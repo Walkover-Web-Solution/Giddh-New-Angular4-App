@@ -20,7 +20,6 @@
         }
 
         .single-invoice-detail {
-            cursor: pointer;
             &:hover,
             &.active {
                 background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);

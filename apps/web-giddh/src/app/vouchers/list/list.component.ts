@@ -680,7 +680,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Set all invoice to service varibale and redirect to view page
+     * Set all invoice to service variable and redirect to view page
      *
      * @memberof VoucherListComponent
      */

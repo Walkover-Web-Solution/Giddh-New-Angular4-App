@@ -313,7 +313,7 @@
             <ng-container *ngIf="!(isVoucherDownloading$ | async)">
                 <div class="pdf-preview" *ngIf="voucherType === 'purchase'">
                     <div class="position-relative">
-                        <h5 class="pd-l15 pd-t1 pd-b1">
+                        <h5 class="pd-l15 py-2">
                             <strong class="text-blue">{{ localeData?.uploaded_purchase_bill }}</strong>
                         </h5>
                         <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
@@ -335,7 +335,7 @@
                             "
                             class="img-expand-collapse"
                         >
-                            <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
+                            <img class="image-preview w-100" [src]="imagePreviewSource" />
                         </div>
 
                         <div
@@ -345,7 +345,6 @@
                             <span>{{ localeData?.invoice_preview_unavailable }}</span>
                         </div>
                         <div
-                            class="preview-not-supported-attachment"
                             *ngIf="attachedDocumentType?.type === 'unsupported'"
                         >
                             <p>{{ attachedDocumentType?.name }}</p>
@@ -356,7 +355,7 @@
                             *ngIf="
                                 shouldShowUploadAttachment && !isCompany && !(attachedPdfFileUrl || imagePreviewSource)
                             "
-                            class="upload-excel max-width-500 center-block box dashed-border"
+                            class="upload-excel max-width-500 dashed-border"
                         >
                             <input
                                 type="file"
