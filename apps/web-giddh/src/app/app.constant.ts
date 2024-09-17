@@ -6,6 +6,7 @@ dayjs.extend(quarterOfYear) // use plugin
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
+    'DevApiUrl': DevApiUrl,
     'isElectron': isElectron,
     'APP_FOLDER': APP_FOLDER
 };
