@@ -494,7 +494,7 @@ export class VoucherService {
     }
 
     /**
-     * Voucher Action API (i.e unpaid, hold, cancle etc)
+     * Voucher Action API (i.e unpaid, hold, cancel etc)
      *
      * @param {string} voucherUniqueName
      * @param {{ action: string, amount?: number }} action
@@ -754,12 +754,13 @@ export class VoucherService {
     }
 
     /**
-     * Download PDF Base64 URL
-     *
-     * @param {*} model
-     * @param {string} downloadOption
-     * @param {string} [fileType="base64"]
-     * @returns {Observable<any>}
+     * Get PDF Base64 URL or Attachement Blob file
+     * 
+     * @param {*} model 
+     * @param {string} downloadOption 
+     * @param {string} fileType 
+     * @param {*} voucherType 
+     * @return {*}  {Observable<any>}
      * @memberof VoucherService
      */
     public downloadPdfFile(model: any, downloadOption: string, fileType: string = "base64", voucherType: any): Observable<any> {
@@ -851,7 +852,7 @@ export class VoucherService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof VoucherService
      */
-    public poStatusUpdate(accountUniqueName: string, payload: any): Observable<BaseResponse<any, any>> {
+    public purchaseOrderStatusUpdate(accountUniqueName: string, payload: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.STATUS_UPDATE;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
@@ -861,9 +862,10 @@ export class VoucherService {
 
     /**
      * Uploads file
-     *
-     * @param {*} postRequest
-     * @returns {Observable<BaseResponse<any, any>>}
+     * 
+     * @param {*} postRequest 
+     * @param {boolean}  addVoucherVersion 
+     * @return {*} {Observable<BaseResponse<any, any>>}
      * @memberof VoucherService
      */
     public uploadFile(postRequest: any, addVoucherVersion: boolean = false): Observable<BaseResponse<any, any>> {

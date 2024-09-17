@@ -2,7 +2,7 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, Subject, takeUntil } from "rxjs";
+import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
@@ -15,10 +15,8 @@ import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
 import { ProformaDownloadRequest, ProformaGetRequest } from "../../models/api-models/proforma";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { CommonService } from "../../services/common.service";
 import { ThermalService } from "../../services/thermal.service";
 import { ToasterService } from "../../services/toaster.service";
-import { SalesService } from "../../services/sales.service";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
@@ -49,17 +47,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Holds Payment template reference */
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Attached document preview container instance */
-    @ViewChild('attachedDocumentPreview', { static: true }) attachedDocumentPreview: ElementRef;
+    @ViewChild('attachedDocumentPreview', { static: false }) attachedDocumentPreview: ElementRef;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Voucher PDF for preview downloading is in progress Observable */
-    public isVoucherDownloading$: Observable<boolean> = this.componentStore.select(state => state.isVoucherDownloading);
+    public isVoucherDownloading$: Observable<boolean> = this.componentStore.isVoucherDownloading$;
     /** Voucher Download Error in PDF for preview downloading status Observable */
-    public isVoucherDownloadError$: Observable<boolean> = this.componentStore.select(state => state.isVoucherDownloadError);
+    public isVoucherDownloadError$: Observable<boolean> = this.componentStore.isVoucherDownloadError$;
     /** Get Vouchers is in progress Observable */
     public getVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
-    /** Holds Filtered Invoice List for invoice search */
-    public filteredInvoiceList$: Subject<any[]> = new Subject<any[]>();
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -160,12 +156,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public sanitizedPdfFileUrl: SafeUrl = null;
     /** Attached PDF file url created with blob */
     public attachedPdfFileUrl: any = '';
-    /** Holds PDF src value  */
+    /** Holds PDF file value */
     public pdfFileURL: string = '';
     /** This will hold the attached file in Purchase Bill */
     private attachedAttachmentBlob: Blob;
     /** This will use for default template */
-    public thermalTemplate: any;
+    public defaultThermalTemplate: any;
     /** True if pdf is available */
     public isPdfAvailable: boolean = true;
     /* This will hold if pdf preview loaded */
@@ -183,9 +179,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private sanitizer: DomSanitizer,
         private domSanitizer: DomSanitizer,
-        private commonService: CommonService,
         private thermalService: ThermalService,
-        private salesService: SalesService,
         private toaster: ToasterService,
         private changeDetection: ChangeDetectorRef,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -241,11 +235,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.advanceFilters.q = search;
                 }
                 this.getAllVouchers();
-
-                this.filteredInvoiceList$.next([]);
-                this.changeDetection.detectChanges();
             }
-        })
+        });
     }
 
     /**
@@ -383,9 +374,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                const thermalTemplate = response?.filter(response => response.templateType === 'thermal_template');
-                if (thermalTemplate?.length > 0) {
-                    this.thermalTemplate = thermalTemplate[0];
+                const defaultThermalTemplate = response?.filter(response => response.templateType === 'thermal_template');
+                if (defaultThermalTemplate?.length > 0) {
+                    this.defaultThermalTemplate = defaultThermalTemplate[0];
                 }
             }
         });
@@ -661,7 +652,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 delete item.balanceDue;
             });
         }
-
         this.componentStore.adjustVoucherWithAdvanceReceipts({ adjustments: advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
     }
 
@@ -798,7 +788,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 } else {
                     req.estimateNumber = this.selectedInvoice?.estimateNumber;
                 }
-                req.emailId = email
+                req.emailId = email;
                 this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
             }
         }
@@ -823,7 +813,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             // Handle page number is more than total pages in query params
             if (this.totalPages < this.advanceFilters.page) {
                 this.advanceFilters.page = 1;
-                this.getAllVouchers()
+                this.getAllVouchers();
                 return;
             }
             response.items?.forEach((item: any, index: number) => {
@@ -1024,7 +1014,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for print thermal print
+     * This will use for thermal print
      *
      * @memberof VouchersPreviewComponent
      */
@@ -1034,7 +1024,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             if (response && this.selectedInvoice?.uniqueName === response.uniqueName) {
                 if (!hasPrinted) {
                     hasPrinted = true;
-                    this.thermalService.print(this.thermalTemplate, response);
+                    this.thermalService.print(this.defaultThermalTemplate, response);
                 }
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName, {
@@ -1071,7 +1061,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public actionVoucher(action: string, event?: any): void {
         if (action) {
             if (action === 'open') {
-                this.componentStore.poStatusUpdate({ accountUniqueName: this.selectedInvoice?.vendor?.uniqueName, payload: { action: action, purchaseNumber: this.selectedInvoice?.voucherNumber } });
+                this.componentStore.purchaseOrderStatusUpdate({ accountUniqueName: this.selectedInvoice?.vendor?.uniqueName, payload: { action: action, purchaseNumber: this.selectedInvoice?.voucherNumber } });
             } else {
                 this.componentStore.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
             }

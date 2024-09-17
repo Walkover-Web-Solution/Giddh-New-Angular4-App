@@ -45,9 +45,9 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
       this.voucherVersionsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
         if (response) {
           let versions = response;
-          if (response.results) {
-            response.items = response.results;
-            delete response.results;
+          if (versions.results) {
+            versions.items = versions.results;
+            delete versions.results;
           }
           if (versions.items && versions.items.length > 0) {
             versions.items.forEach(result => {
@@ -59,7 +59,6 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
               }
             });
           }
-  
           this.versionHistory = versions;
         }
       });

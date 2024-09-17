@@ -158,7 +158,7 @@
                             </button>
                             <button
                                 *ngIf="
-                                    thermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder
+                                    defaultThermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder
                                 "
                                 mat-stroked-button
                                 color="primary"
@@ -258,7 +258,7 @@
                                 </button>
                             </ng-container>
                         </mat-menu>
-                        <span *ngIf="selectedInvoice?.action" class="invoice-status text-capitalize">{{
+                        <span *ngIf="selectedInvoice?.action" class="invoice-status border-radius-5 text-capitalize">{{
                             selectedInvoice.action
                         }}</span>
                         <button mat-stroked-button (click)="backToOldLocation()">
@@ -293,19 +293,17 @@
                         <a href="javascript:;" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
                     </div>
                 </div>
-                <!-- <no-data
-                       *ngIf="
-                       shouldShowUploadAttachment &&
+                <no-data
+                       *ngIf="shouldShowUploadAttachment &&
                        isCompany &&
                        !isPdfAvailable &&
                        !attachedPdfFileUrl &&
-                       !imagePreviewSource
-                   "
+                       !imagePreviewSource"
                        class="mr-t2 d-block text-center"
                        [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
                        [primaryMessageClass]="'bold'"
                        [secondaryMessage]="' '"
-                   ></no-data> -->
+                   ></no-data>
             </section>
             <giddh-page-loader
                 *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
@@ -340,7 +338,7 @@
 
                         <div
                             *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
-                            class="error"
+                            class="error required"
                         >
                             <span>{{ localeData?.invoice_preview_unavailable }}</span>
                         </div>
@@ -355,25 +353,25 @@
                             *ngIf="
                                 shouldShowUploadAttachment && !isCompany && !(attachedPdfFileUrl || imagePreviewSource)
                             "
-                            class="upload-excel max-width-500 dashed-border"
+                            class="upload-excel position-relative d-flex align-items-center justify-content-center max-width-500 dashed-border"
                         >
                             <input
                                 type="file"
                                 id="csv-upload-input"
                                 [placeholder]="localeData?.upload_excel_csv"
                                 droppable="true"
-                                class="form-control"
+                                class="form-control position-absolute h-100 opacity-hidden"
                                 (change)="uploadFile()"
                             />
                             <div class="position-relative width-100">
                                 <div class="file-input-wrapper text-center">
                                     <div class="mr-b2">
-                                        <img src="assets/images/new/import_icon.svg" />
+                                        <img src="assets/images/new/import_icon.svg" class="w100" />
                                     </div>
                                     <div class="pd-r2 pd-l2">
                                         <label class="text-light-2 font-15">{{ localeData?.drop_file }}</label>
                                         <div class="mr-t3">
-                                            <label class="file-upload-panel" for="csv-upload-input">
+                                            <label class="file-upload-panel w-100 text-left p-2 border-radius-5 text-light" for="csv-upload-input">
                                                 <span>{{ localeData?.browse_file }}</span></label
                                             >
                                         </div>
@@ -400,16 +398,6 @@
         </div>
     </div>
 </ng-container>
-
-<!-- paid-dialog
-<ng-template #paidDialog>
-    <app-payment-dialog
-        [voucherDetails]="voucherDetails"
-        [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData"
-        (paymentSubmitted)="paymentSubmitted($event)"
-    ></app-payment-dialog>
-</ng-template> -->
 
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>

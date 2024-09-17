@@ -685,7 +685,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        this.vouchersUtilityService.lastVouchers = this.dataSource;
         this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`], {
             queryParams: { page: this.advanceFilters.page }
         });
