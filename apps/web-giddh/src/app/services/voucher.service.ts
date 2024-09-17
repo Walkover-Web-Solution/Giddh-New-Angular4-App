@@ -572,7 +572,7 @@ export class VoucherService {
     }
 
     /**
-     * Update Action for Proforma 
+     * Update Action for Proforma
      *
      * @param {ProformaUpdateActionRequest} request
      * @param {string} voucherType
@@ -597,7 +597,7 @@ export class VoucherService {
     }
 
     /**
-     * Generate Invoice for Estimate and Proforma 
+     * Generate Invoice for Estimate and Proforma
      *
      * @param {ProformaGetRequest} request
      * @param {string} voucherType

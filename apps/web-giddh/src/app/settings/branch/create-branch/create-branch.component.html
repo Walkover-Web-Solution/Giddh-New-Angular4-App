@@ -75,25 +75,69 @@
                             ></input-field>
                         </div>
                     </div>
+                    <div class="filter-dropdown-branch  mr-b15" *ngIf="isCompany && allBranches?.length > 1">
+                        <mat-select
+                            name="branch"
+                            class="branch-mat-salect"
+                            [placeholder]="commonLocaleData?.app_select_branch"
+                            formControlName="parentBranchUniqueName"
+                        >
+                            <mat-option class="branch-options">
+                                <ngx-mat-select-search
+                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                    [formControl]="branchesDropdown ? branchesDropdown : null"
+                                    [placeholderLabel]="localeData?.search_branch"
+                                    class="mat-select-search-branch"
+                                >
+                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option
+                                class="branch-options"
+                                *ngFor="let branch of branches"
+                                [value]="branch?.uniqueName"
+                            >
+                                {{ branch?.alias ?? "-" }}
+                            </mat-option>
+                        </mat-select>
+                    </div>
                     <div class="branch-form-field">
-                        <div class="address-dropdown form-group mb-0" [ngClass]="{'custom-mat-form-field': !branchForm?.get('address')?.value?.length}">
+                        <div
+                            class="address-dropdown form-group mb-0"
+                            [ngClass]="{ 'custom-mat-form-field': !branchForm?.get('address')?.value?.length }"
+                        >
                             <mat-form-field appearance="outline" class="w-100" (click)="trigger.open()">
                                 <mat-label>{{ localeData?.addresses }}</mat-label>
-                                <mat-chip-grid #chipGrid  class="d-flex flex-wrap column-gap5 row-gap1">
+                                <mat-chip-grid #chipGrid class="d-flex flex-wrap column-gap5 row-gap1">
                                     <ng-container *ngFor="let chipItem of branchForm?.get('address')?.value">
-                                        <mat-chip-row (removed)="removeItem(chipItem)" role="option" >
+                                        <mat-chip-row (removed)="removeItem(chipItem)" role="option">
                                             <span>{{ chipItem?.label }}</span>
                                             <span matChipRemove><i class="icon-cross font-14"></i></span>
                                         </mat-chip-row>
                                     </ng-container>
-                                    <input type="text" autocomplete="off" (focus)="trigger.open()" [formControl]="addressQuery" matInput [placeholder]="localeData?.select_addresses" [matChipInputFor]="chipGrid" >
+                                    <input
+                                        type="text"
+                                        autocomplete="off"
+                                        (focus)="trigger.open()"
+                                        [formControl]="addressQuery"
+                                        matInput
+                                        [placeholder]="localeData?.select_addresses"
+                                        [matChipInputFor]="chipGrid"
+                                    />
                                 </mat-chip-grid>
-                                <mat-select-trigger>
-                                </mat-select-trigger>
-                                <mat-select formControlName="address" panelClass="linked-entities-options" name="particulars" multiple #trigger>
+                                <mat-select-trigger> </mat-select-trigger>
+                                <mat-select
+                                    formControlName="address"
+                                    panelClass="linked-entities-options"
+                                    name="particulars"
+                                    multiple
+                                    #trigger
+                                >
                                     <div>
                                         <div class="bg-grey-on-hover">
-                                            <a  href="javascript:;"
+                                            <a
+                                                href="javascript:;"
                                                 [keyboardShortcut]="'alt+c'"
                                                 (onShortcutPress)="handleShortcutPress()"
                                                 (click)="handleShortcutPress(); trigger.close()"
@@ -105,13 +149,17 @@
                                         </div>
                                     </div>
                                     <ng-container *ngFor="let option of addresses">
-                                        <mat-option [value]="option" (click)="selectAddress(option)" class="align-items-center">
-                                            <div  class="d-flex justify-content-between">
+                                        <mat-option
+                                            [value]="option"
+                                            (click)="selectAddress(option)"
+                                            class="align-items-center"
+                                        >
+                                            <div class="d-flex justify-content-between">
                                                 <span>
                                                     <div>
                                                         {{ option.label || "-" }}
                                                     </div>
-                                                    <div >
+                                                    <div>
                                                         <p *ngIf="option.taxType && option.taxNumber">
                                                             {{ option.taxType }} : {{ option.taxNumber }}
                                                         </p>
@@ -132,10 +180,12 @@
                                             </div>
                                         </mat-option>
                                     </ng-container>
-                                    <div class="px-2" *ngIf="addresses?.length === 0">{{ commonLocaleData?.app_no_result_found }}</div>
+                                    <div class="px-2" *ngIf="addresses?.length === 0">
+                                        {{ commonLocaleData?.app_no_result_found }}
+                                    </div>
                                 </mat-select>
-                              </mat-form-field>
-                        </div> 
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
                 <div class="pd-l15 pd-r15">
@@ -144,12 +194,7 @@
                             <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                type="submit"
-                                [disabled]="branchForm?.invalid"
-                            >
+                            <button mat-stroked-button color="primary" type="submit" [disabled]="branchForm?.invalid">
                                 {{ localeData?.create_branch }}
                             </button>
                         </div>

@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, forEach } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MfStockSearchRequestClass } from 'apps/web-giddh/src/app/manufacturing/manufacturing.utility';
 import { LinkedStocksResponse } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
@@ -260,7 +260,7 @@ export class ListManufacturingComponent implements OnInit {
                     } else {
                         if (this.generalService.companyUniqueName) {
                             // Avoid API call if new user is onboarded
-                            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                         }
                     }
                 });
@@ -367,8 +367,8 @@ export class ListManufacturingComponent implements OnInit {
                 let reportData = [];
 
                 this.totalItems = response.body.totalItems;
-                this.totalPages = response.body.totalPages;          
-                
+                this.totalPages = response.body.totalPages;
+
                 response.body.results.forEach(item => {
                     reportData.push({
                         date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),
