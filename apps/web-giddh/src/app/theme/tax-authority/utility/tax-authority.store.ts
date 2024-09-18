@@ -9,6 +9,7 @@ import { SalesTaxReport, SalesTaxReportRequest } from "./tax-authority.const";
 import { LocaleService } from "../../../services/locale.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
+import { GstReconcileService } from "../../../services/gst-reconcile.service";
 
 export interface TaxAuthorityState {
     isLoading: boolean;
@@ -22,6 +23,7 @@ export interface TaxAuthorityState {
     createTaxAuthorityIsSuccess: boolean;
     deleteTaxAuthorityIsSuccess: boolean;
     updateTaxAuthorityIsSuccess: boolean;
+    taxNumber: any;
 }
 
 const DEFAULT_STATE: TaxAuthorityState = {
@@ -35,7 +37,8 @@ const DEFAULT_STATE: TaxAuthorityState = {
     exportAccountWiseReport: null,
     createTaxAuthorityIsSuccess: null,
     updateTaxAuthorityIsSuccess: null,
-    deleteTaxAuthorityIsSuccess: null
+    deleteTaxAuthorityIsSuccess: null,
+    taxNumber: null
 };
 
 @Injectable()
@@ -44,6 +47,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     constructor(
         private toaster: ToasterService,
         private settingsTaxesService: SettingsTaxesService,
+        private gstReconcileService: GstReconcileService,
         private localeService: LocaleService,
         private store: Store<AppState>
     ) {
@@ -61,6 +65,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     public deleteTaxAuthorityIsSuccess$ = this.select((state) => state.deleteTaxAuthorityIsSuccess);
     public createTaxAuthorityIsSuccess$ = this.select((state) => state.createTaxAuthorityIsSuccess);
     public updateTaxAuthorityIsSuccess$ = this.select((state) => state.updateTaxAuthorityIsSuccess);
+    public taxNumber$ = this.select((state) => state.taxNumber);
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public stateList$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
@@ -239,7 +244,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     });
 
     /**
-     * Get sale tax report - Tax authority/Rate/Account wise 
+     * Get sale tax report - Tax authority/Rate/Account wise
      *
      * @memberof TaxAuthorityComponentStore
      */
@@ -352,6 +357,36 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                                 exportTaxWiseReport: null,
                                 exportAccountWiseReport: null
                             });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+/**
+*   Get Tax Number
+*
+* @memberof VatReportComponentStore
+*/
+    readonly getTaxNumber = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap(() => {
+                this.patchState({ taxNumber: null, isLoading: true });
+                return this.gstReconcileService.getTaxDetails().pipe(
+                    tapResponse(
+                        (res: any) => {
+                            if (res?.status === "success") {
+                                return this.patchState({ taxNumber: res, isLoading: false });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ taxNumber: null, isLoading: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ taxNumber: null, isLoading: false });
                         }
                     ),
                     catchError((err) => EMPTY)
