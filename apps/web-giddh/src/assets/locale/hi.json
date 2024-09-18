@@ -214,7 +214,8 @@
         "yearly": "वार्षिक",
         "weekly": "साप्ताहिक",
         "month": "महिना",
-        "year": "वर्ष"
+        "year": "वर्ष",
+       "daily": "दैनिक"
     },
     "app_tax_subtypes": {
         "receivable": "प्राप्य",

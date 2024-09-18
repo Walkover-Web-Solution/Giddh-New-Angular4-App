@@ -285,7 +285,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 this.subscriptionId = response.subscriptionId;
-                if (response?.duration === 'MONTHLY' && response?.region?.code !== 'GBR') {
+                if ((response?.duration === 'MONTHLY' || response?.duration === 'DAILY') && response?.region?.code !== 'GBR') {
                     if (response.razorpayCustomerId && this.payType === 'buy') {
                         this.initializePayment(response);
                     } else {
@@ -668,7 +668,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.setPlans();
             } else {
                 this.inputData = [];
-                const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+                const filteredPlans = (this.firstStepForm.get('duration')?.value === 'DAILY' || this.firstStepForm.get('duration')?.value === 'MONTHLY') ? this.monthlyPlans : this.yearlyPlans;
                 this.inputData.push(...filteredPlans);
             }
         }
@@ -1298,7 +1298,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             subscriptionId: null
         }
 
-        if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && this.selectedPlan?.entityCode !== 'GBR') {
+        if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && this.selectedPlan?.entityCode !== 'GBR') {
             request['razorpayAuthType'] = this.subscriptionForm.value.thirdStepForm.razorpayAuthType;
         }
 
@@ -1426,7 +1426,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         try {
-            this.razorpay = new window['Razorpay']((request?.duration === 'MONTHLY' && request?.region?.code !== 'GBR') ? razorpayRecurringSubscriptionConfig : options);
+            this.razorpay = new window['Razorpay'](((request?.duration === 'MONTHLY' || request?.duration === 'DAILY') && request?.region?.code !== 'GBR') ? razorpayRecurringSubscriptionConfig : options);
             setTimeout(() => {
                 this.razorpay?.open();
             }, 100);
@@ -1456,7 +1456,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
-            if (subscription?.duration === 'MONTHLY' && subscription?.region?.code !== 'GBR') {
+            if ((subscription?.duration === 'MONTHLY' || subscription?.duration === 'DAILY') && subscription?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId });
             } else {
                 this.componentStore.changePlan(data);
