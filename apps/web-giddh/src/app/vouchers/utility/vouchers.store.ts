@@ -197,7 +197,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public isVoucherVersionsInProgress$ = this.select((state) => state.isVoucherVersionsInProgress);
     public uploadFileIsSuccess$ = this.select((state) => state.uploadFileIsSuccess);
     public updateAttachmentInVoucherIsSuccess$ = this.select((state) => state.updateAttachmentInVoucherIsSuccess);
-    
+
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -1445,7 +1445,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
-
+    /**
+     * Purchase order status
+     *
+     * @memberof VoucherComponentStore
+     */
     readonly purchaseOrderStatusUpdate = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -1538,7 +1542,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                     isVoucherFileDownloading: false,
                                     downloadVoucherFileResponse: null
                                 });
-                            } else {         
+                            } else {
                                 return this.patchState({
                                     isVoucherDownloadError: true,
                                     isVoucherDownloading: false,
@@ -1552,7 +1556,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
-    
+
     readonly getVoucherVersions = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any, voucherType: string }>) => {
         return data.pipe(
             switchMap((req) => {

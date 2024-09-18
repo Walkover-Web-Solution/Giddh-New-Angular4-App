@@ -63,7 +63,6 @@
             }
             .error {
                 font-size: var(--font-size-32);
-                color: var(--color-danger);
             }
 
             .upload-excel {
@@ -83,7 +82,7 @@
                 inset: 0;
                 z-index: 2;
             }
-            
+
             .file-upload-panel {
                 border: 1px solid currentColor;
             }
