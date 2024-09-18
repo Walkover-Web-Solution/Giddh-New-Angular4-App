@@ -18,6 +18,8 @@ import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
+import { COMMON_API } from "./apiurls/common.api";
+import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 
 
 @Injectable()
@@ -467,6 +469,13 @@ export class VoucherService {
                 catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, payload)));
     }
 
+    /**
+     * Export Voucher API
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<string, any>>}
+     * @memberof VoucherService
+     */
     public exportVouchers(model: any): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
@@ -484,6 +493,14 @@ export class VoucherService {
             catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
     }
 
+    /**
+     * Voucher Action API (i.e unpaid, hold, cancel etc)
+     *
+     * @param {string} voucherUniqueName
+     * @param {{ action: string, amount?: number }} action
+     * @return {*}  {Observable<BaseResponse<string, string>>}
+     * @memberof VoucherService
+     */
     public actionVoucher(voucherUniqueName: string, action: { action: string, amount?: number }): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':invoiceUniqueName', voucherUniqueName);
@@ -667,7 +684,7 @@ export class VoucherService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.deleteWithBody(
             url,
@@ -734,5 +751,153 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequest)));
+    }
+
+    /**
+     * Get PDF Base64 URL or Attachement Blob file
+     * 
+     * @param {*} model 
+     * @param {string} downloadOption 
+     * @param {string} fileType 
+     * @param {*} voucherType 
+     * @return {*}  {Observable<any>}
+     * @memberof VoucherService
+     */
+    public downloadPdfFile(model: any, downloadOption: string, fileType: string = "base64", voucherType: any): Observable<any> {
+        let apiUrl = '';
+        let httpMethod: 'post' | 'get' = 'post';
+        let apiParams = model;
+        let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
+
+        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(voucherType)) {
+            apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
+                ?.replace(':fileType', fileType)
+                ?.replace(':downloadOption', downloadOption)
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(voucherType)) {
+            apiUrl = this.config.apiUrl + PROFORMA_API.download
+                ?.replace(':vouchers', voucherType)
+                ?.replace(':fileType', fileType)
+                ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        } else if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            httpMethod = 'get';
+            apiUrl = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF
+                ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
+                ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                ?.replace(':poUniqueName', model.poUniqueName);
+            apiParams = undefined;
+        }
+
+        return this.http[httpMethod](apiUrl, apiParams, responseType).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * This will get voucher versions
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof VoucherService
+     */
+    public getVoucherVersions(getRequestObject: any, postRequestObject: any, voucherType: string): Observable<BaseResponse<any, string>> {
+        if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
+            url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+            url = url?.replace(':page', getRequestObject.page);
+            url = url?.replace(':count', getRequestObject.count);
+
+            return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+        } else if (voucherType === VoucherTypeEnum.generateEstimate || voucherType === VoucherTypeEnum.generateProforma) {
+            let url = this.generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
+                page: getRequestObject.page, count: getRequestObject.count
+            });
+            return this.http.post(url
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+                ?.replace(':vouchers', voucherType)
+                ?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName)),
+                postRequestObject
+            ).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.queryString = voucherType;
+                    data.request = postRequestObject;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
+        } else {
+            let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
+            url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            url = url?.replace(':voucherUniqueName', getRequestObject?.voucherUniqueName);
+            url = url?.replace(':page', getRequestObject.page);
+            url = url?.replace(':count', getRequestObject.count);
+            url = this.generalService.addVoucherVersion(url, 2);
+
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, string> = res;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+        }
+    }
+
+    /**
+     * This will bulk update the status of orders
+     *
+     * @param {string} accountUniqueName
+     * @param {*} payload
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public purchaseOrderStatusUpdate(accountUniqueName: string, payload: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.STATUS_UPDATE;
+        url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+
+        return this.http.patch(url, payload).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Uploads file
+     * 
+     * @param {*} postRequest 
+     * @param {boolean}  addVoucherVersion 
+     * @return {*} {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public uploadFile(postRequest: any, addVoucherVersion: boolean = false): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_FILE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+
+        const formData: FormData = new FormData();
+        formData.append('file', postRequest.file, postRequest.fileName);
+
+        if (postRequest.entries) {
+            formData.append('entries', postRequest.entries);
+        }
+        if (addVoucherVersion) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Updates attachment in voucher
+     *
+     * @param {*} postRequestObject
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public updateAttachmentInVoucher(postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT?.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        return this.http.patch(url, postRequestObject).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
     }
 }

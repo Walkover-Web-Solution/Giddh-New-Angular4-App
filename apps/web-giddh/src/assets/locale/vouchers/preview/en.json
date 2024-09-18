@@ -286,5 +286,9 @@
     "all_payments": "All-payments",
     "payment_no_label": "Payment #",
     "total_payments": "Total Payments",
-    "unused_payments": "Unused Payments"
+    "unused_payments": "Unused Payments",
+    "by_user": "by [USER]",
+    "po_created": "Purchase Order created for [VALUE]",
+    "value_changed": "[FIELD] updated to [VALUE]",
+    "voucher_created": "Voucher created for [VALUE]"
 }

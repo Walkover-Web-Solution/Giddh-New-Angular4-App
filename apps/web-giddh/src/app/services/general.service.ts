@@ -2057,6 +2057,34 @@ export class GeneralService {
     }
 
     /**
+     *  Delete sessions confirmation dialog
+     *
+     * @param confirmationMessage
+     * @param commonLocaleData
+     * @returns
+     */
+    public deleteConfiguration(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = confirmationMessage;
+        return {
+            buttons,
+            headerText,
+            headerCssClass,
+            messageCssClass,
+            messageText
+        };
+    }
+
+    /**
      * This will use for confirmation delete vocher
      *
      * @param {string} headerText
@@ -2085,34 +2113,6 @@ export class GeneralService {
             footerText: footerText,
             footerCssClass,
             buttons
-        };
-    }
-
-    /**
-     *  Delete sessions confirmation dialog
-     *
-     * @param confirmationMessage
-     * @param commonLocaleData
-     * @returns
-     */
-    public deleteConfiguration(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
-        const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes,
-            color: 'primary'
-        },
-        {
-            text: commonLocaleData?.app_no
-        }];
-        const headerText: string = commonLocaleData?.app_confirmation;
-        const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1';
-        const messageText: string = confirmationMessage;
-        return {
-            buttons,
-            headerText,
-            headerCssClass,
-            messageCssClass,
-            messageText
         };
     }
 }

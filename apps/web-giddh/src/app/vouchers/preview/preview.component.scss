@@ -1,6 +1,4 @@
 .search-field {
-    width: 70%;
-
     i {
         top: 10px;
         left: 10px;
@@ -13,32 +11,38 @@
 
 .invoice-preview-wrapper {
     display: flex;
+    height: calc(100vh - (var(--header-height) + 30px));
 
     .preview-list {
         width: 35%;
-        box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
+      .list-viewport {
+            height: calc(100vh - 185px);
+        }
 
         .single-invoice-detail {
-            &:hover {
-                background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
-            }
-
+            &:hover,
             &.active {
                 background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
             }
-        }
-
-        .invoice-btn {
-            width: 30%;
         }
     }
 
     .preview-content {
         width: 65%;
+        overflow-y: auto;
 
         .preview-header {
+            background-color: var(--color-primary-invoice-preview-details-background);
             .action-btn {
                 column-gap: 3px;
+            }
+            .invoice-status {
+                user-select: none;
+                max-height: 36px;
+                padding: 5px 10px;
+                color: var(--color-nero);
+                background-color: var(--color-iron);
+                border: 1px solid var(--color-iron);
             }
         }
 
@@ -57,36 +61,37 @@
             h5 {
                 background-color: var(--color-primary-invoice-preview-details-background);
             }
-        }
-    }
-}
+            .error {
+                font-size: var(--font-size-32);
+            }
 
-// responsive
-@media screen and (max-width: 1440px) {
-    .search-field {
-        width: 60%;
-    }
+            .upload-excel {
+                height: 320px;
+                max-width: 500px;
+                margin: 25px auto !important;
+            }
 
-    .invoice-preview-wrapper {
-        .preview-list {
-            .invoice-btn {
-                width: 44%;
+            .dashed-border {
+                border: 2px dashed var(--color-iron);
+            }
+            .img-expand-collapse {
+                padding: 50px 50px 0 50px;
+            }
+
+            #csv-upload-input {
+                inset: 0;
+                z-index: 2;
+            }
+
+            .file-upload-panel {
+                border: 1px solid currentColor;
             }
         }
     }
 }
+
 @media screen and (max-width: 1199px) {
     .list-responsive {
         flex-wrap: wrap;
-    }
-    .search-field {
-        width: 100%;
-    }
-    .invoice-preview-wrapper {
-        .preview-list {
-            .invoice-btn {
-                width: auto;
-            }
-        }
     }
 }

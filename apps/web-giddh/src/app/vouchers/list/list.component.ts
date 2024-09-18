@@ -8,7 +8,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -281,6 +281,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private advanceSearchTempKeyObj: any = {};
     /** Holds Id of active search input field */
     public activeSearchField: any = null;
+    /** Holds invoice type */
+    public invoiceType: any = {
+        isSalesInvoice: true,
+        isCashInvoice: false,
+        isCreditNote: false,
+        isDebitNote: false,
+        isPurchaseInvoice: false,
+        isProformaInvoice: false,
+        isEstimateInvoice: false,
+        isPurchaseOrder: false,
+        isReceiptInvoice: false,
+        isPaymentInvoice: false
+    };
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -322,6 +335,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
+                this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -413,13 +427,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.handleGetAllVoucherResponse(response);
-        });
-
-        this.componentStore.purchaseOrdersList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.handleGetAllVoucherResponse(response);
-        });
+        merge(this.componentStore.lastVouchers$, this.componentStore.purchaseOrdersList$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.handleGetAllVoucherResponse(response);
+            });
 
         this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -447,24 +458,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.deleteVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.dialog.closeAll();
-                this.getVouchers(this.isUniversalDateApplicable);
-            }
-        });
-
+        merge(this.componentStore.deleteVoucherIsSuccess$, this.componentStore.convertToInvoiceIsSuccess$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response) {
+                    this.getVouchers(this.isUniversalDateApplicable);
+                }
+            });
 
         this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.dialog.closeAll();
                 this.toasterService.showSnackBar("success", (this.voucherType === 'estimates' || this.voucherType === 'proformas') ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
-                this.getVouchers(this.isUniversalDateApplicable);
-            }
-        });
-
-        this.componentStore.convertToInvoiceIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -522,7 +526,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search && search === '') {
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -541,7 +545,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search && search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.advanceFilters.vendorName = search;
                 } else {
@@ -554,7 +558,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.purchaseOrderUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search && search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.advanceFilters.purchaseOrderNumber = search;
                 }
@@ -663,7 +667,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         item.dueDays = null;
                     }
                 }
-
                 this.dataSource.push(item);
             });
             // When user search in table header then after api call focus on respective search field
@@ -673,6 +676,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }, 200);
             }
         }
+    }
+
+    /**
+     * Set all invoice to service variable and redirect to view page
+     *
+     * @memberof VoucherListComponent
+     */
+    public showVoucherPreview(voucherUniqueName: string): void {
+        this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`], {
+            queryParams: { page: this.advanceFilters.page }
+        });
     }
 
     /**
@@ -1089,7 +1103,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public showPaymentDialog(voucher: any): void {
         this.voucherDetails = voucher;
-
         this.dialog.open(this.paymentDialog, {
             panelClass: ['mat-dialog-md']
         });
@@ -1685,7 +1698,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             from: dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '',
             to: dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '',
             page: 1,
-            count: PAGINATION_LIMIT,
+            count: this.pageSizeOptions[0],
             q: ''
         };
         this.voucherNumberInput.patchValue(null, { emitEvent: false });
