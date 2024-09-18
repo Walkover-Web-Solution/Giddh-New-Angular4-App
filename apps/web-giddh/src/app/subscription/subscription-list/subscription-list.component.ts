@@ -132,6 +132,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     }
 
     /**
@@ -169,7 +170,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 this.subscriptionRequestParams.totalItems = 0;
             }
         });
-
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
