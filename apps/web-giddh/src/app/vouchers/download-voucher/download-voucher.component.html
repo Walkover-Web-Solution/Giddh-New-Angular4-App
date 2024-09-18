@@ -5,7 +5,7 @@
 <div mat-dialog-content class="dialog-body">
     <giddh-page-loader class="unset-loader-margin" *ngIf="isVoucherFileDownloading$ | async"></giddh-page-loader>
     <div [formGroup]="downloadForm" *ngIf="!(isVoucherFileDownloading$ | async)">
-        <div>
+
             <ng-container *ngIf="voucherType === 'sales'">
                 <h3 class="font-16 mr-b1">{{ localeData?.invoice_copy }}</h3>
                 <hr />
@@ -63,7 +63,7 @@
                     {{ localeData?.invoice_copy_options?.attachment }}
                 </mat-checkbox>
             </div>
-        </div>
+
 
         <div class="pd-t15">
             <button
