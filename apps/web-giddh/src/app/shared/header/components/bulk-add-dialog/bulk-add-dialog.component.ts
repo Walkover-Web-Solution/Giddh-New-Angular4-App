@@ -58,13 +58,15 @@ export class BulkAddDialogComponent implements OnInit {
                 this.branches = response?.filter(branch => !branch.consolidatedBranch);
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
                 formArray?.clear();
-                response.forEach((item) => {
-                    formArray?.push(this.openingBulkGet(
-                        {
-                            name: item.alias,
-                            uniqueName: item.uniqueName
-                        }
-                    ));
+                this.branches.forEach((item) => {
+                    if (item?.alias) {
+                        formArray?.push(this.openingBulkGet(
+                            {
+                                name: item.alias,
+                                uniqueName: item.uniqueName
+                            }
+                        ));
+                    }
                 });
                 if (this.data?.saveBulkData?.length) {
                     // Then, merge the data by matching uniqueName
