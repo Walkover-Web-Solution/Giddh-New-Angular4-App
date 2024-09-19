@@ -48,7 +48,7 @@ export class SettingsTagsComponent implements OnInit {
         private toaster: ToasterService,
         public dialog: MatDialog,
         private formBuilder: FormBuilder,
-        private generalService: GeneralService,
+        private generalService: GeneralService
     ) { }
 
     /**
