@@ -7,7 +7,7 @@ export const environment: Environment = {
     showDevModule: true,
     AppUrl: 'http://localhost:4200/',
     ApiUrl: 'https://api.giddh.com/',
-    DevApiUrl: 'http://giddh-api-prod-g.eu-west-2.elasticbeanstalk.com/',
+    UkApiUrl: 'http://giddh-api-prod-g.eu-west-2.elasticbeanstalk.com/',
     isElectron: true,
     APP_FOLDER: '',
     /** Angular debug tools in the dev console

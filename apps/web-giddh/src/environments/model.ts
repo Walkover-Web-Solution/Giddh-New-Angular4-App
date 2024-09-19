@@ -6,7 +6,7 @@ export interface Environment {
     showDevModule: boolean;
     AppUrl: string;
     ApiUrl: string;
-    DevApiUrl: string;
+    UkApiUrl: string;
     isElectron: boolean;
     APP_FOLDER: string;
     decorateModuleRef(modRef: NgModuleRef<any>): NgModuleRef<any>;
