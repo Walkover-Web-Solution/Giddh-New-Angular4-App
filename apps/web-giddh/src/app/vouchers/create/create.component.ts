@@ -3438,7 +3438,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
         if (this.isPendingEntries) {
             this.saveVoucher(() => {
-                this.router.navigate(['/pages/invoice/preview/pending/sales']);
+                this.router.navigate(['/pages/vouchers/preview/sales/pending']);
             });
         } else {
             this.saveVoucher();
@@ -3451,20 +3451,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             if (this.invoiceType.isCashInvoice) {
                 if (this.invoiceType.isSalesInvoice) {
-                    this.router.navigate(['/pages/invoice/preview/sales']);
+                    this.router.navigate(['/pages/vouchers/preview/sales/list']);
                 } else if (this.invoiceType.isDebitNote) {
-                    this.router.navigate(['/pages/invoice/preview/debit note']);
+                    this.router.navigate(['/pages/vouchers/preview/debit-note/list']);
                 } else if (this.invoiceType.isCreditNote) {
-                    this.router.navigate(['/pages/invoice/preview/credit note']);
+                    this.router.navigate(['/pages/vouchers/preview/credit-note/list']);
                 } else if (this.invoiceType.isPurchaseInvoice) {
-                    this.router.navigate(['/pages/purchase-management/purchase/bill']);
+                    this.router.navigate(['/pages/vouchers/preview/purchase/list']);
                 } else {
-                    this.router.navigate(['/pages/invoice/preview/sales']);
+                    this.router.navigate(['/pages/vouchers/preview/sales/list']);
                 }
             } else if (this.invoiceType.isPurchaseInvoice) {
-                this.router.navigate(['/pages/purchase-management/purchase/bill']);
+                this.router.navigate(['/pages/vouchers/preview/purchase/list']);
             } else {
-                this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
+                this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/list']);
             }
         }
     }
@@ -3780,7 +3780,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
+                            this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/list']);
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);

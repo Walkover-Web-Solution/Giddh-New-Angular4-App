@@ -1693,6 +1693,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public setInitialAdvanceFilter(onlyResetValue: boolean = false): void {
+        let universalDate;
+        // get application date
+        this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
+            universalDate = date;
+        });
+
+        // set date picker date as application date
+        if (universalDate?.length > 1) {
+            this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
         this.advanceFilters = {
             sortBy: '',
             sort: '',

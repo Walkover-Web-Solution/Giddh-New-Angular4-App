@@ -77,7 +77,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
-            date: [''],
+            date: [dayjs(new Date())],
             amount: ['', Validators.required],
             accountUniqueName: ['', Validators.required],
             tagUniqueName: [''],
