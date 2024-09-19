@@ -10,7 +10,6 @@ export const environment: Environment = {
     production: false,
     AppUrl: 'http://localhost:3000/',
     ApiUrl: 'https://apitest.giddh.com/',
-    UkApiUrl: 'http://giddh-api-prod-g.eu-west-2.elasticbeanstalk.com/',
     isElectron: false,
     APP_FOLDER: '',
     showDevModule: true,

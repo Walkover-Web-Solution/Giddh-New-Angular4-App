@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
-import { GeneralService } from '../../services/general.service';
 
 export interface TagInterface {
     name: string,
@@ -47,8 +46,7 @@ export class SettingsTagsComponent implements OnInit {
         private settingsTagService: SettingsTagService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private formBuilder: FormBuilder,
-        private generalService: GeneralService
+        private formBuilder: FormBuilder
     ) { }
 
     /**
@@ -58,9 +56,7 @@ export class SettingsTagsComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.tagFormInit();
-        if (this.generalService.companyUniqueName?.trim()) {
-            this.getTags();
-        }
+        this.getTags();
     }
 
     /**
