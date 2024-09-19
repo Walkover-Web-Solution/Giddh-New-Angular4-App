@@ -214,7 +214,8 @@
         "yearly": "Yearly",
         "month": "Month",
         "year": "Year",
-        "weekly": "Weekly"
+        "weekly": "Weekly",
+        "daily": "Daily"
     },
     "app_tax_subtypes": {
         "receivable": "Receivable",

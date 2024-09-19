@@ -18,10 +18,10 @@ import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
-import { ConfirmationModalButton } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -100,7 +100,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private generalService: GeneralService,
-        private clipboardService: ClipboardService) {
+        private clipboardService: ClipboardService,
+        private settingsProfileActions : SettingsProfileActions) {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
@@ -204,9 +207,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((activeCompany) => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
+                this.changeDetectionRef.detectChanges();
             }
         });
 
