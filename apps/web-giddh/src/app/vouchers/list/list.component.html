@@ -921,7 +921,7 @@
             <!-- debit-note-content-end -->
 
             <!-- credit-note-content-start -->
-            <mat-tab [label]="localeData?.tabs?.credit_note" *ngIf="activeTabGroup === 1">
+            <mat-tab [label]="localeData?.tabs?.credit_note" *ngIf="activeTabGroup === 0">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1252,7 +1252,7 @@
             <!-- pending-content-end -->
             
             <!-- purchase-order-start -->
-            <mat-tab [label]="localeData?.po_number" *ngIf="activeTabGroup === 2">
+            <mat-tab [label]="localeData?.po_number" *ngIf="activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1456,7 +1456,7 @@
             <!-- purchase-order-end -->
 
             <!-- bill-content-start -->
-            <mat-tab [label]="localeData?.bill" *ngIf="activeTabGroup === 2">
+            <mat-tab [label]="localeData?.bill" *ngIf="activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -2056,7 +2056,7 @@
                           <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                         </div>
                     </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 2">
+                    <mat-tab *ngIf="activeTabGroup === 1">
                         <ng-template mat-tab-label>
                           <i class="icon-mail"></i>
                           Integration
@@ -2086,7 +2086,7 @@
                             <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                         </div>
                     </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 2">
+                    <mat-tab *ngIf="activeTabGroup === 1">
                         <ng-template mat-tab-label>
                             <i class="icon-sales-order"></i>
                             Pur.Order
@@ -2134,7 +2134,7 @@
                             <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                         </div>
                     </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 2">
+                    <mat-tab *ngIf="activeTabGroup === 1">
                         <ng-template mat-tab-label>
                             <div class="voucher-svg">
                                 <svg width="32" height="32" viewBox="0 0 25 24" xmlns="http://www.w3.org/2000/svg">
@@ -2258,7 +2258,7 @@
             <!-- template-content-end -->
              
             <!-- receipt-content-start -->
-            <mat-tab [label]="localeData?.tabs?.receipt" *ngIf="activeTabGroup === 3">
+            <mat-tab [label]="localeData?.tabs?.receipt" *ngIf="activeTabGroup === 0">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -2517,7 +2517,7 @@
             <!-- receipt-content-end -->
 
             <!-- payment-content-start -->
-            <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
+            <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">

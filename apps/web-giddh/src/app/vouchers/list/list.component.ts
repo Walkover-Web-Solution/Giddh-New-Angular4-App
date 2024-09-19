@@ -200,12 +200,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public activeModule: string = "list";
     /** Holds list tabs groups */
     public tabsGroups: any[][] = [
-        ["estimates", "proformas", "sales"],
-        ["debit note", "credit note"],
-        ["purchase-order", "purchase"],
-        ["receipt"],
-        ["payment"]
+        ["estimates", "proformas", "sales", "credit note", "receipt"],
+        ["purchase-order", "purchase", "debit note", "payment"]
     ];
+    // public tabsGroups: any[][] = [
+    //     ["estimates", "proformas", "sales"],
+    //     ["debit note", "credit note"],
+    //     ["purchase-order", "purchase"],
+    //     ["receipt"],
+    //     ["payment"]
+    // ];
     /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 2;
     /** Holds universal date */
@@ -710,34 +714,28 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedTabIndex = 4;
             } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
                 this.selectedTabIndex = 5;
+            } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
+                this.selectedTabIndex = 6;
+            } else if (this.voucherType === 'receipt' && this.activeModule === 'list') {
+                this.selectedTabIndex = 7;
             }
         } else if (this.activeTabGroup === 1) {
             if (this.voucherType === 'debit note' && this.activeModule === 'list') {
                 this.selectedTabIndex = 0;
-            } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
-                this.selectedTabIndex = 1;
             } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
-                this.selectedTabIndex = 2;
-            } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
-                this.selectedTabIndex = 3;
-            } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
-                this.selectedTabIndex = 4;
-            }
-        } else if (this.activeTabGroup === 2) {
-            if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
-            } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                 this.selectedTabIndex = 1;
-            } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
+            } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
                 this.selectedTabIndex = 2;
-            }
-        } else if (this.activeTabGroup === 3) {
-            if (this.voucherType === 'receipt' && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
-            }
-        } else if (this.activeTabGroup === 4) {
-            if (this.voucherType === 'payment' && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
+            } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+                this.selectedTabIndex = 3;
+            } else if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
+                this.selectedTabIndex = 4;
+            } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
+                this.selectedTabIndex = 5;
+            } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
+                this.selectedTabIndex = 6;
+            } else if (this.voucherType === 'payment' && this.activeModule === 'list') {
+                this.selectedTabIndex = 7;
             }
         }
     }
@@ -750,6 +748,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private redirectToSelectedTab(selectedTabIndex: number): void {
+        console.log("redirectToSelectedTab", selectedTabIndex, this.activeTabGroup);
+        
         let voucherType = "";
         let activeModule = "";
         if (this.activeTabGroup === 0) {
@@ -763,12 +763,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 voucherType = "sales";
                 activeModule = "list";
             } else if (selectedTabIndex === 3) {
+                voucherType = "credit-note";
+                activeModule = "list";
+            } else if (selectedTabIndex === 4) {
+                voucherType = "receipt";
+                activeModule = "list";
+            } else if (selectedTabIndex === 5) {
                 voucherType = "sales";
                 activeModule = "pending";
-            } else if (selectedTabIndex === 4) {
+            } else if (selectedTabIndex === 6) {
                 voucherType = "sales";
                 activeModule = "settings";
-            } else if (selectedTabIndex === 5) {
+            } else if (selectedTabIndex === 7) {
                 voucherType = "sales";
                 activeModule = "templates";
             }
@@ -777,36 +783,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 voucherType = "debit-note";
                 activeModule = "list";
             } else if (selectedTabIndex === 1) {
-                voucherType = "credit-note";
-                activeModule = "list";
-            } else if (selectedTabIndex === 2) {
                 voucherType = "debit-note";
                 activeModule = "pending";
+            } else if (selectedTabIndex === 2) {
+                voucherType = "debit-note";
+                activeModule = "settings";
             } else if (selectedTabIndex === 3) {
                 voucherType = "debit-note";
-                activeModule = "settings";
-            } else if (selectedTabIndex === 4) {
-                voucherType = "debit-note";
                 activeModule = "templates";
-            }
-        } else if (this.activeTabGroup === 2) {
-            if (selectedTabIndex === 0) {
+            } else if (selectedTabIndex === 4) {
                 voucherType = "purchase-order";
                 activeModule = "list";
-            } else if (selectedTabIndex === 1) {
+            } else if (selectedTabIndex === 5) {
                 voucherType = "purchase";
                 activeModule = "list";
-            } else if (selectedTabIndex === 2) {
+            } else if (selectedTabIndex === 6) {
                 voucherType = "purchase";
                 activeModule = "settings";
-            }
-        } else if (this.activeTabGroup === 3) {
-            if (selectedTabIndex === 0) {
-                voucherType = "receipt";
-                activeModule = "list";
-            }
-        } else if (this.activeTabGroup === 4) {
-            if (selectedTabIndex === 0) {
+            } else if (selectedTabIndex === 7) {
                 voucherType = "payment";
                 activeModule = "list";
             }
