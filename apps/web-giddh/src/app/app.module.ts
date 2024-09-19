@@ -111,8 +111,8 @@ if (!environment.production) {
         {
             provide: ServiceConfig,
             useValue: localStorage.getItem('Country-Region') === 'GB'
-                ? { apiUrl: Configuration.DevApiUrl, appUrl: Configuration.DevApiUrl, _ }
-                : { apiUrl: Configuration.ApiUrl, appUrl: Configuration.ApiUrl, _ }
+                ? { apiUrl: Configuration.UkApiUrl, appUrl: Configuration.AppUrl, _ }
+                : { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
         },
         {
             provide: HTTP_INTERCEPTORS,
