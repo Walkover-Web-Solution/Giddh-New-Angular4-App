@@ -87,6 +87,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isSubscriptionLoading: boolean = false;
     /** Holds subscription id */
     public subscriptionId: string = '';
+    // /** Observer to track get company profile API call in process */
+    // public getCompanyProfileInProgress$: Observable<boolean>;
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
@@ -101,8 +103,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private generalService: GeneralService,
         private clipboardService: ClipboardService,
-        private settingsProfileActions : SettingsProfileActions) {
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        private settingsProfileActions: SettingsProfileActions) {
+        // console.log('sub');
+        // this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
@@ -209,9 +212,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((activeCompany) => {
             if (activeCompany) {
+                this.selectedCompany = null;
                 this.selectedCompany = activeCompany;
-                this.changeDetectionRef.detectChanges();
             }
+            this.changeDetectionRef.detectChanges();
         });
 
         this.store.dispatch(this.sessionAction.getAllSession());
