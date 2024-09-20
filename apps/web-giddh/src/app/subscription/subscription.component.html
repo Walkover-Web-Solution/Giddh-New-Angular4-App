@@ -356,7 +356,12 @@
                 </div>
             </mat-tab>
             <mat-tab [label]="localeData?.subscription?.tab_heading">
-                <ng-container class="wrap-tab-content-pd-15" *ngIf="selectedCompany?.planVersion === 1">
+                    <!-- {{getCompanyProfileInProgress$ | async}}
+              <giddh-page-loader *ngIf="getCompanyProfileInProgress$ | async"></giddh-page-loader> -->
+                <ng-container
+                    class="wrap-tab-content-pd-15"
+                    *ngIf=" selectedCompany?.planVersion === 1"
+                >
                     <subscription-v1
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
