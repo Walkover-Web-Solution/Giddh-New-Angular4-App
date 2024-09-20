@@ -21,7 +21,6 @@ import * as duration from 'dayjs/plugin/duration';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -87,8 +86,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isSubscriptionLoading: boolean = false;
     /** Holds subscription id */
     public subscriptionId: string = '';
-    // /** Observer to track get company profile API call in process */
-    // public getCompanyProfileInProgress$: Observable<boolean>;
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
@@ -102,11 +99,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private generalService: GeneralService,
-        private clipboardService: ClipboardService,
-        private settingsProfileActions: SettingsProfileActions) {
-        // console.log('sub');
-        // this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
-
+        private clipboardService: ClipboardService
+    ) {
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
