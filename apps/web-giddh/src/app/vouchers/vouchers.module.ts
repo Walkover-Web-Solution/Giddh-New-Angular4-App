@@ -23,7 +23,7 @@ import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
 import { VoucherCreateComponent } from "./create/create.component";
-import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
+import { BulkUpdateComponent } from "./cancel-einvoice-dialog/bulk-update.component";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";

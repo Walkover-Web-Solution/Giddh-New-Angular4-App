@@ -213,6 +213,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public createEwayBill$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
     public sessionUserEmail$: Observable<any> = this.select(this.store.select(state => state.session.user), (response) => response);
+    
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(

@@ -34,7 +34,7 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1 && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -250,7 +250,7 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length === 1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length === 1 && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -401,7 +401,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.action | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="!isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -467,18 +467,29 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
+                             <!-- Cancel e-invoice button -->
+                             <button mat-stroked-button color="primary"
+                                *ngIf="
+                                    isEInvoiceEnabled &&
+                                    selectedVouchers?.length === 1 &&
+                                    selectedVouchers[0].irnNumber
+                                "
+                                (click)="false && openCancelEInvoiceTemplate(cancelEInvoiceTemplate)"
+                            >
+                             {{ localeData?.cancel_e_invoice }}
+                             </button>
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreInvoice="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
-                                <button mat-menu-item *ngIf="selectedVouchers?.length === 1" (click)="showEwayBillDialog()">{{ localeData?.generate_eway_bill }}</button>
-                                <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
+                                <button mat-menu-item *ngIf="selectedVouchers?.length === 1 && selectedVoucher === 'sales'" (click)="showEwayBillDialog()">{{ localeData?.generate_eway_bill }}</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -664,8 +675,8 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
-                                        <p>{{ element.balanceStatus }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel'">
+                                        <p>{{ element.balanceStatus | titlecase }}</p>
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -674,7 +685,7 @@
                                             <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">{{ commonLocaleData?.app_payment_status?.unpaid }}</button>
                                             <button mat-menu-item (click)="actionVoucher(element, 'hold')">{{ commonLocaleData?.app_payment_status?.hold }}</button>
                                             <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{ commonLocaleData?.app_payment_status?.cancel }}</button>
-                                            <button mat-menu-item (click)="showEwayBillDialog(element)">{{ localeData?.generate_eway_bill }}</button>
+                                            <button mat-menu-item (click)="showEwayBillDialog(element)" *ngIf="selectedVoucher === 'sales'">{{ localeData?.generate_eway_bill }}</button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -728,16 +739,28 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
+                             <!-- Cancel e-invoice button -->
+                             <button mat-stroked-button color="primary"
+                                *ngIf="
+                                    isEInvoiceEnabled &&
+                                    selectedVouchers?.length === 1 &&
+                                    selectedVouchers[0].irnNumber
+                                "
+                                (click)="false && openCancelEInvoiceTemplate(cancelEInvoiceTemplate)"
+                            >
+                             {{ localeData?.cancel_e_invoice }}
+                             </button>
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -886,7 +909,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -944,16 +967,28 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
+                             <!-- Cancel e-invoice button -->
+                             <button mat-stroked-button color="primary"
+                                *ngIf="
+                                    isEInvoiceEnabled &&
+                                    selectedVouchers?.length === 1 &&
+                                    selectedVouchers[0].irnNumber
+                                "
+                                (click)="false && openCancelEInvoiceTemplate(cancelEInvoiceTemplate)"
+                            >
+                             {{ localeData?.cancel_e_invoice }}
+                             </button>
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -1102,7 +1137,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -1277,7 +1312,7 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -1412,7 +1447,7 @@
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.status | titlecase }}</p>
                                         <div class="d-flex action-btn column-gap5">
-                                            <button *ngIf="element?.status === 'open'" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="localeData?.convert_to_bill"
+                                            <button *ngIf="element?.status === 'open' && !isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="localeData?.convert_to_bill"
                                                 [matTooltipPosition]="'above'" (click)="convertBillDialog(element)">
                                                 <i class="icon-tick"></i>
                                             </button>
@@ -1420,11 +1455,11 @@
                                                 [matTooltipPosition]="'above'" (click)="openEmailSendDialog(element)">
                                                 <i class="icon-envelope"></i>
                                             </button>
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'" 
+                                            <button *ngIf="!isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'" 
                                                 [routerLink]="['/pages/purchase-management/purchase-order/new/' + element.uniqueName]">
                                                 <i class="icon-copy-small"></i>
                                             </button>
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
+                                            <button *ngIf="!isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
                                                 [matTooltipPosition]="'above'" (click)="deleteVoucherDialog(element)">
                                                 <i class="icon-trash"></i>
                                             </button>
@@ -1636,7 +1671,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -2284,7 +2319,7 @@
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -2543,7 +2578,7 @@
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>

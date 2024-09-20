@@ -30,7 +30,7 @@ import { trigger, state, style, transition, animate } from "@angular/animations"
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
+import { BulkUpdateComponent } from "../cancel-einvoice-dialog/bulk-update.component";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 
 // invoice-table
@@ -294,6 +294,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         isReceiptInvoice: false,
         isPaymentInvoice: false
     };
+     /** True, if user has enable GST E-invoice */
+     public gstEInvoiceEnable: boolean;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -620,6 +622,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.totalResults = response?.totalItems;
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
+
+                if (item.balanceStatus) {
+                    item.balanceStatus = item.balanceStatus.toLocaleLowerCase();
+                }
 
                 if (MULTI_CURRENCY_MODULES?.indexOf(this.voucherType) > -1) {
                     // For CR/DR note and Cash/Sales invoice
