@@ -21,7 +21,6 @@ import * as duration from 'dayjs/plugin/duration';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -100,10 +99,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private generalService: GeneralService,
-        private clipboardService: ClipboardService,
-        private settingsProfileActions : SettingsProfileActions) {
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-
+        private clipboardService: ClipboardService
+    ) {
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
@@ -209,9 +206,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((activeCompany) => {
             if (activeCompany) {
+                this.selectedCompany = null;
                 this.selectedCompany = activeCompany;
-                this.changeDetectionRef.detectChanges();
             }
+            this.changeDetectionRef.detectChanges();
         });
 
         this.store.dispatch(this.sessionAction.getAllSession());

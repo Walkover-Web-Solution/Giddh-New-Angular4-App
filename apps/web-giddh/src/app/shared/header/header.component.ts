@@ -254,6 +254,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSubscriptionPage: boolean = false;
     /** Hold plan version  */
     public planVersion: number;
+    /** Hold broadcast event */
+    public broadcast: any;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -506,6 +508,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
+
+        this.broadcast = new BroadcastChannel("subscription");
+        this.broadcast.onmessage = (event) => {
+            if (event?.data?.activeCompany !== undefined && event?.data?.activeCompany !== null) {
+                this.getCurrentCompanyData();
+            }
+        };
 
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1112,7 +1121,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.menuStateChange.emit(false);
         }
 
-        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings")  || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
+        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
             this.collapseSidebar(true);
         }
     }
@@ -1163,6 +1172,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnDestroy() {
+        this.broadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1529,7 +1539,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
         this.isGoToBranch = false;
-        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") )) {
+        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings"))) {
             return;
         }
 
