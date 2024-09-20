@@ -5,12 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="position-relative invoice-list">
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)">
+    <div class="position-relative invoice-list overflow-visible">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)" class="table-header-sticky">
             
             <!-- estimate-content-start -->
             <mat-tab [label]="localeData?.tabs?.estimates" *ngIf="activeTabGroup === 0">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']" *ngIf="!isCompany">
@@ -49,7 +49,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -201,7 +201,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnEstimate"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnEstimate; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnEstimate;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator

@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="clearfix">
+    <div class="clearfix overflow-visible">
         <mat-tab-group
             mat-stretch-tabs="false"
             [ngClass]="{ 'tab-integration': true }"
@@ -13,6 +13,7 @@
             [selectedIndex]="selectedTabParent"
             (selectedTabChange)="tabChanged($event)"
             [disableRipple]="true"
+            class="table-header-sticky overflow-visible"
         >
             <!-- <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
                 <ng-template tabHeading>
