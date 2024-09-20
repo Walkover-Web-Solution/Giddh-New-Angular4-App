@@ -41,5 +41,7 @@
     "no_linked_address_present" : "No linked address present.",
     "no_linked_warehouse_present" : "No linked warehouse present.",
     "flat_view": "Flat view",
-    "hierarchy_view": "Hierarchy view"
+    "hierarchy_view": "Hierarchy view",
+    "parent_branch": "Parent Branch",
+    "select_parent_branch": "Select Parent Branch"
 }
