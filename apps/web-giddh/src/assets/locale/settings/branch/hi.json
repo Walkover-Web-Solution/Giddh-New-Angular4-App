@@ -41,5 +41,7 @@
     "no_linked_address_present" : "कोई लिंक किया हुआ पता मौजूद नहीं है",
     "no_linked_warehouse_present" : "कोई लिंक किया हुआ गोदाम मौजूद नहीं है",
     "flat_view": "समतल दृश्य",
-    "hierarchy_view": "पदानुक्रम दृश्य"
+    "hierarchy_view": "पदानुक्रम दृश्य",
+    "parent_branch": "मूल शाखा",
+    "select_parent_branch": "मूल शाखा का चयन करें"
 }
