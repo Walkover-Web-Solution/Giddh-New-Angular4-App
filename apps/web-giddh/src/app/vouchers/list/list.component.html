@@ -187,7 +187,7 @@
 
             <!-- proforma-content-start -->
             <mat-tab label="Proformas">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary">
@@ -213,7 +213,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <table mat-table [dataSource]="dataSourceProforma" matSort class="w-100">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef> #
@@ -354,7 +354,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnProforma"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnProforma; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnProforma;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator [pageSizeOptions]="[5, 10, 20]"
@@ -368,7 +368,7 @@
             
             <!-- invoice-content-start -->
             <mat-tab label="Invoices">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="downloadCsvEmail">
@@ -419,7 +419,7 @@
                             <span class="font-16">₹4,16,988.00/-</span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <table mat-table [dataSource]="dataSource" matSort class="w-100">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef> #
@@ -565,7 +565,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator [pageSizeOptions]="[5, 10, 20]"
@@ -579,7 +579,7 @@
 
             <!-- credit-note-content-start -->
             <mat-tab label="Credit Note">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary">
@@ -613,7 +613,7 @@
                             <span class="font-16">₹4,17,193.26/-</span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <table mat-table [dataSource]="dataSourceCredit" matSort class="w-100">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef> # 
@@ -744,7 +744,8 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit"></tr>
+                            
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsCredit;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator [pageSizeOptions]="[5, 10, 20]"
@@ -758,7 +759,7 @@
 
             <!-- pending-content-start -->
             <mat-tab label="Pending">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <div class="custom-datepicker-wrapper">
@@ -772,7 +773,7 @@
                             <button mat-stroked-button color="primary">Preview & Generate</button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <table mat-table [dataSource]="dataSourcePending" matSort class="w-100">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef> # 
@@ -862,7 +863,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element">-</td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnPending"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnPending; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnPending;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator [pageSizeOptions]="[5, 10, 20]"
@@ -1395,7 +1396,7 @@
 
             <!-- purchase-content-start -->
             <mat-tab label="Purchase Order">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary">
@@ -1424,7 +1425,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <table mat-table [dataSource]="dataSourcePurchase" matSort class="w-100 purchase-table">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef> # </th>
@@ -1529,7 +1530,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnPurchase"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnPurchase; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnPurchase;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator [pageSizeOptions]="[5, 10, 20]"
@@ -1543,7 +1544,7 @@
 
             <!-- bill-content-start -->
             <mat-tab label="Bill">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary">
@@ -1575,7 +1576,7 @@
                             <span class="font-16">₹491.00/-</span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <table mat-table [dataSource]="dataSourceBill" matSort class="w-100">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef> # 
@@ -1704,7 +1705,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsBill"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsBill; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsBill;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator [pageSizeOptions]="[5, 10, 20]"
