@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="discount box clearfix section-center position-relative">
+    <div class="discount box clearfix section-center position-relative overflow-visible">
         <div *ngIf="isLoading" class="mt-5">
             <giddh-page-loader></giddh-page-loader>
         </div>
@@ -17,7 +17,7 @@
         </div>
         <button *ngIf="discountList?.length && !isLoading" mat-raised-button color="primary" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
     
-        <div class="mt-4" *ngIf="discountList?.length && !isLoading">
+        <div class="mt-4 overflow-visible table-header-sticky" *ngIf="discountList?.length && !isLoading">
             <table mat-table [dataSource]="discountList" class="bdr table basic mr-b05 on-mobile-view w-100">
                 <ng-container matColumnDef="number">
                     <th mat-header-cell *matHeaderCellDef>#</th>

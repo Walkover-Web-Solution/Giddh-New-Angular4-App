@@ -2,6 +2,7 @@
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
+            z-index: 1;
         }
     }
     .mdc-data-table__content {
@@ -67,6 +68,9 @@ aging-report {
 .table-header-sticky {
     table {
         border-collapse: inherit;
+        td {
+            border-top: 0 !important;
+        }
     }
     .mat-mdc-tab-group {
         overflow: visible !important;
