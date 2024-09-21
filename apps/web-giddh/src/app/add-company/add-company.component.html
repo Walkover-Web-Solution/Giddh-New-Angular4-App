@@ -275,14 +275,18 @@
                                     class="mr-t15"
                                     *ngIf="secondStepForm.controls['businessNature']?.value === 'Other'"
                                 >
-                                    <input-field
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{
+                                         localeData?.other_business_nature
+                                    }}</mat-label>
+                                    <textarea
+                                        matInput
+                                        rows="3"
                                         [name]="'other'"
-                                        [placeholder]="localeData?.enter_business_nature"
-                                        [type]="'text'"
                                         formControlName="otherBusinessNature"
-                                        [label]="localeData?.other_business_nature"
-                                    >
-                                    </input-field>
+                                        [placeholder]="localeData?.enter_business_nature"
+                                    ></textarea>
+                                </mat-form-field>
                                 </div>
                             </div>
                             <ng-container
