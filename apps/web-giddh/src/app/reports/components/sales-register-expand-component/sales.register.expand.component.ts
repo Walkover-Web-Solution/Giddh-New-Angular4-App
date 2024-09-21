@@ -17,6 +17,7 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -96,6 +97,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         sales: false,
         return: false,
         qty_rate: false,
+        qty_unit: false,
         value: false,
         discount: false,
         tax: false,
@@ -118,6 +120,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -179,8 +182,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
-                _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
+                this.dataSource.data = this.SalesRegisteDetailedItems.items.map((obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
+                    return obj;
                 });
                 if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
@@ -292,6 +296,11 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             {
                 "value": "net_sales",
                 "label": "Net Sales",
+                "checked": true
+            },
+            {
+                "value": "qty_unit",
+                "label": "Qty/Unit",
                 "checked": true
             }
         ];
