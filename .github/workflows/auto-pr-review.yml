@@ -1,0 +1,8 @@
+  - name: PR Review
+  # You may pin to the exact commit or the version.
+  # uses: actions-cool/pr-review@903bf051ca31e9d60874f13b3698fceed3633566
+  uses: actions-cool/pr-review@v0.0.1-beat
+  with:
+    # Secret GitHub API token to use for making API requests.
+    GITHUB_TOKEN: # default is ${{ github.token }}
+          
