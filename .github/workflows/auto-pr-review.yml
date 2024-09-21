@@ -3,10 +3,12 @@ name: Auto PR Review
 on: [pull_request]
 
 jobs:
-  test:
+  review:
+    name: Review
     runs-on: ubuntu-latest
-
     steps:
-      - uses: Garlic-Team/Auto-Review@1.0.5
+      - name: Review
+        uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          
