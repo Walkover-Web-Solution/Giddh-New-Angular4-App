@@ -1705,7 +1705,7 @@ export class GeneralService {
     * @returns {boolean}
     * @memberof GeneralService
     */
-    public checkCompanySupportGocardless(countryCode: string): boolean {
+    public checkCompanySupportGoCardless(countryCode: string): boolean {
         const gocardlessSupportedCountryCodeList = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
         return gocardlessSupportedCountryCodeList.includes(countryCode);
     }
