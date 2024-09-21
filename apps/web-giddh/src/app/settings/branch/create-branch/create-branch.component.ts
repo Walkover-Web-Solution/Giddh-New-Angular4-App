@@ -129,9 +129,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     ) {
         this.branchesDropdown = new FormControl('');
         this.branchForm = this.formBuilder.group({
-            alias: ['', [Validators.required, Validators.maxLength(50)]],
+            alias: [''],
             parentBranchUniqueName: [''],
-            name: [''],
+            name: ['', [Validators.required, Validators.maxLength(50)]],
             address: ['']
         });
     }
@@ -170,7 +170,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         currencyName: response.countryV2 && response.countryV2?.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.branchForm.get('name')?.patchValue(this.companyDetails.name);
+                // this.branchForm.get('name')?.patchValue(this.companyDetails.name);
                 if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -185,7 +185,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         ).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
             if (search || search === "") {
-                branchesClone = this.allBranches?.filter(branch => branch.alias?.toLowerCase()?.includes(search?.toLowerCase()));
+                branchesClone = this.allBranches?.filter(branch => branch.name?.toLowerCase()?.includes(search?.toLowerCase()));
                 this.branches = branchesClone;
             }
         });
@@ -293,7 +293,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         const formValue = this.branchForm?.value;
         const requestObj = {
             name: formValue.name,
-            alias: formValue.alias,
+            alias: formValue.name,
             parentBranchUniqueName: formValue.parentBranchUniqueName,
             linkAddresses: []
         };
@@ -435,7 +435,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
                     isDefault: false,
-                    label: result.alias,
+                    label: result.name,
                     value: result?.uniqueName
                 }));
                 if (successCallback) {

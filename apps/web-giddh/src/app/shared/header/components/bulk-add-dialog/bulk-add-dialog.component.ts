@@ -59,10 +59,10 @@ export class BulkAddDialogComponent implements OnInit {
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
                 formArray?.clear();
                 this.branches.forEach((item) => {
-                    if (item?.alias) {
+                    if (item?.name) {
                         formArray?.push(this.openingBulkGet(
                             {
-                                name: item.alias,
+                                name: item.name,
                                 uniqueName: item.uniqueName
                             }
                         ));

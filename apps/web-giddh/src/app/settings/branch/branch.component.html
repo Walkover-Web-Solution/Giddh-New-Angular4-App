@@ -78,7 +78,7 @@
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                         ></i>
                                                         <div>
-                                                            <h2>{{ branch.alias }}</h2>
+                                                            <h2>{{ branch.name }}</h2>
                                                         </div>
                                                     </div>
                                                     <div class="pull-right right-card-section">
@@ -123,11 +123,11 @@
                                                 </div>
 
                                                 <div class="clearfix">
-                                                    <div *ngIf="branch?.parentBranch?.alias" class="pull-left">
+                                                    <div *ngIf="branch?.parentBranch?.name" class="pull-left">
                                                         <span class="parent-branch"
                                                             >{{ localeData?.parent_entity }}:</span
                                                         >
-                                                        {{ branch?.parentBranch?.alias }}
+                                                        {{ branch?.parentBranch?.name }}
                                                     </div>
                                                 </div>
                                                 <div class="clearfix row">

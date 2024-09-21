@@ -474,7 +474,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch?.alias,
+                    label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
                     parentBranch: branch?.parentBranch
@@ -497,14 +497,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : "",
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : "",
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
                     this.currentBranchData = _.cloneDeep(this.currentBranch);
-                    if (this.currentBranch) {
-                        this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : "");
-                    }
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -627,7 +624,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.currentBranch.name = this.activeCompany.name;
                 this.currentBranch.uniqueName = this.activeCompany?.uniqueName;
-                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
+                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : '';
             }
         }
 

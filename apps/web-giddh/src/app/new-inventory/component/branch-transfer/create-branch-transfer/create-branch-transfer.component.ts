@@ -911,7 +911,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             if (branches) {
                 if (branches.results?.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(branch => ({
-                        label: `${branch.alias}`,
+                        label: `${branch.name}`,
                         value: branch?.uniqueName,
                         additional: branch
                     }));

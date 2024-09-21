@@ -541,7 +541,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadBranchWithWarehouse(): void {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.alias || branch.name}`, value: branch?.uniqueName }));
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${ branch.name}`, value: branch?.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
         }
     }

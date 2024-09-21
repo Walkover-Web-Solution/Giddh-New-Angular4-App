@@ -222,7 +222,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.forceClear$ = observableOf({ status: true });
                 this.currentCompanyBranches = [];
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
@@ -245,7 +245,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }

@@ -127,7 +127,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
@@ -150,7 +150,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias:'',
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
