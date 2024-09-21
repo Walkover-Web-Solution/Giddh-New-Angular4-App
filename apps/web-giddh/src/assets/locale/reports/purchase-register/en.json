@@ -12,6 +12,7 @@
     "voucher_type": "Voucher Type",
     "voucher_no": "Voucher No.",
     "qty_rate": "Qty-Rate",
+    "qty_unit": "Qty/Unit",
     "discount": "Discount",
     "tax": "Tax",
     "date": "Date",

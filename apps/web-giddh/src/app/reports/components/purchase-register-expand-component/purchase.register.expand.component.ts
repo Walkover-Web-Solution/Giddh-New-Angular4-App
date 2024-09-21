@@ -17,6 +17,7 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
     selector: "purchase-register-expand",
@@ -114,6 +115,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     
     constructor(
         private store: Store<AppState>,
@@ -201,8 +203,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             .subscribe((res: PurchaseRegisteDetailedResponse) => {
                 if (res) {
                     this.PurchaseRegisteDetailedItems = res;
-                    _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {
+                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
                         obj.date = this.getDateToDMY(obj.date);
+                        return obj;
                     });
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
