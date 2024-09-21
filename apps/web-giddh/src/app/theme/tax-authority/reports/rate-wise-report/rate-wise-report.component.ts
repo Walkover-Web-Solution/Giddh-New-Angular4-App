@@ -102,7 +102,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
 * Loads the tax details of a company
 *
 * @private
-* @memberof VatLiabilitiesPayments
+* @memberof RateWiseReportComponent
 */
     private loadTaxDetails(): void {
         this.componentStore.getTaxNumber();

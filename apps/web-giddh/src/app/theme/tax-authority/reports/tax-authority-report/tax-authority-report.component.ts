@@ -96,7 +96,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     * Loads the tax details of a company
     *
     * @private
-    * @memberof VatLiabilitiesPayments
+    * @memberof TaxAuthorityReportComponent
     */
     private loadTaxDetails(): void {
         this.componentStore.getTaxNumber();

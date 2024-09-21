@@ -365,11 +365,11 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
-/**
-*   Get Tax Number
-*
-* @memberof VatReportComponentStore
-*/
+    /**
+    * Get Tax Number
+    *
+    * @memberof TaxAuthorityComponentStore
+    */
     readonly getTaxNumber = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {

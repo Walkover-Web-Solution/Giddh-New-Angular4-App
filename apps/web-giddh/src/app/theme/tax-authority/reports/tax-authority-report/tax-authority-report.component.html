@@ -38,7 +38,7 @@
                         <giddh-page-loader></giddh-page-loader>
                     </div>
                     <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
-                        <div class="white-box w-100" *ngIf="(taxAuthorityWiseReport$ | async)?.responses?.length; else nodata">
+                        <div class="white-box w-100" *ngIf="(taxAuthorityWiseReport$ | async)?.responses?.length; else noData">
                             <!-- Tax Authority Table  -->
                             <div class="table-responsive">
                                 <table mat-table [dataSource]="(taxAuthorityWiseReport$ | async)?.responses"
@@ -128,7 +128,7 @@
                         </div>
 
                         <!-- No Data Found Message -->
-                        <ng-template #nodata>
+                        <ng-template #noData>
                             <div class="no-data">
                                 <h1 *ngIf="!getFormControl('taxNumber')?.value">{{ localeData?.no_sales_tax_available }}</h1>
                                 <h1 *ngIf="getFormControl('taxNumber')?.value">{{ commonLocaleData?.app_no_result_found }}</h1>
