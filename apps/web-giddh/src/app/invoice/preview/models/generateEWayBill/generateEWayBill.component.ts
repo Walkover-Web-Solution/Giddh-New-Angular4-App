@@ -4,7 +4,7 @@ import { TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
-    selector: 'app-generate-ewaybill-modal',
+    selector: 'app-generate-ewaybill-dialog',
     templateUrl: './generateEWayBill.component.html',
     styleUrls: [`./generateEWayBill.component.scss`]
 })

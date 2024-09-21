@@ -30,8 +30,9 @@ import { trigger, state, style, transition, animate } from "@angular/animations"
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { BulkUpdateComponent } from "../cancel-einvoice-dialog/bulk-update.component";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
+import { BulkUpdateComponent } from "../bulk-update/bulk-update..component";
+import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 
 // invoice-table
 export interface PeriodicElement {
@@ -294,8 +295,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         isReceiptInvoice: false,
         isPaymentInvoice: false
     };
-     /** True, if user has enable GST E-invoice */
-     public gstEInvoiceEnable: boolean;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -528,7 +527,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search && search === '') {
+            if (search || search === '') {
+                console.log("search", search);
+                
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -542,12 +543,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.isSearching = true;
                 this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search && search === '') {
+            if (search || search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.advanceFilters.vendorName = search;
                 } else {
@@ -555,17 +557,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.isSearching = true;
                 this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
 
         this.purchaseOrderUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search && search === '') {
+            if (search || search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.advanceFilters.purchaseOrderNumber = search;
                 }
                 this.isSearching = true;
                 this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -1146,6 +1150,33 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
         let dialogRef = this.dialog.open(BulkUpdateComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: dataToSend
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        })
+    }
+
+    /**
+     * Open Cancel EInvoice Dialog
+     *
+     * @memberof VoucherListComponent
+     */
+    public openCancelEInvoice(): void {
+        const dataToSend = {
+            voucherType: this.voucherType,
+            selectedEInvoice: this.selectedVouchers[0],
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+
+        let dialogRef = this.dialog.open(CancelEInvoiceDialogComponent, {
             panelClass: ['mat-dialog-md'],
             data: dataToSend
         });

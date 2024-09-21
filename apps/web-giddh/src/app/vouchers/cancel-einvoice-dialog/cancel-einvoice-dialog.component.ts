@@ -15,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
+import { C } from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'cancel-einvoice-dialog',
@@ -37,16 +38,14 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     public selectedEInvoice: any;
     /** Holds EInvoice Cancellation Reason Options Array */
     public eInvoiceCancellationReasonOptions: IOption[] = [];
+    /** Holds Voucher Type */
+    public voucherType: string;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
         private formBuilder: FormBuilder,
         private componentStore: VoucherComponentStore,
-        private generalService: GeneralService,
-        private toasterService: ToasterService,
-        private dialog: MatDialog,
-        private store: Store<AppState>,
     ) { }
 
     /**
@@ -62,6 +61,7 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.selectedEInvoice = this.inputData.selectedEInvoice;
+        this.voucherType = this.inputData.voucherType;
 
         this.eInvoiceCancelForm = this.formBuilder.group({
             cancellationReason: [''],
@@ -75,17 +75,71 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
             { label: this.localeData?.cancel_e_invoice_reasons?.other, value: '4' }
         ];
 
-
-        this.componentStore.uploadImageBase64Response$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.cancelEInvoiceInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
             }
         });
 
 
-        this.componentStore.bulkUpdateVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.cancelEInvoiceIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                this.dialogRef.close();
             }
         });
+    }
+
+    /**
+     * Submit EInvoice Cancellation form
+     *
+     * @memberof CancelEInvoiceDialogComponent
+     */
+    public submitEInvoiceCancellation(): void {
+        console.log("submitEInvoiceCancellation", this.eInvoiceCancelForm.value);
+        const eInvoiceCancelForm = this.eInvoiceCancelForm.value;
+
+        if (eInvoiceCancelForm) {
+            const requestObject: any = {
+                cnlRsn: eInvoiceCancelForm.cancellationReason,
+                cnlRem: eInvoiceCancelForm.cancellationRemarks?.trim()
+            };
+
+            const postObject: any = {};
+            // let apiCallObservable;
+
+            postObject.uniqueName = this.selectedEInvoice?.uniqueName;
+            postObject.voucherType = this.voucherType;
+
+            requestObject.accountUniqueName = this.selectedEInvoice?.account?.uniqueName
+            requestObject.voucherVersion = 2;
+
+            // apiCallObservable = this._invoiceService.cancelEInvoiceV2(requestObject, postObject);
+            this.componentStore.cancelEInvoice({ getRequestObject: requestObject, postRequestObject: postObject });
+
+            // apiCallObservable.pipe(take(1)).subscribe(response => {
+            //     this.getVoucher(this.isUniversalDateApplicable);
+            //     if (response?.status === 'success') {
+            //         this._toaster.successToast(response.body);
+
+            //     } 
+            //     // else if (response?.status === 'error') {
+            //     //     this._toaster.errorToast(response.message, response.code);
+            //     // }
+            // });
+        }
+
+
+    }
+
+    /**
+    * Trims the cancellation remarks
+    *
+    * @memberof CancelEInvoiceDialogComponent
+    */
+    public handleBlurOnCancellationRemarks(): void {
+        const cancellationRemarksControl = this.eInvoiceCancelForm?.get('cancellationRemarks');
+        if (cancellationRemarksControl) {
+            cancellationRemarksControl.patchValue(cancellationRemarksControl.value.trim());
+        }
     }
 
 
