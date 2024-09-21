@@ -8,12 +8,14 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { OnboardingComponentStore } from './utility/onboarding.store';
 
 
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
+    providers: [OnboardingComponentStore],
     animations: [
         trigger("slideInOut", [
             state("in", style({
@@ -58,7 +60,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions,
+        private componenet: OnboardingComponentStore
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -74,7 +77,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+        this.componenet.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
              if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                  this.isGocardlessSupportedCountry = this._generalService.checkCompanySupportGocardless(profile.countryV2.alpha2CountryCode);
              }
