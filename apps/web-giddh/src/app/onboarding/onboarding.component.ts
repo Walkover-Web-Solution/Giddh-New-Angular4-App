@@ -49,6 +49,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
 
@@ -71,6 +73,12 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
             }
         });
+
+         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                 this.isGocardlessSupportedCountry = this._generalService.checkCompanySupportGocardless(profile.countryV2.alpha2CountryCode);
+             }
+         });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
