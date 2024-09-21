@@ -7,8 +7,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-      - uses: omio-labs/pr-reviewer-bot@v1
+      - uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
