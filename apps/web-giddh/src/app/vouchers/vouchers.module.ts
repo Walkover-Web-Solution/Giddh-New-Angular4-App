@@ -75,6 +75,16 @@ import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
+import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
+import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
+import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
+import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
+import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
+import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
+import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
 
 @NgModule({
     declarations: [
@@ -97,7 +107,8 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
         DesignFilterComponent,
         ContentFilterComponent,
         ConvertBillDialogComponent,
-        FullAddressComponent
+        FullAddressComponent,
+        DownloadVoucherComponent
     ],
     imports: [
         CommonModule,
@@ -156,7 +167,16 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
         ConfirmationModalModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
-        NgxMaskModule
+        NgxMaskModule,
+        GenerateEWayBillModule,
+        DatepickerWrapperModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        PurchaseSettingModule,
+        InvoiceSettingModule,
+        InvoiceGenerateModule,
+        InvoiceTemplatesModule,
+        CdkScrollModule
     ],
     exports: [
 

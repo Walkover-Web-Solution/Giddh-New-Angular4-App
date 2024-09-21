@@ -65,6 +65,10 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
 import { CommonModule } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
+import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
+import { MatListModule } from '@angular/material/list';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 
 @NgModule({
     declarations: [
@@ -89,11 +93,13 @@ import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module'
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
-        SettingCampaignComponent
+        SettingCampaignComponent,
+        InstitutionsListComponent
     ],
     imports: [
         CommonModule,
         SharedModule,
+        MatListModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,
@@ -137,7 +143,9 @@ import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module'
         WatchVideoModule,
         CreateAddressModule,
         TagsModule,
-        TaxAuthorityModule
+        TaxAuthorityModule,
+        NgxMatSelectSearchModule,
+        D3TreeChartModule
     ],
 })
 

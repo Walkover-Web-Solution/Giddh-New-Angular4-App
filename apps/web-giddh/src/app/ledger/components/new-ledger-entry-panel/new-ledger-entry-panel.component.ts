@@ -774,8 +774,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public calculateAmount() {
-        this.isInclusiveEntry = this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive;
+        this.isInclusiveEntry = false;
         this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
+        this.totalForTax = this.currentTxn.amount;
+
         if (this.currentTxn.inventory) {
             this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
@@ -18,6 +18,9 @@ import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from '../services/general.service';
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -65,7 +68,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public modalRef: BsModalRef;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
-    public isMobileScreen: boolean = true;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
@@ -95,28 +97,31 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions,
         private changeDetectionRef: ChangeDetectorRef,
-        private clipboardService: ClipboardService) {
-        this.contactNo$ = this.store.pipe(select(s => {
-            if (s.session.user) {
-                return s.session.user.user.contactNo;
+        private dialog: MatDialog,
+        private generalService: GeneralService,
+        private clipboardService: ClipboardService
+    ) {
+        this.contactNo$ = this.store.pipe(select(appState => {
+            if (appState.session.user) {
+                return appState.session.user.user.contactNo;
             }
         }), takeUntil(this.destroyed$));
-        this.countryCode$ = this.store.pipe(select(s => {
-            if (s.session.user) {
-                return s.session.user.countryCode;
+        this.countryCode$ = this.store.pipe(select(appState => {
+            if (appState.session.user) {
+                return appState.session.user.countryCode;
             }
         }), takeUntil(this.destroyed$));
 
-        this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
-        this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
-        this.userSessionResponse$ = this.store.pipe(select(s => s.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
-        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
+        this.isAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.userSessionResponse$ = this.store.pipe(select(appState => appState.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.updateProfileInProgress), takeUntil(this.destroyed$));
 
-        this.authenticateTwoWay$ = this.store.pipe(select(s => {
-            if (s.session.user) {
-                return s.session.user.user.authenticateTwoWay;
+        this.authenticateTwoWay$ = this.store.pipe(select(appState => {
+            if (appState.session.user) {
+                return appState.session.user.user.authenticateTwoWay;
             }
         }), takeUntil(this.destroyed$));
     }
@@ -124,7 +129,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /**
      * Copy Authkey to Clipboard
      *
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public toggleIsCopied(): void {
         this.isCopied = true;
@@ -137,11 +142,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         document.querySelector('body').classList.add('setting-sidebar-open');
 
-        this.breakPointObservar.observe([
-            '(max-width:767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
 
         if (!this.isCreateAndSwitchCompanyInProcess) {
             document.querySelector('body').classList.add('tabs-page');
@@ -172,11 +172,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.contactNo$.subscribe(s => this.phoneNumber = s);
-        this.countryCode$.subscribe(s => this.countryCode = s);
-        this.isAddNewMobileNoSuccess$.subscribe(s => this.showVerificationBox = s);
-        this.isVerifyAddNewMobileNoSuccess$.subscribe(s => {
-            if (s) {
+        this.contactNo$.subscribe(appState => this.phoneNumber = appState);
+        this.countryCode$.subscribe(appState => this.countryCode = appState);
+        this.isAddNewMobileNoSuccess$.subscribe(appState => this.showVerificationBox = appState);
+        this.isVerifyAddNewMobileNoSuccess$.subscribe(appState => {
+            if (appState) {
                 this.oneTimePassword = '';
                 this.showVerificationBox = false;
             }
@@ -192,29 +192,31 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.toasty.errorToast(a?.message, a?.status);
             }
         });
-        this.store.pipe(select(s => s.subscriptions.companies), takeUntil(this.destroyed$))
-            .subscribe(s => this.companies = s);
-        this.store.pipe(select(s => s.subscriptions.companyTransactions), takeUntil(this.destroyed$))
-            .subscribe(s => this.companyTransactions = s);
+        this.store.pipe(select(appState => appState.subscriptions.companies), takeUntil(this.destroyed$))
+            .subscribe(appState => this.companies = appState);
+        this.store.pipe(select(appState => appState.subscriptions.companyTransactions), takeUntil(this.destroyed$))
+            .subscribe(appState => this.companyTransactions = appState);
 
-        this.store.pipe(select(s => s.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
+        this.store.pipe(select(appState => appState.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
             if (user) {
                 this.user = cloneDeep(user.user);
                 this.userSessionId = _.cloneDeep(user.session?.id);
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((activeCompany) => {
             if (activeCompany) {
+                this.selectedCompany = null;
                 this.selectedCompany = activeCompany;
             }
+            this.changeDetectionRef.detectChanges();
         });
 
         this.store.dispatch(this.sessionAction.getAllSession());
 
-        this.userSessionResponse$.subscribe(s => {
-            if (s && s.length) {
-                this.userSessionList = s.map(session => {
+        this.userSessionResponse$.subscribe(appState => {
+            if (appState && appState.length) {
+                this.userSessionList = appState.map(session => {
                     // Calculate sign in date
                     session.signInDate = dayjs(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
                     // Calculate sign in time
@@ -224,6 +226,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                     session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
                     return session;
                 });
+                this.changeDetectionRef.detectChanges();
             }
         });
 
@@ -237,7 +240,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /**
      * Lifecycle method that is triggered once all the view child are rendered
      *
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public ngAfterViewInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
@@ -304,18 +307,45 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      *
      * @param {string} sessionId Session ID
      * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public deleteSession(sessionId: string, sessionIndex: number): void {
         const requestPayload = {
             sessionId,
             sessionIndex
         };
-        this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_single_session, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+                this.store.dispatch(this.sessionAction.getAllSession());
+            }
+        });
     }
 
-    public clearAllSession() {
-        this.store.dispatch(this.sessionAction.deleteAllSession());
+    /**
+     * Deletes All sessions
+     *
+     * @memberof SubscriptionComponent
+     */
+    public clearAllSession(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteAllSession());
+                this.router.navigate(['/login']);
+            }
+        });
     }
 
     /**
@@ -323,39 +353,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * which is used by header component, update menu panel and
      * change the route URL as per selected tab
      *
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public onTabChanged(): void {
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${this.tabName[this.activeTabIndex]}`));
         this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof UserDetailsComponent
-     */
-    public getPageHeading(): string {
-        let pageHeading = "";
-
-        if (this.isMobileScreen) {
-            switch (this.activeTabIndex) {
-                case 0:
-                    pageHeading = this.localeData?.auth_key?.tab_heading;
-                    break;
-                case 1:
-                    pageHeading = this.localeData?.mobile_number?.tab_heading;
-                    break;
-                case 2:
-                    pageHeading = this.localeData?.session?.tab_heading;
-                    break;
-                case 3:
-                    pageHeading = this.localeData?.subscription?.tab_heading;
-                    break;
-            }
-        }
-        return pageHeading;
     }
 
     /**
@@ -364,7 +366,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param {number} index Index of current session
      * @param {*} item Session ID instance
      * @return {*} {string} Session's ID for unique identification
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public trackBySessionId(index: number, item: any): string {
         return item.sessionId;

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -200,7 +200,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });

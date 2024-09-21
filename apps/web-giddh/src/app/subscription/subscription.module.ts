@@ -55,8 +55,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-import { OldSubscriptionComponent } from './components/old-subscription/old-subscription.component';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
+import { SubscriptionV1Component } from './components/subscription-v1/subscription-v1.component';
 
 @NgModule({
     imports: [
@@ -109,7 +109,7 @@ import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-me
 
     ],
     exports: [SubscriptionListComponent,
-        OldSubscriptionComponent,
+        SubscriptionV1Component,
         UserDetailsPipe,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
@@ -120,7 +120,7 @@ import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-me
     ],
     declarations: [
         SubscriptionComponent,
-        OldSubscriptionComponent,
+        SubscriptionV1Component,
         SubscriptionListComponent,
         CompanyListDialogComponent,
         PaymentMethodDialogComponent,
@@ -135,7 +135,6 @@ import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-me
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        SubscriptionComponent,
         AddOnsComponent,
         UserDetailsPipe
     ],

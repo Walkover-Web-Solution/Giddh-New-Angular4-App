@@ -55,6 +55,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Output() public focusOut: EventEmitter<any> = new EventEmitter<any>();
     /** This will hold if datepicker is open */
     public isDatepickerOpen: boolean = false;
+     /** This is used to show change date */
+     public inputChange: any = '';
     /** Internal data model */
     private innerValue: any = '';
     /** This is used to show default date */
@@ -97,13 +99,25 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     }
     
     /**
+     * get current value on input 
+     * 
+     * @param event 
+     */
+    public dateInputChange(event: Event): void {
+        if (event) {
+           const inputElement = event.target as HTMLInputElement;
+           const inputValue = inputElement.value;
+           this.inputChange = inputValue;
+        }
+    } 
+    /**
      * Callback for date change
      *
      * @param {MatDatepickerInputEvent<Date>} event
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = (typeof(event?.value) === "object") ? dayjs(event?.value).toDate() : dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
+        let selectedDate = (typeof(event?.value) === "object" && event?.value !== null) ? dayjs(event?.value).toDate() : dayjs(this.inputChange, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
     }

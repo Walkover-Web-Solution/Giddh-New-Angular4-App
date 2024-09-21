@@ -7,7 +7,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
@@ -226,6 +226,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 this.selectedMonth = "";
                 this.selectedYear = "";
                 this.year = null;
+                this.getVatReport();
             }
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -283,7 +284,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Set tax type label 
+     * Set tax type label
      *
      * @private
      * @memberof VatReportFiltersComponent
@@ -306,7 +307,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Set Tax Authority dropdown lable value 
+     * Set Tax Authority dropdown lable value
      *
      * @private
      * @param {string} uniqueName
@@ -321,7 +322,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Set Tax dropdown lable value 
+     * Set Tax dropdown lable value
      *
      * @private
      * @param {string} uniqueName
@@ -434,7 +435,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -551,12 +552,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
 
             let endYear = endDate.split('-');
             endYear = endYear[endYear?.length - 1];
-
-            this.financialYears = [
-                { label: startYear, value: startYear },
-                { label: endYear, value: endYear }
-            ];
-
+            for (let year = startYear; year <= endYear; year++) {
+                this.financialYears.push({ label: year, value: year });
+            }
             return { startYear: startYear, endYear: endYear };
         }
     }

@@ -29,7 +29,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -937,7 +937,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             } else {
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
             }
         });
 
@@ -2580,7 +2580,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
             data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
-            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
+            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(typeof(data.voucherDetails.voucherDate) === "object" ? dayjs(data.voucherDetails.voucherDate).toDate() : dayjs(data.voucherDetails.voucherDate , GIDDH_DATE_FORMAT), 'd')) {
                 this.isShowLoader = false;
                 this.startLoader(false);
                 let dateText = this.commonLocaleData?.app_invoice;
@@ -6171,7 +6171,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return obj;
     }
 
-    private showGstAndTrnUsingCountryName(name: string) {        
+    private showGstAndTrnUsingCountryName(name: string) {
         if (this.selectedCompany && this.selectedCompany.country === name) {
             if (name === 'India') {
                 this.showGSTINNo = true;

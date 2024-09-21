@@ -1069,13 +1069,14 @@ export class GeneralService {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, VoucherTypeEnum.purchaseOrder]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
 
+
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (this.voucherApiVersion === 2) {
+            if (this.voucherApiVersion === 2 && item.exchangeRate !== undefined) {
                 grandTotalConversionRate = item.exchangeRate;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
@@ -1698,6 +1699,19 @@ export class GeneralService {
     }
 
     /**
+    * Check if a given country code is included in the array of supported countries for Gocardless, and return a boolean value
+    * indicating whether the country is supported or not.
+    *
+    * @param {string} countryCode
+    * @returns {boolean}
+    * @memberof GeneralService
+    */
+    public checkCompanySupportGocardless(countryCode: string): boolean {
+        const gocardlessSupportedCountryCodeList = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
+        return gocardlessSupportedCountryCodeList.includes(countryCode);
+    }
+
+    /**
      * This will return the system current user time zone
      *
      * @return {*}
@@ -2041,4 +2055,65 @@ export class GeneralService {
             buttons
         };
     }
+
+    /**
+     *  Delete sessions confirmation dialog
+     *
+     * @param confirmationMessage
+     * @param commonLocaleData
+     * @returns
+     */
+    public deleteConfiguration(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = confirmationMessage;
+        return {
+            buttons,
+            headerText,
+            headerCssClass,
+            messageCssClass,
+            messageText
+        };
+    }
+
+    /**
+     * This will use for confirmation delete vocher
+     *
+     * @param {string} headerText
+     * @param {string} messageText
+     * @param {string} footerText
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getVoucherDeleteConfiguration(headerText: string, messageText: string, footerText: string, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const footerCssClass: string = 'mr-b1 text-light';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: messageText,
+            messageCssClass,
+            footerText: footerText,
+            footerCssClass,
+            buttons
+        };
+    }
 }
+

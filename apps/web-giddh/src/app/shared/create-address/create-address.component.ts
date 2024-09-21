@@ -212,6 +212,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                     alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
+                    parentBranchName: [this.branchToUpdate.parentBranchName],
                     linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
                         return item?.uniqueName ===
                             this.branchToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
@@ -518,7 +519,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public isStateReadonly(): boolean {
         const isGSTIN = this.addressConfiguration?.tax?.name === 'GSTIN';
         const stateLabelNotNull = this.addressForm?.get('stateLabel')?.value !== null;
-        const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "" && this.addressForm?.get('taxNumber')?.value !== null;      
+        const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "" && this.addressForm?.get('taxNumber')?.value !== null;
         return isGSTIN && stateLabelNotNull && taxNumberNotEmpty;
     }
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, ReplaySubject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,14 +18,14 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
-import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
+import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
     styleUrls: ['./subscription-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SubscriptionComponentStore, BuyPlanComponentStore]
+    providers: [SubscriptionComponentStore, BuyPlanComponentStore, CompanyListDialogComponentStore]
 })
 export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */
@@ -47,11 +47,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** Holds Store Subscription list observable*/
-    public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
+    public subscriptionList$: Observable<any> = this.componentStore.select(state => state.subscriptionList);
     /** Holds Store Subscription list in progress API success state as observable*/
-    public subscriptionListInProgress$ = this.componentStore.select(state => state.subscriptionListInProgress);
+    public subscriptionListInProgress$: Observable<any> = this.componentStore.select(state => state.subscriptionListInProgress);
     /** This will use for subscription pagination logs object */
-    public subscriptionRequestParams = {
+    public subscriptionRequestParams: any = {
         page: 1,
         totalPages: 0,
         totalItems: 0,
@@ -71,11 +71,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /* True if billing account show */
     public showBillingAccount = false;
-    /* True if  subscriber show */
+    /* True if subscriber show */
     public showSubscriber = false;
-    /* True if  country show */
+    /* True if country show */
     public showCountry = false;
-    /* True if  name show */
+    /* True if name show */
     public showName = false;
     /* True if Plan Name show */
     public showPlanSubName = false;
@@ -114,6 +114,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    /** Holds Store Archive company API success state as observable*/
+    public archiveCompanySuccess$ = this.componentStoreCompanyListDialog.select(state => state.archiveCompanySuccess);
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
@@ -122,10 +124,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
+        private readonly componentStoreCompanyListDialog: CompanyListDialogComponentStore,
         private generalActions: GeneralActions,
         private router: Router,
-        private toasterService: ToasterService,
-        private settingsProfileActions: SettingsProfileActions
+        private toasterService: ToasterService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -137,11 +139,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public ngOnInit(): void {
-
         document.body?.classList?.add("subscription-page");
         this.initForm();
         this.getAllSubscriptions(false);
-
         /** Get Discount List */
         this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -167,7 +167,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 this.subscriptionRequestParams.totalItems = 0;
             }
         });
-
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
@@ -185,11 +184,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showName = false;
             }
@@ -199,11 +198,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showBillingAccount = false;
             }
@@ -213,11 +212,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showSubscriber = false;
             }
@@ -227,11 +226,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showCountry = false;
             }
@@ -241,11 +240,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showPlanSubName = false;
             }
@@ -256,11 +255,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showStatus = false;
             }
@@ -271,11 +270,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showMonthlyYearly = false;
             }
@@ -287,6 +286,36 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let text = this.localeData?.company_message;
+                text = text?.replace("[TYPE]", response?.archiveStatus === 'USER_ARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
+                this.toasterService.showSnackBar('success', text);
+                this.getAllSubscriptions(null);
+            }
+        });
+
+    }
+    /**
+     * This will be use for check null or undefined values
+     *
+     * @param {*} value
+     * @return {*}  {boolean}
+     * @memberof SubscriptionListComponent
+     */
+    public isNotNullOrUndefined(value: any): boolean {
+        return value !== null && value !== undefined;
+    }
+
+    /**
+     * This will be use for check null or space values
+     *
+     * @param {*} value
+     * @return {*}  {boolean}
+     * @memberof SubscriptionListComponent
+     */
+    public isNullOrEmpty(value: any): boolean {
+        return value === null || value === "";
     }
 
     /**
@@ -314,9 +343,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
    * @memberof SubscriptionComponent
    */
     public getSearchFieldText(title: any): string {
-        let searchField = this.localeData?.search_field;
-        searchField = searchField?.replace("[FIELD]", title);
-        return searchField;
+        return this.localeData?.search_field?.replace("[FIELD]", title);
     }
 
     /**
@@ -389,23 +416,17 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public toggleSearch(fieldName: string): void {
         if (fieldName === 'Company') {
             this.showName = true;
-        }
-        if (fieldName === 'Billing Account') {
+        } else if (fieldName === 'Billing Account') {
             this.showBillingAccount = true;
-        }
-        if (fieldName === 'Subscriber') {
+        } else if (fieldName === 'Subscriber') {
             this.showSubscriber = true;
-        }
-        if (fieldName === 'Country') {
+        } else if (fieldName === 'Country') {
             this.showCountry = true;
-        }
-        if (fieldName === 'Plan Name') {
+        } else if (fieldName === 'Plan Name') {
             this.showPlanSubName = true;
-        }
-        if (fieldName === 'Monthly/Yearly') {
+        } else if (fieldName === 'Monthly/Yearly') {
             this.showMonthlyYearly = true;
-        }
-        if (fieldName === 'Status') {
+        } else if (fieldName === 'Status') {
             this.showStatus = true;
         }
     }
@@ -450,17 +471,17 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will use for transfer subscription
-    *
-    * @param {*} element
-    * @memberof SubscriptionComponent
-    */
+     * This function will use for transfer subscription
+     *
+     * @param {*} subscriptionId
+     * @memberof SubscriptionListComponent
+     */
     public transferSubscription(subscriptionId: any): void {
         this.menu.closeMenu();
         this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
             panelClass: 'transfer-popup',
-            width: "630px",
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'transferDialog'
         });
@@ -491,7 +512,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = true;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            width: '40%',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -558,7 +579,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_cancel
             },
             panelClass: 'cancel-confirmation-modal',
-            width: '585px',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'confirmDialog'
         });
@@ -597,8 +618,20 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      *
      * @memberof SubscriptionComponent
      */
-    public buyPlan(subscription: any): void {
-        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId]);
+    public buyPlan(subscription: any, type: string): void {
+        if (type === 'renew') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId],
+                { queryParams: { renew: 'true' } }
+            );
+        } else if (type === 'trial') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId],
+                { queryParams: { trial: 'true' } }
+            );
+        } else {
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId]);
+        }
     }
 
     /**
@@ -614,9 +647,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /**
      * Navigates to the page for creating a new company.
      *
-     * @memberof SubscriptionComponent
+     * @param {string} subscriptionId
+     * @memberof SubscriptionListComponent
      */
-    public createCompanyInSubscription(subscriptionId): void {
+    public createCompanyInSubscription(subscriptionId: string): void {
         this.router.navigate(['/pages/new-company/' + subscriptionId]);
     }
 
@@ -643,7 +677,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = false;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            width: '40%',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -675,7 +709,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will refresh the subscribed companies if move company was succesful and will close the popup
+    *  This will be use for get all subscriptions for add company and move company
     *
     * @param {*} event
     * @memberof SubscriptionListComponent
@@ -684,5 +718,47 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (event) {
             this.getAllSubscriptions(false);
         }
+    }
+
+    /**
+     * Archives or unarchives a company in the SubscriptionListComponent.
+     *
+     * @param data - The data of the company to be archived or unarchived.
+     * @param type - The type of action, whether to archive or unarchive.
+     * @memberof SubscriptionListComponent
+     */
+    public archiveCompany(data: any, type: string): void {
+        let request = {
+            companyUniqueName: data?.companies[0]?.uniqueName,
+            status: { archiveStatus: type }
+        };
+        this.openConfirmationDialog(request);
+    }
+
+    /**
+     * Open confirmation dialog for archive company
+     *
+     * @private
+     * @param {*} request
+     * @memberof SubscriptionListComponent
+     */
+    private openConfirmationDialog(request: any): void {
+        let text = this.localeData?.confirm_archive_message;
+        text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: text,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStoreCompanyListDialog.archiveCompany(request);
+            }
+        });
     }
 }

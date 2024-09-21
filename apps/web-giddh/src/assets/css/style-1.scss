@@ -14,7 +14,6 @@ AUTHOR:   @THEMECHANIC
 VERSION:  1
 */
 @import "../css/giddh-common.scss";
-@import "./color.scss";
 
 html,
 body {
@@ -2874,7 +2873,6 @@ tr.mat-footer-row {
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
     td.mat-mdc-cell {
-        border-bottom-width: 0px !important;
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
     .nested-table {
@@ -3195,58 +3193,6 @@ td.mat-footer-cell {
         }
     }
 }
-.select-physical-product {
-    .product-detail-content,
-    .service-detail-content,
-    .combo-detail-content,
-    .text-field-container {
-        input {
-            width: 100%;
-            display: inline-block;
-        }
-        input[placeholder="Search"][type="text"] {
-            border: none;
-        }
-        input[placeholder="Product Unit"],
-        input[placeholder="Under Group"],
-        input[placeholder="Service Unit"],
-        .default-input-field {
-            width: 100%;
-            height: 36px;
-            border-radius: 5px;
-            padding-left: 6px;
-            font-size: var(--font-size-15);
-        }
-    }
-    .product-detail-content {
-        mat-select {
-            .mat-select-placeholder {
-                color: var(--color-common-primary-input-placeholder);
-            }
-        }
-        .mat-tab-label {
-            .mat-tab-label-content {
-                letter-spacing: 0px;
-                font: normal normal normal 16px/22px Open Sans;
-                color: var(--color-tab-primary-inactive) !important;
-            }
-            &:focus,
-            :active {
-                .mat-tab-label-content {
-                    letter-spacing: 0px;
-                    font: normal normal 600 16px/22px Open Sans;
-                    color: var(--color-tab-primary-active) !important;
-                }
-            }
-        }
-    }
-}
-
-.mat-chip-list-wrapper {
-    input.mat-input-element {
-        border: none;
-    }
-}
 
 .mat-select-arrow {
     color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
@@ -3461,15 +3407,6 @@ td.mat-footer-cell {
             column-gap: 20px;
             .chip-svg-wrap {
                 min-width: 440px;
-            }
-        }
-    }
-}
-.aside-pane {
-    .help-aside-body {
-        .inventory-items {
-            h5 {
-                font-size: var(--font-size-15);
             }
         }
     }

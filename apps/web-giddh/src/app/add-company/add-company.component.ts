@@ -27,6 +27,7 @@ import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
+import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -36,7 +37,7 @@ declare var window: any;
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [AddCompanyComponentStore]
+    providers: [AddCompanyComponentStore, ChangeBillingComponentStore]
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -85,6 +86,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         pincode: '',
         businessNature: '',
         businessType: '',
+        otherBusinessNature: '',
         address: '',
         industry: '',
         baseCurrency: '',
@@ -127,7 +129,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold business type list */
     public businessTypeList: IOption[] = [];
     /** Hold business nature list */
-    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }];
+    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }, { label: "Other", value: "Other" }];
     /** Stores the item on boarding store data */
     public itemOnBoardingDetails: ItemOnBoardingState;
     /** Hold state gst code list */
@@ -198,7 +200,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold selected role */
     public selectedRole: string = '';
     /** Holds Store permission roles API response state as observable*/
-    public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
+    public permissionRoles$: Observable<any> = this.componentStore.select(state => state.permissionRoles);
     /** List of permission  roles */
     public permissionRoles: any[] = [
         { label: 'View', value: 'view' },
@@ -224,6 +226,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return !this.isCompanyCreated && this.firstStepForm?.dirty;
     }
+    /** Holds Store Get Billing Details observable*/
+    public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -245,7 +249,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private socialAuthService: AuthService,
         private activateRoute: ActivatedRoute,
         public router: Router,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private readonly changeBillingComponentStore: ChangeBillingComponentStore
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -272,6 +277,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
+            if (!this.isNewUserLoggedIn) {
+                this.getBillingDetails();
+                this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data?.companyName) {
+                        this.firstStepForm.get('name')?.patchValue(data.companyName);
+                    }
+                });
+            }
         });
 
         /** Library to separate phone number and calling code */
@@ -347,6 +360,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will be use for get billing details
+     *
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getBillingDetails(): void {
+        this.changeBillingComponentStore.getBillingDetails(null);
     }
 
     /**
@@ -587,6 +610,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             businessType: [''],
             businessNature: [''],
             gstin: [''],
+            otherBusinessNature: [''],
             state: [''],
             county: [''],
             taxes: null,
@@ -1137,6 +1161,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this.generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this.generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this.generalService.getUtmParameter('utm_content');
+        if (this.secondStepForm.value.businessNature === "Other") {
+            this.socketCompanyRequest.BusinessNature = this.secondStepForm.controls['otherBusinessNature'].value;
+        }
         this.companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
         this.generalService.removeUtmParameters();
     }
@@ -1224,6 +1251,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!this.isNewUserLoggedIn) {
             delete this.company.permission;
             delete this.company.creatorSuperAdmin;
+        }
+        if (this.secondStepForm.value.businessNature === "Other") {
+            this.company.otherBusinessNature = this.secondStepForm.value.otherBusinessNature;
         }
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {

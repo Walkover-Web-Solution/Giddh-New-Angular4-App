@@ -2,6 +2,7 @@
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
+            z-index: 1;
         }
     }
     .mdc-data-table__content {
@@ -59,5 +60,36 @@ aging-report {
 
     .mat-mdc-text-field-wrapper {
         min-width: 100px;
+    }
+}
+
+// This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
+
+.table-header-sticky {
+    table {
+        border-collapse: inherit;
+        td {
+            border-top: 0 !important;
+        }
+    }
+    .mat-mdc-tab-group {
+        overflow: visible !important;
+    }
+    .mat-mdc-tab-body-wrapper {
+        overflow: visible !important;
+        .mat-mdc-tab-body {
+            overflow: visible !important;
+            .mat-mdc-tab-body-content {
+                overflow: visible !important;
+            }
+        }
+    }
+}
+
+.header-content-sticky {
+    position: sticky; 
+    inset-inline: 0; 
+    @media screen and (max-width: 992px) {
+        width: fit-content;
     }
 }

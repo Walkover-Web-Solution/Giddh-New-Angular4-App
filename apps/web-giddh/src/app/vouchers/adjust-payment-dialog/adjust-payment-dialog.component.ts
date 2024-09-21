@@ -76,7 +76,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     @Input() public voucherDetails;
     @Input() public isUpdateMode;
     @Input() public depositAmount = 0;
-    // To use pre adjusted data which was adjusted earlier or in other trasaction by user
+    /** To use pre adjusted data which was adjusted earlier or in other trasaction by user */
     @Input() public advanceReceiptAdjustmentUpdatedData: VoucherAdjustments;
     /** Stores the type of voucher adjustment */
     @Input() public adjustedVoucherType: AdjustedVoucherType;
@@ -94,9 +94,9 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
     /** Submit modal event emitter */
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True, if multi-currency support to voucher adjustment is enabled */
     public enableVoucherAdjustmentMultiCurrency: boolean;
@@ -141,14 +141,14 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile && Object.keys(profile).length) {
                 this.companyCurrency = profile?.baseCurrency || 'INR';
-                this.baseCurrencySymbol = profile.baseCurrencySymbol;
-                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+                this.baseCurrencySymbol = profile?.baseCurrencySymbol;
+                this.inputMaskFormat = profile?.balanceDisplayFormat ? profile?.balanceDisplayFormat?.toLowerCase() : '';
                 if (this.account.baseCurrencySymbol) {
                     this.currencySymbol = this.account.baseCurrencySymbol;
                 } else {
                     this.currencySymbol = this.baseCurrencySymbol;
                 }
-                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+                this.giddhBalanceDecimalPlaces = profile?.balanceDecimalPlaces;
             }
         });
 
@@ -507,6 +507,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 return item?.voucherNumber !== '' || item?.adjustmentAmount?.amountForAccount > 0;
             });
         }
+
         if (this.isTaxDeducted) {
             if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
                 if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
@@ -523,6 +524,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             delete this.adjustVoucherForm['description'];
             delete this.adjustVoucherForm['tdsTaxUniqueName'];
         }
+
         if (isValid) {
             this.submitClicked.emit({
                 adjustVoucherData: this.adjustVoucherForm,

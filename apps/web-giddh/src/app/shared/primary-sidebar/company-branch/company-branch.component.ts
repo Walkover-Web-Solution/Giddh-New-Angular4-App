@@ -381,7 +381,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {string} branchUniqueName Branch uniqueName
      * @memberof CompanyBranchComponent
      */
-    public changeBranch(company: any, branchUniqueName: string, event: any): void {
+    public changeBranch(company: any, branchUniqueName: string, event: any, branch?: any): void {
         event.stopPropagation();
         event.preventDefault();
 
@@ -392,7 +392,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
-                    this.switchBranch(company, branchUniqueName, event);
+                    this.switchBranch(company, branch, event);
                 } else {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
                 }
@@ -400,7 +400,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        this.switchBranch(company, branchUniqueName, event);
+        this.switchBranch(company, branch, event);
     }
 
     /**
@@ -412,19 +412,23 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {*} event
      * @memberof CompanyBranchComponent
      */
-    private switchBranch(company: any, branchUniqueName: string, event: any): void {
+    private switchBranch(company: any, branch: any, event: any): void {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
 
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
-            this.changeCompany(company, branchUniqueName, false);
-        } else if (branchUniqueName !== this.generalService.currentBranchUniqueName) {
+            this.changeCompany(company, branch?.uniqueName, false);
+        } else if (branch?.uniqueName !== this.generalService.currentBranchUniqueName) {
             const details = {
                 branchDetails: {
-                    uniqueName: branchUniqueName
+                    uniqueName: branch?.uniqueName
                 }
             };
-            this.generalService.currentBranchUniqueName = branchUniqueName;
-            this.setOrganizationDetails(OrganizationType.Branch, details);
+            this.generalService.currentBranchUniqueName = branch?.uniqueName;
+            if (branch.consolidatedBranch) {
+                this.setOrganizationDetails(OrganizationType.Company, details);
+            } else {
+                this.setOrganizationDetails(OrganizationType.Branch, details);
+            }
             this.store.dispatch(this.invoiceAction.getInvoiceSetting());
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
                 if (response && response.body) {

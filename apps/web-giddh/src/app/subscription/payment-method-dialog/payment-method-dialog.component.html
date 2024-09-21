@@ -14,7 +14,7 @@
                             [options]="paymentProviderList"
                             formControlName="paymentProvider"
                             [labelValue]="paymentProvideLabel ?? ''"
-                            (selectedOption)="paymentProvideLabel = $event?.label"
+                            (selectedOption)="$event?.label && (paymentProvideLabel = $event.label)"
                             [required]="true"
                             [showError]="isFormSubmitted && !paymentMethodForm.get('paymentProvider')?.value"
                         >
@@ -50,10 +50,8 @@
                     </div>
                 </div>
             </div>
-            <ng-container *ngIf="providerListInProgress$ | async">
-                <giddh-page-loader></giddh-page-loader>
-            </ng-container>
-            <ng-container *ngIf="!(providerListInProgress$ | async)">
+            <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+            <ng-container *ngIf="!isLoading">
                 <mat-card class="outline-card mt-3" *ngFor="let payment of paymentMethodList">
                     <mat-card-content>
                         <div class="view-subscription">
@@ -64,12 +62,12 @@
                                 </div>
                                 <div>
                                     <i
-                                        (click)="setPaymentDefault(payment); $event.stopPropagation()"
+                                        (click)="setPaymentDefault(payment)"
                                         class="fa fa-star mr-r2 default-status cursor-pointer"
                                         [ngClass]="{ 'color-primary': payment?.isDefault }"
                                     ></i>
                                     <i
-                                        (click)="deletePaymentMethod(payment); $event.stopPropagation()"
+                                        (click)="deletePaymentMethod(payment)"
                                         class="icon-trash ml-1 mr-r2 cursor-pointer"
                                     ></i>
                                 </div>
@@ -87,16 +85,12 @@
                                     <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_currency }}</p>
                                     <p class="mb-1 font-16">{{ payment?.currency }}</p>
                                 </div>
-                                <div>
-                                    <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_action }}</p>
-                                    <p class="mb-1 font-16">{{ payment?.accountNumber }}</p>
-                                </div>
                             </div>
                         </div>
                     </mat-card-content>
                 </mat-card>
             </ng-container>
-            <div class="no-data" *ngIf="!paymentMethodList?.length">
+            <div class="no-data" *ngIf="!isLoading && !paymentMethodList?.length">
                 <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
             </div>
         </div>

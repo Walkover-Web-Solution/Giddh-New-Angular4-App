@@ -29,6 +29,7 @@ export class SocketNewCompanyRequest {
     public utm_campaign: string;
     public utm_term: string;
     public utm_content: string;
+    public BusinessNature: string;
 }
 
 export class StateDetailsRequest {
@@ -101,7 +102,6 @@ export class SearchCompanyRequest {
         this.page = 1;
     }
 }
-
 export class CompanyResponse {
     public canUserSwitch: boolean;
     public companyIdentity: any[];
@@ -311,6 +311,7 @@ export class CompanyCreateRequest {
     addresses?: Addresses[];
     businessNature?: string;
     businessType?: string;
+    otherBusinessNature?: string;
     address?: string;
     industry?: string;
     baseCurrency: string;
@@ -405,6 +406,7 @@ export class BranchFilterRequest {
     to: string;
     query?: string;
     companyUniqueName?: string;
+    hierarchyType?: string;
 }
 
 export interface OrganizationDetails {

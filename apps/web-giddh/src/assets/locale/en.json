@@ -214,7 +214,8 @@
         "yearly": "Yearly",
         "month": "Month",
         "year": "Year",
-        "weekly": "Weekly"
+        "weekly": "Weekly",
+        "daily": "Daily"
     },
     "app_tax_subtypes": {
         "receivable": "Receivable",
@@ -349,7 +350,11 @@
         "partially_paid": "Partially Paid",
         "unpaid": "Unpaid",
         "hold": "Hold",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "open": "Open",
+        "expired": "Expired",
+        "converted": "Converted",
+        "partially_converted": "Partially Converted"
     },
     "app_date_options": {
         "on": "On",
@@ -744,5 +749,8 @@
     "app_tax_authority": "Tax Authority",
     "app_select_year": "Select Year",
     "app_select_month": "Select Month",
-    "app_user_settings": "User Settings"
+    "app_user_settings": "User Settings",
+    "app_custom_email": "Custom Email",
+    "app_custom_email_template":"Custom Email Template",
+    "app_subscription": "Subscription"
 }

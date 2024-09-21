@@ -246,7 +246,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
     /** Holds Voucher Name that suports csv file export */
-    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note','purchase'];
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase'];
 
     constructor(
         private store: Store<AppState>,
@@ -643,13 +643,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Advance search model show hide
      *
-     * @param {boolean} isClosed  Boolean to check model need to close or not
+     *
      * @memberof InvoicePreviewComponent
      */
-    public toggleAdvanceSearchPopup(isClosed: boolean): void {
-        if (isClosed) {
-            this.toggleAllItems(false);
-        }
+    public toggleAdvanceSearchPopup(): void {
         this.advanceSearch.toggle();
     }
 
@@ -1103,7 +1100,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                     }
                 }
-
                 this.selectedItems.push(item?.uniqueName);
                 return item;
             });
@@ -1380,7 +1376,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         item.isSelected = false;
                     });
                     let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    const fileName  = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
+                    const fileName = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
                     return saveAs(blob, fileName);
                 } else {
                     this._toaster.errorToast(response.message);
@@ -1399,7 +1395,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     private getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean): string {
-        switch(type){
+        switch (type) {
             case 'sales': return isAllItemsSelected ? this.localeData?.all_invoices : this.localeData?.invoices;
             case 'purchase': return isAllItemsSelected ? this.localeData?.all_purchases : this.localeData?.purchases;
             case 'credit note': return isAllItemsSelected ? this.localeData?.all_credit_notes : this.localeData?.credit_notes;

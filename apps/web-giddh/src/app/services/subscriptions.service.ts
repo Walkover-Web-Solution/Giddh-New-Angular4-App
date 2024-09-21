@@ -50,6 +50,22 @@ export class SubscriptionsService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
+    /**
+     * Save Razorpay Token
+     *
+     * @param subscriptionId
+     * @param paymentId
+     * @returns
+     */
+    public saveRazorpayToken(subscriptionId: string, paymentId: string): Observable<any> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_RAZORPAY_TOKEN
+            ?.replace(':subscriptionId', subscriptionId)
+            ?.replace(':paymentId', paymentId))
+            .pipe(map((res) => {
+                return res;
+            }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
+
     public GetSubScribedCompanyTransaction(params): Observable<BaseResponse<string, string>> {
         let paymentFrequency = 'daily';
         if (params.subscription.plan && params.subscription.plan.paymentFrequency) {
@@ -147,10 +163,11 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getAllSubscriptions(pagination: any, model: any): Observable<BaseResponse<any, any>> {
-        const reqObj = model?.region ? { region: model.region } : model;
+        const reqObj = model?.region ? { region: model.region, planName: model.planName } : model;
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
+            ?.replace(':fromMoveCompany', encodeURIComponent(pagination?.fromMoveCompany ?? ''))
             , reqObj)
             .pipe(
                 map((res) => {
@@ -193,25 +210,6 @@ export class SubscriptionsService {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_SUBSCRIPTION
             ?.replace(':company', encodeURIComponent(this.generalService.companyUniqueName ?? '')),
             model)
-            .pipe(
-                map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
-            );
-    }
-
-    /**
-     * Applies a promo code using the provided model in the SubscriptionsService.
-     *
-     * @param model - Data model for applying a promo code.
-     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
-     * @memberof SubscriptionsService
-     */
-    public applyPromoCode(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.APPLY_PROMOCODE, model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -289,8 +287,8 @@ export class SubscriptionsService {
     /**
      * Verifies ownership using the provided ID in the SubscriptionsService.
      *
-     * @param id - ID for ownership verification.
-     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */
     public verifyOwnership(model: any): Observable<BaseResponse<any, any>> {
@@ -381,7 +379,7 @@ export class SubscriptionsService {
     /**
      * This will be use for generating order by subscription id
      *
-     * @param {*} subscriptionId
+     * @param {*} model
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */
@@ -460,10 +458,11 @@ export class SubscriptionsService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
+
     /**
-     * This will be use for get all companies by subscription id
+     *  This will be use for get all companies by subscription id
      *
-     * @param {*} subscriptionId
+     * @param {*} model
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */

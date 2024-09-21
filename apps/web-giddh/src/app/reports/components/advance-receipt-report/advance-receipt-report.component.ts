@@ -7,7 +7,7 @@ import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
@@ -194,9 +194,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
         private route: ActivatedRoute,
-        private router: Router,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private invoiceService: InvoiceService
+        private invoiceService: InvoiceService,
+        private router: Router
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -269,7 +269,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });

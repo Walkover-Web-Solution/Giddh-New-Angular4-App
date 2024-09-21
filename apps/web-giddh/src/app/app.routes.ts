@@ -48,6 +48,7 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'group-name', redirectTo: 'pages/group-name', pathMatch: 'full' },
     { path: 'mobile-restricted', component: MobileRestrictedComponent },
     {
         path: 'pages', component: PageComponent,
@@ -89,7 +90,6 @@ export const ROUTES: Routes = [
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vat-report.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },
-            { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule), canActivate: [NeedsAuthorization] },
@@ -97,8 +97,9 @@ export const ROUTES: Routes = [
             { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization] },
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization] },
             { path: 'user-details/subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
-            { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
             { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule), canActivate: [NeedsAuthorization] },
+            { path: 'group-name', loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule), canActivate: [NeedsAuthorization] },
+            { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

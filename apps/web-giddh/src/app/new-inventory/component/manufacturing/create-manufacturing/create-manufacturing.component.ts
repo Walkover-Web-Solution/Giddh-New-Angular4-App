@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
+import { BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
@@ -183,7 +184,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.changeDetectionRef.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -210,7 +211,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses?.results?.length) {
                 this.warehouses = [];
-                warehouses?.results?.forEach(warehouse => {
+                const warehouseResults = warehouses?.results?.filter(warehouse => !warehouse.isArchived);
+                warehouseResults?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
                 this.selectedWarehouseName = this.warehouses[0].label;

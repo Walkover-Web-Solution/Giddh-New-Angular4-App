@@ -13,6 +13,7 @@ import { Observable, ReplaySubject, of } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -104,7 +105,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _cdRef: ChangeDetectorRef, private toaster: ToasterService) {
+        private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -161,7 +162,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateEwayBillform.toGstIn = 'URP';
         }
         if (this.selectedInvoices?.length === 0) {
-            this.router.navigate(['/pages/invoice/preview/sales']);
+            if (this.generalService.voucherApiVersion === 2) {
+                this.router.navigate(['/pages/vouchers/preview/sales/list']);
+            } else {
+                this.router.navigate(['/pages/invoice/preview/sales']);
+            }
         }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
             if (s) {
@@ -300,7 +305,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (userResponse.response && userResponse.close === 'closeConfirmation') {
             this.selectedInvoices?.splice(0, 1);
             if (this.selectedInvoices?.length === 0) {
-                this.router.navigate(['/pages/invoice/preview/sales']);
+                if (this.generalService.voucherApiVersion === 2) {
+                    this.router.navigate(['/pages/vouchers/preview/sales/list']);
+                } else {
+                    this.router.navigate(['/pages/invoice/preview/sales']);
+                }
             }
         }
         this.invoiceRemoveConfirmationModel?.hide();
@@ -407,7 +416,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
                 if(!voucher?.account?.billingDetails?.pincode) {
                     this.toaster.errorToast(this.localeData?.pincode_required);
-                    this.router.navigate(['/pages/invoice/preview/sales']);
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.router.navigate(['/pages/vouchers/preview/sales/list']);
+                    } else {
+                        this.router.navigate(['/pages/invoice/preview/sales']);
+                    }
                 }
 
                 this.voucherDetails = voucher;

@@ -1754,6 +1754,7 @@ export class InventoryService {
      */
     public getAdjustmentInventoryReport(getParams: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+
         let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.REPORT
             ?.replace(":companyUniqueName", this.companyUniqueName)
             ?.replace(":from", getParams.from)
@@ -1874,13 +1875,13 @@ export class InventoryService {
     }
 
     /**
-   * This will be use for update inventory adjust
-   *
-   * @param {*} model
-   * @param {string} branchUniqueName
-   * @return {*}  {Observable<BaseResponse<any, any>>}
-   * @memberof InventoryService
-   */
+    * This will be use for update inventory adjust
+    *
+    * @param {*} model
+    * @param {string} branchUniqueName
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof InventoryService
+    */
     public updateInventoryAdjustment(model: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
         let refNo = model.refNo;
         delete model.refNo;

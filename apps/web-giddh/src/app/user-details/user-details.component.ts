@@ -22,6 +22,9 @@ import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ClipboardService } from 'ngx-clipboard';
+import { MatDialog } from '@angular/material/dialog';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalButton } from '../theme/confirmation-modal/confirmation-modal.interface';
 
 
 @Component({
@@ -99,6 +102,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions, 
         private settingsProfileActions: SettingsProfileActions,
+        public dialog: MatDialog,
         private clipboardService: ClipboardService) {
         this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
@@ -317,9 +321,37 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         };
         this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
     }
+    /**
+     * Deletes All session
+     *
+     * @memberof UserDetailsComponent
+     */
+    public clearAllSession(): void {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: this.commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: this.commonLocaleData?.app_no
+        }];
+        const headerText: string =  this.commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = this.localeData?.session?.delete_all_session;
+        const configuration = { buttons, headerText, headerCssClass, messageCssClass, messageText };
+        
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: configuration
+            }
+        });
 
-    public clearAllSession() {
-        this.store.dispatch(this.sessionAction.deleteAllSession());
+        dialogRef.afterClosed().pipe().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteAllSession());
+            }
+        });
     }
 
     /**

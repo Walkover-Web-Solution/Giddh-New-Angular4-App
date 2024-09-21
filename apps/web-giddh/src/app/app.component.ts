@@ -80,9 +80,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership')  && !window.location.href.includes('dns')) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://test.giddh.com/login/';
+                    window.location.href = 'https://giddh.com/login/';
                 } else {
                     this.router.navigate(['/login']);
                 }
@@ -116,6 +116,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
         });
+
+        /* Codemirror */
+        if (window['CodeMirror'] === undefined) {
+            let codeMirrorScriptTag = document.createElement('script');
+            codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
+            codeMirrorScriptTag.type = 'text/javascript';
+            codeMirrorScriptTag.defer = true;
+            document.body.appendChild(codeMirrorScriptTag);
+        }
+        /* Codemirror */
     }
 
     public sidebarStatusChange(event) {
@@ -199,13 +209,27 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.body.appendChild(scriptTag);
             }
             /* RAZORPAY */
+
+
+            /* Xml */
+            if (window['xmlScriptTag'] === undefined) {
+                let xmlScriptTag = document.createElement('script');
+                xmlScriptTag.src = './assets/js/xml.min.js';
+                xmlScriptTag.type = 'text/javascript';
+                xmlScriptTag.defer = true;
+                document.body.appendChild(xmlScriptTag);
+            }
+            /* Xml */
         }, 1000);
 
-        if (this._generalService.getUrlParameter("region") === "uk") {
-            this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
-        } else {
-            this._generalService.setParameterInLocalStorage("X-Tenant", "GL");
-        }
+        this._generalService.addLinkTag("./assets/css/code-mirror.css");
+
+
+        // if (this._generalService.getUrlParameter("region") === "uk") {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
+        // } else {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GL");
+        // }
     }
 
     public ngAfterViewInit() {

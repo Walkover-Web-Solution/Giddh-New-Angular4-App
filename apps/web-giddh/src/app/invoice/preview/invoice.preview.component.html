@@ -346,7 +346,7 @@
                             <div
                                 class="advance-icon cursor-pointer align-items-center btn btn-primary"
                                 [tooltip]="commonLocaleData?.app_advance_search"
-                                (click)="toggleAdvanceSearchPopup(false)"
+                                (click)="toggleAdvanceSearchPopup()"
                             >
                                 <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
@@ -1831,8 +1831,6 @@
                         [boundaryLinks]="true"
                         [itemsPerPage]="paginationLimit"
                         [rotate]="false"
-                        previousText="&#9664;"
-                        nextText="&#9658;"
                         (pageChanged)="pageChanged($event)"
                         [firstText]="commonLocaleData?.app_first"
                         [previousText]="commonLocaleData?.app_previous"
@@ -1933,7 +1931,7 @@
                                 [isEInvoiceEnabled]="gstEInvoiceEnable"
                                 [commonLocaleData]="commonLocaleData"
                                 (applyFilterEvent)="applyAdvanceSearch($event)"
-                                (closeModelEvent)="toggleAdvanceSearchPopup(true)"
+                                (closeModelEvent)="toggleAdvanceSearchPopup()"
                             >
                             </invoice-advance-search-component>
                         </div>

@@ -19,19 +19,23 @@
         font-size: var(--font-size-15);
         border-radius: 3px;
         cursor: pointer;
+
         a {
             color: var(--color-abbey);
         }
     }
 }
+
 .select-companies {
     font-size: var(--font-size-15);
     margin-bottom: 5px;
 }
+
 .button-yes-cancel {
     margin-top: 25px;
     margin-bottom: 20px;
 }
+
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -44,32 +48,39 @@
     color: var(--color-gray);
     left: 0;
 }
+
 .input-group-date-range-picker input.form-control {
     padding-left: 35px !important;
     width: 210px;
 }
+
 .content-view {
     display: flex;
     align-items: center;
     font-size: var(--font-size-15);
 }
+
 .branch-card {
     background-color: var(--color-common-primary-background-for-all-components);
     margin-bottom: 15px;
     font-size: var(--font-size-15);
     border: 1px solid var(--color-common-secondary-border);
 }
+
 .card-basic-details span:nth-child(2) {
     width: 83%;
 }
+
 .card-basic-details .clearfix {
     margin-bottom: 10px;
     color: var(--color-nero);
 }
+
 .clearfix {
     .icon-favorite-selected {
         color: var(--color-blue);
     }
+
     .icon-branch-icon,
     .icon-company-HO {
         padding: 4px 5px 0 0;
@@ -77,6 +88,7 @@
         font-size: var(--font-size-12);
     }
 }
+
 .card-basic-details h2 {
     font-size: var(--font-size-15);
     color: var(--color-common-senary-text);
@@ -88,18 +100,22 @@
     margin-right: 15px;
     margin-bottom: 0;
 }
+
 .card-basic-details {
     padding: 20px;
     border-bottom: 1px solid var(--color-common-secondary-border);
 }
+
 .branch-sales-details {
     border-top: 1px solid var(--color-common-secondary-border);
     padding-top: 20px;
+
     label {
         font-family: var(--font-semibold);
         margin-bottom: 10px;
         color: var(--color-nero);
     }
+
     .total-amount {
         width: 70%;
     }
@@ -119,10 +135,12 @@
     right: 0 !important;
     overflow: hidden;
 }
-.card-basic-details .dropdown-menu > li > a {
+
+.card-basic-details .dropdown-menu>li>a {
     padding: 5px 10px;
     cursor: pointer;
 }
+
 .card-basic-details a#button-basic {
     color: var(--color-abbey);
     font-size: var(--font-size-15);
@@ -136,9 +154,11 @@
     position: relative;
     right: -15px;
 }
+
 .branch-views {
     cursor: pointer;
 }
+
 .btn-link {
     border-width: 0px !important;
     background: var(--color-white) !important;
@@ -152,6 +172,7 @@
     max-width: 220px;
     width: 100%;
     margin-right: 8px;
+
     input {
         background-image: url("../../../assets/images/searchIcon.svg") !important;
         background-repeat: no-repeat !important;
@@ -161,10 +182,12 @@
         width: 100% !important;
     }
 }
+
 .search-field {
     display: flex;
     flex-direction: row;
     align-items: center;
+
     .clear-filter-btn {
         color: var(--color-giddh-blue);
         font-size: var(--font-size-15);
@@ -177,6 +200,7 @@
         justify-content: center;
         background-color: var(--color-white);
         height: 40px;
+
         i {
             font-size: var(--font-size-12);
             padding-right: 8px;
@@ -197,6 +221,7 @@
 
     li {
         padding-top: 5px;
+
         &:hover {
             background-color: var(--color-dark-fog);
             color: var(--color-giddh-blue);
@@ -254,6 +279,7 @@
 
 .advance-search-list {
     min-width: 123px;
+
     .search-checkbox {
         label {
             padding-bottom: 5px;
@@ -264,7 +290,7 @@
 
 .btn-primary.active,
 .btn-primary:active,
-.open > .dropdown-toggle.btn-primary {
+.open>.dropdown-toggle.btn-primary {
     color: var(--color-nero);
     background-color: var(--color-dark-fog);
     border-color: var(--color-dark-fog);
@@ -288,6 +314,7 @@
 
         &.branch-active {
             color: var(--color-teal);
+
             span {
                 background-color: var(--color-teal);
                 width: 8px;
@@ -298,8 +325,10 @@
                 margin-right: 4px;
             }
         }
+
         &.branch-archived {
             color: var(--color-red);
+
             span {
                 background-color: var(--color-red);
                 width: 8px;
@@ -312,6 +341,7 @@
         }
     }
 }
+
 .branch-vector {
     text-align: right;
     position: absolute;
@@ -323,85 +353,9 @@ button {
     &.mat-menu-item {
         line-height: 32px;
         height: 30px;
+
         &:hover {
             color: var(--color-blue);
-        }
-    }
-}
-
-@media (max-width: 375px) {
-    .grey-color button.btn.btn-default {
-        margin-left: 0;
-        margin-top: 5px;
-    }
-}
-@media (max-width: 768px) {
-    .content-view {
-        display: none;
-    }
-}
-@media (max-width: 767px) {
-    .branch-card {
-        min-height: auto;
-    }
-    .branch-header-content {
-        margin-right: 0 !important;
-        flex-direction: column;
-        .content-view {
-            margin-left: 0;
-        }
-        .input-group {
-            display: flex;
-            justify-content: space-between;
-            button {
-                margin-right: 0;
-            }
-        }
-        .search-field {
-            margin-right: 0;
-            .clear-filter-btn {
-                padding: 0 8px;
-            }
-        }
-    }
-    .input-group-date-range-picker {
-        .form-group {
-            margin-bottom: 0;
-        }
-    }
-    .btn-sky-blue.pull-right {
-        float: none;
-        margin-bottom: 15px;
-    }
-    .branch-vector {
-        img {
-            width: 150px;
-        }
-    }
-}
-@media (max-width: 370px) {
-    .date-advance-search {
-        display: block;
-        .input-group-date-range-picker {
-            .form-group {
-                margin-bottom: 0;
-            }
-        }
-        .btn {
-            float: left !important;
-        }
-    }
-    .branch-header-content {
-        margin-right: 0;
-        .search-field {
-            margin-right: 0;
-            .search-branch-box {
-                max-width: 160px;
-            }
-            .clear-filter-btn {
-                width: 122px !important;
-                padding: 0 6px;
-            }
         }
     }
 }
@@ -423,37 +377,8 @@ button {
     }
 }
 
-@media (min-width: 575px) and (max-width: 991px) {
-    .select-branch {
-        margin-top: -35px;
-    }
-}
-
 @media (max-width: 950px) {
     .modal-width {
         width: auto !important;
-    }
-}
-
-@media (max-width: 575px) {
-    .date-advance-search {
-        .input-group-date-range-picker {
-            width: 100%;
-        }
-    }
-    .branch-header {
-        flex-direction: column;
-        .search-branch-box {
-            max-width: 100%;
-            margin-bottom: 15px;
-        }
-    }
-
-    .search-field {
-        .clear-filter-btn {
-            padding: 0px 8px;
-            font-size: var(--font-size-12);
-            height: 36px;
-        }
     }
 }

@@ -212,7 +212,7 @@
                                                         localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
-                                            <div class="vouchers-address-form"
+                                            <div class="vouchers-address-form pd-15 border-radius-5"
                                                 [ngClass]="{'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
@@ -221,32 +221,36 @@
                                                         class="w-100" name="billingDetails"
                                                         formControlName="address"></textarea>
                                                 </div>
-                                                <div class="country-field">
-                                                    <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
-                                                        account?.countryName }}</span>
+                                                <div class="d-flex column-gap15 mb-3">
+                                                    <div class="w-50 border-bottom">
+                                                        <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
+                                                            account?.countryName }}</span>
+                                                    </div>
+                                                    <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                        <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                            formControlName="code" [name]="'billingStateCode'"
+                                                            [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [options]="accountStateList$ | async"
+                                                            [labelValue]="invoiceForm.controls['account'].get('billingDetails').get('state').get('name')?.value"
+                                                            [appearance]="'fill'" [showLabel]="false"
+                                                            (selectedOption)="selectState('account', 'billingDetails', $event); copyAccountBillingAddressToShippingAddress()"></reactive-dropdown-field>
+                                                    </div>
                                                 </div>
-                                                <div class="state-field" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-0'"
-                                                        formControlName="code" [name]="'billingStateCode'"
-                                                        [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [options]="accountStateList$ | async"
-                                                        [labelValue]="invoiceForm.controls['account'].get('billingDetails').get('state').get('name')?.value"
-                                                        [appearance]="'fill'" [showLabel]="false"
-                                                        (selectedOption)="selectState('account', 'billingDetails', $event); copyAccountBillingAddressToShippingAddress()"></reactive-dropdown-field>
-                                                </div>
-                                                <div *ngIf="account?.taxTypeLabel" class="gstin-field">
-                                                    <text-field [type]="'text'" [name]="'billingTaxNumber'"
-                                                        (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                        [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0'"
-                                                        [showError]="taxNumberValidations['account']['billingDetails'] | async"
-                                                        formControlName="taxNumber"></text-field>
-                                                </div>
-                                                <div class="pin-code-field">
-                                                    <text-field [type]="'text'" [name]="'billingPinCode'"
-                                                        (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                        formControlName="pincode"></text-field>
+                                                <div class="d-flex column-gap15">
+                                                    <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
+                                                        <text-field [type]="'text'" [name]="'billingTaxNumber'"
+                                                            (keyup)="copyAccountBillingAddressToShippingAddress()"
+                                                            [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                            [showError]="taxNumberValidations['account']['billingDetails'] | async"
+                                                            formControlName="taxNumber"></text-field>
+                                                    </div>
+                                                    <div class="w-50 border-bottom zip-field-width">
+                                                        <text-field [type]="'text'" [name]="'billingPinCode'"
+                                                            (keyup)="copyAccountBillingAddressToShippingAddress()"
+                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                            formControlName="pincode"></text-field>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -298,37 +302,41 @@
                                                 </div>
                                             </mat-menu>
 
-                                            <div class="vouchers-address-form"
+                                            <div class="vouchers-address-form pd-15 border-radius-5"
                                                 [ngClass]="{'form-disabled': copyAccountBillingInShippingAddress, 'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput class="w-100" name="shippingDetails"
                                                         formControlName="address"></textarea>
                                                 </div>
-                                                <div class="country-field">
-                                                    <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
-                                                        account?.countryName }}</span>
+                                                <div class="d-flex column-gap15 mb-3">
+                                                    <div class="w-50 border-bottom">
+                                                        <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
+                                                            account?.countryName }}</span>
+                                                    </div>
+                                                    <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                        <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                            formControlName="code" [name]="'shippingStateCode'"
+                                                            [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [options]="accountStateList$ | async"
+                                                            [labelValue]="invoiceForm.controls['account'].get('shippingDetails').get('state').get('name')?.value"
+                                                            [appearance]="'fill'" [showLabel]="false"
+                                                            (selectedOption)="selectState('account', 'shippingDetails', $event)"></reactive-dropdown-field>
+                                                    </div>
                                                 </div>
-                                                <div class="state-field" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-0'"
-                                                        formControlName="code" [name]="'shippingStateCode'"
-                                                        [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [options]="accountStateList$ | async"
-                                                        [labelValue]="invoiceForm.controls['account'].get('shippingDetails').get('state').get('name')?.value"
-                                                        [appearance]="'fill'" [showLabel]="false"
-                                                        (selectedOption)="selectState('account', 'shippingDetails', $event)"></reactive-dropdown-field>
-                                                </div>
-                                                <div *ngIf="account?.taxTypeLabel" class="gstin-field">
-                                                    <text-field [type]="'text'" [name]="'shippingTaxNumber'"
-                                                        [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0'"
-                                                        [showError]="taxNumberValidations['account']['shippingDetails'] | async"
-                                                        formControlName="taxNumber"></text-field>
-                                                </div>
-                                                <div class="pin-code-field">
-                                                    <text-field [type]="'text'" [name]="'shippingPinCode'"
-                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                        formControlName="pincode"></text-field>
+                                                <div class="d-flex column-gap15">
+                                                    <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
+                                                        <text-field [type]="'text'" [name]="'shippingTaxNumber'"
+                                                            [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                            [showError]="taxNumberValidations['account']['shippingDetails'] | async"
+                                                            formControlName="taxNumber"></text-field>
+                                                    </div>
+                                                    <div class="w-50 border-bottom zip-field-width">
+                                                        <text-field [type]="'text'" [name]="'shippingPinCode'"
+                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                            formControlName="pincode"></text-field>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -435,7 +443,7 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="vouchers-address-form"
+                                        <div class="vouchers-address-form pd-15 border-radius-5"
                                             [ngClass]="{'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
@@ -443,31 +451,35 @@
                                                     (keyup)="copyCompanyBillingAddressToShippingAddress()" class="w-100"
                                                     name="companyBillingAddress" formControlName="address"></textarea>
                                             </div>
-                                            <div class="country-field">
-                                                <span>{{ company?.countryName }}</span>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom">
+                                                    <span>{{ company?.countryName }}</span>
+                                                </div>
+                                                <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                    <reactive-dropdown-field [cssClass]="'border-0 w-100'" formControlName="code"
+                                                        [name]="'companyBillingStateCode'"
+                                                        [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [options]="companyStateList$ | async"
+                                                        [labelValue]="invoiceForm.controls['company'].get('billingDetails').get('state').get('name')?.value"
+                                                        [appearance]="'fill'" [showLabel]="false"
+                                                        (selectedOption)="selectState('company', 'billingDetails', $event); copyCompanyBillingAddressToShippingAddress()"></reactive-dropdown-field>
+                                                </div>
                                             </div>
-                                            <div class="state-field" formGroupName="state">
-                                                <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code"
-                                                    [name]="'companyBillingStateCode'"
-                                                    [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [options]="companyStateList$ | async"
-                                                    [labelValue]="invoiceForm.controls['company'].get('billingDetails').get('state').get('name')?.value"
-                                                    [appearance]="'fill'" [showLabel]="false"
-                                                    (selectedOption)="selectState('company', 'billingDetails', $event); copyCompanyBillingAddressToShippingAddress()"></reactive-dropdown-field>
-                                            </div>
-                                            <div class="gstin-field" *ngIf="company?.taxTypeLabel">
-                                                <text-field [type]="'text'" [name]="'companyBillingTaxNumber'"
-                                                    (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                    [placeholder]="company.taxTypeLabel" [cssClass]="'border-0'"
-                                                    [showError]="taxNumberValidations['company']['billingDetails'] | async"
-                                                    formControlName="taxNumber"></text-field>
-                                            </div>
-                                            <div class="pin-code-field">
-                                                <text-field [type]="'text'" [name]="'companyBillingPinCode'"
-                                                    (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                    [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                    formControlName="pincode"></text-field>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
+                                                    <text-field [type]="'text'" [name]="'companyBillingTaxNumber'"
+                                                        (keyup)="copyCompanyBillingAddressToShippingAddress()"
+                                                        [placeholder]="company.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                        [showError]="taxNumberValidations['company']['billingDetails'] | async"
+                                                        formControlName="taxNumber"></text-field>
+                                                </div>
+                                                <div class="w-50 border-bottom zip-field-width">
+                                                    <text-field [type]="'text'" [name]="'companyBillingPinCode'"
+                                                        (keyup)="copyCompanyBillingAddressToShippingAddress()"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                        formControlName="pincode"></text-field>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -510,36 +522,40 @@
                                             </div>
                                         </mat-menu>
 
-                                        <div class="vouchers-address-form"
+                                        <div class="vouchers-address-form pd-15 border-radius-5"
                                             [ngClass]="{'form-disabled': copyCompanyBillingInShippingAddress, 'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput class="w-100" name="companyShippingAddress"
                                                     formControlName="address"></textarea>
                                             </div>
-                                            <div class="country-field">
-                                                <span>{{ company?.countryName }}</span>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom">
+                                                    <span>{{ company?.countryName }}</span>
+                                                </div>
+                                                <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                    <reactive-dropdown-field [cssClass]="'border-0 w-100'" formControlName="code"
+                                                        [name]="'companyShippingStateCode'"
+                                                        [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [options]="companyStateList$ | async"
+                                                        [labelValue]="invoiceForm.controls['company'].get('shippingDetails').get('state').get('name')?.value"
+                                                        [appearance]="'fill'" [showLabel]="false"
+                                                        (selectedOption)="selectState('company', 'shippingDetails', $event)"></reactive-dropdown-field>
+                                                </div>
                                             </div>
-                                            <div class="state-field" formGroupName="state">
-                                                <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code"
-                                                    [name]="'companyShippingStateCode'"
-                                                    [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [options]="companyStateList$ | async"
-                                                    [labelValue]="invoiceForm.controls['company'].get('shippingDetails').get('state').get('name')?.value"
-                                                    [appearance]="'fill'" [showLabel]="false"
-                                                    (selectedOption)="selectState('company', 'shippingDetails', $event)"></reactive-dropdown-field>
-                                            </div>
-                                            <div class="gstin-field" *ngIf="company?.taxTypeLabel">
-                                                <text-field [type]="'text'" [name]="'companyShippingTaxNumber'"
-                                                    [placeholder]="company.taxTypeLabel" [cssClass]="'border-0'"
-                                                    [showError]="taxNumberValidations['company']['shippingDetails'] | async"
-                                                    formControlName="taxNumber"></text-field>
-                                            </div>
-                                            <div class="pin-code-field">
-                                                <text-field [type]="'text'" [name]="'companyShippingPinCode'"
-                                                    [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                    formControlName="pincode"></text-field>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
+                                                    <text-field [type]="'text'" [name]="'companyShippingTaxNumber'"
+                                                        [placeholder]="company.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                        [showError]="taxNumberValidations['company']['shippingDetails'] | async"
+                                                        formControlName="taxNumber"></text-field>
+                                                </div>
+                                                <div class="w-50 border-bottom zip-field-width">
+                                                    <text-field [type]="'text'" [name]="'companyShippingPinCode'"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                        formControlName="pincode"></text-field>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1421,61 +1437,73 @@
                                                                 </mat-card-title>
                                                             </mat-card-header>
                                                             <mat-card-content>
-                                                                <div class="container px-0" formGroupName="deposit">
-                                                                    <div class="row align-items-center">
-                                                                        <ng-container
-                                                                          *ngIf="invoiceType.isCashInvoice || (currentVoucherFormDetails?.depositAllowed && !isUpdateMode)">
-                                                                            <div class="col">
-                                                                                <reactive-dropdown-field
-                                                                                    [label]="commonLocaleData?.app_account"
-                                                                                    [placeholder]="commonLocaleData?.app_select_account"
-                                                                                    [options]="briefAccounts$ | async"
-                                                                                    (onClear)="selectedDepositAccount($event, true)"
-                                                                                    (selectedOption)="selectedDepositAccount($event)"
-                                                                                    [showCreateNew]="true"
-                                                                                    [createNewText]="commonLocaleData?.app_create_new"
-                                                                                    (createOption)="toggleAccountAsidePane(accountType.bank)"
-                                                                                    [labelValue]="invoiceType.isCashInvoice ? depositAccountName : ''"
-                                                                                    formControlName="accountUniqueName">
-                                                                                </reactive-dropdown-field>
-                                                                            </div>
-                                                                            <div class="col"
-                                                                                *ngIf="!invoiceType.isCashInvoice">
-                                                                                <input-field [name]="'amountForAccount'"
-                                                                                    [label]="commonLocaleData?.app_amount"
-                                                                                    [placeholder]="localeData?.enter_deposit_amount"
-                                                                                    [type]="'number'"
-                                                                                    formControlName="amountForAccount">
-                                                                                </input-field>
-                                                                            </div>
-                                                                        </ng-container>
-                                                                        <div class="col"
-                                                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
-                                                                            <div
-                                                                                class="d-flex align-items-center column-gap1">
-                                                                                <span>{{ localeData?.adjust_amount
-                                                                                    }}</span>
-                                                                                <span class="text-gray">
-                                                                                    <amount-field [amount]="
-                                                                                            adjustPaymentData.totalAdjustedAmount
-                                                                                                | replace
-                                                                                                    : '-'
-                                                                                                    : ''
-                                                                                        " [currencySymbol]="
-                                                                                            isMulticurrencyAccount
-                                                                                                ? account?.baseCurrencySymbol
-                                                                                                : false
-                                                                                        " [currencyCode]="
-                                                                                            isMulticurrencyAccount
-                                                                                                ? account?.baseCurrency
-                                                                                                : false
-                                                                                        "></amount-field>
-                                                                                </span>
-                                                                                <i (click)="openAdjustmentDialog(true)"
-                                                                                    class="icon-edit text-blue font-12"></i>
+                                                                <div class="container px-0 pd-t05 pd-r1 deposit-wrapper overflow-x-hidden overflow-y-auto" formArrayName="deposits">
+                                                                    <ng-container
+                                                                    *ngFor="let deposit of invoiceForm?.get('deposits')['controls']; let depositIndex = index">
+                                                                        <div class="row align-items-center mr-b15" [formGroupName]="depositIndex">
+                                                                            <ng-container *ngIf="invoiceType.isCashInvoice || (currentVoucherFormDetails?.depositAllowed && !isUpdateMode)">
+                                                                                <div class="col">
+                                                                                    <reactive-dropdown-field
+                                                                                        [label]="commonLocaleData?.app_account"
+                                                                                        [placeholder]="commonLocaleData?.app_select_account"
+                                                                                        [options]="briefAccounts$ | async"
+                                                                                        (onClear)="selectedDepositAccount($event, true, depositIndex)"
+                                                                                        (selectedOption)="selectedDepositAccount($event, false, depositIndex)"
+                                                                                        [showCreateNew]="true"
+                                                                                        [createNewText]="commonLocaleData?.app_create_new"
+                                                                                        (createOption)="toggleAccountAsidePane(accountType.bank)"
+                                                                                        [labelValue]="invoiceType.isCashInvoice ? depositAccountName : ''"
+                                                                                        [showError]="getEmptyDepositAccountError(depositIndex)"
+                                                                                        formControlName="accountUniqueName">
+                                                                                    </reactive-dropdown-field>
+                                                                                </div>
+                                                                                <div class="col" *ngIf="!invoiceType.isCashInvoice">
+                                                                                    <input-field
+                                                                                        [name]="'amountForAccount_'+ depositIndex"
+                                                                                        [label]="commonLocaleData?.app_amount"
+                                                                                        [placeholder]="localeData?.enter_deposit_amount"
+                                                                                        [type]="'number'"
+                                                                                        (input)="$event && calculateBalanceDue()"
+                                                                                        formControlName="amountForAccount"
+                                                                                    >
+                                                                                    </input-field>
+                                                                                </div>
+                                                                            </ng-container>
+                                                                            <div class="col" *ngIf="(currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice) || (invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div
+                                                                                        class="d-flex align-items-center column-gap1" *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
+                                                                                        <span>{{ localeData?.adjust_amount
+                                                                                            }}</span>
+                                                                                        <span class="text-gray">
+                                                                                            <amount-field [amount]="
+                                                                                                    adjustPaymentData.totalAdjustedAmount
+                                                                                                        | replace
+                                                                                                            : '-'
+                                                                                                            : ''
+                                                                                                " [currencySymbol]="
+                                                                                                    isMulticurrencyAccount
+                                                                                                        ? account?.baseCurrencySymbol
+                                                                                                        : false
+                                                                                                " [currencyCode]="
+                                                                                                    isMulticurrencyAccount
+                                                                                                        ? account?.baseCurrency
+                                                                                                        : false
+                                                                                                "></amount-field>
+                                                                                        </span>
+                                                                                        <i (click)="openAdjustmentDialog(true)"
+                                                                                            class="icon-edit text-blue font-12"></i>
+                                                                                    </div>
+                                                                                        <i class="icon-trash font-16 cursor-pointer mr-l1" *ngIf="currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice"
+                                                                                        (click)="deleteDepositRow(depositIndex)"></i>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </ng-container>
+                                                                </div>
+                                                                <div class="text-blue mt-2 px-0" *ngIf="currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice">
+                                                                    <span class="cursor-pointer" (click)="addNewDepositRow()">{{ localeData?.add_new_line
+                                                                    }}</span>
                                                                 </div>
                                                             </mat-card-content>
                                                         </mat-card>

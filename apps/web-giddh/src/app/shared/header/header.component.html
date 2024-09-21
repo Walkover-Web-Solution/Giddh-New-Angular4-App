@@ -4,7 +4,8 @@
         {{ localeData?.depreciation_message }}
         <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">
             support
-            <span>&#64;</span> <!-- This &#64; Html Code for @ symbol  -->
+            <span>&#64;</span>
+            <!-- This &#64; Html Code for @ symbol  -->
             giddh.com
         </a>
 
@@ -537,6 +538,15 @@
                                     {{ commonLocaleData?.app_user_settings }}
                                 </button>
                                 <mat-divider></mat-divider>
+                                <button
+                                    mat-menu-item
+                                    class="font-16"
+                                    [routerLink]="['/pages/user-details/subscription']"
+                                >
+                                    {{ commonLocaleData?.app_subscription }}
+                                </button>
+                                <mat-divider></mat-divider>
+
                                 <button mat-menu-item (click)="logout()">
                                     <div class="d-flex align-items-center">
                                         <i class="icon-logout mr-2"></i>
@@ -743,13 +753,7 @@
             (closeAsideEvent)="toggleSidebarPane(false, false)"
         ></aside-setting>
     </div>
-    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
-        <inventory-sidebar
-            class="inventory-sidebar"
-            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
-            (closeAsideEvent)="toggleSidebarPane(false, false)"
-        ></inventory-sidebar>
-    </div>
+
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">

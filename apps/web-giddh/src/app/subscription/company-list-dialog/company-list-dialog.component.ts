@@ -216,7 +216,7 @@ export class CompanyListDialogComponent implements OnInit {
         this.selectedCompany = company;
         this.subscriptionMove = true;
         this.dialog.open(this.moveCompany, {
-            width: '40%',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });

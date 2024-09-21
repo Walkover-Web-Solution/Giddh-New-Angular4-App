@@ -7,28 +7,30 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="transaction-report-wrapper" *ngIf="showContent">
-        <report-filters
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            [moduleName]="moduleName"
-            [customiseColumns]="customiseColumns"
-            [reportUniqueName]="reportUniqueName"
-            [moduleType]="moduleType"
-            [fromToDate]="fromToDate"
-            [stockReportRequest]="stockReportRequest"
-            [balanceStockReportRequest]="balanceStockReportRequest"
-            [stockReportRequestExport]="stockReportRequestExport"
-            [advanceSearchModalResponse]="advanceSearchModalResponse"
-            [pullUniversalDate]="pullUniversalDate"
-            (filters)="getSelectedFilters($event)"
-            (resetFilters)="resetFilter()"
-            [searchPage]="reportType"
-            (isLoading)="isLoading = $event"
-            (selectedColumns)="getCustomiseHeaderColumns($event)"
-        ></report-filters>
-        <div class="inventory-transaction-list" *ngIf="!isLoading">
-            <div *ngIf="isDataAvailable">
+    <div class="transaction-report-wrapper overflow-visible" *ngIf="showContent">
+        <div class="position-sticky">
+            <report-filters
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                [moduleName]="moduleName"
+                [customiseColumns]="customiseColumns"
+                [reportUniqueName]="reportUniqueName"
+                [moduleType]="moduleType"
+                [fromToDate]="fromToDate"
+                [stockReportRequest]="stockReportRequest"
+                [balanceStockReportRequest]="balanceStockReportRequest"
+                [stockReportRequestExport]="stockReportRequestExport"
+                [advanceSearchModalResponse]="advanceSearchModalResponse"
+                [pullUniversalDate]="pullUniversalDate"
+                (filters)="getSelectedFilters($event)"
+                (resetFilters)="resetFilter()"
+                [searchPage]="reportType"
+                (isLoading)="isLoading = $event"
+                (selectedColumns)="getCustomiseHeaderColumns($event)"
+            ></report-filters>
+        </div>
+        <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
+            <div *ngIf="isDataAvailable" class="position-sticky">
                 <div class="row">
                     <div class="col-12">
                         <div class="top-content">
@@ -64,11 +66,11 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.profit
                                                         ? activeCompany.baseCurrencySymbol +
-                                                          ' ' +
-                                                          giddhRoundOff(
-                                                              stockTransactionReportBalance?.profit,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                            ' ' +
+                                                            giddhRoundOff(
+                                                                stockTransactionReportBalance?.profit,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : activeCompany.baseCurrencySymbol + 0
                                                 "
                                             >
@@ -100,9 +102,9 @@
                                                     ' ' +
                                                     stockTransactionReportBalance?.opening?.amount
                                                         ? giddhRoundOff(
-                                                              stockTransactionReportBalance?.opening?.amount,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                                stockTransactionReportBalance?.opening?.amount,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : activeCompany.baseCurrencySymbol + ' ' + 0
                                                 "
                                             >
@@ -124,9 +126,9 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.opening?.quantity
                                                         ? giddhRoundOff(
-                                                              stockTransactionReportBalance?.opening?.quantity,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                                stockTransactionReportBalance?.opening?.quantity,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : 0
                                                 "
                                             >
@@ -156,11 +158,11 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.inwards?.amount
                                                         ? activeCompany.baseCurrencySymbol +
-                                                          ' ' +
-                                                          giddhRoundOff(
-                                                              stockTransactionReportBalance?.inwards?.amount,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                            ' ' +
+                                                            giddhRoundOff(
+                                                                stockTransactionReportBalance?.inwards?.amount,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : activeCompany.baseCurrencySymbol + ' ' + 0
                                                 "
                                             >
@@ -182,9 +184,9 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.inwards?.quantity
                                                         ? giddhRoundOff(
-                                                              stockTransactionReportBalance?.inwards?.quantity,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                                stockTransactionReportBalance?.inwards?.quantity,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : 0
                                                 "
                                             >
@@ -214,11 +216,11 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.outwards?.amount
                                                         ? activeCompany.baseCurrencySymbol +
-                                                          ' ' +
-                                                          giddhRoundOff(
-                                                              stockTransactionReportBalance?.outwards?.amount,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                            ' ' +
+                                                            giddhRoundOff(
+                                                                stockTransactionReportBalance?.outwards?.amount,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : activeCompany.baseCurrencySymbol + ' ' + 0
                                                 "
                                             >
@@ -240,9 +242,9 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.outwards?.quantity
                                                         ? giddhRoundOff(
-                                                              stockTransactionReportBalance?.outwards?.quantity,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                                stockTransactionReportBalance?.outwards?.quantity,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : 0
                                                 "
                                             >
@@ -272,11 +274,11 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.closing?.amount
                                                         ? activeCompany.baseCurrencySymbol +
-                                                          ' ' +
-                                                          giddhRoundOff(
-                                                              stockTransactionReportBalance?.closing?.amount,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                            ' ' +
+                                                            giddhRoundOff(
+                                                                stockTransactionReportBalance?.closing?.amount,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : activeCompany.baseCurrencySymbol + ' ' + 0
                                                 "
                                             >
@@ -299,9 +301,9 @@
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.closing?.quantity
                                                         ? giddhRoundOff(
-                                                              stockTransactionReportBalance?.closing?.quantity,
-                                                              giddhBalanceDecimalPlaces
-                                                          )
+                                                                stockTransactionReportBalance?.closing?.quantity,
+                                                                giddhBalanceDecimalPlaces
+                                                            )
                                                         : 0
                                                 "
                                             >
@@ -326,9 +328,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="isDataAvailable">
-                <div class="col-12 horizontal-padding">
-                    <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
+            <div class="row overflow-visible" *ngIf="isDataAvailable">
+                <div class="col-12 horizontal-padding overflow-visible">
+                    <div class="table-responsive inventory-report-table overflow-visible table-header-sticky" *ngIf="displayedColumns?.length">
                         <table
                             mat-table
                             [dataSource]="dataSource"
@@ -693,13 +695,11 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
-                    <div class="pagination-wrapper mt-2">
+                    <div class="pagination-wrapper mt-2" *ngIf="stockReportRequest?.totalItems > stockReportRequest?.count &&
+                        !isLoading &&
+                        displayedColumns?.length
+                    ">
                         <pagination
-                            *ngIf="
-                                stockReportRequest?.totalItems > stockReportRequest?.count &&
-                                !isLoading &&
-                                displayedColumns?.length
-                            "
                             [totalItems]="stockReportRequest?.totalItems"
                             [(ngModel)]="stockReportRequest.page"
                             [maxSize]="5"

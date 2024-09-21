@@ -110,7 +110,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         let transferDialogRef = this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
             panelClass: 'transfer-popup',
-            width: "630px"
+            width: 'var(--aside-pane-width)',
         });
 
         transferDialogRef.afterClosed().subscribe((action) => {
@@ -154,7 +154,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         this.selectedCompany = this.viewSubscriptionData;
         this.subscriptionMove = true;
         this.dialog.open(this.moveCompany, {
-            width: '40%',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -175,7 +175,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_cancel
             },
             panelClass: 'cancel-confirmation-modal',
-            width: '585px'
+            width: 'var(--aside-pane-width)',
         });
 
         cancelDialogRef.afterClosed().subscribe((action) => {
@@ -197,12 +197,25 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates to the page for purchasing a plan.
+     *  Navigates to the page for purchasing a plan.
      *
+     * @param {string} type
      * @memberof ViewSubscriptionComponent
      */
-    public buyPlan(): void {
-        this.router.navigate([`/pages/user-details/subscription/buy-plan/` + this.subscriptionId]);
+    public buyPlan(type: string): void {
+        if (type === 'renew') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + this.subscriptionId],
+                { queryParams: { renew: 'true' } }
+            );
+        } else if (type === 'trial') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + this.subscriptionId],
+                { queryParams: { trial: 'true' } }
+            );
+        } else {
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + this.subscriptionId]);
+        }
     }
 
     /**
@@ -211,7 +224,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changePlan(): void {
-        this.router.navigate([`/pages/user-details/subscription/buy-plan/` + this.subscriptionId]);
+        this.router.navigate(
+            ['/pages/user-details/subscription/buy-plan/' + this.subscriptionId],
+            { queryParams: { renew: 'true' } }
+        );
     }
 
     /**

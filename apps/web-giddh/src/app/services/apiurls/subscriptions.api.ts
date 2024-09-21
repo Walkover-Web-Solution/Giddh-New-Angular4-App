@@ -10,8 +10,7 @@ export const SUBSCRIPTION_V2_API = {
     GET_COUNTRY_LIST: 'country/country-list',
     CREATE_SUBSCRIPTION: 'v2/subscription',
     UPDATE_SUBSCRIPTION: 'v2/subscription?company=:company',
-    APPLY_PROMOCODE: 'v2/subscription/promocode',
-    GET_ALL_SUBSCRIPTIONS: 'v2/subscription/list?page=:page&count=:count',
+    GET_ALL_SUBSCRIPTIONS: 'v2/subscription/list?page=:page&count=:count&fromMoveCompany=:fromMoveCompany',
     SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId',
     CANCEL_SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId/cancel',
     TRANSFER: 'v2/subscription/transfer/ownership?subscriptionId=:subscriptionId',
@@ -30,5 +29,6 @@ export const SUBSCRIPTION_V2_API = {
     DELETE_PAYMENT_METHOD: 'v2/subscription/payment-method/:paymentUniqueName',
     SET_ARCHIVE_UNARCHIVE_COMPANY: 'company/:companyUniqueName',
     ACTIVATE_PLAN: 'v2/subscription/:subscriptionId/activate?upgrade=true',
-    CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount'
+    CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount',
+    SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token'
 };

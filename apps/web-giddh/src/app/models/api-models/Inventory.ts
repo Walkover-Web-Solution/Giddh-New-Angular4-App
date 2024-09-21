@@ -659,4 +659,3 @@ export class InventorytAdjustReportQueryRequest {
     public branchUniqueName?: string;
     public inventoryType: string;
 }
-
