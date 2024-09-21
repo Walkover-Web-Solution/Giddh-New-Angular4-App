@@ -38,7 +38,7 @@
                                 {{ localeData?.create_bank_account }}
                             </a>
                         </mat-list-item>
-                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="(companyCountry !== 'India') && isPlaidSupportedCountry">
+                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="isGocardlessSupportedCountry || (companyCountry !== 'India') && isPlaidSupportedCountry">
                             <a href="javascript:;" (click)="selectConfigureBank()">
                                 <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
                                     localeData?.configure_bank_account
