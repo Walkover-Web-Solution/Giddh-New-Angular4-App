@@ -353,7 +353,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGocardless(profile.countryV2.alpha2CountryCode);
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                 if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
                     this.isIciciBankSupportedCountry = true;
                 } else {
