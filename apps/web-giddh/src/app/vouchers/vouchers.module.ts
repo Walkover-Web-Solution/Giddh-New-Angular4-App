@@ -87,6 +87,7 @@ import { DownloadVoucherComponent } from "./download-voucher/download-voucher.co
 import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
+import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
     declarations: [
@@ -180,7 +181,8 @@ import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
         InvoiceGenerateModule,
         InvoiceTemplatesModule,
         CdkScrollModule,
-        TrimPipeModule
+        TrimPipeModule,
+        A11yModule
     ],
     exports: [
 

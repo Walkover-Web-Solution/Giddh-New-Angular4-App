@@ -528,8 +528,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
-                console.log("search", search);
-                
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -1542,7 +1540,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             accountUniqueName: voucher.customerUniqueName,
             action: action
         };
-        if (voucher === VoucherTypeEnum.generateEstimate) {
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;

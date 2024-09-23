@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <reactive-dropdown-field [name]="'total_amt'" [label]="localeData?.total_amt" [placeholder]="commonLocaleData?.app_select_range"
-                    [options]="filtersForAmount" class="w-50" (selectedOption)="amountRangeChanged($event)" formControlName="amountFieldSelector" [labelValue]="fieldLabelValues.amountFieldSelector">
+                    [options]="filtersForAmount" class="w-50" (selectedOption)="estimateProformaAmountRangeChanged($event)" formControlName="amountFieldSelector" [labelValue]="fieldLabelValues.amountFieldSelector">
                 </reactive-dropdown-field>
                 <input-field [type]="'tel'" [placeholder]="'00'" [label]="commonLocaleData?.app_amount" class="w-50" name="amount" formControlName="amount"></input-field>
             </div>
@@ -233,6 +233,6 @@
 
     <div class="d-flex justify-content-end column-gap1 mt-3">
         <button mat-stroked-button color="primary" (click)="search()">{{ commonLocaleData?.app_search }}</button>
-        <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+        <button cdkFocusInitial mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
     </div>
 </div>
