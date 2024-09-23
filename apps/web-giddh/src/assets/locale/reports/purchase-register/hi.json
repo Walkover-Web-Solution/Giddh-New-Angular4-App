@@ -14,6 +14,7 @@
     "voucher_type": "वाउचर प्रकार",
     "voucher_no": "वाउचर संख्या।",
     "qty_rate": "मात्रा-दर",
+    "qty_unit": "मात्रा/एकक",
     "discount": "छूट",
     "tax": "कर",
     "date": "तारीख",

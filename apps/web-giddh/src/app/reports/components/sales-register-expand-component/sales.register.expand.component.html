@@ -247,9 +247,8 @@
     </div>
 
     <ng-container *ngIf="isGetSalesDetailsSuccess$ | async">
-        <div class="sales-register-table mb-5">
-            <div class="responsive table-responsive">
-
+        <div class="sales-register-table mb-5 overflow-visible">
+            <div class="responsive table-responsive overflow-visible table-header-sticky">
                 <ng-container *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length > 0">
                     <table mat-table [dataSource]="dataSource" class="manufacturing-table">
                         <!-- Date Column -->
@@ -452,7 +451,7 @@
                         </ng-container>
         
                         <!-- Qty Unit Column -->
-                        <ng-container matColumnDef="qty_unit" *ngIf="showFieldFilter.qty_rate">
+                        <ng-container matColumnDef="qty_unit" *ngIf="showFieldFilter.qty_unit">
                             <th mat-header-cell *matHeaderCellDef> 
                                 <div class="d-flex justify-content-end align-items-center">
                                     <div class="text-right">{{ commonLocaleData?.app_quantity_unit }}</div>
