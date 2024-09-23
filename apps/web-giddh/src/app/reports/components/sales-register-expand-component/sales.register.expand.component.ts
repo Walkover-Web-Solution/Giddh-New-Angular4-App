@@ -17,6 +17,7 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -96,6 +97,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         sales: false,
         return: false,
         qty_rate: false,
+        qty_unit: false,
         value: false,
         discount: false,
         tax: false,
@@ -118,6 +120,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Datasource of Sales Register report */
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -179,8 +183,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
-                _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
+                this.dataSource.data = this.SalesRegisteDetailedItems.items.map((obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
+                    return obj;
                 });
                 if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
@@ -275,9 +280,16 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true
             },
             {
-                "value": "qty_rate",
-                "label": "Qty-Rate",
-                "checked": true
+                "value": "app_unit",
+                "label": "Unit",
+                "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
+                "value": "app_rate",
+                "label": "Rate",
+                "checked": true,
+                "isCommonLocaleData": true
             },
             {
                 "value": "discount",
@@ -452,7 +464,11 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.customiseColumns = this.customiseColumns?.map(column => {
-                column.label = this.localeData[column.value];
+                if (column.isCommonLocaleData) {
+                    column.label = this.commonLocaleData[column.value];
+                } else {
+                    column.label = this.localeData[column.value];
+                }
                 return column;
             });
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];

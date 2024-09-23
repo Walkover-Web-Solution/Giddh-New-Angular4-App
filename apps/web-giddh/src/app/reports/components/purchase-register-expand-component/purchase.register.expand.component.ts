@@ -17,6 +17,7 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
     selector: "purchase-register-expand",
@@ -58,6 +59,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         purchase: false,
         return: false,
         qty_rate: false,
+        qty_unit: false,
         value: false,
         discount: false,
         tax: false,
@@ -114,6 +116,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Datasource of Purchase Register report */
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     
     constructor(
         private store: Store<AppState>,
@@ -201,8 +205,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             .subscribe((res: PurchaseRegisteDetailedResponse) => {
                 if (res) {
                     this.PurchaseRegisteDetailedItems = res;
-                    _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {
+                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
                         obj.date = this.getDateToDMY(obj.date);
+                        return obj;
                     });
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
@@ -294,9 +299,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true,
             },
             {
-                "value": "qty_rate",
-                "label": "Qty-Rate",
+                "value": "app_rate",
+                "label": "Rate",
                 "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
+                "value": "app_unit",
+                "label": "Unit",
+                "checked": true,
+                "isCommonLocaleData": true
             },
             {
                 "value": "discount",
@@ -484,7 +496,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.customiseColumns = this.customiseColumns?.map((column) => {
-                column.label = this.localeData[column.value];
+                if (column.isCommonLocaleData) {
+                    column.label = this.commonLocaleData[column.value];
+                } else {
+                    column.label = this.localeData[column.value];
+                }
                 return column;
             });
             this.monthNames = [
