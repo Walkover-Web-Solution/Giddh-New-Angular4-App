@@ -139,7 +139,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     private getDepositFormGroup(): FormGroup {
         return this.formBuilder.group({
             amount: [''],
-            accountUniqueName: [''],
+            accountUniqueName: ['']
         });
     }
     /**
@@ -202,28 +202,34 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     this.isBankSelected = false;
-                    let deposits = this.paymentForm.get('deposits') as FormArray;
-                    this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
-                        let currentDepositFormGroup = deposits.at(index) as FormGroup;
-                        currentDepositFormGroup.get("accountUniqueName")?.patchValue("");
-                    });
+                    this.setDepositAccountUniqueNameEmpty();
                     this.paymentForm.get('chequeClearanceDate')?.patchValue('');
                     this.paymentForm.get('chequeNumber')?.patchValue('');
                 }
             })
-            this.paymentForm.get('accountUniqueName')?.patchValue(event.value);
+            let deposits = this.paymentForm.get('deposits') as FormArray;
+            let currentDepositFormGroup = deposits.at(index) as FormGroup;
+            currentDepositFormGroup.get("accountUniqueName")?.patchValue(event.value);
         } else {
             this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
             this.selectedPaymentMode = null;
             this.isBankSelected = false;
-            let deposits = this.paymentForm.get('deposits') as FormArray;
-            this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
-                let currentDepositFormGroup = deposits.at(index) as FormGroup;
-                currentDepositFormGroup.get("accountUniqueName")?.patchValue("");
-            });
+            this.setDepositAccountUniqueNameEmpty();
             this.paymentForm.get('chequeClearanceDate')?.patchValue('');
             this.paymentForm.get('chequeNumber')?.patchValue('');
         }
+    }
+    /**
+     * Set AccountUniqueName Empty
+     *
+     * @memberof PaymentDialogComponent
+     */
+    private setDepositAccountUniqueNameEmpty(): void {
+        let deposits = this.paymentForm.get('deposits') as FormArray;
+        this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
+            let currentDepositFormGroup = deposits.at(index) as FormGroup;
+            currentDepositFormGroup.get("accountUniqueName")?.patchValue("");
+        });
     }
 
     /**
