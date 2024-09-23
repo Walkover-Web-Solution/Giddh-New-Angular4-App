@@ -299,12 +299,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             },
             {
                 "value": "qty_unit",
-                "label": "Qty-Rate",
+                "label": "Qty-Unit",
                 "checked": true
             },
             {
                 "value": "qty_rate",
-                "label": "Qty-Rate",
+                "label": "Rate",
                 "checked": true,
             },
             {

@@ -280,12 +280,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             },
             {
                 "value": "qty_unit",
-                "label": "Qty-Unit",
+                "label": "Unit",
                 "checked": true
             },
             {
                 "value": "qty_rate",
-                "label": "Qty-Rate",
+                "label": "Rate",
                 "checked": true
             },
             {
