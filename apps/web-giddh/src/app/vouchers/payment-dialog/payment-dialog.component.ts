@@ -202,19 +202,17 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     this.isBankSelected = false;
-                    this.setDepositAccountUniqueNameEmpty();
+                    this.setDepositAccountUniqueName(index, '');
                     this.paymentForm.get('chequeClearanceDate')?.patchValue('');
                     this.paymentForm.get('chequeNumber')?.patchValue('');
                 }
             })
-            let deposits = this.paymentForm.get('deposits') as FormArray;
-            let currentDepositFormGroup = deposits.at(index) as FormGroup;
-            currentDepositFormGroup.get("accountUniqueName")?.patchValue(event.value);
+            this.setDepositAccountUniqueName(index, event.value);
         } else {
             this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
             this.selectedPaymentMode = null;
             this.isBankSelected = false;
-            this.setDepositAccountUniqueNameEmpty();
+            this.setDepositAccountUniqueName(index, '');
             this.paymentForm.get('chequeClearanceDate')?.patchValue('');
             this.paymentForm.get('chequeNumber')?.patchValue('');
         }
@@ -224,12 +222,10 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      *
      * @memberof PaymentDialogComponent
      */
-    private setDepositAccountUniqueNameEmpty(): void {
+    private setDepositAccountUniqueName(index: number , event: any): void {
         let deposits = this.paymentForm.get('deposits') as FormArray;
-        this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
-            let currentDepositFormGroup = deposits.at(index) as FormGroup;
-            currentDepositFormGroup.get("accountUniqueName")?.patchValue("");
-        });
+        let currentDepositFormGroup = deposits.at(index) as FormGroup;
+        currentDepositFormGroup.get("accountUniqueName")?.patchValue(event);
     }
 
     /**
