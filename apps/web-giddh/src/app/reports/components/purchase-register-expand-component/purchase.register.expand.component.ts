@@ -59,6 +59,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         purchase: false,
         return: false,
         qty_rate: false,
+        qty_unit: false,
         value: false,
         discount: false,
         tax: false,
@@ -295,6 +296,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "value": "return",
                 "label": "Return",
                 "checked": true,
+            },
+            {
+                "value": "qty_unit",
+                "label": "Qty-Rate",
+                "checked": true
             },
             {
                 "value": "qty_rate",

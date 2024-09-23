@@ -429,6 +429,24 @@
                                 <p *ngIf="!item.stocks?.length">-</p>    
                             </td>
                         </ng-container>
+
+                        <!-- Qty Unit Column -->
+                        <ng-container matColumnDef="qty_unit" *ngIf="showFieldFilter.qty_unit">
+                            <th mat-header-cell *matHeaderCellDef> 
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <div class="text-right">{{ commonLocaleData?.app_quantity_unit }}</div>
+                                </div>    
+                            </th>
+                            <td mat-cell *matCellDef="let item"> 
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>
+                                        {{ stock.quantity | giddhCurrency }}
+                                        {{ stock.unit.code }}
+                                    </p>
+                                </ng-container>
+                                <p *ngIf="!item.stocks?.length">-</p>  
+                            </td>
+                        </ng-container>
         
                         <!-- Qty Rate Column -->
                         <ng-container matColumnDef="qty_rate" *ngIf="showFieldFilter.qty_rate">
