@@ -202,7 +202,11 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     this.isBankSelected = false;
-                    // this.paymentForm.get('accountUniqueName')?.patchValue('');
+                    let deposits = this.paymentForm.get('deposits') as FormArray;
+                    this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
+                        let currentDepositFormGroup = deposits.at(index) as FormGroup;
+                        currentDepositFormGroup.get("accountUniqueName")?.patchValue("");
+                    });
                     this.paymentForm.get('chequeClearanceDate')?.patchValue('');
                     this.paymentForm.get('chequeNumber')?.patchValue('');
                 }
@@ -212,7 +216,11 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
             this.selectedPaymentMode = null;
             this.isBankSelected = false;
-            // this.paymentForm.get('accountUniqueName')?.patchValue('');
+            let deposits = this.paymentForm.get('deposits') as FormArray;
+            this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
+                let currentDepositFormGroup = deposits.at(index) as FormGroup;
+                currentDepositFormGroup.get("accountUniqueName")?.patchValue("");
+            });
             this.paymentForm.get('chequeClearanceDate')?.patchValue('');
             this.paymentForm.get('chequeNumber')?.patchValue('');
         }
