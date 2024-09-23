@@ -116,6 +116,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Datasource of Purchase Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     
     constructor(
