@@ -249,7 +249,7 @@
     <ng-container *ngIf="isGetSalesDetailsSuccess$ | async">
         <div class="sales-register-table mb-5 overflow-visible">
             <div class="responsive table-responsive overflow-visible table-header-sticky">
-                <ng-container *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length > 0">
+                <ng-container *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length">
                     <table mat-table [dataSource]="dataSource" class="manufacturing-table">
                         <!-- Date Column -->
                         <ng-container matColumnDef="date" *ngIf="showFieldFilter.date">

@@ -304,14 +304,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true
             },
             {
-                "value": "qty_rate",
-                "label": "Rate",
+                "value": "app_unit",
+                "label": "Unit",
                 "checked": true,
+                "isCommonLocaleData": true
             },
             {
-                "value": "discount",
-                "label": "Discount",
+                "value": "app_rate",
+                "label": "Rate",
                 "checked": true,
+                "isCommonLocaleData": true
             },
             {
                 "value": "tax",
@@ -494,7 +496,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.customiseColumns = this.customiseColumns?.map((column) => {
-                column.label = this.localeData[column.value];
+                if(column.isCommonLocaleData) {
+                    column.label = this.commonLocaleData[column.value];
+                } else {
+                    column.label = this.localeData[column.value];
+                }
                 return column;
             });
             this.monthNames = [
