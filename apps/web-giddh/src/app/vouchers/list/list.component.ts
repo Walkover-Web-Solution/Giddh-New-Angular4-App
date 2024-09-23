@@ -31,7 +31,7 @@ import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
-import { BulkUpdateComponent } from "../bulk-update/bulk-update..component";
+import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 
 // invoice-table

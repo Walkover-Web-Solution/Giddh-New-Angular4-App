@@ -85,7 +85,7 @@ import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.m
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
 import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
-import { BulkUpdateComponent } from "./bulk-update/bulk-update..component";
+import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
 
 @NgModule({
