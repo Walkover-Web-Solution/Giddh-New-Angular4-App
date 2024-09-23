@@ -464,7 +464,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.customiseColumns = this.customiseColumns?.map(column => {
-                if(column.isCommonLocaleData) {
+                if (column.isCommonLocaleData) {
                     column.label = this.commonLocaleData[column.value];
                 } else {
                     column.label = this.localeData[column.value];

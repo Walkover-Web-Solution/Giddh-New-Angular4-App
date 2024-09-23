@@ -299,9 +299,10 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true,
             },
             {
-                "value": "qty_unit",
-                "label": "Qty-Unit",
-                "checked": true
+                "value": "app_rate",
+                "label": "Rate",
+                "checked": true,
+                "isCommonLocaleData": true
             },
             {
                 "value": "app_unit",
@@ -310,10 +311,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "isCommonLocaleData": true
             },
             {
-                "value": "app_rate",
-                "label": "Rate",
+                "value": "discount",
+                "label": "Discount",
                 "checked": true,
-                "isCommonLocaleData": true
             },
             {
                 "value": "tax",
@@ -496,7 +496,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.customiseColumns = this.customiseColumns?.map((column) => {
-                if(column.isCommonLocaleData) {
+                if (column.isCommonLocaleData) {
                     column.label = this.commonLocaleData[column.value];
                 } else {
                     column.label = this.localeData[column.value];
