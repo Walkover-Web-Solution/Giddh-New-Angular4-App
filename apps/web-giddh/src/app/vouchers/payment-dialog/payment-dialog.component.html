@@ -27,12 +27,11 @@
         </reactive-dropdown-field>
     </div>
 
-    <div class="px-0 pd-t05 deposit-wrapper overflow-x-hidden overflow-y-auto" formArrayName="deposits">
+    <div class="px-0 pd-t05 deposit-wrapper overflow-x-hidden overflow-y-auto" [formArrayName]="'deposits'">
         <ng-container *ngFor="let deposit of paymentForm?.get('deposits')['controls']; let depositIndex = index">
             <div class="d-flex column-gap1 mr-b15" [formGroupName]="depositIndex">
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_payment_mode"
-                    [required]="true"
                     [placeholder]="commonLocaleData?.app_select_account"
                     class="w-50"
                     [options]="briefAccounts$ | async"
@@ -42,7 +41,8 @@
                 </reactive-dropdown-field>
                 <div class="d-flex align-items-center w-50">
                     <input-field
-                        [name]="'amount_' + depositIndex"
+                        [id]="'amount_'+depositIndex"
+                        [name]="'amount'"
                         [type]="'text'"
                         [label]="commonLocaleData?.app_amount"
                         [placeholder]="localeData?.enter_amount"
