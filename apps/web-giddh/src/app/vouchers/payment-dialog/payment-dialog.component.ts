@@ -59,7 +59,6 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public showExchangeRateEditField: boolean = false;
     /** Holds true action voucher api call in progress */
     public saveInProgress: boolean = false;
-
     constructor(
         private componentStore: VoucherComponentStore,
         private settingsTagService: SettingsTagService,
@@ -160,7 +159,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public deleteDepositRow(entryIndex: number): void {
         const deposits = this.paymentForm.get('deposits') as FormArray;
         if (deposits?.length === 1) {
-            deposits.at(0).reset();
+            deposits.reset();
             return;
         }
         deposits.removeAt(entryIndex);
@@ -184,8 +183,6 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      */
     public onSelectPaymentMode(event: any, index: number): void {
         if (event && event.value) {
-            console.log(" this.voucherDetails", this.voucherDetails);
-            console.log("event", event);
             if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency?.code) {
                 this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
             } else {
@@ -230,7 +227,6 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     private assignAmount(amount: number, currencySymbol: string, depositIndex: number = 0): void {
-        console.log("assignAmount", depositIndex);
         this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
             if (control.get('amount').value && depositIndex !== index) {
                 amount -= Number(control.get('amount').value);
@@ -241,9 +237,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         let deposits = this.paymentForm?.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(depositIndex) as FormGroup;
         currentDepositFormGroup.get('amount')?.patchValue(amount);
-        console.log("amountCurrency", this.amountCurrency);
         this.amountCurrency = currencySymbol;
-        console.log("currencySymbol", currencySymbol);
     }
 
     /**
@@ -282,30 +276,17 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         if (newFormObj.chequeClearanceDate) {
             newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
-        console.log(newFormObj);
-        if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
-            const deposits = [];
-            console.log('1');
-            this.paymentForm.get('deposits')['controls']?.forEach(control => {
-                if (control.get("accountUniqueName").value && control.get("amount").value) {
+        const deposits = [];
+        this.paymentForm.get('deposits')['controls']?.forEach(control => {
+            if (control.get("accountUniqueName").value && control.get("amount").value) {
+                if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
                     deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
-                }
-            });
-            newFormObj.deposits = deposits;
-            console.log(deposits);
-        } else {
-            console.log('2');
-            const deposits = [];
-            this.paymentForm.get('deposits')['controls']?.forEach(control => {
-                console.log("control", control);
-                if (control.get("accountUniqueName").value && control.get("amount").value) {
+                } else {
                     deposits.push({ amountForCompany: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
                 }
-            });
-            newFormObj.deposits = deposits;
-            console.log(deposits);
-        }
-        console.log(newFormObj);
+            }
+        });
+        newFormObj.deposits = deposits;
         newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
         delete newFormObj.tagUniqueName;
 
