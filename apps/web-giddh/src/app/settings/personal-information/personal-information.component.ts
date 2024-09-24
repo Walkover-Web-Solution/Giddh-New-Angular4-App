@@ -7,8 +7,6 @@ import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
@@ -64,7 +62,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** This will hold region */
     public region: string;
 
-    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private router: Router) {
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) {
         this.initProfileForm();
     }
 
@@ -203,10 +201,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public copyUrl(): void {
-        const urlTree = this.router.createUrlTree([this.portalUrl + this.profileData.portalDomain], {
-            queryParams: { region: this.region }
-        });
-        const urlToCopy = this.router.serializeUrl(urlTree);
+        const urlToCopy = `${this.portalUrl}${this.profileData.portalDomain}?region=${this.region}`;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
         setTimeout(() => {
