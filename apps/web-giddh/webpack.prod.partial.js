@@ -11,7 +11,7 @@ module.exports = {
             'errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
             'AppUrl': JSON.stringify('https://app.giddh.com/'),
             'ApiUrl': JSON.stringify('https://api.giddh.com/'),
-            'UkApiUrl': JSON.stringify('https://routes.msg91.com/api/proxy/117230/33scfei2'),
+            'UkApiUrl': JSON.stringify('https://routes.msg91.com/api/proxy/117230/33scfei2/'),
             'PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(true),
@@ -39,7 +39,7 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
             'process.env.AppUrl': JSON.stringify('https://app.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
-            'process.env.UkApiUrl': JSON.stringify('https://routes.msg91.com/api/proxy/117230/33scfei2'),
+            'process.env.UkApiUrl': JSON.stringify('https://routes.msg91.com/api/proxy/117230/33scfei2/'),
             'process.PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),

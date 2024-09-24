@@ -10,7 +10,7 @@ export const environment: Environment = {
     production: false,
     AppUrl: 'http://localhost:3000/',
     ApiUrl: 'https://apitest.giddh.com/',
-    UkApiUrl: 'https://routes.msg91.com/api/proxy/117230/33scfei2',
+    UkApiUrl: 'https://routes.msg91.com/api/proxy/117230/33scfei2/',
     isElectron: false,
     APP_FOLDER: '',
     showDevModule: true,

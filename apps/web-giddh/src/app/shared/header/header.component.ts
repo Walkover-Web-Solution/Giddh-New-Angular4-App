@@ -1706,7 +1706,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         })
     }
-    
     /**
      * This function will check if page has tabs to show/hide page heading
      *
@@ -1986,6 +1985,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
         localStorage.removeItem('isNewArchitecture');
+        localStorage.removeItem('Country-Region');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {

@@ -10,7 +10,7 @@ export const environment: Environment = {
     showDevModule: false,
     AppUrl: './',
     ApiUrl: 'https://api.giddh.com/',
-    UkApiUrl: 'https://routes.msg91.com/api/proxy/117230/33scfei2',
+    UkApiUrl: 'https://routes.msg91.com/api/proxy/117230/33scfei2/',
     isElectron: false,
     APP_FOLDER: '',
     /** Angular debug tools in the dev console
