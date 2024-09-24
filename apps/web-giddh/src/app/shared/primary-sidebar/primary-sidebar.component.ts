@@ -113,6 +113,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commandkDialogRef: MatDialogRef<any>;
     /** Holds true if company has no branch */
     public isCompanyWithoutBranch: boolean = false;
+     /** Hold broadcast event */
+     public broadcast: any;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -239,20 +241,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.activeCompanyForDb.name = selectedCmp.name;
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                 }
-                if (this.generalService.companyUniqueName) {
-                    this.dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
-                        if (accountList?.length) {
-                            if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                                this.accountItemsFromIndexDB = accountList.slice(0, 7);
-                            } else {
-                                this.accountItemsFromIndexDB = accountList.slice(0, 5);
-                            }
-                        } else {
-                            this.accountItemsFromIndexDB = DEFAULT_AC;
-                        }
-                        this.changeDetectorRef.detectChanges();
-                    });
-                }
+                this.getAccountItems();
             }
         });
         this.currentCompanyBranches$.subscribe(response => {
@@ -290,6 +279,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         });
+        
+        this.broadcast = new BroadcastChannel("deleteAccount");
+        this.broadcast.onmessage = (event) => {
+            if (event?.data === "deleteAccount") {
+                this.getAccountItems();
+            }
+        };
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
@@ -353,11 +349,34 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+    * Get All Account
+    *
+    * @memberof PrimarySidebarComponent
+    */
+    public getAccountItems(): void {
+        if (this.generalService.companyUniqueName ) {
+            this.dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').pipe(take(1)).subscribe(accountList => {
+                if (accountList?.length) {
+                    if (window.innerWidth > 1440 && window.innerHeight > 717) {
+                        this.accountItemsFromIndexDB = accountList.slice(0, 7);
+                    } else {
+                        this.accountItemsFromIndexDB = accountList.slice(0, 5);
+                    }
+                } else {
+                    this.accountItemsFromIndexDB = DEFAULT_AC;
+                }
+                this.changeDetectorRef.detectChanges();
+            });
+        }
+    }
+
+    /**
      * Releases the occupied memory
      *
      * @memberof PrimarySidebarComponent
      */
     public ngOnDestroy(): void {
+        this.broadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

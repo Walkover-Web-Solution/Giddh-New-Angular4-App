@@ -35,6 +35,7 @@ import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/per
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ExportMasterDialogComponent } from '../export-master-dialog/export-master-dialog.component';
+import { DbService } from 'apps/web-giddh/src/app/services/db.service';
 
 @Component({
     selector: 'account-operations',
@@ -133,10 +134,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
     /** List of discounts */
     public discounts: any[] = [];
+    /** Hold broadcast event */
+    public broadcast: any;
     /** Holds active group unique name */
     @Input() public activeGroupUniqueName: string = '';
 
-    constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
+    constructor(private _fb: UntypedFormBuilder,private dbService: DbService, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions, public dialog: MatDialog) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
@@ -651,8 +654,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
+        this.dbService.removeItem(this.generalService.currentBranchUniqueName,'accounts',activeAccUniqueName);
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
-
+        this.broadcast = new BroadcastChannel("deleteAccount");
+        setTimeout(()=>this.broadcast.postMessage("deleteAccount"),1000);
+        
         this.hideDeleteAccountModal();
     }
 
@@ -721,6 +727,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public ngOnDestroy() {
+        this.broadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
