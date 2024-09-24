@@ -1976,7 +1976,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && this.account?.baseCurrency !== accountData.currency) {
-            this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
+            this.componentStore.getBriefAccounts({ currency: accountData?.currency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
         }
 
         this.account.countryName = accountData.country?.countryName;
