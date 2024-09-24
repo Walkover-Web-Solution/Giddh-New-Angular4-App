@@ -73,6 +73,8 @@ export interface VoucherState {
     uploadFileInProgress: boolean;
     uploadFileIsSuccess: any;
     updateAttachmentInVoucherIsSuccess: boolean;
+    cancelEInvoiceInProgress: boolean;
+    cancelEInvoiceIsSuccess: boolean;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -128,7 +130,9 @@ const DEFAULT_STATE: VoucherState = {
     voucherVersionsResponse: null,
     uploadFileInProgress: null,
     uploadFileIsSuccess: null,
-    updateAttachmentInVoucherIsSuccess: null
+    updateAttachmentInVoucherIsSuccess: null,
+    cancelEInvoiceInProgress: null,
+    cancelEInvoiceIsSuccess: null
 };
 
 @Injectable()
@@ -197,6 +201,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public isVoucherVersionsInProgress$ = this.select((state) => state.isVoucherVersionsInProgress);
     public uploadFileIsSuccess$ = this.select((state) => state.uploadFileIsSuccess);
     public updateAttachmentInVoucherIsSuccess$ = this.select((state) => state.updateAttachmentInVoucherIsSuccess);
+    public cancelEInvoiceInProgress$ = this.select((state) => state.cancelEInvoiceInProgress);
+    public cancelEInvoiceIsSuccess$ = this.select((state) => state.cancelEInvoiceIsSuccess);
+
 
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
@@ -213,6 +220,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public createEwayBill$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
     public sessionUserEmail$: Observable<any> = this.select(this.store.select(state => state.session.user), (response) => response);
+    
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -1646,6 +1654,41 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 updateAttachmentInVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+    
+    readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any}>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ cancelEInvoiceInProgress: true });
+                return this.voucherService.cancelEInvoice(req.getRequestObject, req.postRequestObject).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                typeof res.body === 'string' && this.toaster.showSnackBar("error", res.body);
+                                return this.patchState({
+                                    cancelEInvoiceInProgress: false,
+                                    cancelEInvoiceIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    cancelEInvoiceInProgress: false,
+                                    cancelEInvoiceIsSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                cancelEInvoiceInProgress: false,
+                                cancelEInvoiceIsSuccess: null
                             });
                         }
                     ),

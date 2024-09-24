@@ -900,4 +900,34 @@ export class VoucherService {
         return this.http.patch(url, postRequestObject).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
     }
+
+    /**
+     * Handler for cancellation of E-invoice
+     *
+     * @param {*} requestObject
+     * @param {*} postObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public cancelEInvoice(requestObject: any, postObject: any): Observable<BaseResponse<any, any>> {
+        let contextPath = 
+        `${this.config.apiUrl}${(requestObject.voucherType === VoucherTypeEnum.creditNote || requestObject.voucherType === VoucherTypeEnum.debitNote) 
+            ? INVOICE_API.CANCEL_CN_DN_E_INVOICE_API 
+            : INVOICE_API_2.CANCEL_E_INVOICE}`;
+
+        contextPath = contextPath?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        if (requestObject.accountUniqueName) {
+            contextPath = contextPath?.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
+            delete requestObject.accountUniqueName;
+        }
+        Object.keys(requestObject).forEach((key, index) => {
+            const delimiter = index === 0 ? '?' : '&'
+            if (requestObject[key] !== undefined) {
+                contextPath += `${delimiter}${key}=${encodeURIComponent(requestObject[key])}`
+            }
+        });
+
+        return this.http.post(contextPath, postObject).pipe(
+            catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
+    }
 }
