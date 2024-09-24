@@ -99,7 +99,23 @@
                     "label": "Estimates (Beta)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
-                    "description": "Final sales order"
+                    "description": "Final sales order",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Estimates (Beta)",
+                    "link": "/pages/vouchers/preview/estimates/list",
+                    "icon": "icon-sales-order1",
+                    "description": "Final sales order",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "New Credit Note",
