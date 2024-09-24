@@ -693,8 +693,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`], {
-            queryParams: { page: this.advanceFilters.page }
+        this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${voucherUniqueName}`], {
+            queryParams: { page: this.advanceFilters.page, from: this.advanceFilters.from, to: this.advanceFilters.to }
         });
     }
 

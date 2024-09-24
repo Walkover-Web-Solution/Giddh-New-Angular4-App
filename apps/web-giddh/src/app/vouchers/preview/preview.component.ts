@@ -198,7 +198,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             if (params) {
                 if (params?.voucherType) {
                     this.params = params;
-                    this.voucherType = params?.voucherType;
+                    this.voucherType = this.vouchersUtilityService.parseVoucherType(params?.voucherType);
                     this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                     this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
                     this.getCreatedTemplates();
@@ -206,6 +206,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 }
                 if (params?.page) {
                     this.advanceFilters.page = Number(params.page);
+                    this.advanceFilters.from = params.from ?? '';
+                    this.advanceFilters.to = params.to ?? '';
                     this.getAllVouchers();
                 }
             }
