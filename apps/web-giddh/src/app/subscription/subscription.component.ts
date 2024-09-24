@@ -206,7 +206,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((activeCompany) => {
             if (activeCompany) {
-                this.selectedCompany = null;
                 this.selectedCompany = activeCompany;
             }
             this.changeDetectionRef.detectChanges();
