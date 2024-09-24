@@ -926,7 +926,6 @@ export class VoucherService {
                 contextPath += `${delimiter}${key}=${encodeURIComponent(requestObject[key])}`
             }
         });
-        // contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
 
         return this.http.post(contextPath, postObject).pipe(
             catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));

@@ -99,7 +99,23 @@
                     "label": "अंदाज (बीटा)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
-                    "description": "अंतिम विक्री ऑर्डर"
+                    "description": "अंतिम विक्री ऑर्डर",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "अंदाज (बीटा)",
+                    "link": "/pages/vouchers/preview/estimates/list",
+                    "icon": "icon-sales-order1",
+                    "description": "अंतिम विक्री ऑर्डर",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "नवीन क्रेडिट नोट",

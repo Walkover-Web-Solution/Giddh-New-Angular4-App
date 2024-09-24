@@ -58,7 +58,7 @@
             color="primary"
             (click)="submitEInvoiceCancellation()"
             [disabled]="
-                (bulkUpdateVoucherInProgress$ | async) ||
+                (cancelEInvoiceInProgress$ | async) ||
                 !eInvoiceCancelForm.get('cancellationReason')?.value ||
                 !(eInvoiceCancelForm.get('cancellationRemarks')?.value | trim)
             "
