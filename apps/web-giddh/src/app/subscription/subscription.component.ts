@@ -86,7 +86,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Holds subscription id */
     public subscriptionId: string = '';
     /** Holds profile data */
-    public profileData: any;
+    public profileData: any = null;
 
 
     constructor(private store: Store<AppState>,
@@ -206,9 +206,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response:any) => {
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response) {
-                this.profileData = null;
                 this.profileData = response;
             }
             this.changeDetectionRef.detectChanges();
