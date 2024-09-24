@@ -51,27 +51,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public modalUniqueName: string;
     public imgPath: string;
     public expand: boolean = false;
-    public showFieldFilter = {
-        date: false,
-        account: false,
-        voucher_type: false,
-        voucher_no: false,
-        purchase: false,
-        return: false,
-        qty_rate: false,
-        qty_unit: false,
-        value: false,
-        discount: false,
-        tax: false,
-        net_purchase: false,
-        parent_group: false,
-        purchase_account: false,
-        tax_no: false,
-        address: false,
-        pincode: false,
-        email: false,
-        mobile_no: false,
-    };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -380,12 +359,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.expand = !this.expand;
     }
 
-    public columnFilter(event, column) {
-        if (event && column) {
-            this.showFieldFilter[column] = event;
-        }
-    }
-
     public hideListItems() {
         if (this.filterDropDownList.isOpen) {
             this.filterDropDownList.hide();
@@ -577,8 +550,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public getSelectedTableColumns(event: any): void {
         this.displayedColumns = event;
-        const displayColumnsSet = new Set(this.displayedColumns);
-        Object.keys(this.showFieldFilter).forEach((key) => (this.showFieldFilter[key] = displayColumnsSet.has(key)));
     }
 
     /**

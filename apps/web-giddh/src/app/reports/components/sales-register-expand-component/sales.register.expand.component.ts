@@ -88,28 +88,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public displayedColumns: any[] = [];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** True according to show field filters  */
-    public showFieldFilter = {
-        date: false,
-        account: false,
-        voucher_type: false,
-        voucher_no: false,
-        sales: false,
-        return: false,
-        qty_rate: false,
-        qty_unit: false,
-        value: false,
-        discount: false,
-        tax: false,
-        net_sales: false,
-        parent_group: false,
-        sales_account: false,
-        tax_no: false,
-        address: false,
-        pincode: false,
-        email: false,
-        mobile_no: false
-    };
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Hold initial params data */
@@ -348,11 +326,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public emitExpand() {
         this.expand = !this.expand;
     }
-    public columnFilter(event, column) {
-        if (event && column) {
-            this.showFieldFilter[column] = event;
-        }
-    }
     public hideListItems() {
         if (this.filterDropDownList.isOpen) {
             this.filterDropDownList.hide();
@@ -531,8 +504,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     */
     public getSelectedTableColumns(event: any): void {
         this.displayedColumns = event;
-        const displayColumnsSet = new Set(this.displayedColumns);
-        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
     }
 
     /**
