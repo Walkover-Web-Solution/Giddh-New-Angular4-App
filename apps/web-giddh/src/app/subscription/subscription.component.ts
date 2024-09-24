@@ -57,7 +57,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isVerifyAddNewMobileNoInProcess$: Observable<boolean>;
     public isVerifyAddNewMobileNoSuccess$: Observable<boolean>;
     public authenticateTwoWay$: Observable<boolean>;
-    public selectedCompany: CompanyResponse = null;
     public user: UserDetails = null;
     public apiTabActivated: boolean = false;
     public userSessionResponse$: Observable<any>;
@@ -86,6 +85,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isSubscriptionLoading: boolean = false;
     /** Holds subscription id */
     public subscriptionId: string = '';
+    /** Holds profile data */
+    public profileData: any = null;
+
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
@@ -204,10 +206,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((activeCompany) => {
-            if (activeCompany) {
-                this.selectedCompany = null;
-                this.selectedCompany = activeCompany;
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response) {
+                this.profileData = response;
             }
             this.changeDetectionRef.detectChanges();
         });
