@@ -7,7 +7,7 @@ import { Environment } from './model';
 Error.stackTraceLimit = Infinity;
 
 export const environment: Environment = {
-    production: false,
+    production: true,
     AppUrl: 'http://localhost:3000/',
     ApiUrl: 'https://apitest.giddh.com/',
     UkApiUrl: 'https://gbapi.giddh.com/',
