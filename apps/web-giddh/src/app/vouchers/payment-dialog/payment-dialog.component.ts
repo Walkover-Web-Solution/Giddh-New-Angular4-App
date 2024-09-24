@@ -6,7 +6,7 @@ import { SettingsTagService } from '../../services/settings.tag.service';
 import { orderBy } from '../../lodash-optimized';
 import { BriedAccountsGroup } from '../utility/vouchers.const';
 import { OptionInterface } from '../../models/api-models/Voucher';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
@@ -59,7 +59,6 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public showExchangeRateEditField: boolean = false;
     /** Holds true action voucher api call in progress */
     public saveInProgress: boolean = false;
-
     constructor(
         private componentStore: VoucherComponentStore,
         private settingsTagService: SettingsTagService,
@@ -77,9 +76,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
-            date: [dayjs(new Date())],
-            amount: ['', Validators.required],
-            accountUniqueName: ['', Validators.required],
+            date: [''],
+            deposits: this.formBuilder.array([this.getDepositFormGroup()]),
             tagUniqueName: [''],
             chequeNumber: [''],
             chequeClearanceDate: [''],
@@ -131,6 +129,41 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             this.saveInProgress = response;
         });
     }
+    /**
+     * Returns deposit form group
+     *
+     * @private
+     * @return {*}  {FormGroup}
+     * @memberof PaymentDialogComponent
+     */
+    private getDepositFormGroup(): FormGroup {
+        return this.formBuilder.group({
+            amount: [''],
+            accountUniqueName: ['']
+        });
+    }
+    /**
+     * Add new deposit row
+     *
+     * @memberof PaymentDialogComponent
+     */
+    public addNewDepositRow(): void {
+        this.paymentForm.get('deposits')['controls'].push(this.getDepositFormGroup());
+    }
+    /**
+     * Remove deposit row
+     *
+     * @param {number} entryIndex
+     * @memberof PaymentDialogComponent
+     */
+    public deleteDepositRow(entryIndex: number): void {
+        const deposits = this.paymentForm.get('deposits') as FormArray;
+        if (deposits?.length === 1) {
+            deposits.reset();
+            return;
+        }
+        deposits.removeAt(entryIndex);
+    }
 
     /**
      * Lifecycle hook for destroy
@@ -148,12 +181,12 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof PaymentDialogComponent
      */
-    public onSelectPaymentMode(event: any): void {
+    public onSelectPaymentMode(event: any, index: number): void {
         if (event && event.value) {
-            if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency) {
-                this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
+            if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency?.code) {
+                this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
             } else {
-                this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
+                this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currency?.symbol, index);
             }
             this.selectedPaymentMode = event;
 
@@ -169,20 +202,30 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     this.isBankSelected = false;
-                    this.paymentForm.get('accountUniqueName')?.patchValue('');
+                    this.setDepositAccountUniqueName(index, '');
                     this.paymentForm.get('chequeClearanceDate')?.patchValue('');
                     this.paymentForm.get('chequeNumber')?.patchValue('');
                 }
             })
-            this.paymentForm.get('accountUniqueName')?.patchValue(event.value);
+            this.setDepositAccountUniqueName(index, event.value);
         } else {
-            this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
+            this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
             this.selectedPaymentMode = null;
             this.isBankSelected = false;
-            this.paymentForm.get('accountUniqueName')?.patchValue('');
+            this.setDepositAccountUniqueName(index, '');
             this.paymentForm.get('chequeClearanceDate')?.patchValue('');
             this.paymentForm.get('chequeNumber')?.patchValue('');
         }
+    }
+    /**
+     * Set AccountUniqueName Empty
+     *
+     * @memberof PaymentDialogComponent
+     */
+    private setDepositAccountUniqueName(index: number , event: any): void {
+        let deposits = this.paymentForm.get('deposits') as FormArray;
+        let currentDepositFormGroup = deposits.at(index) as FormGroup;
+        currentDepositFormGroup.get("accountUniqueName")?.patchValue(event);
     }
 
     /**
@@ -193,8 +236,17 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @param {string} currencySymbol
      * @memberof PaymentDialogComponent
      */
-    private assignAmount(amount: number, currencySymbol: string): void {
-        this.paymentForm.get('amount')?.patchValue(amount);
+    private assignAmount(amount: number, currencySymbol: string, depositIndex: number = 0): void {
+        this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
+            if (control.get('amount').value && depositIndex !== index) {
+                amount -= Number(control.get('amount').value);
+            }
+        });
+
+        amount = amount > 0 ? amount : 0;
+        let deposits = this.paymentForm?.get('deposits')['controls'] as FormArray;
+        let currentDepositFormGroup = deposits.at(depositIndex) as FormGroup;
+        currentDepositFormGroup.get('amount')?.patchValue(amount);
         this.amountCurrency = currencySymbol;
     }
 
@@ -234,17 +286,20 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         if (newFormObj.chequeClearanceDate) {
             newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
-
-        if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
-            newFormObj.amountForAccount = newFormObj.amount;
-        } else {
-            newFormObj.amountForCompany = newFormObj.amount;
-        }
-
+        const deposits = [];
+        this.paymentForm.get('deposits')['controls']?.forEach(control => {
+            if (control.get("accountUniqueName").value && control.get("amount").value) {
+                if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
+                    deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
+                } else {
+                    deposits.push({ amountForCompany: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
+                }
+            }
+        });
+        newFormObj.deposits = deposits;
         newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
-        delete newFormObj.amount;
         delete newFormObj.tagUniqueName;
-        
+
         this.paymentSubmitted.emit(newFormObj);
     }
 }
