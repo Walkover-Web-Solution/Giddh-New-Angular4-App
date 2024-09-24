@@ -202,6 +202,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public razorpaySuccess$ = this.componentStore.select((state) => state.razorpaySuccess);
     /** Hold calculation amount response*/
     public calculationResponse: any;
+    /** Hold new user selected country value */
+    public newUserSelectedCountryValue: string = '';
 
     constructor(
         public dialog: MatDialog,
@@ -1175,9 +1177,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             planUniqueName: this.selectedPlan?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value,
-            countryCode: this.isNewUserLoggedIn ? this.selectedPlan?.entityCode : this.subscriptionForm.value.secondStepForm.country?.value
+            countryCode: this.isNewUserLoggedIn ? this.selectedPlan?.entityCode : this.secondStepForm.get('country').value?.value
         }
-        if (this.selectedPlan?.uniqueName) {
+        if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1221,6 +1223,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (event?.value) {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
+            this.newUserSelectedCountryValue = event.value;
             setTimeout(() => {
                 if (this.isSubscriptionRegion) {
                     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
@@ -1240,7 +1243,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
             this.selectedCountry = event.label;
             this.secondStepForm.controls['country'].setValue(event);
-
             this.secondStepForm.get('taxNumber')?.setValue('');
             this.secondStepForm.get('state')?.setValue('');
             this.selectedState = "";
@@ -1255,6 +1257,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             let statesRequest = new StatesRequest();
             statesRequest.country = event.value;
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
+            this.setFinalAmount();
             this.changeDetection.detectChanges();
         }
     }

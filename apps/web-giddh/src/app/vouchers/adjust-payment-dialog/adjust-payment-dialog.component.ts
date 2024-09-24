@@ -76,7 +76,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     @Input() public voucherDetails;
     @Input() public isUpdateMode;
     @Input() public depositAmount = 0;
-    // To use pre adjusted data which was adjusted earlier or in other trasaction by user
+    /** To use pre adjusted data which was adjusted earlier or in other trasaction by user */
     @Input() public advanceReceiptAdjustmentUpdatedData: VoucherAdjustments;
     /** Stores the type of voucher adjustment */
     @Input() public adjustedVoucherType: AdjustedVoucherType;
@@ -94,9 +94,9 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
     /** Submit modal event emitter */
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True, if multi-currency support to voucher adjustment is enabled */
     public enableVoucherAdjustmentMultiCurrency: boolean;

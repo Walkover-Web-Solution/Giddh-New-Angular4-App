@@ -132,9 +132,7 @@
                                                         <h2
                                                             class="font-20 plan-title d-flex align-items-center justify-content-center"
                                                         >
-                                                            <span>
-                                                                {{ plan?.name }}
-                                                            </span>
+                                                            {{ plan?.name }}
                                                         </h2>
                                                         <p *ngIf="plan?.description" class="font-15 feature-txt">
                                                             <span>
@@ -323,8 +321,8 @@
                                                                         {{
                                                                             commonLocaleData?.app_duration?.month
                                                                                 | lowercase
-                                                                        }}</span
-                                                                    >
+                                                                        }}
+                                                                    </span>
                                                                 </p>
                                                             </ng-container>
                                                             <p
@@ -333,7 +331,7 @@
                                                                     plan?.monthlyAmountAfterDiscount > 0
                                                                 "
                                                             >
-                                                                <span>
+                                                                <span class="strong">
                                                                     {{ localeData?.save }}
                                                                     <amount-field
                                                                         [useGiddhCurrencyPipe]="false"
@@ -344,11 +342,7 @@
                                                                     >
                                                                     </amount-field>
                                                                     {{ localeData?.for }}
-                                                                    {{
-                                                                        plan?.monthlyDiscount?.duration
-                                                                            ? plan?.monthlyDiscount?.duration
-                                                                            : 0
-                                                                    }}
+                                                                    {{ plan?.monthlyDiscount?.duration }}
                                                                     {{
                                                                         commonLocaleData?.app_duration?.month
                                                                             | lowercase
@@ -596,7 +590,10 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid">
+                                        <div
+                                            class="grid-list-div list-grid"
+                                            *ngIf="newUserSelectedCountryValue === 'IND'"
+                                        >
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     {{ localeData?.e_invoice }}
@@ -618,7 +615,10 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid">
+                                        <div
+                                            class="grid-list-div list-grid"
+                                            *ngIf="newUserSelectedCountryValue === 'IND'"
+                                        >
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     {{ localeData?.gst_direct }}
@@ -762,7 +762,7 @@
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="commonCountrySource"
-                                                        (selectedOption)="selectCountry($event); setFinalAmount()"
+                                                        (selectedOption)="selectCountry($event)"
                                                         [defaultValue]="selectedCountry"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('country')?.value
@@ -897,9 +897,12 @@
                                                 <mat-radio-button color="primary" value="CARD">{{
                                                     localeData?.credit_debit_card
                                                 }}</mat-radio-button>
-                                                <mat-radio-button color="primary" value="UPI" *ngIf="selectedPlan?.entityCode === 'IND'">{{
-                                                    localeData?.upi
-                                                }}</mat-radio-button>
+                                                <mat-radio-button
+                                                    color="primary"
+                                                    value="UPI"
+                                                    *ngIf="selectedPlan?.entityCode === 'IND'"
+                                                    >{{ localeData?.upi }}</mat-radio-button
+                                                >
                                             </mat-radio-group>
                                         </mat-card-content>
                                     </mat-card>

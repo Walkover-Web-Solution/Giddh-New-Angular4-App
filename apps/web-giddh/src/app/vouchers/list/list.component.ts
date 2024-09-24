@@ -30,8 +30,9 @@ import { trigger, state, style, transition, animate } from "@angular/animations"
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
+import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
+import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 
 // invoice-table
 export interface PeriodicElement {
@@ -526,7 +527,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search || search === '') {
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -540,12 +541,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.isSearching = true;
                 this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search || search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.advanceFilters.vendorName = search;
                 } else {
@@ -553,17 +555,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.isSearching = true;
                 this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
 
         this.purchaseOrderUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search || search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.advanceFilters.purchaseOrderNumber = search;
                 }
                 this.isSearching = true;
                 this.checkSearchingIsEmpty();
+                this.advanceFilters.page = 1;
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -620,6 +624,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.totalResults = response?.totalItems;
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
+
+                if (item.balanceStatus) {
+                    item.balanceStatus = item.balanceStatus.toLocaleLowerCase();
+                }
 
                 if (MULTI_CURRENCY_MODULES?.indexOf(this.voucherType) > -1) {
                     // For CR/DR note and Cash/Sales invoice
@@ -680,14 +688,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Set all invoice to service varibale and redirect to view page
+     * Set all invoice to service variable and redirect to view page
      *
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        this.vouchersUtilityService.lastVouchers = this.dataSource;
         this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`], {
-            queryParams: { page: this.advanceFilters.page, count: this.advanceFilters.count }
+            queryParams: { page: this.advanceFilters.page }
         });
     }
 
@@ -1155,6 +1162,33 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Open Cancel EInvoice Dialog
+     *
+     * @memberof VoucherListComponent
+     */
+    public openCancelEInvoice(): void {
+        const dataToSend = {
+            voucherType: this.voucherType,
+            selectedEInvoice: this.selectedVouchers[0],
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+
+        let dialogRef = this.dialog.open(CancelEInvoiceDialogComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: dataToSend
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        })
+    }
+
+    /**
      * Handle Delete Voucher Dialog
      *
      * @param {*} [voucher]
@@ -1506,7 +1540,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             accountUniqueName: voucher.customerUniqueName,
             action: action
         };
-        if (voucher === VoucherTypeEnum.generateEstimate) {
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;
@@ -1694,13 +1728,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public setInitialAdvanceFilter(onlyResetValue: boolean = false): void {
+        let universalDate;
+        // get application date
+        this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
+            universalDate = date;
+        });
+
+        // set date picker date as application date
+        if (universalDate?.length > 1) {
+            this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
         this.advanceFilters = {
             sortBy: '',
             sort: '',
             from: dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '',
             to: dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '',
             page: 1,
-            count: PAGINATION_LIMIT,
+            count: this.pageSizeOptions[0],
             q: ''
         };
         this.voucherNumberInput.patchValue(null, { emitEvent: false });

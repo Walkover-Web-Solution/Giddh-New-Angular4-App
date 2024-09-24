@@ -35,6 +35,7 @@ import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.
 import { LiabilityReportComponent } from './liability-report/liability-report.component';
 import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
 import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filters.component';
+import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabilities-payments.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +47,8 @@ import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filte
         WithHeldSettingComponent,
         LiabilityReportComponent,
         LiabilityDetailedReportComponent,
-        VatReportFiltersComponent
+        VatReportFiltersComponent,
+        VatLiabilitiesPayments
     ],
     imports: [
         VatReportRoutingModule,

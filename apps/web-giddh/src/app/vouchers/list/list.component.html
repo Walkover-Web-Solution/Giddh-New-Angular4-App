@@ -5,12 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="position-relative invoice-list">
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)">
+    <div class="position-relative invoice-list overflow-visible">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)" class="table-header-sticky">
             
             <!-- estimate-content-start -->
             <mat-tab [label]="localeData?.tabs?.estimates" *ngIf="activeTabGroup === 0">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']" *ngIf="!isCompany">
@@ -29,12 +29,12 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span>
+                                <span class="icon-cross font-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1 && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -49,7 +49,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -98,7 +98,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <span class="d-block" *ngIf="element?.expiredDays !== null">
                                         <small class="text-danger" *ngIf="element?.expiredDays === 0">
                                             {{ localeData?.expired_by_today }}
@@ -201,7 +201,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnEstimate"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnEstimate; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnEstimate;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
@@ -226,7 +226,7 @@
 
             <!-- proforma-content-start -->
             <mat-tab [label]="localeData?.tabs?.proformas" *ngIf="activeTabGroup === 0">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/proformas/create']" *ngIf="!isCompany">
@@ -245,12 +245,12 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span> 
+                                <span class="icon-cross font-12"></span> 
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length === 1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length === 1 && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -265,7 +265,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="position">
@@ -401,7 +401,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.action | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="!isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -413,7 +413,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnProforma"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnProforma; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnProforma;" class="checkbox-show"></tr>
                         </table>
                          <mat-paginator
@@ -438,7 +438,7 @@
             
             <!-- invoice-content-start -->
             <mat-tab [label]="localeData?.tabs?.invoices" *ngIf="activeTabGroup === 0">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [matMenuTriggerFor]="createNewVoucher" *ngIf="!isCompany" class="width-150">
@@ -462,23 +462,34 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span> 
+                                <span class="icon-cross font-12"></span> 
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
+                             <!-- Cancel e-invoice button -->
+                             <button mat-stroked-button color="primary"
+                                *ngIf="
+                                    isEInvoiceEnabled &&
+                                    selectedVouchers?.length === 1 &&
+                                    selectedVouchers[0].irnNumber
+                                "
+                                (click)="openCancelEInvoice()"
+                            >
+                             {{ localeData?.cancel_e_invoice }}
+                             </button>
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreInvoice="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
                                 <button mat-menu-item *ngIf="selectedVouchers?.length === 1" (click)="showEwayBillDialog()">{{ localeData?.generate_eway_bill }}</button>
-                                <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -514,7 +525,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -563,7 +574,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <small class="text-danger d-block" *ngIf="element?.overdueDays">
                                         {{ element.overdueDays }}
                                     </small>
@@ -664,8 +675,8 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
-                                        <p>{{ element.balanceStatus }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel'">
+                                        <p>{{ element.balanceStatus | titlecase }}</p>
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -704,7 +715,7 @@
 
             <!-- debit-note-content-start -->
             <mat-tab [label]="localeData?.tabs?.debit_note" *ngIf="activeTabGroup === 1">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/debit-note/create']" *ngIf="!isCompany">
@@ -723,21 +734,33 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span> 
+                                <span class="icon-cross font-12"></span> 
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
+                             <!-- Cancel e-invoice button -->
+                             <button mat-stroked-button color="primary"
+                                *ngIf="
+                                    isEInvoiceEnabled &&
+                                    selectedVouchers?.length === 1 &&
+                                    selectedVouchers[0].irnNumber
+                                "
+                                (click)="openCancelEInvoice()"
+                            >
+                             {{ localeData?.cancel_e_invoice }}
+                             </button>
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -762,7 +785,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -886,7 +909,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -897,7 +920,7 @@
                                 </td>
                             </ng-container>
                             
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsCredit;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
@@ -922,7 +945,7 @@
 
             <!-- credit-note-content-start -->
             <mat-tab [label]="localeData?.tabs?.credit_note" *ngIf="activeTabGroup === 1">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" class="w-100" [routerLink]="['/pages/vouchers/credit-note/create']" *ngIf="!isCompany">
@@ -939,21 +962,34 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span> 
+                                <span class="icon-cross font-12"></span> 
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
+                        {{selectedVouchers[0]?.irnNumber ?? 'NA'}}
                         <div class="d-flex align-items-center column-gap1">
+                             <!-- Cancel e-invoice button -->
+                             <button mat-stroked-button color="primary"
+                                *ngIf="
+                                    isEInvoiceEnabled &&
+                                    selectedVouchers?.length === 1 &&
+                                    selectedVouchers[0].irnNumber
+                                "
+                                (click)="openCancelEInvoice()"
+                            >
+                             {{ localeData?.cancel_e_invoice }}
+                             </button>
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -978,7 +1014,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -1102,7 +1138,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -1113,7 +1149,7 @@
                                 </td>
                             </ng-container>
                             
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsCredit;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
@@ -1141,7 +1177,7 @@
                 <div class="pd-t15"> 
                     <app-invoice-generate [selectedVoucher]="voucherType"></app-invoice-generate>
                 </div>
-                <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible" *ngIf="false">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <div class="custom-datepicker-wrapper">
@@ -1155,7 +1191,7 @@
                             <button mat-stroked-button color="primary">Preview & Generate</button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <table mat-table [dataSource]="dataSourcePending" matSort class="w-100">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef> # 
@@ -1228,7 +1264,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element">-</td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnPending"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnPending; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnPending;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
@@ -1253,7 +1289,7 @@
             
             <!-- purchase-order-start -->
             <mat-tab [label]="localeData?.po_number" *ngIf="activeTabGroup === 2">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase-order/create']" *ngIf="!isCompany">
@@ -1272,12 +1308,12 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span> 
+                                <span class="icon-cross font-12"></span> 
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -1295,7 +1331,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100 purchase-table">
                             <ng-container matColumnDef="index">
@@ -1352,7 +1388,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendorname">
@@ -1412,7 +1448,7 @@
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.status | titlecase }}</p>
                                         <div class="d-flex action-btn column-gap5">
-                                            <button *ngIf="element?.status === 'open'" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="localeData?.convert_to_bill"
+                                            <button *ngIf="element?.status === 'open' && !isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="localeData?.convert_to_bill"
                                                 [matTooltipPosition]="'above'" (click)="convertBillDialog(element)">
                                                 <i class="icon-tick"></i>
                                             </button>
@@ -1420,11 +1456,11 @@
                                                 [matTooltipPosition]="'above'" (click)="openEmailSendDialog(element)">
                                                 <i class="icon-envelope"></i>
                                             </button>
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'" 
+                                            <button *ngIf="!isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'" 
                                                 [routerLink]="['/pages/purchase-management/purchase-order/new/' + element.uniqueName]">
                                                 <i class="icon-copy-small"></i>
                                             </button>
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
+                                            <button *ngIf="!isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
                                                 [matTooltipPosition]="'above'" (click)="deleteVoucherDialog(element)">
                                                 <i class="icon-trash"></i>
                                             </button>
@@ -1432,7 +1468,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnPurchase"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnPurchase; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnPurchase;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
@@ -1457,7 +1493,7 @@
 
             <!-- bill-content-start -->
             <mat-tab [label]="localeData?.bill" *ngIf="activeTabGroup === 2">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']" *ngIf="!isCompany">
@@ -1497,7 +1533,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -1546,7 +1582,7 @@
                                     </div>
                                     </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <div *ngIf="element?.dueDays !== null">
                                         <small class="text-danger" *ngIf="element?.dueDays > 0">
                                             {{ getOverdueDaysText(element.dueDays) }}
@@ -1636,7 +1672,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && !isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -1655,7 +1691,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsBill"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsBill; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsBill;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
@@ -2259,7 +2295,7 @@
              
             <!-- receipt-content-start -->
             <mat-tab [label]="localeData?.tabs?.receipt" *ngIf="activeTabGroup === 3">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <div class="custom-datepicker-wrapper">
@@ -2275,7 +2311,7 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span> 
+                                <span class="icon-cross font-12"></span> 
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
@@ -2284,7 +2320,7 @@
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -2346,7 +2382,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -2493,7 +2529,7 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnReceipt"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnReceipt; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnReceipt;" class="checkbox-show"></tr>
                         </table>
                          <mat-paginator
@@ -2518,7 +2554,7 @@
 
             <!-- payment-content-start -->
             <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <div class="custom-datepicker-wrapper">
@@ -2534,7 +2570,7 @@
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
                             <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross icon-font-14"></span> 
+                                <span class="icon-cross font-12"></span> 
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
@@ -2543,7 +2579,7 @@
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length && !isCompany">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -2583,7 +2619,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive overflow-visible">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
@@ -2715,7 +2751,7 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnPayment"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnPayment; sticky: true;"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnPayment;" class="checkbox-show"></tr>
                         </table>
                          <mat-paginator
@@ -2845,11 +2881,6 @@
         >
         </voucher-adjustments>
     </ng-template>
-    
-    <!-- e-way-bill-dialog -->
-    <ng-template #eWayBill>
-        <app-e-waybill-dialog></app-e-waybill-dialog>
-    </ng-template>
 
     <!-- setting-tab-btn -->
     <ng-template #actionButtons>
@@ -2867,15 +2898,16 @@
             (convertToBill)="poBulkAction('create_purchase_bill', $event)"
         ></app-convert-bill-dialog>
     </ng-template>
-    
+
+    <!--     E-way bill -->
     <ng-template #ewayBill>
-        <app-generate-ewaybill-modal
+        <app-generate-ewaybill-dialog
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             (closeModelEvent)="ewayBillDialogRef?.close()"
             (createEWayBillEvent)="createEwayBill()"
         >
-        </app-generate-ewaybill-modal>
+        </app-generate-ewaybill-dialog>
     </ng-template>
 
     <ng-template #accountAsideMenu>

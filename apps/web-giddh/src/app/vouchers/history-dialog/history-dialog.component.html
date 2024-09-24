@@ -6,7 +6,7 @@
     <div mat-dialog-content class="create-discount-aside dialog-body">
         <div class="aside-pane-form position-relative p-3 h-100 overflow-auto">
             <giddh-page-loader
-                [cssClass]="'mt-0 mb-0'"
+                [cssClass]="'my-0'"
                 *ngIf="isVoucherVersionsInProgress$ | async"
             ></giddh-page-loader>
             <ng-container *ngIf="!(isVoucherVersionsInProgress$ | async)">

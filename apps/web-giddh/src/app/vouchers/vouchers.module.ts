@@ -23,7 +23,6 @@ import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
 import { VoucherCreateComponent } from "./create/create.component";
-import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
@@ -83,6 +82,12 @@ import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-set
 import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
 import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
 import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
+import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
+import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
+import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
+import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
+import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
     declarations: [
@@ -105,7 +110,9 @@ import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.m
         DesignFilterComponent,
         ContentFilterComponent,
         ConvertBillDialogComponent,
-        FullAddressComponent
+        FullAddressComponent,
+        DownloadVoucherComponent,
+        CancelEInvoiceDialogComponent
     ],
     imports: [
         CommonModule,
@@ -172,7 +179,10 @@ import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.m
         PurchaseSettingModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        InvoiceTemplatesModule
+        InvoiceTemplatesModule,
+        CdkScrollModule,
+        TrimPipeModule,
+        A11yModule
     ],
     exports: [
 

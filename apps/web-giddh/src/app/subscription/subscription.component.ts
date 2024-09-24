@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
@@ -18,6 +18,10 @@ import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
+import { ConfirmationModalButton } from '../theme/confirmation-modal/confirmation-modal.interface';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from '../services/general.service';
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -94,6 +98,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions,
         private changeDetectionRef: ChangeDetectorRef,
+        private dialog: MatDialog,
+        private generalService: GeneralService,
         private clipboardService: ClipboardService) {
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
@@ -218,6 +224,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                     session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
                     return session;
                 });
+                this.changeDetectionRef.detectChanges();
             }
         });
 
@@ -305,11 +312,38 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             sessionId,
             sessionIndex
         };
-        this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_single_session, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+                this.store.dispatch(this.sessionAction.getAllSession());
+            }
+        });
     }
 
-    public clearAllSession() {
-        this.store.dispatch(this.sessionAction.deleteAllSession());
+    /**
+     * Deletes All sessions
+     *
+     * @memberof SubscriptionComponent
+     */
+    public clearAllSession(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteAllSession());
+                this.router.navigate(['/login']);
+            }
+        });
     }
 
     /**

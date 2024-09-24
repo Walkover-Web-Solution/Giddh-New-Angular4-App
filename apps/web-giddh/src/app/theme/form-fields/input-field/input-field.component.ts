@@ -89,6 +89,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
+    /** It will show Icon prefix in the text field */
+    @Input() public matPrefixIcon: string = "";
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,

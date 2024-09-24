@@ -13,9 +13,10 @@
                 class="form-control cursor-pointer text-right mat-field-border"
                 [rawInputValue]="discountTotal"
                 [(ngModel)]="discountTotal"
-                readonly
                 [ngClass]="{ 'field-disabled': readonly }"
                 (focus)="discountMenu = true; hideOtherPopups.emit(true)"
+                autocomplete="off"
+                [readonly]="readonly"
             />
             <span class="caret"></span>
         </div>

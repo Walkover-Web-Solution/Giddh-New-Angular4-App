@@ -99,7 +99,23 @@
                     "label": "Estimates (Beta)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
-                    "description": "Final sales order"
+                    "description": "Final sales order",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Estimates (Beta)",
+                    "link": "/pages/vouchers/preview/estimates/list",
+                    "icon": "icon-sales-order1",
+                    "description": "Final sales order",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "New Credit Note",
@@ -549,6 +565,36 @@
                                 "GB",
                                 "ZW",
                                 "KE"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "VAT Liabilities",
+                    "link": "/pages/vat-report/liabilities",
+                    "icon": "icon-vat1",
+                    "description": "VAT Liabilities",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "VAT Payments",
+                    "link": "/pages/vat-report/payments",
+                    "icon": "icon-vat1",
+                    "description": "VAT Payments",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
                             ]
                         }
                     }

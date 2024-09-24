@@ -1,5 +1,4 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { VoucherPreviewComponentStore } from '../utility/vouhcers-preview.store';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -10,15 +9,15 @@ import { PAGE_SIZE_OPTIONS } from '../utility/vouchers.const';
   selector: 'app-history-dialog',
   templateUrl: './history-dialog.component.html',
   styleUrls: ['./history-dialog.component.scss'],
-  providers: [VoucherComponentStore, VoucherPreviewComponentStore]
+  providers: [VoucherComponentStore]
 })
 export class HistoryDialogComponent implements OnInit, OnDestroy {
   /** Observable to unsubscribe all the store listeners to avoid memory leaks */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   /** Voucher Versions is in progress Observable */
-  public isVoucherVersionsInProgress$: Observable<any> = this.componentStorePreview.isVoucherVersionsInProgress$;
+  public isVoucherVersionsInProgress$: Observable<any> = this.componentStore.isVoucherVersionsInProgress$;
   /** Voucher Versions response state Observable */
-  public voucherVersionsResponse$: Observable<any> = this.componentStorePreview.voucherVersionsResponse$;
+  public voucherVersionsResponse$: Observable<any> = this.componentStore.voucherVersionsResponse$;
   /** Holds List of Version History */
   public versionHistory: any;
   /** Holds page Size Options for pagination */
@@ -31,7 +30,7 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public inputData,
-    private componentStorePreview: VoucherPreviewComponentStore,
+    private componentStore: VoucherComponentStore,
     private generalService: GeneralService
   ) { }
 
@@ -46,9 +45,9 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
       this.voucherVersionsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
         if (response) {
           let versions = response;
-          if (response.results) {
-            response.items = response.results;
-            delete response.results;
+          if (versions.results) {
+            versions.items = versions.results;
+            delete versions.results;
           }
           if (versions.items && versions.items.length > 0) {
             versions.items.forEach(result => {
@@ -60,7 +59,6 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
               }
             });
           }
-  
           this.versionHistory = versions;
         }
       });
@@ -89,7 +87,7 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     const model = this.inputData.model;
     model.getRequestObject.page = this.pagination.page;
     model.getRequestObject.count = this.pagination.count;
-    this.componentStorePreview.getVoucherVersions({ ...model });
+    this.componentStore.getVoucherVersions({ ...model });
   }
 
   /**

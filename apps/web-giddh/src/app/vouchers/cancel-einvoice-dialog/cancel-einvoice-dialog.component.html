@@ -1,0 +1,70 @@
+<div class="dialog-header">
+    <span mat-dialog-title class="font-16">{{ localeData?.cancel_e_invoice }}</span>
+    <i mat-dialog-close class="icon-cross icon-font-16"></i>
+</div>
+
+<div mat-dialog-content class="dialog-body" [formGroup]="eInvoiceCancelForm">
+    <div class="d-flex row-gap15 flex-column">
+        <input-field
+            [type]="'text'"
+            [label]="commonLocaleData?.app_invoice_number"
+            [defaultValue]="selectedEInvoice?.voucherNumber"
+            [readonly]="true"
+            class="w-100"
+        >
+        </input-field>
+
+        <input-field
+            [type]="'text'"
+            [label]="commonLocaleData?.app_irn"
+            [defaultValue]="selectedEInvoice?.irnNumber"
+            [readonly]="true"
+            class="w-100"
+        >
+        </input-field>
+        <reactive-dropdown-field
+            [name]="'invoice'"
+            [label]="localeData?.cancel_reason"
+            [placeholder]="commonLocaleData?.app_select"
+            [options]="eInvoiceCancellationReasonOptions"
+            (onClear)="eInvoiceCancelForm.get('cancellationReason').patchValue('')"
+            formControlName="cancellationReason"
+            class="w-100"
+            [required]="true"
+        >
+        </reactive-dropdown-field>
+        <div class="mr-b15">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ localeData?.cancel_remarks }}</mat-label>
+                <textarea
+                    required
+                    matInput
+                    rows="3"
+                    name="cancellationRemarks"
+                    [maxlength]="100"
+                    formControlName="cancellationRemarks"
+                    (blur)="handleBlurOnCancellationRemarks()"
+                ></textarea>
+            </mat-form-field>
+            <ng-container *ngIf="eInvoiceCancelForm.get('cancellationRemarks')?.value">
+                <span class="max-character-label">{{ commonLocaleData?.app_characters_left }}:&nbsp;</span>
+                <span class="max-character-value">{{ 100 - eInvoiceCancelForm.get("cancellationRemarks")?.value?.length }}</span>
+            </ng-container>
+        </div>
+    </div>
+    <div class="d-flex column-gap1 mr-t15">
+        <button
+            mat-stroked-button
+            color="primary"
+            (click)="submitEInvoiceCancellation()"
+            [disabled]="
+                (bulkUpdateVoucherInProgress$ | async) ||
+                !eInvoiceCancelForm.get('cancellationReason')?.value ||
+                !(eInvoiceCancelForm.get('cancellationRemarks')?.value | trim)
+            "
+        >
+            {{ commonLocaleData?.app_confirm }}
+        </button>
+        <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+    </div>
+</div>
