@@ -99,7 +99,23 @@
                     "label": "अनुमान (बीटा)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
-                    "description": "अंतिम बिक्री आदेश"
+                    "description": "अंतिम बिक्री आदेश",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "अनुमान (बीटा)",
+                    "link": "/pages/vouchers/preview/estimates/list",
+                    "icon": "icon-sales-order1",
+                    "description": "अंतिम बिक्री आदेश",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "नया क्रेडिट नोट",

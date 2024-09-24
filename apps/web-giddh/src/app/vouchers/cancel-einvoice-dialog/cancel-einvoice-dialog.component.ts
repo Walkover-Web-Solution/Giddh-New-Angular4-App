@@ -1,21 +1,10 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { CustomTemplateResponse } from '../../models/api-models/Invoice';
-import { GeneralService } from '../../services/general.service';
-import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ToasterService } from '../../services/toaster.service';
-import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
-import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
-import { C } from '@angular/cdk/keycodes';
+
 
 @Component({
     selector: 'cancel-einvoice-dialog',
@@ -30,8 +19,8 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds Bulk Update Voucher in progress Observable */
-    public bulkUpdateVoucherInProgress$: Observable<any> = this.componentStore.bulkUpdateVoucherInProgress$;
+    /** Holds cancel EInvoice Voucher is in progress Observable */
+    public cancelEInvoiceInProgress$: Observable<any> = this.componentStore.cancelEInvoiceInProgress$;
     /** Holds Bulk Update Form */
     public eInvoiceCancelForm: FormGroup;
     /** Holds Invoice Details */
@@ -75,12 +64,6 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
             { label: this.localeData?.cancel_e_invoice_reasons?.other, value: '4' }
         ];
 
-        this.componentStore.cancelEInvoiceInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-            }
-        });
-
-
         this.componentStore.cancelEInvoiceIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.dialogRef.close();
@@ -94,7 +77,6 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
      * @memberof CancelEInvoiceDialogComponent
      */
     public submitEInvoiceCancellation(): void {
-        console.log("submitEInvoiceCancellation", this.eInvoiceCancelForm.value);
         const eInvoiceCancelForm = this.eInvoiceCancelForm.value;
 
         if (eInvoiceCancelForm) {
@@ -104,30 +86,12 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
             };
 
             const postObject: any = {};
-            // let apiCallObservable;
-
             postObject.uniqueName = this.selectedEInvoice?.uniqueName;
             postObject.voucherType = this.voucherType;
-
             requestObject.accountUniqueName = this.selectedEInvoice?.account?.uniqueName
             requestObject.voucherVersion = 2;
-
-            // apiCallObservable = this._invoiceService.cancelEInvoiceV2(requestObject, postObject);
             this.componentStore.cancelEInvoice({ getRequestObject: requestObject, postRequestObject: postObject });
-
-            // apiCallObservable.pipe(take(1)).subscribe(response => {
-            //     this.getVoucher(this.isUniversalDateApplicable);
-            //     if (response?.status === 'success') {
-            //         this._toaster.successToast(response.body);
-
-            //     } 
-            //     // else if (response?.status === 'error') {
-            //     //     this._toaster.errorToast(response.message, response.code);
-            //     // }
-            // });
         }
-
-
     }
 
     /**

@@ -1165,7 +1165,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      *
      * @memberof VoucherListComponent
      */
-    public openCancelEInvoice(): void {
+    public openCancelEInvoiceDialog(): void {
         const dataToSend = {
             voucherType: this.voucherType,
             selectedEInvoice: this.selectedVouchers[0],
