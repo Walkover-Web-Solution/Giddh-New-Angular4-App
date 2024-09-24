@@ -7,6 +7,7 @@ import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'personal-information',
@@ -60,10 +61,12 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     public portalUrl: any = PORTAL_URL;
     /** Holds Profile Form */
     public profileForm: FormGroup;
+    /** This will hold region */
+    public region: string;
 
-    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) {
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private router: Router) {
         this.initProfileForm();
-     }
+    }
 
     /**
      * Initializes the component
@@ -71,6 +74,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
+        this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : '';
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -86,7 +90,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.profileData && changes.profileData.currentValue !== changes.profileData.previousValue) {  
+        if (changes?.profileData && changes.profileData.currentValue !== changes.profileData.previousValue) {
             if (this.profileData?.alias || this.profileData?.name) {
                 this.initProfileForm(this.profileData);
             }
@@ -199,7 +203,10 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public copyUrl(): void {
-        const urlToCopy = this.portalUrl + this.profileData.portalDomain;
+        const urlTree = this.router.createUrlTree([this.portalUrl + this.profileData.portalDomain], {
+            queryParams: { region: this.region }
+        });
+        const urlToCopy = this.router.serializeUrl(urlTree);
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
         setTimeout(() => {
