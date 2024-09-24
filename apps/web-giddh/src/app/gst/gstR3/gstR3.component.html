@@ -113,8 +113,13 @@
                                     (clickOutside)="downloadReport.hide()"
                                     [attachOutsideOnClick]="true"
                                 >
-                                    <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0">
-                                        <i class="icon-download"></i> {{ commonLocaleData?.app_download }}
+                                    <button 
+                                        mat-stroked-button 
+                                        dropdownToggle 
+                                        color="primary"
+                                    >
+                                        <i class="icon-download"></i> 
+                                        {{ commonLocaleData?.app_download }}
                                     </button>
                                     <ul
                                         id="dropdown-menu"

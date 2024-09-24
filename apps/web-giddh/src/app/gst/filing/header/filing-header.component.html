@@ -76,13 +76,18 @@
                 </li>
                 <li>
                     <button
-                        type="button"
-                        class="btn btn-sky-blue mr-0 error-button gstr-button"
+                        mat-stroked-button
+                        color="primary"
+                        class="error-button gstr-button"
                         (click)="onDownloadSheetGSTR('error')"
                     >
                         {{ localeData?.filing?.errors }}
                     </button>
-                    <button type="button" class="btn btn-sky-blue mr-0 gstr-button" (click)="pushToPortalModal?.show()">
+                    <button 
+                        mat-stroked-button
+                        color="primary"
+                        class="btn btn-sky-blue mr-0 gstr-button" 
+                        (click)="pushToPortalModal?.show()">
                         <i class="icon-download"></i>
                         {{ commonLocaleData?.app_download }}
                     </button>

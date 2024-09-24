@@ -52,6 +52,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { GstSettingComponent } from './gst-setting/gst-setting.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -96,7 +97,8 @@ import { MatDividerModule } from '@angular/material/divider';
         MatNativeDateModule,
         WatchVideoModule,
         MatTooltipModule,
-        MatDividerModule
+        MatDividerModule,
+        MatSelectModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]
