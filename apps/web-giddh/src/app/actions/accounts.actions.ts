@@ -466,7 +466,7 @@ export class AccountsAction {
                     if (data.request && data.request.length) {
                         data.request.forEach(uniqueAccountName => {
                             const request: IUpdateDbRequest = {
-                                uniqueName: this._generalServices.companyUniqueName,
+                                uniqueName: this._generalServices.currentBranchUniqueName,
                                 deleteUniqueName: uniqueAccountName?.uniqueName,
                                 type: "accounts",
                                 name: this._generalServices.companyUniqueName,
