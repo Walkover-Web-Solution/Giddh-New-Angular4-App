@@ -168,6 +168,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
     public pdfPreviewHasError: boolean = false;
+    /** Hold true if searching */
+    public isSearching: boolean;
 
     constructor(
         private router: Router,
@@ -224,6 +226,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     sort: '',
                     sortBy: ''
                 };
+
+                this.isSearching = search.length !== 0;
 
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
@@ -658,17 +662,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open adjust payment dialog
-     *
-     * @memberof VouchersPreviewComponent
-     */
-    public adjustPayment(): void {
-        this.dialog.open(this.adjustPaymentDialog, {
-            panelClass: "mat-dialog-md"
-        });
-    }
-
-    /**
      * Open Download Voucher Dailog
      *
      * @memberof VouchersPreviewComponent
@@ -738,8 +731,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @param {*} voucher
     * @memberof VoucherListComponent
     */
-    public showAdjustmentDialog(voucher: any): void {
-        this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
+    public showAdjustmentDialog(): void {
+        this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: this.selectedInvoice?.account?.uniqueName, payload: { uniqueName: this.selectedInvoice?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
@@ -812,6 +805,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.pageNumberHistory.unshift(response.page);
             }
             this.totalPages = response?.totalPages;
+
+            if (this.totalPages === 0) {
+                this.invoiceList = [];
+                return;
+            }
+
             // Handle page number is more than total pages in query params
             if (this.totalPages < this.advanceFilters.page) {
                 this.advanceFilters.page = 1;
@@ -845,11 +844,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 currentInvoiceList.push(item);
             });
 
-            this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
+            if (this.isSearching && this.advanceFilters.page === 1) {
+                this.invoiceList = currentInvoiceList;
+            } else {
+                this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
+            }
             this.changeDetection.detectChanges();
 
-            if (this.invoiceList?.length && !this.selectedInvoice) {
-                this.setSelectedInvoice(this.params.voucherUniqueName);
+            if (this.invoiceList?.length) {
+                this.setSelectedInvoice(!this.selectedInvoice ? this.params.voucherUniqueName : this.invoiceList[0].uniqueName);
             }
         }
     }
