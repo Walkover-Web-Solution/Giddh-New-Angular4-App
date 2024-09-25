@@ -18,7 +18,6 @@ import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
-import { ConfirmationModalButton } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
@@ -58,7 +57,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isVerifyAddNewMobileNoInProcess$: Observable<boolean>;
     public isVerifyAddNewMobileNoSuccess$: Observable<boolean>;
     public authenticateTwoWay$: Observable<boolean>;
-    public selectedCompany: CompanyResponse = null;
     public user: UserDetails = null;
     public apiTabActivated: boolean = false;
     public userSessionResponse$: Observable<any>;
@@ -87,6 +85,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isSubscriptionLoading: boolean = false;
     /** Holds subscription id */
     public subscriptionId: string = '';
+    /** Holds profile data */
+    public profileData: any = null;
+
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
@@ -100,7 +101,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private generalService: GeneralService,
-        private clipboardService: ClipboardService) {
+        private clipboardService: ClipboardService
+    ) {
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
                 return appState.session.user.user.contactNo;
@@ -204,10 +206,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.selectedCompany = activeCompany;
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response) {
+                this.profileData = response;
             }
+            this.changeDetectionRef.detectChanges();
         });
 
         this.store.dispatch(this.sessionAction.getAllSession());
