@@ -530,7 +530,7 @@ export class AccountsAction {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request?.groupUniqueName));
                     this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
                     const request: IUpdateDbRequest = {
-                        uniqueName: this._generalServices.companyUniqueName,
+                        uniqueName: this._generalServices.currentBranchUniqueName,
                         deleteUniqueName: action.payload.queryString,
                         type: "accounts",
                         name: this._generalServices.companyUniqueName,
