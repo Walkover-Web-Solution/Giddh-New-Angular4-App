@@ -764,10 +764,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (response?.cashVoucher) {
-                    this.getVoucherType(response);
-                }
                 if (!response.isCopyVoucher) {
+                    if (response?.cashVoucher) {
+                        this.getVoucherType(response);
+                    }
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
                     this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
@@ -784,9 +784,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.depositAccountName = response.account?.name;
                 }
 
-                this.getAccountDetails(response.account?.uniqueName);
 
                 if (!response.isCopyVoucher) {
+                    this.getAccountDetails(response.account?.uniqueName);
                     this.fillBillingShippingAddress("account", "billingDetails", response.account?.billingDetails, 0);
                     this.fillBillingShippingAddress("account", "shippingDetails", response.account?.shippingDetails, 0);
 
@@ -1999,7 +1999,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             let defaultAddress = null;
-
             let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
             defaultAddress = accountDefaultAddress.defaultAddress;
             index = accountDefaultAddress.defaultAddressIndex;
