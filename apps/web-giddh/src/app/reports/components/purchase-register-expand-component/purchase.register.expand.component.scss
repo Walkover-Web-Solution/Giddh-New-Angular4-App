@@ -320,6 +320,10 @@ table th {
     );
 }
 
+.header-fix {
+    left: 0;
+}
+
 @media screen and (max-width: 768px) {
     .giddh-table {
         tbody {
