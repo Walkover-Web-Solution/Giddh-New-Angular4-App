@@ -7,4 +7,10 @@
             max-width: unset !important;
         }
     }
+    
+    .initial-screen {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }

@@ -8,7 +8,6 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -16,6 +15,8 @@ import { FileReturnComponent } from '../file-return/file-return.component';
 import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { VatReportComponentStore } from '../utility/vat.report.store';
+import { cloneDeep } from '../../lodash-optimized';
 
 export interface ObligationsStatus {
     label: string;
@@ -24,7 +25,8 @@ export interface ObligationsStatus {
 @Component({
     selector: 'obligations-component',
     templateUrl: './obligations.component.html',
-    styleUrls: ['./obligations.component.scss']
+    styleUrls: ['./obligations.component.scss'],
+    providers: [VatReportComponentStore]
 })
 
 export class ObligationsComponent implements OnInit, OnDestroy {
@@ -74,8 +76,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
+    /** Observable to store the Tax Number */
+    public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
+    /** True if current company or branch has tax number */
+    public hasTaxNumber: boolean = false;
     constructor(
-        private gstReconcileService: GstReconcileService,
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -83,8 +88,10 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private modalService: BsModalService,
         public dialog: MatDialog,
-        private route: Router
+        private route: Router,
+        private componentStore: VatReportComponentStore
     ) {
+        this.iniObligationsForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -92,7 +99,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 this.getURLHMRCAuthorization();
             }
         });
-        this.iniObligationsForm();
     }
 
     /**
@@ -104,9 +110,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.loadTaxDetails();
 
         if (this.isCompanyMode) {
+            this.loadTaxDetails();
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
                     if (response?.length > 1) {
@@ -129,7 +135,42 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             });
         } else {
             this.getFormControl('branchUniqueName').setValue(this.generalService.currentBranchUniqueName);
+            this.getCurrentCompanyBranchTaxNumber();
         }
+        this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.taxesList = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+                if (this.taxesList.length === 1) {
+                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
+                }
+                if (this.isCompanyMode) {
+                    this.hasTaxNumber = true;
+                }
+                this.getVatObligations();
+            }
+        });
+    }
+
+    /**
+    * Get Current company branches information
+    *
+    * @private
+    * @memberof ObligationsComponent
+    */
+    private getCurrentCompanyBranchTaxNumber(): void {
+        this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                let currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                this.hasTaxNumber = currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+                if (this.hasTaxNumber) {
+                    this.loadTaxDetails();
+                }
+            }
+        });
     }
 
     /**
@@ -305,18 +346,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     private loadTaxDetails(): void {
-        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body?.length) {
-                this.taxesList = response.body.map(tax => ({
-                    label: tax,
-                    value: tax
-                }));
-                if (this.taxesList.length === 1) {
-                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
-                    this.getVatObligations();
-                }
-            }
-        });
+        this.componentStore.getTaxNumber();
     }
 
     /**
