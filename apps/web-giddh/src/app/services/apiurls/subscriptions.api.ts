@@ -21,7 +21,7 @@ export const SUBSCRIPTION_V2_API = {
     GENERATE_ORDER_BY_SUBSCRIPTION_ID: 'v2/subscription/:subscriptionId/generate-order?promocode=:promocode',
     GET_CHANGE_PLAN_DETAILS: 'v2/subscription/change-plan',
     UPDATE_PLAN: 'v2/subscription/update',
-    BUY_PLAN_BY_GOCARDLESS: 'v2/subscription/buy-plan',
+    BUY_PLAN: 'v2/subscription/buy-plan',
     GET_COMPANIES_BY_SUBSCRIPTION_ID: 'v2/subscription/:subscriptionId/company-list?page=:page&count=:count&q=:q',
     SET_DEFAULT_PAYMENT_METHOD: 'v2/subscription/payment-method/:paymentUniqueName',
     SAVE_PAYMENT_METHOD: 'v2/subscription/add-payment-method',
@@ -30,5 +30,6 @@ export const SUBSCRIPTION_V2_API = {
     SET_ARCHIVE_UNARCHIVE_COMPANY: 'company/:companyUniqueName',
     ACTIVATE_PLAN: 'v2/subscription/:subscriptionId/activate?upgrade=true',
     CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount',
-    SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token'
+    SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token',
+    PAYPAL_CAPTURE_PLAN: 'subscription/paypal/order/:orderID/capture?subscriptionId=:subscriptionId'
 };
