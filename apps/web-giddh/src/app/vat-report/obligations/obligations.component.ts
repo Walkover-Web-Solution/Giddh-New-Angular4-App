@@ -72,6 +72,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
+    /** Hold HMRC portal url */
+    public connectToHMRCUrl: string = null;
     constructor(
         private gstReconcileService: GstReconcileService,
         private formBuilder: UntypedFormBuilder,
@@ -85,8 +87,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     ) {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.companyUniqueName) {
+            if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
+                this.getURLHMRCAuthorization();
             }
         });
         this.iniObligationsForm();
@@ -397,5 +400,17 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out'
+    }
+    /**
+     * This will call API to get HMRC get authorization url
+     *
+     * @memberof VatReportComponent
+     */
+    public getURLHMRCAuthorization(): void {
+        this.vatService.getHMRCAuthorization(this.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.body) {
+                this.connectToHMRCUrl = res?.body;
+            }
+        })
     }
 }
