@@ -148,13 +148,13 @@
                         <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
                     </table>
                 </div>
-                <div *ngIf="!dataSource.length && hasTaxNumber" class="no-data no-report">
-                    <div *ngIf="connectToHMRCUrl">
-                        <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl">
+                <div *ngIf="!dataSource.length && hasTaxNumber">
+                    <div *ngIf="connectToHMRCUrl" class="initial-screen position-absolute text-center">
+                        <a mat-stroked-button color="primary" class="text-center" [href]="connectToHMRCUrl">
                             {{ localeData?.connect_to_hmrc }}
                         </a>
                     </div>
-                    <div  *ngIf="!connectToHMRCUrl" >
+                    <div class="no-data" *ngIf="!connectToHMRCUrl" >
                         <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
                     </div>
                 </div>
