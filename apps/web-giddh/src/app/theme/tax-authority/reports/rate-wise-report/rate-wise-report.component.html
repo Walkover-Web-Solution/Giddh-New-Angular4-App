@@ -71,7 +71,14 @@
                                         <td mat-cell *matCellDef="let element" width="18%">
                                             {{ element?.grandTotal }}
                                         </td>
-                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef></td>
+                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
+                                            <amount-field
+                                                class="d-inline-block"
+                                                [amount]="(taxAuthorityWiseReport$ | async)?.totalGrandTotal"
+                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </td>
                                     </ng-container>
 
                                     <!-- Taxable Amount -->
@@ -82,7 +89,14 @@
                                         <td mat-cell *matCellDef="let element" width="18%">
                                             {{ element?.taxableAmount }}
                                         </td>
-                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef></td>
+                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
+                                            <amount-field
+                                                class="d-inline-block"
+                                                [amount]="(taxAuthorityWiseReport$ | async)?.totalTaxableAmount"
+                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </td>
                                     </ng-container>
 
                                      <!-- Tax Percentage -->
