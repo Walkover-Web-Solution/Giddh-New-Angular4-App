@@ -411,7 +411,7 @@
                                     </div>
                                 </div>    
                             </th>
-                            <td mat-cell *matCellDef="let item"> 
+                            <td mat-cell *matCellDef="let item" class="text-right"> 
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item.creditTotal"
@@ -441,7 +441,7 @@
                                     </div>
                                 </div>   
                             </th>
-                            <td mat-cell *matCellDef="let item"> 
+                            <td mat-cell *matCellDef="let item" class="text-right"> 
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item.debitTotal"
@@ -466,7 +466,7 @@
                                     </div>
                                 </div>    
                             </th>
-                            <td mat-cell *matCellDef="let item"> 
+                            <td mat-cell *matCellDef="let item" class="text-right"> 
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p>
                                         {{ stock.quantity | giddhCurrency }}
@@ -490,7 +490,7 @@
                                     </div>
                                 </div>    
                             </th>
-                            <td mat-cell *matCellDef="let item"> 
+                            <td mat-cell *matCellDef="let item" class="text-right"> 
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p>
                                         <span class="d-inline-flex">
@@ -525,7 +525,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <td mat-cell *matCellDef="let item">
+                            <td mat-cell *matCellDef="let item" class="text-right">
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item.discountTotal"
@@ -550,7 +550,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <td mat-cell *matCellDef="let item"> 
+                            <td mat-cell *matCellDef="let item" class="text-right"> 
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item.taxTotal"
@@ -575,7 +575,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <td mat-cell *matCellDef="let item">
+                            <td mat-cell *matCellDef="let item" class="text-right">
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item.netTotal"
