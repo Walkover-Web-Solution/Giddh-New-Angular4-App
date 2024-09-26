@@ -43,9 +43,9 @@
             <div class="mt-5" *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="tableDataSource.length && !isLoading">
+            <div class="row mt-5" *ngIf="!isLoading">
                 <div class="table-responsive">
-                    <table mat-table [dataSource]="tableDataSource" class="w-100">
+                    <table mat-table [dataSource]="tableDataSource" class="w-100" *ngIf="tableDataSource.length">
                         <ng-container matColumnDef="start">
                             <th mat-header-cell *matHeaderCellDef>
                                 {{ commonLocaleData?.app_start_date }}
@@ -98,8 +98,18 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                     <section *ngIf="!tableDataSource?.length">
-                        <div class="no-data">
-                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                        <div *ngIf="getFormControl('taxNumber').value">
+                            <div *ngIf="connectToHMRCUrl" class="align-item-center">
+                                <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl">
+                                    {{ localeData?.connect_to_hmrc }}
+                                </a>
+                            </div>
+                            <div class="no-data"  *ngIf="!connectToHMRCUrl" >
+                                <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
+                            </div>
+                        </div>
+                        <div class="no-data" *ngIf="!getFormControl('taxNumber').value">
+                            <h1>{{ localeData?.no_vrn_available }}</h1>
                         </div>
                     </section>
                 </div>

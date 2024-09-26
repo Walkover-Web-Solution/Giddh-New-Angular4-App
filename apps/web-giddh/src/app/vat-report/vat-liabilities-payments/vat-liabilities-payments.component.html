@@ -147,8 +147,15 @@
                         <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
                     </table>
-                    <div class="no-data" *ngIf="!dataSource.length">
-                        <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                </div>
+                <div *ngIf="!dataSource.length && hasTaxNumber" class="no-data no-report">
+                    <div *ngIf="connectToHMRCUrl">
+                        <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl">
+                            {{ localeData?.connect_to_hmrc }}
+                        </a>
+                    </div>
+                    <div  *ngIf="!connectToHMRCUrl" >
+                        <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
                     </div>
                 </div>
                 <div *ngIf="!hasTaxNumber" class="no-data no-report">

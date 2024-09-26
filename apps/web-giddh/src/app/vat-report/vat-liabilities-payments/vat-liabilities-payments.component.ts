@@ -11,6 +11,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatReportComponentStore } from '../utility/vat.report.store';
 import { cloneDeep } from '../../lodash-optimized';
+import { VatService } from '../../services/vat.service';
 
 @Component({
     selector: 'vat-liabilities-payments',
@@ -78,9 +79,12 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     private currentBranch: any = {};
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
+    /** Hold HMRC portal url */
+    public connectToHMRCUrl: string = null;
 
     constructor(
         private activatedRoute: ActivatedRoute,
+        private vatService: VatService,
         private formBuilder: FormBuilder,
         private generalService: GeneralService,
         private toaster: ToasterService,
@@ -93,6 +97,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
+                this.getURLHMRCAuthorization();
+                
             }
         });
     }
@@ -335,5 +341,17 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out';
+    }
+    /**
+     * This will call API to get HMRC get authorization url
+     *
+     * @memberof VatLiabilitiesPayments
+     */
+    public getURLHMRCAuthorization(): void {
+        this.vatService.getHMRCAuthorization(this.activeCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.body) {
+                this.connectToHMRCUrl = res?.body;
+            }
+        })
     }
 }
