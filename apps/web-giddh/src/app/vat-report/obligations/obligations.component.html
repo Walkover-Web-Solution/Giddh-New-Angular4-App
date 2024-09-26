@@ -99,12 +99,12 @@
                     </table>
                     <section *ngIf="!tableDataSource?.length">
                         <div *ngIf="getFormControl('taxNumber').value">
-                            <div *ngIf="connectToHMRCUrl" class="align-item-center">
-                                <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl">
+                            <div *ngIf="connectToHMRCUrl" class="initial-screen position-absolute text-center">
+                                <a mat-stroked-button color="primary" class="text-center" [href]="connectToHMRCUrl">
                                     {{ localeData?.connect_to_hmrc }}
                                 </a>
                             </div>
-                            <div class="no-data"  *ngIf="!connectToHMRCUrl" >
+                            <div class="no-data"  *ngIf="!connectToHMRCUrl">
                                 <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
                             </div>
                         </div>
