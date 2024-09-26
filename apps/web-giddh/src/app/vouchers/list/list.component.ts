@@ -1745,7 +1745,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             from: dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '',
             to: dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '',
             page: 1,
-            count: this.pageSizeOptions[0],
+            count: this.pageSizeOptions[2], // Set default Count 50
             q: ''
         };
         this.voucherNumberInput.patchValue(null, { emitEvent: false });

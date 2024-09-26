@@ -13,6 +13,7 @@
             [showToggleIcon]="false"
             [appearance]="'outline'"
             class="w-50"
+            [required]="true"
             formControlName="date"
         >
         </giddh-datepicker>
@@ -46,14 +47,14 @@
                         [type]="'text'"
                         [label]="commonLocaleData?.app_amount"
                         [placeholder]="localeData?.enter_amount"
-                        class="w-75"
+                        class="w-100"
                         [mask]="company?.inputMaskFormat"
                         [useMask]="true"
                         [prefix]="amountCurrency"
                         formControlName="amount"
                     >
                     </input-field>
-                    <i class="icon-trash font-16 cursor-pointer mr-l1" (click)="deleteDepositRow(depositIndex)"></i>
+                    <i class="icon-trash font-16 cursor-pointer mr-l2 mr-r1" (click)="deleteDepositRow(depositIndex)"></i>
                 </div>
             </div>
         </ng-container>
@@ -138,7 +139,7 @@
         ></textarea>
     </mat-form-field>
     <div class="d-flex column-gap1 justify-content-end">
-        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress">
+        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress || !paymentForm.get('deposits')?.value?.[0]?.accountUniqueName?.length || paymentForm?.invalid">
             {{ commonLocaleData?.app_save }}
         </button>
         <button mat-stroked-button mat-dialog-close (click)="closeModelEvent.emit()">

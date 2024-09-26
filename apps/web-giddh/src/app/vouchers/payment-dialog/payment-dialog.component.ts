@@ -64,9 +64,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         private settingsTagService: SettingsTagService,
         private searchService: SearchService,
         private formBuilder: FormBuilder
-    ) {
-
-    }
+    ) { }
 
     /**
      * Initializes the component
@@ -76,7 +74,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
-            date: [''],
+            date: ['', Validators.required],
             deposits: this.formBuilder.array([this.getDepositFormGroup()]),
             tagUniqueName: [''],
             chequeNumber: [''],
