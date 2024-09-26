@@ -1,75 +1,75 @@
-<div class="fill body scroll-y noscroll-x scrollbox">
+<div class="fill scroll-y noscroll-x scrollbox">
     <div class="filter-band">
-        <div class="row font-small">
-            <div class="col-md-12">
-                <div class="filter-row back-button">
-                    <a href="javascript:void(0)" (click)="goBack()">
-                        <svg
-                            style="top: 3px; position: relative"
-                            version="1.1"
-                            id="Layer_1"
-                            xmlns="http://www.w3.org/2000/svg"
-                            x="0"
-                            y="0"
-                            viewBox="0 0 512 512"
-                            xml:space="preserve"
-                            class="icon icon-sm text-top"
+        <div class="back-button p-3">
+            <button
+                mat-stroked-button
+                color="primary"
+                (click)="goBack()"
+            >
+                <svg
+                    style="top: 3px; position: relative"
+                    version="1.1"
+                    id="Layer_1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0"
+                    y="0"
+                    viewBox="0 0 512 512"
+                    xml:space="preserve"
+                    class="icon icon-sm text-top mr-1"
+                >
+                    <path
+                        d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
+                    ></path>
+                </svg>
+                {{ commonLocaleData?.app_back }}
+            </button>
+        </div>
+        <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
+            <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+            <div class="btn-group filter d-inline-block" dropdown>
+                <button
+                    id="button-basic"
+                    dropdownToggle
+                    type="button"
+                    class="btn btn-primary dropdown-toggle"
+                    aria-controls="dropdown-basic"
+                >
+                    {{ selectedFilter?.entityType }} <span class="caret"></span>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <li *ngFor="let entity of gstr1entityType">
+                        <a
+                            class="dropdown-item"
+                            href="javascript:void(0)"
+                            (click)="viewFilteredTxn('entityType', entity?.value)"
+                            >{{ entity.label }}</a
                         >
-                            <path
-                                d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
-                            ></path>
-                        </svg>
-                        {{ commonLocaleData?.app_back }}
-                    </a>
-                </div>
-                <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
-                    <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
-                    <div class="btn-group filter d-inline-block" dropdown>
-                        <button
-                            id="button-basic"
-                            dropdownToggle
-                            type="button"
-                            class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic"
+                    </li>
+                </ul>
+            </div>
+            </div>
+            <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
+                <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+            <div class="btn-group filter d-inline-block" dropdown>
+                <button
+                    id="button-basic2"
+                    dropdownToggle
+                    type="button"
+                    class="btn btn-primary dropdown-toggle"
+                    aria-controls="dropdown-basic"
+                >
+                    {{ selectedFilter?.entityType }} <span class="caret"></span>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">
+                    <li *ngFor="let entity of gstr2entityType">
+                        <a
+                            class="dropdown-item"
+                            href="javascript:void(0)"
+                            (click)="viewFilteredTxn('entityType', entity?.value)"
+                            >{{ entity.label }}</a
                         >
-                            {{ selectedFilter?.entityType }} <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                            <li *ngFor="let entity of gstr1entityType">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('entityType', entity?.value)"
-                                    >{{ entity.label }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
-                    </div>
-                    <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
-                        <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
-                    <div class="btn-group filter d-inline-block" dropdown>
-                        <button
-                            id="button-basic2"
-                            dropdownToggle
-                            type="button"
-                            class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                        >
-                            {{ selectedFilter?.entityType }} <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">
-                            <li *ngFor="let entity of gstr2entityType">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('entityType', entity?.value)"
-                                    >{{ entity.label }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

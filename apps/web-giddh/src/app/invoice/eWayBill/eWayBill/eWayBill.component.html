@@ -98,7 +98,7 @@
     </div>
 
     <div class="custom-tabs e-waybill-tabs heightVH-100">
-        <tabset *ngIf="!(EwaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)">
+        <!-- <tabset *ngIf="!(EwaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)">
             <tab [heading]="localeData?.tab_generated_bills" id="tab1">
                 <div class="clearfix">
                     <div class="col-md-12">
@@ -371,7 +371,425 @@
                     </div>
                 </div>
             </tab>
-        </tabset>
+        </tabset> -->
+
+        <mat-tab-group
+            mat-stretch-tabs="false"
+            mat-align-tabs="start"
+            animationDuration="0ms"
+            *ngIf="!(EwaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)"
+        >
+            <mat-tab [label]="localeData?.tab_generated_bills">
+                <div class="table-responsive table-wrapper">
+                    <table class="table basic table-bordered giddh-table on-mobile-view">
+                        <thead
+                            class="thead-background1"
+                            (clickOutside)="clickedOutside()"
+                            [hidden]="!EwaybillLists?.results?.length && !EwayBillfilterRequest?.searchTerm"
+                        >
+                            <tr>
+                                <th width="50px">#</th>
+                                <th class="nowrap">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ commonLocaleData?.app_date }}</div>
+                                        <div class="icon-pointer">
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-top
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('invoiceDate', 'asc')"
+                                            ></div>
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-bottom
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('invoiceDate', 'desc')"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <th class="td-search-box nowrap" #searchInvoiceContainer>
+                                    <div [hidden]="showSearchInvoiceNo">
+                                        <span> {{ commonLocaleData?.app_invoice_no }}</span>
+                                        <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
+                                    </div>
+
+                                    <div class="input-container" [hidden]="!showSearchInvoiceNo">
+                                        <input
+                                            type="text"
+                                            [placeholder]="localeData?.search_eway"
+                                            class="w100"
+                                            #invoiceSearch
+                                            [formControl]="voucherNumberInput"
+                                        />
+                                    </div>
+                                </th>
+
+                                <th class="td-search-box nowrap" #searchCustomerContainer>
+                                    <div [hidden]="showSearchCustomer">
+                                        <span>{{ commonLocaleData?.app_customer_name }}</span>
+                                        <i class="icon-search" (click)="toggleSearch('customerUniqueName')"></i>
+                                    </div>
+
+                                    <div class="input-container" [hidden]="!showSearchCustomer">
+                                        <input
+                                            type="text"
+                                            [placeholder]="localeData?.search_particular"
+                                            #customerSearch
+                                            class="w100"
+                                            [formControl]="customerNameInput"
+                                        />
+                                    </div>
+                                </th>
+
+                                <th class="nowrap">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ commonLocaleData?.app_customer_gstin }}</div>
+                                    </div>
+                                </th>
+
+                                <th class="nowrap">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ localeData?.ewaybill_no }}</div>
+                                        <div class="icon-pointer">
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-top
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('ewbNo', 'asc')"
+                                            ></div>
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-bottom
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('ewbNo', 'desc')"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <th class="nowrap">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ localeData?.ewaybill_date }}</div>
+                                        <div class="icon-pointer">
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-top
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('billingDate', 'asc')"
+                                            ></div>
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-bottom
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('billingDate', 'desc')"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <th class="nowrap">
+                                    <div class="d-flex">
+                                        <div class="flex-fill text-right">
+                                            {{ commonLocaleData?.app_total }}
+                                        </div>
+                                        <div class="icon-pointer">
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-top
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('totalValue', 'asc')"
+                                            ></div>
+                                            <div
+                                                class="
+                                                    glyphicon glyphicon-triangle-bottom
+                                                    text-light-2
+                                                    d-block
+                                                    font-xxs
+                                                "
+                                                (click)="sortbyApi('totalValue', 'desc')"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="nowrap">{{ commonLocaleData?.app_action }}</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="!isLoading">
+                            <tr *ngFor="let item of EwaybillLists?.results; let i = index">
+                                <td data-title="#">{{ i + 1 }}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_date" class="nowrap">
+                                    {{ item?.invoiceDate }}
+                                </td>
+                                <td
+                                    [attr.data-title]="commonLocaleData?.app_invoice_no"
+                                    class="nowrap download-arrow"
+                                >
+                                    <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
+                                    <a
+                                        (click)="onSelectEwayDownload(item)"
+                                        [tooltip]="localeData?.download_eway_bill"
+                                        class="cursor-pointer pull-right"
+                                    >
+                                        <i class="icon-download1"></i
+                                    ></a>
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_customer_name">
+                                    {{ item?.customerName }}
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_customer_gstin">
+                                    {{ item?.customerGstin }}
+                                </td>
+                                <td [attr.data-title]="localeData?.ewaybill_no">
+                                    <div>
+                                        {{ item?.ewbNo }}
+                                        <br />
+                                        <small
+                                            *ngIf="item?.isManuallyGenerated"
+                                            class="cp btn-link text-green"
+                                            >{{ localeData?.manually_generated }}</small
+                                        >
+                                    </div>
+                                </td>
+                                <td [attr.data-title]="localeData?.ewaybill_date" class="nowrap">
+                                    {{ item?.ewayBillDate }}
+                                </td>
+                                <td
+                                    [attr.data-title]="commonLocaleData?.app_total"
+                                    class="nowrap text-right pr-1"
+                                >
+                                    <i class="icon-rupees icon-font-11"></i>
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="item?.totalValue"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_action" class="nowrap">
+                                    <div class="btn-group pull-left" dropdown>
+                                        <a
+                                            href="javascript:void(0)"
+                                            class="dropdown-toggle color-link"
+                                            [id]="'actionbutton_'+ i"
+                                            dropdownToggle
+                                            (click)="showActionsMenu($event)"
+                                            >{{ commonLocaleData?.app_actions }} <i class="caret"></i
+                                        ></a>
+                                        <ul
+                                            id="dropdown-basic"
+                                            *dropdownMenu
+                                            class="dropdown-menu dropdown-left"
+                                            role="menu"
+                                            aria-labelledby="button-basic"
+                                            [ngClass]="{ 'dropup-menu': isDropUp }"
+                                        >
+                                            <li role="menuitem">
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="javascript:void(0)"
+                                                    (click)="openModal(item, template)"
+                                                    >{{ localeData?.add_vehicle_details }}</a
+                                                >
+                                            </li>
+                                            <li role="menuitem">
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="javascript:void(0)"
+                                                    (click)="onSelectEwayDetailedDownload(item)"
+                                                    >{{ localeData?.download_detailed_eway }}</a
+                                                >
+                                            </li>
+                                            <li role="menuitem">
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="javascript:void(0)"
+                                                    (click)="openModal(item, cancel)"
+                                                    >{{ commonLocaleData?.app_cancel }}</a
+                                                >
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="isLoading">
+                            <tr>
+                                <td colspan="9" align="center">
+                                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table mat-table [dataSource]="EwaybillLists?.results">
+                        <!-- Index Column -->
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let element; let i = index">
+                                {{ i + 1 }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Invoice Date Column -->
+                        <ng-container matColumnDef="invoiceDate">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <div class="d-flex">
+                                    <div class="flex-fill">{{ commonLocaleData?.app_date }}</div>
+                                    <div class="icon-pointer">
+                                        <div
+                                            class="
+                                                glyphicon glyphicon-triangle-top
+                                                text-light-2
+                                                d-block
+                                                font-xxs
+                                            "
+                                            (click)="sortbyApi('invoiceDate', 'asc')"
+                                        ></div>
+                                        <div
+                                            class="
+                                                glyphicon glyphicon-triangle-bottom
+                                                text-light-2
+                                                d-block
+                                                font-xxs
+                                            "
+                                            (click)="sortbyApi('invoiceDate', 'desc')"
+                                        ></div>
+                                    </div>
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ item?.invoiceDate }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Invoice Number Column with Search -->
+                        <ng-container matColumnDef="invoiceNumber" #searchInvoiceContainer>
+                            <th mat-header-cell *matHeaderCellDef>
+                                <div [hidden]="showSearchInvoiceNo">
+                                    <span> {{ commonLocaleData?.app_invoice_no }}</span>
+                                    <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
+                                <a
+                                    (click)="onSelectEwayDownload(item)"
+                                    [tooltip]="localeData?.download_eway_bill"
+                                    class="cursor-pointer pull-right"
+                                >
+                                    <i class="icon-download1"></i
+                                ></a>
+                            </td>
+                        </ng-container>
+
+                        <!-- Customer Name Column with Search -->
+                        <ng-container matColumnDef="customerName" #searchCustomerContainer>
+                            <th mat-header-cell *matHeaderCellDef>
+                                <div [hidden]="showSearchCustomer">
+                                    <span>{{ commonLocaleData?.app_customer_name }}</span>
+                                    <i class="icon-search" (click)="toggleSearch('customerUniqueName')"></i>
+                                </div>
+
+                                <div class="input-container" [hidden]="!showSearchCustomer">
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_particular"
+                                        #customerSearch
+                                        class="w100"
+                                        [formControl]="customerNameInput"
+                                    />
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ item?.customerName }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Customer GSTIN Column -->
+                        <ng-container matColumnDef="customerGstin">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_customer_gstin }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ item?.customerGstin }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Ewaybill No Column -->
+                        <ng-container matColumnDef="ewbNo">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ localeData?.ewaybill_no }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.ewbNo }}
+                            </td>
+                        </ng-container>
+                        
+                        <!-- Ewaybill Date Column -->
+                        <ng-container matColumnDef="ewayBillDate">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ localeData?.ewaybill_date }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.ewayBillDate }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Total Value Column -->
+                        <ng-container matColumnDef="totalValue">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_total }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <i class="icon-rupees icon-font-11"></i>
+                                {{ element?.totalValue | currency }}
+                            </td>
+                        </ng-container>
+                        
+                        <!-- Actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_action }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div>
+                                    <button mat-button (click)="openModal(element, template)">{{ localeData?.add_vehicle_details }}</button>
+                                    <button mat-button (click)="onSelectEwayDetailedDownload(element)">{{ localeData?.download_detailed_eway }}</button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
         <div
             class="no-data"
             *ngIf="!isLoading && EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)"
@@ -485,118 +903,140 @@
                         </div>
                     </div>
 
-                    <div class="row d-flex e-way-body">
-                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{ localeData?.vehicle_no_label }}</label>
-                        </div>
+                    <!-- <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">{{ localeData?.vehicle_no_label }}</label>
+                    </div> -->
+                    <input-field
+                        [label]="localeData?.vehicle_no_label"
+                        [placeholder]="localeData?.vehicle_no_placeholder"
+                        [name]="'vehicleNo'"
+                        [isRequired]="true"
+                        [maxlength]="15"
+                        [minlength]="7"
+                    ></input-field>
+                    <!-- <input
+                        type="text"
+                        name="vehicleNo"
+                        required
+                        [placeholder]="localeData?.vehicle_no_placeholder"
+                        [(ngModel)]="updateEwayVehicleform.vehicleNo"
+                        maxlength="15"
+                        minlength="7"
+                        class="form-control input"
+                    /> -->
 
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
-                            <input
-                                type="text"
-                                name="vehicleNo"
-                                required
-                                [placeholder]="localeData?.vehicle_no_placeholder"
-                                [(ngModel)]="updateEwayVehicleform.vehicleNo"
-                                maxlength="15"
-                                minlength="7"
-                                class="form-control input"
-                            />
-                        </div>
-                    </div>
+                    <!-- <label class="pd-t07">{{ localeData?.from_place_label }}</label> -->
+                    <!-- <sh-select
+                        [options]="searchResults"
+                        name="fromPlace"
+                        required
+                        [isRequired]="true"
+                        maxlength="50"
+                        [(ngModel)]="updateEwayVehicleform.fromPlace"
+                        autocomplete="off"
+                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                        [enableDynamicSearch]="true"
+                        [placeholder]="localeData?.from_place_placeholder"
+                        [showClear]="false"
+                        [multiple]="false"
+                        [ItemHeight]="67"
+                    >
+                    </sh-select> -->
+                    <dropdown-field
+                        [label]="localeData?.from_place_label"
+                        [options]="searchResults"
+                        [name]="'fromPlace'"
+                        [isRequired]="true"
+                        [placeholder]="localeData?.from_place_placeholder"
+                        [maxlength]="50"
+                        [autocomplete]="'off'"
+                    ></dropdown-field>
 
-                    <div class="row">
-                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{ localeData?.from_place_label }}</label>
-                        </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15" id="form-place">
-                            <sh-select
-                                [options]="searchResults"
-                                name="fromPlace"
-                                required
-                                [isRequired]="true"
-                                maxlength="50"
-                                [(ngModel)]="updateEwayVehicleform.fromPlace"
-                                autocomplete="off"
-                                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                [enableDynamicSearch]="true"
-                                [placeholder]="localeData?.from_place_placeholder"
-                                [showClear]="false"
-                                [multiple]="false"
-                                [ItemHeight]="67"
-                            >
-                            </sh-select>
-                        </div>
-                    </div>
+                    <!-- <label class="pd-t07">{{ localeData?.from_state_label }}</label> -->
+                    <!-- <sales-sh-select
+                        [placeholder]="localeData?.from_state_placeholder"
+                        [multiple]="false"
+                        [isFilterEnabled]="true"
+                        class="select-bdr-bottom"
+                        name="fromState"
+                        required
+                        [isRequired]="true"
+                        [(ngModel)]="updateEwayVehicleform.fromState"
+                        [options]="statesSource$ | async"
+                    >
+                    </sales-sh-select> -->
 
-                    <div class="row">
-                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{ localeData?.from_state_label }}</label>
-                        </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
-                            <sales-sh-select
-                                [placeholder]="localeData?.from_state_placeholder"
-                                [multiple]="false"
-                                [isFilterEnabled]="true"
-                                class="select-bdr-bottom"
-                                name="fromState"
-                                required
-                                [isRequired]="true"
-                                [(ngModel)]="updateEwayVehicleform.fromState"
-                                [options]="statesSource$ | async"
-                            >
-                            </sales-sh-select>
-                        </div>
-                    </div>
+                    <dropdown-field
+                        [label]="localeData?.from_state_label"
+                        [placeholder]="localeData?.from_state_placeholder"
+                        [name]="'fromState'"
+                        [isRequired]="true"
+                        [options]="statesSource$ | async"
+                    ></dropdown-field>
 
-                    <div class="row">
-                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{ localeData?.reason_label }}</label>
-                        </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
-                            <sh-select
-                                class="input"
-                                [options]="ewayUpdateVehicleReasonList"
-                                required
-                                [isRequired]="true"
-                                [placeholder]="localeData?.reason_placeholder"
-                                [isFilterEnabled]="true"
-                                name="reasonCode"
-                                [(ngModel)]="updateEwayVehicleform.reasonCode"
-                                [ItemHeight]="33"
-                            ></sh-select>
-                        </div>
-                    </div>
+                    <!-- <label class="pd-t07">{{ localeData?.reason_label }}</label> -->
+                    <!-- <sh-select
+                        class="input"
+                        [options]="ewayUpdateVehicleReasonList"
+                        required
+                        [isRequired]="true"
+                        [placeholder]="localeData?.reason_placeholder"
+                        [isFilterEnabled]="true"
+                        name="reasonCode"
+                        [(ngModel)]="updateEwayVehicleform.reasonCode"
+                        [ItemHeight]="33"
+                    ></sh-select> -->
 
-                    <div class="row">
-                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{ localeData?.remark_label }}</label>
-                        </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
-                            <textarea
-                                name="reasonRem"
-                                class="form-control"
-                                required
-                                [(ngModel)]="updateEwayVehicleform.reasonRem"
-                                [placeholder]="localeData?.remark_placeholder"
-                            ></textarea>
-                        </div>
-                    </div>
+                    <dropdown-field
+                        [label]="localeData?.reason_label"
+                        [placeholder]="localeData?.reason_placeholder"
+                        [isRequired]="true"
+                        [options]="ewayUpdateVehicleReasonList"
+                    ></dropdown-field>
 
-                    <div class="row">
-                        <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
-                            <label class="pd-t07">{{ localeData?.transporter_doc_no_required_label }}</label>
-                        </div>
-                        <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
-                            <input
-                                type="text"
-                                [placeholder]="localeData?.transporter_doc_no_required_placeholder"
-                                required
-                                name="transDocNo"
-                                [(ngModel)]="updateEwayVehicleform.transDocNo"
-                                class="form-control input"
-                            />
-                        </div>
+                    <!-- <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">{{ localeData?.remark_label }}</label>
                     </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                        <textarea
+                            name="reasonRem"
+                            class="form-control"
+                            required
+                            [(ngModel)]="updateEwayVehicleform.reasonRem"
+                            [placeholder]="localeData?.remark_placeholder"
+                        ></textarea>
+                    </div> -->
+                    <mat-form-field appearance="outline" class="w-100 mr-b15">
+                        <mat-label>{{ localeData?.remark_label }}</mat-label>
+                        <textarea
+                            matInput
+                            rows="3"
+                            [placeholder]="localeData?.remark_placeholder"
+                            [isRequired]="true"
+                            [name]="'reasonRem'"
+                        ></textarea>
+                    </mat-form-field>
+
+                    <!-- <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">{{ localeData?.transporter_doc_no_required_label }}</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15">
+                        <input
+                            type="text"
+                            [placeholder]="localeData?.transporter_doc_no_required_placeholder"
+                            required
+                            name="transDocNo"
+                            [(ngModel)]="updateEwayVehicleform.transDocNo"
+                            class="form-control input"
+                        />
+                    </div> -->
+                    <input-field
+                        [label]="localeData?.transporter_doc_no_required_label"
+                        [placeholder]="localeData?.transporter_doc_no_required_placeholder"
+                        [type]="'text'"
+                        [name]="'transDocNo'"
+                        [isRequired]="true"
+                    ></input-field>
 
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
@@ -614,6 +1054,15 @@
                                 class="form-control pd-r3"
                                 bsDatepicker
                             />
+                            <giddh-datepicker
+                                class="inline border-0"
+                                name="receipt-date"
+                                [placeholder]="commonLocaleData?.app_select_date"
+                                [cssClass]="
+                                    'form-control w-100 mat-field-border date-border text-lg-right text-md-left'
+                                "
+                                [showToggleIcon]="false"
+                            ></giddh-datepicker>
                         </div>
                     </div>
 

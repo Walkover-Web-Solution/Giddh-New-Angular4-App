@@ -24,6 +24,8 @@ import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -135,6 +137,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public initialApiCalled: boolean = false;
     /** Stores the tax details of a company */
     public taxes: IOption[] = [];
+    /** Datasource of Purchase Register report */
+    // public dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
     constructor(
         private store: Store<AppState>,
@@ -148,7 +152,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver,
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
-        private gstReconcileService: GstReconcileService
+        private gstReconcileService: GstReconcileService,
+        public dialog: MatDialog
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -450,6 +455,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.modalRef = this.modalService.show(template);
         this.selectedEwayItem = ewayItem;
     }
+
+    // public openModal(): void{
+    //     this.dialog.open({
+
+    //     })
+    // }
 
     public openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(

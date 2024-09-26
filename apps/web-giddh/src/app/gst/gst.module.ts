@@ -53,6 +53,7 @@ import { GstSettingComponent } from './gst-setting/gst-setting.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -98,7 +99,8 @@ import { MatSelectModule } from '@angular/material/select';
         WatchVideoModule,
         MatTooltipModule,
         MatDividerModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTabsModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

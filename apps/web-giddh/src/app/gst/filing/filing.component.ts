@@ -64,6 +64,8 @@ export class FilingComponent implements OnInit, OnDestroy {
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = false;
+    /** Holds active tab index */
+    public activeTabIndex: number;
 
     constructor(
         private route: Router,
@@ -304,5 +306,15 @@ export class FilingComponent implements OnInit, OnDestroy {
         let text = this.localeData?.loading_gst_data;
         text = text?.replace("[SELECTED_GST]", selectedGst);
         return text;
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof FilingComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
     }
 }
