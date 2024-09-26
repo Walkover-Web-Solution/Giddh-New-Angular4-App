@@ -1,4 +1,11 @@
 .liabilities-payments {
+    min-height: calc(100vh - 90px);
+    position: relative;
+    .initial-screen {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
     .custom-datepicker {
         input {
             height: 48px;
@@ -6,11 +13,5 @@
             min-width: 230px;
             max-width: unset !important;
         }
-    }
-    
-    .initial-screen {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
     }
 }
