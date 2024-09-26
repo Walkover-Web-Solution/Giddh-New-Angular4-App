@@ -270,4 +270,24 @@ export class CommonService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
     }
 
+    /**
+     *  This will be use to call back for window close
+     *
+     * @param {*} gstin
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof CommonService
+     */
+    public windowCallBack(moduleType: any): Observable<BaseResponse<any, string>> {
+        let url;
+        if (moduleType === 'subscription') {
+            url = this.config.apiUrl + COMMON_API.SUBSCRIPTION_PAYPAL_CALL_BACK
+        }
+        return this.http.get(url).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+    }
+
 }
