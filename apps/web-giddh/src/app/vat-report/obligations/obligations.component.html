@@ -9,7 +9,7 @@
             [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-    <div class="obligations pd-15">
+    <div class="obligations position-relative pd-15">
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap">
                 <div class="col flex-grow-0">
@@ -40,8 +40,8 @@
                 </div>
             </div>
 
-            <div class="mt-5" *ngIf="isLoading">
-                <giddh-page-loader></giddh-page-loader>
+            <div class="position-center position-absolute" *ngIf="isLoading">
+                <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
             </div>
             <div class="row mt-5" *ngIf="!isLoading">
                 <div class="table-responsive">
@@ -99,8 +99,8 @@
                     </table>
                     <section *ngIf="!tableDataSource?.length">
                         <div *ngIf="getFormControl('taxNumber').value">
-                            <div *ngIf="connectToHMRCUrl" class="initial-screen position-absolute text-center">
-                                <a mat-stroked-button color="primary" class="text-center" [href]="connectToHMRCUrl">
+                            <div *ngIf="connectToHMRCUrl" class="position-center position-absolute">
+                                <a mat-stroked-button color="primary" [href]="connectToHMRCUrl">
                                     {{ localeData?.connect_to_hmrc }}
                                 </a>
                             </div>

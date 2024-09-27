@@ -11,12 +11,22 @@ export interface VatReportState {
     liabilityPaymentListInProgress: boolean;
     liabilityPaymentList: any;
     taxNumber: any;
+    getTaxNumberInProgress: boolean;
+    connectToHMRCUrl: any;
+    getHMRCInProgress: boolean;
+    obligationList: any;
+    getObligationListInProgress: boolean;
 }
 
 const DEFAULT_STATE: VatReportState = {
     liabilityPaymentListInProgress: false,
     liabilityPaymentList: null,
-    taxNumber: null
+    taxNumber: null,
+    getTaxNumberInProgress: false,
+    connectToHMRCUrl: null,
+    getHMRCInProgress: false,
+    obligationList: null,
+    getObligationListInProgress: false
 };
 
 @Injectable()
@@ -30,6 +40,10 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     ) {
         super(DEFAULT_STATE);
     }
+    public liabilityPaymentListInProgress$ = this.select(state => state.liabilityPaymentListInProgress);
+    public getObligationListInProgress$ = this.select(state => state.getObligationListInProgress);
+    public getTaxNumberInProgress$ = this.select(state => state.getTaxNumberInProgress);
+    public getHMRCInProgress$ = this.select(state => state.getHMRCInProgress);
 
     public currentCompanyBranches$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -73,20 +87,80 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     readonly getTaxNumber = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {
-                this.patchState({ taxNumber: null, liabilityPaymentListInProgress: true });
+                this.patchState({ taxNumber: null, getTaxNumberInProgress: true });
                 return this.gstReconcileService.getTaxDetails().pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success") {
-                                return this.patchState({ taxNumber: res, liabilityPaymentListInProgress: false });
+                                return this.patchState({ taxNumber: res, getTaxNumberInProgress: false });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ taxNumber: null, liabilityPaymentListInProgress: false });
+                                return this.patchState({ taxNumber: null, getTaxNumberInProgress: false });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
-                            return this.patchState({ taxNumber: null, liabilityPaymentListInProgress: false });
+                            return this.patchState({ taxNumber: null, getTaxNumberInProgress: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+    * This will call API to get HMRC get authorization url
+    *
+    * @memberof VatReportComponentStore
+    */
+    readonly getHMRCAuthorization = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: true });
+                return this.vatService.getHMRCAuthorization(req).pipe(
+                    tapResponse(
+                        (res: any) => {
+                            if (res?.status === "success") {
+                                return this.patchState({ connectToHMRCUrl: res, getHMRCInProgress: false });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * VAT Obligations API Call
+     *
+     * @memberof VatReportComponentStore
+     */
+    readonly getVatObligations = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ obligationList: null, getObligationListInProgress: true });
+                return this.vatService.getVatObligations(req.companyUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: any) => {
+                            if (res?.status === "success") {
+                                return this.patchState({ obligationList: res, getObligationListInProgress: false });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ obligationList: null, getObligationListInProgress: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ obligationList: null, getObligationListInProgress: false });
                         }
                     ),
                     catchError((err) => EMPTY)
