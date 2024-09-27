@@ -15,14 +15,16 @@
 
     .preview-list {
         width: 35%;
-      .list-viewport {
+        .list-viewport {
             height: calc(100vh - 185px);
         }
 
         .single-invoice-detail {
             &:hover,
             &.active {
-                background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
+                background-color: var(
+                    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover
+                );
             }
         }
     }
@@ -34,7 +36,15 @@
         .preview-header {
             background-color: var(--color-primary-invoice-preview-details-background);
             .action-btn {
-                column-gap: 3px;
+                column-gap: 6px;
+
+                button {
+                    &.mdc-button {
+                        min-width: 36px;
+                        width: 36px;
+                        height: 36px;
+                    }
+                }
             }
             .invoice-status {
                 user-select: none;

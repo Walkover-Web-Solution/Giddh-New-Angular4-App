@@ -125,9 +125,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private toasterService: ToasterService,
         private voucherService: VoucherService
-    ) {
-
-    }
+    ) {  }
 
     /**
      * Life cycle hook
@@ -143,7 +141,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 this.companyCurrency = profile?.baseCurrency || 'INR';
                 this.baseCurrencySymbol = profile?.baseCurrencySymbol;
                 this.inputMaskFormat = profile?.balanceDisplayFormat ? profile?.balanceDisplayFormat?.toLowerCase() : '';
-                if (this.account.baseCurrencySymbol) {
+                if (this.account?.baseCurrencySymbol) {
                     this.currencySymbol = this.account.baseCurrencySymbol;
                 } else {
                     this.currencySymbol = this.baseCurrencySymbol;
