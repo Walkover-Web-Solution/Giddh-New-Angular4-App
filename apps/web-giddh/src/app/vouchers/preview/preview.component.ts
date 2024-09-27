@@ -2,7 +2,7 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
+import { debounceTime, delay, distinctUntilChanged, filter, merge, Observable, ReplaySubject, skip, switchMap, takeUntil } from "rxjs";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
@@ -168,6 +168,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
     public pdfPreviewHasError: boolean = false;
+    /** Hold true if searching */
+    public isSearching: boolean;
 
     constructor(
         private router: Router,
@@ -198,7 +200,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             if (params) {
                 if (params?.voucherType) {
                     this.params = params;
-                    this.voucherType = params?.voucherType;
+                    this.voucherType = this.vouchersUtilityService.parseVoucherType(params?.voucherType);
                     this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                     this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
                     this.getCreatedTemplates();
@@ -206,6 +208,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 }
                 if (params?.page) {
                     this.advanceFilters.page = Number(params.page);
+                    this.advanceFilters.from = params.from ?? '';
+                    this.advanceFilters.to = params.to ?? '';
                     this.getAllVouchers();
                 }
             }
@@ -222,6 +226,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     sort: '',
                     sortBy: ''
                 };
+
+                this.isSearching = search.length !== 0;
 
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
@@ -325,6 +331,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         merge(this.componentStore.deleteVoucherIsSuccess$, this.componentStore.convertToInvoiceIsSuccess$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
+                    this.getAllVouchers();
+                }
+            });
+
+        /** Universal date */
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$), skip(1)).subscribe(response => {
+                if (response) {
+                    this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                    this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                     this.getAllVouchers();
                 }
             });
@@ -656,17 +671,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open adjust payment dialog
-     *
-     * @memberof VouchersPreviewComponent
-     */
-    public adjustPayment(): void {
-        this.dialog.open(this.adjustPaymentDialog, {
-            panelClass: "mat-dialog-md"
-        });
-    }
-
-    /**
      * Open Download Voucher Dailog
      *
      * @memberof VouchersPreviewComponent
@@ -736,8 +740,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @param {*} voucher
     * @memberof VoucherListComponent
     */
-    public showAdjustmentDialog(voucher: any): void {
-        this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
+    public showAdjustmentDialog(): void {
+        this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: this.selectedInvoice?.account?.uniqueName, payload: { uniqueName: this.selectedInvoice?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
@@ -810,6 +814,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.pageNumberHistory.unshift(response.page);
             }
             this.totalPages = response?.totalPages;
+
+            if (this.totalPages === 0) {
+                this.invoiceList = [];
+                return;
+            }
+
             // Handle page number is more than total pages in query params
             if (this.totalPages < this.advanceFilters.page) {
                 this.advanceFilters.page = 1;
@@ -843,11 +853,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 currentInvoiceList.push(item);
             });
 
-            this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
+            if (this.isSearching && this.advanceFilters.page === 1) {
+                this.invoiceList = currentInvoiceList;
+            } else {
+                this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
+            }
             this.changeDetection.detectChanges();
 
-            if (this.invoiceList?.length && !this.selectedInvoice) {
-                this.setSelectedInvoice(this.params.voucherUniqueName);
+            if (this.invoiceList?.length) {
+                this.setSelectedInvoice(!this.selectedInvoice ? this.params.voucherUniqueName : this.invoiceList[0].uniqueName);
             }
         }
     }

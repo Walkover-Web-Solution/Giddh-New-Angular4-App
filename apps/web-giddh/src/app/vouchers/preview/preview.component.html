@@ -6,8 +6,8 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader *ngIf="getVouchersInProgress$ | async" [cssClass]="'no-data'"></giddh-page-loader>
-    <div class="invoice-preview-wrapper" *ngIf="!(getVouchersInProgress$ | async)">
+    <giddh-page-loader *ngIf="!isSearching && (getVouchersInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
+    <div class="invoice-preview-wrapper" *ngIf="isSearching || !(getVouchersInProgress$ | async)">
         <div class="preview-list h-100 pd-b15">
             <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
                 <div class="position-relative search-field flex-grow-1">
@@ -52,7 +52,7 @@
                 </ng-template>
             </div>
             <div class="mat-grid-wrapper">
-                <div class="mat-list-wrap">
+                <div class="mat-list-wrap" *ngIf="!(getVouchersInProgress$ | async)" >
                     <mat-list>
                         <app-cdk-scroll
                             [scrollTriggerDistance]="30"
@@ -110,6 +110,7 @@
                         </app-cdk-scroll>
                     </mat-list>
                 </div>
+                <giddh-page-loader *ngIf="getVouchersInProgress$ | async" [cssClass]="'no-data'"></giddh-page-loader>
             </div>
         </div>
         <div class="preview-content">
@@ -209,7 +210,7 @@
                                 {{ commonLocaleData?.app_payment_status?.paid }}
                             </button>
                             <ng-container *ngIf="voucherType === 'sales'">
-                                <button mat-menu-item (click)="adjustPayment()">
+                                <button mat-menu-item (click)="showAdjustmentDialog()">
                                     {{ commonLocaleData?.app_payment_status?.adjust_amount }}
                                 </button>
                                 <button mat-menu-item (click)="actionVoucher('unpaid')">
@@ -308,6 +309,7 @@
             <giddh-page-loader
                 *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
             ></giddh-page-loader>
+            
             <ng-container *ngIf="!(isVoucherDownloading$ | async)">
                 <div class="pdf-preview" *ngIf="voucherType === 'purchase'">
                     <div class="position-relative">
