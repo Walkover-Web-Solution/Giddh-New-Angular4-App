@@ -2,7 +2,7 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
+import { debounceTime, delay, distinctUntilChanged, filter, merge, Observable, ReplaySubject, skip, switchMap, takeUntil } from "rxjs";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
@@ -331,6 +331,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         merge(this.componentStore.deleteVoucherIsSuccess$, this.componentStore.convertToInvoiceIsSuccess$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
+                    this.getAllVouchers();
+                }
+            });
+
+        /** Universal date */
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$), skip(1)).subscribe(response => {
+                if (response) {
+                    this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                    this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                     this.getAllVouchers();
                 }
             });

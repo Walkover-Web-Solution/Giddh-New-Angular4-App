@@ -97,7 +97,7 @@ export class GeneralService {
     public createQueryString(url: string, params: any) {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
-                const delimiter = url.indexOf('?') === -1 ? '?' : '&';
+                const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
                 url += `${delimiter}${key}=${params[key]}`
             }
         });
