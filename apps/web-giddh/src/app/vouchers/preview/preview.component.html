@@ -7,7 +7,7 @@
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader *ngIf="!isSearching && (getVouchersInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
-    <div class="invoice-preview-wrapper" *ngIf="isSearching || !(getVouchersInProgress$ | async)">
+    <div class="invoice-preview-wrapper" *ngIf="(isSearching || isLoadMore) || !(getVouchersInProgress$ | async)">
         <div class="preview-list h-100 pd-b15">
             <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
                 <div class="position-relative search-field flex-grow-1">
@@ -110,7 +110,7 @@
                         </app-cdk-scroll>
                     </mat-list>
                 </div>
-                <giddh-page-loader *ngIf="getVouchersInProgress$ | async" [cssClass]="'no-data'"></giddh-page-loader>
+                <giddh-page-loader *ngIf="isSearching && !isLoadMore && (getVouchersInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
             </div>
         </div>
         <div class="preview-content">
@@ -196,7 +196,7 @@
                             mat-stroked-button
                             color="primary"
                             [matMenuTriggerFor]="changeStatus"
-                            *ngIf="!isCompany"
+                            *ngIf="(selectedInvoice?.balanceStatus !== 'CANCEL') && !isCompany"
                         >
                             <span>Change Status</span>
                             <i class="icon-arrow-down icon-font-11 ml-2"></i>

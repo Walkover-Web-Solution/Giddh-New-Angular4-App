@@ -89,6 +89,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public dayjs = dayjs;
     /** Holds current voucher type */
     public voucherType: string = VoucherTypeEnum.sales.toString();
+    /** Hold url Voucher Type */
+    public urlVoucherType: any = '';
     /** Holds images folder path */
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */
@@ -407,6 +409,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+     /** Holds current route query parameters */
+     public queryParams: any = {};
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -539,14 +543,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let params = response[0];
-                let queryParams = response[1];
+                this.queryParams = response[1];
 
-                if (queryParams?.redirect) {
-                    this.redirectUrl = queryParams?.redirect;
+                if (this.queryParams?.redirect) {
+                    this.redirectUrl = this.queryParams?.redirect;
                 }
 
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
+                this.urlVoucherType =  params.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 if (this.voucherApiVersion !== 2) {
@@ -571,9 +576,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.searchAccount();
                 }
 
-                if (params?.accountUniqueName && queryParams?.entryUniqueNames) {
+                if (params?.accountUniqueName && this.queryParams?.entryUniqueNames) {
                     this.isPendingEntries = true;
-                    this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: queryParams?.entryUniqueNames.split(",") } });
+                    this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: this.queryParams?.entryUniqueNames.split(",") } });
                 } else {
                     this.isPendingEntries = false;
                 }
@@ -3445,28 +3450,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    private redirectToGetAll(): void {
-        if (this.invoiceType.isPurchaseOrder) {
-            this.router.navigate(['/pages/purchase-management/purchase/order']);
-        } else {
-            if (this.invoiceType.isCashInvoice) {
-                if (this.invoiceType.isSalesInvoice) {
-                    this.router.navigate(['/pages/vouchers/preview/sales/list']);
-                } else if (this.invoiceType.isDebitNote) {
-                    this.router.navigate(['/pages/vouchers/preview/debit-note/list']);
-                } else if (this.invoiceType.isCreditNote) {
-                    this.router.navigate(['/pages/vouchers/preview/credit-note/list']);
-                } else if (this.invoiceType.isPurchaseInvoice) {
-                    this.router.navigate(['/pages/vouchers/preview/purchase/list']);
-                } else {
-                    this.router.navigate(['/pages/vouchers/preview/sales/list']);
-                }
-            } else if (this.invoiceType.isPurchaseInvoice) {
-                this.router.navigate(['/pages/vouchers/preview/purchase/list']);
-            } else {
-                this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/list']);
-            }
-        }
+    /**
+     * Redirect to Invoice Preview page
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private redirectToInvoicePreview(): void {
+        const queryParams = { 
+            page: this.queryParams?.page ?? 1, 
+            from: this.queryParams?.from ?? '', 
+            to: this.queryParams?.to ?? '' 
+        };
+        this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
 
     /**
@@ -3478,7 +3474,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.redirectUrl) {
             this.router.navigateByUrl(this.redirectUrl);
         } else {
-            this.redirectToGetAll();
+            this.redirectToInvoicePreview();
         }
     }
 
@@ -3872,7 +3868,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.redirectToGetAll();
+                            this.redirectToInvoicePreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
