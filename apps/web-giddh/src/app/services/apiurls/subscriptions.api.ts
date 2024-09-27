@@ -31,5 +31,5 @@ export const SUBSCRIPTION_V2_API = {
     ACTIVATE_PLAN: 'v2/subscription/:subscriptionId/activate?upgrade=true',
     CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount',
     SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token',
-    PAYPAL_CAPTURE_PLAN: 'subscription/paypal/order/:orderID/capture?subscriptionId=:subscriptionId'
+    PAYPAL_CAPTURE_PLAN: 'subscription/paypal/order/:orderId/capture?subscriptionId=:subscriptionId'
 };
