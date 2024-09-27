@@ -12,7 +12,7 @@ export class CallBackPageComponent implements OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold broadcast event */
     public broadcast: any;
-    constructor(private router: Router, private route: ActivatedRoute,) {
+    constructor(private router: Router, private route: ActivatedRoute) {
         this.closePopup();
     }
 
