@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { merge, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, MOBILE_NUMBER_SELF_URL } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -16,7 +16,6 @@ import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { VatReportComponentStore } from '../utility/vat.report.store';
-import { cloneDeep } from '../../lodash-optimized';
 
 export interface ObligationsStatus {
     label: string;
@@ -80,12 +79,15 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
     /** True if current company or branch has tax number */
     public hasTaxNumber: boolean = false;
+    /** Observable to store the HMRC portal url */
+    public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
+    /** Observable to store the data of obligation */
+    public obligationList$ = this.componentStore.select(state => state.obligationList);
+
     constructor(
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private vatService: VatService,
-        private toaster: ToasterService,
         private modalService: BsModalService,
         public dialog: MatDialog,
         private route: Router,
@@ -152,6 +154,28 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 this.getVatObligations();
             }
         });
+
+        this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                this.connectToHMRCUrl = response.body;
+            }
+        });
+
+        this.obligationList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.obligations) {
+                this.tableDataSource = response?.body?.obligations.map(item => {
+                    item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
+                    item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
+                    item.due = dayjs(item.due).format(GIDDH_DATE_FORMAT);
+                    return item;
+                });
+            }
+        });
+
+        merge(this.componentStore.getObligationListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.isLoading = response;
+            });
     }
 
     /**
@@ -164,7 +188,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                let currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                let currentBranch = response.find(branch => branch?.uniqueName === currentBranchUniqueName);
                 this.hasTaxNumber = currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
                 if (this.hasTaxNumber) {
                     this.loadTaxDetails();
@@ -179,23 +203,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public getVatObligations(): void {
-        this.isLoading = true;
-        this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
-            if (response?.status === "success" && response?.body?.obligations) {
-                this.tableDataSource = response?.body?.obligations.map(item => {
-                    item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
-                    item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
-                    item.due = dayjs(item.due).format(GIDDH_DATE_FORMAT);
-
-                    return item;
-                });
-            } else if (response?.body?.message) {
-                this.toaster.showSnackBar('error', response?.body?.message);
-            } else if (response?.message) {
-                this.toaster.showSnackBar('error', response?.message);
-            }
-        });
+        this.componentStore.getVatObligations({ companyUniqueName: this.companyUniqueName, payload: this.obligationsForm.value })
     }
 
     /**
@@ -419,6 +427,14 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling']);
     }
 
+    /**
+     * This will call API to get HMRC get authorization url
+     *
+     * @memberof VatReportComponent
+     */
+    public getURLHMRCAuthorization(): void {
+        this.componentStore.getHMRCAuthorization(this.companyUniqueName);
+    }
 
     /**
     * Lifecycle hook for destroy
@@ -430,17 +446,5 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out'
-    }
-    /**
-     * This will call API to get HMRC get authorization url
-     *
-     * @memberof VatReportComponent
-     */
-    public getURLHMRCAuthorization(): void {
-        this.vatService.getHMRCAuthorization(this.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res?.body) {
-                this.connectToHMRCUrl = res?.body;
-            }
-        })
     }
 }
