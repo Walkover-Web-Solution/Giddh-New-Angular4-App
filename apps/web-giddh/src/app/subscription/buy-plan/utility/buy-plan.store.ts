@@ -50,7 +50,7 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     changePlanDetails: null,
     activatePlanSuccess: false,
     calculateDataInProgress: false,
-    paypalCaptureOrderIdSuccess: false,
+    paypalCaptureOrderIdSuccess: null,
     calculateData: null,
     razorpaySuccess: false
 };

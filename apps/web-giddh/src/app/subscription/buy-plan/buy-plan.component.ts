@@ -24,13 +24,11 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { CallBackPageComponentStore } from '../../shared/call-back-page/utility/call-back-page.store';
-
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
     styleUrls: ['./buy-plan.component.scss'],
-    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore, CallBackPageComponentStore]
+    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore]
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
@@ -208,8 +206,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public newUserSelectedCountryValue: string = '';
     /** Hold broadcast event */
     public broadcast: any;
-    /** Holds Store Call Back API succes state as observable*/
-    public callBackSuccess$: Observable<any> = this.callBackPageComponentStore.select(state => state.callBackSuccess);
     /** Hold paypal capture order id */
     public paypalCaptureOrderId: string = '';
     /** Holds Store Paypal Order Id Success observable*/
@@ -218,13 +214,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public filteredPaymentProviders: any[] = [];
     /** Hold all payment providers */
     public allPaymentProviders: any[] = [];
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
+    /** Hold callback event */
+    public callBackEvent: any;
 
     constructor(
         public dialog: MatDialog,
         private readonly componentStore: BuyPlanComponentStore,
         private readonly changeBillingComponentStore: ChangeBillingComponentStore,
         private readonly subscriptionComponentStore: SubscriptionComponentStore,
-        private readonly callBackPageComponentStore: CallBackPageComponentStore,
         private toasterService: ToasterService,
         private commonActions: CommonActions,
         private store: Store<AppState>,
@@ -280,7 +279,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response?.paypalApprovalLink) {
                 this.paypalCaptureOrderId = response.paypalOrderId;
                 this.openWindow(response.paypalApprovalLink);
-            } if (response?.redirectLink) {
+            } else if (response?.redirectLink) {
                 this.openWindow(response.redirectLink);
             } else if (response?.subscriptionId) {
                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
@@ -293,15 +292,20 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.callBackSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response === 'PAYPAL') {
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            this.callBackEvent = event?.data?.success;
+            if (event?.data?.success) {
                 let model = {
                     orderID: this.paypalCaptureOrderId,
                     subscriptionId: this.subscriptionId
                 }
                 this.componentStore.paypalCaptureOrderId(model);
+            } else {
+                this.router.navigate(['/pages/user-details/subscription']);
             }
-        });
+        };
 
         this.paypalCaptureOrderIdSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -469,7 +473,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
         window.addEventListener('message', event => {
             if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
-                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") || this.callBackEvent) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1245,11 +1249,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         if (entityCode === 'GBR' && duration === 'MONTHLY') {
             // Only GoCardless for monthly GBR
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => provider.value === 'GOCARDLESS');
-            this.thirdStepForm.get('paymentProvider')?.patchValue('GOCARDLESS');
-        } else if (entityCode === 'GBR' && (duration === 'MONTHLY' || duration === 'YEARLY')) {
-            // Exclude Razorpay for GBR
             this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => provider.value !== 'RAZORPAY');
+        } else if (entityCode === 'GBR' && duration === 'YEARLY') {
+            // Exclude Razorpay for GBR
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => provider.value === 'PAYPAL');
+            this.thirdStepForm.get('paymentProvider')?.patchValue('PAYPAL');
         } else if (entityCode !== 'IND') {
             // Only PayPal for non-IND countries
             this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => provider.value === 'PAYPAL');
@@ -1460,6 +1464,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         document.body?.classList?.remove("plan-page");
         this.broadcast?.close();
+        this.callBackBroadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
