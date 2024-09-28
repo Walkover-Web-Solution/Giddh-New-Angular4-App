@@ -163,7 +163,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
 
         this.obligationList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.obligations) {
-                this.tableDataSource = response?.body?.obligations.map(item => {
+                this.tableDataSource = response.body.obligations.map(item => {
                     item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
                     item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
                     item.due = dayjs(item.due).format(GIDDH_DATE_FORMAT);

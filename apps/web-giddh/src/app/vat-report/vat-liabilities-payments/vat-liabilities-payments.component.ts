@@ -98,7 +98,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
                 this.getURLHMRCAuthorization();
-
             }
         });
     }
