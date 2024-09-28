@@ -90,6 +90,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.briefAccounts$ = observableOf(response);
+                if (response.length === 1) {
+                    this.setDepositAccountUniqueName(0, response[0].label);
+                }
             }
         });
 
@@ -139,6 +142,22 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             amount: [''],
             accountUniqueName: ['']
         });
+    }
+
+    /**
+     * Deposit account error
+     *
+     * @param {number} index
+     * @return {*}  {boolean}
+     * @memberof PaymentDialogComponent
+     */
+    public getEmptyDepositAccountError(index: number): boolean {
+        let deposits = this.paymentForm?.get('deposits')['controls'] as FormArray;
+        let currentDepositFormGroup = deposits.at(index) as FormGroup;
+        if (currentDepositFormGroup?.get("amount").value && (!currentDepositFormGroup?.get("accountUniqueName").value)) {
+            return true;
+        }
+        return false;
     }
     /**
      * Add new deposit row
@@ -220,7 +239,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      *
      * @memberof PaymentDialogComponent
      */
-    private setDepositAccountUniqueName(index: number , event: any): void {
+    private setDepositAccountUniqueName(index: number, event: any): void {
         let deposits = this.paymentForm.get('deposits') as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
         currentDepositFormGroup.get("accountUniqueName")?.patchValue(event);
