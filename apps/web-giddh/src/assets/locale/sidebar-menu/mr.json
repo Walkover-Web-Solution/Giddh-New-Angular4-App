@@ -114,7 +114,7 @@
                 },
                 {
                     "label": "पावती",
-                    "link": "/pages/reports/receipt",
+                    "link": "/pages/vouchers/preview/receipt/list",
                     "icon": "icon-reciept-new",
                     "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
                     "additional": {
@@ -246,7 +246,7 @@
                 },
                 {
                     "label": "फेड",
-                    "link": "/pages/reports/payment",
+                    "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
                     "additional": {

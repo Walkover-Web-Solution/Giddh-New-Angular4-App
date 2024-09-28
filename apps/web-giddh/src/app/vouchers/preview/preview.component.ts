@@ -259,6 +259,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public setSelectedInvoice(voucherUniqueName: string): void {
+        if (this.selectedInvoice?.uniqueName === voucherUniqueName) {
+            return;
+        }
+
         this.selectedInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
         if (this.selectedInvoice && !this.isVoucherDownloading) {
             this.downloadVoucherPdf('base64');
@@ -980,7 +984,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             if (this.selectedInvoice && this.selectedInvoice.blob) {
-                return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice.account.name} - ${this.selectedInvoice.voucherNumber}.pdf`);
+                return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice?.account?.name} - ${this.selectedInvoice.voucherNumber}.pdf`);
             } else {
                 return;
             }

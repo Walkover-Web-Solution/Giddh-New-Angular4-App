@@ -21,35 +21,37 @@
                     </text-field>
                     <i class="icon-search position-absolute"></i>
                 </div>
-                <ng-container *ngIf="voucherType === 'sales'; else other">
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        [matMenuTriggerFor]="newInvoice"
-                        class="invoice-btn width-150"
-                    >
-                        <span>{{ localeData?.new_invoice }}</span>
-                        <i class="icon-arrow-down icon-font-11 ml-2"></i>
-                    </button>
-                    <mat-menu #newInvoice="matMenu" class="width-150">
-                        <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">
-                            {{ localeData?.cash_invoice }}
+                <ng-container *ngIf="!isCompany">
+                    <ng-container *ngIf="voucherType === 'sales'; else other">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            [matMenuTriggerFor]="newInvoice"
+                            class="invoice-btn width-150"
+                        >
+                            <span>{{ localeData?.new_invoice }}</span>
+                            <i class="icon-arrow-down icon-font-11 ml-2"></i>
                         </button>
-                        <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">
-                            {{ localeData?.sales_invoice }}
+                        <mat-menu #newInvoice="matMenu" class="width-150">
+                            <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">
+                                {{ localeData?.cash_invoice }}
+                            </button>
+                            <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">
+                                {{ localeData?.sales_invoice }}
+                            </button>
+                        </mat-menu>
+                    </ng-container>
+                    <ng-template #other>
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            class="invoice-btn width-150"
+                            [routerLink]="[createNewVoucher.link]"
+                        >
+                            {{ createNewVoucher.text }}
                         </button>
-                    </mat-menu>
+                    </ng-template>
                 </ng-container>
-                <ng-template #other>
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        class="invoice-btn width-150"
-                        [routerLink]="[createNewVoucher.link]"
-                    >
-                        {{ createNewVoucher.text }}
-                    </button>
-                </ng-template>
             </div>
             <div class="mat-grid-wrapper">
                 <div class="mat-list-wrap" *ngIf="!(getVouchersInProgress$ | async)" >
@@ -71,6 +73,7 @@
                                             'border-bottom': !lastItem
                                         }"
                                         (click)="setSelectedInvoice(item?.uniqueName)"
+                                        [matTooltip]="(item?.account?.customerName || item?.account?.name || item?.vendor?.name)?.length > 30 ? (item?.account?.customerName || item?.account?.name || item?.vendor?.name) : null"
                                     >
                                         <div class="d-flex justify-content-between align-items-center column-gap5">
                                             <div>
@@ -82,7 +85,7 @@
                                                     }}
                                                 </span>
                                                 <span class="font-12 light-gray"> | {{ item?.voucherDate }} </span>
-                                                <p class="black-color">
+                                                <p class="black-color text-ellipsis account-name-width">
                                                     {{
                                                         item?.account?.customerName ||
                                                             item?.account?.name ||

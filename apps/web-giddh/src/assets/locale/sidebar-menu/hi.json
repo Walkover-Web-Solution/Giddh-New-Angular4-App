@@ -114,7 +114,7 @@
                 },
                 {
                     "label": "रसीद",
-                    "link": "/pages/reports/receipt",
+                    "link": "/pages/vouchers/preview/receipt/list",
                     "icon": "icon-reciept-new",
                     "description": "अग्रिम, सामान्य, कुल, और अप्रयुक्त रसीदें",
                     "additional": {
@@ -246,7 +246,7 @@
                 },
                 {
                     "label": "भुगतान",
-                    "link": "/pages/reports/payment",
+                    "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "कुल, और अप्रयुक्त भुगतान",
                     "additional": {
