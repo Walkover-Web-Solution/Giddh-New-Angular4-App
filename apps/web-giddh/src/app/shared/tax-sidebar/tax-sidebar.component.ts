@@ -127,9 +127,6 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 if (this.localeData) {
                     this.translationComplete(true);
                 }
-                if( this.localeData) {
-                    this.translationComplete(true);
-                }
             }
             this.changeDetectionRef.detectChanges();
         });
