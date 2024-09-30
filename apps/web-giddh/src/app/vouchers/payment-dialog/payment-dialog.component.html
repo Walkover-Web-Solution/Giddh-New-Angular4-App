@@ -34,12 +34,12 @@
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_payment_mode"
                     [labelValue]="(briefAccounts$ | async)?.length === 1 ? (briefAccounts$ | async)[0].label : ''"
-                    [showError]="getEmptyDepositAccountError(depositIndex)"
+                    [showError]="showPaymentModeDropdownError"
                     [placeholder]="commonLocaleData?.app_select_account"
                     class="w-50"
                     [options]="briefAccounts$ | async"
                     formControlName="accountUniqueName"
-                    (selectedOption)="onSelectPaymentMode($event, depositIndex)"
+                    (selectedOption)="onSelectPaymentMode($event, depositIndex); getEmptyDepositAccountError(depositIndex)"
                 >
                 </reactive-dropdown-field>
                 <div class="d-flex align-items-center w-50">
@@ -52,6 +52,7 @@
                         class="w-100"
                         [mask]="company?.inputMaskFormat"
                         [useMask]="true"
+                        (change)="getEmptyDepositAccountError(depositIndex)"
                         [prefix]="amountCurrency"
                         formControlName="amount"
                     >
