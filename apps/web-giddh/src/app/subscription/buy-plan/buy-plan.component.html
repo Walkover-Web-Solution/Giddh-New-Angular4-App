@@ -887,10 +887,14 @@
                                             </div>
                                         </mat-card-content>
                                     </mat-card>
-                                    <!-- -->
                                 </div>
                                 <div
                                     class="new-plan mt-4"
+                                    *ngIf="
+                                        filteredPaymentProviders?.length > 1 ||
+                                        (firstStepForm.get('duration')?.value === 'MONTHLY' &&
+                                            selectedPlan?.entityCode === 'IND')
+                                    "
                                 >
                                     <mat-card class="outline-card">
                                         <mat-card-content>
@@ -898,11 +902,7 @@
                                                 <reactive-dropdown-field
                                                     [label]="localeData?.payment_provider"
                                                     [placeholder]="localeData?.select_provider"
-                                                    [labelValue]="
-                                                        filteredPaymentProviders?.length === 1
-                                                            ? filteredPaymentProviders[0]?.value
-                                                            : thirdStepForm.get('paymentProvider')?.value
-                                                    "
+                                                    [labelValue]="thirdStepForm.get('paymentProvider')?.value"
                                                     [options]="filteredPaymentProviders"
                                                     formControlName="paymentProvider"
                                                     (onClear)="thirdStepForm.get('paymentProvider')?.patchValue(null)"
