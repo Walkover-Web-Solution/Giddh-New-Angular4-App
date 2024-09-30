@@ -23,6 +23,7 @@ import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'buy-plan',
@@ -202,6 +203,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public razorpaySuccess$ = this.componentStore.select((state) => state.razorpaySuccess);
     /** Hold calculation amount response*/
     public calculationResponse: any;
+    /** Hold new user selected country value */
+    public newUserSelectedCountryValue: string = '';
+    /** Hold broadcast event */
+    public broadcast: any;
 
     constructor(
         public dialog: MatDialog,
@@ -215,6 +220,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private generalActions: GeneralActions,
         private formBuilder: FormBuilder,
         private subscriptionService: SubscriptionsService,
+        private settingsProfileActions: SettingsProfileActions,
         private router: Router,
         private route: ActivatedRoute,
         private location: Location,
@@ -274,6 +280,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.setBroadcastEvent();
                 this.responseSubscriptionId = response.subscriptionId;
                 // if (response.duration === "YEARLY") {
                 //     this.isLoading = true;
@@ -324,6 +331,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.setBroadcastEvent();
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
@@ -338,6 +346,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.updatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.setBroadcastEvent();
                 this.responseSubscriptionId = response.subscriptionId;
                 // if (response.duration === "YEARLY") {
                 //     this.isLoading = true;
@@ -357,6 +366,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.setBroadcastEvent();
                 this.isLoading = false;
                 if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
@@ -549,6 +559,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+    }
+    /**
+     * This will be used to set a broadcast event to call the 'get Company' API for subscription and header.
+     *
+     * @memberof BuyPlanComponent
+     */
+    public setBroadcastEvent(): void {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.broadcast = new BroadcastChannel("subscription");
+        this.broadcast.postMessage({ activeCompany: 'activeCompany' });
     }
 
     /**
@@ -1221,6 +1241,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (event?.value) {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
+            this.newUserSelectedCountryValue = event.value;
             setTimeout(() => {
                 if (this.isSubscriptionRegion) {
                     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
@@ -1378,6 +1399,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.body?.classList?.remove("plan-page");
+        this.broadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1449,7 +1471,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: subscription?.subscriptionId,
                 planUniqueName: subscription?.planDetails?.uniqueName
             };
-            this.subscriptionId = subscription?.subscriptionId;
+            if (request.subscriptionId) {
+                this.subscriptionId = request.subscriptionId;
+            }
             let data = { ...request, ...this.subscriptionRequest };
             if (subscription?.duration === 'MONTHLY' && subscription?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId });

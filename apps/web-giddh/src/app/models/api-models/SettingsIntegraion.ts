@@ -144,5 +144,15 @@ export class IntegratedBankList {
     message?: any;
     bankUserId: string;
 }
+export class InstitutionsRequest {
+    public count: number;
+    public page: number;
+    public countryCode: string;
+    constructor() {
+        this.count = 250;
+        this.page = 1;
+    }
+}
+
 
 

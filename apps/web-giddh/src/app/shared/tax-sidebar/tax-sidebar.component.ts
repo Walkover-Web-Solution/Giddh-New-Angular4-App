@@ -77,6 +77,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /** Holds active company information */
     public activeCompany: any;
 
+
     constructor(
         private router: Router,
         private generalService: GeneralService,
@@ -99,7 +100,6 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             this.activeCompanyGstNumber = response;
         });
-
         this.loadTaxDetails();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -119,6 +119,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                     this.showGstMenus = true;
                 } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showSalesTaxMenus = true;
+                }
+                if( this.localeData) {
+                    this.translationComplete(true);
                 }
             }
             this.changeDetectionRef.detectChanges();

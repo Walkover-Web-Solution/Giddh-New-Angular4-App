@@ -1,6 +1,6 @@
 <div class="text-field-container" [ngClass]="{ 'readonly-field': readonly }">
     <mat-form-field
-        [ngClass]="{ 'mat-form-field-invalid': showError }"
+        [ngClass]="{ 'mat-form-field-invalid': showError, 'prefix-icon-field': matPrefixIcon }"
         [appearance]="appearance"
         [floatLabel]="floatLabel"
     >
@@ -138,6 +138,7 @@
             [ngClass]="{ 'error-box': showError }"
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
+        <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
     </mat-form-field>
 </div>

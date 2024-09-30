@@ -1698,6 +1698,19 @@ export class GeneralService {
     }
 
     /**
+    * Check if a given country code is included in the array of supported countries for Gocardless, and return a boolean value
+    * indicating whether the country is supported or not.
+    *
+    * @param {string} countryCode
+    * @returns {boolean}
+    * @memberof GeneralService
+    */
+    public checkCompanySupportGoCardless(countryCode: string): boolean {
+        const gocardlessSupportedCountryCodeList = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
+        return gocardlessSupportedCountryCodeList.includes(countryCode);
+    }
+
+    /**
      * This will return the system current user time zone
      *
      * @return {*}
@@ -2041,4 +2054,33 @@ export class GeneralService {
             buttons
         };
     }
+
+    /**
+     *  Delete sessions confirmation dialog
+     *
+     * @param confirmationMessage
+     * @param commonLocaleData
+     * @returns
+     */
+    public deleteConfiguration(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = confirmationMessage;
+        return {
+            buttons,
+            headerText,
+            headerCssClass,
+            messageCssClass,
+            messageText
+        };
+    }
 }
+
