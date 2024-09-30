@@ -85,6 +85,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -182,7 +183,8 @@ import { MatRadioModule } from '@angular/material/radio';
         FormFieldsModule,
         MatInputModule,
         GiddhDatepickerModule,
-        MatRadioModule
+        MatRadioModule,
+        MatButtonModule
     ],
     exports: [
         InvoiceRoutingModule,

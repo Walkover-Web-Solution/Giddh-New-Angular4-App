@@ -1,5 +1,24 @@
 <div>
-    <div class="modal-header">
+    <div class="modal-header theme-bg d-flex justify-content-between">
+        <h3 class="modal-title bg" id="modal-title" mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</h3>
+        <button aria-hidden="true" class="close" mat-dialog-close id="closedialog" (click)="onCancel">×</button>
+    </div>
+    <mat-dialog-content>
+        <form name="newRole" novalidate autocomplete="off">
+            <div class="modal-wrap">
+                <h3>{{ message }}</h3>
+            </div>
+        </form>
+        <div class="d-flex column-gap1 align-items-center">
+            <button mat-stroked-button color="primary" (click)="onConfirmation()">
+                {{ commonLocaleData?.app_yes }}
+            </button>
+            <button mat-stroked-button mat-dialog-close (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
+        </div>
+    </mat-dialog-content>
+
+
+    <!-- <div class="modal-header">
         <h2 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h2>
         <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
@@ -15,5 +34,5 @@
             {{ commonLocaleData?.app_yes }}
         </button>
         <button type="submit" class="btn btn-md btn-danger" (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
-    </div>
+    </div> -->
 </div>

@@ -10,21 +10,134 @@
             <h1 class="section-head m-0 pl-0 pb-0 pr-0">{{ localeData?.added_taxes }}</h1>
             <div>
                 <watch-video [cssClass]="'text-primary mr-r15'" [moduleName]="'TAX_CREATION'"></watch-video>
-                <button
-                    class="btn btn-sky-blue mr-0"
-                    [tooltip]="localeData?.create_new_tax"
+                <!-- <button
+                    mat-stroked-button
+                    color="primary"
+                    [matTooltip]="localeData?.create_new_tax"
+                    [matTooltipPosition]="'above'"
                     (click)="selectedTax = null; toggleTaxAsidePane($event)"
                     aria-label="create new tax"
                 >
-                    <i class="icon icon-plus font-12"></i> {{ localeData?.new_tax }}
+                    <i class="icon icon-plus font-12 mr-1"></i> {{ localeData?.new_tax }}
+                </button> -->
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    [matTooltip]="localeData?.create_new_tax"
+                    [matTooltipPosition]="'above'"
+                    (click)="addTaxDialogOpen()"
+                    aria-label="create new tax"
+                >
+                    <i class="icon icon-plus font-12 mr-1"></i> {{ localeData?.new_tax }}
                 </button>
             </div>
         </div>
 
         <div class="col-sm-12 pd-t15 tax-table-wrapper">
             <div class="row">
+                {{availableTaxes?.length}}
                 <div class="table-responsive">
-                    <table class="table table-bordered basic mr-b05 on-mobile-view">
+                    <table mat-table [dataSource]="dataSource" *ngIf="availableTaxes?.length">
+                        <!-- Index Column -->
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let element; let i = index">
+                                {{ i + 1 }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Tax Number Column -->
+                        <ng-container matColumnDef="taxNumber">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.taxNumber }}</td>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                        </ng-container>
+
+                        <!-- Tax Authority Column -->
+                        <!-- <ng-container matColumnDef="taxAuthority" *ngIf="availableTaxes[0]?.taxAuthority">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
+                            <td mat-cell *matCellDef="let acc of element.accounts">{{ acc.name }}</td>
+                        </ng-container> -->
+
+                        <!-- Linked Account Column -->
+                        <!-- <ng-container matColumnDef="linkedAccount">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
+                            <td mat-cell *matCellDef="let element">
+                            <p *ngFor="let acc of element.accounts">{{ acc.name }}</p>
+                            </td>
+                        </ng-container> -->
+
+                        <!-- Applied From Column -->
+                        <ng-container matColumnDef="appliedFrom">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.applied_from }}</th>
+                            <td mat-cell *matCellDef="let element">
+                            <div *ngFor="let t of element.taxDetail">{{ dayjs(t.date).format(giddhDateFormat) }}</div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Tax Percentage Column -->
+                        <ng-container matColumnDef="taxPercentage">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax_percentage }}</th>
+                            <td mat-cell *matCellDef="let element">
+                            <div *ngFor="let t of element.taxDetail">{{ t.taxValue }}</div>
+                            </td>
+                        </ng-container>
+
+                        <!-- File Date Column -->
+                        <ng-container matColumnDef="fileDate">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.file_date }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.taxFileDate }}</td>
+                        </ng-container>
+
+                        <!-- Duration Column -->
+                        <ng-container matColumnDef="duration">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.duration }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.duration }}</td>
+                        </ng-container>
+
+                        <!-- Tax Type Column -->
+                        <ng-container matColumnDef="taxType">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_type }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.taxType || commonLocaleData?.app_tax_types?.others }}</td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                            <td mat-cell *matCellDef="let element">
+                            <button 
+                                mat-stroked-button 
+                                color="primary"
+                                (click)="selectedTax = element; toggleTaxAsidePane()">
+                                <i
+                                    class="icon-edit-pencil"
+                                    aria-hidden="true"
+                                    [matTooltip]="commonLocaleData?.app_edit"
+                                ></i>
+                            </button>
+                            <button 
+                                mat-stroked-button 
+                                (click)="deleteTax(element)">
+                                <i
+                                    class="fa fa-trash"
+                                    aria-hidden="true"
+                                    [matTooltip]="commonLocaleData?.app_delete"
+                                ></i>
+                            </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+
+                    <!-- <table class="table table-bordered basic mr-b05 on-mobile-view">
                         <thead [hidden]="!availableTaxes?.length">
                             <tr>
                                 <th>#</th>
@@ -239,7 +352,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                 </div>
             </div>
             <div class="no-data" *ngIf="!isLoading && !availableTaxes?.length">
@@ -254,7 +367,7 @@
     </div>
 
     <!-- region open tax aside -->
-    <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
+    <!-- <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
     <aside-menu-create-tax-component
         [class]="taxAsideMenuState"
         [tax]="selectedTax"
@@ -263,11 +376,32 @@
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
         (closeEvent)="toggleTaxAsidePane()"
-    ></aside-menu-create-tax-component>
+    ></aside-menu-create-tax-component> -->
+
+    <ng-template #newTaxDialogAside>
+        <aside-menu-create-tax-component
+            [class]="taxAsideMenuState"
+            [tax]="selectedTax"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            (closeEvent)="toggleTaxAsidePane()"
+        ></aside-menu-create-tax-component>
+        <!-- <p>djgjkdfgj</p> -->
+    </ng-template>
+    
     <!-- endregion -->
 
     <!-- region delete Tax confirmation model -->
-    <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
+     <ng-template #taxConfirmationModel>
+        <delete-tax-confirmation-model
+            [message]="confirmationMessage"
+            [commonLocaleData]="commonLocaleData"
+            (userConfirmationEvent)="userConfirmation($event)"
+        >
+        </delete-tax-confirmation-model>
+     </ng-template>
+     
+    <!-- <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <delete-tax-confirmation-model
@@ -278,6 +412,6 @@
                 </delete-tax-confirmation-model>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- endregion -->
 </ng-container>

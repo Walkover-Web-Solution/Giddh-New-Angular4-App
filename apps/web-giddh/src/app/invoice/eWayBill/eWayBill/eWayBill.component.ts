@@ -37,6 +37,8 @@ import { MatDialog } from '@angular/material/dialog';
 export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
     @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
+    @ViewChild("addVehicle") vehicleDialog: TemplateRef<any>;
+    @ViewChild("cancellation") cancelDialog: TemplateRef<any>;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
@@ -451,16 +453,22 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
     }
 
-    public openModal(ewayItem: any, template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
-        this.selectedEwayItem = ewayItem;
+    // public openModal(ewayItem: any, template: TemplateRef<any>) {
+    //     this.modalRef = this.modalService.show(template);
+    //     this.selectedEwayItem = ewayItem;
+    // }
+
+    public openModal(): void {
+        this.dialog.open(this.vehicleDialog, {
+            width: '630px'
+        });
     }
 
-    // public openModal(): void{
-    //     this.dialog.open({
-
-    //     })
-    // }
+    public cancelOpenModal(): void {
+        this.dialog.open(this.cancelDialog, {
+            width: '630px'
+        })
+    }
 
     public openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
