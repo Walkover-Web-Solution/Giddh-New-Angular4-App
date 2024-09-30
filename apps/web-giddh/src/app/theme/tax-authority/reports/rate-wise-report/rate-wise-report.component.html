@@ -16,15 +16,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="w-100">
-                        <vat-report-filters 
-                            [localeData]="localeData" 
+                        <vat-report-filters
+                            [localeData]="localeData"
                             [commonLocaleData]="commonLocaleData"
                             [activeCompany]="activeCompany"
-                            [isUSCompany]="true" 
+                            [isUSCompany]="true"
                             [localeData]="localeData"
-                            [salesTaxReportType]="'tax'" 
+                            [salesTaxReportType]="'tax'"
                             [currentTaxAuthorityUniqueName]="getFormControl('taxAuthorityUniqueName')?.value"
-                            (getReport)="getSalesTaxReport()" 
+                            (getReport)="getSalesTaxReport()"
                             (exportReport)="exportTaxAuthority()"
                             (isTaxApiInProgress)="isTaxApiInProgress = $event"
                             (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
@@ -43,7 +43,7 @@
                         <giddh-page-loader></giddh-page-loader>
                     </div>
                     <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
-                        <div class="white-box w-100" *ngIf="(taxWiseReport$ | async)?.responses?.length">
+                        <div class="white-box w-100" *ngIf="(taxWiseReport$ | async)?.responses?.length; else noData ">
                             <!-- Tax Authority Table  -->
                             <div class="table-responsive">
                                 <table mat-table [dataSource]="(taxWiseReport$ | async)?.responses"
@@ -62,7 +62,7 @@
                                             {{ commonLocaleData?.app_total }}
                                         </td>
                                     </ng-container>
-        
+
                                      <!-- Total Sales -->
                                      <ng-container matColumnDef="total_sales">
                                         <th mat-header-cell *matHeaderCellDef>
@@ -73,7 +73,7 @@
                                         </td>
                                         <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef></td>
                                     </ng-container>
-        
+
                                     <!-- Taxable Amount -->
                                     <ng-container matColumnDef="taxable_amount">
                                         <th mat-header-cell *matHeaderCellDef>
@@ -84,7 +84,7 @@
                                         </td>
                                         <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef></td>
                                     </ng-container>
-        
+
                                      <!-- Tax Percentage -->
                                      <ng-container matColumnDef="tax_percentage">
                                         <th mat-header-cell *matHeaderCellDef>
@@ -95,7 +95,7 @@
                                         </td>
                                         <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef></td>
                                     </ng-container>
-        
+
                                      <!-- Tax Collected -->
                                      <ng-container matColumnDef="tax_collected">
                                         <th mat-header-cell *matHeaderCellDef>
@@ -113,20 +113,20 @@
                                             ></amount-field>
                                         </td>
                                     </ng-container>
-        
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
                                 </table>
                             </div>
                         </div>
-
                         <!-- No Data Found Message -->
-                        <div class="no-data" *ngIf="(taxWiseReport$ | async)?.responses?.length === 0 && !(isLoading$ | async) && !isTaxApiInProgress">
-                            <h1 *ngIf="!getFormControl('taxNumber')?.value">{{ localeData?.no_sales_tax_available }}</h1>
-                            <h1 *ngIf="getFormControl('taxNumber')?.value">{{ commonLocaleData?.app_no_result_found }}</h1>
-                        </div>
-
+                        <ng-template #noData>
+                            <div class="no-data">
+                                <h1 *ngIf="!getFormControl('taxNumber')?.value">{{ localeData?.no_sales_tax_available }}</h1>
+                                <h1 *ngIf="getFormControl('taxNumber')?.value">{{ commonLocaleData?.app_no_result_found }}</h1>
+                            </div>
+                        </ng-template>
                         <!-- Pagination  -->
                         <div class="pagination-wrapper justify-content-end" *ngIf="pagination?.totalPages > 1">
                             <mat-paginator
