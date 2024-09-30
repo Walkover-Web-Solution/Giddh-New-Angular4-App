@@ -59,6 +59,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public showExchangeRateEditField: boolean = false;
     /** Holds true action voucher api call in progress */
     public saveInProgress: boolean = false;
+    public showPaymentModeDropdownError: boolean = false;
+
     constructor(
         private componentStore: VoucherComponentStore,
         private settingsTagService: SettingsTagService,
@@ -151,13 +153,10 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @return {*}  {boolean}
      * @memberof PaymentDialogComponent
      */
-    public getEmptyDepositAccountError(index: number): boolean {
+    public getEmptyDepositAccountError(index: number): void {
         let deposits = this.paymentForm?.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
-        if (currentDepositFormGroup?.get("amount").value && (!currentDepositFormGroup?.get("accountUniqueName").value)) {
-            return true;
-        }
-        return false;
+        this.showPaymentModeDropdownError = currentDepositFormGroup?.get("amount").value && (!currentDepositFormGroup?.get("accountUniqueName").value);
     }
     /**
      * Add new deposit row
