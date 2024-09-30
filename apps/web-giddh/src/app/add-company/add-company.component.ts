@@ -1161,9 +1161,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this.generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this.generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this.generalService.getUtmParameter('utm_content');
-        if (this.secondStepForm.value.businessNature === "Other") {
-            this.socketCompanyRequest.BusinessNature = this.secondStepForm.value.otherBusinessNature;
-        }
+        this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
         this.generalService.removeUtmParameters();
     }
@@ -1252,9 +1250,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             delete this.company.permission;
             delete this.company.creatorSuperAdmin;
         }
-        if (this.secondStepForm.value.businessNature === "Other") {
-            this.company.otherBusinessNature = this.secondStepForm.value.otherBusinessNature;
-        }
+        this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
