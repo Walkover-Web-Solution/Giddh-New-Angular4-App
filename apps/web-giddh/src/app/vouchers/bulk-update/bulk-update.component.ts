@@ -50,7 +50,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     /** Template Signatures Options */
     public templateSignaturesOptions: any[] = [];
     /** Holds Days Reference */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** True if voucher type is Purchase order */
     public isPOVoucher: boolean = false;
     /** This holds the fields which can be updated in bulk */

@@ -3,7 +3,7 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GeneralService } from '../../services/general.service';
-import { PAGE_SIZE_OPTIONS } from '../utility/vouchers.const';
+import { PAGE_SIZE_OPTIONS, VoucherTypeEnum } from '../utility/vouchers.const';
 
 @Component({
   selector: 'app-history-dialog',
@@ -54,7 +54,7 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
               result.versionTime = new Date(result.versionTime);
               if (result.changes && result.changes.length > 0) {
                 result.changes.forEach(change => {
-                  change.message = this.getVersionMessage("po", change);
+                  change.message = this.getVersionMessage(this.inputData.model?.voucherType === VoucherTypeEnum.purchaseOrder, change);
                 });
               }
             });
@@ -111,12 +111,12 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
    * @returns {string}
    * @memberof HistoryDialogComponent
    */
-  public getVersionMessage(type: string, change: any): string {
+  public getVersionMessage(isPurchaseOrder: boolean, change: any): string {
     let message = "";
     let revisionField = this.generalService.getRevisionField(change.type);
 
     if (change.optType === "CREATE") {
-      if (type === "po") {
+      if (isPurchaseOrder) {
         let poCreated = this.inputData?.localeData?.po_created;
         poCreated = poCreated?.replace("[VALUE]", change.newValue);
         message += poCreated;

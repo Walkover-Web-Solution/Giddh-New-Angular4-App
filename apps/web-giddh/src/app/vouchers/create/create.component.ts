@@ -86,11 +86,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /* Selector for adjustment modal */
     @ViewChild('adjustmentModal', { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds current voucher type */
     public voucherType: string = VoucherTypeEnum.sales.toString();
     /** Hold url Voucher Type */
-    public urlVoucherType: any = '';
+    public urlVoucherType: string = '';
     /** Holds images folder path */
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */

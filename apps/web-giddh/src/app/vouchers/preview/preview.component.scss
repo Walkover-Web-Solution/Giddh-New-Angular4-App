@@ -47,6 +47,10 @@
                         min-width: 36px;
                         width: 36px;
                         height: 36px;
+
+                        .mdc-button__label {
+                            line-height: 14px;
+                        }
                     }
                 }
             }

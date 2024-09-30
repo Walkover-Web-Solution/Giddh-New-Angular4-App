@@ -170,9 +170,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold invoice  type */
     public voucherType: any = '';
     /** Hold url Voucher Type */
-    public urlVoucherType: any = '';
+    public urlVoucherType: string = '';
     /** Hold day js reference */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
     public selectedDateRange: any;

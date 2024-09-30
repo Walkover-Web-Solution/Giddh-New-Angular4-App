@@ -31,7 +31,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold dayjs reference */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds company specific data */
     public company: any = {
         baseCurrency: '',
@@ -48,7 +48,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /** Holds Amount Currency*/
     public amountCurrency: string = "";
     /** Holds true if Multicurrency Account*/
-    public isMulticurrencyAccount = false;
+    public isMulticurrencyAccount: boolean = false;
     /** Selected payment mode */
     public selectedPaymentMode: any;
     /** Holds true if Bank Selected */
@@ -59,6 +59,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public showExchangeRateEditField: boolean = false;
     /** Holds true action voucher api call in progress */
     public saveInProgress: boolean = false;
+    /** Holds true when payment mode is not selected and amount is present */
     public showPaymentModeDropdownError: boolean = false;
 
     constructor(

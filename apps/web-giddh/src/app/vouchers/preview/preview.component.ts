@@ -61,7 +61,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Hold day js reference */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds advance Filters keys */
     public advanceFilters: any = {
         page: 1,
@@ -79,7 +79,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Hold invoice  type */
     public voucherType: any = '';
     /** Hold url Voucher Type */
-    public urlVoucherType: any = '';
+    public urlVoucherType: string = '';
     /** Holds Total Results Count */
     public totalPages: number = 0;
     /** Holds params value */
