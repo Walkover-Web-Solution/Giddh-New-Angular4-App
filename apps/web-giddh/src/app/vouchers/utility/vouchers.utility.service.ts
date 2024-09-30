@@ -310,7 +310,7 @@ export class VouchersUtilityService {
 
     public cleanVoucherObject(invoiceForm: any): any {
 
-        invoiceForm.deposits.forEach((response) => {
+        invoiceForm?.deposits?.forEach((response) => {
             delete response.currencySymbol;
             delete response.type;
         });
