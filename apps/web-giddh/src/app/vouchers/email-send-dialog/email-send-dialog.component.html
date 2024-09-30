@@ -18,7 +18,7 @@
                 <div class="w-100 option-value-field" formGroupName="email">
                     <text-field [name]="'email'" [placeholder]="localeData?.enter_email_addresses" [cssClass]="'w-100'" formControlName="to" [type]="'text'"></text-field>
                 </div>
-                <div class="my-3" *ngIf="!invoiceType?.isEstimateInvoice && !invoiceType?.isProformaInvoice && !invoiceType?.isDebitNote && !invoiceType?.isCreditNote && !invoiceType?.isReceiptInvoice && !invoiceType?.isPaymentInvoice && !invoiceType.isPurchaseOrder && !invoiceType.isPurchaseInvoice">
+                <div class="my-3" *ngIf="invoiceType.isSalesInvoice">
                     <h3 class="mr-b05">{{ localeData?.invoice_copy }}</h3>
                     <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Original')"
                         formControlName="copyTypeOriginal">

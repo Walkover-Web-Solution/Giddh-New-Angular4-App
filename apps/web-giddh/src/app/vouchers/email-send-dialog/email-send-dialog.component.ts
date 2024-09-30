@@ -113,10 +113,10 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
             return;
         }
         const emailsArray = this.sendEmailForm.get('email.to').value?.split(',').map(email => email.trim());
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.purchase].includes(this.selectedItem?.type ?? this.voucherType)) {
-            this.successEvent.emit(emailsArray);
-        } else {
+        if (this.invoiceType.isSalesInvoice) {
             this.successEvent.emit({ email: emailsArray, invoiceType: this.copyTypes.value, uniqueName: this.selectedItem?.uniqueName });
+        } else {
+            this.successEvent.emit(emailsArray);
         }
     }
 
