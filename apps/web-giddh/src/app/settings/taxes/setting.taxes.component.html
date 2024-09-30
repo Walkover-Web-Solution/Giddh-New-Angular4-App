@@ -33,327 +33,328 @@
             </div>
         </div>
 
-        <div class="col-sm-12 pd-t15 tax-table-wrapper">
-            <div class="row">
-                {{availableTaxes?.length}}
-                <div class="table-responsive">
-                    <table mat-table [dataSource]="dataSource" *ngIf="availableTaxes?.length">
-                        <!-- Index Column -->
-                        <ng-container matColumnDef="index">
-                            <th mat-header-cell *matHeaderCellDef>#</th>
-                            <td mat-cell *matCellDef="let element; let i = index">
-                                {{ i + 1 }}
+        <div class="pd-t15 tax-table-wrapper">
+            <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource" *ngIf="availableTaxes?.length">
+                    <!-- Index Column -->
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef>#</th>
+                        <td mat-cell *matCellDef="let element; let i = index">
+                            {{ i + 1 }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Tax Number Column -->
+                    <ng-container matColumnDef="taxNumber">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.taxNumber }}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                    </ng-container>
+
+                    <!-- Tax Authority Column -->
+                    <!-- <ng-container matColumnDef="taxAuthority" *ngIf="availableTaxes[0]?.taxAuthority">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
+                        <td mat-cell *matCellDef="let acc of element.accounts">{{ acc.name }}</td>
+                    </ng-container> -->
+
+                    <!-- Linked Account Column -->
+                    <!-- <ng-container matColumnDef="linkedAccount">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
+                        <td mat-cell *matCellDef="let element">
+                        <p *ngFor="let acc of element.accounts">{{ acc.name }}</p>
+                        </td>
+                    </ng-container> -->
+
+                    <!-- Applied From Column -->
+                    <ng-container matColumnDef="appliedFrom">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.applied_from }}</th>
+                        <td mat-cell *matCellDef="let element">
+                        <div *ngFor="let t of element.taxDetail">{{ dayjs(t.date).format(giddhDateFormat) }}</div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Tax Percentage Column -->
+                    <ng-container matColumnDef="taxPercentage">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax_percentage }}</th>
+                        <td mat-cell *matCellDef="let element">
+                        <div *ngFor="let t of element.taxDetail">{{ t.taxValue }}</div>
+                        </td>
+                    </ng-container>
+
+                    <!-- File Date Column -->
+                    <ng-container matColumnDef="fileDate">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.file_date }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.taxFileDate }}</td>
+                    </ng-container>
+
+                    <!-- Duration Column -->
+                    <ng-container matColumnDef="duration">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.duration }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.duration }}</td>
+                    </ng-container>
+
+                    <!-- Tax Type Column -->
+                    <ng-container matColumnDef="taxType">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_type }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.taxType || commonLocaleData?.app_tax_types?.others }}</td>
+                    </ng-container>
+
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="d-flex column-gap1">
+                                <button 
+                                    mat-stroked-button 
+                                    color="primary"
+                                    (click)="selectedTax = element; toggleTaxAsidePane()">
+                                    <i
+                                        class="icon-edit-pencil"
+                                        aria-hidden="true"
+                                        [matTooltip]="commonLocaleData?.app_edit"
+                                        [matTooltipPosition]="'above'"
+                                    ></i>
+                                </button>
+                                <button 
+                                    mat-stroked-button 
+                                    (click)="deleteTax(element)">
+                                    <i
+                                        class="fa fa-trash"
+                                        aria-hidden="true"
+                                        [matTooltip]="commonLocaleData?.app_delete"
+                                        [matTooltipPosition]="'above'"
+                                    ></i>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+
+                <!-- <table class="table table-bordered basic mr-b05 on-mobile-view">
+                    <thead [hidden]="!availableTaxes?.length">
+                        <tr>
+                            <th>#</th>
+                            <th>{{ localeData?.tax }}</th>
+                            <th>{{ commonLocaleData?.app_name }}</th>
+                            <th *ngIf="availableTaxes?.length && availableTaxes[0]?.taxAuthority">{{ commonLocaleData?.app_tax_authority }}</th>
+                            <th>{{ localeData?.linked_account }}</th>
+                            <th>{{ localeData?.applied_from }}</th>
+                            <th>{{ localeData?.tax_percentage }}</th>
+                            <th>{{ localeData?.file_date }}</th>
+                            <th>{{ localeData?.duration }}</th>
+                            <th>{{ commonLocaleData?.app_type }}</th>
+                            <th class="text-center">{{ commonLocaleData?.app_action }}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="!isLoading && availableTaxes?.length">
+                        <tr *ngFor="let tax of availableTaxes; let i = index">
+                            <td data-title="#">{{ i + 1 }}</td>
+                            <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
+                            <td *ngIf="taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
+                            <td *ngIf="!taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">
+                                {{ tax.name }}
                             </td>
-                        </ng-container>
-
-                        <!-- Tax Number Column -->
-                        <ng-container matColumnDef="taxNumber">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.taxNumber }}</td>
-                        </ng-container>
-
-                        <!-- Name Column -->
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-                        </ng-container>
-
-                        <!-- Tax Authority Column -->
-                        <!-- <ng-container matColumnDef="taxAuthority" *ngIf="availableTaxes[0]?.taxAuthority">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
-                            <td mat-cell *matCellDef="let acc of element.accounts">{{ acc.name }}</td>
-                        </ng-container> -->
-
-                        <!-- Linked Account Column -->
-                        <!-- <ng-container matColumnDef="linkedAccount">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
-                            <td mat-cell *matCellDef="let element">
-                            <p *ngFor="let acc of element.accounts">{{ acc.name }}</p>
+                            <td *ngIf="taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">
+                                {{ tax.name }}
                             </td>
-                        </ng-container> -->
-
-                        <!-- Applied From Column -->
-                        <ng-container matColumnDef="appliedFrom">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.applied_from }}</th>
-                            <td mat-cell *matCellDef="let element">
-                            <div *ngFor="let t of element.taxDetail">{{ dayjs(t.date).format(giddhDateFormat) }}</div>
+                            <td *ngIf="tax?.taxAuthority">
+                                {{ tax?.taxAuthority?.name }}
                             </td>
-                        </ng-container>
-
-                        <!-- Tax Percentage Column -->
-                        <ng-container matColumnDef="taxPercentage">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax_percentage }}</th>
-                            <td mat-cell *matCellDef="let element">
-                            <div *ngFor="let t of element.taxDetail">{{ t.taxValue }}</div>
+                            <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
+                            <td
+                                *ngIf="tax.accounts[0] && !taxToEdit[i]"
+                                [attr.data-title]="localeData?.linked_account"
+                            >
+                                <p *ngFor="let acc of tax.accounts">
+                                    {{ acc.name }}
+                                </p>
                             </td>
-                        </ng-container>
 
-                        <!-- File Date Column -->
-                        <ng-container matColumnDef="fileDate">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.file_date }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.taxFileDate }}</td>
-                        </ng-container>
-
-                        <!-- Duration Column -->
-                        <ng-container matColumnDef="duration">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.duration }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.duration }}</td>
-                        </ng-container>
-
-                        <!-- Tax Type Column -->
-                        <ng-container matColumnDef="taxType">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_type }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.taxType || commonLocaleData?.app_tax_types?.others }}</td>
-                        </ng-container>
-
-                        <!-- Action Column -->
-                        <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
-                            <td mat-cell *matCellDef="let element">
-                            <button 
-                                mat-stroked-button 
-                                color="primary"
-                                (click)="selectedTax = element; toggleTaxAsidePane()">
-                                <i
-                                    class="icon-edit-pencil"
-                                    aria-hidden="true"
-                                    [matTooltip]="commonLocaleData?.app_edit"
-                                ></i>
-                            </button>
-                            <button 
-                                mat-stroked-button 
-                                (click)="deleteTax(element)">
-                                <i
-                                    class="fa fa-trash"
-                                    aria-hidden="true"
-                                    [matTooltip]="commonLocaleData?.app_delete"
-                                ></i>
-                            </button>
+                            <td
+                                *ngIf="tax.accounts[0] && taxToEdit[i]"
+                                [attr.data-title]="localeData?.linked_account"
+                            >
+                                <p *ngFor="let acc of availableTaxes[i].accounts; let ind = index">
+                                    <input
+                                        [disabled]="true"
+                                        class="form-control"
+                                        type="text"
+                                        [(ngModel)]="acc.name"
+                                        name="acc_0_name{{ i }}_{{ ind }}"
+                                    />
+                                </p>
                             </td>
-                        </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
+                            <td *ngIf="!tax?.taxDetail?.length">--</td>
+                            <td
+                                *ngIf="tax?.taxDetail?.length && !taxToEdit[i]"
+                                [attr.data-title]="localeData?.applied_from"
+                            >
+                                <div *ngFor="let t of tax.taxDetail">
+                                    {{ dayjs(t.date).format(giddhDateFormat) }}
+                                </div>
+                            </td>
 
-
-                    <!-- <table class="table table-bordered basic mr-b05 on-mobile-view">
-                        <thead [hidden]="!availableTaxes?.length">
-                            <tr>
-                                <th>#</th>
-                                <th>{{ localeData?.tax }}</th>
-                                <th>{{ commonLocaleData?.app_name }}</th>
-                                <th *ngIf="availableTaxes?.length && availableTaxes[0]?.taxAuthority">{{ commonLocaleData?.app_tax_authority }}</th>
-                                <th>{{ localeData?.linked_account }}</th>
-                                <th>{{ localeData?.applied_from }}</th>
-                                <th>{{ localeData?.tax_percentage }}</th>
-                                <th>{{ localeData?.file_date }}</th>
-                                <th>{{ localeData?.duration }}</th>
-                                <th>{{ commonLocaleData?.app_type }}</th>
-                                <th class="text-center">{{ commonLocaleData?.app_action }}</th>
-                            </tr>
-                        </thead>
-
-                        <tbody *ngIf="!isLoading && availableTaxes?.length">
-                            <tr *ngFor="let tax of availableTaxes; let i = index">
-                                <td data-title="#">{{ i + 1 }}</td>
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
-                                <td *ngIf="taxToEdit[i]" [attr.data-title]="localeData?.tax">{{ tax.taxNumber }}</td>
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">
-                                    {{ tax.name }}
-                                </td>
-                                <td *ngIf="taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">
-                                    {{ tax.name }}
-                                </td>
-                                <td *ngIf="tax?.taxAuthority">
-                                    {{ tax?.taxAuthority?.name }}
-                                </td>
-                                <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
-                                <td
-                                    *ngIf="tax.accounts[0] && !taxToEdit[i]"
-                                    [attr.data-title]="localeData?.linked_account"
-                                >
-                                    <p *ngFor="let acc of tax.accounts">
-                                        {{ acc.name }}
-                                    </p>
-                                </td>
-
-                                <td
-                                    *ngIf="tax.accounts[0] && taxToEdit[i]"
-                                    [attr.data-title]="localeData?.linked_account"
-                                >
-                                    <p *ngFor="let acc of availableTaxes[i].accounts; let ind = index">
+                            <td
+                                *ngIf="tax?.taxDetail?.length && taxToEdit[i]"
+                                [attr.data-title]="localeData?.applied_from"
+                            >
+                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
+                                    <div class="input-group">
                                         <input
-                                            [disabled]="true"
-                                            class="form-control"
                                             type="text"
-                                            [(ngModel)]="acc.name"
-                                            name="acc_0_name{{ i }}_{{ ind }}"
+                                            [ngModel]="dayjs(t.date).format(giddhDateFormat)"
+                                            name="tax_date_{{ i }}_{{ j }}"
+                                            (focus)="showDatePickerInTable = true"
+                                            class="form-control"
+                                            required
                                         />
-                                    </p>
-                                </td>
-
-                                <td *ngIf="!tax?.taxDetail?.length">--</td>
-                                <td
-                                    *ngIf="tax?.taxDetail?.length && !taxToEdit[i]"
-                                    [attr.data-title]="localeData?.applied_from"
-                                >
-                                    <div *ngFor="let t of tax.taxDetail">
-                                        {{ dayjs(t.date).format(giddhDateFormat) }}
+                                        <span class="input-group-btn">
+                                            <button
+                                                type="button"
+                                                class="btn btn-default"
+                                                (click)="showDatePickerInTable = !showDatePickerInTable"
+                                            >
+                                                <i class="icon-calender"></i>
+                                            </button>
+                                        </span>
                                     </div>
-                                </td>
 
-                                <td
-                                    *ngIf="tax?.taxDetail?.length && taxToEdit[i]"
-                                    [attr.data-title]="localeData?.applied_from"
-                                >
-                                    <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
-                                        <div class="input-group">
-                                            <input
-                                                type="text"
-                                                [ngModel]="dayjs(t.date).format(giddhDateFormat)"
-                                                name="tax_date_{{ i }}_{{ j }}"
-                                                (focus)="showDatePickerInTable = true"
-                                                class="form-control"
-                                                required
-                                            />
-                                            <span class="input-group-btn">
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-default"
-                                                    (click)="showDatePickerInTable = !showDatePickerInTable"
-                                                >
-                                                    <i class="icon-calender"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-
-                                        <div *ngIf="showDatePickerInTable && taxToEdit[i]" class="tax-datepicker">
-                                            <datepicker
-                                                name="tableDate{{ i }}_{{ j }}"
-                                                [(ngModel)]="t.date"
-                                                (selectionDone)="showDatePickerInTable = !showDatePickerInTable"
-                                                [showWeeks]="false"
-                                            ></datepicker>
-                                        </div>
+                                    <div *ngIf="showDatePickerInTable && taxToEdit[i]" class="tax-datepicker">
+                                        <datepicker
+                                            name="tableDate{{ i }}_{{ j }}"
+                                            [(ngModel)]="t.date"
+                                            (selectionDone)="showDatePickerInTable = !showDatePickerInTable"
+                                            [showWeeks]="false"
+                                        ></datepicker>
                                     </div>
-                                </td>
+                                </div>
+                            </td>
 
-                                <td *ngIf="!tax?.taxDetail?.length">--</td>
+                            <td *ngIf="!tax?.taxDetail?.length">--</td>
 
-                                <td
-                                    *ngIf="tax?.taxDetail?.length && !taxToEdit[i]"
-                                    [attr.data-title]="localeData?.tax_percentage"
+                            <td
+                                *ngIf="tax?.taxDetail?.length && !taxToEdit[i]"
+                                [attr.data-title]="localeData?.tax_percentage"
+                            >
+                                <div *ngFor="let t of tax.taxDetail">
+                                    {{ t.taxValue }}
+                                </div>
+                            </td>
+
+                            <td *ngIf="tax?.taxDetail?.length && taxToEdit[i]">
+                                <div
+                                    class="input-group mr-b1"
+                                    *ngFor="let t of tax.taxDetail; let j = index; let last = last"
                                 >
-                                    <div *ngFor="let t of tax.taxDetail">
-                                        {{ t.taxValue }}
-                                    </div>
-                                </td>
-
-                                <td *ngIf="tax?.taxDetail?.length && taxToEdit[i]">
-                                    <div
-                                        class="input-group mr-b1"
-                                        *ngFor="let t of tax.taxDetail; let j = index; let last = last"
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        [(ngModel)]="t.taxValue"
+                                        name="tax_taxValue_{{ i }}_{{ j }}"
+                                    />
+                                    <span
+                                        *ngIf="!last"
+                                        (click)="removeDateAndPercentage(i, j)"
+                                        class="input-group-addon cursor-pointer"
                                     >
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            [(ngModel)]="t.taxValue"
-                                            name="tax_taxValue_{{ i }}_{{ j }}"
-                                        />
-                                        <span
-                                            *ngIf="!last"
-                                            (click)="removeDateAndPercentage(i, j)"
-                                            class="input-group-addon cursor-pointer"
-                                        >
-                                            <i class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
-                                        </span>
-                                        <span
-                                            *ngIf="last"
-                                            (click)="addMoreDateAndPercentage(i)"
-                                            class="input-group-addon cursor-pointer"
-                                        >
-                                            <i class="icon-plus cursor-pointer" aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                </td>
+                                        <i class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
+                                    </span>
+                                    <span
+                                        *ngIf="last"
+                                        (click)="addMoreDateAndPercentage(i)"
+                                        class="input-group-addon cursor-pointer"
+                                    >
+                                        <i class="icon-plus cursor-pointer" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </td>
 
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.file_date">
-                                    {{ tax.taxFileDate }}
-                                </td>
+                            <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.file_date">
+                                {{ tax.taxFileDate }}
+                            </td>
 
-                                <td *ngIf="taxToEdit[i]">
-                                    <div class="custom-select position-relative">
-                                        <sh-select
-                                            [options]="days"
-                                            [isFilterEnabled]="false"
-                                            [(ngModel)]="availableTaxes[i].taxFileDate"
-                                            name="tfd{{ i }}"
-                                            [placeholder]="commonLocaleData?.app_select"
-                                            [ItemHeight]="33"
-                                        ></sh-select>
-                                    </div>
-                                </td>
+                            <td *ngIf="taxToEdit[i]">
+                                <div class="custom-select position-relative">
+                                    <sh-select
+                                        [options]="days"
+                                        [isFilterEnabled]="false"
+                                        [(ngModel)]="availableTaxes[i].taxFileDate"
+                                        name="tfd{{ i }}"
+                                        [placeholder]="commonLocaleData?.app_select"
+                                        [ItemHeight]="33"
+                                    ></sh-select>
+                                </div>
+                            </td>
 
-                                <td [attr.data-title]="localeData?.duration">
-                                    <div class="custom-select position-relative">
-                                        <sh-select
-                                            [options]="duration"
-                                            [disabled]="true"
-                                            [isFilterEnabled]="false"
-                                            [(ngModel)]="availableTaxes[i].duration"
-                                            name="duration{{ i }}"
-                                            [placeholder]="commonLocaleData?.app_select"
-                                            [ItemHeight]="33"
-                                        ></sh-select>
-                                    </div>
-                                </td>
+                            <td [attr.data-title]="localeData?.duration">
+                                <div class="custom-select position-relative">
+                                    <sh-select
+                                        [options]="duration"
+                                        [disabled]="true"
+                                        [isFilterEnabled]="false"
+                                        [(ngModel)]="availableTaxes[i].duration"
+                                        name="duration{{ i }}"
+                                        [placeholder]="commonLocaleData?.app_select"
+                                        [ItemHeight]="33"
+                                    ></sh-select>
+                                </div>
+                            </td>
 
-                                <td [attr.data-title]="commonLocaleData?.app_type">
-                                    {{ tax.taxType ? tax.taxType : commonLocaleData?.app_tax_types?.others }}
-                                </td>
+                            <td [attr.data-title]="commonLocaleData?.app_type">
+                                {{ tax.taxType ? tax.taxType : commonLocaleData?.app_tax_types?.others }}
+                            </td>
 
-                                <td class="text-center ico-btn" [attr.data-title]="commonLocaleData?.app_action">
-                                    <div class="d-flex">
-                                        <button
-                                            (click)="selectedTax = tax; toggleTaxAsidePane()"
-                                            type="button"
-                                            aria-label="edit-icon"
-                                            class="btn btn-xs"
-                                        >
-                                            <i
-                                                class="icon-edit-pencil"
-                                                aria-hidden="true"
-                                                [tooltip]="commonLocaleData?.app_edit"
-                                            ></i>
-                                        </button>
+                            <td class="text-center ico-btn" [attr.data-title]="commonLocaleData?.app_action">
+                                <div class="d-flex">
+                                    <button
+                                        (click)="selectedTax = tax; toggleTaxAsidePane()"
+                                        type="button"
+                                        aria-label="edit-icon"
+                                        class="btn btn-xs"
+                                    >
+                                        <i
+                                            class="icon-edit-pencil"
+                                            aria-hidden="true"
+                                            [tooltip]="commonLocaleData?.app_edit"
+                                        ></i>
+                                    </button>
 
-                                        <button
-                                            *ngIf="!taxToEdit[i]"
-                                            type="button"
-                                            aria-label="delete-icon"
-                                            class="btn btn-xs"
-                                            (click)="deleteTax(tax)"
-                                        >
-                                            <i
-                                                class="fa fa-trash"
-                                                aria-hidden="true"
-                                                [tooltip]="commonLocaleData?.app_delete"
-                                            ></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody *ngIf="isLoading">
-                            <tr>
-                                <td colspan="10" class="text-center empty-table">
-                                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-                </div>
+                                    <button
+                                        *ngIf="!taxToEdit[i]"
+                                        type="button"
+                                        aria-label="delete-icon"
+                                        class="btn btn-xs"
+                                        (click)="deleteTax(tax)"
+                                    >
+                                        <i
+                                            class="fa fa-trash"
+                                            aria-hidden="true"
+                                            [tooltip]="commonLocaleData?.app_delete"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="10" class="text-center empty-table">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> -->
             </div>
             <div class="no-data" *ngIf="!isLoading && !availableTaxes?.length">
                 <no-data
@@ -386,7 +387,6 @@
             [commonLocaleData]="commonLocaleData"
             (closeEvent)="toggleTaxAsidePane()"
         ></aside-menu-create-tax-component>
-        <!-- <p>djgjkdfgj</p> -->
     </ng-template>
     
     <!-- endregion -->

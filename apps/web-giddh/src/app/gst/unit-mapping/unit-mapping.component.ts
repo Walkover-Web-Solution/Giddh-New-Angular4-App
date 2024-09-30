@@ -34,6 +34,10 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     public stockUnit$: Observable<StockUnitRequest[]>;
     /** Holds unit array list */
     public unitsArray: any[] = [];
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService, private store: Store<AppState>, private toasty: ToasterService, private customStockAction: CustomStockUnitAction, private router: Router, private changeDetection: ChangeDetectorRef) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));

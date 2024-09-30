@@ -1,5 +1,5 @@
-<div class="container-fluid" [ngClass]="{ 'setting-profile-container': !addressOnly }">
-    <div class="row">
+<div class="container-fluid overflow-visible" [ngClass]="{ 'setting-profile-container': !addressOnly }">
+    <div class="row overflow-visible">
         <div
             *ngIf="organizationType === 'COMPANY'"
             class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
@@ -32,8 +32,8 @@
             </button>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100">
-            <div class="table-responsive">
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 overflow-visible">
+            <div class="table-responsive table-header-sticky">
                 <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view">
                     <ng-container matColumnDef="no">
                         <th class="min-wid-check" width="2%" mat-header-cell *matHeaderCellDef>#</th>
@@ -224,7 +224,7 @@
                     </ng-container>
                     </ng-container>
                     
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
                     <ng-container *ngIf="!shouldShowLoader">
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </ng-container>
