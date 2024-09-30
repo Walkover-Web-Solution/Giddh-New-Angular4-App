@@ -118,8 +118,8 @@
         </div>
         <div class="preview-content">
             <section class="preview-header pd-15">
-                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap1">
-                    <div>
+                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap2 flex-row-reverse">
+                    <div class="order-1 mr-auto">
                         <h3 class="font-16 fw-bold">{{ selectedInvoice?.voucherNumber }}</h3>
                         <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
                     </div>
@@ -262,10 +262,10 @@
                                 </button>
                             </ng-container>
                         </mat-menu>
-                        <span *ngIf="selectedInvoice?.action" class="invoice-status border-radius-5 text-capitalize">{{
-                            selectedInvoice.action
-                        }}</span>
-                        <button mat-stroked-button (click)="backToOldLocation()">
+                        <span *ngIf="selectedInvoice?.balanceStatus === 'CANCEL'" class="invoice-status border-radius-5 text-capitalize">
+                            {{ selectedInvoice?.balanceStatus }}
+                        </span>
+                        <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>

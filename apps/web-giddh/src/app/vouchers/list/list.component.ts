@@ -295,6 +295,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         isReceiptInvoice: false,
         isPaymentInvoice: false
     };
+    /** Holds current route query parameters */
+    public queryParams: any = {};
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -321,6 +323,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
+        this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
+            if (params && params.page && params.from && params.to) {
+                this.queryParams = params;
+            }
+        });
     }
 
     /**
@@ -341,6 +348,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
+                if (this.queryParams.page) {
+                    this.advanceFilters.page = this.queryParams.page;
+                    this.advanceFilters.from = this.queryParams.from;
+                    this.advanceFilters.to = this.queryParams.to;
+                }
 
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
 
@@ -349,7 +361,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
 
                 this.getSelectedTabIndex();
-
                 if (this.universalDate) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
@@ -417,6 +428,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                if (this.queryParams.page) {
+                    this.advanceFilters.page = this.queryParams.page;
+                    this.advanceFilters.from = this.queryParams.from;
+                    this.advanceFilters.to = this.queryParams.to;
+                }
                 this.getVouchers(true);
                 this.getVoucherBalances();
             }
@@ -1825,14 +1841,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     uniqueName: this.currentVoucher?.uniqueName,
                     voucherType: this.voucherType
                 };
-                this.componentStore.sendEmail({ request, model: { emailId: [email] } });
+                this.componentStore.sendEmail({ request, model: { emailId: email } });
             } else if (this.voucherType === VoucherTypeEnum.purchase) {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.currentVoucher?.account?.uniqueName,
                     payload: {
                         copyTypes: [],
                         email: {
-                            to: email?.split(',').map(email => email.trim())
+                            to: email
                         },
                         voucherType: this.voucherType,
                         uniqueName: this.currentVoucher?.uniqueName
