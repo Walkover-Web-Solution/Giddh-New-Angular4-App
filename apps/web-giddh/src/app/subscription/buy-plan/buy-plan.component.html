@@ -769,7 +769,7 @@
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="commonCountrySource"
-                                                        (selectedOption)="selectCountry($event); setFinalAmount()"
+                                                        (selectedOption)="selectCountry($event)"
                                                         [defaultValue]="selectedCountry"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('country')?.value
@@ -891,11 +891,6 @@
                                 </div>
                                 <div
                                     class="new-plan mt-4"
-                                    *ngIf="
-                                        (firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                            firstStepForm.get('duration')?.value === 'DAILY') &&
-                                        selectedPlan?.entityCode !== 'GBR'
-                                    "
                                 >
                                     <mat-card class="outline-card">
                                         <mat-card-content>
