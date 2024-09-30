@@ -1898,7 +1898,7 @@
 <ng-template #adjustmentModal>
     <voucher-adjustments [account]="account" [voucherDetails]="invoiceForm?.value" [voucherTotals]="voucherTotals"
         [adjustedVoucherType]="voucherType" [isUpdateMode]="isUpdateMode"
-        [depositAmount]="invoiceForm.get('deposit.amountForAccount')?.value"
+        [depositAmount]="totalDepositAmount"
         [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
         (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)"
         [voucherForAdjustment]="vouchersForAdjustment">

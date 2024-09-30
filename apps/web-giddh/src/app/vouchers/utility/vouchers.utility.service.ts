@@ -309,62 +309,63 @@ export class VouchersUtilityService {
     }
 
     public cleanVoucherObject(invoiceForm: any): any {
-
-        invoiceForm.deposits.forEach((response) => {
-            delete response.currencySymbol;
-            delete response.type;
-        });
-
-        delete invoiceForm.account.billingDetails.index;
-        delete invoiceForm.account.shippingDetails.index;
-        delete invoiceForm.company.billingDetails.index;
-        delete invoiceForm.company.shippingDetails.index;
-        delete invoiceForm.grandTotalMultiCurrency;
-        delete invoiceForm.chequeNumber;
-        delete invoiceForm.chequeClearanceDate;
-        delete invoiceForm.isAdvanceReceipt;
-        delete invoiceForm.salesPurchaseAsReceiptPayment;
-
-        invoiceForm?.entries?.forEach(entry => {
-            delete entry.showCodeType;
-            delete entry.totalDiscount;
-            delete entry.totalTax;
-            delete entry.totalTaxWithoutCess;
-            delete entry.totalCess;
-            delete entry.total;
-            delete entry.requiredTax;
-            delete entry.calculateTotal;
-
-            entry.taxes?.forEach(tax => {
-                delete tax.taxType;
-                delete tax.taxDetail;
+        if (invoiceForm) {
+            invoiceForm.deposits?.forEach((response) => {
+                delete response.currencySymbol;
+                delete response.type;
             });
 
-            if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
-                if (!entry.taxes) {
-                    entry.taxes = [];
+            delete invoiceForm.account.billingDetails.index;
+            delete invoiceForm.account.shippingDetails.index;
+            delete invoiceForm.company.billingDetails.index;
+            delete invoiceForm.company.shippingDetails.index;
+            delete invoiceForm.grandTotalMultiCurrency;
+            delete invoiceForm.chequeNumber;
+            delete invoiceForm.chequeClearanceDate;
+            delete invoiceForm.isAdvanceReceipt;
+            delete invoiceForm.salesPurchaseAsReceiptPayment;
+
+            invoiceForm.entries?.forEach(entry => {
+                delete entry.showCodeType;
+                delete entry.totalDiscount;
+                delete entry.totalTax;
+                delete entry.totalTaxWithoutCess;
+                delete entry.totalCess;
+                delete entry.total;
+                delete entry.requiredTax;
+                delete entry.calculateTotal;
+
+                entry.taxes?.forEach(tax => {
+                    delete tax.taxType;
+                    delete tax.taxDetail;
+                });
+
+                if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
+                    if (!entry.taxes) {
+                        entry.taxes = [];
+                    }
+
+                    entry.taxes.push({
+                        uniqueName: entry.otherTax?.uniqueName,
+                        calculationMethod: entry.otherTax?.calculationMethod
+                    });
                 }
 
-                entry.taxes.push({
-                    uniqueName: entry.otherTax?.uniqueName,
-                    calculationMethod: entry.otherTax?.calculationMethod
-                });
-            }
+                if (!entry.transactions[0]?.stock?.uniqueName) {
+                    delete entry.transactions[0].stock;
+                }
 
-            if (!entry.transactions[0]?.stock?.uniqueName) {
-                delete entry.transactions[0].stock;
-            }
+                if (entry.transactions[0].stock) {
+                    delete entry.transactions[0].stock.maxQuantity;
+                }
 
-            if (entry.transactions[0].stock) {
-                delete entry.transactions[0].stock.maxQuantity;
-            }
+                delete entry.otherTax;
+            });
 
-            delete entry.otherTax;
-        });
+            invoiceForm = this.cleanObject(invoiceForm);
 
-        invoiceForm = this.cleanObject(invoiceForm);
-
-        return invoiceForm;
+            return invoiceForm;
+        }
     }
 
     /**
