@@ -635,11 +635,14 @@ export class SubscriptionsService {
     * @memberof SubscriptionsService
     */
     public paypalCaptureOrder(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.PAYPAL_CAPTURE_PLAN, model)
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.PAYPAL_CAPTURE_PLAN
+            ?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionId))
+            ?.replace(':orderId', encodeURIComponent(model?.orderId))
+            , '')
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
-                    data.request = model;
+                    data.request = '';
                     data.queryString = {};
                     return data;
                 }),

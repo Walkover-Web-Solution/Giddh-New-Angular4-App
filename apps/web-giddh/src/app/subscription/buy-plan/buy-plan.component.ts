@@ -217,7 +217,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
     /** Hold callback event */
-    public callBackEvent: any;
+    public callBackEvent: boolean;
 
     constructor(
         public dialog: MatDialog,
@@ -295,21 +295,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
-            this.callBackEvent = event?.data?.success;
             if (event?.data?.success) {
                 let model = {
-                    orderID: this.paypalCaptureOrderId,
+                    orderId: this.paypalCaptureOrderId,
                     subscriptionId: this.subscriptionId
                 }
                 this.componentStore.paypalCaptureOrderId(model);
-            } else {
-                this.router.navigate(['/pages/user-details/subscription']);
             }
         };
 
         this.paypalCaptureOrderIdSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                this.callBackEvent = true;
             }
         });
 

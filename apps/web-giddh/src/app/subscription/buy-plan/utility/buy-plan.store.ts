@@ -551,7 +551,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ paypalCaptureOrderIdSuccess: false });
-                return this.subscriptionService.getPlanAmountCalculation(req).pipe(
+                return this.subscriptionService.paypalCaptureOrder(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {

@@ -12,7 +12,7 @@ export class CallBackPageComponent implements OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold broadcast event */
     public broadcast: any;
-    constructor(private router: Router, private route: ActivatedRoute,) {
+    constructor() {
         this.closePopup();
     }
 
@@ -22,16 +22,8 @@ export class CallBackPageComponent implements OnDestroy {
    * @memberof CallBackPageComponent
    */
     public closePopup(): void {
-        if (this.router.url === '/pages/user-details/subscription/call-back') {
-            this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
-                if (queryParams.success) {
-                    this.setBroadcastEvent(true);
-                } else {
-                    this.setBroadcastEvent(false);
-                }
-                window.close();
-            });
-        }
+        this.setBroadcastEvent(true);
+        window.close();
     }
 
     /**
