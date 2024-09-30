@@ -177,6 +177,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (changes?.labelValue) {
             this.labelValue = changes.labelValue.currentValue;
         }
+
+        if(changes?.showError?.currentValue) {
+            this.showError = false;
+            setTimeout(() => {
+                this.showError = true;
+            }, 50);
+        }
     }
 
     /**
