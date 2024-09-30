@@ -86,6 +86,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         pincode: '',
         businessNature: '',
         businessType: '',
+        otherBusinessNature: '',
         address: '',
         industry: '',
         baseCurrency: '',
@@ -128,7 +129,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold business type list */
     public businessTypeList: IOption[] = [];
     /** Hold business nature list */
-    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }];
+    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }, { label: "Other", value: "Other" }];
     /** Stores the item on boarding store data */
     public itemOnBoardingDetails: ItemOnBoardingState;
     /** Hold state gst code list */
@@ -609,6 +610,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             businessType: [''],
             businessNature: [''],
             gstin: [''],
+            otherBusinessNature: [''],
             state: [''],
             county: [''],
             taxes: null,
