@@ -33,11 +33,13 @@
             <div class="d-flex column-gap1 mr-b15" [formGroupName]="depositIndex">
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_payment_mode"
+                    [labelValue]="(briefAccounts$ | async)?.length === 1 ? (briefAccounts$ | async)[0].label : ''"
+                    [showError]="showPaymentModeDropdownError"
                     [placeholder]="commonLocaleData?.app_select_account"
                     class="w-50"
                     [options]="briefAccounts$ | async"
                     formControlName="accountUniqueName"
-                    (selectedOption)="onSelectPaymentMode($event, depositIndex)"
+                    (selectedOption)="onSelectPaymentMode($event, depositIndex); getEmptyDepositAccountError(depositIndex)"
                 >
                 </reactive-dropdown-field>
                 <div class="d-flex align-items-center w-50">
@@ -50,6 +52,7 @@
                         class="w-100"
                         [mask]="company?.inputMaskFormat"
                         [useMask]="true"
+                        (change)="getEmptyDepositAccountError(depositIndex)"
                         [prefix]="amountCurrency"
                         formControlName="amount"
                     >
@@ -139,7 +142,7 @@
         ></textarea>
     </mat-form-field>
     <div class="d-flex column-gap1 justify-content-end">
-        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress || !paymentForm.get('deposits')?.value?.[0]?.accountUniqueName?.length || paymentForm?.invalid">
+        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress || !paymentForm.get('deposits')?.value?.[0]?.accountUniqueName?.length || !paymentForm.get('date')?.value">
             {{ commonLocaleData?.app_save }}
         </button>
         <button mat-stroked-button mat-dialog-close (click)="closeModelEvent.emit()">
