@@ -1311,9 +1311,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value === provider);
             this.thirdStepForm.get('paymentProvider')?.patchValue(provider);
         };
-
-        if (entityCode === 'GBR') {
-            if (duration === 'MONTHLY') {
+        if (entityCode !== 'GBR' && duration === 'DAILY') {
+            // Exclude Razorpay for monthly GBR
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
+        } else if (entityCode === 'GBR') {
+            if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Exclude Razorpay for monthly GBR
                 this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
             } else if (duration === 'YEARLY') {
@@ -1333,7 +1335,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             filterProviders('RAZORPAY');
         }
 
-        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && duration === 'MONTHLY') {
+        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && (duration === 'MONTHLY' || duration === 'DAILY')) {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
         } else {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);

@@ -891,6 +891,7 @@
                                 <div
                                     class="new-plan mt-4"
                                     *ngIf="
+                                        firstStepForm.get('duration')?.value === 'DAILY' ||
                                         filteredPaymentProviders?.length > 1 ||
                                         (firstStepForm.get('duration')?.value === 'MONTHLY' &&
                                             selectedPlan?.entityCode === 'IND')
@@ -906,10 +907,10 @@
                                                     [options]="filteredPaymentProviders"
                                                     formControlName="paymentProvider"
                                                     (onClear)="thirdStepForm.get('paymentProvider')?.patchValue(null)"
-                                                     [required]="
+                                                    [required]="
                                                         !thirdStepForm.get('paymentProvider')?.value ? true : false
                                                     "
-                                                       [showError]="
+                                                    [showError]="
                                                         isFormSubmitted && !thirdStepForm.get('paymentProvider')?.value
                                                     "
                                                 >
@@ -917,8 +918,8 @@
                                             </div>
                                             <ng-container
                                                 *ngIf="
-                                                    firstStepForm.get('duration')?.value === 'MONTHLY' &&
-                                                    selectedPlan?.entityCode === 'IND'
+                                                    ((firstStepForm.get('duration')?.value === 'MONTHLY ' ||  firstStepForm.get('duration')?.value === 'DAILY') &&
+                                                        selectedPlan?.entityCode === 'IND')
                                                 "
                                             >
                                                 <mat-radio-group
