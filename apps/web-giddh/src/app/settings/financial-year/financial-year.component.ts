@@ -47,7 +47,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds Table Display Columns */
-    public displayedColumns: string[] = ['number', 'from', 'to'];
+    public displayedColumns: string[] = ['number', 'from', 'to', 'status'];
     /** Holds Table Data to display */
     public dataSource: any[];
 
