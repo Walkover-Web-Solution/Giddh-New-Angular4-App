@@ -86,11 +86,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /* Selector for adjustment modal */
     @ViewChild('adjustmentModal', { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds current voucher type */
     public voucherType: string = VoucherTypeEnum.sales.toString();
     /** Hold url Voucher Type */
-    public urlVoucherType: any = '';
+    public urlVoucherType: string = '';
     /** Holds images folder path */
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */
@@ -553,7 +553,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
-                this.urlVoucherType =  params.voucherType;
+                this.urlVoucherType = params.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 if (this.voucherApiVersion !== 2) {
@@ -3487,10 +3487,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private redirectToInvoicePreview(): void {
-        const queryParams = { 
-            page: this.queryParams?.page ?? 1, 
-            from: this.queryParams?.from ?? '', 
-            to: this.queryParams?.to ?? '' 
+        const queryParams = {
+            page: this.queryParams?.page ?? 1,
+            from: this.queryParams?.from ?? '',
+            to: this.queryParams?.to ?? ''
         };
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
@@ -4115,11 +4115,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * This will be use for send email after create voucher
      *
-     * @param {*} response
+     * @param {*} email
      * @memberof VoucherCreateComponent
      */
-    public sendEmail(response: any): void {
-        if (response) {
+    public sendEmail(email: any): void {
+        if (email) {
             if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
                 let req: ProformaGetRequest = new ProformaGetRequest();
 
@@ -4130,15 +4130,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     req.estimateNumber = this.voucherDetails?.number;
                 }
-                req.emailId = (response.email as string).split(',');
+                req.emailId = email;
                 this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
             } else {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.voucherDetails?.account?.uniqueName, payload: {
-                        email: { to: response.email.split(',') },
+                        email: { to: email.email },
                         voucherType: this.voucherDetails?.type,
-                        copyTypes: response.invoiceType ? response.invoiceType : [],
-                        uniqueName: response.uniqueName
+                        copyTypes: email.invoiceType ? email.invoiceType : [],
+                        uniqueName: email.uniqueName
                     }
                 });
             }

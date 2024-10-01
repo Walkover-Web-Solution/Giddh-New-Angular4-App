@@ -34,25 +34,27 @@
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_payment_mode"
                     [labelValue]="(briefAccounts$ | async)?.length === 1 ? (briefAccounts$ | async)[0].label : ''"
-                    [showError]="showPaymentModeDropdownError"
+                    [required]="depositIndex === 0 ? true : false"
+                    [showError]="showError && getEmptyDepositAccountError(true, depositIndex)"
                     [placeholder]="commonLocaleData?.app_select_account"
                     class="w-50"
                     [options]="briefAccounts$ | async"
                     formControlName="accountUniqueName"
-                    (selectedOption)="onSelectPaymentMode($event, depositIndex); getEmptyDepositAccountError(depositIndex)"
+                    (selectedOption)="onSelectPaymentMode($event, true, depositIndex)"
+                    (onClear)="onSelectPaymentMode($event, false, depositIndex)"
                 >
                 </reactive-dropdown-field>
                 <div class="d-flex align-items-center w-50">
                     <input-field
-                        [id]="'amount_' + depositIndex"
                         [name]="'amount'"
                         [type]="'text'"
                         [label]="commonLocaleData?.app_amount"
+                        [required]="depositIndex === 0 ? true : false"
+                        [showError]="showError && getEmptyDepositAccountError(false, depositIndex)"
                         [placeholder]="localeData?.enter_amount"
                         class="w-100"
                         [mask]="company?.inputMaskFormat"
                         [useMask]="true"
-                        (change)="getEmptyDepositAccountError(depositIndex)"
                         [prefix]="amountCurrency"
                         formControlName="amount"
                     >
@@ -132,7 +134,7 @@
             </div>
         </div>
     </div>
-    <mat-form-field appearance="outline" class="w-100 mr-b15">
+    <mat-form-field appearance="outline" class="w-100 mr-b15 mr-t15">
         <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
         <textarea
             matInput
@@ -142,10 +144,10 @@
         ></textarea>
     </mat-form-field>
     <div class="d-flex column-gap1 justify-content-end">
-        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress || !paymentForm.get('deposits')?.value?.[0]?.accountUniqueName?.length || !paymentForm.get('date')?.value">
+        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress">
             {{ commonLocaleData?.app_save }}
         </button>
-        <button mat-stroked-button mat-dialog-close (click)="closeModelEvent.emit()">
+        <button cdkFocusInitial mat-stroked-button mat-dialog-close (click)="closeModelEvent.emit()">
             {{ commonLocaleData?.app_cancel }}
         </button>
     </div>
