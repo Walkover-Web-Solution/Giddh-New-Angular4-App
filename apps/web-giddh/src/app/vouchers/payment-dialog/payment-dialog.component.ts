@@ -160,22 +160,20 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      */
     public getEmptyDepositAccountError(isAccount: boolean, index: number, checkBothField: boolean = false): boolean {
         let deposits = this.paymentForm?.get('deposits') as FormArray;
-
         if (checkBothField) {
-            const hasError = deposits.controls.some(control => {
+            const hasError = deposits.controls.some((control, index) => {
                 const amount = control?.get("amount")?.value;
                 const accountUniqueName = control?.get("accountUniqueName")?.value;
-
-                if ((amount && !accountUniqueName) || (!amount && accountUniqueName)) {
+                if (((amount && !accountUniqueName) || (!amount && accountUniqueName)) || ((!amount && !accountUniqueName) && index === 0)) {
                     return true;
                 }
                 return false;
             });
-
             return hasError;
         } else {
             let currentDepositFormGroup = deposits.at(index) as FormGroup;
-            return isAccount && currentDepositFormGroup?.get("amount").value && (!currentDepositFormGroup?.get("accountUniqueName").value) || (!isAccount && (!currentDepositFormGroup?.get("amount").value) && currentDepositFormGroup?.get("accountUniqueName").value);
+            return (isAccount && (currentDepositFormGroup?.get("amount").value > 0) && (!currentDepositFormGroup?.get("accountUniqueName").value) || (!isAccount && (!(currentDepositFormGroup?.get("amount").value > 0)) && currentDepositFormGroup?.get("accountUniqueName").value)) 
+            || (!(deposits.at(0)?.get("amount").value > 0) && !deposits.at(0)?.get("accountUniqueName").value);
         }
     }
     /**
