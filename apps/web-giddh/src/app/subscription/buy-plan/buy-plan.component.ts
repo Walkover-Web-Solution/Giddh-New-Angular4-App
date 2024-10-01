@@ -207,7 +207,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold broadcast event */
     public broadcast: any;
     /** Hold paypal capture order id */
-    public paypalCaptureOrderId: string = '';
+    public paypalCaptureOrderId: any = '';
     /** Holds Store Paypal Order Id Success observable*/
     public paypalCaptureOrderIdSuccess$: Observable<any> = this.componentStore.select(state => state.paypalCaptureOrderIdSuccess);
     /** Hold filtered payment providers */
@@ -622,6 +622,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.broadcast.postMessage({ activeCompany: 'activeCompany' });
     }
 
+    /**
+   * This will be use for paypal callback event
+   *
+   * @param {*} response
+   * @memberof BuyPlanComponent
+   */
     public paypalCallBackEvent(response: any): void {
         if (this.subscriptionId && this.isChangePlan) {
             this.router.navigate(['/pages/user-details/subscription']);
@@ -1305,9 +1311,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value === provider);
             this.thirdStepForm.get('paymentProvider')?.patchValue(provider);
         };
-
-        if (entityCode === 'GBR') {
-            if (duration === 'MONTHLY') {
+        if (entityCode !== 'GBR' && duration === 'DAILY') {
+            // Exclude Razorpay for monthly GBR
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
+        } else if (entityCode === 'GBR') {
+            if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Exclude Razorpay for monthly GBR
                 this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
             } else if (duration === 'YEARLY') {
@@ -1327,8 +1335,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             filterProviders('RAZORPAY');
         }
 
-        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY') {
-            this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD')
+        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && (duration === 'MONTHLY' || duration === 'DAILY')) {
+            this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
+        } else {
+            this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
         }
 
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
