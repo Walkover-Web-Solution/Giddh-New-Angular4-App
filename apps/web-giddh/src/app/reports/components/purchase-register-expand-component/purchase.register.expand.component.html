@@ -557,22 +557,16 @@
                     </table>
                 </ng-container>
             </div>
-            <div class="text-center mt-4 mb-5" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit">
-                <pagination
-                    [totalItems]="(purchaseRegisteDetailedResponse$ | async).totalItems"
-                    [(ngModel)]="getDetailedPurchaseRequestFilter.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
-            </div>
+        </div>
+        <div class="text-center mt-4 mb-5 position-sticky position-left" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+            <mat-paginator
+                (page)="handlePageChange($event)"
+                [length]="(purchaseRegisteDetailedResponse$ | async).totalItems"
+                [pageSize]="paginationLimit"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                [pageIndex]="getDetailedPurchaseReport.page - 1"
+            ></mat-paginator>
         </div>
         <div
             class="no-data"
