@@ -848,7 +848,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.thirdStepForm = this.formBuilder.group({
             userUniqueName: [''],
             paymentProvider: [''],
-            razorpayAuthType: [this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' ? 'CARD' : '']
+            razorpayAuthType: ['']
         });
 
         this.subscriptionForm = this.formBuilder.group({
@@ -1327,6 +1327,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             filterProviders('RAZORPAY');
         }
 
+        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY') {
+            this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD')
+        }
 
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && Object.keys(response)?.length) {
