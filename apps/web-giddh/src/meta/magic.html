@@ -862,7 +862,7 @@
 
                     axios.onload = function () {
                         var magic = document.createElement('script');
-                        magic.src = '../' + folderPath + 'assets/magic-link-assets/magic-link-script.js';
+                        magic.src = '../' + folderPath + 'assets/magic-link-assets/magic-link-script.js?v=' + new Date().getTime();
                         document.head.appendChild(magic);
                     }
                 }
