@@ -105,22 +105,26 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
-    // comment code because we need to remove the lock and unlock feature of financial year because with large number of accounts something went wrong error is coming. 
-    // public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
-    //     if(financialYear) {
-    //         let year = cloneDeep(financialYear);
-    //         let dataToSend = {
-    //             lockAll: true,
-    //             uniqueName: year?.uniqueName
-    //         };
-    //         financialYear.isLocked = !financialYear.isLocked;
-    //         if (financialYear.isLocked) {
-    //             this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
-    //         } else {
-    //             this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
-    //         }
-    //     }
-    // }
+    /**
+     * Lock Unlock Financial Year
+     *
+     * @memberof FinancialYearComponent
+     */
+    public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
+        if(financialYear) {
+            let year = cloneDeep(financialYear);
+            let dataToSend = {
+                lockAll: true,
+                uniqueName: year?.uniqueName
+            };
+            financialYear.isLocked = !financialYear.isLocked;
+            if (financialYear.isLocked) {
+                this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
+            } else {
+                this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
+            }
+        }
+    }
 
     public selectYear(data) {
         this.selectedYear = data?.value;
