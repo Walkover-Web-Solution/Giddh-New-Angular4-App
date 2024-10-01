@@ -118,13 +118,13 @@
         </div>
         <div class="preview-content">
             <section class="preview-header pd-15">
-                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap1">
-                    <div>
+                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap2 flex-row-reverse">
+                    <div class="order-1 mr-auto">
                         <h3 class="font-16 fw-bold">{{ selectedInvoice?.voucherNumber }}</h3>
                         <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
                     </div>
                     <div class="d-flex column-gap1 flex-wrap row-gap1">
-                        <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()">
+                        <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()" *ngIf="!(invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)">
                             <i class="icon-history-icon mr-1"></i>
                             {{ commonLocaleData?.app_history }}
                         </button>
@@ -262,10 +262,10 @@
                                 </button>
                             </ng-container>
                         </mat-menu>
-                        <span *ngIf="selectedInvoice?.action" class="invoice-status border-radius-5 text-capitalize">{{
-                            selectedInvoice.action
-                        }}</span>
-                        <button mat-stroked-button (click)="backToOldLocation()">
+                        <span *ngIf="isShowStatus()" class="invoice-status border-radius-5 text-capitalize">
+                            {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action }}
+                        </span>
+                        <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>

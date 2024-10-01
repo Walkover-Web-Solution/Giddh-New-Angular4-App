@@ -61,7 +61,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Hold day js reference */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds advance Filters keys */
     public advanceFilters: any = {
         page: 1,
@@ -79,7 +79,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Hold invoice  type */
     public voucherType: any = '';
     /** Hold url Voucher Type */
-    public urlVoucherType: any = '';
+    public urlVoucherType: string = '';
     /** Holds Total Results Count */
     public totalPages: number = 0;
     /** Holds params value */
@@ -176,6 +176,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public isLoadMore: boolean;
     /** Hold Get all api call count */
     private getAllApiCallCount: number = 0;
+    /** Holds current route query parameters */
+    public queryParams: any = {};
 
     constructor(
         private router: Router,
@@ -214,6 +216,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.subscribeStoreObservable();
                 }
                 if (params?.page) {
+                    this.queryParams = params;
                     this.advanceFilters.page = Number(params.page);
                     this.advanceFilters.from = params.from ?? '';
                     this.advanceFilters.to = params.to ?? '';
@@ -276,7 +279,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private getCreatedTemplates(): void {
-        this.componentStore.getCreatedTemplates(this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? 'voucher' : 'invoice');
+        this.componentStore.getCreatedTemplates((this.invoiceType.isDebitNote || this.invoiceType.isCreditNote) ? 'voucher' : 'invoice');
     }
 
     /**
@@ -409,7 +412,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         merge(this.componentStore.deleteVoucherIsSuccess$, this.componentStore.bulkUpdateVoucherIsSuccess$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
-                    this.backToOldLocation();
+                    this.redirectToGetAllPage();
                 }
             });
 
@@ -1050,7 +1053,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public printThermal(): void {
         let hasPrinted = false;
-        this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.createEwayBill$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && this.selectedInvoice?.uniqueName === response.uniqueName) {
                 if (!hasPrinted) {
                     hasPrinted = true;
@@ -1183,8 +1186,30 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      *
      * @memberof VouchersPreviewComponent
      */
-    public backToOldLocation(): void {
-        this.location.back();
+    public redirectToGetAllPage(): void {
+        this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
+            queryParams: {
+                page: this.queryParams.page ?? 1,
+                from: this.advanceFilters.from,
+                to: this.advanceFilters.to
+            }
+        });
+    }
+
+    /**
+     * Return true when select invoice status will show
+     *
+     * @return {*}  {boolean}
+     * @memberof VouchersPreviewComponent
+     */
+    public isShowStatus(): boolean {
+        if ((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) {
+            return true;
+        } else if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

@@ -3,7 +3,7 @@ import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, takeUntil, of as observableOf } from 'rxjs';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { SettingsTagService } from '../../services/settings.tag.service';
-import { orderBy } from '../../lodash-optimized';
+import { cloneDeep, orderBy } from '../../lodash-optimized';
 import { BriedAccountsGroup } from '../utility/vouchers.const';
 import { OptionInterface } from '../../models/api-models/Voucher';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -31,7 +31,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold dayjs reference */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds company specific data */
     public company: any = {
         baseCurrency: '',
@@ -48,7 +48,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /** Holds Amount Currency*/
     public amountCurrency: string = "";
     /** Holds true if Multicurrency Account*/
-    public isMulticurrencyAccount = false;
+    public isMulticurrencyAccount: boolean = false;
     /** Selected payment mode */
     public selectedPaymentMode: any;
     /** Holds true if Bank Selected */
@@ -59,7 +59,10 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public showExchangeRateEditField: boolean = false;
     /** Holds true action voucher api call in progress */
     public saveInProgress: boolean = false;
+    /** Holds true when payment mode is not selected and amount is present */
     public showPaymentModeDropdownError: boolean = false;
+    /** Hold true when submit form */
+    public showError: boolean = false;
 
     constructor(
         private componentStore: VoucherComponentStore,
@@ -76,7 +79,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
-            date: ['', Validators.required],
+            date: [dayjs(new Date()), Validators.required],
             deposits: this.formBuilder.array([this.getDepositFormGroup()]),
             tagUniqueName: [''],
             chequeNumber: [''],
@@ -149,14 +152,29 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /**
      * Deposit account error
      *
+     * @param {boolean} isAccount
      * @param {number} index
+     * @param {boolean} [checkBothField=false]
      * @return {*}  {boolean}
      * @memberof PaymentDialogComponent
      */
-    public getEmptyDepositAccountError(index: number): void {
-        let deposits = this.paymentForm?.get('deposits')['controls'] as FormArray;
-        let currentDepositFormGroup = deposits.at(index) as FormGroup;
-        this.showPaymentModeDropdownError = currentDepositFormGroup?.get("amount").value && (!currentDepositFormGroup?.get("accountUniqueName").value);
+    public getEmptyDepositAccountError(isAccount: boolean, index: number, checkBothField: boolean = false): boolean {
+        let deposits = this.paymentForm?.get('deposits') as FormArray;
+        if (checkBothField) {
+            const hasError = deposits.controls.some((control, index) => {
+                const amount = control?.get("amount")?.value;
+                const accountUniqueName = control?.get("accountUniqueName")?.value;
+                if (((amount && !accountUniqueName) || (!amount && accountUniqueName)) || ((!amount && !accountUniqueName) && index === 0)) {
+                    return true;
+                }
+                return false;
+            });
+            return hasError;
+        } else {
+            let currentDepositFormGroup = deposits.at(index) as FormGroup;
+            return (isAccount && (currentDepositFormGroup?.get("amount").value > 0) && (!currentDepositFormGroup?.get("accountUniqueName").value) || (!isAccount && (!(currentDepositFormGroup?.get("amount").value > 0)) && currentDepositFormGroup?.get("accountUniqueName").value)) 
+            || (!(deposits.at(0)?.get("amount").value > 0) && !deposits.at(0)?.get("accountUniqueName").value);
+        }
     }
     /**
      * Add new deposit row
@@ -197,40 +215,44 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof PaymentDialogComponent
      */
-    public onSelectPaymentMode(event: any, index: number): void {
-        if (event && event.value) {
-            if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency?.code) {
-                this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
-            } else {
-                this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currency?.symbol, index);
-            }
-            this.selectedPaymentMode = event;
+    public onSelectPaymentMode(event: any, isSelectAccount: boolean, index: number): void {
+        if (isSelectAccount) {
+            if (event && event.value) {
+                if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency?.code) {
+                    this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
+                } else {
+                    this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currency?.symbol, index);
+                }
+                this.selectedPaymentMode = event;
 
-            this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.body) {
-                    const parentGroups = response.body.parentGroups;
-                    if (parentGroups && parentGroups[1] === 'bankaccounts') {
-                        this.isBankSelected = true;
+                this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response && response.body) {
+                        const parentGroups = response.body.parentGroups;
+                        if (parentGroups && parentGroups[1] === 'bankaccounts') {
+                            this.isBankSelected = true;
+                        } else {
+                            this.isBankSelected = false;
+                            this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+                            this.paymentForm.get('chequeNumber')?.patchValue('');
+                        }
                     } else {
                         this.isBankSelected = false;
+                        this.setDepositAccountUniqueName(index, '');
                         this.paymentForm.get('chequeClearanceDate')?.patchValue('');
                         this.paymentForm.get('chequeNumber')?.patchValue('');
                     }
-                } else {
-                    this.isBankSelected = false;
-                    this.setDepositAccountUniqueName(index, '');
-                    this.paymentForm.get('chequeClearanceDate')?.patchValue('');
-                    this.paymentForm.get('chequeNumber')?.patchValue('');
-                }
-            })
-            this.setDepositAccountUniqueName(index, event.value);
+                })
+                this.setDepositAccountUniqueName(index, event.value);
+            } else {
+                this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
+                this.selectedPaymentMode = null;
+                this.isBankSelected = false;
+                this.setDepositAccountUniqueName(index, '');
+                this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+                this.paymentForm.get('chequeNumber')?.patchValue('');
+            }
         } else {
-            this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
-            this.selectedPaymentMode = null;
-            this.isBankSelected = false;
             this.setDepositAccountUniqueName(index, '');
-            this.paymentForm.get('chequeClearanceDate')?.patchValue('');
-            this.paymentForm.get('chequeNumber')?.patchValue('');
         }
     }
     /**
@@ -239,7 +261,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     private setDepositAccountUniqueName(index: number, event: any): void {
-        let deposits = this.paymentForm.get('deposits') as FormArray;
+        let deposits = this.paymentForm.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
         currentDepositFormGroup.get("accountUniqueName")?.patchValue(event);
     }
@@ -297,14 +319,19 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     public savePayment(): void {
-        let newFormObj = this.paymentForm?.value;
+        this.showError = true;
+        if (this.getEmptyDepositAccountError(null, null, true)) {
+            return;
+        }
+
+        let newFormObj = cloneDeep(this.paymentForm?.value);
         newFormObj.date = dayjs(newFormObj.date).format(GIDDH_DATE_FORMAT);
         if (newFormObj.chequeClearanceDate) {
             newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
         const deposits = [];
         this.paymentForm.get('deposits')['controls']?.forEach(control => {
-            if (control.get("accountUniqueName").value && control.get("amount").value) {
+            if (control.get("accountUniqueName").value?.length && (control.get("amount").value > 0)) {
                 if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
                     deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
                 } else {
