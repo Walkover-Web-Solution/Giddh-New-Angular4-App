@@ -61,6 +61,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public saveInProgress: boolean = false;
     /** Holds true when payment mode is not selected and amount is present */
     public showPaymentModeDropdownError: boolean = false;
+    /** Hold true when submit form */
+    public showError: boolean = false;
 
     constructor(
         private componentStore: VoucherComponentStore,
@@ -77,7 +79,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
-            date: ['', Validators.required],
+            date: [dayjs(new Date()), Validators.required],
             deposits: this.formBuilder.array([this.getDepositFormGroup()]),
             tagUniqueName: [''],
             chequeNumber: [''],
@@ -150,14 +152,31 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /**
      * Deposit account error
      *
+     * @param {boolean} isAccount
      * @param {number} index
+     * @param {boolean} [checkBothField=false]
      * @return {*}  {boolean}
      * @memberof PaymentDialogComponent
      */
-    public getEmptyDepositAccountError(isAccount:boolean, index: number): boolean {
+    public getEmptyDepositAccountError(isAccount: boolean, index: number, checkBothField: boolean = false): boolean {
         let deposits = this.paymentForm?.get('deposits') as FormArray;
-        let currentDepositFormGroup = deposits.at(index) as FormGroup;
-        return isAccount && currentDepositFormGroup?.get("amount").value && (!currentDepositFormGroup?.get("accountUniqueName").value) || (!isAccount && (!currentDepositFormGroup?.get("amount").value) && currentDepositFormGroup?.get("accountUniqueName").value);
+
+        if (checkBothField) {
+            const hasError = deposits.controls.some(control => {
+                const amount = control?.get("amount")?.value;
+                const accountUniqueName = control?.get("accountUniqueName")?.value;
+
+                if ((amount && !accountUniqueName) || (!amount && accountUniqueName)) {
+                    return true;
+                }
+                return false;
+            });
+
+            return hasError;
+        } else {
+            let currentDepositFormGroup = deposits.at(index) as FormGroup;
+            return isAccount && currentDepositFormGroup?.get("amount").value && (!currentDepositFormGroup?.get("accountUniqueName").value) || (!isAccount && (!currentDepositFormGroup?.get("amount").value) && currentDepositFormGroup?.get("accountUniqueName").value);
+        }
     }
     /**
      * Add new deposit row
@@ -302,6 +321,11 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     public savePayment(): void {
+        this.showError = true;
+        if (this.getEmptyDepositAccountError(null, null, true)) {
+            return;
+        }
+
         let newFormObj = cloneDeep(this.paymentForm?.value);
         newFormObj.date = dayjs(newFormObj.date).format(GIDDH_DATE_FORMAT);
         if (newFormObj.chequeClearanceDate) {

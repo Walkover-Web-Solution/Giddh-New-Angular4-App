@@ -1197,6 +1197,22 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Return true when select invoice status will show
+     *
+     * @return {*}  {boolean}
+     * @memberof VouchersPreviewComponent
+     */
+    public isShowStatus(): boolean {
+        if ((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) {
+            return true;
+        } else if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Lifecycle hook for destroy
      *
      * @memberof VouchersPreviewComponent
