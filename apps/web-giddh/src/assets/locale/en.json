@@ -747,5 +747,6 @@
     "app_user_settings": "User Settings",
     "app_subscription": "Subscription",
     "app_custom_email": "Custom Email",
-    "app_custom_email_template":"Custom Email Template"
+    "app_custom_email_template":"Custom Email Template",
+    "app_send_voucher_type_whatsapp": "Send [VOUCHER_TYPE] via whatsapp"
 }
