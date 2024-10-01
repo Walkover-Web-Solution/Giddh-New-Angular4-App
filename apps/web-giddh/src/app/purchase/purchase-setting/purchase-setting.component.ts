@@ -282,4 +282,16 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * Send voucher type whatsapp option.
+     *
+     * @param {string} voucherType
+     * @returns {boolean}
+     * @memberof PurchaseSettingComponent
+     */
+    getWhatsappOption(voucherType: string): string {
+        let text = this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
+        return text;
+    }
 }
