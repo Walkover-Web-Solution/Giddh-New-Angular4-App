@@ -31,79 +31,93 @@
                     flex-sm-row flex-column
                 "
             >
-                <div class="wrap-gst-date w-100 d-flex align-items-center">
-                    <span class="font-xlarge d-inline-block pd-r15">
-                        <a
-                            href="javascript:void(0);"
-                            [routerLink]="['/gstfiling']"
-                            id="ember2007"
-                            class="ember-view cursor-pointer"
-                            aria-label="back svg"
-                        >
-                            <svg
-                                id="Layer_1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 512 512"
-                                class="icon icon-lg text-middle"
+                <div class="wrap-gst-date w-100 d-flex align-items-center justify-content-between">
+                    <div class="d-flex column-gap1 align-items-center">
+                        <span class="font-16">
+                            <a
+                                href="javascript:void(0);"
+                                [routerLink]="['/gstfiling']"
+                                id="ember2007"
+                                class="ember-view cursor-pointer"
+                                aria-label="back svg"
                             >
-                                <path
-                                    d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
-                                ></path>
-                            </svg>
-                        </a>
-                        {{ localeData?.gstr3b_summary }}
-                    </span>
-
-                    <div
-                        class="btn-group dropdown d-inline-block"
-                        dropdown
-                        [autoClose]="false"
-                        #monthWise="bs-dropdown"
-                        (clickOutside)="monthWise.hide()"
-                        [attachOutsideOnClick]="true"
-                    >
-                        <button
-                            id="button-nested"
-                            dropdownToggle
-                            type="button"
-                            class="
-                                dropdown
-                                clearfix
-                                list-title
-                                filter-by
-                                return-sel
-                                font-large
-                                dropdown-toggle
-                                pull-left
-                            "
-                            aria-controls="dropdown-nested"
+                                <svg
+                                    id="Layer_1"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512"
+                                    class="icon icon-lg text-middle"
+                                >
+                                    <path
+                                        d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
+                                    ></path>
+                                </svg>
+                            </a>
+                            {{ localeData?.gstr3b_summary }}
+                        </span>
+    
+                        <div
+                            class="btn-group dropdown d-inline-block"
+                            dropdown
+                            [autoClose]="false"
+                            #monthWise="bs-dropdown"
+                            (clickOutside)="monthWise.hide()"
+                            [attachOutsideOnClick]="true"
                         >
-                            <ng-container>
-                                {{ visibleSelectMonth }}
-                            </ng-container>
-                            <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                            <li role="menuitem">
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    <bs-datepicker-inline
-                                        name="fromDate"
-                                        (click)="$event.stopPropagation()"
-                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
-                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
-                                        [ngModelOptions]="{standalone: true}"
-                                    >
-                                    </bs-datepicker-inline>
-                                </a>
-                            </li>
-                        </ul>
+                            <button
+                                id="button-nested"
+                                dropdownToggle
+                                type="button"
+                                class="
+                                    dropdown
+                                    clearfix
+                                    list-title
+                                    filter-by
+                                    return-sel
+                                    font-large
+                                    dropdown-toggle
+                                    pull-left
+                                "
+                                aria-controls="dropdown-nested"
+                            >
+                                <ng-container>
+                                    {{ visibleSelectMonth }}
+                                </ng-container>
+                                <span class="caret"></span>
+                            </button>
+                            <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                                <li role="menuitem">
+                                    <a class="dropdown-item" href="javascript:void(0)">
+                                        <bs-datepicker-inline
+                                            name="fromDate"
+                                            (click)="$event.stopPropagation()"
+                                            (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                            [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                            [ngModelOptions]="{standalone: true}"
+                                        >
+                                        </bs-datepicker-inline>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Datepicker -->
+                        <div class="custom-datepicker-wrapper">
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                />
+                            </div>
+                        </div>
                     </div>
 
-                    <span class="ml-auto">
-                        <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR3B'"></watch-video>
-                    </span>
-                    <div class="pull-right download-authenticate-btn">
-                        <ul class="list-inline list-middle">
+                    <div class="d-flex column-gap1 align-items-center">
+                        <span>
+                            <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'"></watch-video>
+                        </span>
+                        <ul class="list-inline">
                             <li>
                                 <div
                                     class="btn-group"
@@ -162,7 +176,6 @@
                                     </ul>
                                 </div>
                             </li>
-
                             <!-- <li>
                                 <div *ngIf="showTaxPro">
                                     <button
@@ -1406,3 +1419,28 @@
         [commonLocaleData]="commonLocaleData"
     ></filing-header>
 </ng-container>
+
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

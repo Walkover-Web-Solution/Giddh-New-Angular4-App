@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)">
     <div class="modal-header theme-bg d-flex justify-content-between">
         <h3 class="modal-title bg" id="modal-title" mat-dialog-title>{{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h3>
-        <button aria-hidden="true" class="close" id="closedialog" (click)="closeEvent.emit()">×</button>
+        <button aria-hidden="true" mat-dialog-close class="close" id="closedialog" (click)="closeEvent.emit()">×</button>
     </div>
     <!-- <div class="aside-pane" role="dialog" aria-labelledby="modal-title" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()"> -->
         <!-- <div class="form-header">

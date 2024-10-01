@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -17,6 +17,7 @@ import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-
 import { GstReport } from '../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'file-gstr3',
@@ -62,6 +63,18 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public showGstFiling: boolean = false;
     /** This will use for string date show */
     public visibleSelectMonth: string = '';
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will store datepicker modal reference */
+    public modalRef: BsModalRef;
+    /** Instance of datepicker */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** This will store universalDate */
+    public universalDate: any;
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -71,7 +84,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private breakpointObserver: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        public modalService: BsModalService
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -82,6 +96,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
@@ -341,4 +356,20 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
         return text;
     }
+
+    /**
+      * To show the datepicker
+      *
+      * @param {*} element
+      * @memberof FileGstR3Component
+      */
+     public showGiddhDatepicker(element: any): void {
+            if (element) {
+                this.dateFieldPosition = this.generalService.getPosition(element.target);
+            }
+            this.modalRef = this.modalService.show(
+                this.datepickerTemplate,
+                Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+            );
+        }
 }
