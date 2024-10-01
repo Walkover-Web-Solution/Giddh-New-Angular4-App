@@ -530,7 +530,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
 
                 this.dialog.open(this.adjustPaymentDialog, {
-                    panelClass: ['mat-dialog-md']
+                    panelClass: ['mat-dialog-md'],
+                    disableClose: true
                 });
             }
         });
@@ -835,8 +836,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 activeModule = "list";
             }
         }
-
-        this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule]);
+        if (this.queryParams.page) {
+            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
+                queryParams: {
+                    page: this.queryParams.page ?? 1,
+                    from: this.queryParams.from,
+                    to: this.queryParams.to
+                }
+            });
+        } else {
+            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule]);
+        }
     }
     /**
      * Handle Tab Change event
@@ -1099,7 +1109,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public advanceSearchDialog(): void {
         this.advanceFilters = { ...this.advanceFilters, ...this.advanceSearchTempKeyObj };
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearch, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 
@@ -1116,7 +1127,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 voucherType: this.voucherType,
                 advanceFilters: this.advanceFilters,
                 totalItems: this.selectedVouchers?.length || this.totalResults
-            }
+            },
+            disableClose: true
         });
     }
 
@@ -1129,7 +1141,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showPaymentDialog(voucher: any): void {
         this.voucherDetails = voucher;
         this.dialog.open(this.paymentDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 
@@ -1165,7 +1178,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         let dialogRef = this.dialog.open(BulkUpdateComponent, {
             panelClass: ['mat-dialog-md'],
-            data: dataToSend
+            data: dataToSend,
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1192,7 +1206,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         let dialogRef = this.dialog.open(CancelEInvoiceDialogComponent, {
             panelClass: ['mat-dialog-md'],
-            data: dataToSend
+            data: dataToSend,
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1222,7 +1237,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             panelClass: ['mat-dialog-md'],
             data: {
                 configuration: configuration
-            }
+            },
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1436,7 +1452,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
 
         this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
-            width: '600px'
+            width: '600px',
+            disableClose: true
         });
     }
 
@@ -1734,7 +1751,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             position: {
                 right: '0',
                 top: '0'
-            }
+            },
+            disableClose: true
         });
     }
 
@@ -1822,7 +1840,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public openEmailSendDialog(voucher: any): void {
         this.sendEmailModalDialogRef = this.dialog.open(this.sendEmailModal, {
-            panelClass: ['mat-dialog-sm']
+            panelClass: ['mat-dialog-sm'],
+            disableClose: true
         });
         this.currentVoucher = voucher;
     }
@@ -1870,7 +1889,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.dialog.open(this.convertBill, {
             data: vouchers,
             width: '600px',
-            maxHeight: '80vh'
+            maxHeight: '80vh',
+            disableClose: true
         });
     }
 

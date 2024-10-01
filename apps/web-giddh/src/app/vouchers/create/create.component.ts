@@ -546,7 +546,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.queryParams = response[1];
 
                 if (this.queryParams?.redirect) {
-                    this.redirectUrl = this.queryParams?.redirect;
+                    this.redirectUrl = this.queryParams.redirect;
                 }
 
                 this.company.countryName = "";
@@ -3720,7 +3720,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/purchase-management/purchase/order']);
+                            this.redirectToInvoicePreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response.message);

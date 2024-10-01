@@ -124,7 +124,7 @@
                         <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
                     </div>
                     <div class="d-flex column-gap1 flex-wrap row-gap1">
-                        <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()" *ngIf="!(invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)">
+                        <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()" *ngIf="!(invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice) || true">
                             <i class="icon-history-icon mr-1"></i>
                             {{ commonLocaleData?.app_history }}
                         </button>
@@ -262,7 +262,7 @@
                                 </button>
                             </ng-container>
                         </mat-menu>
-                        <span *ngIf="isShowStatus()" class="invoice-status border-radius-5 text-capitalize">
+                        <span *ngIf="isShowInvoiceStatus()" class="invoice-status border-radius-5 text-capitalize">
                             {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action }}
                         </span>
                         <button mat-stroked-button (click)="redirectToGetAllPage()">
@@ -295,6 +295,35 @@
                             {{ localeData?.email_invoice }}
                         </p>
                         <a href="javascript:;" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
+                    </div>
+                </div>
+                <div class="preview-box d-flex" *ngIf="invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice">
+                    <div class="payment-log-div">
+                        <div class="pd-t1 pd-b1 pd-l1" *ngIf="moreLogsDisplayed">
+                            <a href="javascript:;" (click)="filterVoucherVersions(false)">{{
+                                localeData?.less_details
+                            }}</a>
+                        </div>
+                        <div
+                            class="pd-t1 pd-b1 pd-l1"
+                            *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed"
+                        >
+                            <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
+                                localeData?.more_details
+                            }}</a>
+                        </div>
+
+                        <ul>
+                            <li *ngFor="let log of filteredVoucherVersions">
+                                <span class="small-circle"></span>
+                                <span class="about-payment-log"
+                                    >{{ log.estimateDate }},
+                                    <span *ngIf="voucherType === 'estimates'">{{ localeData?.estimate }}</span>
+                                    <span *ngIf="voucherType !== 'estimates'">{{ voucherType }}</span>
+                                    {{ getVoucherLogText(log) }}</span
+                                >
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <no-data
