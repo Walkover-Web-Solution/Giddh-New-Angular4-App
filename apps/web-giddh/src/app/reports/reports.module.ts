@@ -46,6 +46,7 @@ import { SelectTableColumnModule } from '../shared/select-table-column/select-ta
 import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-export/sales-purchase-register-export.component';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -106,7 +107,8 @@ import { MatTableModule } from '@angular/material/table';
         MatSlideToggleModule,
         SelectTableColumnModule,
         BulkExportVoucherModule,
-        MatTableModule
+        MatTableModule,
+        MatPaginatorModule
     ]
 })
 

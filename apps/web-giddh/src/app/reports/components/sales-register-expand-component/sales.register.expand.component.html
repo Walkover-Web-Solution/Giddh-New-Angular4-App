@@ -593,22 +593,16 @@
                 </ng-container>
             </div>
 
-            <div class="text-center mt-4 mb-5" *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
-                <pagination
-                    [totalItems]="(salesRegisteDetailedResponse$ | async).totalItems"
-                    [(ngModel)]="getDetailedsalesRequestFilter.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
-            </div>
+        </div>
+        <div class="text-center position-sticky position-left" *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+            <mat-paginator
+                (page)="handlePageChange($event)"
+                [length]="(salesRegisteDetailedResponse$ | async)?.totalItems"
+                [pageSize]="paginationLimit"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                [pageIndex]="getDetailedsalesRequestFilter.page - 1"
+            ></mat-paginator>
         </div>
         <div
             class="no-data"
