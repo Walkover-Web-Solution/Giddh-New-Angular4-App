@@ -295,13 +295,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         setTimeout(() => { this.detectChange() }, 200);
         this.store.dispatch(this.invoiceReceiptActions.GetSalesRegistedDetails(SalesDetailedfilter));
     }
-    public pageChanged(ev: any): void {
-        if (ev.page === this.getDetailedsalesRequestFilter.page) {
-            return;
-        }
-        this.getDetailedsalesRequestFilter.page = ev.page;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-    }
     public sortbyApi(ord, key) {
         this.showClearFilter = true;
         this.getDetailedsalesRequestFilter.sortBy = key;
@@ -570,5 +563,16 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
         this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
         this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+    }
+
+    /**
+      * Handle Page Change event and Make API Call
+      *
+      * @param {*} event
+      * @memberof SalesRegisterExpandComponent
+      */
+    public handlePageChange(event: any): void {
+        this.getDetailedsalesRequestFilter.page = event.pageIndex + 1;
+        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
 }

@@ -318,14 +318,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRegistedDetails(PurchaseDetailedfilter));
     }
 
-    public pageChanged(ev: any): void {
-        if (ev.page === this.getDetailedPurchaseRequestFilter.page) {
-            return;
-        }
-        this.getDetailedPurchaseRequestFilter.page = ev.page;
-        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
-    }
-
     public sortbyApi(ord, key) {
         this.showClearFilter = true;
         this.getDetailedPurchaseRequestFilter.sortBy = key;
@@ -616,5 +608,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
         this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
         this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+    }
+
+    /**
+     * Handle Page Change event and Make API Call
+     *
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public handlePageChange(event: any): void {
+        this.getDetailedPurchaseRequestFilter.page = event.pageIndex + 1
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
 }
