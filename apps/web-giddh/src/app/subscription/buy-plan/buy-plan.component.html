@@ -900,6 +900,12 @@
                                                     [options]="filteredPaymentProviders"
                                                     formControlName="paymentProvider"
                                                     (onClear)="thirdStepForm.get('paymentProvider')?.patchValue(null)"
+                                                    [required]="
+                                                        !thirdStepForm.get('paymentProvider')?.value ? true : false
+                                                    "
+                                                       [showError]="
+                                                        isFormSubmitted && !thirdStepForm.get('paymentProvider')?.value
+                                                    "
                                                 >
                                                 </reactive-dropdown-field>
                                             </div>
