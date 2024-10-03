@@ -13614,7 +13614,8 @@ aside-menu-product-service {
         .mat-list-wrap {
             .mat-mdc-list {
                 .mat-mdc-list-item {
-                    height: 60px;
+                    height: auto;
+                    min-height: 60px;
                 }
             }
         }

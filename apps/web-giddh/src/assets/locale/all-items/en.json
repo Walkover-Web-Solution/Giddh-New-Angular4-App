@@ -213,9 +213,25 @@
                 },
                 {
                     "label": "Receipt",
+                    "link": "/pages/reports/receipt",
+                    "icon": "icon-reciept-new",
+                    "description": "Advance, normal, total, & unused receipts",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Receipt",
                     "link": "/pages/vouchers/preview/receipt/list",
                     "icon": "icon-reciept-new",
-                    "description": "Advance, normal, total, & unused receipts"
+                    "description": "Advance, normal, total, & unused receipts",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Sales Register",
