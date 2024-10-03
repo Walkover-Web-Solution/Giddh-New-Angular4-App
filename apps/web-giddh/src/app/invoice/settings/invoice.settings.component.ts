@@ -626,8 +626,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @returns {boolean}
      * @memberof InvoiceSettingComponent
      */
-    getWhatsappOption(voucherType: string): string {
-        let text = this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
-        return text;
+    public getWhatsappSettingLabel(voucherType: string): string {
+        return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
     }
 }

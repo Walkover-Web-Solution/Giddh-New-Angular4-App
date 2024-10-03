@@ -385,22 +385,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    <div class="clearfix pd-t1 row"> 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.autoWhatsAppPayment"
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
                                                 class="show-on-mobile"
                                                 name="autoWhatsAppPayment"
                                                 color="primary"
                                                 aria-label="autoWhatsAppPayment"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ getWhatsappOption("payment") }}</label>
+                                            <label>{{ getWhatsappSettingLabel("payment") }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.autoWhatsAppPayment"
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
                                                 class="hide-on-mobile"
                                                 name="autoWhatsAppPayment"
                                                 color="primary"
@@ -409,23 +409,21 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
+                                    <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.autoWhatsAppDebitNote"
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppDebitNote"
                                                 class="show-on-mobile"
                                                 name="autoWhatsAppDebitNote"
                                                 color="primary"
                                                 aria-label="autoWhatsAppDebitNote"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ getWhatsappOption("debit note") }}</label>
+                                            <label>{{ getWhatsappSettingLabel("debit note") }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.autoWhatsAppDebitNote"
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppDebitNote"
                                                 class="hide-on-mobile"
                                                 name="autoWhatsAppDebitNote"
                                                 color="primary"
@@ -434,8 +432,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                </div>
-
+                                </ng-container>
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
