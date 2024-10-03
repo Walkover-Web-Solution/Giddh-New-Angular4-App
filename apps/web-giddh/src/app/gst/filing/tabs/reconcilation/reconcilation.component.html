@@ -243,7 +243,7 @@
                                         (gstNotFoundOnPortalData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
+                                <!-- <pagination
                                     [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
                                     [boundaryLinks]="true"
@@ -252,7 +252,15 @@
                                     [previousText]="commonLocaleData?.app_previous"
                                     [nextText]="commonLocaleData?.app_next"
                                     [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                                ></pagination> -->
+
+                                <mat-paginator
+                                    (page)="reconcilePageChanged($event, 'notfoundonportal')"
+                                    [length]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstNotFoundOnPortalData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
                         </mat-tab>
 
@@ -288,7 +296,7 @@
                                         (gstNotFoundOnGiddhData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
+                                <!-- <pagination
                                     [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
                                     [boundaryLinks]="true"
@@ -297,7 +305,15 @@
                                     [previousText]="commonLocaleData?.app_previous"
                                     [nextText]="commonLocaleData?.app_next"
                                     [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                                ></pagination> -->
+
+                                <mat-paginator
+                                    (page)="reconcilePageChanged($event, 'notfoundongiddh')"
+                                    [length]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
                         </mat-tab>
 
@@ -334,7 +350,7 @@
                                         (gstPartiallyMatchedData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
+                                <!-- <pagination
                                     [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"
                                     [boundaryLinks]="true"
@@ -343,7 +359,15 @@
                                     [previousText]="commonLocaleData?.app_previous"
                                     [nextText]="commonLocaleData?.app_next"
                                     [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                                ></pagination> -->
+
+                                <mat-paginator
+                                    (page)="reconcilePageChanged($event, 'partiallymatched')"
+                                    [length]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstPartiallyMatchedData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
                         </mat-tab>
 
@@ -382,7 +406,7 @@
                                     (gstMatchedData$ | async)?.data?.totalItems > (gstMatchedData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
+                                <!-- <pagination
                                     [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstMatchedData$ | async)?.data?.count"
                                     [boundaryLinks]="true"
@@ -391,7 +415,15 @@
                                     [previousText]="commonLocaleData?.app_previous"
                                     [nextText]="commonLocaleData?.app_next"
                                     [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                                ></pagination> -->
+
+                                <mat-paginator
+                                    (page)="reconcilePageChanged($event, 'matched')"
+                                    [length]="(gstMatchedData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstMatchedData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
                         </mat-tab>
                     </mat-tab-group>

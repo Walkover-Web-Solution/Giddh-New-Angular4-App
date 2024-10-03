@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
@@ -18,6 +18,7 @@ import { GstReport } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -57,7 +58,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** True if current organization is company */
     @Input() public isCompany: boolean;
-    @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
+    // @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
+    @ViewChild("cancelConfirmationModel") cancelConfirmationModel: TemplateRef<any>;
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
@@ -91,6 +93,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
+    /** asideAuthentication Dialog Open */
+    @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -101,7 +105,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService,
-        private router: Router
+        private router: Router,
+        public dialog: MatDialog
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -227,7 +232,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (selectedService) {
             this.selectedService = selectedService;
         }
-        this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
+        // this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
+        this.dialog.open(this.asideAuthenticationDialog,{
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: '760px',
+            height: '100vh !important'
+        })
     }
 
     public closeAsidePane() {
@@ -295,7 +308,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public toggleCancelModel() {
-        this.cancelConfirmationModel.toggle();
+        // this.cancelConfirmationModel.toggle();
+        this.dialog.open(this.cancelConfirmationModel, {
+            width: '600px'
+        });
     }
 
     /**

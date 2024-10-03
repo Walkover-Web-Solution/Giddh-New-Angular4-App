@@ -54,6 +54,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -100,7 +102,9 @@ import { MatTabsModule } from '@angular/material/tabs';
         MatTooltipModule,
         MatDividerModule,
         MatSelectModule,
-        MatTabsModule
+        MatTabsModule,
+        MatDialogModule,
+        MatCheckboxModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

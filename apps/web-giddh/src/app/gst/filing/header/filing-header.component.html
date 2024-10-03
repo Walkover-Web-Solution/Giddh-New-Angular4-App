@@ -237,7 +237,7 @@
     <!-- endregion -->
 </div>
 
-<div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+<!-- <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
 <gst-aside-menu
     *ngIf="GstAsidePaneState === 'in'"
     [selectedService]="selectedService"
@@ -250,10 +250,24 @@
     (fileGstComplete)="closeAsidePane()"
     [localeData]="localeData"
     [commonLocaleData]="commonLocaleData"
-></gst-aside-menu>
+></gst-aside-menu> -->
+
+<ng-template #asideAuthentication>
+    <gst-aside-menu
+        [selectedService]="selectedService"
+        [returnType]="selectedGst"
+        [class]="GstAsidePaneState"
+        (fileGst)="fileGstReturnV2()"
+        (cancelConfirmationEvent)="cancelConfirmationModel?.show()"
+        (fileGstComplete)="closeAsidePane()"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    ></gst-aside-menu>
+</ng-template>
+
 
 <!-- region cancel confirmation modal -->
-<div
+<!-- <div
     bsModal
     #cancelConfirmationModel="bs-modal"
     class="modal z-index-for-aside fade"
@@ -269,7 +283,16 @@
             ></confirm-modal>
         </div>
     </div>
-</div>
+</div> -->
+
+<ng-template #cancelConfirmationModel>
+    <confirm-modal
+        [body]="localeData?.filing?.cancel_title"
+        (successCallBack)="cancelConfirmationModel.hide(); toggleSettingAsidePane(null)"
+        (cancelCallBack)="cancelConfirmationModel.hide()"
+    ></confirm-modal>
+</ng-template>
+
 <!--push to portal modal -->
 <div
     bsModal

@@ -6,7 +6,11 @@
     <div class="row main-container">
         <div class="col-sm left-side">
             <div class="left-side-center">
-                <button type="button" class="btn btn-sky-blue mr-0 downloads-button" (click)="onDownloadExcel($event)">
+                <button 
+                    mat-stroked-button
+                    color="primary"
+                    class="downloads-button" 
+                    (click)="onDownloadExcel($event)">
                     {{ localeData?.filing?.download_excel }}
                 </button>
             </div>
@@ -24,7 +28,12 @@
         </div>
         <div class="col-sm right-side">
             <div class="right-side-center">
-                <button type="button" class="btn btn-sky-blue mr-0 downloads-button" (click)="onDownloadJson($event)">
+                <button 
+                    mat-stroked-button
+                    color="primary"
+                    class="downloads-button" 
+                    (click)="onDownloadJson($event)"
+                >
                     {{ localeData?.filing?.download_json }}
                 </button>
             </div>

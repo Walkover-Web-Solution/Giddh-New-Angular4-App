@@ -5,9 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null; toggleTaxAsidePane()">
+    <div class="pd-t15 pd-b15 clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null; toggleTaxAsidePane()">
         <div class="d-flex justify-content-between">
-            <h1 class="section-head m-0 pl-0 pb-0 pr-0">{{ localeData?.added_taxes }}</h1>
+            <h1 class="section-head m-0 p-0">{{ localeData?.added_taxes }}</h1>
             <div>
                 <watch-video [cssClass]="'text-primary mr-r15'" [moduleName]="'TAX_CREATION'"></watch-video>
                 <!-- <button

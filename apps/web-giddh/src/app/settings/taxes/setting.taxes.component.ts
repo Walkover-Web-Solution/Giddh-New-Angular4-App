@@ -94,7 +94,6 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 });
                 this.availableTaxes = cloneDeep(o.taxes);
                 this.dataSource.data = this.availableTaxes;
-                console.log('Table data', this.availableTaxes);
                 this.onCancel();
             }
 

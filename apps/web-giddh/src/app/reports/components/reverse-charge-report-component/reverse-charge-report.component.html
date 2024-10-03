@@ -613,6 +613,15 @@
                     [nextText]="commonLocaleData?.app_next"
                     [lastText]="commonLocaleData?.app_last"
                 ></pagination>
+
+                <mat-paginator
+                    (page)="pageChanged($event)"
+                    [length]="reverseChargeReportResults.totalItems"
+                    [pageSize]="paginationLimit"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    [pageIndex]="reverseChargeReportResults.page - 1"
+                ></mat-paginator>
             </div>
             <div
                 class="no-data"

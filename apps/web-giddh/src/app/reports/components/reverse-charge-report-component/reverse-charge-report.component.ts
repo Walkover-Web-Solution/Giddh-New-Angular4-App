@@ -262,13 +262,22 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ReverseChargeReport
      */
+    // public pageChanged(event: any): void {
+    //     if (this.reverseChargeReportGetRequest.page != event.page) {
+    //         this.reverseChargeReportResults.results = [];
+    //         this.reverseChargeReportGetRequest.page = event.page;
+    //         this.getReverseChargeReport(false);
+    //     }
+    // }
+
     public pageChanged(event: any): void {
-        if (this.reverseChargeReportGetRequest.page != event.page) {
+        const pageIndex = event.pageIndex + 1;
+        if (this.reverseChargeReportGetRequest.page !== pageIndex) {
             this.reverseChargeReportResults.results = [];
-            this.reverseChargeReportGetRequest.page = event.page;
+            this.reverseChargeReportGetRequest.page = pageIndex;
             this.getReverseChargeReport(false);
         }
-    }
+      }
 
     /**
      * This function will get the data of vat detailed report
