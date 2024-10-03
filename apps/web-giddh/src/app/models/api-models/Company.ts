@@ -29,6 +29,7 @@ export class SocketNewCompanyRequest {
     public utm_campaign: string;
     public utm_term: string;
     public utm_content: string;
+    public BusinessNature: string;
 }
 
 export class StateDetailsRequest {
@@ -310,6 +311,7 @@ export class CompanyCreateRequest {
     addresses?: Addresses[];
     businessNature?: string;
     businessType?: string;
+    otherBusinessNature?: string;
     address?: string;
     industry?: string;
     baseCurrency: string;

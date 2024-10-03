@@ -1699,16 +1699,16 @@ export class GeneralService {
     }
 
     /**
-    * Check if a given country name is included in the array of supported countries for Gocardless, and return a boolean value
+    * Check if a given country code is included in the array of supported countries for Gocardless, and return a boolean value
     * indicating whether the country is supported or not.
     *
-    * @param {string} countryName
+    * @param {string} countryCode
     * @returns {boolean}
     * @memberof GeneralService
     */
-    public checkCompanySupportGocardless(countryName: string): boolean {
-        const gocardlessSupportedCountryList = ['UNITED KINGDOM'];
-        return gocardlessSupportedCountryList.includes(countryName.toUpperCase());
+    public checkCompanySupportGoCardless(countryCode: string): boolean {
+        const gocardlessSupportedCountryCodeList = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
+        return gocardlessSupportedCountryCodeList.includes(countryCode);
     }
 
     /**

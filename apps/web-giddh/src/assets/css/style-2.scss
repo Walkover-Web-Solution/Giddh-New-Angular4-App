@@ -1404,6 +1404,7 @@ body {
     -webkit-font-smoothing: auto;
     padding: 0 !important;
     margin: 0 !important;
+    overflow: hidden;
 }
 
 /* table css need to removed at last (finish)*/
@@ -2339,6 +2340,10 @@ ul.sub-list {
 
 .width-150 {
     width: 150px;
+}
+
+.w-fit-content {
+    width: fit-content
 }
 
 .btn-green {
@@ -9412,10 +9417,10 @@ ngx-daterangepicker-material {
 #HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
-    top: -5px;
+    top: 1px;
     width: 30px !important;
     display: flex !important;
-    right: -5px !important;
+    right: 2px !important;
     position: absolute !important;
 }
 
@@ -12378,7 +12383,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-.table-header-fix {
+.table-position-left {
     position: sticky;
     top: 0;
     background-color: var(--color-white);

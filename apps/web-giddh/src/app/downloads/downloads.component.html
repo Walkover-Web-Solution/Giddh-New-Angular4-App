@@ -5,14 +5,15 @@
     (localeData)="localeData = $event"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="relative">
-        <div class="clearfix petty-cash">
+    <div class="relative overflow-visible">
+        <div class="clearfix petty-cash overflow-visible">
             <mat-tab-group
                 mat-stretch-tabs="false"
                 animationDuration="0ms"
                 [selectedIndex]="selectedTabIndex"
                 (selectedTabChange)="tabChanged($event)"
                 [disableRipple]="true"
+                class="table-header-sticky"
             >
                 <mat-tab [label]="'Exports'">
                     <exports *ngIf="selectedTabIndex === 0"></exports>
