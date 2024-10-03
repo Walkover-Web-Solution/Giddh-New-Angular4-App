@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+    <div class="setting-page user-detail-page relative overflow-visible" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
         <div class="video-link position-absolute mr-r15" *ngIf="activeTabIndex === 1">
             <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'TWO_FACTOR_AUTHENTICATION'"></watch-video>
         </div>
@@ -23,6 +23,7 @@
             animationDuration="0ms"
             [selectedIndex]="activeTabIndex"
             (selectedTabChange)="selectTab($event)"
+            class="table-header-sticky"
         >
             <mat-tab [label]="localeData?.auth_key?.tab_heading">
                 <div class="wrap-tab-content-pd-15">
@@ -285,8 +286,8 @@
                 </div>
             </mat-tab>
             <mat-tab [label]="localeData?.session?.tab_heading">
-                <div class="wrap-tab-content-pd-15">
-                    <div class="box clearfix mt-1">
+                <div class="wrap-tab-content-pd-15 overflow-visible">
+                    <div class="box clearfix mt-1 overflow-visible">
                         <div class="d-flex pd-b1 activity-title">
                             <h1 class="section-head pt-0">{{ localeData?.session?.section_heading }}</h1>
                             <button mat-stroked-button class="mr-0" (click)="clearAllSession()">
@@ -294,7 +295,7 @@
                             </button>
                         </div>
                         <p class="grey-color">{{ localeData?.session?.section_description }}</p>
-                        <div class="mr-t15 table-responsive">
+                        <div class="mr-t15 table-responsive overflow-visible">
                             <table mat-table [dataSource]="userSessionList" class="table w-100 basic giddh-table">
                                 <ng-container matColumnDef="ipaddress">
                                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.session?.ip_address }}</th>
