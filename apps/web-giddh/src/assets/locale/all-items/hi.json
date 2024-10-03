@@ -215,7 +215,23 @@
                     "label": "रसीद",
                     "link": "/pages/reports/receipt",
                     "icon": "icon-reciept-new",
-                    "description": "अग्रिम, सामान्य, कुल, और अप्रयुक्त रसीदें"
+                    "description": "अग्रिम, सामान्य, कुल, और अप्रयुक्त रसीदें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "रसीद",
+                    "link": "/pages/vouchers/preview/receipt/list",
+                    "icon": "icon-reciept-new",
+                    "description": "अग्रिम, सामान्य, कुल, और अप्रयुक्त रसीदें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "बिक्री रजिस्टर",
@@ -436,7 +452,7 @@
                 },
                 {
                     "label": "भुगतान",
-                    "link": "/pages/reports/payment",
+                    "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "कुल, और अप्रयुक्त भुगतान",
                     "additional": {
