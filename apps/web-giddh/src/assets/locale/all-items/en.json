@@ -213,7 +213,7 @@
                 },
                 {
                     "label": "Receipt",
-                    "link": "/pages/reports/receipt",
+                    "link": "/pages/vouchers/preview/receipt/list",
                     "icon": "icon-reciept-new",
                     "description": "Advance, normal, total, & unused receipts"
                 },
@@ -436,7 +436,7 @@
                 },
                 {
                     "label": "Payment",
-                    "link": "/pages/reports/payment",
+                    "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "Total, & unused payments",
                     "additional": {
