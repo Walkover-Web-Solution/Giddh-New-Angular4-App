@@ -1076,8 +1076,8 @@ export class GeneralService {
 
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (this.voucherApiVersion === 2 && item.exchangeRate !== undefined) {
-                grandTotalConversionRate = item.exchangeRate;
+            if (this.voucherApiVersion === 2) {
+                grandTotalConversionRate = item.exchangeRate ?? 1;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
