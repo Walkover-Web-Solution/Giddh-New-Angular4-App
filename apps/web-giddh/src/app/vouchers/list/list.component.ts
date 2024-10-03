@@ -1462,7 +1462,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const tempKeysInAdvanceFiltersForm = ['dueAmount', 'dateRange', 'grandTotalOperation', 'invoiceTotalAmount', 'invoiceDateRange'];
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
-
+        this.selectAllVouchers({ checked: false });
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
             sort: this.advanceFilters.sort,
@@ -1507,13 +1507,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /**
      * Close Advance Search Dialog
      *
-     * @param {boolean} isClosed
+     *
      * @memberof VoucherListComponent
      */
-    public closeAdvanceSearchDialog(isClosed: boolean): void {
-        if (isClosed) {
-            this.selectAllVouchers({ checked: false });
-        }
+    public closeAdvanceSearchDialog(): void {
         this.advanceSearchDialogRef?.close();
     }
 
