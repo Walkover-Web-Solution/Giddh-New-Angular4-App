@@ -162,11 +162,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateEwayBillform.toGstIn = 'URP';
         }
         if (this.selectedInvoices?.length === 0) {
-            if (this.generalService.voucherApiVersion === 2) {
-                this.router.navigate(['/pages/vouchers/preview/sales/list']);
-            } else {
-                this.router.navigate(['/pages/invoice/preview/sales']);
-            }
+            this.redirectToSalesInvoice();
         }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
             if (s) {
@@ -305,11 +301,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (userResponse.response && userResponse.close === 'closeConfirmation') {
             this.selectedInvoices?.splice(0, 1);
             if (this.selectedInvoices?.length === 0) {
-                if (this.generalService.voucherApiVersion === 2) {
-                    this.router.navigate(['/pages/vouchers/preview/sales/list']);
-                } else {
-                    this.router.navigate(['/pages/invoice/preview/sales']);
-                }
+                this.redirectToSalesInvoice();
             }
         }
         this.invoiceRemoveConfirmationModel?.hide();
@@ -414,13 +406,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.receipt.voucher), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
             if (voucher) {
 
-                if(!voucher?.account?.billingDetails?.pincode) {
+                if (!voucher?.account?.billingDetails?.pincode) {
                     this.toaster.errorToast(this.localeData?.pincode_required);
-                    if (this.generalService.voucherApiVersion === 2) {
-                        this.router.navigate(['/pages/vouchers/preview/sales/list']);
-                    } else {
-                        this.router.navigate(['/pages/invoice/preview/sales']);
-                    }
+                    this.redirectToSalesInvoice();
                 }
 
                 this.voucherDetails = voucher;
@@ -456,5 +444,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this._cdRef.detectChanges();
             }
         });
+    }
+
+    /**
+     * Redirect Sales invoice get all page based on voucher version
+     *
+     * @private
+     * @memberof EWayBillCreateComponent
+     */
+    private redirectToSalesInvoice(): void {
+        if (this.generalService.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/vouchers/preview/sales/list']);
+        } else {
+            this.router.navigate(['/pages/invoice/preview/sales']);
+        }
     }
 }

@@ -21,7 +21,6 @@ import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { saveAs } from 'file-saver';
-import { Location } from "@angular/common";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
@@ -174,14 +173,17 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public pdfPreviewHasError: boolean = false;
     /** Hold true if searching */
     public isSearching: boolean;
-    /** Hold true if invoice load more data is trigger */
+    /** Holds true if invoice load more data is trigger */
     public isLoadMore: boolean;
-    /** Hold Get all api call count */
+    /** Holds Get all api call count */
     private getAllApiCallCount: number = 0;
     /** Holds current route query parameters */
     public queryParams: any = {};
+    /** Holds voucher history of Estimates/Proforma */
     public voucherVersions: ProformaVersionItem[] = [];
+    /** Holds history of Estimates/Proforma filtered data */
     public filteredVoucherVersions: ProformaVersionItem[] = [];
+    /** Holds View More voucher history status used to toggle voucher history */
     public moreLogsDisplayed: boolean = true;
 
     constructor(
@@ -198,7 +200,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private changeDetection: ChangeDetectorRef,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private location: Location,
         private adjustmentUtilityService: AdjustmentUtilityService
     ) { }
 
@@ -274,7 +275,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
 
         this.selectedInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
-        this.getVoucherVersions(this.selectedInvoice);
+        if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+            this.getVoucherVersions(this.selectedInvoice);
+        }
         if (this.selectedInvoice && !this.isVoucherDownloading) {
             this.downloadVoucherPdf('base64');
         }
@@ -481,9 +484,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.voucherVersionsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice)) {
                 this.voucherVersions = response?.results;
-                console.log(response?.results);
                 this.filterVoucherVersions(false);
             }
         });
@@ -1248,11 +1250,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Get Voucher Versions list API call
-    *
-    * @private
-    * @memberof VouchersPreviewComponent
-    */
+     * Get Voucher Versions list API call
+     *
+     * @private
+     * @param {*} selectedInvoice
+     * @memberof VouchersPreviewComponent
+     */
     private getVoucherVersions(selectedInvoice: any): void {
         const model = {
             getRequestObject: {
@@ -1276,7 +1279,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public filterVoucherVersions(showMore: boolean): void {
-        this.filteredVoucherVersions = this.voucherVersions.slice(0, showMore ? 14 : 2);
+        this.filteredVoucherVersions = this.voucherVersions?.slice(0, showMore ? 14 : 2);
         this.moreLogsDisplayed = showMore;
     }
 
