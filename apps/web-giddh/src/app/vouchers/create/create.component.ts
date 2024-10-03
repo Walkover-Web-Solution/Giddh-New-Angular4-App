@@ -551,7 +551,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
-                this.urlVoucherType =  params.voucherType;
+                this.urlVoucherType = params.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 if (this.voucherApiVersion !== 2) {
@@ -3457,10 +3457,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private redirectToInvoicePreview(): void {
-        const queryParams = { 
-            page: this.queryParams?.page ?? 1, 
-            from: this.queryParams?.from ?? '', 
-            to: this.queryParams?.to ?? '' 
+        const queryParams = {
+            page: this.queryParams?.page ?? 1,
+            from: this.queryParams?.from ?? '',
+            to: this.queryParams?.to ?? ''
         };
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
@@ -4173,7 +4173,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
      * @memberof VoucherCreateComponent
      */
-    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments?.forEach(adjustment => {
