@@ -16,6 +16,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
+import { UntypedFormControl } from "@angular/forms";
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -89,6 +90,22 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public isMobileScreen: boolean = true;
     /** True if today selected */
     public todaySelected: boolean = false;
+    displayedColumns: string[] = [
+        'index', 
+        'entryDate', 
+        'suppliersName', 
+        'voucherType', 
+        'invoiceNumber', 
+        'supplierInvoiceDate', 
+        'supplierCountry', 
+        'taxableValue', 
+        'taxRate', 
+        'taxAmount'
+      ];
+    /** True, if name search field is to be shown in the filters */
+    public showNameSearch: boolean;
+        /** Stores the searched name value for the Name filter */
+        public searchedName: UntypedFormControl = new UntypedFormControl();
 
     constructor(
         private store: Store<AppState>,
@@ -245,13 +262,22 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ReverseChargeReport
      */
+    // public pageChanged(event: any): void {
+    //     if (this.reverseChargeReportGetRequest.page != event.page) {
+    //         this.reverseChargeReportResults.results = [];
+    //         this.reverseChargeReportGetRequest.page = event.page;
+    //         this.getReverseChargeReport(false);
+    //     }
+    // }
+
     public pageChanged(event: any): void {
-        if (this.reverseChargeReportGetRequest.page != event.page) {
+        const pageIndex = event.pageIndex + 1;
+        if (this.reverseChargeReportGetRequest.page !== pageIndex) {
             this.reverseChargeReportResults.results = [];
-            this.reverseChargeReportGetRequest.page = event.page;
+            this.reverseChargeReportGetRequest.page = pageIndex;
             this.getReverseChargeReport(false);
         }
-    }
+      }
 
     /**
      * This function will get the data of vat detailed report
@@ -442,5 +468,53 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
+    }
+
+        /**
+     * Toogles the search field
+     *
+     * @param {string} fieldName Field name to toggle
+     * @memberof ContactComponent
+     */
+    public toggleSearch(fieldName: string): void {
+        if (fieldName === "name") {
+            this.showNameSearch = true;
+        }
+    }
+
+    /**
+     * Returns the placeholder for the current searched field
+     *
+     * @param {string} fieldName Field name for which placeholder is required
+     * @return {*}  {string} Placeholder text
+     * @memberof ReverseChargeReport
+     */
+    public getSearchFieldText(fieldName: string): string {
+        if (fieldName === "name") {
+            return this.localeData?.search_name;
+        }
+        return "";
+    }
+
+    /**
+     * Click outside handler for Name field search
+     *
+     * @param {*} event Click outside event
+     * @param {*} element Focused element
+     * @param {string} searchedFieldName Name of the field through which search is to be performed
+     * @return {*}  {void}
+     * @memberof ReverseChargeReport
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === "name") {
+            if (this.searchedName?.value) {
+                return;
+            }
+            if (this.generalService.childOf(event.target, element)) {
+                return;
+            } else {
+                this.showNameSearch = false;
+            }
+        }
     }
 }

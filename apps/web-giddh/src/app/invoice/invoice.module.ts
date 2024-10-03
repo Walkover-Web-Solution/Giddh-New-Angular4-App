@@ -80,6 +80,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -171,7 +177,14 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         WatchVideoModule,
         MatTabsModule,
         BulkExportVoucherModule,
-        FroalaTemplateEditorModule
+        FroalaTemplateEditorModule,
+        MatTableModule,
+        MatFormFieldModule,
+        FormFieldsModule,
+        MatInputModule,
+        GiddhDatepickerModule,
+        MatRadioModule,
+        MatButtonModule
     ],
     exports: [
         InvoiceRoutingModule,

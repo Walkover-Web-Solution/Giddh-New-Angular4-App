@@ -43,6 +43,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/mat-menu.scss";
 @import "../css/global/tax-authority.scss";
 @import "../css/global/adjustment-inventory.scss";
+@import "../css/global/color.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -6800,10 +6801,10 @@ GST filing
     width: auto;
 }
 
-.tax-engine .column.list-column {
-    display: block;
-    border-right: 1px solid var(--color-common-secondary-border);
-}
+// .tax-engine .column.list-column {
+//     display: block;
+//     border-right: 1px solid var(--color-common-secondary-border);
+// }
 
 .tax-engine .column {
     height: 100%;
@@ -13730,4 +13731,12 @@ import-wizard {
             }
         }
     }
+}
+
+// table header search icon
+.table-search-icon {
+    top: 2px;
+    width: 25px !important;
+    height: 25px !important;
+    padding: 0 !important;
 }

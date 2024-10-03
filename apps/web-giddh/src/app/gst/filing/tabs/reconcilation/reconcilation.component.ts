@@ -82,9 +82,9 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         this.fireGstReconcileRequest(this.reconcileActiveTab, this.getPageNo());
     }
 
-    public reconcilePageChanged(event: any, action: string) {
-        this.fireGstReconcileRequest(GstReconcileActionsEnum[action], event.page);
-    }
+    // public reconcilePageChanged(event: any, action: string) {
+    //     this.fireGstReconcileRequest(GstReconcileActionsEnum[action], event.page);
+    // }
 
     public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false) {
         if (!this.currentPeriod) {
@@ -142,4 +142,16 @@ export class ReconcileComponent implements OnInit, OnDestroy {
 
         return page;
     }
+
+    /**
+     * Handle Page Change event and Make API Call
+     *
+     * @param {*} event
+     * @param {string} action
+     * @memberof ReconcileComponent
+     */
+    public reconcilePageChanged(event: any, action: string): void {
+        const pageIndex = event.pageIndex + 1;
+        this.fireGstReconcileRequest(GstReconcileActionsEnum[action], pageIndex);
+    }    
 }

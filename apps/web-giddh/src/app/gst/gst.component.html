@@ -34,11 +34,11 @@
         </div>
 
         <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3 ml-0 mr-0">
-            <div class="tax-heading col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
+            <!-- <div class="tax-heading col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
                 <label>{{ commonLocaleData?.app_gstin }}:</label>
-            </div>
+            </div> -->
             <div class="tax-dropdown col-xl-3 col-lg-6 col-md-3 col-sm-9 col-9">
-                <sh-select
+                <!-- <sh-select
                 [options]="taxes"
                 [(ngModel)]="activeCompanyGstNumber"
                 (selected)="selectTax($event)"
@@ -49,7 +49,18 @@
                     [ItemHeight]="67"
                     [isRequired]="true"
                     >
-                </sh-select>
+                </sh-select> -->
+                <dropdown-field
+                    [options]="taxes"
+                    [label]="commonLocaleData?.app_gstin"
+                    [(ngModel)]="activeCompanyGstNumber"
+                    (selectedOption)="selectTax($event)"
+                    [defaultValue]="activeCompanyGstNumber"
+                    [placeholder]="localeData?.select_gstin"
+                    [showClear]="false"
+                    [multiple]="false"
+                    [isRequired]="true"
+                ></dropdown-field>
             </div>
             <span class="ml-auto">
                 <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GST_FILLING_DASHBOARD'"></watch-video>
@@ -167,43 +178,36 @@
                 </div>
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
                 <div
-                    class="return-content"
+                    class="return-content pd-15 bg-white d-flex justify-content-between align-items-center flex-wrap"
                     [ngClass]="{ 'content-disabled': !isMonthSelected || !activeCompanyGstNumber }"
                 >
-                    <span class="btn-toolbar pull-right"> </span>
-                    <div>
+                    <div class="d-flex justify-content-between align-items-center column-gap1">
                         <img src="{{ imgPath }}summary.svg" class="icon gstr-icon text-middle" alt="summary img" />
-                        <div class="return-top text-middle">
-                            <div class="font-xlarge">
-                                <b>{{ localeData?.gstr3b_summary }}</b>
-                            </div>
-                        </div>
-                        <span class="btn-toolbar view-summary-btn pull-right">
-                            <a
-                                href="javascript:void(0);"
-                                aria-label="summary"
-                                class="btn btn-primary"
-                                (click)="navigateTogstR3B(GstReport.Gstr3b)"
-                            >
-                                {{ localeData?.view_summary }}
-                            </a>
-                        </span>
+                        <b>{{ localeData?.gstr3b_summary }}</b>
                     </div>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        aria-label="summary"
+                        (click)="navigateTogstR3B(GstReport.Gstr3b)"
+                    >
+                        {{ localeData?.view_summary }}
+                    </button>
                 </div>
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
 
                 <!-- ============================ GSTR1 ================================== -->
                 <div class="mt-2 parent position-relative">
                     <div
-                        class="return-content"
+                        class="return-content pd-15 bg-white"
                         [ngClass]="{
                             'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)
                         }"
                     >
-                        <div>
-                            <div class="return-top text-middle gstr-1-label">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
                                 <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart-img" />
-                                <div>
+                                <div class="mt-1">
                                     <div class="font-xlarge">
                                         <b class="text-middle"
                                             >{{ localeData?.gstr1_label }}
@@ -221,16 +225,16 @@
                                     <p>{{ localeData?.outward_supplies_details }}</p>
                                 </div>
                             </div>
-                            <span class="btn-toolbar view-summary-btn pull-right mr-t1" *ngIf="gstr1TransactionCounts">
-                                <a
-                                    href="javascript:void(0);"
-                                    aria-label="summary"
-                                    class="btn btn-primary"
-                                    (click)="navigateToOverview(GstReport.Gstr1)"
-                                >
-                                    {{ localeData?.view_summary }}
-                                </a>
-                            </span>
+                            <button
+                                *ngIf="gstr1TransactionCounts"  
+                                mat-stroked-button
+                                color="primary"
+                                aria-label="summary"
+                                class="mr-t1"
+                                (click)="navigateToOverview(GstReport.Gstr1)"
+                            >
+                                {{ localeData?.view_summary }}
+                            </button>
                         </div>
 
                         <div class="content-graph" *ngIf="gstr1TransactionCounts">
@@ -338,146 +342,138 @@
                     </div>
 
                     <div
-                        class="return-content"
+                        class="return-content pd-15 bg-white"
                         [ngClass]="{
                             'content-disabled':
                                 !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async)
                         }"
                     >
-                        <span class="btn-toolbar pull-right mr-t1" *ngIf="gstr2TransactionCounts">
-                            <a
-                                href="javascript:void(0);"
-                                aria-label="summary"
-                                class="btn btn-primary"
-                                (click)="navigateToOverview(GstReport.Gstr2)"
-                            >
-                                {{ localeData?.view_summary }}
-                            </a>
-                        </span>
+                    <button
+                        *ngIf="gstr2TransactionCounts"
+                        mat-stroked-button
+                        color="primary"
+                        aria-label="summary"
+                        class="mr-t1"
+                        (click)="navigateToOverview(GstReport.Gstr2)"
+                    >
+                        {{ localeData?.view_summary }}
+                    </button>
 
-                        <div>
-                            <div class="return-top text-middle gstr-2-label">
-                                <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle"  alt="bag img"  />
-                                <div>
-                                    <div class="font-xlarge">
-                                        <b
-                                            >{{ localeData?.gstr2_label }}
+                    <div>
+                        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="bag img"  />
+                        <div class="mt-1">
+                            <div class="font-xlarge">
+                                <b
+                                    >{{ localeData?.gstr2_label }}
 
-                                            <ng-container *ngIf="isMonthSelected">
-                                                ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
-                                            </ng-container>
-                                            <ng-container *ngIf="!isMonthSelected">
-                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
-                                                -
-                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
-                                            </ng-container>
-                                        </b>
-                                    </div>
-                                    <p>{{ localeData?.inward_supplies_details }}</p>
-                                </div>
+                                    <ng-container *ngIf="isMonthSelected">
+                                        ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
+                                    </ng-container>
+                                    <ng-container *ngIf="!isMonthSelected">
+                                        ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
+                                        -
+                                        {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                                    </ng-container>
+                                </b>
+                            </div>
+                            <p>{{ localeData?.inward_supplies_details }}</p>
+                        </div>
+                    </div>
+
+                    <div class="content-graph gstr2-push-disabled" *ngIf="gstr2TransactionCounts">
+                        <div class="purchase-colm">
+                            <div class="text-muted text-uppercase font-xs">
+                                <b> {{ localeData?.all_transactions }} </b>
+                            </div>
+                            <div class="line"></div>
+                            <div class="count">
+                                <a (click)="navigateToOverview(GstReport.Gstr2)"  href="javascript:void(0);"  aria-label="transaction"
+                                    ><span class="font-xxxlarge"
+                                        ><b> {{ gstr2TransactionCounts }} </b></span
+                                    >
+                                    <span>&nbsp;{{ localeData?.app_transactions }}</span></a
+                                >
                             </div>
                         </div>
 
-                        <div class="content-graph gstr2-push-disabled" *ngIf="gstr2TransactionCounts">
-                            <div class="purchase-colm">
-                                <div class="text-muted text-uppercase font-xs">
-                                    <b> {{ localeData?.all_transactions }} </b>
-                                </div>
-                                <div class="line"></div>
-                                <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr2)"  href="javascript:void(0);"  aria-label="transaction"
-                                        ><span class="font-xxxlarge"
-                                            ><b> {{ gstr2TransactionCounts }} </b></span
-                                        >
-                                        <span>&nbsp;{{ localeData?.app_transactions }}</span></a
-                                    >
-                                </div>
+                        <div class="purchase-colm">
+                            <div class="text-muted text-uppercase font-xs">
+                                <b>{{ localeData?.uncategorized }}</b>
                             </div>
-
-                            <div class="purchase-colm">
-                                <div class="text-muted text-uppercase font-xs">
-                                    <b>{{ localeData?.uncategorized }}</b>
-                                </div>
-                                <div class="line"></div>
-                                <div class="count">
-                                    <a
-                                        href="javascript:void(0);"  aria-label="transaction"
-                                        ><span class="font-xxxlarge"
-                                            ><b>{{ commonLocaleData?.app_numbers?.zero }}</b></span
-                                        >
-                                        <span>&nbsp;{{ localeData?.app_transactions }}</span></a
+                            <div class="line"></div>
+                            <div class="count">
+                                <a
+                                    href="javascript:void(0);"  aria-label="transaction"
+                                    ><span class="font-xxxlarge"
+                                        ><b>{{ commonLocaleData?.app_numbers?.zero }}</b></span
                                     >
-                                </div>
-                            </div>
-
-                            <div class="text-overdue ss mr-t3">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-middle">
-                                    <path
-                                        d="M437.2 74.8C388.8 26.4 324.4-.2 256-.2c-68.4 0-132.8 26.7-181.2 75.1C26.4 123.2-.2 187.6-.2 256c0 68.4 26.7 132.8 75.1 181.2 48.4 48.4 112.7 75.1 181.2 75.1 68.4 0 132.8-26.7 181.2-75.1s75.1-112.7 75.1-181.2c-.2-68.4-26.8-132.8-75.2-181.2z"
-                                    ></path>
-                                    <path
-                                        fill="#FFF"
-                                        d="M256.5 348.9c-17.7 0-32 14.1-32 31.6s14.3 31.6 32 31.6 32-14.2 32-31.6c.1-17.4-14.3-31.6-32-31.6zm-.8-246.2c-25.8 0-45.7 22.6-42.5 47.9 2.7 20.9 22.5 125.3 29.2 159.9 1.3 6.5 7 12.3 13.7 12.3h.3c6.5 0 12.1-5.7 13.3-12 6.5-34.1 26.5-138.9 29.1-160.2 3.3-25.6-17-47.9-43.1-47.9z"
-                                    ></path>
-                                </svg>
-                                <i class="text-middle p-0 mr-l05">{{ localeData?.gstr2_push_disabled }}</i>
+                                    <span>&nbsp;{{ localeData?.app_transactions }}</span></a
+                                >
                             </div>
                         </div>
+
+                        <div class="text-overdue ss mr-t3">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-middle">
+                                <path
+                                    d="M437.2 74.8C388.8 26.4 324.4-.2 256-.2c-68.4 0-132.8 26.7-181.2 75.1C26.4 123.2-.2 187.6-.2 256c0 68.4 26.7 132.8 75.1 181.2 48.4 48.4 112.7 75.1 181.2 75.1 68.4 0 132.8-26.7 181.2-75.1s75.1-112.7 75.1-181.2c-.2-68.4-26.8-132.8-75.2-181.2z"
+                                ></path>
+                                <path
+                                    fill="#FFF"
+                                    d="M256.5 348.9c-17.7 0-32 14.1-32 31.6s14.3 31.6 32 31.6 32-14.2 32-31.6c.1-17.4-14.3-31.6-32-31.6zm-.8-246.2c-25.8 0-45.7 22.6-42.5 47.9 2.7 20.9 22.5 125.3 29.2 159.9 1.3 6.5 7 12.3 13.7 12.3h.3c6.5 0 12.1-5.7 13.3-12 6.5-34.1 26.5-138.9 29.1-160.2 3.3-25.6-17-47.9-43.1-47.9z"
+                                ></path>
+                            </svg>
+                            <i class="text-middle p-0 mr-l05">{{ localeData?.gstr2_push_disabled }}</i>
+                        </div>
+                    </div>
 
                         <!--   -->
                         <div class="content-graph" *ngIf="!gstr2TransactionCounts">
-                            <div>
-                                <div class="row empty-return-row">
-                                    <div
-                                        class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                        [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/purchase/create' : '/pages/proforma-invoice/invoice/purchase']"
+                            <div class="d-flex justify-content-around empty-return-row">
+                                <div
+                                    class="text-center filing-steps cursor-pointer d-flex flex-column justify-content-center align-items-center"
+                                    [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/purchase/create' : '/pages/proforma-invoice/invoice/purchase']"
+                                >
+                                    <svg
+                                        id="Layer_1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 512 512"
+                                        class="icon filing-step-icon"
                                     >
-                                        <svg
-                                            id="Layer_1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 512 512"
-                                            class="icon filing-step-icon"
-                                        >
-                                            <path
-                                                fill="#444"
-                                                d="M412.8 173.9c0-1.3-.5-2.6-1.5-3.6l-94.7-94.7c-1-1-2.3-1.5-3.6-1.5H131.5c-2.8 0-5 2.2-5 5v118.7c0 2.8 2.2 5 5 5s5-2.2 5-5V84.2h171.7v89.7c0 2.8 2.2 5 5 5h89.7v249H136.5V254.4c0-2.8-2.2-5-5-5s-5 2.2-5 5v178.4c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5V174.1c0-.1-.1-.1-.1-.2zm-94.7-5V91.2l77.6 77.6h-77.6z"
-                                            ></path>
-                                            <path
-                                                fill="#00B177"
-                                                d="M144.7 231.6c28.9 1.6 55.5 13.6 77 34.5 18.8 18.4 32.2 42.8 38.3 69.6l-18.8-11c-2.4-1.4-5.4-.6-6.8 1.8-1.4 2.4-.6 5.4 1.8 6.8l28.2 16.5c.8.5 1.7.7 2.5.7 1.7 0 3.4-.9 4.3-2.5l16.5-28.2c1.4-2.4.6-5.4-1.8-6.8-2.4-1.4-5.4-.6-6.8 1.8l-9.7 16.6c-6.7-27.8-20.9-53.2-40.6-72.4-23.2-22.7-52.1-35.6-83.4-37.4-14.4-.8-28.7.8-42.5 4.9-2.7.8-4.2 3.5-3.4 6.2.8 2.7 3.5 4.2 6.2 3.4 12.6-3.8 25.8-5.3 39-4.5z"
-                                            ></path>
-                                        </svg>
-                                        <div class="font-large">
-                                            <b>{{ localeData?.create_transactions }}</b>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                        (click)="navigateToTab(1, GstReport.Gstr2)"
+                                        <path
+                                            fill="#444"
+                                            d="M412.8 173.9c0-1.3-.5-2.6-1.5-3.6l-94.7-94.7c-1-1-2.3-1.5-3.6-1.5H131.5c-2.8 0-5 2.2-5 5v118.7c0 2.8 2.2 5 5 5s5-2.2 5-5V84.2h171.7v89.7c0 2.8 2.2 5 5 5h89.7v249H136.5V254.4c0-2.8-2.2-5-5-5s-5 2.2-5 5v178.4c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5V174.1c0-.1-.1-.1-.1-.2zm-94.7-5V91.2l77.6 77.6h-77.6z"
+                                        ></path>
+                                        <path
+                                            fill="#00B177"
+                                            d="M144.7 231.6c28.9 1.6 55.5 13.6 77 34.5 18.8 18.4 32.2 42.8 38.3 69.6l-18.8-11c-2.4-1.4-5.4-.6-6.8 1.8-1.4 2.4-.6 5.4 1.8 6.8l28.2 16.5c.8.5 1.7.7 2.5.7 1.7 0 3.4-.9 4.3-2.5l16.5-28.2c1.4-2.4.6-5.4-1.8-6.8-2.4-1.4-5.4-.6-6.8 1.8l-9.7 16.6c-6.7-27.8-20.9-53.2-40.6-72.4-23.2-22.7-52.1-35.6-83.4-37.4-14.4-.8-28.7.8-42.5 4.9-2.7.8-4.2 3.5-3.4 6.2.8 2.7 3.5 4.2 6.2 3.4 12.6-3.8 25.8-5.3 39-4.5z"
+                                        ></path>
+                                    </svg>
+                                    <b>{{ localeData?.create_transactions }}</b>
+                                </div>
+                                <div
+                                    class="text-center filing-steps cursor-pointer d-flex flex-column justify-content-center align-items-center"
+                                    (click)="navigateToTab(1, GstReport.Gstr2)"
+                                >
+                                    <svg
+                                        id="Layer_1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 512 512"
+                                        class="icon filing-step-icon"
                                     >
-                                        <svg
-                                            id="Layer_1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 512 512"
-                                            class="icon filing-step-icon"
-                                        >
-                                            <path
-                                                fill="#444"
-                                                d="M399.2 174.2c0-.3 0-.6-.1-.9v-.1c-.1-.3-.1-.5-.2-.7 0-.1-.1-.2-.1-.3-.1-.2-.2-.4-.3-.5 0-.1-.1-.2-.2-.2-.2-.2-.3-.4-.5-.6l-.1-.1L303 76.6c-.2-.2-.4-.4-.7-.5-.1 0-.1-.1-.2-.1-.2-.1-.4-.2-.5-.3-.1 0-.2-.1-.3-.1-.2-.1-.5-.2-.7-.2h-.1c-.3-.1-.6-.1-.9-.1H117.8c-2.8 0-5 2.2-5 5V434c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5V174.2zm-94.7-82l77.6 77.1h-77.6V92.2zM122.8 428.8V85.2h171.7v89.1c0 2.8 2.2 5 5 5h89.7v249.5H122.8z"
-                                            ></path>
-                                            <path
-                                                fill="#FF9248"
-                                                d="M256 229.9c-35.9 0-65.1 29.2-65.1 65.1s29.2 65.1 65.1 65.1c35.9 0 65.1-29.2 65.1-65.1s-29.2-65.1-65.1-65.1zm0 120.2c-30.4 0-55.1-24.7-55.1-55.1s24.7-55.1 55.1-55.1 55.1 24.7 55.1 55.1-24.7 55.1-55.1 55.1z"
-                                            ></path>
-                                            <path
-                                                fill="#FF9248"
-                                                d="M294.2 269.8c-2-2-5.1-2-7.1 0l-40.9 40.9-13.5-13.5c-2-2-5.1-2-7.1 0s-2 5.1 0 7.1l17.1 17.1c1 1 2.3 1.5 3.5 1.5 1.3 0 2.6-.5 3.5-1.5l44.4-44.4c2.1-2.1 2.1-5.2.1-7.2z"
-                                            ></path>
-                                        </svg>
-                                        <div class="font-large">
-                                            <b>{{ localeData?.reconcile_transactions }}</b>
-                                        </div>
-                                    </div>
+                                        <path
+                                            fill="#444"
+                                            d="M399.2 174.2c0-.3 0-.6-.1-.9v-.1c-.1-.3-.1-.5-.2-.7 0-.1-.1-.2-.1-.3-.1-.2-.2-.4-.3-.5 0-.1-.1-.2-.2-.2-.2-.2-.3-.4-.5-.6l-.1-.1L303 76.6c-.2-.2-.4-.4-.7-.5-.1 0-.1-.1-.2-.1-.2-.1-.4-.2-.5-.3-.1 0-.2-.1-.3-.1-.2-.1-.5-.2-.7-.2h-.1c-.3-.1-.6-.1-.9-.1H117.8c-2.8 0-5 2.2-5 5V434c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5V174.2zm-94.7-82l77.6 77.1h-77.6V92.2zM122.8 428.8V85.2h171.7v89.1c0 2.8 2.2 5 5 5h89.7v249.5H122.8z"
+                                        ></path>
+                                        <path
+                                            fill="#FF9248"
+                                            d="M256 229.9c-35.9 0-65.1 29.2-65.1 65.1s29.2 65.1 65.1 65.1c35.9 0 65.1-29.2 65.1-65.1s-29.2-65.1-65.1-65.1zm0 120.2c-30.4 0-55.1-24.7-55.1-55.1s24.7-55.1 55.1-55.1 55.1 24.7 55.1 55.1-24.7 55.1-55.1 55.1z"
+                                        ></path>
+                                        <path
+                                            fill="#FF9248"
+                                            d="M294.2 269.8c-2-2-5.1-2-7.1 0l-40.9 40.9-13.5-13.5c-2-2-5.1-2-7.1 0s-2 5.1 0 7.1l17.1 17.1c1 1 2.3 1.5 3.5 1.5 1.3 0 2.6-.5 3.5-1.5l44.4-44.4c2.1-2.1 2.1-5.2.1-7.2z"
+                                        ></path>
+                                    </svg>
+                                    <b>{{ localeData?.reconcile_transactions }}</b>
                                 </div>
                             </div>
                             <!---->
@@ -490,9 +486,12 @@
                 <!-- ============================ GSTR2 ================================== -->
 
                 <!-- =================================== FINAL RETURN ============================= -->
-                <div class="return-content" *ngIf="false">
+                <div class="return-content pd-15 bg-white" *ngIf="false">
                     <span class="btn-toolbar pull-right">
-                        <button type="button" class="btn btn-primary">{{ localeData?.file_now }}</button>
+                        <button 
+                            mat-stroked-button
+                            color="primary"
+                        >{{ localeData?.file_now }}</button>
                     </span>
                     <div>
                         <svg
@@ -514,8 +513,12 @@
                 <!-- =================================== FINAL RETURN ============================= -->
 
                 <!-- =================================== TAX RETURN ============================= -->
-                <div class="return-content" *ngIf="false">
-                    <button type="button" class="btn btn-primary btn-toolbar pull-right">
+                <div class="return-content pd-15 bg-white" *ngIf="false">
+                    <button 
+                        mat-stroked-button
+                        color="primary"
+                        class="btn-toolbar pull-right"
+                    >
                         {{ localeData?.record_payment }}
                     </button>
                     <div>
