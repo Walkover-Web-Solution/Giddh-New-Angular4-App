@@ -110,8 +110,8 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      *
      * @memberof FinancialYearComponent
      */
-    public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
-        if(financialYear) {
+    public lockUnlockFinancialYear(financialYear: ActiveFinancialYear): void {
+        if (financialYear) {
             let year = cloneDeep(financialYear);
             let dataToSend = {
                 lockAll: true,
