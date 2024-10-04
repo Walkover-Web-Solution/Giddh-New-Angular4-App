@@ -409,8 +409,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
-     /** Holds current route query parameters */
-     public queryParams: any = {};
+    /** Holds current route query parameters */
+    public queryParams: any = {};
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -546,12 +546,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.queryParams = response[1];
 
                 if (this.queryParams?.redirect) {
-                    this.redirectUrl = this.queryParams?.redirect;
+                    this.redirectUrl = this.queryParams.redirect;
                 }
 
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
-                this.urlVoucherType =  params.voucherType;
+                this.urlVoucherType = params.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 if (this.voucherApiVersion !== 2) {
@@ -769,10 +769,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (response?.cashVoucher) {
-                    this.getVoucherType(response);
-                }
                 if (!response.isCopyVoucher) {
+                    if (response?.cashVoucher) {
+                        this.getVoucherType(response);
+                    }
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
                     this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
@@ -789,9 +789,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.depositAccountName = response.account?.name;
                 }
 
-                this.getAccountDetails(response.account?.uniqueName);
 
                 if (!response.isCopyVoucher) {
+                    this.getAccountDetails(response.account?.uniqueName);
                     this.fillBillingShippingAddress("account", "billingDetails", response.account?.billingDetails, 0);
                     this.fillBillingShippingAddress("account", "shippingDetails", response.account?.shippingDetails, 0);
 
@@ -2004,7 +2004,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             let defaultAddress = null;
-
             let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
             defaultAddress = accountDefaultAddress.defaultAddress;
             index = accountDefaultAddress.defaultAddressIndex;
@@ -3457,10 +3456,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private redirectToInvoicePreview(): void {
-        const queryParams = { 
-            page: this.queryParams?.page ?? 1, 
-            from: this.queryParams?.from ?? '', 
-            to: this.queryParams?.to ?? '' 
+        const queryParams = {
+            page: this.queryParams?.page ?? 1,
+            from: this.queryParams?.from ?? '',
+            to: this.queryParams?.to ?? ''
         };
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
@@ -3720,7 +3719,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/purchase-management/purchase/order']);
+                            this.redirectToInvoicePreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response.message);
@@ -4064,11 +4063,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * This will be use for send email after create voucher
      *
-     * @param {*} response
+     * @param {*} email
      * @memberof VoucherCreateComponent
      */
-    public sendEmail(response: any): void {
-        if (response) {
+    public sendEmail(email: any): void {
+        if (email) {
             if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
                 let req: ProformaGetRequest = new ProformaGetRequest();
 
@@ -4079,15 +4078,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     req.estimateNumber = this.voucherDetails?.number;
                 }
-                req.emailId = (response.email as string).split(',');
+                req.emailId = email;
                 this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
             } else {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.voucherDetails?.account?.uniqueName, payload: {
-                        email: { to: response.email.split(',') },
+                        email: { to: email.email },
                         voucherType: this.voucherDetails?.type,
-                        copyTypes: response.invoiceType ? response.invoiceType : [],
-                        uniqueName: response.uniqueName
+                        copyTypes: email.invoiceType ? email.invoiceType : [],
+                        uniqueName: email.uniqueName
                     }
                 });
             }
@@ -4173,7 +4172,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
      * @memberof VoucherCreateComponent
      */
-    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments?.forEach(adjustment => {

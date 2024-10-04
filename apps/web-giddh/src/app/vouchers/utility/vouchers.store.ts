@@ -273,7 +273,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPreviousVouchers = this.effect((data: Observable<{ model: InvoiceReceiptFilter, type: string }>) => {
         return data.pipe(
-            mergeMap((req) => {
+            switchMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllVouchers(req.model, req.type).pipe(
                     tapResponse(
@@ -303,7 +303,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getPreviousProformaEstimates = this.effect((data: Observable<{ model: ProformaFilter, type: string }>) => {
         return data.pipe(
-            mergeMap((req) => {
+            switchMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
                     tapResponse(
@@ -1382,7 +1382,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly sendEmail = this.effect((data: Observable<{ request: any, model: any }>) => {
+    readonly sendEmailOnPurchaseOrder = this.effect((data: Observable<{ request: any, model: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({

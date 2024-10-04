@@ -73,7 +73,6 @@
                                             'border-bottom': !lastItem
                                         }"
                                         (click)="setSelectedInvoice(item?.uniqueName)"
-                                        [matTooltip]="(item?.account?.customerName || item?.account?.name || item?.vendor?.name)?.length > 30 ? (item?.account?.customerName || item?.account?.name || item?.vendor?.name) : null"
                                     >
                                         <div class="d-flex justify-content-between align-items-center column-gap5">
                                             <div>
@@ -85,7 +84,7 @@
                                                     }}
                                                 </span>
                                                 <span class="font-12 light-gray"> | {{ item?.voucherDate }} </span>
-                                                <p class="black-color text-ellipsis account-name-width">
+                                                <p class="black-color pd-r3 text-wrap">
                                                     {{
                                                         item?.account?.customerName ||
                                                             item?.account?.name ||
@@ -118,13 +117,13 @@
         </div>
         <div class="preview-content">
             <section class="preview-header pd-15">
-                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap1">
-                    <div>
+                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap2 flex-row-reverse">
+                    <div class="order-1 mr-auto">
                         <h3 class="font-16 fw-bold">{{ selectedInvoice?.voucherNumber }}</h3>
                         <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
                     </div>
                     <div class="d-flex column-gap1 flex-wrap row-gap1">
-                        <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()">
+                        <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()" *ngIf="!(invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)">
                             <i class="icon-history-icon mr-1"></i>
                             {{ commonLocaleData?.app_history }}
                         </button>
@@ -262,10 +261,10 @@
                                 </button>
                             </ng-container>
                         </mat-menu>
-                        <span *ngIf="selectedInvoice?.action" class="invoice-status border-radius-5 text-capitalize">{{
-                            selectedInvoice.action
-                        }}</span>
-                        <button mat-stroked-button (click)="backToOldLocation()">
+                        <span *ngIf="isShowInvoiceStatus()" class="invoice-status border-radius-5 text-capitalize">
+                            {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action }}
+                        </span>
+                        <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>
@@ -295,6 +294,34 @@
                             {{ localeData?.email_invoice }}
                         </p>
                         <a href="javascript:;" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
+                    </div>
+                </div>
+                <div class="d-flex" *ngIf="invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice">
+                    <div>
+                        <div class="pd-t1 pd-b1" *ngIf="moreLogsDisplayed">
+                            <a href="javascript:;" (click)="filterVoucherVersions(false)">{{
+                                localeData?.less_details
+                            }}</a>
+                        </div>
+                        <div
+                            class="pd-t1 pd-b1"
+                            *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed"
+                        >
+                            <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
+                                localeData?.more_details
+                            }}</a>
+                        </div>
+
+                        <ul class="invoice-history-list mr-l15">
+                            <li *ngFor="let log of filteredVoucherVersions" class="position-relative my-3">
+                                <p>
+                                    {{ log.estimateDate }},
+                                    <span *ngIf="voucherType === 'estimates'">{{ localeData?.estimate }}</span>
+                                    <span *ngIf="voucherType !== 'estimates'">{{ voucherType }}</span>
+                                    {{ getVoucherLogText(log) }}
+                                </p>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <no-data
@@ -343,7 +370,7 @@
 
                         <div
                             *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
-                            class="error required"
+                            class="error danger text-center"
                         >
                             <span>{{ localeData?.invoice_preview_unavailable }}</span>
                         </div>

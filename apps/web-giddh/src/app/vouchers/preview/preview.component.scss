@@ -26,10 +26,6 @@
                     --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover
                 );
             }
-
-            .account-name-width {
-                max-width: 240px;
-            }
         }
     }
 
@@ -75,12 +71,32 @@
             }
         }
 
+        ul {
+            &.invoice-history-list {
+                list-style-type: circle;
+
+                li {
+                    &:not(:last-child) {
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            top: 20px;
+                            left: -10px;
+                            transform: translateX(-90%);
+                            height: 100%;
+                            border: 1px dashed var(--color-common-secondary-border);
+                        }
+                    }
+                }
+            }
+        }
+
         .pdf-preview {
             h5 {
                 background-color: var(--color-primary-invoice-preview-details-background);
             }
             .error {
-                font-size: var(--font-size-32);
+                font-size: var(--font-size-24);
             }
 
             .upload-excel {

@@ -88,6 +88,7 @@ import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-e
 import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
 import { A11yModule } from "@angular/cdk/a11y";
+import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
 
 @NgModule({
     declarations: [
@@ -187,7 +188,7 @@ import { A11yModule } from "@angular/cdk/a11y";
     exports: [
 
     ],
-    providers: [TitleCasePipe]
+    providers: [TitleCasePipe, InvoiceUiDataService]
 })
 export class VouchersModule {
 

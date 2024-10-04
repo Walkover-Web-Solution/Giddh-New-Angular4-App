@@ -47,7 +47,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public createNewText: any = "";
     /** True when pagination should be enabled */
     @Input() public isPaginationEnabled: boolean;
-    /** True if the compoonent should be used as dynamic search component instead of static search */
+    /** True if the component should be used as dynamic search component instead of static search */
     @Input() public enableDynamicSearch: boolean;
     /** True if we need to show value also with label */
     @Input() public showValueInLabel: boolean = false;
@@ -99,7 +99,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public next$: Subject<void> = new Subject();
 
     constructor(
-        private changeDetection : ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef
     ) {
 
     }
@@ -176,13 +176,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         if (changes?.labelValue) {
             this.labelValue = changes.labelValue.currentValue;
-        }
-
-        if(changes?.showError?.currentValue) {
-            this.showError = false;
-            setTimeout(() => {
-                this.showError = true;
-            }, 50);
         }
     }
 

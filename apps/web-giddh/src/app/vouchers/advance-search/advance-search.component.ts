@@ -241,10 +241,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public estimateProformaAmountRangeChanged(item: IOption): void {
-        this.searchForm.get('amountGreaterThan')?.patchValue(true);
-        this.searchForm.get('amountLessThan')?.patchValue(true);
-        this.searchForm.get('amountExclude')?.patchValue(true);
-        this.searchForm.get('amountEquals')?.patchValue(true);
+        this.searchForm.get('amountGreaterThan')?.patchValue(false);
+        this.searchForm.get('amountLessThan')?.patchValue(false);
+        this.searchForm.get('amountExclude')?.patchValue(false);
+        this.searchForm.get('amountEquals')?.patchValue(false);
 
         switch (item?.value) {
             case 'greaterThan':
