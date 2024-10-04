@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
-import * as saveAs from 'file-saver';
+import { saveAs } from 'file-saver';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { VoucherComponentStore } from '../utility/vouchers.store';

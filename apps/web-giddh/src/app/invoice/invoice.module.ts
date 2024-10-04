@@ -167,9 +167,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
         InvoicePreviewComponent
-    ],
-    providers: [
-        InvoiceUiDataService
     ]
 })
 export class InvoiceModule {

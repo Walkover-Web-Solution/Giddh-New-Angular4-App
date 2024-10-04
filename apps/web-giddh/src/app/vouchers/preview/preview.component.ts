@@ -802,13 +802,13 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public sendEmail(response: any): void {
         if (response) {
-            if (this.invoiceType.isSalesInvoice) {
+            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice) {
                 this.componentStore.sendVoucherOnEmail({
-                    accountUniqueName: this.selectedInvoice?.account?.uniqueName,
+                    accountUniqueName: this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName,
                     payload: {
-                        copyTypes: response.invoiceType,
+                        copyTypes: response.invoiceType ?? [],
                         email: {
-                            to: response.email
+                            to: response.email ?? response
                         },
                         voucherType: this.voucherType,
                         uniqueName: this.selectedInvoice?.uniqueName
@@ -826,13 +826,13 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     }
                     req.emailId = response;
                     this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
-                } else {
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     const request = {
                         accountUniqueName: this.selectedInvoice?.vendor?.uniqueName,
                         uniqueName: this.selectedInvoice?.uniqueName,
                         voucherType: this.voucherType
                     };
-                    this.componentStore.sendEmail({ request, model: { emailId: response } });
+                    this.componentStore.sendEmailOnPurchaseOrder({ request, model: { emailId: response } });
                 }
             }
         }

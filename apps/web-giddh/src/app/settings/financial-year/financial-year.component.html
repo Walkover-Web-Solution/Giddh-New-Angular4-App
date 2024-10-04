@@ -5,13 +5,13 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="box clearfix">
-        <form>
-            <div class="row">
-                <div class="col-sm-12">
+    <div class="box clearfix overflow-visible">
+        <form class="overflow-visible">
+            <div class="row overflow-visible">
+                <div class="col-sm-12 overflow-visible">
                     <h1 class="section-head">{{ localeData?.page_heading }} - {{ currentCompanyName }}</h1>
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-xs-12">
+                    <div class="row overflow-visible">
+                        <div class="col-xl-12 col-md-12 col-xs-12 overflow-visible">
                             <div class="financial-year-field row pt-1">
                                 <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
                                     <div class="row align-items-center">
@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-responsive" *ngIf="financialYearObj && financialYearObj.financialYears">
+                            <div class="table-responsive overflow-visible table-header-sticky" *ngIf="financialYearObj && financialYearObj.financialYears">
                                <table
                                     mat-table
                                     [dataSource]="financialYearObj.financialYears"
