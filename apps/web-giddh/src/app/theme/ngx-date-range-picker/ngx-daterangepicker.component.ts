@@ -290,9 +290,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     get startDateString(): string {
         if (this.startDate) {
             if (this.ActiveDate === ActiveDateEnum.End) {
-                return this.startDate.format(GIDDH_NEW_DATE_FORMAT_UI);
+                return this.startDate?.format(GIDDH_NEW_DATE_FORMAT_UI);
             } else {
-                return this.startDate.format(this.locale.format);
+                return this.startDate?.format(this.locale.format);
             }
         }
         return '';

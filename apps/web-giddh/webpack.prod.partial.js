@@ -9,7 +9,7 @@ module.exports = {
             'isElectron': JSON.stringify(false),
             'errlyticsNeeded': JSON.stringify(true),
             'errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
-            'AppUrl': JSON.stringify('https://app.giddh.com/'),
+            'AppUrl': JSON.stringify('https://books.giddh.com/'),
             'ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
@@ -36,7 +36,7 @@ module.exports = {
             'process.env.isElectron': JSON.stringify(false),
             'process.env.errlyticsNeeded': JSON.stringify(true),
             'process.env.errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
-            'process.env.AppUrl': JSON.stringify('https://app.giddh.com/'),
+            'process.env.AppUrl': JSON.stringify('https://books.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'process.PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')

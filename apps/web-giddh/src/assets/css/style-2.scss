@@ -43,6 +43,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/mat-menu.scss";
 @import "../css/global/tax-authority.scss";
 @import "../css/global/adjustment-inventory.scss";
+@import "../css/global/vouchers-preview.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -1642,6 +1643,14 @@ input {
     align-items: center;
     margin-top: 125px;
     margin-bottom: 105px;
+}
+
+giddh-page-loader {
+    &.unset-loader-margin {
+        .loader-main {
+            margin: 0 !important;
+        }
+    }
 }
 
 .dropdown-arrow {
@@ -11046,6 +11055,37 @@ body.update-scroll-hidden {
     }
 }
 
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
+    }
+
+    button.mat-menu-item {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px !important;
+    }
+
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+}
+
 /*---- inventory-master ----*/
 
 inventory-master {
@@ -13548,6 +13588,10 @@ aside-menu-product-service {
 }
 
 // common-dialog md width
+.mat-dialog-sm {
+    width: 500px;
+}
+
 .mat-dialog-md {
     width: 700px;
 }
@@ -13575,7 +13619,8 @@ aside-menu-product-service {
         .mat-list-wrap {
             .mat-mdc-list {
                 .mat-mdc-list-item {
-                    height: 60px;
+                    height: auto;
+                    min-height: 60px;
                 }
             }
         }
