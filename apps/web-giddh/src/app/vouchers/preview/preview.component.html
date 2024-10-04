@@ -370,7 +370,7 @@
 
                         <div
                             *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
-                            class="error required"
+                            class="error danger text-center"
                         >
                             <span>{{ localeData?.invoice_preview_unavailable }}</span>
                         </div>
