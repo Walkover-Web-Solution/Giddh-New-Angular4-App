@@ -1311,29 +1311,43 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value === provider);
             this.thirdStepForm.get('paymentProvider')?.patchValue(provider);
         };
-        if (entityCode !== 'GBR' && duration === 'DAILY') {
-            // Exclude Razorpay for monthly GBR
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
-        } else if (entityCode === 'GBR') {
-            if (duration === 'MONTHLY' || duration === 'DAILY') {
+        if (duration === 'MONTHLY' || duration === 'DAILY') {
+            if (entityCode === 'GLB' || entityCode === 'ARE') {
+                filterProviders('PAYPAL');
+            } else if (entityCode === 'GBR') {
                 // Exclude Razorpay for monthly GBR
                 this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
-            } else if (duration === 'YEARLY') {
+            } else if (entityCode === 'IND') {
                 // Only Razorpay for yearly GBR
                 filterProviders('RAZORPAY');
             }
-        } else if (entityCode !== 'IND') {
-            if (duration === 'MONTHLY') {
-                // Only PayPal for non-IND countries with monthly duration
-                filterProviders('PAYPAL');
-            } else if (duration === 'YEARLY') {
-                // Only Razorpay for non-IND countries with yearly duration
+        } else if (duration === 'YEARLY') {
+            if (entityCode === 'GLB' || entityCode === 'GBR' || entityCode === 'IND' || entityCode === 'ARE') {
+                // Only Razorpay for yearly GBR
                 filterProviders('RAZORPAY');
             }
-        } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'YEARLY')) {
-            // Only Razorpay for IND with any duration
-            filterProviders('RAZORPAY');
         }
+
+        // if (entityCode === 'GBR') {
+        //     if (duration === 'MONTHLY') {
+
+        //     } else if (duration === 'YEARLY') {
+        //         // Only Razorpay for yearly GBR
+        //         filterProviders('RAZORPAY');
+        //     }
+        // } else if (entityCode !== 'IND') {
+        //     if (duration === 'MONTHLY') {
+        //         // Only PayPal for non-IND countries with monthly duration
+        //         filterProviders('PAYPAL');
+        //     } else if (duration === 'YEARLY') {
+        //         // Only Razorpay for non-IND countries with yearly duration
+        //         filterProviders('RAZORPAY');
+        //     }
+        // } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'YEARLY')) {
+        //     // Only Razorpay for IND with any duration
+        //     filterProviders('RAZORPAY');
+        // }
+
 
         if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && (duration === 'MONTHLY' || duration === 'DAILY')) {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
