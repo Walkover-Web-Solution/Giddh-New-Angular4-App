@@ -1,163 +1,165 @@
 <div class="container-fluid">
-    <div
-        *ngIf="
-            (dueAmountReportData$ | async)?.results?.length ||
-            (getAgingReportRequestInProcess$ | async) ||
-            showClearFilter ||
-            isAdvanceSearchApplied
-        "
-        class="top-bar aging-top-bar d-flex justify-content-between"
-    >
-        <div class="aging-form-inline">
-            <div class="btn-group pull-left on-desktop-view">
-                <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
-                    {{ localeData?.new_customer }}
-                </button>
-            </div>
-            <div
-                class="form-group mr-r15 pull-left linked-entities mb-0"
-                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-            >
-                <div class="form-group mb-0">
-                    <sh-select
-                        [options]="currentCompanyBranches"
-                        [(ngModel)]="currentBranch.uniqueName"
-                        [showClear]="false"
-                        [ItemHeight]="33"
-                        width="100%"
-                        (selected)="handleBranchChange($event)"
-                        [isFilterEnabled]="true"
-                        [placeholder]="commonLocaleData?.app_select_entity"
-                        [fixedValue]="currentBranch?.alias"
-                    >
-                        <ng-template #optionTemplate let-option="option">
-                            <ng-container>
-                                <a href="javascript:void(0)" class="list-item d-flex">
-                                    <span class="entity-icon">
-                                        <i
-                                            class="icon-branch-icon"
-                                            *ngIf="!option.isCompany"
-                                            matTooltip="{{ commonLocaleData?.app_branch }}"
-                                            matTooltipPosition="above"
-                                        ></i>
-                                        <i
-                                            class="icon-company-profile"
-                                            *ngIf="option.isCompany"
-                                            matTooltip="{{ commonLocaleData?.app_company }}"
-                                            matTooltipPosition="above"
-                                        ></i>
-                                    </span>
-                                    <span class="entity-details">
-                                        <div class="item giddh-limit single-line-clamp">{{ option?.label || "-" }}</div>
-                                        <div class="item-unique giddh-limit single-line-clamp">
-                                            {{ option?.name || "-" }}
-                                        </div>
-                                    </span>
-                                </a>
-                            </ng-container>
-                        </ng-template>
-                    </sh-select>
+    <div class="header-content-sticky">
+        <div
+            *ngIf="
+                (dueAmountReportData$ | async)?.results?.length ||
+                (getAgingReportRequestInProcess$ | async) ||
+                showClearFilter ||
+                isAdvanceSearchApplied
+            "
+            class="top-bar aging-top-bar d-flex justify-content-between"
+        >
+            <div class="aging-form-inline">
+                <div class="btn-group pull-left on-desktop-view">
+                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
+                        {{ localeData?.new_customer }}
+                    </button>
+                </div>
+                <div
+                    class="form-group mr-r15 pull-left linked-entities mb-0"
+                    *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                >
+                    <div class="form-group mb-0">
+                        <sh-select
+                            [options]="currentCompanyBranches"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            [showClear]="false"
+                            [ItemHeight]="33"
+                            width="100%"
+                            (selected)="handleBranchChange($event)"
+                            [isFilterEnabled]="true"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [fixedValue]="currentBranch?.alias"
+                        >
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                        <span class="entity-icon">
+                                            <i
+                                                class="icon-branch-icon"
+                                                *ngIf="!option.isCompany"
+                                                matTooltip="{{ commonLocaleData?.app_branch }}"
+                                                matTooltipPosition="above"
+                                            ></i>
+                                            <i
+                                                class="icon-company-profile"
+                                                *ngIf="option.isCompany"
+                                                matTooltip="{{ commonLocaleData?.app_company }}"
+                                                matTooltipPosition="above"
+                                            ></i>
+                                        </span>
+                                        <span class="entity-details">
+                                            <div class="item giddh-limit single-line-clamp">{{ option?.label || "-" }}</div>
+                                            <div class="item-unique giddh-limit single-line-clamp">
+                                                {{ option?.name || "-" }}
+                                            </div>
+                                        </span>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                        </sh-select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div
-            class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
-            *ngIf="showClearFilter"
-        >
-            <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
-                <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
-            </button>
-        </div>
-        <div class="d-flex justify-content-between align-items-center">      
-            <watch-video class="mr-r1" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
-            <div class="pull-left d-flex wrap-searching-aging">
-                <div
-                    class="form-group search-field max-width-250"
-                    [ngClass]="{ 'default-width': isAdvanceSearchApplied }"
-                >
-                    <text-field
-                        type="text"
-                        [placeholder]="localeData?.name_amount"
-                        [cssClass]="'form-control name-width'"
-                        [(ngModel)]="searchStr"
-                        (ngModelChange)="searchStr$.next($event)"
-                    ></text-field>
-                    <span class="input-addon">
-                        <i class="icon-search"></i>
+            <div
+                class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+                *ngIf="showClearFilter"
+            >
+                <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
+                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                </button>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">      
+                <watch-video class="mr-r1" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
+                <div class="pull-left d-flex wrap-searching-aging">
+                    <div
+                        class="form-group search-field max-width-250"
+                        [ngClass]="{ 'default-width': isAdvanceSearchApplied }"
+                    >
+                        <text-field
+                            type="text"
+                            [placeholder]="localeData?.name_amount"
+                            [cssClass]="'form-control name-width'"
+                            [(ngModel)]="searchStr"
+                            (ngModelChange)="searchStr$.next($event)"
+                        ></text-field>
+                        <span class="input-addon">
+                            <i class="icon-search"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        class="advance-icon"
+                        (click)="showAdvanceSearchPopup()"
+                        matTooltip="{{ commonLocaleData?.app_advance_search }}"
+                        matTooltipPosition="right"
+                        aria-label="filter button"
+                    >
+                        <div class="d-flex align-items-center">
+                            {{ commonLocaleData?.app_filter }}
+                            <span class="icon-advance-filter ml-2"></span>
+                        </div>
+                    </button>
+                    <button *ngIf="voucherApiVersion ===2" mat-stroked-button color="primary" (click)="exportReport()" aria-label="export">
+                        {{ commonLocaleData?.app_export }}
+                    </button>
+                    <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
+                        <button mat-icon-button (click)="resetAdvanceSearch()" aria-label="refresh-btn">
+                            <i
+                                aria-hidden="true"
+                                class="icon-refresh"
+                                matTooltip="{{ commonLocaleData?.app_reset_filter }}"
+                                matTooltipPosition="below"
+                            ></i>
+                        </button>
                     </span>
                 </div>
             </div>
-            <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    class="advance-icon"
-                    (click)="showAdvanceSearchPopup()"
-                    matTooltip="{{ commonLocaleData?.app_advance_search }}"
-                    matTooltipPosition="right"
-                    aria-label="filter button"
-                >
-                    <div class="d-flex align-items-center">
-                        {{ commonLocaleData?.app_filter }}
-                        <span class="icon-advance-filter ml-2"></span>
-                    </div>
+            <div class="btn-group mr-t15 pull-left mobile-view">
+                <button mat-stroked-button color="primary" class="w-100" (click)="createNewCustomerEvent.emit(true)" aria-label="new customer">
+                    {{ localeData?.new_customer }}
                 </button>
-                <button *ngIf="voucherApiVersion ===2" mat-stroked-button color="primary" (click)="exportReport()" aria-label="export">
-                    {{ commonLocaleData?.app_export }}
-                </button>
-                <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                    <button mat-icon-button (click)="resetAdvanceSearch()" aria-label="refresh-btn">
-                        <i
-                            aria-hidden="true"
-                            class="icon-refresh"
-                            matTooltip="{{ commonLocaleData?.app_reset_filter }}"
-                            matTooltipPosition="below"
-                        ></i>
-                    </button>
-                </span>
             </div>
         </div>
-        <div class="btn-group mr-t15 pull-left mobile-view">
-            <button mat-stroked-button color="primary" class="w-100" (click)="createNewCustomerEvent.emit(true)" aria-label="new customer">
-                {{ localeData?.new_customer }}
-            </button>
-        </div>
-    </div>
-    <div class="top-content" [hidden]="!(dueAmountReportData$ | async)?.results?.length">
-        <div class="d-flex w-100 justify-content-between overflow-x-auto">
-            <div class="total-due-sale total-details-box opening-box border-none mr-r05">
-                <h5>
-                    {{ commonLocaleData?.app_upcoming }}
-                    <div>
-                        <span class="d-inline-flex number-total">
-                            <amount-field
-                                [amount]="totalFutureDueAmounts"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field
-                            >/-
-                        </span>
-                    </div>
-                </h5>
-            </div>
-            <div class="total-due-sale total-details-box due-box border-none">
-                <h5>
-                    {{ commonLocaleData?.app_due }}
-                    <div>
-                        <span class="d-inline-flex number-total">
-                            <amount-field [amount]="totalDueAmounts" [currencySymbol]="false" [currencyCode]="false">
-                            </amount-field
-                            >/-
-                        </span>
-                    </div>
-                </h5>
+        <div class="top-content" [hidden]="!(dueAmountReportData$ | async)?.results?.length">
+            <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                <div class="total-due-sale total-details-box opening-box border-none mr-r05">
+                    <h5>
+                        {{ commonLocaleData?.app_upcoming }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="totalFutureDueAmounts"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field
+                                >/-
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-due-sale total-details-box due-box border-none">
+                    <h5>
+                        {{ commonLocaleData?.app_due }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field [amount]="totalDueAmounts" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field
+                                >/-
+                            </span>
+                        </div>
+                    </h5>
+                </div>
             </div>
         </div>
     </div>
-    <div class="contact-main aging-page"  *ngIf="!isLoading">
-        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
-            <div *ngIf="!isMobileScreen" class="table-responsive">
+    <div class="contact-main aging-page overflow-visible"  *ngIf="!isLoading">
+        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper overflow-visible">
+            <div *ngIf="!isMobileScreen" class="table-responsive overflow-visible">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
             <div *ngIf="isMobileScreen && (dueAmountReportData$ | async)?.results?.length">

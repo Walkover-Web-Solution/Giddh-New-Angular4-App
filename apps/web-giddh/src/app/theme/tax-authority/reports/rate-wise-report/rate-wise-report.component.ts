@@ -62,6 +62,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initSalesTaxReportForm();
+        this.loadTaxDetails();
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
             if (queryParams?.uniqueName) {
                 this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams.uniqueName ?? '');
@@ -89,6 +90,23 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
                 this.pagination.totalPages = response.totalPages;
             }
         });
+
+        // Subscribe Tax Number Observable
+        this.componentStore.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.getFormControl('taxNumber').patchValue(response.body[0]);
+            }
+        });
+    }
+    
+    /**
+    * Loads the tax details of a company
+    *
+    * @private
+    * @memberof RateWiseReportComponent
+    */
+    private loadTaxDetails(): void {
+        this.componentStore.getTaxNumber();
     }
 
     /**

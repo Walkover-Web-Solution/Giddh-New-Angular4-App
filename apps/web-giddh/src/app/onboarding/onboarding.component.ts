@@ -8,12 +8,14 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { OnboardingComponentStore } from './utility/onboarding.store';
 
 
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
+    providers: [OnboardingComponentStore],
     animations: [
         trigger("slideInOut", [
             state("in", style({
@@ -49,6 +51,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
+    /** Holds true if current company country is gocardless supported country */
+    public isGoCardlessSupportedCountry: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
 
@@ -56,7 +60,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions,
+        private componentStore: OnboardingComponentStore
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -71,6 +76,12 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
             }
         });
+
+        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
+             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                 this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+             }
+         });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
