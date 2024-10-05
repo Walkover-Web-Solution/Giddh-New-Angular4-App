@@ -12,6 +12,7 @@ import { AccountAddNewDetailsComponent } from './account-add-new-details.compone
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -31,7 +32,8 @@ import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.compo
         RouterModule,
         MatDialogModule,
         MatButtonModule,
-        FormsModule
+        FormsModule,
+        TooltipModule.forRoot()
     ]
 })
 export class AccountAddNewDetailsModule { }
