@@ -13400,19 +13400,6 @@ voucher-component {
 .custom-btn {
     color: var(--color-black);
 }
-.readonly-field {
-    .dropdown-bg {
-        display: none !important;
-    }
-
-    .mat-mdc-form-field {
-        background-color: var(--color-primary-input-bar-background) !important;
-    }
-
-    .dropdown-bg {
-        background-color: transparent !important;
-    }
-}
 
 .new-branch-transfer-page {
     .cdk-overlay-container {
