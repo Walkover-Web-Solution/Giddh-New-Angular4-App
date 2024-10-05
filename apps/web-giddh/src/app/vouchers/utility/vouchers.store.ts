@@ -1382,7 +1382,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly sendEmail = this.effect((data: Observable<{ request: any, model: any }>) => {
+    readonly sendEmailOnPurchaseOrder = this.effect((data: Observable<{ request: any, model: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({

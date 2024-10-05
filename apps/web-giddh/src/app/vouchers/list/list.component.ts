@@ -20,7 +20,7 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
-import * as saveAs from "file-saver";
+import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
@@ -1860,7 +1860,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     uniqueName: this.currentVoucher?.uniqueName,
                     voucherType: this.voucherType
                 };
-                this.componentStore.sendEmail({ request, model: { emailId: email } });
+                this.componentStore.sendEmailOnPurchaseOrder({ request, model: { emailId: email } });
             } else if (this.voucherType === VoucherTypeEnum.purchase) {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.currentVoucher?.account?.uniqueName,
