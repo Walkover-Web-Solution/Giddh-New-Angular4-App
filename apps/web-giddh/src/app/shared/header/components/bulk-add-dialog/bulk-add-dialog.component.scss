@@ -15,4 +15,14 @@
             border-radius: 5px !important;
         }
     }
+
+    .bulk-input-width {
+        input {
+                width: 210px;
+        }
+    }
+
+        .word-wrap-dots {
+            max-width: 85px;
+        }
 }

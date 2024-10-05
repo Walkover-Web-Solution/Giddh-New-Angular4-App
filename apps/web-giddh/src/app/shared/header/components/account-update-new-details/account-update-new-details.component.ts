@@ -937,7 +937,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
             }
         ];
-        accountRequest.accountOpeningBalance = this.company?.isActive ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
+
+        const accountOpeningBalanceValue = this.addAccountForm.get('accountOpeningBalance')?.value;
+        const isAccountOpeningBalanceValid = accountOpeningBalanceValue?.some((balance: any) => {
+            return balance.branch || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+        const isBranchModeOpeningBalanceValid = branchModeOpeningBalance.some((balance: any) => {
+            return balance.branch?.name || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+
+        accountRequest.accountOpeningBalance = this.company.isActive
+            ? (isAccountOpeningBalanceValid ? accountOpeningBalanceValue : [])
+            : (isBranchModeOpeningBalanceValid ? branchModeOpeningBalance : []);
+
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
