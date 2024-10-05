@@ -1443,12 +1443,12 @@
                                                                                 </div>
                                                                                 <div class="col" *ngIf="!invoiceType.isCashInvoice">
                                                                                     <input-field
-                                                                                        [name]="'amountForAccount_'+ depositIndex"
+                                                                                        [name]="'amount_'+ depositIndex"
                                                                                         [label]="commonLocaleData?.app_amount"
                                                                                         [placeholder]="localeData?.enter_deposit_amount"
                                                                                         [type]="'number'"
                                                                                         (input)="$event && calculateBalanceDue()"
-                                                                                        formControlName="amountForAccount"
+                                                                                        formControlName="amount"
                                                                                     >
                                                                                     </input-field>
                                                                                 </div>

@@ -2149,7 +2149,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getDepositFormGroup(): FormGroup {
         return this.formBuilder.group({
             accountUniqueName: [''],
-            amountForAccount: [''],
+            amount: [''],
             currencySymbol: [''],
             type: ['DEBIT']
         });
@@ -3618,8 +3618,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getDeposits(): any[] {
         const deposits = [];
         this.invoiceForm.get('deposits')['controls']?.forEach(control => {
-            if (!this.invoiceType.isCashInvoice && control.get("accountUniqueName").value && control.get("amountForAccount").value || this.invoiceType.isCashInvoice && control.get("accountUniqueName").value) {
-                deposits.push(control.value);
+            if (!this.invoiceType.isCashInvoice && control.get("accountUniqueName").value && control.get("amount").value) {
+                if (this.isMultiCurrencyVoucher) {
+                    deposits.push({ amountForCompany: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
+                } else {
+                    deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
+                }
+            }else if(this.invoiceType.isCashInvoice && control.get("accountUniqueName").value){
+                deposits.push({ accountUniqueName: control.get("accountUniqueName").value });
             }
         });
         return deposits;
@@ -4332,8 +4338,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getTotalDepositAmount(): void {
         this.totalDepositAmount = 0;
         this.invoiceForm.get('deposits')['controls']?.forEach((control: any) => {
-            if (control.get("accountUniqueName").value && control.get('amountForAccount').value) {
-                this.totalDepositAmount += Number(control.get('amountForAccount').value);
+            if (control.get("accountUniqueName").value && control.get("amount").value) {
+                this.totalDepositAmount += Number(control.get("amount").value);
             }
         });
     }
@@ -4347,7 +4353,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getEmptyDepositAccountError(index: number): boolean {
         let deposits = this.invoiceForm?.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
-        if ((!currentDepositFormGroup.get("accountUniqueName").value) && currentDepositFormGroup.get("amountForAccount").value) {
+        if ((!currentDepositFormGroup.get("accountUniqueName").value) && currentDepositFormGroup.get("amount").value) {
             return true;
         }
         return false;
