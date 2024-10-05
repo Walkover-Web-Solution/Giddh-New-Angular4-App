@@ -13,78 +13,78 @@
             <form class="create-acc-form" [formGroup]="bulkAddAccountForm">
                 <ng-container formArrayName="customFields">
                     <div class="d-flex align-items-center column-gap15 mb-3 justify-content-between">
-                        <h4 class="fw-bold w-25">{{ commonLocaleData?.app_branch_name }}</h4>
-                        <div class="d-flex align-items-center obj-gap">
-                            <h4 class="fw-bold balance-width" *ngIf="data?.foreignCurrency">
-                                {{ localeData?.foreign_opening_balance }}
-                            </h4>
-                            <h4 class="fw-bold balance-width">{{ localeData?.opening_balance }}</h4>
-                            <h4 class="fw-bold">{{ localeData?.opening_balance_type }}</h4>
-                        </div>
+                        <h4 class="fw-bold">{{ commonLocaleData?.app_branch_name }}</h4>
+                        <h4 class="fw-bold balance-width text-left" *ngIf="data?.foreignCurrency">
+                            {{ localeData?.foreign_opening_balance }}
+                        </h4>
+                        <h4 class="fw-bold balance-width text-left">{{ localeData?.opening_balance }}</h4>
+                        <h4 class="fw-bold text-right">{{ localeData?.opening_balance_type }}</h4>
                     </div>
                     <ng-container
                         *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index"
                         [formGroupName]="bulkIndex"
                     >
                         <div class="d-flex column-gap15 align-items-start mb-3 justify-content-between">
-                            <p class="w-25">{{ branches[bulkIndex]?.name }}</p>
-                            <div class="form-group m-0">
-                                <div class="input-group obj-gap">
-                                    <input
-                                        *ngIf="data?.foreignCurrency"
-                                        type="number"
-                                        min="0"
-                                        class="form-control text-right mr-1"
-                                        digitsOnlyDirective
-                                        formControlName="foreignOpeningBalance"
-                                        [placeholder]="'0.00'"
-                                    />
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        class="form-control text-right mr-1"
-                                        digitsOnlyDirective
-                                        formControlName="openingBalance"
-                                        [placeholder]="'0.00'"
-                                    />
-                                    <div class="d-flex column-gap5 width-150">
-                                        <div
-                                            class="input-group-addon"
-                                            (click)="openingBalanceTypeChanged('DEBIT', bulkIndex)"
-                                            [ngClass]="{
-                                                'active-toggle-btn':
-                                                    item.get('openingBalanceType')?.value === 'DEBIT' &&
-                                                    (item.get('openingBalance')?.value > 0 ||
-                                                        item.get('foreignOpeningBalance')?.value > 0),
-                                                'cursor-pointer':
-                                                    item.get('openingBalance')?.value > 0 ||
-                                                    item.get('foreignOpeningBalance')?.value > 0
-                                            }"
-                                        >
-                                            {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                                        </div>
-                                        <div
-                                            class="input-group-addon"
-                                            (click)="openingBalanceTypeChanged('CREDIT', bulkIndex)"
-                                            [ngClass]="{
-                                                'active-toggle-btn':
-                                                    item.get('openingBalanceType')?.value === 'CREDIT' &&
-                                                    (item.get('openingBalance')?.value > 0 ||
-                                                        item.get('foreignOpeningBalance')?.value > 0),
-                                                'cursor-pointer':
-                                                    item.get('openingBalance')?.value > 0 ||
-                                                    item.get('foreignOpeningBalance')?.value > 0
-                                            }"
-                                        >
-                                            {{ commonLocaleData?.app_cr?.toUpperCase() }}
-                                        </div>
-                                    </div>
+                            <p tooltip="{{ branches[bulkIndex]?.name }}" class="word-wrap-dots text-ellipsis">
+                                {{ branches[bulkIndex]?.name }}
+                            </p>
+                            <div *ngIf="data?.foreignCurrency" class="bulk-input-width">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    class="form-control text-right mr-1 m-auto"
+                                    digitsOnlyDirective
+                                    formControlName="foreignOpeningBalance"
+                                    [placeholder]="'0.00'"
+                                />
+                            </div>
+                            <div class="bulk-input-width">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    class="form-control text-right mr-1"
+                                    digitsOnlyDirective
+                                    formControlName="openingBalance"
+                                    [placeholder]="'0.00'"
+                                />
+                            </div>
+                            <div class="d-flex column-gap5 justify-content-end width-150">
+                                <div
+                                    class="input-group-addon"
+                                    (click)="openingBalanceTypeChanged('DEBIT', bulkIndex)"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            item.get('openingBalanceType')?.value === 'DEBIT' &&
+                                            (item.get('openingBalance')?.value > 0 ||
+                                                item.get('foreignOpeningBalance')?.value > 0),
+                                        'cursor-pointer':
+                                            item.get('openingBalance')?.value > 0 ||
+                                            item.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                </div>
+                                <div
+                                    class="input-group-addon"
+                                    (click)="openingBalanceTypeChanged('CREDIT', bulkIndex)"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            item.get('openingBalanceType')?.value === 'CREDIT' &&
+                                            (item.get('openingBalance')?.value > 0 ||
+                                                item.get('foreignOpeningBalance')?.value > 0),
+                                        'cursor-pointer':
+                                            item.get('openingBalance')?.value > 0 ||
+                                            item.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
                             </div>
                         </div>
                     </ng-container>
                 </ng-container>
                 <button
+                    class="float-right"
                     mat-stroked-button
                     color="primary"
                     aria-label="save"

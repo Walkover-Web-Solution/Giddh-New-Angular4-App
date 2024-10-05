@@ -23,7 +23,6 @@ export class SettingsBranchService {
     */
     public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = (request.companyUniqueName) ? request.companyUniqueName : this.generalService.companyUniqueName;
-        console.log(this.generalService.currentBranchUniqueName);
         let from = (request.from) ? request.from : "";
         let to = (request.to) ? request.to : "";
         let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
