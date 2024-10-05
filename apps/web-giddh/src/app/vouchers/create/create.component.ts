@@ -3624,7 +3624,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
                 }
-            }else if(this.invoiceType.isCashInvoice && control.get("accountUniqueName").value){
+            } else if (this.invoiceType.isCashInvoice && control.get("accountUniqueName").value) {
                 deposits.push({ accountUniqueName: control.get("accountUniqueName").value });
             }
         });
