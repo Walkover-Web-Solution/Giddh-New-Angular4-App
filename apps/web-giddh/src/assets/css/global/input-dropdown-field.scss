@@ -16,7 +16,7 @@ report-filters,
     }
 
     .mat-mdc-form-field {
-        background-color: var(--color-white);
+        background-color: var(--color-white) !important;
         border-radius: 4px;
 
         .mat-mdc-text-field-wrapper {
@@ -236,16 +236,8 @@ report-filters,
 }
 
 .mat-mdc-form-field {
-    &.mat-focused {
-        background-color: transparent;
-
-        .mat-text-field--focused {
-            background-color: transparent;
-        }
-    }
 
     &:hover {
-        background-color: transparent;
 
         .mat-mdc-form-field-focus-overlay {
             opacity: 0;
@@ -294,12 +286,6 @@ giddh-datepicker,
             min-width: 71px;
             max-width: 100px;
         }
-    }
-}
-
-.mdc-text-field--filled {
-    &:not(.mdc-text-field--disabled) {
-        background-color: transparent !important;
     }
 }
 
@@ -392,14 +378,6 @@ add-company {
     &.mat-pseudo-checkbox-minimal {
         &::after {
             color: var(--color-giddh-blue);
-        }
-    }
-}
-
-.mat-mdc-option {
-    &:focus {
-        &.mdc-list-item {
-            background-color: transparent !important;
         }
     }
 }
@@ -658,5 +636,16 @@ input-field {
                 }
             }
         }
+    }
+}
+
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
+
+    .mat-mdc-form-field,  
+    .mat-mdc-form-field input{
+        background-color: var(--color-primary-input-bar-background) !important;
     }
 }
