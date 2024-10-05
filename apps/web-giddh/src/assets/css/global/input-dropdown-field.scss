@@ -16,6 +16,9 @@ report-filters,
     }
 
     .mat-mdc-form-field {
+        background-color: var(--color-white);
+        border-radius: 4px;
+
         .mat-mdc-text-field-wrapper {
             .mat-form-field-underline {
                 display: block !important;
