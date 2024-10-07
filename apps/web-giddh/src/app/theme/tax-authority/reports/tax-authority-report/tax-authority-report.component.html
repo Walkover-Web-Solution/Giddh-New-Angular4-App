@@ -71,7 +71,7 @@
                                                 class="d-inline-block"
                                                 [amount]="(taxAuthorityWiseReport$ | async)?.totalGrandTotal"
                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                [currencyCode]="false"
+                                                [currencyCode]="activeCompany?.baseCurrency"
                                             ></amount-field>
                                         </td>
                                     </ng-container>
@@ -89,7 +89,7 @@
                                                 class="d-inline-block"
                                                 [amount]="(taxAuthorityWiseReport$ | async)?.totalSubTotal"
                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                [currencyCode]="false"
+                                                [currencyCode]="activeCompany?.baseCurrency"
                                             ></amount-field>
                                         </td>
                                     </ng-container>
@@ -107,7 +107,7 @@
                                                 class="d-inline-block"
                                                 [amount]="(taxAuthorityWiseReport$ | async)?.totalNonTaxableAmount"
                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                [currencyCode]="false"
+                                                [currencyCode]="activeCompany?.baseCurrency"
                                             ></amount-field>
                                         </td>
                                     </ng-container>
@@ -125,7 +125,7 @@
                                                 class="d-inline-block"
                                                 [amount]="(taxAuthorityWiseReport$ | async)?.totalTaxableAmount"
                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                [currencyCode]="false"
+                                                [currencyCode]="activeCompany?.baseCurrency"
                                             ></amount-field>
                                         </td>
                                     </ng-container>
