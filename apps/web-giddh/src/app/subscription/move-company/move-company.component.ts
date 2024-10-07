@@ -113,9 +113,9 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.isLoading = true;
             this.searchCompany(false);
             this.componentStore.companyList$.pipe(
-                takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data?.length) {
-                        const mappedCompanyWise = data.results.map(item => ({
+                takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.results?.length) {
+                        const mappedCompanyWise = response.results.map(item => ({
                             value: item.uniqueName,
                             label: item.name,
                             additional: item
@@ -161,9 +161,9 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
                     this.searchRequest.loadMore = false;
-                    if (response) {
+                    if (response?.results?.length) {
                         if (loadMore) {
-                            let nextPaginatedData = response.results?.map(item => ({
+                            let nextPaginatedData = response.results.map(item => ({
                                 value: item.uniqueName,
                                 label: item.name,
                                 additional: item
@@ -172,7 +172,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                             this.fieldFilteredOptions = concatData;
                             this.companyList$ = observableOf(concatData);
                         } else {
-                            this.fieldFilteredOptions = response.results?.map(item => ({
+                            this.fieldFilteredOptions = response.results.map(item => ({
                                 value: item.uniqueName,
                                 label: item.name,
                                 additional: item
