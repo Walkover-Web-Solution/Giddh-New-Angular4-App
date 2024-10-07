@@ -114,16 +114,16 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.searchCompany(false);
             this.componentStore.companyList$.pipe(
                 takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data) {
-                        this.isLoading = false;
-                        const mappedCompanyWise = data?.results?.map(item => ({
+                    if (data?.length) {
+                        const mappedCompanyWise = data.results.map(item => ({
                             value: item.uniqueName,
                             label: item.name,
                             additional: item
                         }));
                         this.companyList$ = observableOf(mappedCompanyWise);
-                        this.changeDetection.detectChanges();
                     }
+                    this.isLoading = false;
+                    this.changeDetection.detectChanges();
                 });
         }
     }

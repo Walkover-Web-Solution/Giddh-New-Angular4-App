@@ -673,7 +673,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionListComponent
      */
     public addCompanyInSubscription(company: any): void {
-        this.menu?.closeMenu();
+        this.menu.closeMenu();
         this.subscriptionMove = false;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
