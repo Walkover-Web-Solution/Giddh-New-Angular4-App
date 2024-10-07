@@ -616,16 +616,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private checkSearchingIsEmpty(): void {
-        let seachingFieldIsEmpty: boolean = false;
+        let searchingFieldIsEmpty: boolean = false;
 
         if (this.voucherType === VoucherTypeEnum.purchase) {
-            seachingFieldIsEmpty = this.purchaseOrderUniqueNameInput.value === "" && this.accountUniqueNameInput.value === "" && this.voucherNumberInput.value === "";
+            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
         } else {
-            seachingFieldIsEmpty = this.accountUniqueNameInput.value === "" && this.voucherNumberInput.value === "";
+            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
         }
 
-        this.advanceFiltersApplied = !seachingFieldIsEmpty;
-        this.isSearching = !seachingFieldIsEmpty;
+        this.advanceFiltersApplied = this.isSearching = searchingFieldIsEmpty;
     }
 
     /**
