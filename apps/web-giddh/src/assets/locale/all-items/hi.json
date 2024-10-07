@@ -583,6 +583,51 @@
                     }
                 },
                 {
+                    "label": "टैक्स प्राधिकरण",
+                    "link": "pages/settings/reports/tax-authority",
+                    "icon": "icon-vat1",
+                    "description": "टैक्स प्राधिकरण",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "कर दर के अनुसार",
+                    "link": "pages/settings/reports/rate-wise",
+                    "icon": "icon-vat1",
+                    "description": "कर दर के अनुसार",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "कर खाता वार",
+                    "link": "pages/settings/reports/account-wise",
+                    "icon": "icon-vat1",
+                    "description": "कर खाता वार",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
                     "label": "वैट देनदारियाँ",
                     "link": "/pages/vat-report/liabilities",
                     "icon": "icon-vat1",
