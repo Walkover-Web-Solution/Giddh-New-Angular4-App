@@ -324,7 +324,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
-            if (params && params.page && params.from && params.to) {
+            if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
             }
         });
@@ -842,6 +842,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     page: this.queryParams.page ?? 1,
                     from: this.queryParams.from,
                     to: this.queryParams.to
+                }
+            });
+        } else if (this.queryParams.tabIndex) {
+            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
+                queryParams: {
+                    tabIndex: this.queryParams.tabIndex ?? 0,
                 }
             });
         } else {

@@ -850,7 +850,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             const currentInvoiceList = [];
             if (this.pageNumberHistory[0] < response.page) {
                 this.pageNumberHistory.push(response.page);
-            } else {
+            } else if(!this.pageNumberHistory.includes(response.page)) {
                 this.pageNumberHistory.unshift(response.page);
             }
             this.totalPages = response?.totalPages;
@@ -892,8 +892,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 }
                 currentInvoiceList.push(item);
             });
-
-            if (this.isSearching && this.advanceFilters.page === 1 && this.pageNumberHistory.length === 1) {
+            
+            if (this.isSearching && (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) {
                 this.invoiceList = currentInvoiceList;
             } else {
                 this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
