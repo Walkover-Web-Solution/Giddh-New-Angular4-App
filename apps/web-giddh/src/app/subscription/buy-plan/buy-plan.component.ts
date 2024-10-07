@@ -1219,6 +1219,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (!this.intlClass) {
             this.initIntl();
         }
+        this.setFinalAmount();
     }
 
     /**
@@ -1239,16 +1240,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 );
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
-                if (!this.subscriptionId) {
-                    if (this.yearlyPlans?.length) {
-                        this.firstStepForm.get('duration').setValue('YEARLY');
+                    if (!this.subscriptionId) {
+                        if (this.yearlyPlans?.length) {
+                            this.firstStepForm.get('duration').setValue('YEARLY');
+                        } else {
+                            this.firstStepForm.get('duration').setValue('MONTHLY');
+                        }
                     } else {
-                        this.firstStepForm.get('duration').setValue('MONTHLY');
+                        this.firstStepForm.get('duration').setValue(this.viewSubscriptionData?.period);
                     }
-                } else {
-                    this.firstStepForm.get('duration').setValue(this.viewSubscriptionData?.period);
-                }
-                this.setPlans();
+                    this.setPlans();
             } else {
                 this.inputData = [];
                 setTimeout(() => {
@@ -1380,7 +1381,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
             this.newUserSelectedCountryValue = event.value;
+
             setTimeout(() => {
+                this.getAllPlans();
                 if (this.isSubscriptionRegion) {
                     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
                 }
