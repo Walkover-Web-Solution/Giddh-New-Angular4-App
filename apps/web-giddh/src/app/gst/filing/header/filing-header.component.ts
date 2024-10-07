@@ -149,6 +149,18 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.selectedGst = params['return_type'];
         });
+
+        let request: GstOverViewRequest = new GstOverViewRequest();
+        request.from = this.currentPeriod.from;
+        request.to = this.currentPeriod.to;
+        request.gstin = this.activeCompanyGstNumber;
+        if (this.selectedGst === GstReport.Gstr1) {
+            this.navigateToOverview();
+            this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
+        } else {
+            this.navigateToOverview();
+            this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
+        }
     }
 
     public pullFromGstIn(ev) {
@@ -301,18 +313,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             };
             this.dateSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
-            let request: GstOverViewRequest = new GstOverViewRequest();
-            request.from = this.currentPeriod.from;
-            request.to = this.currentPeriod.to;
-            request.gstin = this.activeCompanyGstNumber;
             if (this.selectedGst === GstReport.Gstr1) {
                 this.navigateToOverview();
-                this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
             } else {
                 this.navigateToOverview();
-                this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
             }
         }
+
     }
 
     /**

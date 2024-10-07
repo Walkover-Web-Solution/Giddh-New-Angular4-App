@@ -63,13 +63,14 @@ export class AccountWiseReportComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.initSalesTaxReportForm();
+        this.loadTaxDetails();
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
             if (queryParams?.taxAuthorityUniqueName || queryParams?.taxUniqueName) {
                 this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams?.taxAuthorityUniqueName ?? '');
                 this.getFormControl('taxUniqueName').patchValue(queryParams?.taxUniqueName ?? '');
             }
         });
-        
+
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -91,6 +92,23 @@ export class AccountWiseReportComponent implements OnInit {
                 this.pagination.totalPages = response.totalPages;
             }
         });
+
+        // Subscribe Tax Number Observable
+        this.componentStore.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.getFormControl('taxNumber').patchValue(response.body[0]);
+            }
+        });
+    }
+
+    /**
+    * Loads the tax details of a company
+    *
+    * @private
+    * @memberof AccountWiseReportComponent
+    */
+    private loadTaxDetails(): void {
+        this.componentStore.getTaxNumber();
     }
 
     /**

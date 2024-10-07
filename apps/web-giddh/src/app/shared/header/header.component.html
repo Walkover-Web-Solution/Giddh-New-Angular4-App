@@ -4,10 +4,11 @@
         {{ localeData?.depreciation_message }}
         <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">
             support
-            <span>&#64;</span> <!-- This &#64; Html Code for @ symbol  -->
+            <span>&#64;</span>
+            <!-- This &#64; Html Code for @ symbol  -->
             giddh.com
         </a>
-        
+
         {{ localeData?.depreciation_data_message }} &nbsp;
         <a
             href="javascript:void(0);"
@@ -148,7 +149,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <ul>
+                                            <ul class="d-flex column-gap2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -208,7 +209,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <ul>
+                                            <ul class="d-flex column-gap2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -263,7 +264,7 @@
                                                 </span>
                                                 <span> {{ localeData?.branch_transfer }} </span>
                                             </div>
-                                            <ul>
+                                            <ul class="d-flex column-gap2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -293,7 +294,7 @@
                                                 </span>
                                                 <span> {{ localeData?.stock }} </span>
                                             </div>
-                                            <ul>
+                                            <ul class="d-flex column-gap2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -534,9 +535,18 @@
                                     class="font-16"
                                     [routerLink]="['/pages/user-details/mobile-number']"
                                 >
-                                    {{ localeData?.my_profile }}
+                                    {{ commonLocaleData?.app_user_settings }}
                                 </button>
                                 <mat-divider></mat-divider>
+                                <button
+                                    mat-menu-item
+                                    class="font-16"
+                                    [routerLink]="['/pages/user-details/subscription']"
+                                >
+                                    {{ commonLocaleData?.app_subscription }}
+                                </button>
+                                <mat-divider></mat-divider>
+
                                 <button mat-menu-item (click)="logout()">
                                     <div class="d-flex align-items-center">
                                         <i class="icon-logout mr-2"></i>
@@ -743,7 +753,7 @@
             (closeAsideEvent)="toggleSidebarPane(false, false)"
         ></aside-setting>
     </div>
-    
+
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">

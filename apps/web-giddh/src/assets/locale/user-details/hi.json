@@ -48,7 +48,9 @@
 		"signin_time": "साइन इन समय",
 		"duration": "अवधि (डीडी/एचएच/एमएम/एसएस)",
 		"browser_agent": "अवधि (डीडी/एचएच/एमएम/एसएस)",
-		"current": "वर्तमान"
+		"current": "वर्तमान",
+        "delete_all_sessions": "क्या आप वाकई सभी सत्र हटाना चाहते हैं?",
+        "delete_single_session": "क्या आप वाकई इस सत्र को हटाना चाहते हैं?"
 	},
 	"subscription": {
 		"tab_heading": "सदस्यता",

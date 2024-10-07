@@ -10,6 +10,7 @@ export const environment: Environment = {
     production: false,
     AppUrl: 'http://localhost:3000/',
     ApiUrl: 'https://apitest.giddh.com/',
+    UkApiUrl: 'https://gbapi.giddh.com/',
     isElectron: false,
     APP_FOLDER: '',
     showDevModule: true,
