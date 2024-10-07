@@ -397,32 +397,36 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                                <span class="d-flex">
-                                                    <i class="icon-invoice-new mr-r1"></i>
-                                                </span>
-                                                <span>
-                                                    <a
-                                                        class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/vouchers/receipt/create')"
-                                                    >
-                                                        {{ commonLocaleData?.app_voucher_types?.receipt }}
-                                                    </a>
-                                                </span>
-                                            </div> -->
-                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                                <span class="d-flex">
-                                                    <i class="icon-invoice-new mr-r1"></i>
-                                                </span>
-                                                <span>
-                                                    <a
-                                                        class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/vouchers/payment/create')"
-                                                    >
-                                                        {{ commonLocaleData?.app_voucher_types?.payment }}
-                                                    </a>
-                                                </span>
-                                            </div> -->
+                                            <!-- NOTE - This code is only active for Test Environment - Start -->
+                                            <ng-container *ngIf="!isProdMode">
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-invoice-new mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="navigateToSubItemLink('/vouchers/receipt/create')"
+                                                        >
+                                                            {{ commonLocaleData?.app_voucher_types?.receipt }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-invoice-new mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="navigateToSubItemLink('/vouchers/payment/create')"
+                                                        >
+                                                            {{ commonLocaleData?.app_voucher_types?.payment }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </ng-container>
+                                            <!-- NOTE - This code is only active for Test Environment - End -->
                                             <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>

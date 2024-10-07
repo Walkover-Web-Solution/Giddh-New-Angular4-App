@@ -1816,6 +1816,7 @@
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice && !isPendingEntries" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_sales_update_account }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isEstimateInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isProformaInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="(invoiceType.isPaymentInvoice || invoiceType.isReceiptInvoice) && !isProdMode" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice && !isPendingEntries" (click)="generateVoucher()">{{ localeData?.generate_sales }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="isPendingEntries && !invoiceType.isCashInvoice" (click)="generateVoucher()">{{ localeData?.generate_invoice }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" (click)="generateVoucher()">{{ localeData?.generate_cash }}</button>
