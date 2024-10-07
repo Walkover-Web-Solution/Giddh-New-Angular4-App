@@ -116,7 +116,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 takeUntil(this.destroyed$)).subscribe(data => {
                     if (data) {
                         this.isLoading = false;
-                        const mappedCompanyWise = data?.results.map(item => ({
+                        const mappedCompanyWise = data?.results?.map(item => ({
                             value: item.uniqueName,
                             label: item.name,
                             additional: item
@@ -163,7 +163,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                     this.searchRequest.loadMore = false;
                     if (response) {
                         if (loadMore) {
-                            let nextPaginatedData = response.results.map(item => ({
+                            let nextPaginatedData = response.results?.map(item => ({
                                 value: item.uniqueName,
                                 label: item.name,
                                 additional: item
@@ -172,7 +172,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                             this.fieldFilteredOptions = concatData;
                             this.companyList$ = observableOf(concatData);
                         } else {
-                            this.fieldFilteredOptions = response.results.map(item => ({
+                            this.fieldFilteredOptions = response.results?.map(item => ({
                                 value: item.uniqueName,
                                 label: item.name,
                                 additional: item
