@@ -181,6 +181,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     };
     /** Holds last filters applyed */
     public lastListingFilters: any;
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
 
     /** @ignore */
     constructor(
