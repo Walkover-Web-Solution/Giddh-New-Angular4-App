@@ -70,7 +70,7 @@ export class CreateManufacturingClass {
     manufacturingMultipleOf: number;
     stockUniqueName: string;
     variant: ManufacturingVariant;
-    variants?: ManufacturingVariant[];
+    variants?: any[];
     manufacturingUnitCode?: string;
     manufacturingUnitUniqueName?: string;
     stockName?: string;
@@ -88,7 +88,6 @@ export class CreateManufacturingClass {
         this.otherExpenses = [];
         this.increaseAssetValue = true;
         this.variant = new ManufacturingVariant();
-        this.variants = [new ManufacturingVariant()];
         this.stocksPageNumber = 1;
         this.stocksTotalPages = 1;
         this.stocksQ = "";
