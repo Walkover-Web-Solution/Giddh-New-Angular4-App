@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { merge, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -64,8 +64,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "type", "due"];
     /** Holds current table columns */
     public displayColumns: string[] = [];
-    /** Observable to store true if API Call is in progress */
-    public liabilityPaymentListInProgress$ = this.componentStore.select(state => state.liabilityPaymentListInProgress);
     /** Holds true if user in vat-payment */
     public isPaymentMode: boolean;
     /** Stores the current company */
@@ -78,6 +76,12 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     private currentBranch: any = {};
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
+    /** Hold HMRC portal url */
+    public connectToHMRCUrl: string = null;
+    /** True if API Call is in progress */
+    public isLoading: boolean;
+    /** Observable to store the HMRC portal url */
+    public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -93,6 +97,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
+                this.getURLHMRCAuthorization();
             }
         });
     }
@@ -161,6 +166,17 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                 this.getLiabilitiesPayment();
             }
         });
+
+        this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                this.connectToHMRCUrl = response.body;
+            }
+        });
+
+        merge(this.componentStore.liabilityPaymentListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.isLoading = response;
+            });
     }
     /**
     * Get Current company branches information
@@ -325,6 +341,15 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         return this.searchForm.get(control);
     }
 
+    /**
+     * This will call API to get HMRC get authorization url
+     *
+     * @memberof VatLiabilitiesPayments
+     */
+    public getURLHMRCAuthorization(): void {
+        this.componentStore.getHMRCAuthorization(this.activeCompany.uniqueName);
+    }
+    
     /**
     * Lifecycle hook for destroy
     *

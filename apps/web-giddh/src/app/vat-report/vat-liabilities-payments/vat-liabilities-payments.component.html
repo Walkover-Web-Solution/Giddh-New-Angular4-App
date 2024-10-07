@@ -13,7 +13,7 @@
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-    <div class="liabilities-payments pd-15">
+    <div class="liabilities-payments position-relative pd-15">
         <div class="container-fluid section-center ml-0">
             <div class="row align-items-center row-gap">
                 <div class="col flex-grow-0">
@@ -49,11 +49,11 @@
                     </button>
                 </div>
             </div>
-            <div class="mt-5" *ngIf="liabilityPaymentListInProgress$ | async">
-                <giddh-page-loader></giddh-page-loader>
+            <div class="mt-5" *ngIf="isLoading">
+                <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="!(liabilityPaymentListInProgress$ | async)">
-                <div class="table-responsive" *ngIf="hasTaxNumber">
+            <div class="row mt-5" *ngIf="!isLoading">
+                <div class="table-responsive">
                     <table mat-table [dataSource]="dataSource" class="w-100" *ngIf="dataSource.length">
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef>#</th>
@@ -147,12 +147,19 @@
                         <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
                     </table>
-                    <div class="no-data" *ngIf="!dataSource.length">
-                        <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                    <div *ngIf="!dataSource.length && hasTaxNumber">
+                        <div *ngIf="connectToHMRCUrl" class="position-center position-absolute">
+                            <a mat-stroked-button color="primary" [href]="connectToHMRCUrl">
+                                {{ localeData?.connect_to_hmrc }}
+                            </a>
+                        </div>
+                        <div class="no-data" *ngIf="!connectToHMRCUrl" >
+                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
+                        </div>
                     </div>
-                </div>
-                <div *ngIf="!hasTaxNumber" class="no-data no-report">
-                    <h1>{{ localeData?.no_vrn_available }}</h1>
+                    <div *ngIf="!hasTaxNumber" class="no-data no-report">
+                        <h1>{{ localeData?.no_vrn_available }}</h1>
+                    </div>
                 </div>
             </div>
         </div>
