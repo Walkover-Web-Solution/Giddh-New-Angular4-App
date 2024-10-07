@@ -413,6 +413,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private totalDepositAmount: number = 0;
     /** Holds current route query parameters */
     public queryParams: any = {};
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we

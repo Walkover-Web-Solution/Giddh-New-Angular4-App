@@ -256,6 +256,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
 
     /**
      * Returns whether the back button in header should be displayed or not
