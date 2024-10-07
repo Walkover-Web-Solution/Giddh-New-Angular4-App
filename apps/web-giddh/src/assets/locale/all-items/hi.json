@@ -584,7 +584,7 @@
                 },
                 {
                     "label": "टैक्स प्राधिकरण",
-                    "link": "pages/settings/reports/tax-authority",
+                    "link": "/pages/settings/reports/tax-authority",
                     "icon": "icon-vat1",
                     "description": "टैक्स प्राधिकरण",
                     "hide": "sidebar",
@@ -599,7 +599,7 @@
                 },
                 {
                     "label": "कर दर के अनुसार",
-                    "link": "pages/settings/reports/rate-wise",
+                    "link": "/pages/settings/reports/rate-wise",
                     "icon": "icon-vat1",
                     "description": "कर दर के अनुसार",
                     "hide": "sidebar",
@@ -614,7 +614,7 @@
                 },
                 {
                     "label": "कर खाता वार",
-                    "link": "pages/settings/reports/account-wise",
+                    "link": "/pages/settings/reports/account-wise",
                     "icon": "icon-vat1",
                     "description": "कर खाता वार",
                     "hide": "sidebar",
