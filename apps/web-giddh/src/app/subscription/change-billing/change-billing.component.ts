@@ -383,8 +383,11 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
             this.selectedCountry = event.label;
-            this.changeBillingForm.controls['country'].setValue(event);
-
+            let reqObj = {
+                name: event.label,
+                code: event.value
+            }
+            this.changeBillingForm.controls['country'].setValue(reqObj);
             this.changeBillingForm.get('taxNumber')?.setValue('');
             this.changeBillingForm.get('state')?.setValue('');
             this.selectedState = "";
@@ -400,6 +403,22 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             statesRequest.country = event.value;
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
             this.changeDetection.detectChanges();
+        }
+    }
+
+    /**
+      * This will use for select state
+      *
+      * @param {*} event
+      * @memberof ChangeBillingComponent
+      */
+    public selectState(event: any): void {
+        let reqObj = {
+            name: event.label,
+            code: event.value
+        }
+        if (event?.value) {
+            this.changeBillingForm.controls['state'].setValue(reqObj);
         }
     }
 

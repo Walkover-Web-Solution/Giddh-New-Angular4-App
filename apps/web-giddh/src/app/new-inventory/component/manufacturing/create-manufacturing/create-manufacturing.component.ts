@@ -1277,6 +1277,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingUnitCode;
                 this.manufacturingObject.manufacturingDetails[0].stockName = response.body.stockName;
                 this.manufacturingObject.manufacturingDetails[0].stockUniqueName = response.body.stockUniqueName;
+                this.manufacturingObject.manufacturingDetails[0].variants = [{ label: response.body.variant.name, value: response.body.variant.uniqueName }];
                 this.manufacturingObject.manufacturingDetails[0].variant.name = response.body.variant.name;
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
