@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { delay, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -117,7 +117,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
         this.initSettingObj();
 
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+        this._route.queryParams.pipe(delay(200),takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tabIndex) {
                 this.selectTab(val.tabIndex);
             }
