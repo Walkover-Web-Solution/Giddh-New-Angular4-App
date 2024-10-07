@@ -587,7 +587,7 @@
                 },
                 {
                     "label": "Tax Authority",
-                    "link": "pages/settings/reports/tax-authority",
+                    "link": "/pages/settings/reports/tax-authority",
                     "icon": "icon-vat1",
                     "description": "Tax Authority",
                     "hide": "sidebar",
@@ -602,7 +602,7 @@
                 },
                 {
                     "label": "Tax Rate Wise",
-                    "link": "pages/settings/reports/rate-wise",
+                    "link": "/pages/settings/reports/rate-wise",
                     "icon": "icon-vat1",
                     "description": "Tax Rate Wise",
                     "hide": "sidebar",
@@ -617,7 +617,7 @@
                 },
                 {
                     "label": "Tax Account Wise",
-                    "link": "pages/settings/reports/account-wise",
+                    "link": "/pages/settings/reports/account-wise",
                     "icon": "icon-vat1",
                     "description": "Tax Account Wise",
                     "hide": "sidebar",
