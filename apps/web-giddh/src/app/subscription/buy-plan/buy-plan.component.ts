@@ -412,7 +412,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             if (this.payType === 'trial') {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
-                                if (response?.region?.code === 'GBR') {
+                                if (response?.duration === 'MONTHLY' && response?.region?.code !== 'IND') {
                                     let model = {
                                         planUniqueName: response?.planDetails?.uniqueName,
                                         paymentProvider: this.thirdStepForm.value.paymentProvider,
@@ -525,7 +525,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
             }
             if (response && response.dueAmount > 0) {
-                if (response?.region?.code === 'GBR') {
+                if (response?.duration === 'MONTHLY' && response?.region?.code !== 'IND') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,
@@ -1167,7 +1167,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                this.isUserManualChangePlan = this.selectedPlan.uniqueName !== this.viewSubscriptionData?.planUniqueName;
+                this.isUserManualChangePlan = this.selectedPlan?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
                 this.setFinalAmount();
             }
         });
@@ -1197,7 +1197,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
-                this.selectedPlan = result.find(plan => plan.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
             }
         });
         if (this.firstStepForm?.get('promoCode')?.value) {
@@ -1240,16 +1240,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 );
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
-                    if (!this.subscriptionId) {
-                        if (this.yearlyPlans?.length) {
-                            this.firstStepForm.get('duration').setValue('YEARLY');
-                        } else {
-                            this.firstStepForm.get('duration').setValue('MONTHLY');
-                        }
+                if (!this.subscriptionId) {
+                    if (this.yearlyPlans?.length) {
+                        this.firstStepForm.get('duration').patchValue('YEARLY');
                     } else {
-                        this.firstStepForm.get('duration').setValue(this.viewSubscriptionData?.period);
+                        this.firstStepForm.get('duration').patchValue('MONTHLY');
                     }
-                    this.setPlans();
+                } else if (this.viewSubscriptionData?.period) {
+                    this.firstStepForm.get('duration').patchValue(this.viewSubscriptionData?.period);
+                } else {
+                    if (this.yearlyPlans?.length) {
+                        this.firstStepForm.get('duration').patchValue('YEARLY');
+                    } else {
+                        this.firstStepForm.get('duration').patchValue('MONTHLY');
+                    }
+                }
+                this.setPlans();
             } else {
                 this.inputData = [];
                 setTimeout(() => {
@@ -1338,6 +1344,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         } else {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
         }
+
 
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && Object.keys(response)?.length) {
