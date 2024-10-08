@@ -98,7 +98,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
-                this.getURLHMRCAuthorization();
             }
         });
     }
@@ -151,13 +150,17 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 if (this.isCompanyMode) {
                     this.hasTaxNumber = true;
                 }
-                this.getVatObligations();
+                this.getURLHMRCAuthorization();
             }
         });
 
         this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body) {
-                this.connectToHMRCUrl = response.body;
+            if (response?.status === "success") {
+                if (response?.body) {
+                    this.connectToHMRCUrl = response.body;
+                } else {
+                    this.getVatObligations();
+                }
             }
         });
 
