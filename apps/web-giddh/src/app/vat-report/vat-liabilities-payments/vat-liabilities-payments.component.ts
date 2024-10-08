@@ -167,10 +167,12 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         });
 
         this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body) {
-                this.connectToHMRCUrl = response.body;
-            } else if(response) {
-                this.getLiabilitiesPayment();
+            if (response?.status === "success") {
+                if (response?.body) {
+                    this.connectToHMRCUrl = response.body;
+                } else {
+                    this.getLiabilitiesPayment();
+                }
             }
         });
 
@@ -350,7 +352,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public getURLHMRCAuthorization(): void {
         this.componentStore.getHMRCAuthorization(this.activeCompany.uniqueName);
     }
-    
+
     /**
     * Lifecycle hook for destroy
     *
