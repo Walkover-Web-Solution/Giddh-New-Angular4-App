@@ -76,7 +76,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding', hasTabs: false },
 
 
-    { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', hasTabs: false },
+    { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/vouchers/preview/sales/list', hasTabs: false },
     { type: 'MENU', name: 'New Purchase Bill', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
     { type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash', hasTabs: false },
     { type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas', hasTabs: false },
@@ -113,10 +113,10 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: true },
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt', hasTabs: false },
     // { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
-    { type: 'MENU', name: 'Purchase Management > Purchase Order', uniqueName: '/pages/purchase-management/purchase/order', hasTabs: true },
-    { type: 'MENU', name: 'Purchase Management > Purchase Bill', uniqueName: '/pages/purchase-management/purchase/bill', hasTabs: true },
+    { type: 'MENU', name: 'Purchase Management > Purchase Order', uniqueName: '/pages/vouchers/preview/purchase-order/list', hasTabs: true },
+    { type: 'MENU', name: 'Purchase Management > Purchase Bill', uniqueName: '/pages/vouchers/preview/purchase/list', hasTabs: true },
     { type: 'MENU', name: 'New Purchase Order', uniqueName: '/pages/purchase-management/purchase-order/new', hasTabs: false },
-    { type: 'MENU', name: 'Purchase Management > Settings', uniqueName: '/pages/purchase-management/purchase/settings', hasTabs: true }
+    { type: 'MENU', name: 'Purchase Management > Settings', uniqueName: '/pages/vouchers/preview/purchase/settings', hasTabs: true }
 ];
 export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['journal-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
