@@ -97,7 +97,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
-                this.getURLHMRCAuthorization();
             }
         });
     }
@@ -163,13 +162,15 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                 if (this.isCompanyMode) {
                     this.hasTaxNumber = true;
                 }
-                this.getLiabilitiesPayment();
+                this.getURLHMRCAuthorization();
             }
         });
 
         this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.connectToHMRCUrl = response.body;
+            } else if(response) {
+                this.getLiabilitiesPayment();
             }
         });
 
