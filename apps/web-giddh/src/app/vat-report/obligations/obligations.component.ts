@@ -155,10 +155,12 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         });
 
         this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body) {
-                this.connectToHMRCUrl = response.body;
-            } else if (response) {
-                this.getVatObligations();
+            if (response?.status === "success") {
+                if (response?.body) {
+                    this.connectToHMRCUrl = response.body;
+                } else {
+                    this.getVatObligations();
+                }
             }
         });
 
