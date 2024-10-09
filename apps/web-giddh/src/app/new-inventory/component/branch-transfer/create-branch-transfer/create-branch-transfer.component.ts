@@ -176,6 +176,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public universalFrom: any;
     /** This will hold universal date  */
     public universalTo: any;
+    public sender: any=[];
+    public receiver: any = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -557,6 +559,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     }
                 });
             } else {
+                console.log("branchTransferObj ", branchTransferObj);
                 this.inventoryService.createNewBranchTransfer(branchTransferObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     this.isLoading = false;
                     this.branchTransferCreateEditForm.addControl('myCurrentCompany', this.formBuilder.control(''));
@@ -1288,7 +1291,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             const sourceFormGroup = sourcesArray.at(0) as UntypedFormGroup;
             const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
             const destinationsFormGroup = destinationsArray.at(0) as UntypedFormGroup;
-
             if (this.branchTransferMode === "delivery-challan") {
                 sourceFormGroup.get('uniqueName')?.setValue(selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName);
                 sourceFormGroup.get('name')?.setValue(selectedBranch ? selectedBranch.name : hoBranch?.name);
@@ -1338,6 +1340,18 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     }
                 }
             });
+            if(this.editBranchTransferUniqueName){
+                console.log("this.branchTransferCreateEditForm ",this.branchTransferCreateEditForm.value);
+                const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+                const sourceFormGroup = sourcesArray.at(0) as UntypedFormGroup;
+                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+                const destinationsFormGroup = destinationsArray.at(0) as UntypedFormGroup;
+                console.log(sourceFormGroup.value);
+                console.log(destinationsFormGroup.value);
+            }
+            
+            
+            
         }
         return branches;
     }
