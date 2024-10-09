@@ -303,7 +303,7 @@
                                                                     )?.value
                                                                 ]?.length === 1
                                                                     ? branchTransferCreateEditForm.get(
-                                                                          'sources.0.warehouse.name'
+                                                                        'sources.0.warehouse.name'
                                                                       ).value
                                                                     : ''
                                                             "
@@ -829,7 +829,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
                                             <div [formGroupName]="0">
                                                 <div class="mr-b15 one">
@@ -844,15 +844,10 @@
                                                                     ?.value
                                                             ]
                                                         "
-                                                        [defaultValue]="
-                                                            senderWarehouses[
-                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
-                                                                    ?.value
-                                                            ]?.length === 1
-                                                                ? branchTransferCreateEditForm.get(
+                                                        [defaultValue]=" isUpdateMode ?
+                                                            branchTransferCreateEditForm.get(
                                                                       'sources.0.warehouse.name'
-                                                                  ).value
-                                                                : ''
+                                                            ).value : ''
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"
