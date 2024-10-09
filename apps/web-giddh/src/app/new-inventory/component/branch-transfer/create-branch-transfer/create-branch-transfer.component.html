@@ -297,15 +297,9 @@
                                                                 )?.value
                                                             "
                                                             [defaultValue]="
-                                                                senderWarehouses[
-                                                                    branchTransferCreateEditForm.get(
-                                                                        'sources.0.uniqueName'
-                                                                    )?.value
-                                                                ]?.length === 1
-                                                                    ? branchTransferCreateEditForm.get(
+                                                                branchTransferCreateEditForm.get(
                                                                           'sources.0.warehouse.name'
                                                                       ).value
-                                                                    : ''
                                                             "
                                                             [allowValueReset]="true"
                                                             (onClear)="resetWarehouse('sources', 0)"
@@ -845,14 +839,9 @@
                                                             ]
                                                         "
                                                         [defaultValue]="
-                                                            senderWarehouses[
-                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
-                                                                    ?.value
-                                                            ]?.length === 1
-                                                                ? branchTransferCreateEditForm.get(
+                                                            branchTransferCreateEditForm.get(
                                                                       'sources.0.warehouse.name'
                                                                   ).value
-                                                                : ''
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"
