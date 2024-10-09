@@ -1611,6 +1611,8 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
+                            <giddh-custom-pagination>
+                            </giddh-custom-pagination>
                             <pagination
                                 *ngIf="paginationObject.showPagination"
                                 [totalItems]="paginationObject.totalItems"
@@ -2700,6 +2702,12 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
+                            <giddh-custom-pagination
+                                [currentPage]="paginationObject.page"
+                                [commonLocaleData]="commonLocaleData"
+                                (pageChange)="pageChanged($event)"
+                            >
+                            </giddh-custom-pagination>
                             <pagination
                                 *ngIf="paginationObject.showPagination"
                                 [totalItems]="paginationObject.totalItems"

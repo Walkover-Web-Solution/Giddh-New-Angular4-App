@@ -44,6 +44,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/tax-authority.scss";
 @import "../css/global/adjustment-inventory.scss";
 @import "../css/global/vouchers-preview.scss";
+@import "../css/global/custom-pagination.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -3804,6 +3805,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .cursor-pointer {
     cursor: pointer !important;
+}
+
+.pointer-event-none {
+    pointer-events: none !important;
 }
 
 .cursor-default {

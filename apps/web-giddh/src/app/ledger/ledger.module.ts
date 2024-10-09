@@ -59,6 +59,7 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
 import { MatIconModule } from '@angular/material/icon';
+import { GiddhCustomPaginationModule } from '../shared/giddh-custom-pagination/giddh-custom-pagination.module';
 
 @NgModule({
     declarations: [
@@ -132,7 +133,8 @@ import { MatIconModule } from '@angular/material/icon';
         AttachmentsModule,
         FormFieldsModule,
         StockCreateEditModule,
-        MatIconModule
+        MatIconModule,
+        GiddhCustomPaginationModule
     ]
 })
 export class LedgerModule {

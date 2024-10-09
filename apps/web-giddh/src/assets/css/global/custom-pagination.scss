@@ -1,0 +1,12 @@
+.custom-pagination {
+    mat-button-toggle {
+        .mat-button-toggle-label-content{
+            line-height: 28px;
+        }
+
+        &.page-count-wrapper {
+            max-width: fit-content;
+            min-width: 45px;
+        }
+    }
+}

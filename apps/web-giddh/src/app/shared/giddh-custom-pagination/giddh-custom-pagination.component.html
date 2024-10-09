@@ -1,0 +1,11 @@
+<mat-button-toggle-group #group="matButtonToggleGroup" class="custom-pagination">
+    <mat-button-toggle value="left" aria-label="Goto previous page" [disabled]="isPreviousButtonDisabled" (click)="emitsPageChangeEvent(false)">
+        {{ commonLocaleData?.app_previous }}
+    </mat-button-toggle>
+    <mat-button-toggle value="center" aria-label="Current Page" class="pointer-event-none page-count-wrapper">
+        {{ currentPage }}
+    </mat-button-toggle>
+    <mat-button-toggle value="right" aria-label="Goto next page" [disabled]="isNextButtonDisabled" (click)="emitsPageChangeEvent(true)">
+        {{ commonLocaleData?.app_next }}
+    </mat-button-toggle>
+</mat-button-toggle-group>

@@ -22,6 +22,7 @@ export class HttpWrapperService {
     ): Observable<any> => {
         options = this.prepareOptions(options);
         options.params = params;
+
         return this.http.get(url, options).pipe(
             tap(res => {
                 //

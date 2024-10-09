@@ -1,0 +1,11 @@
+:host {
+    display: block;
+}
+.custom-pagination {
+    border-color: var(--color-giddh-blue);
+    mat-button-toggle {
+        border-color: var(--color-giddh-blue);
+        width: 80px;
+        line-height: 28px;
+    }
+}
