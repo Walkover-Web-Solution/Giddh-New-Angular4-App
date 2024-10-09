@@ -479,11 +479,7 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length === 1
+                                                            isUpdateMode
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
                                                                   ).value
