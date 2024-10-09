@@ -622,6 +622,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (response && response.voucherType === this.voucherType) {
             this.dataSource = [];
             this.totalResults = response?.totalItems;
+            this.selectAllVouchers({ checked: false });
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
 
@@ -1462,7 +1463,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const tempKeysInAdvanceFiltersForm = ['dueAmount', 'dateRange', 'grandTotalOperation', 'invoiceTotalAmount', 'invoiceDateRange'];
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
-        this.selectAllVouchers({ checked: false });
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
             sort: this.advanceFilters.sort,
