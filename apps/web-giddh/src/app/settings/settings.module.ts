@@ -67,6 +67,8 @@ import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
+import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     declarations: [
@@ -91,11 +93,13 @@ import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module'
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
-        SettingCampaignComponent
+        SettingCampaignComponent,
+        InstitutionsListComponent
     ],
     imports: [
         CommonModule,
         SharedModule,
+        MatListModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,

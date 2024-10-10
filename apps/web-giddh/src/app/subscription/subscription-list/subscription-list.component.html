@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="subscription-container mx-auto pd-15">
+    <div class="subscription-container mx-auto pd-15 overflow-visible">
         <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-t1">
             <button
                 *ngIf="
@@ -33,7 +33,7 @@
         <giddh-page-loader *ngIf="subscriptionListInProgress$ | async"></giddh-page-loader>
         <section *ngIf="showData && !(subscriptionListInProgress$ | async)" class="mt-4">
             <form
-                class="table-responsive"
+                class="table-responsive table-header-sticky overflow-visible"
                 name="subscriptionListForm"
                 [formGroup]="subscriptionListForm"
                 novalidate
@@ -307,6 +307,32 @@
                                         "
                                     >
                                         {{ localeData?.manage_payment }}
+                                    </button>
+                                    <button
+                                        *ngIf="
+                                            element?.isOwner &&
+                                            element?.companies &&
+                                            element?.companies?.length === 1 &&
+                                            element?.companyArchiveStatus === 'USER_ARCHIVED'
+                                        "
+                                        mat-menu-item
+                                        (click)="archiveCompany(element, 'UNARCHIVED')"
+                                        aria-label="details"
+                                    >
+                                        {{ commonLocaleData?.app_unarchive }}
+                                    </button>
+                                    <button
+                                        *ngIf="
+                                            element?.isOwner &&
+                                            element?.companies &&
+                                            element?.companies?.length === 1 &&
+                                            element?.companyArchiveStatus === 'UNARCHIVED'
+                                        "
+                                        mat-menu-item
+                                        (click)="archiveCompany(element, 'USER_ARCHIVED')"
+                                        aria-label="details"
+                                    >
+                                        {{ commonLocaleData?.app_archive }}
                                     </button>
                                 </div>
                             </mat-menu>

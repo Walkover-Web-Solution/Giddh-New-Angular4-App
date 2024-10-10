@@ -1,135 +1,475 @@
-<ng-container>
+<ng-container
+    appTranslate
+    [file]="'vouchers/preview'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="invoice-preview-wrapper">
+    <giddh-page-loader *ngIf="!isSearching && (getVouchersInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
+    <div class="invoice-preview-wrapper" *ngIf="(isSearching || isLoadMore) || !(getVouchersInProgress$ | async)">
         <div class="preview-list h-100 pd-b15">
-            <div class="d-flex align-items-center column-gap5 justify-content-between pd-15 w-100 list-responsive row-gap1">
-                <div class="position-relative search-field">
-                    <text-field class="width-inherit" [type]="'text'" [cssClass]="'form-control pl-3'"
-                        [placeholder]="'Search'">
+            <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
+                <div class="position-relative search-field flex-grow-1">
+                    <text-field
+                        class="width-inherit"
+                        [type]="'text'"
+                        [cssClass]="'form-control pl-3'"
+                        [placeholder]="commonLocaleData?.app_search"
+                        [formControl]="search"
+                    >
                     </text-field>
                     <i class="icon-search position-absolute"></i>
                 </div>
-                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newInvoice" class="invoice-btn">
-                    <span>+ New Invoice</span>
-                    <i class="icon-arrow-down icon-font-11 ml-2"></i>
-                </button>
-                <mat-menu #newInvoice="matMenu">
-                    <button mat-menu-item>Cash Invoice</button>
-                    <button mat-menu-item>Sales Invoice</button>
-                </mat-menu>
+                <ng-container *ngIf="!isCompany">
+                    <ng-container *ngIf="voucherType === 'sales'; else other">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            [matMenuTriggerFor]="newInvoice"
+                            class="invoice-btn width-150"
+                        >
+                            <span>{{ localeData?.new_invoice }}</span>
+                            <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                        </button>
+                        <mat-menu #newInvoice="matMenu" class="width-150">
+                            <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">
+                                {{ localeData?.cash_invoice }}
+                            </button>
+                            <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">
+                                {{ localeData?.sales_invoice }}
+                            </button>
+                        </mat-menu>
+                    </ng-container>
+                    <ng-template #other>
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            class="invoice-btn width-150"
+                            [routerLink]="[createNewVoucher.link]"
+                        >
+                            {{ createNewVoucher.text }}
+                        </button>
+                    </ng-template>
+                </ng-container>
             </div>
             <div class="mat-grid-wrapper">
-                <div class="mat-list-wrap">
+                <div class="mat-list-wrap" *ngIf="!(getVouchersInProgress$ | async)" >
                     <mat-list>
-                        <cdk-virtual-scroll-viewport [itemSize]="62">
-                            <mat-list-item class="single-invoice-detail cp border-bottom">
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
-                                    <div>
-                                        <span class="font-12 text-blue"> 240122-1 </span>
-                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
-                                        <p class="black-color">00000000</p>
-                                    </div>
-                                    <div>
-                                        <span class="black-color">233.00 </span>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                        </cdk-virtual-scroll-viewport>
+                        <app-cdk-scroll
+                            [scrollTriggerDistance]="30"
+                            (fetchPreviousPage)="getAllVouchers(true, true)"
+                            (fetchNextPage)="getAllVouchers(true)"
+                            [scrollableElementId]="'invoiceList'"
+                        >
+                            <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport" [id]="'invoiceList'">
+                                <ng-container
+                                    *cdkVirtualFor="let item of invoiceList; let i = index; let lastItem = last"
+                                >
+                                    <mat-list-item
+                                        class="single-invoice-detail cursor-pointer"
+                                        [ngClass]="{
+                                            'active': item?.uniqueName === selectedInvoice?.uniqueName,
+                                            'border-bottom': !lastItem
+                                        }"
+                                        (click)="setSelectedInvoice(item?.uniqueName)"
+                                    >
+                                        <div class="d-flex justify-content-between align-items-center column-gap5">
+                                            <div>
+                                                <span class="font-12 text-blue">
+                                                    {{
+                                                        item.voucherNumber
+                                                            ? item.voucherNumber
+                                                            : commonLocaleData?.app_not_available
+                                                    }}
+                                                </span>
+                                                <span class="font-12 light-gray"> | {{ item?.voucherDate }} </span>
+                                                <p class="black-color pd-r3 text-wrap">
+                                                    {{
+                                                        item?.account?.customerName ||
+                                                            item?.account?.name ||
+                                                            item?.vendor?.name
+                                                    }}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <span class="black-color">
+                                                    <amount-field
+                                                        [amount]="item?.grandTotal?.amountForAccount"
+                                                        [currencySymbol]="item?.account?.currency?.symbol"
+                                                        [currencyCode]="item?.account?.currency?.code"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </mat-list-item>
+                                </ng-container>
+                                <mat-list-item *ngIf="invoiceList?.length === 0">
+                                    <p class="text-center light-gray">{{ commonLocaleData?.app_no_data_found }}</p>
+                                </mat-list-item>
+                            </cdk-virtual-scroll-viewport>
+                        </app-cdk-scroll>
                     </mat-list>
                 </div>
+                <giddh-page-loader *ngIf="isSearching && !isLoadMore && (getVouchersInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
             </div>
         </div>
-        <div class="preview-content pd-15">
-            <div class="preview-header d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap1">
-                <div>
-                    <h3 class="font-16 fw-bold"> 240122-1 </h3>
-                    <p>00000000</p>
-                </div>
-                <div class="d-flex column-gap1 flex-wrap row-gap1">
-                    <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()">
-                        <i class="icon-history-icon mr-1"></i>
-                        History
-                    </button>
-                    <div class="d-flex action-btn">
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Edit'"
-                            [matTooltipPosition]="'above'"><i class="icon-edit-pencil"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Send Email'"
-                            [matTooltipPosition]="'above'" (click)="openEmailSendDialog()"><i class="icon-envelope"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print'"
-                            [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print Receipt'"
-                            [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Download PDF'"
-                            [matTooltipPosition]="'above'"><i class="icon-download-circle"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Delete'"
-                            [matTooltipPosition]="'above'"><i class="icon-trash"></i></button>
+        <div class="preview-content">
+            <section class="preview-header pd-15">
+                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap2 flex-row-reverse">
+                    <div class="order-1 mr-auto">
+                        <h3 class="font-16 fw-bold">{{ selectedInvoice?.voucherNumber }}</h3>
+                        <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
                     </div>
-                    <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus">
-                        <span>Change Status</span>
-                        <i class="icon-arrow-down icon-font-11 ml-2"></i>
-                    </button>
-                    <mat-menu #changeStatus="matMenu">
-                        <button mat-menu-item (click)="onPerformAction()">Paid</button>
-                        <button mat-menu-item (click)="adjustPayment()">Adjust Amount</button>
-                        <button mat-menu-item>Unpaid</button>
-                        <button mat-menu-item>Hold</button>
-                        <button mat-menu-item>Cancel</button>
-                    </mat-menu>
-                    <button mat-stroked-button>
-                        Cancel
-                    </button>
-                    <button mat-stroked-button class="mat-icon-sm-btn">
-                        <i class="icon-cross"></i>
-                    </button>
+                    <div class="d-flex column-gap1 flex-wrap row-gap1">
+                        <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()" *ngIf="!(invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)">
+                            <i class="icon-history-icon mr-1"></i>
+                            {{ commonLocaleData?.app_history }}
+                        </button>
+                        <div class="d-flex action-btn">
+                            <button
+                                *ngIf="!isCompany"
+                                mat-stroked-button
+                                color="primary"
+                                class="mat-icon-sm-btn"
+                                [matTooltip]="commonLocaleData?.app_edit"
+                                [matTooltipPosition]="'above'"
+                                (click)="editVoucher()"
+                            >
+                                <i class="icon-edit-pencil"></i>
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="mat-icon-sm-btn"
+                                [matTooltip]="commonLocaleData?.app_send_email"
+                                [matTooltipPosition]="'above'"
+                                (click)="openEmailSendDialog()"
+                            >
+                                <i class="icon-envelope"></i>
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="mat-icon-sm-btn"
+                                [matTooltip]="commonLocaleData?.app_print"
+                                [matTooltipPosition]="'above'"
+                                (click)="printInvoice()"
+                            >
+                                <i class="fa fa-print"></i>
+                            </button>
+                            <button
+                                *ngIf="
+                                    defaultThermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder
+                                "
+                                mat-stroked-button
+                                color="primary"
+                                class="mat-icon-sm-btn"
+                                [matTooltip]="commonLocaleData?.app_print_thermal"
+                                [matTooltipPosition]="'above'"
+                                (click)="printThermal()"
+                            >
+                                <i class="fa fa-print"></i>
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="mat-icon-sm-btn"
+                                [matTooltip]="commonLocaleData?.app_download_pdf"
+                                [matTooltipPosition]="'above'"
+                                (click)="downloadPdf()"
+                            >
+                                <i class="icon-download-circle"></i>
+                            </button>
+                            <button
+                                *ngIf="!isCompany"
+                                mat-stroked-button
+                                color="primary"
+                                class="mat-icon-sm-btn"
+                                [matTooltip]="commonLocaleData?.app_delete"
+                                [matTooltipPosition]="'above'"
+                                (click)="deleteVoucherDialog()"
+                            >
+                                <i class="icon-trash"></i>
+                            </button>
+                        </div>
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            [matMenuTriggerFor]="changeStatus"
+                            *ngIf="(selectedInvoice?.balanceStatus !== 'CANCEL') && !isCompany"
+                        >
+                            <span>Change Status</span>
+                            <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                        </button>
+                        <mat-menu #changeStatus="matMenu">
+                            <button
+                                mat-menu-item
+                                (click)="showPaymentDialog()"
+                                *ngIf="['sales', 'purchase', 'credit note', 'debit note'].includes(voucherType)"
+                            >
+                                {{ commonLocaleData?.app_payment_status?.paid }}
+                            </button>
+                            <ng-container *ngIf="voucherType === 'sales'">
+                                <button mat-menu-item (click)="showAdjustmentDialog()">
+                                    {{ commonLocaleData?.app_payment_status?.adjust_amount }}
+                                </button>
+                                <button mat-menu-item (click)="actionVoucher('unpaid')">
+                                    {{ commonLocaleData?.app_payment_status?.unpaid }}
+                                </button>
+                                <button mat-menu-item (click)="actionVoucher('hold')">
+                                    {{ commonLocaleData?.app_payment_status?.hold }}
+                                </button>
+                            </ng-container>
+                            <button
+                                mat-menu-item
+                                (click)="actionVoucher('cancel')"
+                                *ngIf="['sales', 'purchase-order', 'credit note', 'debit note'].includes(voucherType)"
+                            >
+                                {{ commonLocaleData?.app_payment_status?.cancel }}
+                            </button>
+                            <ng-container *ngIf="['purchase', 'purchase-order'].includes(voucherType)">
+                                <button mat-menu-item (click)="copyInvoice()">{{ commonLocaleData?.app_copy }}</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">
+                                    {{ commonLocaleData?.app_delete }}
+                                </button>
+                            </ng-container>
+                            <button
+                                mat-menu-item
+                                *ngIf="voucherType === 'purchase-order'"
+                                (click)="actionVoucher('open')"
+                            >
+                                {{ commonLocaleData?.app_payment_status?.open }}
+                            </button>
+
+                            <ng-container *ngIf="['estimates', 'proformas'].includes(voucherType)">
+                                <button mat-menu-item (click)="actionEstimateProforma('accepted')">
+                                    {{ localeData?.accepted }}
+                                </button>
+                                <button mat-menu-item (click)="actionEstimateProforma('decline')">
+                                    {{ localeData?.declined }}
+                                </button>
+                                <button mat-menu-item (click)="convertToProforma()" *ngIf="voucherType === 'estimates'">
+                                    {{ localeData?.convert_proforma }}
+                                </button>
+                                <button mat-menu-item (click)="convertToInvoice()">
+                                    {{ localeData?.convert_invoice }}
+                                </button>
+                                <button mat-menu-item (click)="actionEstimateProforma('expired')">
+                                    {{ localeData?.expired }}
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                        <span *ngIf="isShowInvoiceStatus()" class="invoice-status border-radius-5 text-capitalize">
+                            {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action }}
+                        </span>
+                        <button mat-stroked-button (click)="redirectToGetAllPage()">
+                            {{ commonLocaleData?.app_back }}
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="preview-box d-flex">
-                <div>
-                    <span class="d-flex justify-content-center align-items-center border-r">
-                        <img src="assets/images/dollar-icon.svg" alt="img">
-                    </span>
-                    <p class="my-1">Receive payments in cash/check and record <br> payments manually.</p>
-                    <a href="javascript:;" (click)="onPerformAction()">Receive Payment</a>
+                <div class="preview-box d-flex" *ngIf="showPaymentDetails">
+                    <div
+                        *ngIf="
+                            !isCompany &&
+                            voucherType === 'sales' &&
+                            selectedInvoice?.balanceStatus !== 'PAID' &&
+                            selectedInvoice?.balanceStatus !== 'CANCEL'
+                        "
+                    >
+                        <span class="d-flex justify-content-center align-items-center border-r">
+                            <img src="assets/images/dollar-icon.svg" alt="img" />
+                        </span>
+                        <p class="my-1">
+                            {{ localeData?.record_payment }}
+                        </p>
+                        <a href="javascript:;" (click)="showPaymentDialog()"> {{ localeData?.receipt_payment }}</a>
+                    </div>
+                    <div>
+                        <span class="d-flex justify-content-center align-items-center border-r">
+                            <img src="assets/images/send-icon.svg" alt="img" />
+                        </span>
+                        <p class="my-1">
+                            {{ localeData?.email_invoice }}
+                        </p>
+                        <a href="javascript:;" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
+                    </div>
                 </div>
-                <div>
-                    <span class="d-flex justify-content-center align-items-center border-r">
-                        <img src="assets/images/send-icon.svg" alt="img">
-                    </span>
-                    <p class="my-1">You can now email this invoice to your customer or <br> mark it as sent.</p>
-                    <a href="javascript:;" (click)="openEmailSendDialog()">Send Invoice</a>
+                <div class="d-flex" *ngIf="invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice">
+                    <div>
+                        <div class="pd-t1 pd-b1" *ngIf="moreLogsDisplayed">
+                            <a href="javascript:;" (click)="filterVoucherVersions(false)">{{
+                                localeData?.less_details
+                            }}</a>
+                        </div>
+                        <div
+                            class="pd-t1 pd-b1"
+                            *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed"
+                        >
+                            <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
+                                localeData?.more_details
+                            }}</a>
+                        </div>
+
+                        <ul class="invoice-history-list mr-l15">
+                            <li *ngFor="let log of filteredVoucherVersions" class="position-relative my-3">
+                                <p>
+                                    {{ log.estimateDate }},
+                                    <span *ngIf="voucherType === 'estimates'">{{ localeData?.estimate }}</span>
+                                    <span *ngIf="voucherType !== 'estimates'">{{ voucherType }}</span>
+                                    {{ getVoucherLogText(log) }}
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div>
                 <no-data
-                    class="mr-t2 d-block text-center"
-                    [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
-                    [primaryMessageClass]="'bold'"
-                    [secondaryMessage]="' '"
-                ></no-data>
-            </div>
-            <div class="pdf-preview">
-                <h5 class="pd-l15 pd-t1 pd-b1">
-                    <strong class="text-blue">Giddh Auto Generated Bill</strong>
-                </h5>
-                <iframe src="" frameborder="0"></iframe>
-            </div>
+                       *ngIf="shouldShowUploadAttachment &&
+                       isCompany &&
+                       !isPdfAvailable &&
+                       !attachedPdfFileUrl &&
+                       !imagePreviewSource"
+                       class="mr-t2 d-block text-center"
+                       [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
+                       [primaryMessageClass]="'bold'"
+                       [secondaryMessage]="' '"
+                   ></no-data>
+            </section>
+            <giddh-page-loader
+                *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
+            ></giddh-page-loader>
+            
+            <ng-container *ngIf="!(isVoucherDownloading$ | async)">
+                <div class="pdf-preview" *ngIf="voucherType === 'purchase'">
+                    <div class="position-relative">
+                        <h5 class="pd-l15 py-2">
+                            <strong class="text-blue">{{ localeData?.uploaded_purchase_bill }}</strong>
+                        </h5>
+                        <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
+                        <div #attachedDocumentPreview>
+                            <iframe
+                                #pdfContainer
+                                *ngIf="attachedPdfFileUrl"
+                                width="100%"
+                                height="100%"
+                                [src]="attachedPdfFileUrl"
+                                title="PDF"
+                            ></iframe>
+                        </div>
+                        <div
+                            *ngIf="
+                                !shouldShowUploadAttachment &&
+                                voucherType === 'purchase' &&
+                                attachedDocumentType?.type === 'image'
+                            "
+                            class="img-expand-collapse"
+                        >
+                            <img class="image-preview w-100" [src]="imagePreviewSource" />
+                        </div>
+
+                        <div
+                            *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
+                            class="error danger text-center"
+                        >
+                            <span>{{ localeData?.invoice_preview_unavailable }}</span>
+                        </div>
+                        <div
+                            *ngIf="attachedDocumentType?.type === 'unsupported'"
+                        >
+                            <p>{{ attachedDocumentType?.name }}</p>
+                            <p>{{ commonLocaleData?.app_preview_formats }}</p>
+                        </div>
+
+                        <div
+                            *ngIf="
+                                shouldShowUploadAttachment && !isCompany && !(attachedPdfFileUrl || imagePreviewSource)
+                            "
+                            class="upload-excel position-relative d-flex align-items-center justify-content-center max-width-500 dashed-border"
+                        >
+                            <input
+                                type="file"
+                                id="csv-upload-input"
+                                [placeholder]="localeData?.upload_excel_csv"
+                                droppable="true"
+                                class="form-control position-absolute h-100 opacity-hidden"
+                                (change)="uploadFile()"
+                            />
+                            <div class="position-relative width-100">
+                                <div class="file-input-wrapper text-center">
+                                    <div class="mr-b2">
+                                        <img src="assets/images/new/import_icon.svg" class="w100" />
+                                    </div>
+                                    <div class="pd-r2 pd-l2">
+                                        <label class="text-light-2 font-15">{{ localeData?.drop_file }}</label>
+                                        <div class="mr-t3">
+                                            <label class="file-upload-panel w-100 text-left p-2 border-radius-5 text-light" for="csv-upload-input">
+                                                <span>{{ localeData?.browse_file }}</span></label
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pdf-preview mr-t5 h-100">
+                    <h5 class="pd-l15 pd-t1 pd-b1">
+                        <strong class="text-blue">{{ localeData?.auto_generated_purchase_bill }}</strong>
+                    </h5>
+                    <iframe
+                        *ngIf="!(isVoucherDownloading$ | async) && sanitizedPdfFileUrl"
+                        #pdfContainer
+                        width="100%"
+                        height="100%"
+                        [src]="sanitizedPdfFileUrl"
+                        title="PDF"
+                    ></iframe>
+                </div>
+            </ng-container>
         </div>
     </div>
 </ng-container>
 
-<!-- paid-dialog -->
-<ng-template #paidDialog>
-    <app-payment-dialog></app-payment-dialog>
-</ng-template>
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>
-    <app-adjust-payment-dialog></app-adjust-payment-dialog>
+    <voucher-adjustments
+        [isUpdateMode]="isUpdateMode"
+        [depositAmount]="depositAmount"
+        [account]="voucherDetails?.account"
+        [voucherDetails]="voucherDetails"
+        [voucherTotals]="voucherTotals"
+        [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+        (closeModelEvent)="closeAdvanceReceiptDialog()"
+        (submitClicked)="getAdvanceReceiptAdjustData($event)"
+        [voucherForAdjustment]="null"
+        [adjustedVoucherType]="voucherType"
+    >
+    </voucher-adjustments>
 </ng-template>
+
 <!-- history dialog -->
 <ng-template #historyAsideDialog>
     <app-history-dialog></app-history-dialog>
 </ng-template>
-<!-- email-dialog -->
-<ng-template #emailSendDialog>
-    <app-email-send-dialog></app-email-send-dialog>
+
+<!-- Send Email Template -->
+<ng-template #sendEmailModal>
+    <app-email-send-dialog
+        [voucherType]="voucherType"
+        [invoiceType]="invoiceType"
+        (cancelEvent)="sendEmailModalDialogRef.close()"
+        (successEvent)="sendEmail($event)"
+    >
+    </app-email-send-dialog>
+</ng-template>
+
+<!-- payment-dialog -->
+<ng-template #paymentDialog>
+    <app-payment-dialog
+        [voucherDetails]="selectedInvoice"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (paymentSubmitted)="actionVoucher(null, $event)"
+    ></app-payment-dialog>
 </ng-template>

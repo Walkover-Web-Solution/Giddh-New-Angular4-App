@@ -466,6 +466,9 @@ aside-menu-account .container-fluid {
 .row-gap15 {
     row-gap: 15px;
 }
+.row-gap2 {
+    row-gap: 20px;
+}
 
 .border-bottom {
     border-bottom-color: var(--color-ledger-grid-border-color);
@@ -544,6 +547,9 @@ aside-menu-account .container-fluid {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+.text-wrap {
+    text-wrap: wrap;
 }
 .cp {
     cursor: pointer !important;
@@ -2873,7 +2879,6 @@ tr.mat-footer-row {
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
     td.mat-mdc-cell {
-        border-bottom-width: 0px !important;
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
     .nested-table {
@@ -3113,9 +3118,6 @@ td.mat-footer-cell {
     opacity: 1 !important;
     transform: none !important;
 }
-.double-popup-zindex {
-    z-index: 99 !important;
-}
 .receipt-card {
     .mat-form-field {
         .mat-form-field-wrapper {
@@ -3198,6 +3200,9 @@ td.mat-footer-cell {
     }
 }
 
+.mat-select-arrow {
+    color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
+}
 .mat-menu-panel {
     background-color: var(--color-dropdown-primary-background) !important;
 }
@@ -3339,6 +3344,9 @@ td.mat-footer-cell {
 }
 .border-radius-5 {
     border-radius: 5px !important;
+}
+.double-popup-zindex {
+    z-index: 99 !important;
 }
 
 /* material css for ledger end*/
