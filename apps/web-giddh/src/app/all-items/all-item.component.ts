@@ -242,7 +242,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                     width: '630px'
                 });
             } else {
-                if ((subitem?.additional?.queryParams?.tabIndex >= 0) && subitem?.additional?.queryParams?.tab?.length) {
+                if ((subitem?.additional?.queryParams?.tabIndex >= 0) && subitem?.additional?.queryParams?.tab) {
                     this.router.navigate([subitem.link], { queryParams: subitem?.additional?.queryParams });
                 } else {
                     this.router.navigate([subitem.link]);
