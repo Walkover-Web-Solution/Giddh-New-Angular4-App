@@ -9,7 +9,7 @@
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-
+    
     <!-- Tax Authority code  -->
     <div class="tax-authority-report section-center pd-t15">
         <div class="container-fluid ml-0">
@@ -74,7 +74,7 @@
                                         <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
                                             <amount-field
                                                 class="d-inline-block"
-                                                [amount]="(taxAuthorityWiseReport$ | async)?.totalGrandTotal"
+                                                [amount]="(taxWiseReport$ | async)?.totalGrandTotal"
                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                 [currencyCode]="activeCompany?.baseCurrency"
                                             ></amount-field>
@@ -92,7 +92,7 @@
                                         <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
                                             <amount-field
                                                 class="d-inline-block"
-                                                [amount]="(taxAuthorityWiseReport$ | async)?.totalTaxableAmount"
+                                                [amount]="(taxWiseReport$ | async)?.totalTaxableAmount"
                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                 [currencyCode]="activeCompany?.baseCurrency"
                                             ></amount-field>
