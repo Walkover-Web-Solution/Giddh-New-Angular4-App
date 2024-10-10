@@ -253,7 +253,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         itemsPerPage: 0,
         page: 0,
         totalPages: 0,
-        showPagination: false
+        showPagination: false,
+        prevToken: null,
+        nextToken: null
     };
     /** Holds restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
@@ -450,8 +452,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public pageChanged(event: any): void {
-        this.trxRequest.page = event.page;
-
+        this.trxRequest.paginationToken = event;
         if (this.isAdvanceSearchImplemented) {
             this.advanceSearchRequest.page = event.page;
             this.getAdvanceSearchTxn();

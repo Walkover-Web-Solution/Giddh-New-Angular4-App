@@ -1611,10 +1611,17 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
-                            <giddh-custom-pagination>
+                            <giddh-custom-pagination
+                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                [currentPage]="paginationObject.page"
+                                [commonLocaleData]="commonLocaleData"
+                                (pageChange)="pageChanged($event)"
+                                [nextPageToken]="paginationObject.nextToken"
+                                [previousPageToken]="paginationObject.prevToken"
+                            >
                             </giddh-custom-pagination>
                             <pagination
-                                *ngIf="paginationObject.showPagination"
+                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
                                 [totalItems]="paginationObject.totalItems"
                                 [(ngModel)]="paginationObject.page"
                                 [maxSize]="5"
@@ -2703,13 +2710,16 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-custom-pagination
+                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
+                                [nextPageToken]="paginationObject.nextToken"
+                                [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-custom-pagination>
                             <pagination
-                                *ngIf="paginationObject.showPagination"
+                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
                                 [totalItems]="paginationObject.totalItems"
                                 [(ngModel)]="paginationObject.page"
                                 [maxSize]="5"
