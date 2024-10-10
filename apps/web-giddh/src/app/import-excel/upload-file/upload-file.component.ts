@@ -122,7 +122,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
@@ -134,9 +134,6 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
-                    if (this.currentBranch) {
-                        this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch?.alias ? ` (${this.currentBranch.alias})` : '');
-                    }
                 }
             } else {
                 if (this.generalService.companyUniqueName) {

@@ -60,7 +60,7 @@
                             class="btn-group"
                             *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
-                            [tooltip]="company?.name + (company?.alias ? ' ( ' + company?.alias + ' ) ' : '')"
+                            [tooltip]="company?.name"
                             [placement]="i === 0 ? 'bottom' : 'top'"
                             aria-hidden="true"
                         >
@@ -148,13 +148,13 @@
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
-                                    [tooltip]="branch?.alias"
+                                    [tooltip]="branch?.name"
                                     placement="top"
                                 >
                                     <i class="icon-branch-connect mr-2"></i>
                                     <span class="d-flex flex-column">
                                         <span class="branch-alias">
-                                            {{ branch?.alias }}
+                                            {{ branch?.name }}
                                         </span>
                                         <span *ngIf="branch?.consolidatedBranch" class="font-12 branch-company-name">{{
                                             localeData?.company_consolidated_data

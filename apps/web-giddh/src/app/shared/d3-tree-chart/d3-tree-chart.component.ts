@@ -44,10 +44,18 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
             this.chart = new OrgChart();
         }
 
+        // Get the screen or container size
+        const containerWidth = this.chartContainer.nativeElement.offsetWidth;
+        const containerHeight = this.chartContainer.nativeElement.offsetHeight;
+
+        const calculatedWidth = containerWidth > 0 ? containerWidth : window.innerWidth;
+        const calculatedHeight = containerHeight > 0 ? containerHeight : window.innerHeight;
+
         this.chart
             .container(this.chartContainer.nativeElement)
             .data(this.data)
-            .svgWidth(1500)
+            .svgWidth(calculatedWidth) // Set dynamic width
+            .svgHeight(calculatedHeight) // Set dynamic height
             .initialZoom(1.1)
             .nodeHeight(() => 120)
             .childrenMargin(() => 40)
@@ -65,15 +73,13 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
                 }, 0);
 
                 return `
-          <div id="${nodeId}" class="branch-tree-wrapper pd-t3 overflow-visible">
+          <div id="${nodeId}" class=" branch-tree-wrapper pd-t3 overflow-visible">
             <div class="tree-content pt-0">
               <div class="tree-inner-content"></div>
               <div class="tree-container pd-b2 pd-t2 text-align-center">
                 <span class="d-inline-flex align-items-center">
-                  <i class="cursor-pointer icon-branch-icon mr-r05"></i>
-                  <div class="tree-name  font-16">${d.data.alias}</div>
+                  <div class="tree-name text-limit  font-16"> <i class="cursor-pointer icon-branch-icon mr-r05"></i>${d.data.name}</div>
                 </span>
-                <div class="tree-alias font-16">${this.localeData?.parent_entity}: ${d.data.name}</div>
               </div>
             </div>
           </div>`;
