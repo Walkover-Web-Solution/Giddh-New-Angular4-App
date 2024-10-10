@@ -24,7 +24,7 @@ export interface ConfirmationModalConfiguration {
     footerText?: string; // Footer text to be displayed in modal (close to button)
     footerCssClass?: string; // Footer CSS class
     disableRipple?: boolean;
-    actionBtnWrapperCssClass?: String; // Button alignment css class
+    actionBtnWrapperCssClass?: string; // Button alignment css class
     buttons?: Array<ConfirmationModalButton>; // Buttons array depending on the type of modal
 }
 
