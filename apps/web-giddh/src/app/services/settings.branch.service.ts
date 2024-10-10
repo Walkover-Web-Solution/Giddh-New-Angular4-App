@@ -36,7 +36,7 @@ export class SettingsBranchService {
             url = url.concat(`&q=${request.query}`);
         }
 
-        url = url.concat(`${delimiter}branchUniqueName=`); // Empty branch unique name as we don't support sub-branch as of now
+        url = url.concat(`${delimiter}branchUniqueName=`, this.generalService.currentBranchUniqueName); // Empty branch unique name as we don't support sub-branch as of now
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;

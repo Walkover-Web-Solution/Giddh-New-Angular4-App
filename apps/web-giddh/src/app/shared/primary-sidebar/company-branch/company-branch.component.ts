@@ -364,10 +364,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public filterBranchList(event: any): void {
         if (this.companyBranches) {
             this.companyBranches.branches = this.branchList?.filter((branch) => {
-                if (!branch.alias) {
+                if (!branch.name) {
                     return branch.name?.toLowerCase().includes(event?.toLowerCase());
                 } else {
-                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.alias?.toLowerCase().includes(event?.toLowerCase());
+                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.name?.toLowerCase().includes(event?.toLowerCase());
                 }
             });
             this.changeDetectorRef.detectChanges();

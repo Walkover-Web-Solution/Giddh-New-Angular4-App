@@ -1143,6 +1143,13 @@ textarea {
         }
     }
 }
+    .text-limit {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
