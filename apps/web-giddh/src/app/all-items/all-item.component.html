@@ -50,7 +50,6 @@
                                     *ngIf="subItem.link"
                                     class="single-menu-item"
                                     (click)="redirectSubItemLink(subItem)"
-                                    [queryParams]="subItem?.additional?.queryParams"
                                     [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
                                     [tabindex]="subItemIndex"
                                 >
