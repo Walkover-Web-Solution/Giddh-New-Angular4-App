@@ -687,7 +687,7 @@ export class GeneralService {
             color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no
+            text: commonLocaleData?.app_cancel
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
