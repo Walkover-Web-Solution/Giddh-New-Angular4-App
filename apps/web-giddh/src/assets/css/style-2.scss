@@ -1138,14 +1138,12 @@ textarea {
         }
     }
 }
-    .text-limit {
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        line-clamp: 1;
-        -webkit-box-orient: vertical;
-    }
-
+        .text-limit {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
 .institutions-dialog-body {
     .mdc-list-item__primary-text {
         color: var(--color-common-primary-text) !important;
