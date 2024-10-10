@@ -97,7 +97,7 @@ export class GeneralService {
     public createQueryString(url: string, params: any) {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
-                const delimiter = url.indexOf('?') === -1 ? '?' : '&';
+                const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
                 url += `${delimiter}${key}=${params[key]}`
             }
         });
@@ -1069,14 +1069,15 @@ export class GeneralService {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, VoucherTypeEnum.purchaseOrder]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
 
+
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
             if (this.voucherApiVersion === 2) {
-                grandTotalConversionRate = item.exchangeRate;
+                grandTotalConversionRate = item.exchangeRate ?? 1;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
@@ -2080,6 +2081,38 @@ export class GeneralService {
             headerCssClass,
             messageCssClass,
             messageText
+        };
+    }
+
+    /**
+     * This will use for confirmation delete vocher
+     *
+     * @param {string} headerText
+     * @param {string} messageText
+     * @param {string} footerText
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getVoucherDeleteConfiguration(headerText: string, messageText: string, footerText: string, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const footerCssClass: string = 'mr-b1 text-light';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: messageText,
+            messageCssClass,
+            footerText: footerText,
+            footerCssClass,
+            buttons
         };
     }
 }

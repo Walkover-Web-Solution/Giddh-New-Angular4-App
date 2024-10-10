@@ -1494,7 +1494,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
-                !this.router.url.includes("/vendor")) {
+                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page")?.length)) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1996,6 +1996,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
         localStorage.removeItem('isNewArchitecture');
+        localStorage.removeItem('Country-Region');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {

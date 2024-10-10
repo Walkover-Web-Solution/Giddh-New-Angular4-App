@@ -86,9 +86,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /* Selector for adjustment modal */
     @ViewChild('adjustmentModal', { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds current voucher type */
     public voucherType: string = VoucherTypeEnum.sales.toString();
+    /** Hold url Voucher Type */
+    public urlVoucherType: string = '';
     /** Holds images folder path */
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */
@@ -384,7 +386,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Create new account */
     public createNewAccount: boolean = true;
     /** True if currency switched */
-    private currencySwitched: boolean = false;
+    public currencySwitched: boolean = false;
     /** Label for voucher date */
     public voucherDateLabel: string = '';
     /** Label for voucher due date */
@@ -407,6 +409,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Holds current route query parameters */
+    public queryParams: any = {};
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -539,14 +543,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let params = response[0];
-                let queryParams = response[1];
+                this.queryParams = response[1];
 
-                if (queryParams?.redirect) {
-                    this.redirectUrl = queryParams?.redirect;
+                if (this.queryParams?.redirect) {
+                    this.redirectUrl = this.queryParams.redirect;
                 }
 
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
+                this.urlVoucherType = params.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 if (this.voucherApiVersion !== 2) {
@@ -571,9 +576,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.searchAccount();
                 }
 
-                if (params?.accountUniqueName && queryParams?.entryUniqueNames) {
+                if (params?.accountUniqueName && this.queryParams?.entryUniqueNames) {
                     this.isPendingEntries = true;
-                    this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: queryParams?.entryUniqueNames.split(",") } });
+                    this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: this.queryParams?.entryUniqueNames.split(",") } });
                 } else {
                     this.isPendingEntries = false;
                 }
@@ -3437,35 +3442,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
         if (this.isPendingEntries) {
             this.saveVoucher(() => {
-                this.router.navigate(['/pages/invoice/preview/pending/sales']);
+                this.router.navigate(['/pages/vouchers/preview/sales/pending']);
             });
         } else {
             this.saveVoucher();
         }
     }
 
-    private redirectToGetAll(): void {
-        if (this.invoiceType.isPurchaseOrder) {
-            this.router.navigate(['/pages/purchase-management/purchase/order']);
-        } else {
-            if (this.invoiceType.isCashInvoice) {
-                if (this.invoiceType.isSalesInvoice) {
-                    this.router.navigate(['/pages/invoice/preview/sales']);
-                } else if (this.invoiceType.isDebitNote) {
-                    this.router.navigate(['/pages/invoice/preview/debit note']);
-                } else if (this.invoiceType.isCreditNote) {
-                    this.router.navigate(['/pages/invoice/preview/credit note']);
-                } else if (this.invoiceType.isPurchaseInvoice) {
-                    this.router.navigate(['/pages/purchase-management/purchase/bill']);
-                } else {
-                    this.router.navigate(['/pages/invoice/preview/sales']);
-                }
-            } else if (this.invoiceType.isPurchaseInvoice) {
-                this.router.navigate(['/pages/purchase-management/purchase/bill']);
-            } else {
-                this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
-            }
-        }
+    /**
+     * Redirect to Invoice Preview page
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private redirectToInvoicePreview(): void {
+        const queryParams = {
+            page: this.queryParams?.page ?? 1,
+            from: this.queryParams?.from ?? '',
+            to: this.queryParams?.to ?? ''
+        };
+        this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
 
     /**
@@ -3477,7 +3473,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.redirectUrl) {
             this.router.navigateByUrl(this.redirectUrl);
         } else {
-            this.redirectToGetAll();
+            this.redirectToInvoicePreview();
         }
     }
 
@@ -3723,7 +3719,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/purchase-management/purchase/order']);
+                            this.redirectToInvoicePreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response.message);
@@ -3779,7 +3775,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
+                            this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/list']);
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
@@ -3871,7 +3867,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.redirectToGetAll();
+                            this.redirectToInvoicePreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
@@ -4067,11 +4063,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * This will be use for send email after create voucher
      *
-     * @param {*} response
+     * @param {*} email
      * @memberof VoucherCreateComponent
      */
-    public sendEmail(response: any): void {
-        if (response) {
+    public sendEmail(email: any): void {
+        if (email) {
             if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
                 let req: ProformaGetRequest = new ProformaGetRequest();
 
@@ -4082,15 +4078,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     req.estimateNumber = this.voucherDetails?.number;
                 }
-                req.emailId = (response.email as string).split(',');
+                req.emailId = email;
                 this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
             } else {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.voucherDetails?.account?.uniqueName, payload: {
-                        email: { to: response.email.split(',') },
+                        email: { to: email.email },
                         voucherType: this.voucherDetails?.type,
-                        copyTypes: response.invoiceType ? response.invoiceType : [],
-                        uniqueName: response.uniqueName
+                        copyTypes: email.invoiceType ? email.invoiceType : [],
+                        uniqueName: email.uniqueName
                     }
                 });
             }
@@ -4176,7 +4172,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
      * @memberof VoucherCreateComponent
      */
-    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments?.forEach(adjustment => {

@@ -349,7 +349,11 @@
         "partially_paid": "Partially Paid",
         "unpaid": "Unpaid",
         "hold": "Hold",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "open": "Open",
+        "expired": "Expired",
+        "converted": "Converted",
+        "partially_converted": "Partially Converted"
     },
     "app_date_options": {
         "on": "On",
