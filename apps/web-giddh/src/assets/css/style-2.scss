@@ -1087,11 +1087,6 @@ textarea {
         margin-left: 20px !important;
     }
 }
-.institutions-dialog-body {
-    .mdc-list-item__primary-text {
-        color: var(--color-common-primary-text) !important;
-    }
-}
 
 .create-branch-page {
     .mat-select-search-branch {
@@ -1151,6 +1146,11 @@ textarea {
         -webkit-box-orient: vertical;
     }
 
+.institutions-dialog-body {
+    .mdc-list-item__primary-text {
+        color: var(--color-common-primary-text) !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
