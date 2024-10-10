@@ -1611,7 +1611,7 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
-                            <giddh-custom-pagination
+                            <giddh-ledger-paginator
                                 *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
@@ -1619,7 +1619,7 @@
                                 [nextPageToken]="paginationObject.nextToken"
                                 [previousPageToken]="paginationObject.prevToken"
                             >
-                            </giddh-custom-pagination>
+                            </giddh-ledger-paginator>
                             <pagination
                                 *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
                                 [totalItems]="paginationObject.totalItems"
@@ -2709,7 +2709,7 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
-                            <giddh-custom-pagination
+                            <giddh-ledger-paginator
                                 *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
@@ -2717,7 +2717,7 @@
                                 [nextPageToken]="paginationObject.nextToken"
                                 [previousPageToken]="paginationObject.prevToken"
                             >
-                            </giddh-custom-pagination>
+                            </giddh-ledger-paginator>
                             <pagination
                                 *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
                                 [totalItems]="paginationObject.totalItems"

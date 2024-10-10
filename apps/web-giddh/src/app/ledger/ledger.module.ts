@@ -59,7 +59,7 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
 import { MatIconModule } from '@angular/material/icon';
-import { GiddhCustomPaginationModule } from '../shared/giddh-custom-pagination/giddh-custom-pagination.module';
+import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/giddh-ledger-paginator.module';
 
 @NgModule({
     declarations: [
@@ -134,7 +134,7 @@ import { GiddhCustomPaginationModule } from '../shared/giddh-custom-pagination/g
         FormFieldsModule,
         StockCreateEditModule,
         MatIconModule,
-        GiddhCustomPaginationModule
+        GiddhLedgerPaginatorModule
     ]
 })
 export class LedgerModule {

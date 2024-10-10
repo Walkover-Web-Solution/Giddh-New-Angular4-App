@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GiddhCustomPaginationComponent } from './giddh-custom-pagination.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { GiddhLedgerPaginatorComponent } from './giddh-ledger-paginator.component';
 
 @NgModule({
     imports: [
@@ -11,8 +11,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         MatButtonToggleModule
     ],
     exports: [
-        GiddhCustomPaginationComponent
+        GiddhLedgerPaginatorComponent
     ],
-    declarations: [GiddhCustomPaginationComponent]
+    declarations: [GiddhLedgerPaginatorComponent]
 })
-export class GiddhCustomPaginationModule { }
+export class GiddhLedgerPaginatorModule { }

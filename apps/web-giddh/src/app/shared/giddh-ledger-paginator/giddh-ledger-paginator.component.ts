@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: 'giddh-custom-pagination',
-    templateUrl: './giddh-custom-pagination.component.html',
-    styleUrls: ['./giddh-custom-pagination.component.scss']
+    selector: 'giddh-ledger-paginator',
+    templateUrl: './giddh-ledger-paginator.component.html',
+    styleUrls: ['./giddh-ledger-paginator.component.scss']
 })
-export class GiddhCustomPaginationComponent {
+export class GiddhLedgerPaginatorComponent {
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Holds current page count */
@@ -25,7 +25,7 @@ export class GiddhCustomPaginationComponent {
      * Emits events next and previous button clicked
      *
      * @param {boolean} isNextPage
-     * @memberof GiddhCustomPaginationComponent
+     * @memberof GiddhLedgerPaginatorComponent
      */
     public emitsPageChangeEvent(isNextPage: boolean): void {
         this.pageChange.emit(isNextPage ? this.nextPageToken : this.previousPageToken);
