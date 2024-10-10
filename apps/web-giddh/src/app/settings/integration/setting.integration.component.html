@@ -459,7 +459,7 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                                <div class="account-info-background width-100 font-15 row align-items-end">
+                                <div class="account-info-background width-100 font-15 row align-items-center">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
@@ -493,7 +493,7 @@
                                             "
                                         ></dropdown-field>
                                     </div>
-                                    <span class="mr-l1 action-div" *ngIf="!isIciciBankSupportedCountry">
+                                    <ng-container *ngIf="!isIciciBankSupportedCountry">
                                         <a
                                             *ngIf="!isGocardlessSupportedCountry && hasIntegrationScope"
                                             href="javascript:;"
@@ -503,7 +503,7 @@
                                         <i
                                             *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
                                             (click)="deleteBankAccount(bankAccount)"
-                                            class="icon-trash ml-1 mr-r2 cursor-pointer"
+                                            class="icon-trash cursor-pointer"
                                         ></i>
                                         <ng-container *ngIf="bankAccount.reLoginRequired">
                                             <button
@@ -524,7 +524,7 @@
                                                 </button>
                                             </mat-menu>
                                         </ng-container>
-                                    </span>
+                                    </ng-container>
                                     <div class="col-md-4 d-flex flex-column" *ngIf="isIciciBankSupportedCountry">
                                         <span class="field-label"
                                             >{{ localeData?.payment?.payment_updates }}<br
