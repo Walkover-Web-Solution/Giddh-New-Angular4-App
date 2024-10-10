@@ -659,6 +659,21 @@
                             ]
                         }
                     }
+                },
+                {
+                    "label": "VAT Obligation",
+                    "link": "/pages/vat-report/obligations",
+                    "icon": "icon-vat1",
+                    "description": "VAT Obligation",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
                 }
             ],
             "link": "/pages/settings/taxes"

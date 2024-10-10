@@ -656,6 +656,21 @@
                             ]
                         }
                     }
+                },
+                {
+                    "label": "व्हॅट बंधन",
+                    "link": "/pages/vat-report/obligations",
+                    "icon": "icon-vat1",
+                    "description": "व्हॅट बंधन",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
                 }
             ]
         },
