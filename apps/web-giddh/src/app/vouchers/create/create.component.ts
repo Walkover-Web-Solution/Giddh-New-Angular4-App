@@ -2155,7 +2155,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getDepositFormGroup(): FormGroup {
         return this.formBuilder.group({
-            accountUniqueName: [''],
+            accountUniqueName: [null],
             amount: [''],
             currencySymbol: [''],
             type: ['DEBIT']
@@ -3914,7 +3914,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
             const deposits = this.invoiceForm.get('deposits') as FormArray;
-            let accountUniqueName = this.invoiceType.isCashInvoice ? (deposits.at(0).get('accountUniqueName')?.value ? deposits.at(0).get('accountUniqueName')?.value : 'cash') : invoiceForm.account?.uniqueName;
+            let accountUniqueName = this.invoiceType.isCashInvoice ? (deposits.at(0).get('accountUniqueName')?.value ?? invoiceForm.account?.uniqueName ?? 'cash') : invoiceForm.account?.uniqueName;
             invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
                 this.voucherService.updateVoucher(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
