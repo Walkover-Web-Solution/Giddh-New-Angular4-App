@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
 import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, of, skip, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
@@ -47,7 +47,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public createNewText: any = "";
     /** True when pagination should be enabled */
     @Input() public isPaginationEnabled: boolean;
-    /** True if the compoonent should be used as dynamic search component instead of static search */
+    /** True if the component should be used as dynamic search component instead of static search */
     @Input() public enableDynamicSearch: boolean;
     /** True if we need to show value also with label */
     @Input() public showValueInLabel: boolean = false;
@@ -99,7 +99,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public next$: Subject<void> = new Subject();
 
     constructor(
-
+        private changeDetection: ChangeDetectorRef
     ) {
 
     }
@@ -123,6 +123,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     this.onClear.emit({ label: "", value: "" });
                 }
                 this.fieldFilteredOptions$ = this.filterOptions(String(search));
+                this.changeDetection.detectChanges();
             });
         }
     }

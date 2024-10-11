@@ -23,7 +23,6 @@
                                 [type]="'text'"
                                 [name]="'customerName'"
                                 [label]="localeData?.customer_name"
-                                [cssClass]="'form-control mat-field-border'"
                                 [(ngModel)]="adjustPayment.customerName"
                                 [readonly]="true"
                             ></input-field>
@@ -42,8 +41,8 @@
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
                                     [amount]="adjustPayment?.grandTotal"
-                                    [currencySymbol]="account.baseCurrencySymbol"
-                                    [currencyCode]="account.baseCurrency"
+                                    [currencySymbol]="account?.baseCurrencySymbol"
+                                    [currencyCode]="account?.baseCurrency"
                                 >
                                 </amount-field>
                             </span>
@@ -75,8 +74,8 @@
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
                                     [amount]="getBalanceDue()"
-                                    [currencySymbol]="account.baseCurrencySymbol"
-                                    [currencyCode]="account.baseCurrency"
+                                    [currencySymbol]="account?.baseCurrencySymbol"
+                                    [currencyCode]="account?.baseCurrency"
                                 >
                                 </amount-field>
                             </span>
@@ -266,8 +265,8 @@
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="-exceedDueAmount"
-                                    [currencySymbol]="account.baseCurrencySymbol"
-                                    [currencyCode]="account.baseCurrency"
+                                    [currencySymbol]="account?.baseCurrencySymbol"
+                                    [currencyCode]="account?.baseCurrency"
                                 >
                                 </amount-field>
                             </span>

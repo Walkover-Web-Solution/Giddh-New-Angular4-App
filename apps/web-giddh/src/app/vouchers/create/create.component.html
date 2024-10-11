@@ -212,7 +212,7 @@
                                                         localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
-                                            <div class="vouchers-address-form"
+                                            <div class="vouchers-address-form pd-15 border-radius-5"
                                                 [ngClass]="{'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
@@ -221,32 +221,36 @@
                                                         class="w-100" name="billingDetails"
                                                         formControlName="address"></textarea>
                                                 </div>
-                                                <div class="country-field">
-                                                    <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
-                                                        account?.countryName }}</span>
+                                                <div class="d-flex column-gap15 mb-3">
+                                                    <div class="w-50 border-bottom">
+                                                        <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
+                                                            account?.countryName }}</span>
+                                                    </div>
+                                                    <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                        <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                            formControlName="code" [name]="'billingStateCode'"
+                                                            [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [options]="accountStateList$ | async"
+                                                            [labelValue]="invoiceForm.controls['account'].get('billingDetails').get('state').get('name')?.value"
+                                                            [appearance]="'fill'" [showLabel]="false"
+                                                            (selectedOption)="selectState('account', 'billingDetails', $event); copyAccountBillingAddressToShippingAddress()"></reactive-dropdown-field>
+                                                    </div>
                                                 </div>
-                                                <div class="state-field" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-0'"
-                                                        formControlName="code" [name]="'billingStateCode'"
-                                                        [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [options]="accountStateList$ | async"
-                                                        [labelValue]="invoiceForm.controls['account'].get('billingDetails').get('state').get('name')?.value"
-                                                        [appearance]="'fill'" [showLabel]="false"
-                                                        (selectedOption)="selectState('account', 'billingDetails', $event); copyAccountBillingAddressToShippingAddress()"></reactive-dropdown-field>
-                                                </div>
-                                                <div *ngIf="account?.taxTypeLabel" class="gstin-field">
-                                                    <text-field [type]="'text'" [name]="'billingTaxNumber'"
-                                                        (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                        [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0'"
-                                                        [showError]="taxNumberValidations['account']['billingDetails'] | async"
-                                                        formControlName="taxNumber"></text-field>
-                                                </div>
-                                                <div class="pin-code-field">
-                                                    <text-field [type]="'text'" [name]="'billingPinCode'"
-                                                        (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                        formControlName="pincode"></text-field>
+                                                <div class="d-flex column-gap15">
+                                                    <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
+                                                        <text-field [type]="'text'" [name]="'billingTaxNumber'"
+                                                            (keyup)="copyAccountBillingAddressToShippingAddress()"
+                                                            [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                            [showError]="taxNumberValidations['account']['billingDetails'] | async"
+                                                            formControlName="taxNumber"></text-field>
+                                                    </div>
+                                                    <div class="w-50 border-bottom zip-field-width">
+                                                        <text-field [type]="'text'" [name]="'billingPinCode'"
+                                                            (keyup)="copyAccountBillingAddressToShippingAddress()"
+                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                            formControlName="pincode"></text-field>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -298,37 +302,41 @@
                                                 </div>
                                             </mat-menu>
 
-                                            <div class="vouchers-address-form"
+                                            <div class="vouchers-address-form pd-15 border-radius-5"
                                                 [ngClass]="{'form-disabled': copyAccountBillingInShippingAddress, 'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput class="w-100" name="shippingDetails"
                                                         formControlName="address"></textarea>
                                                 </div>
-                                                <div class="country-field">
-                                                    <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
-                                                        account?.countryName }}</span>
+                                                <div class="d-flex column-gap15 mb-3">
+                                                    <div class="w-50 border-bottom">
+                                                        <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
+                                                            account?.countryName }}</span>
+                                                    </div>
+                                                    <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                        <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                            formControlName="code" [name]="'shippingStateCode'"
+                                                            [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                            [options]="accountStateList$ | async"
+                                                            [labelValue]="invoiceForm.controls['account'].get('shippingDetails').get('state').get('name')?.value"
+                                                            [appearance]="'fill'" [showLabel]="false"
+                                                            (selectedOption)="selectState('account', 'shippingDetails', $event)"></reactive-dropdown-field>
+                                                    </div>
                                                 </div>
-                                                <div class="state-field" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-0'"
-                                                        formControlName="code" [name]="'shippingStateCode'"
-                                                        [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                        [options]="accountStateList$ | async"
-                                                        [labelValue]="invoiceForm.controls['account'].get('shippingDetails').get('state').get('name')?.value"
-                                                        [appearance]="'fill'" [showLabel]="false"
-                                                        (selectedOption)="selectState('account', 'shippingDetails', $event)"></reactive-dropdown-field>
-                                                </div>
-                                                <div *ngIf="account?.taxTypeLabel" class="gstin-field">
-                                                    <text-field [type]="'text'" [name]="'shippingTaxNumber'"
-                                                        [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0'"
-                                                        [showError]="taxNumberValidations['account']['shippingDetails'] | async"
-                                                        formControlName="taxNumber"></text-field>
-                                                </div>
-                                                <div class="pin-code-field">
-                                                    <text-field [type]="'text'" [name]="'shippingPinCode'"
-                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                        formControlName="pincode"></text-field>
+                                                <div class="d-flex column-gap15">
+                                                    <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
+                                                        <text-field [type]="'text'" [name]="'shippingTaxNumber'"
+                                                            [placeholder]="account?.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                            [showError]="taxNumberValidations['account']['shippingDetails'] | async"
+                                                            formControlName="taxNumber"></text-field>
+                                                    </div>
+                                                    <div class="w-50 border-bottom zip-field-width">
+                                                        <text-field [type]="'text'" [name]="'shippingPinCode'"
+                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                            formControlName="pincode"></text-field>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -435,7 +443,7 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="vouchers-address-form"
+                                        <div class="vouchers-address-form pd-15 border-radius-5"
                                             [ngClass]="{'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
@@ -443,31 +451,35 @@
                                                     (keyup)="copyCompanyBillingAddressToShippingAddress()" class="w-100"
                                                     name="companyBillingAddress" formControlName="address"></textarea>
                                             </div>
-                                            <div class="country-field">
-                                                <span>{{ company?.countryName }}</span>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom">
+                                                    <span>{{ company?.countryName }}</span>
+                                                </div>
+                                                <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                    <reactive-dropdown-field [cssClass]="'border-0 w-100'" formControlName="code"
+                                                        [name]="'companyBillingStateCode'"
+                                                        [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [options]="companyStateList$ | async"
+                                                        [labelValue]="invoiceForm.controls['company'].get('billingDetails').get('state').get('name')?.value"
+                                                        [appearance]="'fill'" [showLabel]="false"
+                                                        (selectedOption)="selectState('company', 'billingDetails', $event); copyCompanyBillingAddressToShippingAddress()"></reactive-dropdown-field>
+                                                </div>
                                             </div>
-                                            <div class="state-field" formGroupName="state">
-                                                <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code"
-                                                    [name]="'companyBillingStateCode'"
-                                                    [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [options]="companyStateList$ | async"
-                                                    [labelValue]="invoiceForm.controls['company'].get('billingDetails').get('state').get('name')?.value"
-                                                    [appearance]="'fill'" [showLabel]="false"
-                                                    (selectedOption)="selectState('company', 'billingDetails', $event); copyCompanyBillingAddressToShippingAddress()"></reactive-dropdown-field>
-                                            </div>
-                                            <div class="gstin-field" *ngIf="company?.taxTypeLabel">
-                                                <text-field [type]="'text'" [name]="'companyBillingTaxNumber'"
-                                                    (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                    [placeholder]="company.taxTypeLabel" [cssClass]="'border-0'"
-                                                    [showError]="taxNumberValidations['company']['billingDetails'] | async"
-                                                    formControlName="taxNumber"></text-field>
-                                            </div>
-                                            <div class="pin-code-field">
-                                                <text-field [type]="'text'" [name]="'companyBillingPinCode'"
-                                                    (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                    [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                    formControlName="pincode"></text-field>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
+                                                    <text-field [type]="'text'" [name]="'companyBillingTaxNumber'"
+                                                        (keyup)="copyCompanyBillingAddressToShippingAddress()"
+                                                        [placeholder]="company.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                        [showError]="taxNumberValidations['company']['billingDetails'] | async"
+                                                        formControlName="taxNumber"></text-field>
+                                                </div>
+                                                <div class="w-50 border-bottom zip-field-width">
+                                                    <text-field [type]="'text'" [name]="'companyBillingPinCode'"
+                                                        (keyup)="copyCompanyBillingAddressToShippingAddress()"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                        formControlName="pincode"></text-field>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -510,36 +522,40 @@
                                             </div>
                                         </mat-menu>
 
-                                        <div class="vouchers-address-form"
+                                        <div class="vouchers-address-form pd-15 border-radius-5"
                                             [ngClass]="{'form-disabled': copyCompanyBillingInShippingAddress, 'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput class="w-100" name="companyShippingAddress"
                                                     formControlName="address"></textarea>
                                             </div>
-                                            <div class="country-field">
-                                                <span>{{ company?.countryName }}</span>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom">
+                                                    <span>{{ company?.countryName }}</span>
+                                                </div>
+                                                <div class="state-field w-50 border-bottom" formGroupName="state">
+                                                    <reactive-dropdown-field [cssClass]="'border-0 w-100'" formControlName="code"
+                                                        [name]="'companyShippingStateCode'"
+                                                        [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
+                                                        [options]="companyStateList$ | async"
+                                                        [labelValue]="invoiceForm.controls['company'].get('shippingDetails').get('state').get('name')?.value"
+                                                        [appearance]="'fill'" [showLabel]="false"
+                                                        (selectedOption)="selectState('company', 'shippingDetails', $event)"></reactive-dropdown-field>
+                                                </div>
                                             </div>
-                                            <div class="state-field" formGroupName="state">
-                                                <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code"
-                                                    [name]="'companyShippingStateCode'"
-                                                    [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
-                                                    [options]="companyStateList$ | async"
-                                                    [labelValue]="invoiceForm.controls['company'].get('shippingDetails').get('state').get('name')?.value"
-                                                    [appearance]="'fill'" [showLabel]="false"
-                                                    (selectedOption)="selectState('company', 'shippingDetails', $event)"></reactive-dropdown-field>
-                                            </div>
-                                            <div class="gstin-field" *ngIf="company?.taxTypeLabel">
-                                                <text-field [type]="'text'" [name]="'companyShippingTaxNumber'"
-                                                    [placeholder]="company.taxTypeLabel" [cssClass]="'border-0'"
-                                                    [showError]="taxNumberValidations['company']['shippingDetails'] | async"
-                                                    formControlName="taxNumber"></text-field>
-                                            </div>
-                                            <div class="pin-code-field">
-                                                <text-field [type]="'text'" [name]="'companyShippingPinCode'"
-                                                    [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
-                                                    formControlName="pincode"></text-field>
+                                            <div class="d-flex column-gap15 mb-3">
+                                                <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
+                                                    <text-field [type]="'text'" [name]="'companyShippingTaxNumber'"
+                                                        [placeholder]="company.taxTypeLabel" [cssClass]="'border-0 w-100'"
+                                                        [showError]="taxNumberValidations['company']['shippingDetails'] | async"
+                                                        formControlName="taxNumber"></text-field>
+                                                </div>
+                                                <div class="w-50 border-bottom zip-field-width">
+                                                    <text-field [type]="'text'" [name]="'companyShippingPinCode'"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                        formControlName="pincode"></text-field>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

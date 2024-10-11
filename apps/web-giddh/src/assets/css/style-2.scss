@@ -43,6 +43,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/mat-menu.scss";
 @import "../css/global/tax-authority.scss";
 @import "../css/global/adjustment-inventory.scss";
+@import "../css/global/vouchers-preview.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -154,7 +155,6 @@ textarea {
 
 .mobile-number-wrapper {
     z-index: 9;
-    
     input.error {
         border: 1px solid var(--color-danger);
     }
@@ -1092,7 +1092,11 @@ textarea {
         margin-left: 20px !important;
     }
 }
-
+.institutions-dialog-body {
+    .mdc-list-item__primary-text {
+        color: var(--color-common-primary-text) !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -1290,7 +1294,7 @@ aside-create-group {
                         overflow-y: auto;
                     }
                 }
-                
+
             // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
@@ -1400,6 +1404,7 @@ body {
     -webkit-font-smoothing: auto;
     padding: 0 !important;
     margin: 0 !important;
+    overflow: hidden;
 }
 
 /* table css need to removed at last (finish)*/
@@ -1638,6 +1643,14 @@ input {
     align-items: center;
     margin-top: 125px;
     margin-bottom: 105px;
+}
+
+giddh-page-loader {
+    &.unset-loader-margin {
+        .loader-main {
+            margin: 0 !important;
+        }
+    }
 }
 
 .dropdown-arrow {
@@ -2329,6 +2342,10 @@ ul.sub-list {
     width: 150px;
 }
 
+.w-fit-content {
+    width: fit-content
+}
+
 .btn-green {
     background: var(--color-secondary-button-background);
     color: var(--color-septenary-button-text);
@@ -2601,7 +2618,7 @@ modal-container.modal {
 }
 
 .color-primary {
-    color: var(--color-blue);
+    color: var(--color-blue) !important;
 }
 
 .justify-content-between {
@@ -4267,7 +4284,7 @@ a.btn.btn-xs.btn-link.pull-right {
             table {
                 tr {
                     td {
-                        width: 180px;
+                        width: 197px;
                         padding-right: 10px;
                     }
                 }
@@ -9400,10 +9417,10 @@ ngx-daterangepicker-material {
 #HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
-    top: -5px;
+    top: 1px;
     width: 30px !important;
     display: flex !important;
-    right: -5px !important;
+    right: 2px !important;
     position: absolute !important;
 }
 
@@ -11038,6 +11055,37 @@ body.update-scroll-hidden {
     }
 }
 
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
+    }
+
+    button.mat-menu-item {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px !important;
+    }
+
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+    }
+}
+
 /*---- inventory-master ----*/
 
 inventory-master {
@@ -12335,7 +12383,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-.table-header-fix {
+.table-position-left {
     position: sticky;
     top: 0;
     background-color: var(--color-white);
@@ -13540,6 +13588,10 @@ aside-menu-product-service {
 }
 
 // common-dialog md width
+.mat-dialog-sm {
+    width: 500px;
+}
+
 .mat-dialog-md {
     width: 700px;
 }
@@ -13567,7 +13619,8 @@ aside-menu-product-service {
         .mat-list-wrap {
             .mat-mdc-list {
                 .mat-mdc-list-item {
-                    height: 60px;
+                    height: auto;
+                    min-height: 60px;
                 }
             }
         }

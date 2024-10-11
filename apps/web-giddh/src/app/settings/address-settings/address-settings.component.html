@@ -32,8 +32,8 @@
             </button>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100">
-            <div class="table-responsive">
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 overflow-visible">
+            <div class="table-responsive overflow-visible">
                 <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view">
                     <ng-container matColumnDef="no">
                         <th class="min-wid-check" width="2%" mat-header-cell *matHeaderCellDef>#</th>

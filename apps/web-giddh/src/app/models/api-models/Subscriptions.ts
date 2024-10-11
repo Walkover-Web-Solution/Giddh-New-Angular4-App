@@ -80,3 +80,18 @@ export class SubscriptionReportRequest {
         this.page = 1;
     }
 }
+
+export class SearchSubscriptionRequest {
+    public q: any;
+    public count: number;
+    public page: number;
+    public totalItems?: number;
+    public totalPages?: number;
+    public loadMore?: boolean;
+    public fromMoveCompany?: boolean;
+    constructor() {
+        this.count = PAGINATION_LIMIT;
+        this.page = 1;
+        this.fromMoveCompany = true;
+    }
+}

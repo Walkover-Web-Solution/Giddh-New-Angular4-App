@@ -6,6 +6,7 @@ dayjs.extend(quarterOfYear) // use plugin
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
+    'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
     'APP_FOLDER': APP_FOLDER
 };
@@ -377,8 +378,7 @@ export const ROUTES_WITH_HEADER_BACK_BUTTON = [
 export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/settings/branch',
     '/pages/settings/create-branch',
-    '/pages/settings/financial-year',
-    '/pages/user-details/subscription'
+    '/pages/settings/financial-year'
 ];
 
 /** Settings integration tabs */

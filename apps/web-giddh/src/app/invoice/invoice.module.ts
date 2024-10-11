@@ -4,7 +4,6 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
-import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
 import { InvoiceComponent } from './invoice.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
@@ -13,17 +12,10 @@ import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModa
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
-import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/generateEWayBill.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { ProformaListComponent } from './proforma/proforma-list.component';
 import { RecurringComponent } from './recurring/recurring.component';
-import { InvoiceSettingComponent } from './settings/invoice.settings.component';
-import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
-import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
-import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
-import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
-import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { WebviewDirective } from './webview.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -69,7 +61,6 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -78,27 +69,26 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
+import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
+import { InvoiceSettingModule } from './settings/invoice-setting.module';
+import { InvoiceGenerateModule } from './generate/invoice-generate.module';
+import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+
 
 @NgModule({
     declarations: [
         InvoiceComponent,
         InvoicePreviewComponent,
-        InvoiceGenerateComponent,
-        EditInvoiceComponent,
-        DesignFiltersContainerComponent,
-        EditFiltersContainersComponent,
-        InvoiceSettingComponent,
         InvoicePaymentModelComponent,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoiceTemplateModalComponent,
-        InvoiceTemplatePreviewModelComponent,
         EsignModalComponent,
         RecurringComponent,
         WebviewDirective,
         InvoiceAdvanceSearchComponent,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
-        GenerateEWayBillComponent,
         EWayBillCreateComponent,
         EWayBillComponent,
         EWayBillCredentialsComponent,
@@ -112,6 +102,7 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
+        MatDividerModule,
         TabsModule.forRoot(),
         ReactiveFormsModule,
         ModalModule.forRoot(),
@@ -162,11 +153,15 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         BsDatepickerModule.forRoot(),
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
-        DeleteTemplateConfirmationModalModule,
         MatDialogModule,
         WatchVideoModule,
         MatTabsModule,
-        BulkExportVoucherModule
+        BulkExportVoucherModule,
+        GenerateEWayBillModule,
+        InvoiceSettingModule,
+        InvoiceGenerateModule,
+        DeleteTemplateConfirmationModalModule,
+        FroalaTemplateEditorModule
     ],
     exports: [
         InvoiceRoutingModule,

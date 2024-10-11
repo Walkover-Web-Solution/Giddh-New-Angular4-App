@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { delay, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -19,6 +19,8 @@ import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 import { BootstrapToggleSwitch } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { MatDialog } from '@angular/material/dialog';
+import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -87,6 +89,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     constructor(
         private commonActions: CommonActions,
+        private dialog: MatDialog,
         private cdr: ChangeDetectorRef,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -107,7 +110,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -115,7 +117,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
         this.initSettingObj();
 
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+        this._route.queryParams.pipe(delay(200),takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tabIndex) {
                 this.selectTab(val.tabIndex);
             }
@@ -597,5 +599,23 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public tabChanged(event: any): void {
         this.selectedTabIndex = event?.index;
+    }
+
+    /**
+     *Open custom email dialog
+     *
+     * @param {string} voucherType
+     * @memberof InvoiceSettingComponent
+     */
+    public openCustomEmailDialog(voucherType: string): void {
+        this.dialog.open(TemplateFroalaComponent, {
+            data: voucherType,
+            width: 'var(--aside-pane-width)',
+            height: '70vh',
+            position: {
+                right: '15px',
+                bottom: '0'
+            }
+        });
     }
 }

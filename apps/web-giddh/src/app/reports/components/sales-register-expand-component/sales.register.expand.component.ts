@@ -17,6 +17,7 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -87,27 +88,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public displayedColumns: any[] = [];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** True according to show field filters  */
-    public showFieldFilter = {
-        date: false,
-        account: false,
-        voucher_type: false,
-        voucher_no: false,
-        sales: false,
-        return: false,
-        qty_rate: false,
-        value: false,
-        discount: false,
-        tax: false,
-        net_sales: false,
-        parent_group: false,
-        sales_account: false,
-        tax_no: false,
-        address: false,
-        pincode: false,
-        email: false,
-        mobile_no: false
-    };
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Hold initial params data */
@@ -118,6 +98,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Datasource of Sales Register report */
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -179,8 +161,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
-                _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
+                this.dataSource.data = this.SalesRegisteDetailedItems.items.map((obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
+                    return obj;
                 });
                 if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
@@ -275,8 +258,13 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true
             },
             {
-                "value": "qty_rate",
-                "label": "Qty-Rate",
+                "value": "app_unit",
+                "label": "Unit",
+                "checked": true
+            },
+            {
+                "value": "app_rate",
+                "label": "Rate",
                 "checked": true
             },
             {
@@ -307,13 +295,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         setTimeout(() => { this.detectChange() }, 200);
         this.store.dispatch(this.invoiceReceiptActions.GetSalesRegistedDetails(SalesDetailedfilter));
     }
-    public pageChanged(ev: any): void {
-        if (ev.page === this.getDetailedsalesRequestFilter.page) {
-            return;
-        }
-        this.getDetailedsalesRequestFilter.page = ev.page;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-    }
     public sortbyApi(ord, key) {
         this.showClearFilter = true;
         this.getDetailedsalesRequestFilter.sortBy = key;
@@ -337,11 +318,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     */
     public emitExpand() {
         this.expand = !this.expand;
-    }
-    public columnFilter(event, column) {
-        if (event && column) {
-            this.showFieldFilter[column] = event;
-        }
     }
     public hideListItems() {
         if (this.filterDropDownList.isOpen) {
@@ -521,8 +497,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     */
     public getSelectedTableColumns(event: any): void {
         this.displayedColumns = event;
-        const displayColumnsSet = new Set(this.displayedColumns);
-        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
     }
 
     /**
@@ -589,5 +563,16 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
         this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
         this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+    }
+
+    /**
+      * Handle Page Change event and Make API Call
+      *
+      * @param {*} event
+      * @memberof SalesRegisterExpandComponent
+      */
+    public handlePageChange(event: any): void {
+        this.getDetailedsalesRequestFilter.page = event.pageIndex + 1;
+        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
 }

@@ -496,7 +496,9 @@
                                         *ngIf="
                                             blankLedger.voucherType === 'sal' ||
                                             blankLedger.voucherType === 'pur' ||
-                                            blankLedger.voucherType == 'pay' ||
+                                            blankLedger.voucherType === 'pay' ||
+                                            blankLedger.voucherType === 'rcpt' ||
+                                            blankLedger.voucherType === 'advance-receipt' ||
                                             (voucherApiVersion === 2 && blankLedger.voucherType == 'jr')
                                         "
                                     >

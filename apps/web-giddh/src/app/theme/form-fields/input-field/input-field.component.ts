@@ -60,6 +60,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public useMask: boolean = false;
     /** It will show mask in the text field */
     @Input() public mask: any;
+    /** It will show currency symbol which direction is rtl ex. AED */
+    @Input() public allowUnsupportedPrefix: boolean = false;
     /** It will show prefix in the text field */
     @Input() public prefix: any;
     /** It will show suffix in the text field */
@@ -89,6 +91,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
+    /** It will show Icon prefix in the text field */
+    @Input() public matPrefixIcon: string = "";
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -109,7 +113,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
         if (changes?.defaultValue) {
             this.ngModel = this.defaultValue;
         }
-        
+
         if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();
