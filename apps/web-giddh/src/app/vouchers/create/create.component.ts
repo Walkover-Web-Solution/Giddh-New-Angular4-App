@@ -407,6 +407,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** selected country code */
+    private callingCode: string = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1188,6 +1190,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
+        console.log(this.intlClass);
     }
 
     /**
@@ -2091,6 +2094,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqueName: ['', Validators.required],
                 attentionTo: [''],
                 mobileNumber: [''],
+                callingCode: [''],
                 email: ['', Validators.email],
                 billingDetails: this.getAddressFormGroup(),
                 shippingDetails: this.getAddressFormGroup()
@@ -3128,6 +3132,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     parentDom,
                     false
                 );
+                console.log(this.intlClass);
             }
             if (times > 25) {
                 clearInterval(interval);
@@ -3603,6 +3608,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
+
+        if (!this.invoiceType.isPurchaseOrder) {
+            invoiceForm.account.callingCode = this.intlClass.selectedCountryData.dialCode;
+        } else {
+            delete invoiceForm.account.callingCode;
+        }
+
         if (!this.currentVoucherFormDetails?.depositAllowed) {
             delete invoiceForm.deposit;
         }
@@ -3860,7 +3872,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
-
+            this.intlClass.selectedCountryData.dialCode;
             let accountUniqueName = this.invoiceType.isCashInvoice ? (invoiceForm.deposit?.accountUniqueName ? invoiceForm.deposit?.accountUniqueName : 'cash') : invoiceForm.account?.uniqueName;
             invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
