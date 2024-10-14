@@ -1188,7 +1188,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
-        console.log(this.intlClass);
     }
 
     /**
@@ -3130,7 +3129,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     parentDom,
                     false
                 );
-                console.log(this.intlClass);
             }
             if (times > 25) {
                 clearInterval(interval);
@@ -3870,7 +3868,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
-            this.intlClass.selectedCountryData.dialCode;
             let accountUniqueName = this.invoiceType.isCashInvoice ? (invoiceForm.deposit?.accountUniqueName ? invoiceForm.deposit?.accountUniqueName : 'cash') : invoiceForm.account?.uniqueName;
             invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
