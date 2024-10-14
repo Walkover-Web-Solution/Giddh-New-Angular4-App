@@ -2091,6 +2091,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqueName: ['', Validators.required],
                 attentionTo: [''],
                 mobileNumber: [''],
+                callingCode: [''],
                 email: ['', Validators.email],
                 billingDetails: this.getAddressFormGroup(),
                 shippingDetails: this.getAddressFormGroup()
@@ -3655,6 +3656,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
+
+        if (!this.invoiceType.isPurchaseOrder) {
+            invoiceForm.account.callingCode = this.intlClass.selectedCountryData.dialCode;
+        } else {
+            delete invoiceForm.account.callingCode;
+        }
+
         if (!this.currentVoucherFormDetails?.depositAllowed) {
             delete invoiceForm.deposits;
         }
