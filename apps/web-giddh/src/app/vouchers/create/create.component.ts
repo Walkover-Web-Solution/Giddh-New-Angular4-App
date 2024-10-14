@@ -407,8 +407,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
-    /** selected country code */
-    private callingCode: string = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
