@@ -269,5 +269,4 @@ export class CommonService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
     }
-
 }

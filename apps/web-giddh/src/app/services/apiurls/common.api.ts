@@ -13,5 +13,6 @@ export const COMMON_API = {
     UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
     UPLOAD_IMAGE: 'company/:companyUniqueName/images',
     BARCODE_SCAN: 'v4/company/:companyUniqueName/particular?customerUniqueName=:customerUniqueName&invoiceType=:invoiceType&barcode=:barcode',
-    GST_INFORMATION: 'gst-info?gstin=:gstin'
+    GST_INFORMATION: 'gst-info?gstin=:gstin',
+    SUBSCRIPTION_PAYPAL_CALL_BACK: 'v2/subscription/paypal-subscription-callback'
 };

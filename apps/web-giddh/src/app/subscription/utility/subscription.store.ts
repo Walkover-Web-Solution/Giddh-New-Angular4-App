@@ -272,10 +272,10 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     *
     * @memberof SubscriptionComponentStore
     */
-    readonly buyPlanByGoCardless = this.effect((data: Observable<any>) => {
+    readonly buyPlan = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.subscriptionService.buyPlanByGoCardless(req).pipe(
+                return this.subscriptionService.buyPlan(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

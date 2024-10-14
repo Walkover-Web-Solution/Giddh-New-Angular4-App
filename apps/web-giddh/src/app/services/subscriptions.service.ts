@@ -439,14 +439,14 @@ export class SubscriptionsService {
     }
 
     /**
-    * This will be use for buy plan by gocardless
+    * This will be use for buy plan
     *
     * @param {*} model
     * @return {*}  {Observable<BaseResponse<any, any>>}
     * @memberof SubscriptionsService
     */
-    public buyPlanByGoCardless(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.BUY_PLAN_BY_GOCARDLESS,
+    public buyPlan(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.BUY_PLAN,
             model)
             .pipe(
                 map((res) => {
@@ -619,6 +619,30 @@ export class SubscriptionsService {
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = model;
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {}))
+            );
+    }
+
+
+    /**
+    * Get Paypal capture plan
+    *
+    * @param {*} model
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof SubscriptionsService
+    */
+    public paypalCaptureOrder(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.PAYPAL_CAPTURE_PLAN
+            ?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionId))
+            ?.replace(':orderId', encodeURIComponent(model?.orderId))
+            , '')
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
                     data.queryString = {};
                     return data;
                 }),
