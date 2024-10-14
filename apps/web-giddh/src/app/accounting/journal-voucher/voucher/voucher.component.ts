@@ -1489,9 +1489,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
-                totalCredit += control.get('amount').value;
+                totalCredit += control.get('amount').value ?? 0;
             } else {
-                totalDebit += control.get('amount').value;
+                totalDebit += control.get('amount').value ?? 0;
             }
         });
 
