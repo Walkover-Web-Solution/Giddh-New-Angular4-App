@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { Observable, takeUntil, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, takeUntil, of as observableOf, ReplaySubject, delay } from 'rxjs';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { Store } from '@ngrx/store';
@@ -121,12 +121,10 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         this.getOnboardingFormData();
         this.getActiveCompany();
 
-        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+        this.route.params.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.billingDetails.billingAccountUnqiueName = params?.billingAccountUnqiueName;
-                setTimeout(() => {
-                    this.getBillingDetails(this.billingDetails.billingAccountUnqiueName);
-                }, 500);
+                this.getBillingDetails(this.billingDetails.billingAccountUnqiueName);
             }
         });
 
@@ -306,7 +304,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                     });
                 }
             } else {
-                let statesRequest = new StatesRequest();
+                const statesRequest = new StatesRequest();
                 statesRequest.country = countryCode;
                 this.store.dispatch(this.generalActions.getAllState(statesRequest));
             }
