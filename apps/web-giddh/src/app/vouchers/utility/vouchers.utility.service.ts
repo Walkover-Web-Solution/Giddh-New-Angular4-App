@@ -520,12 +520,12 @@ export class VouchersUtilityService {
      */
     public getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean, localeData: any): string {
         switch (type) {
-            case 'sales': return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
-            case 'purchase': return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
-            case 'credit note': return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
-            case 'debit note': return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
-            case 'receipt': return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
-            case 'payment': return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
+            case VoucherTypeEnum.sales: return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
+            case VoucherTypeEnum.purchase: return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
+            case VoucherTypeEnum.creditNote: return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
+            case VoucherTypeEnum.debitNote: return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
+            case VoucherTypeEnum.receipt: return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
+            case VoucherTypeEnum.payment: return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
         }
     }
 

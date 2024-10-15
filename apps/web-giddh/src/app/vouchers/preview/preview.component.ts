@@ -185,6 +185,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public filteredVoucherVersions: ProformaVersionItem[] = [];
     /** Holds View More voucher history status used to toggle voucher history */
     public moreLogsDisplayed: boolean = true;
+    /** Holds Image dynamic path for electron and web application */
+    public imgPath: string = '';
+    /** Holds voucher type enum to use Enum in html */
+    public voucherTypeEnum: any = VoucherTypeEnum;
 
     constructor(
         private router: Router,
@@ -231,6 +235,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter
@@ -585,11 +590,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * API Call Get All Vouchers
-    *
-    * @private
-    * @memberof VouchersPreviewComponent
-    */
+     * API Call Get All Vouchers
+     *
+     * @private
+     * @param {boolean} [isLoadMore=false]
+     * @param {boolean} [isScrollUp=false]
+     * @return {*}  {void}
+     * @memberof VouchersPreviewComponent
+     */
     private getAllVouchers(isLoadMore: boolean = false, isScrollUp: boolean = false): void {
         if (isLoadMore) {
             this.isLoadMore = true;
@@ -761,7 +769,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Payment Dialog
     *
-    * @param {*} voucher
     * @memberof VouchersPreviewComponent
     */
     public showPaymentDialog(): void {
@@ -774,7 +781,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Adjust payment dialog
     *
-    * @param {*} voucher
     * @memberof VoucherListComponent
     */
     public showAdjustmentDialog(): void {
@@ -784,7 +790,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Send Email Dialog
     *
-    * @param {*} voucher
     * @memberof VouchersPreviewComponent
     */
     public openEmailSendDialog(): void {
@@ -797,7 +802,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
      * Send Email API Call
      *
-     * @param {*} email
+     * @param {*} response
      * @memberof VouchersPreviewComponent
      */
     public sendEmail(response: any): void {
@@ -1227,9 +1232,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public isShowInvoiceStatus(): boolean {
-        if ((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) {
-            return true;
-        } else if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+        if (((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) || (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice)) {
             return true;
         } else {
             return false;

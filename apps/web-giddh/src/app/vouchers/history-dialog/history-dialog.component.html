@@ -12,9 +12,9 @@
             <ng-container *ngIf="!(isVoucherVersionsInProgress$ | async)">
                 <ng-container *ngFor="let item of versionHistory?.items; let lastItem = last">
                     <div class="py-2" [ngClass]="{ 'border-bottom': lastItem }" *ngFor="let change of item?.changes">
-                        <p class="text-gray">{{ item.versionTime | date : "dd/MM/yyyy, hh:mm aa" }}</p>
+                        <p class="text-gray">{{ item.versionTime | date : "dd-MM-yyyy, hh:mm aa" }}</p>
                         <p>
-                            {{ change.message }} <span class="text-gray">{{ getByUserText(item.user?.name) }}</span>
+                            {{ change.message }} <span class="text-gray">{{ item?.userName }} -</span>
                         </p>
                     </div>
                 </ng-container>

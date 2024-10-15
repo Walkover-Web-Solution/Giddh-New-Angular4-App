@@ -303,7 +303,6 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      *
      * @param {string} fromCurrency
      * @param {string} toCurrency
-     * @param {*} voucherDate
      * @memberof PaymentDialogComponent
      */
     public getExchangeRate(fromCurrency: string, toCurrency: string): void {
