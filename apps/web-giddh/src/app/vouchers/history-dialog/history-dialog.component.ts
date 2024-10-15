@@ -4,6 +4,7 @@ import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GeneralService } from '../../services/general.service';
 import { PAGE_SIZE_OPTIONS, VoucherTypeEnum } from '../utility/vouchers.const';
+import { GIDDH_DATE_FORMAT_TIME } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'app-history-dialog',
@@ -27,6 +28,8 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
         page: 1,
         count: this.pageSizeOptions[0]
     }
+    /** Holds Date format with time global constant */
+    public giddhDateFormatWithTime: string = GIDDH_DATE_FORMAT_TIME;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
