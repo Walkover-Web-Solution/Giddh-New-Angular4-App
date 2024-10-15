@@ -361,7 +361,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
 
                 this.getSelectedTabIndex();
-                if (this.universalDate) {
+                // 'pending', 'settings', 'templates' These tabs are not voucher list
+                if (this.universalDate && !['pending', 'settings', 'templates'].includes(this.activeModule)) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
                 }
