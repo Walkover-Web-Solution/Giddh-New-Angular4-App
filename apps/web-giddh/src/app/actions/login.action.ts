@@ -341,13 +341,23 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
+                const regionMap: { [key: string]: string | null } = {
+                    'GB': 'uk',
+                    'IN': 'in',
+                    'AE': 'ae',
+                    'GL': '?site=global'
+                };
+
+                const countryRegion = localStorage.getItem('Country-Region');
+                const region = regionMap[countryRegion] || null;
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://giddh.com/login/';
+
+                    window.location.href = `https://giddh.com/login/${region}`;
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
-                    window.location.href = AppUrl + 'login/';
+                    window.location.href = AppUrl + `login//${region}`;
                 }
                 return { type: 'EmptyAction' };
             })));
