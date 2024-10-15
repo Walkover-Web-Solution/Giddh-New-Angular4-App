@@ -15,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 @Component({
     selector: 'app-bulk-update',
@@ -84,7 +85,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
 
-        this.isPOVoucher = this.inputData?.voucherType === 'purchase-order';
+        this.isPOVoucher = this.inputData?.voucherType ===  VoucherTypeEnum.purchaseOrder;
         if (this.isPOVoucher) {
             this.bulkUpdateForm = this.formBuilder.group({
                 action: [''],
@@ -127,7 +128,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.slogan, value: 'slogan' },
             ];
 
-            if (this.inputData?.voucherType === "credit note" || this.inputData?.voucherType === "debit note") {
+            if ((this.inputData?.voucherType === VoucherTypeEnum.creditNote) || (this.inputData?.voucherType === VoucherTypeEnum.debitNote)) {
                 this.fieldOptions = this.fieldOptions?.filter(item => item?.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
             }
 
@@ -187,7 +188,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getCreatedTemplates(): void {
-        let voucherType = this.inputData?.voucherType === 'debit note' || this.inputData?.voucherType === 'credit note' ? 'voucher' : 'invoice';
+        let voucherType = (this.inputData?.voucherType === VoucherTypeEnum.creditNote) || (this.inputData?.voucherType === VoucherTypeEnum.debitNote) ? 'voucher' : 'invoice';
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.componentStore.getCreatedTemplates(voucherType);
@@ -362,9 +363,6 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                         dueDate = dayjs(this.bulkUpdateForm.get("dueDate")?.value).format(GIDDH_DATE_FORMAT);
                     }
                     this.bulkUpdateRequest({ dueDate: dueDate }, 'duedate');
-                    break;
-
-                case 'shippingDetails':
                     break;
 
                 case 'customFields':
