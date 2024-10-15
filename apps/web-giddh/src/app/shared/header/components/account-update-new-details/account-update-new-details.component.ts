@@ -237,7 +237,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
-    public isForeignCurrecny: boolean = false;
+    public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
     public tempSaveBulkData: any[] = [];
     /** Account Opening Balance list */
@@ -2274,9 +2274,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
       * @memberof AccountUpdateNewDetailsComponent
       */
     public openBulkAddDialog(): void {
-        this.isForeignCurrecny = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
+        this.isForeignCurrency = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
         let data = {
-            foreignCurrency: this.isForeignCurrecny,
+            foreignCurrency: this.isForeignCurrency,
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {

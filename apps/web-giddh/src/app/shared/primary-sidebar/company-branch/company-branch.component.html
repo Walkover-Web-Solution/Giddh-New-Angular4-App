@@ -120,28 +120,6 @@
                 <div class="company-list branch-list mt-2">
                     <ul class="list-style-none font-15" *ngIf="!branchRefreshInProcess">
                         <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
-                            <li
-                                *ngIf="
-                                    activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName
-                                "
-                                [tooltip]="companyBranches.name"
-                                placement="bottom"
-                            >
-                                <a
-                                    class="d-flex align-items-center head-branch"
-                                    href="javascript:;"
-                                    (keydown.enter)="changeCompany(companyBranches, '', false)"
-                                    (click)="changeCompany(companyBranches, '', false)"
-                                >
-                                    <i class="icon-head-branch mr-2"></i>
-                                    <span class="d-flex flex-column">
-                                        <span class="branch-alias">{{ companyBranches?.name }}</span>
-                                        <span class="font-12 branch-company-name">{{
-                                            localeData?.company_consolidated_data
-                                        }}</span>
-                                    </span>
-                                </a>
-                            </li>
                             <li *ngFor="let branch of companyBranches?.branches">
                                 <a
                                     class="d-flex align-items-center"
