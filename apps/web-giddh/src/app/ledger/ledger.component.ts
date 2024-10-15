@@ -643,6 +643,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
                 this.searchText = '';
+                this.trxRequest.paginationToken = '';
                 this.resetBlankTransaction();
 
                 this.isCompanyCreated$.pipe(take(1)).subscribe(s => {
