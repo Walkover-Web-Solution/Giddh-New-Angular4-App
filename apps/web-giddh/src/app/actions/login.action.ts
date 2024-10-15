@@ -352,12 +352,12 @@ export class LoginActions {
                 const region = regionMap[countryRegion] || null;
                 if (PRODUCTION_ENV && !isElectron) {
 
-                    window.location.href = `https://giddh.com/login/${region}`;
+                    window.location.href = `https://giddh.com/${region}/login`;
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
-                    window.location.href = AppUrl + `login/${region}`;
+                    window.location.href = AppUrl + '/login';
                 }
                 return { type: 'EmptyAction' };
             })));
