@@ -351,8 +351,7 @@ export class LoginActions {
                 const countryRegion = localStorage.getItem('Country-Region');
                 const region = regionMap[countryRegion] || null;
                 if (PRODUCTION_ENV && !isElectron) {
-
-                    window.location.href = `https://giddh.com/${region}/login`;
+                    window.location.href = region === "?site=global" ? "https://giddh.com/login" : `https://giddh.com/${region}/login`;
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
