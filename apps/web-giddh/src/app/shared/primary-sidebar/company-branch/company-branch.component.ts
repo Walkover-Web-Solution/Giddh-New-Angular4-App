@@ -414,7 +414,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      */
     private switchBranch(company: any, branch: any, event: any): void {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
-
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branch?.uniqueName, false);
         } else if (branch?.uniqueName !== this.generalService.currentBranchUniqueName) {
@@ -423,10 +422,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                     uniqueName: branch?.uniqueName
                 }
             };
-            this.generalService.currentBranchUniqueName = branch?.uniqueName;
             if (branch.consolidatedBranch) {
                 this.setOrganizationDetails(OrganizationType.Company, details);
             } else {
+                this.generalService.currentBranchUniqueName = branch?.uniqueName;
                 this.setOrganizationDetails(OrganizationType.Branch, details);
             }
             this.store.dispatch(this.invoiceAction.getInvoiceSetting());
