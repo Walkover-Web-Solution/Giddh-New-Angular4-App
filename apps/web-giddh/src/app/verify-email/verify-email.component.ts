@@ -85,9 +85,9 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         let redirect = "/pages/home";
 
         if (params?.module === "invoice") {
-            redirect = "/pages/invoice/preview/settings/sales";
+            redirect = "/pages/vouchers/preview/sales/settings";
         } else if (params?.module === "purchase") {
-            redirect = "/pages/purchase-management/purchase/settings";
+            redirect = "/pages/vouchers/preview/purchase/settings";
         }
 
         this.router.navigate([redirect]);

@@ -101,6 +101,7 @@
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [allowUnsupportedPrefix]="allowUnsupportedPrefix"
             [validation]="false"
             *ngIf="!allowDigitsOnly && useMask"
             #textField
@@ -127,6 +128,7 @@
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [allowUnsupportedPrefix]="allowUnsupportedPrefix"
             [validation]="false"
             *ngIf="allowDigitsOnly && useMask"
             [customDecimalPlaces]="customDecimalPlaces"
