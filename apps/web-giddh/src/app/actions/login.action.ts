@@ -357,7 +357,7 @@ export class LoginActions {
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
-                    window.location.href = AppUrl + `login//${region}`;
+                    window.location.href = AppUrl + `login/${region}`;
                 }
                 return { type: 'EmptyAction' };
             })));
