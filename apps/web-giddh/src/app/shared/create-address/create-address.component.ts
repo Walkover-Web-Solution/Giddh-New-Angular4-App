@@ -212,7 +212,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                     alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
-                    parentBranchName: [this.branchToUpdate.parentBranchName],
                     linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
                         return item?.uniqueName ===
                             this.branchToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
@@ -325,7 +324,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
-
         if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
             let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                 return item = item.uniqueName;
@@ -348,7 +346,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             const trimmedTaxNumber = this.addressForm?.get('taxNumber')?.value?.trim();
             this.addressForm?.get('taxNumber')?.patchValue(trimmedTaxNumber);
         }
-
+        this.addressForm?.get('name')?.patchValue(this.addressForm?.get('alias').value);
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.getRawValue(),

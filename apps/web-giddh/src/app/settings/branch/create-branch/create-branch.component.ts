@@ -170,7 +170,6 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         currencyName: response.countryV2 && response.countryV2?.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                // this.branchForm.get('name')?.patchValue(this.companyDetails.name);
                 if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
