@@ -92,5 +92,6 @@
     "ifsc_code": "IFSC कोड",
     "beneficiary_name": "लाभार्थीचे नाव",
     "branch_name": "शाखेचे नाव",
-    "swift_code": "स्विफ्ट कोड"
+    "swift_code": "स्विफ्ट कोड",
+    "bulk_add": "मोठ्या प्रमाणात जोडा"
 }

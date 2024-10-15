@@ -1,0 +1,28 @@
+.bulk-dialog {
+    form {
+        p {
+            word-wrap: break-word;
+        }
+
+        .balance-width {
+            max-width: 218px;
+            min-width: 218px;
+        }
+    }
+
+    .input-group {
+        input {
+            border-radius: 5px !important;
+        }
+    }
+
+    .bulk-input-width {
+        input {
+            width: 210px;
+        }
+    }
+
+    .word-wrap-dots {
+        max-width: 85px;
+    }
+}

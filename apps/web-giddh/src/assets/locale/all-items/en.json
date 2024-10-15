@@ -840,6 +840,12 @@
                     "icon": "icon-tally-import1"
                 }
             ]
+        },
+        {
+            "label": "Group Name",
+            "link": "/pages/group-name",
+            "icon": "icon-daybook-new",
+            "description": "Everyday entries that can be exported"
         }
     ],
     "switch_branch": "Switch Branch",

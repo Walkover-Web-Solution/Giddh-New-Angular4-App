@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
@@ -514,13 +514,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.currentCompanyBranches$.subscribe(response => {
                 if (response && response.length) {
                     this.currentCompanyBranches = response.map(branch => ({
-                        label: branch?.alias,
+                        label: branch?.name,
                         value: branch?.uniqueName,
                         name: branch?.name,
                         parentBranch: branch?.parentBranch
                     }));
                     this.currentCompanyBranches.unshift({
-                        label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        label: this.activeCompany ? this.activeCompany.name : '',
                         name: this.activeCompany ? this.activeCompany.name : '',
                         value: this.activeCompany ? this.activeCompany.uniqueName : '',
                         isCompany: true
@@ -537,7 +537,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {
                                 name: this.activeCompany ? this.activeCompany.name : '',
-                                alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                                alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                                 uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                             };
                         }
@@ -555,7 +555,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else {
                     if (this.generalService.companyUniqueName) {
                         // Avoid API call if new user is onboarded
-                        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                     }
                 }
             });

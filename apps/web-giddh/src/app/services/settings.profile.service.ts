@@ -60,7 +60,7 @@ export class SettingsProfileService {
             model = model;
         }
         const contextPath = (model.callNewPlanApi) ? SETTINGS_PROFILE_API.UPDATE_COMPANY_PLAN : SETTINGS_PROFILE_API.GET;
-        return this.http.patch(this.config.apiUrl + contextPath?.replace(':companyUniqueName', encodeURIComponent(model?.companyUniqueName ? model.companyUniqueName :  this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.patch(this.config.apiUrl + contextPath?.replace(':companyUniqueName', encodeURIComponent(model?.companyUniqueName ? model.companyUniqueName : this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -141,7 +141,7 @@ export class SettingsProfileService {
      */
     public updateBranchInfo(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        const branchUniqueName = this.generalService.currentBranchUniqueName || params.branchUniqueName;
+        const branchUniqueName = params.branchUniqueName || this.generalService.currentBranchUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.UPDATE_BRANCH_INFO}`
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName));
