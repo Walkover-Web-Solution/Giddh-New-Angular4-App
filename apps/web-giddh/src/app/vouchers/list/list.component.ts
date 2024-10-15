@@ -324,7 +324,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
-            if (params && params.page && params.from && params.to) {
+            if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
             }
         });
@@ -616,16 +616,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private checkSearchingIsEmpty(): void {
-        let seachingFieldIsEmpty: boolean = false;
+        let searchingFieldIsEmpty: boolean = false;
 
         if (this.voucherType === VoucherTypeEnum.purchase) {
-            seachingFieldIsEmpty = this.purchaseOrderUniqueNameInput.value === "" && this.accountUniqueNameInput.value === "" && this.voucherNumberInput.value === "";
+            searchingFieldIsEmpty = (this.purchaseOrderUniqueNameInput.value?.length > 0) || (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
         } else {
-            seachingFieldIsEmpty = this.accountUniqueNameInput.value === "" && this.voucherNumberInput.value === "";
+            searchingFieldIsEmpty = (this.accountUniqueNameInput.value?.length > 0) || (this.voucherNumberInput.value?.length > 0);
         }
 
-        this.advanceFiltersApplied = !seachingFieldIsEmpty;
-        this.isSearching = !seachingFieldIsEmpty;
+        this.advanceFiltersApplied = this.isSearching = searchingFieldIsEmpty;
     }
 
     /**
@@ -842,6 +841,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     page: this.queryParams.page ?? 1,
                     from: this.queryParams.from,
                     to: this.queryParams.to
+                }
+            });
+        } else if (this.queryParams.tabIndex) {
+            this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
+                queryParams: {
+                    tabIndex: this.queryParams.tabIndex ?? 0,
                 }
             });
         } else {
