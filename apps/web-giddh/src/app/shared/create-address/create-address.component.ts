@@ -346,7 +346,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             const trimmedTaxNumber = this.addressForm?.get('taxNumber')?.value?.trim();
             this.addressForm?.get('taxNumber')?.patchValue(trimmedTaxNumber);
         }
-        this.addressForm?.get('name')?.patchValue(this.addressForm?.get('alias').value);
+        if (this.addressForm?.get('alias')?.value) {
+            this.addressForm?.get('name')?.patchValue(this.addressForm?.get('alias').value);
+        }
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.getRawValue(),

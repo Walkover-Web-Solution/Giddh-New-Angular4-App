@@ -125,7 +125,11 @@
                                     class="d-flex align-items-center"
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
-                                    (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
+                                    (click)="
+                                        !branch?.parentBranch && branch?.consolidatedBranch
+                                            ? changeCompany(companyBranches, '', false)
+                                            : changeBranch(companyBranches, branch?.uniqueName, $event, branch)
+                                    "
                                     [tooltip]="branch?.name"
                                     placement="top"
                                 >
@@ -134,9 +138,11 @@
                                         <span class="branch-alias">
                                             {{ branch?.name }}
                                         </span>
-                                        <span *ngIf="branch?.consolidatedBranch" class="font-12 branch-company-name">{{
-                                            localeData?.company_consolidated_data
-                                        }}</span>
+                                        <span
+                                            *ngIf="!branch?.parentBranch && branch?.consolidatedBranch"
+                                            class="font-12 branch-company-name"
+                                            >{{ localeData?.company_consolidated_data }}</span
+                                        >
                                         <!-- Company name will show once we release the concept of headquarters -->
                                         <!-- <span class="font-11 branch-company-name">{{companyBranches?.name}}</span> -->
                                     </span>
