@@ -212,7 +212,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof CompanyBranchComponent
      */
     private switchCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean): void {
-        console.log(company, selectBranchUniqueName, fetchLastState);
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
