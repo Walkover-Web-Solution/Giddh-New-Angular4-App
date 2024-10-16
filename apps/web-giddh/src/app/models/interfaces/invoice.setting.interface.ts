@@ -83,7 +83,9 @@ export class InvoiceSettings {
         this.salesRoundOff = false;
         this.purchaseRoundOff = false;
         this.debitNoteRoundOff = false;
-        this.creditNoteRoundOff = false;
+        this.creditNoteRoundOff = false;     
+        this.autoWhatsAppInvoice = true;
+        this.autoWhatsAppCreditNote = true;
     }
     duePeriod?: any;
     autoMail: boolean;
@@ -131,4 +133,9 @@ export class InvoiceSettings {
     purchaseRoundOff: boolean;
     debitNoteRoundOff: boolean;
     creditNoteRoundOff: boolean;
+    autoWhatsAppInvoice: boolean;
+    autoWhatsAppCreditNote: boolean;
+    autoWhatsAppReceipt: boolean;
+    autoWhatsAppDebitNote: boolean;
+    autoWhatsAppPayment: boolean;
 }
