@@ -18,19 +18,16 @@ export class DbService {
     }
 
     public getItemDetails(key: any): Observable<ICompAidata> {
-        console.log(key);
         return from(GIDDH_DB.getItemByKey(key).catch(err => {
             return err;
         }));
     }
 
     public getAllItems(key: string, entity: string): Observable<IUlist[]> {
-        console.log(key, entity);
         return from(GIDDH_DB.getAllItems(key, entity));
     }
 
     public insertFreshData(item: ICompAidata): Observable<number> {
-        console.log(item);
         return from(GIDDH_DB.insertFreshData(item));
     }
 
