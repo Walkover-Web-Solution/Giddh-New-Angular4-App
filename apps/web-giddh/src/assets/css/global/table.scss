@@ -69,9 +69,6 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
     &:not(:has(#{$listOfNotApplyBelowCodeSelectors})){
         table {
             border-collapse: inherit;
-            td {
-                border-top: 0 !important;
-            }
         }
         .mat-mdc-tab-group {
             overflow: visible !important;
