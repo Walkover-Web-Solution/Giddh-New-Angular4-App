@@ -381,7 +381,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-            this.manufacturingObject.manufacturingDetails[0].variants = variants
             this.changeDetectionRef.detectChanges();
         });
     }
