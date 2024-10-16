@@ -212,6 +212,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof CompanyBranchComponent
      */
     private switchCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean): void {
+        console.log(company, selectBranchUniqueName, fetchLastState);
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
@@ -387,7 +388,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
-                    this.switchBranch(company, branch, event);
+                    this.switchBranch(company, branchUniqueName, event);
                 } else {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
                 }
@@ -395,7 +396,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        this.switchBranch(company, branch, event);
+        this.switchBranch(company, branchUniqueName, event);
     }
 
     /**
