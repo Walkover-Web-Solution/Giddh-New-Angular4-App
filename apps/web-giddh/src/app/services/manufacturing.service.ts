@@ -102,9 +102,9 @@ export class ManufacturingService {
         if ((model.count)) {
             url = url + 'count=' + model.count;
         }
-        if (this.generalService.currentBranchUniqueName) {
-            // model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
-            url = url.concat(`&branchUniqueName=${encodeURIComponent(this.generalService.currentBranchUniqueName)}`)
+        if (model.branchUniqueName) {
+            model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(model.branchUniqueName)}`)
         }
 
         return this.http.get(url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(

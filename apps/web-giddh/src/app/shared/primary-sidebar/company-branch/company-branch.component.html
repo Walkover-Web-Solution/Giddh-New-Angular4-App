@@ -134,7 +134,7 @@
                                         <span class="branch-alias">
                                             {{ branch?.name }}
                                         </span>
-                                        <span *ngIf="branch?.consolidatedBranch" class="font-12 branch-company-name">{{
+                                        <span *ngIf="!branch?.parenBranch && branch?.consolidatedBranch" class="font-12 branch-company-name">{{
                                             localeData?.company_consolidated_data
                                         }}</span>
                                         <!-- Company name will show once we release the concept of headquarters -->
