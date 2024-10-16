@@ -141,7 +141,7 @@ export class SettingsProfileService {
      */
     public updateBranchInfo(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        const branchUniqueName = params.branchUniqueName || this.generalService.currentBranchUniqueName;
+        const branchUniqueName = this.generalService.currentBranchUniqueName || params.branchUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.UPDATE_BRANCH_INFO}`
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName));
