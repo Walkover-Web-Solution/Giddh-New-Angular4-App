@@ -1182,11 +1182,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp?.alias) {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
-            } else {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(ev?.toLowerCase());
-            }
+            return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
         });
     }
 
@@ -1203,11 +1199,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         if (branchName) {
             this.currentCompanyBranches = branches?.filter(branch => {
-                if (!branch?.alias) {
-                    return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
-                } else {
-                    return branch?.alias.toLowerCase().includes(branchName?.toLowerCase());
-                }
+                return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
             });
         } else {
             this.currentCompanyBranches = branches;

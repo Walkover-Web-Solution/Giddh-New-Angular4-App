@@ -1321,7 +1321,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
                     if (this.editBranchTransferUniqueName || !res.isArchived) {
-                        branches.push(new LinkedStocksVM(res.name, res?.uniqueName, false, res.alias, res.warehouses, res.isArchived));
+                        branches.push(new LinkedStocksVM(res.name, res?.uniqueName, false, res.name, res.warehouses, res.isArchived));
                     }
                     if (res.warehouses?.length) {
                         this.senderWarehouses[res?.uniqueName] = [];

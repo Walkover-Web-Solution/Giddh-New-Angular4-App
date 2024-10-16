@@ -89,38 +89,42 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.profileData && changes.profileData.currentValue !== changes.profileData.previousValue) {
+            let allowUpdate: boolean = false;
             if (this.profileData?.alias || this.profileData?.name) {
-                this.initProfileForm(this.profileData);
+                this.profileForm.patchValue(this.profileData);
             }
 
             if (this.organizationType === 'COMPANY') {
                 this.profileForm?.get('name')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('name');
                     }
                 });
                 this.profileForm?.get('portalDomain')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('portalDomain');
                     }
                 });
                 this.profileForm?.get('nameAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('nameAlias');
                     }
                 });
                 this.profileForm?.get('headQuarterAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('headQuarterAlias');
                     }
                 });
             } else {
                 this.profileForm?.get('alias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('alias');
                     }
                 });
             }
+            setTimeout(() => {
+                allowUpdate = true;
+            }, 1500);
         }
     }
 
@@ -151,6 +155,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
             taxType: [profileData?.taxType ?? ''],
             portalDomain: [profileData?.portalDomain ?? '']
         });
+        console.log(this.profileForm);
     }
 
     /**

@@ -268,7 +268,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.branchToUpdate = {
                 name: branch.name,
                 alias: branch.name,
-                parentBranchName: branch.parentBranch?.name,
                 linkedEntities: branch.addresses || []
             };
             this.toggleAsidePane();
@@ -502,7 +501,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         const requestObject: any = {
             name: branch.name,
-            alias: branch.name,
+            alias: branch.alias,
             linkAddresses: branch.addresses,
             branchUniqueName: branch?.uniqueName,
         }
