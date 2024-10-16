@@ -97,7 +97,8 @@
                                                     $event,
                                                     true,
                                                     0
-                                                )
+                                                );
+                                                loadStockVariantsByStockUniqueName($event?.value)
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].stockName"
                                             [enableDynamicSearch]="true"
@@ -113,12 +114,12 @@
                                         </dropdown-field>
                                     </div>
 
-                                    <div *ngIf="manufacturingObject.manufacturingDetails[0].variants?.length > 1">
+                                    <div *ngIf="stockVariants?.length > 1">
                                         <dropdown-field
                                             [cssClass]="errorFields.finishedStockVariant ? ' required-field-error' : ''"
                                             [name]="'variantUniqueName'"
                                             [placeholder]="commonLocaleData?.app_select_variant"
-                                            [options]="manufacturingObject.manufacturingDetails[0].variants"
+                                            [options]="stockVariants"
                                             (selectedOption)="
                                                 errorFields.finishedStockVariant = false;
                                                 manufacturingObject.manufacturingDetails[0].variant.name = $event.label;

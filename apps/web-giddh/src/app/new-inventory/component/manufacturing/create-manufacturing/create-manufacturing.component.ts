@@ -124,6 +124,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     private isByProductExpanded: boolean;
     /** True ifi is by other expenses expanded*/
     private isOtherExpenseExpanded: boolean;
+    /** Stores the list of stock variants */
+    public stockVariants: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -287,7 +289,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         this.preventByProductStocksApiCall = true;
-
         if (q) {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
@@ -380,7 +381,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-
+            this.manufacturingObject.manufacturingDetails[0].variants = variants
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -1277,7 +1278,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingUnitCode;
                 this.manufacturingObject.manufacturingDetails[0].stockName = response.body.stockName;
                 this.manufacturingObject.manufacturingDetails[0].stockUniqueName = response.body.stockUniqueName;
-                this.manufacturingObject.manufacturingDetails[0].variants = [{ label: response.body?.variant?.name, value: response.body?.variant?.uniqueName }];
                 this.manufacturingObject.manufacturingDetails[0].variant.name = response.body.variant.name;
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
@@ -1285,7 +1285,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.increaseExpenseAmount = response.body.increaseAssetValue;
 
                 this.selectedInventoryType = response.body.inventoryType;
-
+                if (response.body.stockUniqueName) {
+                    this.loadStockVariantsByStockUniqueName(response.body.stockUniqueName);
+                }
                 let linkedStocks = [];
                 response.body.linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
@@ -1460,6 +1462,25 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * This will be use for load stock variants by stock unique name
+     *
+     * @param {string} stockUniqueName
+     * @memberof CreateManufacturingComponent
+     */
+    public loadStockVariantsByStockUniqueName(stockUniqueName: string): void {
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
+            this.stockVariants = [];
+            if (variants?.length) {
+                variants?.forEach(variant => {
+                    this.stockVariants.push({ label: variant?.name, value: variant?.uniqueName });
+                });
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
 
     /**
      * Delete manufacturing
