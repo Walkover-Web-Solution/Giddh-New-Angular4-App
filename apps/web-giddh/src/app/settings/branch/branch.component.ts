@@ -26,7 +26,7 @@ import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
-
+import { BranchHierarchyType } from '../../app.constant';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -111,6 +111,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public statusDialogRef: any;
     /** Holds Close Address MatDailog Reference */
     public addressAsidePaneRef: any;
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
+    /** Active tab name */
+    public activeTab: string;
+    /** This will hold tree response data */
+    public data: any[] = [];
 
     constructor(
         private router: Router,
@@ -132,16 +138,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.getOnboardingForm();
-        this.searchBranchQuery.valueChanges.pipe(debounceTime(700),distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe( query => {
-            if(query !== undefined && query !== null) {
-                if(query) {
+        this.searchBranchQuery.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(query => {
+            if (query !== undefined && query !== null) {
+                if (query) {
                     this.handleBranchSearch(query);
                 } else {
                     this.resetFilter();
                 }
             }
         });
-
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -173,6 +178,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.unFilteredBranchList = [];
                     this.branches$ = observableOf(null);
                 }
+                this.data = this.unFilteredBranchList;
                 this.showLoader = false;
             }
             if (companies && companies.length && branches) {
@@ -213,16 +219,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * Performs local search among branches
-     *
-     * @param {string} query Searched query
-     * @memberof BranchComponent
-     */
+ * Performs local search among branches
+ *
+ * @param {string} query Searched query
+ * @memberof BranchComponent
+ */
     public handleBranchSearch(query: string): void {
         let branches = [...this.unFilteredBranchList];
         if (query) {
             const lowercaseQuery = query.toLowerCase();
-            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias?.toLowerCase().includes(lowercaseQuery)));
+            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)));
         }
         this.branches$ = observableOf(branches);
     }
@@ -239,7 +245,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * Open Create company dialog 
+     * Open Create company dialog
      *
      * @memberof BranchComponent
      */
@@ -258,11 +264,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public updateBranch(branch: any): void {
         this.branchDetails = branch;
-
         this.loadAddresses('GET', () => {
             this.branchToUpdate = {
                 name: branch.name,
-                alias: branch.alias,
+                alias: branch.name,
+                parentBranchName: branch.parentBranch?.name,
                 linkedEntities: branch.addresses || []
             };
             this.toggleAsidePane();
@@ -331,6 +337,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Get all branches
+     *
+     * @memberof BranchComponent
+     */
     public getAllBranches() {
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = this.filters['from'];
@@ -338,6 +349,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
         }
@@ -444,7 +456,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.addressAsidePaneRef?.close();
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
                 this.toasterService.errorToast(response?.message);
@@ -490,7 +502,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         const requestObject: any = {
             name: branch.name,
-            alias: branch.alias,
+            alias: branch.name,
             linkAddresses: branch.addresses,
             branchUniqueName: branch?.uniqueName,
         }
@@ -501,9 +513,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
         });
     }
+
 
     /**
      * Resets the branch filter
@@ -589,6 +602,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 let branchFilterRequest = new BranchFilterRequest();
                 branchFilterRequest.from = this.filters['from'];
                 branchFilterRequest.to = this.filters['to'];
+                branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
                 this.toasterService.successToast((isArchived) ? this.localeData?.branch_archived : this.localeData?.branch_unarchived);
             } else {

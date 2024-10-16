@@ -586,6 +586,51 @@
                     }
                 },
                 {
+                    "label": "Tax Authority",
+                    "link": "/pages/settings/reports/tax-authority",
+                    "icon": "icon-vat1",
+                    "description": "Tax Authority",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "Tax Rate Wise",
+                    "link": "/pages/settings/reports/rate-wise",
+                    "icon": "icon-vat1",
+                    "description": "Tax Rate Wise",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "Tax Account Wise",
+                    "link": "/pages/settings/reports/account-wise",
+                    "icon": "icon-vat1",
+                    "description": "Tax Account Wise",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
                     "label": "VAT Liabilities",
                     "link": "/pages/vat-report/liabilities",
                     "icon": "icon-vat1",
@@ -605,6 +650,21 @@
                     "link": "/pages/vat-report/payments",
                     "icon": "icon-vat1",
                     "description": "VAT Payments",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "VAT Obligation",
+                    "link": "/pages/vat-report/obligations",
+                    "icon": "icon-vat1",
+                    "description": "VAT Obligation",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
@@ -840,6 +900,12 @@
                     "icon": "icon-tally-import1"
                 }
             ]
+        },
+        {
+            "label": "Group Name",
+            "link": "/pages/group-name",
+            "icon": "icon-daybook-new",
+            "description": "Everyday entries that can be exported"
         }
     ],
     "switch_branch": "Switch Branch",

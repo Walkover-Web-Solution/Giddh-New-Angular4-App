@@ -49,8 +49,6 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     public amountCurrency: string = "";
     /** Holds true if Multicurrency Account*/
     public isMulticurrencyAccount: boolean = false;
-    /** Selected payment mode */
-    public selectedPaymentMode: any;
     /** Holds true if Bank Selected */
     public isBankSelected: boolean = false;
     /** True if currency switched */
@@ -96,7 +94,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             if (response) {
                 this.briefAccounts$ = observableOf(response);
                 if (response.length === 1) {
-                    this.setDepositAccountUniqueName(0, response[0].label);
+                    this.setDepositAccountUniqueName(0, response[0]);
                 }
             }
         });
@@ -145,7 +143,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     private getDepositFormGroup(): FormGroup {
         return this.formBuilder.group({
             amount: [''],
-            accountUniqueName: ['']
+            accountUniqueName: [''],
+            paymentMode: ['']
         });
     }
 
@@ -223,8 +222,6 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
                 } else {
                     this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currency?.symbol, index);
                 }
-                this.selectedPaymentMode = event;
-
                 this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response && response.body) {
                         const parentGroups = response.body.parentGroups;
@@ -237,22 +234,21 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
                         }
                     } else {
                         this.isBankSelected = false;
-                        this.setDepositAccountUniqueName(index, '');
+                        this.setDepositAccountUniqueName(index, null);
                         this.paymentForm.get('chequeClearanceDate')?.patchValue('');
                         this.paymentForm.get('chequeNumber')?.patchValue('');
                     }
                 })
-                this.setDepositAccountUniqueName(index, event.value);
+                this.setDepositAccountUniqueName(index, event);
             } else {
                 this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol, index);
-                this.selectedPaymentMode = null;
                 this.isBankSelected = false;
-                this.setDepositAccountUniqueName(index, '');
+                this.setDepositAccountUniqueName(index, null);
                 this.paymentForm.get('chequeClearanceDate')?.patchValue('');
                 this.paymentForm.get('chequeNumber')?.patchValue('');
             }
         } else {
-            this.setDepositAccountUniqueName(index, '');
+            this.setDepositAccountUniqueName(index, null);
         }
     }
     /**
@@ -263,7 +259,13 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     private setDepositAccountUniqueName(index: number, event: any): void {
         let deposits = this.paymentForm.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
-        currentDepositFormGroup.get("accountUniqueName")?.patchValue(event);
+        if (event?.value) {
+            currentDepositFormGroup.get("accountUniqueName")?.patchValue(event.value);
+            currentDepositFormGroup.get("paymentMode")?.patchValue(event.additional?.currency?.code);
+        } else {
+            currentDepositFormGroup.get("accountUniqueName")?.patchValue('');
+            currentDepositFormGroup.get("paymentMode")?.patchValue('');
+        }
     }
 
     /**
@@ -331,7 +333,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         const deposits = [];
         this.paymentForm.get('deposits')['controls']?.forEach(control => {
             if (control.get("accountUniqueName").value?.length && (control.get("amount").value > 0)) {
-                if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
+                if (this.voucherDetails?.account?.currency?.code === control.get("paymentMode").value) {
                     deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
                 } else {
                     deposits.push({ amountForCompany: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });

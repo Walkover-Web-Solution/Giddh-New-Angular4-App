@@ -92,5 +92,6 @@
     "ifsc_code": "IFSC Code",
     "beneficiary_name": "Beneficiary Name",
     "branch_name": "Branch Name",
-    "swift_code": "Swift Code"
+    "swift_code": "Swift Code",
+    "bulk_add": "Bulk Add"
 }
