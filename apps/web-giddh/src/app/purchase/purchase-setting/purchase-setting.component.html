@@ -385,54 +385,30 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ng-container *ngIf="voucherApiVersion === 2">
-                                    <div class="clearfix pd-t1 row"> 
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
-                                                class="show-on-mobile"
-                                                name="autoWhatsAppPayment"
-                                                color="primary"
-                                                aria-label="autoWhatsAppPayment"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ getWhatsappSettingLabel("payment") }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
-                                                class="hide-on-mobile"
-                                                name="autoWhatsAppPayment"
-                                                color="primary"
-                                                aria-label="autoWhatsAppPayment"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
+                                <div class="clearfix pd-t1 row" *ngIf="voucherApiVersion === 2"> 
+                                    <div class="col-sm-12 col-md-12 col-lg-3">
+                                        <mat-slide-toggle
+                                            [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
+                                            class="show-on-mobile"
+                                            name="autoWhatsAppPayment"
+                                            color="primary"
+                                            aria-label="autoWhatsAppPayment"
+                                        >
+                                        </mat-slide-toggle>
+                                        <label>{{ getWhatsappSettingLabel("payment") }}</label>
                                     </div>
-                                    <div class="clearfix pd-t1 row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppDebitNote"
-                                                class="show-on-mobile"
-                                                name="autoWhatsAppDebitNote"
-                                                color="primary"
-                                                aria-label="autoWhatsAppDebitNote"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label>{{ getWhatsappSettingLabel("debit note") }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppDebitNote"
-                                                class="hide-on-mobile"
-                                                name="autoWhatsAppDebitNote"
-                                                color="primary"
-                                                aria-label="autoWhatsAppDebitNote"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                        <mat-slide-toggle
+                                            [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
+                                            class="hide-on-mobile"
+                                            name="autoWhatsAppPayment"
+                                            color="primary"
+                                            aria-label="autoWhatsAppPayment"
+                                        >
+                                        </mat-slide-toggle>
                                     </div>
-                                </ng-container>
+                                </div>
+                               
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
