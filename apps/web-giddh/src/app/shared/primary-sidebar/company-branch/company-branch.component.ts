@@ -387,7 +387,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
-                    this.switchBranch(company, branch, event);
+                    this.switchBranch(company, branchUniqueName, event);
                 } else {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
                 }
@@ -395,7 +395,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        this.switchBranch(company, branch, event);
+        this.switchBranch(company, branchUniqueName, event);
     }
 
     /**
