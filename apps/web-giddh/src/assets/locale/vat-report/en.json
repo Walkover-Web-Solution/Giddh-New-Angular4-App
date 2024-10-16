@@ -23,6 +23,7 @@
     "period_key": "Period Key",
     "view_return": "View Return",
     "file_return": "File Return",
+    "submit_file_return": "Submit - File return",
     "status_open": "Open",
     "status_fulfilled": "Fulfilled",
     "select_status": "Select status",

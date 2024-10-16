@@ -683,16 +683,17 @@ export class GeneralService {
     public fileReturnConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes,
+            text: localeData?.submit_file_return,
             color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no
+            text: commonLocaleData?.app_cancel
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
+        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -700,7 +701,8 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons
+            buttons,
+            actionBtnWrapperCssClass
         };
     }
 
