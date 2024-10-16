@@ -155,7 +155,6 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
             taxType: [profileData?.taxType ?? ''],
             portalDomain: [profileData?.portalDomain ?? '']
         });
-        console.log(this.profileForm);
     }
 
     /**
