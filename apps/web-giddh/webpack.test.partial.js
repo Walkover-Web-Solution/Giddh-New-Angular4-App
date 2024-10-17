@@ -40,7 +40,7 @@ module.exports = {
             'process.env.AppUrl': JSON.stringify('https://test.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
             'process.env.UkApiUrl': JSON.stringify('https://gbapi.giddh.com/'),
-            'process.PORTAL_URL': JSON.stringify('https://main.d301dzfu7a22lr.amplifyapp.com/'),
+            'process.PORTAL_URL': JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
         new CompressionPlugin({
