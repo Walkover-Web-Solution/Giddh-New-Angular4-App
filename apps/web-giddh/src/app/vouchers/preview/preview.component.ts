@@ -369,9 +369,21 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.getAllApiCallCount > 0) {
-                this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
-                this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
-                this.getAllVouchers();
+                // Reset
+                this.isSearching = false;
+                this.isLoadMore = false;
+                this.pageNumberHistory = [1];
+                this.advanceFilters = {
+                    page: 1,
+                    from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(response[1]).format(GIDDH_DATE_FORMAT),
+                    count: this.advanceFilters.count,
+                    q: '',
+                    sort: '',
+                    sortBy: ''
+                };
+                this.invoiceList = [];
+                this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
             }
         });
 
@@ -600,6 +612,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private getAllVouchers(isLoadMore: boolean = false, isScrollUp: boolean = false): void {
+        if (this.isLoadMore) {
+            return;
+        }
         if (isLoadMore) {
             this.isLoadMore = true;
             if (this.totalPages >= this.advanceFilters.page) {
