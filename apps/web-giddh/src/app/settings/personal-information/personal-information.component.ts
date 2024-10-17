@@ -72,7 +72,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : '';
+        this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : 'in';
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -205,7 +205,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public copyUrl(): void {
-        const urlToCopy = `${this.portalUrl}${this.profileData.portalDomain}?region=${this.region}`;
+        const urlToCopy = `${this.portalUrl}${this.profileData.portalDomain}/login/${this.region}`;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
         setTimeout(() => {
