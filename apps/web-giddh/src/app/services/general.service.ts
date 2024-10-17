@@ -8,7 +8,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
 import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -87,6 +87,7 @@ export class GeneralService {
 
     constructor(
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) { }
 
@@ -2116,6 +2117,24 @@ export class GeneralService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Update current page query params
+     *
+     * @param {Params} queryParams
+     * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @memberof GeneralService
+     */
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling: queryParamsHandling
+            }
+        );
     }
 }
 
