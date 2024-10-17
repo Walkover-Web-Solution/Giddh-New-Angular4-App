@@ -178,4 +178,22 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             this.showSettingHeading = false;
         }
     }
+
+    /**
+     * This will show/hide tag manu
+     *
+     * @param {boolean} open
+     * @memberof AsideSettingComponent
+     */
+    public tagsMenuOpen(open : boolean){
+        if(open){
+            this.isTagMenuOpened = true;
+            document.querySelector("body")?.classList?.add("tags-menu-open");
+        }else{
+            this.isTagMenuOpened = false;
+            setTimeout(()=>{
+                document.querySelector("body")?.classList?.remove("tags-menu-open");
+            },100);
+        }
+    }
 }
