@@ -214,6 +214,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             if (params) {
                 if (params?.voucherType) {
                     this.params = params;
+                    this.isSearching = false;
                     this.urlVoucherType = params?.voucherType;
                     this.voucherType = this.vouchersUtilityService.parseVoucherType(params?.voucherType);
                     this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
@@ -245,7 +246,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     sortBy: ''
                 };
 
-                this.isSearching = search.length !== 0;
+                this.isSearching = true;
 
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
@@ -295,7 +296,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Check voucher type and assign create new invoice text 
+     * Check voucher type and assign create new invoice text
      *
      * @private
      * @memberof VouchersPreviewComponent
@@ -840,7 +841,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
     /**
      * Handle Get All Voucher Response
-     * 
+     *
      * @private
      * @param {*} response
      * @memberof VouchersPreviewComponent
