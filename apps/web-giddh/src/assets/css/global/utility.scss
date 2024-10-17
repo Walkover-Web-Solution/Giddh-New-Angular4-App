@@ -1,0 +1,9 @@
+.grid-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.grid-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.justify-self-end {
+    justify-self: end !important;
+}

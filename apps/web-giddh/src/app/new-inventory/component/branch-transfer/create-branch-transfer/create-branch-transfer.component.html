@@ -245,7 +245,7 @@
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                            isUpdateMode && branchTransferCreateEditForm.get('sources.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get('sources.0.name')
                                                                       ?.value
                                                                 : ''
@@ -427,7 +427,7 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                            isUpdateMode && branchTransferCreateEditForm.get('destinations.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.name'
                                                                   )?.value
@@ -479,7 +479,7 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                            isUpdateMode && branchTransferCreateEditForm.get('destinations.0.warehouse.name').value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
                                                                   ).value
@@ -625,7 +625,7 @@
                                                     )
                                                 "
                                                 [defaultValue]="
-                                                    isUpdateMode
+                                                    isUpdateMode && branchTransferCreateEditForm.get('products.0.name').value
                                                         ? branchTransferCreateEditForm.get('products.0.name').value
                                                         : ''
                                                 "
@@ -840,10 +840,9 @@
                                                                     ?.value
                                                             ]
                                                         "
-                                                        [defaultValue]=" isUpdateMode ?
-                                                            branchTransferCreateEditForm.get(
-                                                                      'sources.0.warehouse.name'
-                                                            ).value : ''
+                                                        [defaultValue]=" isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
+                                                            ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
+                                                            : ''
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"

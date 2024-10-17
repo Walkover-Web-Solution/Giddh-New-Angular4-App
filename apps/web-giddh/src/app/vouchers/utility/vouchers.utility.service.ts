@@ -362,7 +362,9 @@ export class VouchersUtilityService {
                 delete entry.otherTax;
             });
 
-            invoiceForm = this.cleanObject(invoiceForm);
+            invoiceForm = cleaner?.clean(invoiceForm, {
+                nullCleaner: true
+            });
 
             return invoiceForm;
         }
