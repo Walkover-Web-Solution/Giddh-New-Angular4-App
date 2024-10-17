@@ -218,7 +218,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
             if (search) {
-                branchesClone = this.allBranches?.filter(branch => (branch.alias?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
+                branchesClone = this.allBranches?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
             }
             this.branches = branchesClone;
         });

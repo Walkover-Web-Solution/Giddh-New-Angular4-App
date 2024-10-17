@@ -14,6 +14,7 @@ import { InvoiceTemplateModalComponent } from './modals/template-modal/template-
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { InvoiceService } from '../../../services/invoice.service';
 import { cloneDeep } from '../../../lodash-optimized';
+import { GeneralService } from '../../../services/general.service';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -670,7 +671,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _activatedRoute: ActivatedRoute,
         private invoiceService: InvoiceService,
-        private _invoiceUiDataService: InvoiceUiDataService
+        private _invoiceUiDataService: InvoiceUiDataService,
+        private generalService: GeneralService
     ) {
 
     }
@@ -688,15 +690,17 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
         this.store.dispatch(this.invoiceActions.getTemplateState());
-        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
-            if (route && route.selectedType) {
-                if (route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {
-                    this.voucherTypeChanged(route.selectedType);
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params && (this.generalService.voucherApiVersion === 2 && params.module === 'templates') || (this.generalService.voucherApiVersion === 1)) {
+                if (params.selectedType) {
+                    if (params.selectedType === VoucherTypeEnum.creditNote || params.selectedType === VoucherTypeEnum.debitNote) {
+                        this.voucherTypeChanged(params.selectedType);
+                    } else {
+                        this.voucherTypeChanged("sales");
+                    }
                 } else {
                     this.voucherTypeChanged("sales");
                 }
-            } else {
-                this.voucherTypeChanged("sales");
             }
         });
         // this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {

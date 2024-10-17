@@ -19,7 +19,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { TAX_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, VAT_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, SALES_TAX_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { TAX_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, VAT_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, SALES_TAX_SUPPORTED_COUNTRIES, BranchHierarchyType } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -2783,7 +2783,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (response && response.length) {
                 branches = response;
             } else {
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
             }
         });
         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
