@@ -3481,12 +3481,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Redirect to Invoice Preview page
+     * Redirect to Voucher Preview page
      *
      * @private
      * @memberof VoucherCreateComponent
      */
-    private redirectToInvoicePreview(): void {
+    private redirectToVoucherPreview(): void {
         const queryParams = {
             page: this.queryParams?.page ?? 1,
             from: this.queryParams?.from ?? '',
@@ -3504,7 +3504,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.redirectUrl) {
             this.router.navigateByUrl(this.redirectUrl);
         } else {
-            this.redirectToInvoicePreview();
+            this.redirectToVoucherPreview();
         }
     }
 
@@ -3773,7 +3773,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.redirectToInvoicePreview();
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response.message);
@@ -3922,7 +3922,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.redirectToInvoicePreview();
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
