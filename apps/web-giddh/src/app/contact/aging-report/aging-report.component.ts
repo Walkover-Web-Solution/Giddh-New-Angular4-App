@@ -36,7 +36,7 @@ import { UntypedFormControl } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { PAGINATION_LIMIT } from "../../app.constant";
+import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
@@ -235,13 +235,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch?.alias,
+                    label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
                     parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : "",
                     value: this.activeCompany ? this.activeCompany.uniqueName : "",
                     isCompany: true,
@@ -258,16 +258,15 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : "",
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : "",
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
-                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : "");
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: "", to: "" }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -683,12 +682,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function returns object with to and from date 
+     * This function returns object with to and from date
      *
      * @private
      * @param {number} intervalCount
      * @param {number} intervaldays
-     * @return {*} 
+     * @return {*}
      * @memberof AgingReportComponent
      */
     private getPriorDate(intervalCount: number, intervaldays: number): any {

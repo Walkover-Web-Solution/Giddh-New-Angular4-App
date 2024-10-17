@@ -8,11 +8,14 @@ import { ToasterService } from '../../services/toaster.service';
 @Component({
     selector: 'app-email-send-dialog',
     templateUrl: './email-send-dialog.component.html',
-    styleUrls: ['./email-send-dialog.component.scss']
+    styleUrls: ['./email-send-dialog.component.scss'],
+    providers: [VoucherComponentStore]
 })
 export class EmailSendDialogComponent implements OnInit, OnDestroy {
     /** Holds invoice type */
     @Input() public invoiceType: any;
+    /** Holds voucher type */
+    @Input() public voucherType: string;
     /** Voucher data */
     @Input() selectedItem: any;
     /** Success event emitter */
@@ -105,15 +108,18 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if (!this.copyTypes?.value?.length) {
+        if (!this.copyTypes?.value?.length && this.voucherType !== VoucherTypeEnum.purchaseOrder && this.voucherType !== VoucherTypeEnum.purchase) {
             this.toasterService.showSnackBar("error", this.localeData?.select_invoice_copy);
             return;
         }
-
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.type)) {
-            this.successEvent.emit(this.sendEmailForm.get('email.to').value);
+        const emailsArray = this.sendEmailForm.get('email.to').value?.split(',').map(email => email.trim());
+        if (this.invoiceType.isSalesInvoice) {
+            this.successEvent.emit({ 
+                email: emailsArray, 
+                invoiceType: this.copyTypes.value, 
+                uniqueName: this.selectedItem?.uniqueName });
         } else {
-            this.successEvent.emit({ email: this.sendEmailForm.get('email.to').value, invoiceType: this.copyTypes.value, uniqueName: this.selectedItem?.uniqueName });
+            this.successEvent.emit(emailsArray);
         }
     }
 
