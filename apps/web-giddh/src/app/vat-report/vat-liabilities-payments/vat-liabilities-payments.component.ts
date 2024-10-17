@@ -134,7 +134,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                         this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.branchList = this.branchList.map(branch => {
                             return {
-                                label: branch?.alias,
+                                label: branch?.name,
                                 value: branch?.uniqueName
                             };
                         });
