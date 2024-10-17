@@ -8,6 +8,7 @@
 $custom-typography: mat-typography-config($font-family: var(--font-regular),
     );
 @include angular-material-typography($custom-typography);
+@import "../css/global/utility.scss";
 @import "../css/ngx-bs-datepicker.scss";
 @import "../css/global/add-company.scss";
 @import "../css/global/aside-modal.scss";
