@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, forEach } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MfStockSearchRequestClass } from 'apps/web-giddh/src/app/manufacturing/manufacturing.utility';
 import { LinkedStocksResponse } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
@@ -224,13 +224,13 @@ export class ListManufacturingComponent implements OnInit {
                 this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
                     if (response && response.length) {
                         this.currentCompanyBranches = response.map(branch => ({
-                            label: branch?.alias,
+                            label: branch?.name,
                             value: branch?.uniqueName,
                             name: branch?.name,
                             parentBranch: branch?.parentBranch
                         }));
                         this.currentCompanyBranches.unshift({
-                            label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            label: this.activeCompany ? this.activeCompany.name : '',
                             name: this.activeCompany ? this.activeCompany.name : '',
                             value: this.activeCompany ? this.activeCompany.uniqueName : '',
                             isCompany: true
@@ -248,11 +248,11 @@ export class ListManufacturingComponent implements OnInit {
                                 currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                                 this.currentBranch = {
                                     name: this.activeCompany ? this.activeCompany.name : '',
-                                    alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                                    alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                                     uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                                 };
 
-                                this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
+                                this.handleBranchChange({ label: this.currentBranch.name, value: this.currentBranch.uniqueName });
                             }
                         }
 
@@ -260,7 +260,7 @@ export class ListManufacturingComponent implements OnInit {
                     } else {
                         if (this.generalService.companyUniqueName) {
                             // Avoid API call if new user is onboarded
-                            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                         }
                     }
                 });
@@ -346,7 +346,7 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-        this.handleBranchChange({ label: this.currentBranch.alias, value: this.currentBranch.uniqueName });
+        this.handleBranchChange({ label: this.currentBranch.name, value: this.currentBranch.uniqueName });
         this.getReport();
     }
 
@@ -367,8 +367,8 @@ export class ListManufacturingComponent implements OnInit {
                 let reportData = [];
 
                 this.totalItems = response.body.totalItems;
-                this.totalPages = response.body.totalPages;          
-                
+                this.totalPages = response.body.totalPages;
+
                 response.body.results.forEach(item => {
                     reportData.push({
                         date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),

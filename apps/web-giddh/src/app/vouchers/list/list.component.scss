@@ -1,5 +1,5 @@
 .invoice-list {
-    height: 100vh;
+    height: calc(100vh - (var(--header-height) + 30px));
     overflow-y: auto;
 }
 
@@ -23,11 +23,20 @@
                     color: var(--color-danger);
                 }
             }
+
+            &.payment-receipt, &.closing-box {
+                span {
+                    color: var(--color-slate);
+                }
+            }
         }
     }
     table {
         tr {
             td {
+                amount-field {
+                    display: inline-block;
+                }
                 .action-btn {
                     visibility: hidden;
                 }
@@ -52,6 +61,13 @@
 }
 
 table {
+    tr {
+        th, td {
+            max-width: 240px;
+            word-break: break-all;
+            white-space: normal;
+        }
+    }
     .checkbox-show {
         .checkbox-hide {
             display: none;
@@ -120,6 +136,10 @@ table {
     .template-content {
         width: 200px;
     }
+}
+
+.ontime-delivery {
+    color: var(--color-secondary-success);
 }
 
 @media screen and (max-width: 1199px) {

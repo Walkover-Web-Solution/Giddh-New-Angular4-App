@@ -1,0 +1,15 @@
+:host {
+    display: block;
+}
+.custom-paginator {
+    border-color: var(--color-giddh-blue);
+    mat-button-toggle {
+        border-color: var(--color-giddh-blue);
+        width: 80px;
+        line-height: 28px;
+        &.page-count-wrapper {
+            background-color: var(--color-giddh-blue) !important;
+            color: var(--color-pagination-active-button);
+        }
+    }
+}

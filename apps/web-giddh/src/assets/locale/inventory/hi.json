@@ -76,7 +76,8 @@
         "advance_filter":"अग्रिम फ़िल्टर",
         "customise":"अनुकूलित करें",
         "no_result_found":"कोई परिणाम नहीं मिला",
-        "select_all":"सबका चयन करें"
+        "select_all":"सबका चयन करें",
+        "select_account_group":"खाता समूह चुनें"
     },
     "advance_search_filter":{
         "advance_search":"उन्नत खोज",

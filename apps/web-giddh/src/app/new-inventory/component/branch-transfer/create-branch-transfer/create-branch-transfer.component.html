@@ -245,7 +245,7 @@
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                            isUpdateMode && branchTransferCreateEditForm.get('sources.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get('sources.0.name')
                                                                       ?.value
                                                                 : ''
@@ -303,7 +303,7 @@
                                                                     )?.value
                                                                 ]?.length === 1
                                                                     ? branchTransferCreateEditForm.get(
-                                                                          'sources.0.warehouse.name'
+                                                                        'sources.0.warehouse.name'
                                                                       ).value
                                                                     : ''
                                                             "
@@ -427,7 +427,7 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                            isUpdateMode && branchTransferCreateEditForm.get('destinations.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.name'
                                                                   )?.value
@@ -479,11 +479,7 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length === 1
+                                                            isUpdateMode && branchTransferCreateEditForm.get('destinations.0.warehouse.name').value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
                                                                   ).value
@@ -629,7 +625,7 @@
                                                     )
                                                 "
                                                 [defaultValue]="
-                                                    isUpdateMode
+                                                    isUpdateMode && branchTransferCreateEditForm.get('products.0.name').value
                                                         ? branchTransferCreateEditForm.get('products.0.name').value
                                                         : ''
                                                 "
@@ -829,7 +825,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
                                             <div [formGroupName]="0">
                                                 <div class="mr-b15 one">
@@ -844,15 +840,9 @@
                                                                     ?.value
                                                             ]
                                                         "
-                                                        [defaultValue]="
-                                                            senderWarehouses[
-                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
-                                                                    ?.value
-                                                            ]?.length === 1
-                                                                ? branchTransferCreateEditForm.get(
-                                                                      'sources.0.warehouse.name'
-                                                                  ).value
-                                                                : ''
+                                                        [defaultValue]=" isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
+                                                            ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
+                                                            : ''
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"

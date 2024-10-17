@@ -55,9 +55,7 @@ export class RevisionHistoryComponent implements OnDestroy {
         private purchaseRecordService: PurchaseRecordService,
         private cdRef: ChangeDetectorRef,
         private invoiceService: InvoiceService
-        ) {
-
-    }
+        ) { }
 
     /**
      * This will send the event to close the aside pan
@@ -88,7 +86,6 @@ export class RevisionHistoryComponent implements OnDestroy {
                     if (res.status === 'success') {
                         if (res.body) {
                             let versions = res.body;
-
                             if (versions.results && versions.results.length > 0) {
                                 versions.results.forEach(result => {
                                     result.versionTime = new Date(result.versionTime);

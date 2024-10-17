@@ -401,27 +401,35 @@ var app = new Vue({
                     console.log('the error is :', e);
                 })
         },
-        getApi: function () {
-            var apiBaseUrl = '';
-            switch (window.location.hostname) {
-                case 'localhost':
-                case 'test.giddh.com':
-                    apiBaseUrl = 'https://apitest.giddh.com/';
-                    break;
-                case 'dev.giddh.com':
-                    apiBaseUrl = 'https://apidev.giddh.com/';
-                    break;
-                case 'stage.giddh.com':
-                    apiBaseUrl = 'https://apitest.giddh.com/';
-                    break;
-                case 'giddh.com':
-                case 'books.giddh.com':
-                    apiBaseUrl = 'https://api.giddh.com/';
-                    break;
-                default:
-                    apiBaseUrl = 'https://api.giddh.com/';
-            }
-            return apiBaseUrl;
+getApi: function () {
+    var apiBaseUrl = '';
+    var region = this.getParameterByName('region'); // Get the region from URL query params
+
+    // Check if region is present and set the apiBaseUrl accordingly
+    if (region) {
+        apiBaseUrl = 'https://gbapi.giddh.com/';
+    } else {
+        // Original logic based on hostname
+        switch (window.location.hostname) {
+            case 'localhost':
+            case 'test.giddh.com':
+                apiBaseUrl = 'https://apitest.giddh.com/';
+                break;
+            case 'dev.giddh.com':
+                apiBaseUrl = 'https://apidev.giddh.com/';
+                break;
+            case 'stage.giddh.com':
+                apiBaseUrl = 'https://apitest.giddh.com/';
+                break;
+            case 'giddh.com':
+            case 'books.giddh.com':
+                apiBaseUrl = 'https://api.giddh.com/';
+                break;
+            default:
+                apiBaseUrl = 'https://api.giddh.com/';
         }
+    }
+    return apiBaseUrl;
+},
     }
 }).$mount('#app');

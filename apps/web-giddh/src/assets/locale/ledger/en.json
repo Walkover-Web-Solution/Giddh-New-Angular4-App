@@ -210,6 +210,6 @@
     "download_sample_xls": "Download a sample Excel file",
     "download_sample_csv": "Download a sample CSV file",
     "select_variant": "Select Variant",
-    "uncheck_auto_generate_tooltip_message": "You cannot uncheck the checkbox as \"Automatically generate voucher for the entries\" setting is enabled. If you wish to disable it, <a href='/pages/invoice/preview/settings/sales?tabIndex=4' target='_blank'>click here</a> to go to Invoice > Settings page.",
+    "uncheck_auto_generate_tooltip_message": "You cannot uncheck the checkbox as \"Automatically generate voucher for the entries\" setting is enabled. If you wish to disable it, <a href='/pages/vouchers/preview/sales/settings?tabIndex=4' target='_blank'>click here</a> to go to Invoice > Settings page.",
     "convert_to_entries": "Convert to entries"
 }

@@ -1352,8 +1352,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.updateCustomFieldObjectInVariant();
 
                 if (this.createRecipe.newVariants?.length) {
-                    this.createRecipe.stock.variants = response.body.variants;
-                    this.createRecipe.variants = response.body.variants;
                     this.createRecipe.newVariants = [];
                     this.createRecipe.refreshVariantsList();
                     this.activeTabIndex = 2;

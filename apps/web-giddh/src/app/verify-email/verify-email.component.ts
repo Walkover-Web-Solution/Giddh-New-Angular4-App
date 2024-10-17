@@ -5,6 +5,7 @@ import { takeUntil } from "rxjs/operators";
 import { InvoiceService } from "../services/invoice.service";
 import { PurchaseOrderService } from "../services/purchase-order.service";
 import { ToasterService } from "../services/toaster.service";
+import { GeneralService } from "../services/general.service";
 
 @Component({
     selector: "verify-email",
@@ -21,7 +22,8 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         private purchaseOrderService: PurchaseOrderService,
         private router: Router,
         private route: ActivatedRoute,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private generalService: GeneralService
     ) {
 
     }
@@ -85,9 +87,9 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         let redirect = "/pages/home";
 
         if (params?.module === "invoice") {
-            redirect = "/pages/invoice/preview/settings/sales";
+            redirect = this.generalService.voucherApiVersion === 1 ? "/pages/invoice/preview/settings/sales" : "/pages/vouchers/preview/sales/settings";
         } else if (params?.module === "purchase") {
-            redirect = "/pages/purchase-management/purchase/settings";
+            redirect = this.generalService.voucherApiVersion === 1 ? "/pages/purchase-management/purchase/settings" : "/pages/vouchers/preview/purchase/settings";
         }
 
         this.router.navigate([redirect]);

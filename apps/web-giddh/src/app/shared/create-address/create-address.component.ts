@@ -324,7 +324,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
-
         if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
             let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                 return item = item.uniqueName;
@@ -347,7 +346,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             const trimmedTaxNumber = this.addressForm?.get('taxNumber')?.value?.trim();
             this.addressForm?.get('taxNumber')?.patchValue(trimmedTaxNumber);
         }
-
+        if (this.addressForm?.get('alias')?.value) {
+            this.addressForm?.get('name')?.patchValue(this.addressForm?.get('alias').value);
+        }
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.getRawValue(),
@@ -518,7 +519,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public isStateReadonly(): boolean {
         const isGSTIN = this.addressConfiguration?.tax?.name === 'GSTIN';
         const stateLabelNotNull = this.addressForm?.get('stateLabel')?.value !== null;
-        const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "" && this.addressForm?.get('taxNumber')?.value !== null;      
+        const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "" && this.addressForm?.get('taxNumber')?.value !== null;
         return isGSTIN && stateLabelNotNull && taxNumberNotEmpty;
     }
 }

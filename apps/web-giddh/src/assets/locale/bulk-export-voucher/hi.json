@@ -8,5 +8,7 @@
         "customer": "ग्राहक",
         "transport": "ट्रांसपोर्ट",
         "attachment": "संलग्नक"
-    }
+    },
+    "invalid_email": "अमान्य ईमेल आईडी [EMAIL]",
+    "email_required": "कृपया कम से कम 1 प्राप्तकर्ता ईमेल आईडी दर्ज करें"
 }

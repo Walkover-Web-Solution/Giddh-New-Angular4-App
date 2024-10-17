@@ -39,5 +39,9 @@
     "archive_notallowed": "शेवटची सक्रिय शाखा संग्रहित केली जाऊ शकत नाही.",
     "archived_default_error": "संग्रहित गोदाम डीफॉल्ट म्हणून सेट केले जाऊ शकत नाही.",
     "no_linked_address_present" : "कोणताही लिंक केलेला पत्ता उपस्थित नाही",
-    "no_linked_warehouse_present" : "कोणतेही जोडलेले गोदाम उपस्थित नाही"
+    "no_linked_warehouse_present" : "कोणतेही जोडलेले गोदाम उपस्थित नाही",
+    "flat_view": "सपाट दृश्य",
+    "hierarchy_view": "पदानुक्रम दृश्य",
+    "parent_branch": "पालक शाखा",
+    "select_parent_branch": "पालक शाखा निवडा"
 }

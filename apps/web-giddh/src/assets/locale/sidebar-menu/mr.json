@@ -47,7 +47,7 @@
                 },
                 {
                     "label": "क्रेडिट टीप",
-                    "link": "/pages/invoice/preview/credit note",
+                    "link": "/pages/vouchers/preview/credit-note/list",
                     "icon": "icon-credit-note-new",
                     "description": "क्रेडिट नोट व्युत्पन्न करा आणि अद्यतनित करा",
                     "additional": {
@@ -77,7 +77,7 @@
                 },
                 {
                     "label": "बीजक",
-                    "link": "/pages/invoice/preview/sales",
+                    "link": "/pages/vouchers/preview/sales/list",
                     "icon": "icon-invoice-new",
                     "description": "मल्टीक्युरन्सी, आवर्ती चलन, रोख चलन",
                     "additional": {
@@ -94,18 +94,30 @@
                     "label": "बीजक सेटिंग्ज",
                     "link": "/pages/invoice/preview/settings/sales",
                     "icon": "icon-settings-cog",
-                    "description": "बीजक सेटिंग्ज"
+                    "description": "बीजक सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बीजक सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/sales/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "बीजक सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "पावती",
-                    "link": "/pages/reports/receipt",
+                    "link": "/pages/vouchers/preview/receipt/list",
                     "icon": "icon-reciept-new",
                     "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
                     "additional": {
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/receipt/create"
-                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -123,7 +135,22 @@
                     "link": "/pages/invoice/preview/templates/sales",
                     "icon": "icon-template",
                     "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
-                    "alwaysPresent": "True"
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/vouchers/preview/sales/templates",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -148,7 +175,7 @@
                 },
                 {
                     "label": "बिल",
-                    "link": "/pages/purchase-management/purchase/bill",
+                    "link": "/pages/vouchers/preview/purchase/list",
                     "icon": "icon-invoice-new",
                     "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा",
                     "additional": {
@@ -165,7 +192,23 @@
                     "label": "बिल सेटिंग्ज",
                     "link": "/pages/purchase-management/purchase/settings",
                     "icon": "icon-invoice-new",
-                    "description": "बिल सेटिंग्ज"
+                    "description": "बिल सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बिल सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/purchase/settings",
+                    "icon": "icon-invoice-new",
+                    "description": "बिल सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "डेबिट नोट",
@@ -184,7 +227,7 @@
                 },
                 {
                     "label": "डेबिट नोट",
-                    "link": "/pages/invoice/preview/debit note",
+                    "link": "/pages/vouchers/preview/debit-note/list",
                     "icon": "icon-debit-note-new",
                     "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा",
                     "additional": {
@@ -199,14 +242,10 @@
                 },
                 {
                     "label": "फेड",
-                    "link": "/pages/reports/payment",
+                    "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
                     "additional": {
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/payment/create"
-                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -229,7 +268,7 @@
                 },
                 {
                     "label": "खरेदी ऑर्डर",
-                    "link": "/pages/purchase-management/purchase/order",
+                    "link": "/pages/vouchers/preview/purchase-order/list",
                     "icon": "icon-purchase-order",
                     "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा",
                     "additional": {

@@ -157,6 +157,7 @@ export class ProformaService {
     }
 
     public updateAction(request: ProformaUpdateActionRequest, voucherType: string): Observable<BaseResponse<string, ProformaUpdateActionRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + PROFORMA_API.updateAction
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':vouchers', voucherType)

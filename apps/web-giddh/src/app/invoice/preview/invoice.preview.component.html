@@ -1965,13 +1965,13 @@
                 <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <app-generate-ewaybill-modal
+                            <app-generate-ewaybill-dialog
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
                                 (closeModelEvent)="toggleEwayBillPopup()"
                                 (createEWayBillEvent)="createEWayBill()"
                             >
-                            </app-generate-ewaybill-modal>
+                            </app-generate-ewaybill-dialog>
                         </div>
                     </div>
                 </div>

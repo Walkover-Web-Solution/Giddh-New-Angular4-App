@@ -76,7 +76,8 @@
         "advance_filter":"आगाऊ फिल्टर",
         "customise":"सानुकूलित करा",
         "no_result_found":"कोणताही परिणाम आढळला नाही",
-        "select_all":"सर्व निवडा"
+        "select_all":"सर्व निवडा",
+        "select_account_group":"खाते गट निवडा"
     },
     "advance_search_filter":{
         "advance_search":"प्रगत शोध",

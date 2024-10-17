@@ -911,7 +911,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             if (branches) {
                 if (branches.results?.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(branch => ({
-                        label: `${branch.alias}`,
+                        label: `${branch.name}`,
                         value: branch?.uniqueName,
                         additional: branch
                     }));
@@ -1321,7 +1321,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
                     if (this.editBranchTransferUniqueName || !res.isArchived) {
-                        branches.push(new LinkedStocksVM(res.name, res?.uniqueName, false, res.alias, res.warehouses, res.isArchived));
+                        branches.push(new LinkedStocksVM(res.name, res?.uniqueName, false, res.name, res.warehouses, res.isArchived));
                     }
                     if (res.warehouses?.length) {
                         this.senderWarehouses[res?.uniqueName] = [];

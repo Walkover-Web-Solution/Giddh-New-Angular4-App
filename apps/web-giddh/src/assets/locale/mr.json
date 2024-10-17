@@ -349,7 +349,11 @@
         "partially_paid": "अर्धवट दिले",
         "unpaid": "पैसे न दिलेले",
         "hold": "धरा",
-        "cancel": "रद्द करा"
+        "cancel": "रद्द करा",
+        "open": "उघडा",
+        "expired": "मुदत संपली",
+        "converted": "रूपांतरित",
+        "partially_converted": "आंशिक रूपांतरित"
     },
     "app_date_options": {
         "on": "चालू",

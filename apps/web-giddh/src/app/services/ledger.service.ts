@@ -67,7 +67,6 @@ export class LedgerService {
      */
     public GetLedgerTransactions(request: TransactionsRequest): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-
         let url = this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':q', encodeURIComponent(request.q || ''))
             ?.replace(':page', request.page?.toString())
@@ -83,7 +82,7 @@ export class LedgerService {
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
         }
         // tslint:disable-next-line:max-line-length
-        return this.http.get(url).pipe(map((res) => {
+        return this.http.get(url, null, { headers: { 'token':  request.paginationToken }}).pipe(map((res) => {
             let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
             data.request = request;
             return data;

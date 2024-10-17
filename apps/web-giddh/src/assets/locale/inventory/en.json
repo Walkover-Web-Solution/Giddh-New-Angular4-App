@@ -77,7 +77,8 @@
         "advance_filter":"Advance Filter",
         "customise":"Customise",
         "no_result_found":"No result found",
-        "select_all":"Select All"
+        "select_all":"Select All",
+        "select_account_group":"Select Account Group"
     },
     "advance_search_filter":{
         "advance_search":"Advance Search",

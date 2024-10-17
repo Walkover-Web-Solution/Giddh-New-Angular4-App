@@ -787,7 +787,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
                     if (response?.status === 'success') {
-
                         if (this.voucherApiVersion === 2) {
                             const requestObject = {
                                 uniqueName: this.selectedItem?.uniqueName,
