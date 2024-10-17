@@ -45,7 +45,7 @@
                         </ng-container>
                         <ng-template #tagsListItem>
                             <mat-list-item role="listitem" [ngClass]="{ 'active-link': isTagMenuOpened }">
-                                <a href="javascript:;" aria-label="icon" class="d-block clearfix" [matMenuTriggerFor]="tagsMenu" #tagsMenuTrigger="matMenuTrigger" (menuOpened)="isTagMenuOpened = true" (menuClosed)="isTagMenuOpened = false">
+                                <a href="javascript:;" aria-label="icon" class="d-block clearfix" [matMenuTriggerFor]="tagsMenu" #tagsMenuTrigger="matMenuTrigger" (menuOpened)="tagsMenuOpen(true)" (menuClosed)="tagsMenuOpen(false)">
                                     <span [innerHTML]="tab?.icon"></span>
                                     <span>{{ tab?.label }}</span>
                                 </a>
