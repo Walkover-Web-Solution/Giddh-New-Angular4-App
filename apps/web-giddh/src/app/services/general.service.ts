@@ -1358,7 +1358,6 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public setParameterInLocalStorage(key: any, value: any): void {
-        this.setCookie(key, value, 30);
         localStorage.setItem(key, value);
     }
 
