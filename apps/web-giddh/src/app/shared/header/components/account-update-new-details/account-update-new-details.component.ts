@@ -1018,7 +1018,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @return {*}
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public mergeOpeningBalanceData(accountOpeningBalanceValue: any) {
+    public mergeOpeningBalanceData(accountOpeningBalanceValue: any): any {
         const updatedOpeningBalance = [...this.accountOpeningBalance];
 
         accountOpeningBalanceValue.forEach(updatedItem => {
@@ -2003,7 +2003,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let acc = results[0];
                 this.resetBankDetailsForm();
                 if (acc && acc.parentGroups[0]?.uniqueName) {
-                    console.log(acc.accountOpeningBalance);
                     this.accountOpeningBalance = acc.accountOpeningBalance;
                     let col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
