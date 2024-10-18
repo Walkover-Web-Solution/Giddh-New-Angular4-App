@@ -43,7 +43,7 @@
                                     <span
                                         class="branch-ellipsis"
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
-                                        ><span>{{ currentBranch?.alias }}</span>
+                                        ><span>{{ currentBranch?.name }}</span>
                                     </span>
                                     <i
                                         class="icon-branch-connect"
@@ -220,10 +220,10 @@
                                                             {{ item?.label }}
                                                             <ng-container *ngIf="currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch">
                                                                 <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
-                                                                    <strong 
-                                                                        class="ml-auto" 
-                                                                        *ngIf="item?.additional?.createNew" 
-                                                                        (click)="$event.stopPropagation()" 
+                                                                    <strong
+                                                                        class="ml-auto"
+                                                                        *ngIf="item?.additional?.createNew"
+                                                                        (click)="$event.stopPropagation()"
                                                                         [routerLink]="[item?.additional?.createNew?.link]"
                                                                         [queryParams]="item?.additional?.createNew?.queryParams"
                                                                     >
@@ -231,11 +231,11 @@
                                                                     </strong>
                                                                 </ng-container>
                                                                 <ng-container *ngIf="(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
-                                                                    <strong 
-                                                                    class="ml-auto" 
+                                                                    <strong
+                                                                    class="ml-auto"
                                                                     (click)="
                                                                         $event.stopPropagation();
-                                                                        selectedGroupForCreateAccount = 
+                                                                        selectedGroupForCreateAccount =
                                                                         item?.additional?.createNew?.queryParams?.addCustomer
                                                                         ? 'sundrydebtors'
                                                                         : 'sundrycreditors';

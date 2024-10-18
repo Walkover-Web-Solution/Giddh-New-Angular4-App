@@ -32,52 +32,53 @@
                 </div>
             </div>
             <div class="all-item-block">
-                <div class="main-item" *ngFor="let item of filteredItems$ | async; index as filteredMenuIndex">
-                    <h3 *ngIf="!item?.link" class="mr-b2 d-flex align-items-center">
-                        <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
-                    </h3>
-                    <h3
-                        *ngIf="item?.link"
-                        [routerLink]="[item?.link]"
-                        class="cursor-pointer mr-b2 d-flex align-items-center"
-                    >
-                        <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
-                    </h3>
-                    <div class="sub-item-block">
-                        <div class="row responsive-sub-items">
-                            <ng-container *ngFor="let subItem of item?.items; index as subItemIndex">
-                                <mat-card
-                                    *ngIf="subItem.link"
-                                    class="single-menu-item"
-                                    (click)="redirectSubItemLink(subItem)"
-                                    [queryParams]="subItem?.additional?.queryParams"
-                                    [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
-                                    [tabindex]="subItemIndex"
-                                >
-                                    <mat-card-title>
-                                        <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
-                                    </mat-card-title>
-                                    <mat-card-content>
-                                        <p class="font-12">{{ subItem?.description }}</p>
-                                    </mat-card-content>
-                                </mat-card>
-                                <mat-card
-                                    *ngIf="!subItem.link"
-                                    class="single-menu-item"
-                                    [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
-                                    (click)="handleItemClick(subItem)"
-                                >
-                                    <mat-card-title>
-                                        <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
-                                    </mat-card-title>
-                                    <mat-card-content>
-                                        <p class="font-12">{{ subItem?.description }}</p>
-                                    </mat-card-content>
-                                </mat-card>
-                            </ng-container>
+                <ng-container *ngFor="let item of filteredItems$ | async; index as filteredMenuIndex">
+                    <div class="main-item" *ngIf="item?.items?.length">
+                        <h3 *ngIf="!item?.link" class="mr-b2 d-flex align-items-center">
+                            <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
+                        </h3>
+                        <h3
+                            *ngIf="item?.link"
+                            [routerLink]="[item?.link]"
+                            class="cursor-pointer mr-b2 d-flex align-items-center"
+                        >
+                            <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
+                        </h3>
+                        <div class="sub-item-block">
+                            <div class="row responsive-sub-items">
+                                <ng-container *ngFor="let subItem of item?.items; index as subItemIndex">
+                                    <mat-card
+                                        *ngIf="subItem.link"
+                                        class="single-menu-item"
+                                        (click)="redirectSubItemLink(subItem)"
+                                        [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
+                                        [tabindex]="subItemIndex"
+                                    >
+                                        <mat-card-title>
+                                            <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
+                                        </mat-card-title>
+                                        <mat-card-content>
+                                            <p class="font-12">{{ subItem?.description }}</p>
+                                        </mat-card-content>
+                                    </mat-card>
+                                    <mat-card
+                                        *ngIf="!subItem.link"
+                                        class="single-menu-item"
+                                        [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
+                                        (click)="handleItemClick(subItem)"
+                                    >
+                                        <mat-card-title>
+                                            <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
+                                        </mat-card-title>
+                                        <mat-card-content>
+                                            <p class="font-12">{{ subItem?.description }}</p>
+                                        </mat-card-content>
+                                    </mat-card>
+                                </ng-container>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </ng-container>
             </div>
         </div>
     </div>

@@ -79,7 +79,7 @@
             [
                 {
                     "label": "बीजक व्यवस्थापन",
-                    "link": "/pages/invoice/preview/settings/sales",
+                    "link": "/pages/vouchers/preview/sales/settings",
                     "icon": "<i class='icon-invoice-management'></i>"
                 },
                  {
@@ -147,7 +147,7 @@
             [
                 {
                     "label": "बीजक व्यवस्थापन",
-                    "link": "/pages/invoice/preview/settings/sales",
+                    "link": "/pages/vouchers/preview/sales/settings",
                     "icon": "<i class='icon-invoice-management'></i>"
                 }
             ]
