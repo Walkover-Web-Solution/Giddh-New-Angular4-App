@@ -803,7 +803,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public sendEmail(response: any): void {
         if (response) {
-            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice) {
+            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName,
                     payload: {
@@ -1034,6 +1034,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             } else {
                 this.openDownloadVoucher();
             }
+        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+            saveAs(this.attachedDocumentBlob, this.localeData?.download_po_filename);
         } else {
             this.openDownloadVoucher();
         }
