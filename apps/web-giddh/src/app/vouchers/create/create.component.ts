@@ -606,6 +606,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.isUpdateMode = true;
                     this.useDefaultAccountDetails = false;
                     this.getVoucherDetails(params);
+                    this.getUpdateVoucherText();
                 }
 
                 if (params?.accountUniqueName === "cash") {
