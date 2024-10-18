@@ -84,31 +84,6 @@
     }
 }
 
-// body {
-//     &.aside-setting {
-//         .cdk-overlay-pane {
-//             &:has(.tags-menu-contianer) {
-//                 top: var(--header-height) !important;
-//                 right: 0px !important;
-//                 transform: translateX(-240px) !important; // 240px is width of setting sidebar
-
-//                 .mat-mdc-menu-panel {
-//                     max-width: unset !important;
-
-//                     .mat-mdc-menu-content {
-//                         padding: 0 !important;
-
-//                         .tags-menu-contianer {
-//                             padding: 15px !important;
-//                             width: 480px;
-//                             height: calc(100vh - (var(--header-height)));
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
 
 body {
     &.tags-menu-open {
