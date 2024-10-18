@@ -1021,10 +1021,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public mergeOpeningBalanceData(accountOpeningBalanceValue: any): any {
         const updatedOpeningBalance = [...this.accountOpeningBalance];
 
-        accountOpeningBalanceValue.forEach(updatedItem => {
+        accountOpeningBalanceValue?.forEach(updatedItem => {
             const existingIndex = updatedOpeningBalance.findIndex(item => item.branch.uniqueName === updatedItem.branch.uniqueName);
 
-            if (existingIndex !== -1) {
+            if (existingIndex > -1) {
                 updatedOpeningBalance[existingIndex] = { ...updatedOpeningBalance[existingIndex], ...updatedItem };
             } else {
                 updatedOpeningBalance.push(updatedItem);
