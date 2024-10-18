@@ -1988,7 +1988,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
-
+        
         let index = 0;
 
         if (this.useDefaultAccountDetails) {
@@ -3615,7 +3615,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const deposits = [];
         this.invoiceForm.get('deposits')['controls']?.forEach(control => {
             if (!this.invoiceType.isCashInvoice && control.get("accountUniqueName").value && control.get("amount").value) {
-                if (this.isMultiCurrencyVoucher) {
+                if (this.account.baseCurrencySymbol !== control.get("currencySymbol").value) {
                     deposits.push({ amountForCompany: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
                 } else {
                     deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
