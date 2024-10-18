@@ -730,7 +730,7 @@
                                             *ngIf="currencySwitched">{{ company?.baseCurrency
                                             }}</ng-container><ng-container *ngIf="!currencySwitched">{{
                                             account?.baseCurrency }}</ng-container></span>
-                                    <img alt="switch-icon" height="15px" src="{{ imgPath }}images/switch-icon.svg"
+                                    <img alt="switch-icon" height="15px" src="{{ imgPath }}switch-icon.svg"
                                         class="cursor-pointer" (click)="switchCurrency()" />
                                     <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value |
                                         giddhCurrency }} <ng-container *ngIf="currencySwitched">{{ account?.baseCurrency
