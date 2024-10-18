@@ -5247,6 +5247,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public translationComplete(): void {
         this.getVoucherDateLabelPlaceholder();
+        if (this.isUpdateMode) {
+            this.getUpdateVoucherText();
+        }
     }
 
     /**

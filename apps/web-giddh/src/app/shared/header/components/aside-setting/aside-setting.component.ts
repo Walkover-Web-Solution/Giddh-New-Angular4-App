@@ -185,9 +185,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @param {boolean} menuStatus
      * @memberof AsideSettingComponent
      */
-    public toggleMenuOpen(menuStatus: boolean) {
+    public toggleTagMenu(menuStatus: boolean): void {
         this.isTagMenuOpened = menuStatus;
-        if (open) {
+        if (menuStatus) {
             document.querySelector("body")?.classList?.add("tags-menu-open");
         } else {
             setTimeout(() => {
