@@ -61,6 +61,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     public profileForm: FormGroup;
     /** This will hold region */
     public region: string;
+    /** Holds Portal Login Url */
+    public portalLoginUrl: string = "";
 
     constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) {
         this.initProfileForm();
@@ -92,6 +94,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
             let allowUpdate: boolean = false;
             if (this.profileData?.alias || this.profileData?.name) {
                 this.profileForm.patchValue(this.profileData);
+                this.portalLoginUrl = `${this.portalUrl}${this.profileData.portalDomain}/${this.region}/login`;
             }
 
             if (this.organizationType === 'COMPANY') {
@@ -205,7 +208,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public copyUrl(): void {
-        const urlToCopy = `${this.portalUrl}${this.profileData.portalDomain}/login/${this.region}`;
+        const urlToCopy = this.portalLoginUrl;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
         setTimeout(() => {
