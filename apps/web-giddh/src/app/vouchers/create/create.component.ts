@@ -606,6 +606,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.isUpdateMode = true;
                     this.useDefaultAccountDetails = false;
                     this.getVoucherDetails(params);
+                    this.getUpdateVoucherText();
                 }
 
                 if (params?.accountUniqueName === "cash") {
@@ -5246,9 +5247,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public translationComplete(): void {
         this.getVoucherDateLabelPlaceholder();
-        if (this.isUpdateMode) {
-            this.getUpdateVoucherText();
-        }
     }
 
     /**
