@@ -61,7 +61,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
@@ -180,20 +180,19 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show/hide tag manu
+     * This will add/remove class tag menu
      *
-     * @param {boolean} open
+     * @param {boolean} menuStatus
      * @memberof AsideSettingComponent
      */
-    public tagsMenuOpen(open : boolean){
-        if(open){
-            this.isTagMenuOpened = true;
+    public toggleMenuOpen(menuStatus: boolean) {
+        this.isTagMenuOpened = menuStatus;
+        if (open) {
             document.querySelector("body")?.classList?.add("tags-menu-open");
-        }else{
-            this.isTagMenuOpened = false;
-            setTimeout(()=>{
+        } else {
+            setTimeout(() => {
                 document.querySelector("body")?.classList?.remove("tags-menu-open");
-            },100);
+            }, 500);
         }
     }
 }
