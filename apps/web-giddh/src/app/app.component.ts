@@ -82,10 +82,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
-                    const countryRegion = localStorage.getItem('Country-Region');
-                    const region = COUNTRY_REGION_MAP[countryRegion] || null;
-                    let giddhRegion = region === 'gl' ? 'https://giddh.com/login/' : `https://giddh.com/${region}/login/`;
-                    window.location.href = giddhRegion;
+                    window.location.href = this._generalService.getGiddhRegionUrl() + '/';
                 } else {
                     this.router.navigate(['/login']);
                 }

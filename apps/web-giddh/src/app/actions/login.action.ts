@@ -343,8 +343,7 @@ export class LoginActions {
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !isElectron) {
-                    let giddhRegion = this._generalService.getGiddhRegionUrl();
-                    window.location.href = giddhRegion;
+                    window.location.href = this._generalService.getGiddhRegionUrl();
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
