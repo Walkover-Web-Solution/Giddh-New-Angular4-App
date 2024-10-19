@@ -1245,6 +1245,7 @@
                                                                     <discount-dropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value"
+                                                                        [companyDecimalPlaces]="company.giddhBalanceDecimalPlaces"
                                                                         [discountsList]="discountsList$ | async"
                                                                         [commonLocaleData]="commonLocaleData"
                                                                         [selectedDiscountsList]="entry.get('discounts')?.value"
