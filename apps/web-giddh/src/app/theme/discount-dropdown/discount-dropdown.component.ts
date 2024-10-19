@@ -15,6 +15,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public selectedDiscountsList: any[] = [];
     /** Amount for discount */
     @Input() public amount: any;
+    /** Holds active company decimal place 2 or 4 */
+    @Input() private companyDecimalPlaces: number = 2;
     /** Account currency */
     @Input() public currency: any;
     /* This will hold common JSON data */
@@ -137,6 +139,18 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             isActive: [discount.isActive ?? false]
         });
     }
+    /**
+     * Round a Number to Company Decimal Places
+     *
+     * @private
+     * @param {*} value
+     * @returns {number}
+     * @memberof DiscountDropdownComponent
+     */
+    private roundOffValueByCompanyDecimalPlace(value: number): number {
+        const decimalPlaces = this.companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
+    }
 
     /**
      * Calculates discount
@@ -160,6 +174,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         }
+        this.totalDiscountAmount = this.roundOffValueByCompanyDecimalPlace(this.totalDiscountAmount);
 
         this.emitSelectedDiscounts();
     }
