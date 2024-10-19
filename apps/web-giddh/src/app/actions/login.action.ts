@@ -342,10 +342,9 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
-                const countryRegion = localStorage.getItem('Country-Region');
-                const region = COUNTRY_REGION_MAP[countryRegion] || null;
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = region === "gl" ? "https://giddh.com/login" : `https://giddh.com/${region}/login`;
+                    let giddhRegion = this._generalService.getGiddhRegionUrl();
+                    window.location.href = giddhRegion;
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();

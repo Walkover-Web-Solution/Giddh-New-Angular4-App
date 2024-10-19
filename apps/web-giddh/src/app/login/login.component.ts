@@ -27,6 +27,7 @@ import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
+import { GeneralService } from "../services/general.service";
 
 declare var initSendOTP: any;
 
@@ -92,7 +93,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
         private ngZone: NgZone,
-        private commonAction: CommonActions
+        private commonAction: CommonActions,
+        private generalService: GeneralService
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -247,7 +249,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         window.addEventListener('message', event => {
             if (event?.data && typeof event?.data === "string") {
-                const data: any = event?.data?.split("&").reduce(function(prev, curr, i, arr) {
+                const data: any = event?.data?.split("&").reduce(function (prev, curr, i, arr) {
                     var params = curr.split("=");
                     prev[decodeURIComponent(params[0])] = decodeURIComponent(params[1]);
                     return prev;
@@ -259,7 +261,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
         if (PRODUCTION_ENV && !isElectron) {
-            window.location.href = 'https://giddh.com/login';
+            let giddhRegion = this.generalService.getGiddhRegionUrl();
+            window.location.href = giddhRegion;
         }
     }
 

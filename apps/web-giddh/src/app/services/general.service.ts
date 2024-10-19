@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -626,6 +626,17 @@ export class GeneralService {
             return cookieValue.toUpperCase();
         }
         return null;
+    }
+    /**
+     * This will be use for get giddh region url
+     *
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getGiddhRegionUrl(): string {
+        const countryRegion = localStorage.getItem('Country-Region');
+        const region = COUNTRY_REGION_MAP[countryRegion] || null;
+        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
     }
 
     /**
