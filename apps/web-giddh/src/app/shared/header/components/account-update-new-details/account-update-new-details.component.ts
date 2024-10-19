@@ -1031,10 +1031,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
+        if (updatedOpeningBalance.length === 1 && (!updatedOpeningBalance[0].branch || !updatedOpeningBalance[0].openingBalance || !updatedOpeningBalance[0].openingBalanceType)) {
+            return [];
+        }
+
+
         if (!accountOpeningBalanceValue.length) {
             return this.accountOpeningBalance;
         }
-
         return updatedOpeningBalance;
     }
 
