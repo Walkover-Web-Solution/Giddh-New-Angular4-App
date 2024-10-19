@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { Configuration } from "./app.constant";
+import { Configuration, COUNTRY_REGION_MAP } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -40,7 +40,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
     /** This holds the active locale */
     public activeLocale: string = "";
-    COUNTRY_REGION_MAP: any;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -84,7 +83,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
                     const countryRegion = localStorage.getItem('Country-Region');
-                    const region = this.COUNTRY_REGION_MAP[countryRegion] || null;
+                    const region = COUNTRY_REGION_MAP[countryRegion] || null;
                     let giddhRegion = region === 'gl' ? 'https://giddh.com/login/' : `https://giddh.com/${region}/login/`;
                     window.location.href = giddhRegion;
                 } else {
