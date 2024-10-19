@@ -135,7 +135,7 @@
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
-                                (click)="editVoucher()"
+                                (click)="editCopyVoucher('edit')"
                             >
                                 <i class="icon-edit-pencil"></i>
                             </button>
@@ -230,7 +230,7 @@
                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                             </button>
                             <ng-container *ngIf="['purchase', 'purchase-order'].includes(voucherType)">
-                                <button mat-menu-item (click)="copyInvoice()">{{ commonLocaleData?.app_copy }}</button>
+                                <button mat-menu-item (click)="editCopyVoucher('copy')">{{ commonLocaleData?.app_copy }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
