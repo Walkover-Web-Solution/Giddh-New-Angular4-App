@@ -185,6 +185,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public filteredVoucherVersions: ProformaVersionItem[] = [];
     /** Holds View More voucher history status used to toggle voucher history */
     public moreLogsDisplayed: boolean = true;
+    /** Holds Image dynamic path for electron and web application */
+    public imgPath: string = '';
+    /** Holds voucher type enum to use Enum in html */
+    public voucherTypeEnum: any = VoucherTypeEnum;
 
     constructor(
         private router: Router,
@@ -232,6 +236,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter
@@ -364,9 +369,21 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.getAllApiCallCount > 0) {
-                this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
-                this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
-                this.getAllVouchers();
+                // Reset
+                this.isSearching = false;
+                this.isLoadMore = false;
+                this.pageNumberHistory = [1];
+                this.advanceFilters = {
+                    page: 1,
+                    from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(response[1]).format(GIDDH_DATE_FORMAT),
+                    count: this.advanceFilters.count,
+                    q: '',
+                    sort: '',
+                    sortBy: ''
+                };
+                this.invoiceList = [];
+                this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
             }
         });
 
@@ -586,12 +603,18 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * API Call Get All Vouchers
-    *
-    * @private
-    * @memberof VouchersPreviewComponent
-    */
+     * API Call Get All Vouchers
+     *
+     * @private
+     * @param {boolean} [isLoadMore=false]
+     * @param {boolean} [isScrollUp=false]
+     * @return {*}  {void}
+     * @memberof VouchersPreviewComponent
+     */
     private getAllVouchers(isLoadMore: boolean = false, isScrollUp: boolean = false): void {
+        if (this.isLoadMore) {
+            return;
+        }
         if (isLoadMore) {
             this.isLoadMore = true;
             if (this.totalPages >= this.advanceFilters.page) {
@@ -762,7 +785,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Payment Dialog
     *
-    * @param {*} voucher
     * @memberof VouchersPreviewComponent
     */
     public showPaymentDialog(): void {
@@ -775,7 +797,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Adjust payment dialog
     *
-    * @param {*} voucher
     * @memberof VoucherListComponent
     */
     public showAdjustmentDialog(): void {
@@ -785,7 +806,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Send Email Dialog
     *
-    * @param {*} voucher
     * @memberof VouchersPreviewComponent
     */
     public openEmailSendDialog(): void {
@@ -798,7 +818,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
      * Send Email API Call
      *
-     * @param {*} email
+     * @param {*} response
      * @memberof VouchersPreviewComponent
      */
     public sendEmail(response: any): void {
@@ -1101,19 +1121,13 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      *
      * @memberof VouchersPreviewComponent
      */
-    public editVoucher(): void {
-        const queryParams = {
-            from: this.advanceFilters.from,
-            to: this.advanceFilters.to,
-            page: this.advanceFilters.page
-        }
-
+    public editCopyVoucher(actionType: 'edit' | 'copy' = 'edit'): void {
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`]);
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`]);
         } else {
-            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/${actionType}`]);
         }
     }
 
@@ -1136,18 +1150,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Copy Invoice and redirect to respective page
-     *
-     * @memberof VouchersPreviewComponent
-     */
-    public copyInvoice(): void {
-        if (this.voucherType === VoucherTypeEnum.purchase) {
-            this.router.navigate([`/pages/proforma-invoice/invoice/purchase/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.uniqueName}/copy`]);
-        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-            this.router.navigate([`/pages/purchase-management/purchase-order/new/${this.selectedInvoice?.uniqueName}`]);
-        }
-    }
 
     /**
      * Handle Estimate Proforma Actions API Call
@@ -1230,9 +1232,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public isShowInvoiceStatus(): boolean {
-        if ((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) {
-            return true;
-        } else if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+        if (((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) || (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice)) {
             return true;
         } else {
             return false;
