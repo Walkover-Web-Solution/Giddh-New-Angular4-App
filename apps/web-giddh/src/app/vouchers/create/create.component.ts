@@ -3658,10 +3658,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
-        if (!this.invoiceType.isPurchaseOrder) {
-            invoiceForm.account.callingCode = this.intlClass.selectedCountryData.dialCode;
-        } else {
-            delete invoiceForm.account.callingCode;
+        if (invoiceForm.account.mobileNumber) {
+            invoiceForm.account.mobileNumber = this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber;
         }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
