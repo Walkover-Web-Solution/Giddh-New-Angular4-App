@@ -8,7 +8,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
 import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -87,6 +87,7 @@ export class GeneralService {
 
     constructor(
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) { }
 
@@ -608,6 +609,23 @@ export class GeneralService {
         date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
         const expires = "expires=" + date.toUTCString();
         document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
+    }
+
+    /**
+     *Get cookie value
+     *
+     * @param {*} name
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public getCookieValue(name: any): any {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            const cookieValue = parts.pop().split(';').shift();
+            return cookieValue.toUpperCase();
+        }
+        return null;
     }
 
     /**
@@ -2116,6 +2134,24 @@ export class GeneralService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Update current page query params
+     *
+     * @param {Params} queryParams
+     * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @memberof GeneralService
+     */
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling: queryParamsHandling
+            }
+        );
     }
 }
 

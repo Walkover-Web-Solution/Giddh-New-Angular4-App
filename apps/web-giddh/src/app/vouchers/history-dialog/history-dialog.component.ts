@@ -4,6 +4,7 @@ import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GeneralService } from '../../services/general.service';
 import { PAGE_SIZE_OPTIONS, VoucherTypeEnum } from '../utility/vouchers.const';
+import { GIDDH_DATE_FORMAT_TIME } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'app-history-dialog',
@@ -27,6 +28,8 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
         page: 1,
         count: this.pageSizeOptions[0]
     }
+    /** Holds Date format with time global constant */
+    public giddhDateFormatWithTime: string = GIDDH_DATE_FORMAT_TIME;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -52,6 +55,7 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
                     if (versions.items && versions.items.length > 0) {
                         versions.items.forEach(result => {
                             result.versionTime = new Date(result.versionTime);
+                            result['userName'] =  this.getByUserText(result.user?.name);
                             if (result.changes && result.changes.length > 0) {
                                 result.changes.forEach(change => {
                                     change.message = this.getVersionMessage(this.inputData.model?.voucherType === VoucherTypeEnum.purchaseOrder, change);
@@ -91,13 +95,14 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will return the by user text
-    *
-    * @param {*} user
-    * @returns {string}
-    * @memberof HistoryDialogComponent
-    */
-    public getByUserText(user: any): string {
+     * This will return the by user text
+     *
+     * @private
+     * @param {*} user
+     * @return {*}  {string}
+     * @memberof HistoryDialogComponent
+     */
+    private getByUserText(user: any): string {
         let byUser = this.inputData?.localeData?.by_user;
         byUser = byUser?.replace("[USER]", user);
         return byUser;

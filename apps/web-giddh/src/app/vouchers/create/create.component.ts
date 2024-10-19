@@ -217,6 +217,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public accountAsideMenuRef: MatDialogRef<any>;
     /** True if it's voucher update mode */
     public isUpdateMode: boolean = false;
+    /** True if voucher copy mode */
+    public isCopyMode: boolean = false;
     /** Holds parent group unique name for create account modal */
     public accountParentGroup: string = '';
     /** True if account has unsaved changes */
@@ -545,7 +547,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getWarehouses();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response) {                
                 let params = response[0];
                 this.queryParams = response[1];
 
@@ -565,14 +567,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.resetVoucherForm(!params?.uniqueName, true);
 
                 /** Open account dropdown on create */
-                if (params?.uniqueName) {
-                    this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
-                } else {
-                    this.depositAccountName = "";
-                }
-
                 this.getVoucherType();
-
 
                 if (params?.accountUniqueName && !params?.uniqueName) {
                     this.searchAccount(params?.accountUniqueName, 1, true);
@@ -603,10 +598,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceForm.get('type').patchValue(this.voucherType);
 
                 if (params?.uniqueName) {
-                    this.isUpdateMode = true;
+                    if (params?.action === 'copy') {
+                        this.isCopyMode = true;
+                    } else {
+                        this.isUpdateMode = true;
+                        this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
+                    }
                     this.useDefaultAccountDetails = false;
                     this.getVoucherDetails(params);
                     this.getUpdateVoucherText();
+                } else {
+                    this.depositAccountName = "";
                 }
 
                 if (params?.accountUniqueName === "cash") {
@@ -779,7 +781,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getVoucherType(response);
                     }
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
-                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName) ;
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
                     this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
                     this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber);
@@ -810,7 +812,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
-                    this.invoiceForm.get('number')?.patchValue(response.number);
+                    this.invoiceForm.get('number')?.patchValue(this.isCopyMode ? null : response.number);
                     this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
                     this.invoiceForm.get('passportNumber').patchValue(response?.passportNumber);
 
@@ -822,8 +824,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             value: response.referenceVoucher.uniqueName,
                             additional: {
                                 voucherType: response.referenceVoucher.voucherType,
-                                voucherNumber: response.referenceVoucher.number,
-                                voucherDate: response.referenceVoucher.date
+                                voucherNumber: this.isCopyMode ? null : response.referenceVoucher.number,
+                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) :response.referenceVoucher.date
                             }
                         });
                     }
@@ -2203,7 +2205,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
-            uniqueName: [entryData && copyUniqueName ? entryData?.uniqueName : ''],
+            uniqueName: [this.isCopyMode ? '' : (entryData && copyUniqueName ? entryData?.uniqueName : '')],
             showCodeType: [entryData && entryData?.hsnNumber ? 'hsn' : 'sac'], //temp
             hsnNumber: [entryData ? entryData?.hsnNumber : ''],
             sacNumber: [entryData ? entryData?.sacNumber : ''],
@@ -3485,12 +3487,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Redirect to Invoice Preview page
+     * Redirect to Voucher Preview page
      *
      * @private
      * @memberof VoucherCreateComponent
      */
-    private redirectToInvoicePreview(): void {
+    private redirectToVoucherPreview(): void {
         const queryParams = {
             page: this.queryParams?.page ?? 1,
             from: this.queryParams?.from ?? '',
@@ -3508,7 +3510,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.redirectUrl) {
             this.router.navigateByUrl(this.redirectUrl);
         } else {
-            this.redirectToInvoicePreview();
+            this.redirectToVoucherPreview();
         }
     }
 
@@ -3782,7 +3784,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.redirectToInvoicePreview();
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response.message);
@@ -3931,7 +3933,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.redirectToInvoicePreview();
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
