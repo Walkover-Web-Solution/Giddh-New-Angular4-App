@@ -40,15 +40,6 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      */
     public ngOnInit() {
         this.generalService.removeLocalStorageParameter("session");
-        if (this.generalService.getCookieValue("giddh_region") === "UK") {
-            this.generalService.setParameterInLocalStorage("Country-Region", "GB");
-        } else if (this.generalService.getCookieValue("giddh_region") === "AE") {
-            this.generalService.setParameterInLocalStorage("Country-Region", "AE");
-        } else if (this.generalService.getCookieValue("giddh_region") === "IN") {
-            this.generalService.setParameterInLocalStorage("Country-Region", "IN");
-        } else {
-            this.generalService.setParameterInLocalStorage("Country-Region", "GL");
-        }
         window.addEventListener("online", (event) => {
             if (!this.isConnected) {
                 this.isConnected = true;
