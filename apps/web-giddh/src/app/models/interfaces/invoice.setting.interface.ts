@@ -51,6 +51,7 @@ export class EstimateSettings {
     duePeriod: number;
     autoMail: boolean;
     enableEstimate: boolean;
+    autoWhatsApp: boolean;
 }
 
 export class ProformaSettings {
@@ -70,6 +71,7 @@ export class ProformaSettings {
     autoChangeStatusOnExp?: any;
     sendSms: boolean;
     enableProforma: boolean;
+    poAutoWhatsApp: boolean;
 }
 
 export class InvoiceSettings {
