@@ -15,16 +15,16 @@
             >
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
-                    <!-- NOTE - This code is only active for Test Environment - Start -->
-                    <button
-                        type="button"
-                        class="btn btn-sky-blue dropdown-btn-new"
-                        [routerLink]="'/pages/vouchers/payment/create'"
-                        *ngIf="voucherApiVersion === 2"
-                    >
-                        {{ localeData?.new_voucher }}
-                    </button>
-                    <!-- NOTE - This code is only active for Test Environment - End -->
+                <!-- NOTE - This code is only active for Test Environment - Start -->
+                <button
+                    type="button"
+                    class="btn btn-sky-blue dropdown-btn-new"
+                    [routerLink]="'/pages/vouchers/payment/create'"
+                    *ngIf="(voucherApiVersion === 2) && !isProdMode"
+                >
+                    {{ localeData?.new_voucher }}
+                </button>
+                <!-- NOTE - This code is only active for Test Environment - End -->
                     <div
                         class="input-group linked-entities mr-r15"
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
@@ -39,7 +39,7 @@
                             (selected)="handleBranchChange($event)"
                             [isFilterEnabled]="true"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.alias"
+                            [fixedValue]="currentBranch?.name"
                         >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>

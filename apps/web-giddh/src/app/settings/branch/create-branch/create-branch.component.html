@@ -43,7 +43,7 @@
             </div>
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
-                    <div class="filter-dropdown-branch mr-b15" *ngIf="isCompany && allBranches?.length > 1">
+                    <!-- <div class="filter-dropdown-branch mr-b15" *ngIf="isCompany && allBranches?.length > 1">
                         <mat-select
                             name="branch"
                             class="branch-mat-salect"
@@ -66,26 +66,26 @@
                                 *ngFor="let branch of branches"
                                 [value]="branch?.uniqueName"
                             >
-                                {{ branch?.alias ?? "-" }}
+                                {{ branch?.name ?? "-" }}
                             </mat-option>
                         </mat-select>
-                    </div>
+                    </div> -->
                     <div class="branch-form-field">
                         <div class="address-dropdown">
                             <input-field
                                 [label]="commonLocaleData?.app_branch_name"
                                 [maxlength]="50"
                                 [class.error-box]="
-                                    branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid
+                                    branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid
                                 "
                                 [type]="'text'"
-                                formControlName="alias"
+                                formControlName="name"
                                 [placeholder]="localeData?.enter_name"
                                 [required]="true"
                             ></input-field>
                             <span
                                 class="danger pl-1"
-                                *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength"
+                                *ngIf="branchForm?.get('name')?.touched && branchForm?.get('name')?.errors?.maxlength"
                             >
                                 {{ commonLocaleData?.app_max_50_characters_allowed_limit }}
                             </span>
@@ -98,7 +98,7 @@
                             <input-field
                                 [label]="commonLocaleData?.app_branch_name"
                                 [type]="'text'"
-                                formControlName="name"
+                                formControlName="alias"
                                 [placeholder]="localeData?.enter_name"
                             ></input-field>
                         </div>

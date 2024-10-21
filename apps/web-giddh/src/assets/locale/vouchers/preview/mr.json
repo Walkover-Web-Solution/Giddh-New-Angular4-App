@@ -290,5 +290,7 @@
     "by_user": "[USER] द्वारा",
     "po_created": "[VALUE] साठी खरेदी ऑर्डर तयार केली",
     "value_changed": "[FIELD] वर अद्यतनित केले [VALUE]",
-    "voucher_created": "व्हाउचर तयार केले [VALUE]"
+    "voucher_created": "व्हाउचर तयार केले [VALUE]",
+    "revision_history": "पुनरावृत्ती इतिहास",
+    "download_po_filename": "खरेदी-ऑर्डर.pdf"
 }

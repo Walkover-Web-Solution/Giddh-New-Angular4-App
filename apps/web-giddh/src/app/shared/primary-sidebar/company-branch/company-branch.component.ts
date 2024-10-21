@@ -173,11 +173,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp?.alias) {
-                return cmp?.name?.toLowerCase().includes(event?.toLowerCase());
-            } else {
-                return cmp?.name?.toLowerCase().includes(event?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(event?.toLowerCase());
-            }
+            return cmp?.name?.toLowerCase().includes(event?.toLowerCase());
         });
     }
 
@@ -225,7 +221,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                 uniqueName: selectBranchUniqueName
             }
         };
-
         if (selectBranchUniqueName) {
             this.setOrganizationDetails(OrganizationType.Branch, details);
         } else {
@@ -364,10 +359,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public filterBranchList(event: any): void {
         if (this.companyBranches) {
             this.companyBranches.branches = this.branchList?.filter((branch) => {
-                if (!branch.alias) {
+                if (!branch.name) {
                     return branch.name?.toLowerCase().includes(event?.toLowerCase());
                 } else {
-                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.alias?.toLowerCase().includes(event?.toLowerCase());
+                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.name?.toLowerCase().includes(event?.toLowerCase());
                 }
             });
             this.changeDetectorRef.detectChanges();
@@ -392,7 +387,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
-                    this.switchBranch(company, branch, event);
+                    this.switchBranch(company, branchUniqueName, event);
                 } else {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
                 }
@@ -400,7 +395,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        this.switchBranch(company, branch, event);
+        this.switchBranch(company, branchUniqueName, event);
     }
 
     /**
@@ -412,23 +407,18 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {*} event
      * @memberof CompanyBranchComponent
      */
-    private switchBranch(company: any, branch: any, event: any): void {
+    private switchBranch(company: any, branchUniqueName: string, event: any): void {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
-
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
-            this.changeCompany(company, branch?.uniqueName, false);
-        } else if (branch?.uniqueName !== this.generalService.currentBranchUniqueName) {
+            this.changeCompany(company, branchUniqueName, false);
+        } else if (branchUniqueName !== this.generalService.currentBranchUniqueName) {
             const details = {
                 branchDetails: {
-                    uniqueName: branch?.uniqueName
+                    uniqueName: branchUniqueName
                 }
             };
-            this.generalService.currentBranchUniqueName = branch?.uniqueName;
-            if (branch.consolidatedBranch) {
-                this.setOrganizationDetails(OrganizationType.Company, details);
-            } else {
-                this.setOrganizationDetails(OrganizationType.Branch, details);
-            }
+            this.generalService.currentBranchUniqueName = branchUniqueName;
+            this.setOrganizationDetails(OrganizationType.Branch, details);
             this.store.dispatch(this.invoiceAction.getInvoiceSetting());
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
                 if (response && response.body) {

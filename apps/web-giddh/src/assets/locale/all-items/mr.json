@@ -99,7 +99,23 @@
                     "label": "अंदाज (बीटा)",
                     "link": "/pages/invoice/preview/estimates",
                     "icon": "icon-sales-order1",
-                    "description": "अंतिम विक्री ऑर्डर"
+                    "description": "अंतिम विक्री ऑर्डर",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "अंदाज (बीटा)",
+                    "link": "/pages/vouchers/preview/estimates/list",
+                    "icon": "icon-sales-order1",
+                    "description": "अंतिम विक्री ऑर्डर",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "नवीन क्रेडिट नोट",
@@ -199,7 +215,23 @@
                     "label": "पावती",
                     "link": "/pages/reports/receipt",
                     "icon": "icon-reciept-new",
-                    "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या"
+                    "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "पावती",
+                    "link": "/pages/vouchers/preview/receipt/list",
+                    "icon": "icon-reciept-new",
+                    "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "विक्री नोंदणी",
@@ -420,7 +452,7 @@
                 },
                 {
                     "label": "पेमेंट",
-                    "link": "/pages/reports/payment",
+                    "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
                     "additional": {
@@ -551,6 +583,51 @@
                     }
                 },
                 {
+                    "label": "कर प्राधिकरण",
+                    "link": "/pages/settings/reports/tax-authority",
+                    "icon": "icon-vat1",
+                    "description": "कर प्राधिकरण",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "कर दरानुसार",
+                    "link": "/pages/settings/reports/rate-wise",
+                    "icon": "icon-vat1",
+                    "description": "कर दरानुसार",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "कर खातेनिहाय",
+                    "link": "/pages/settings/reports/account-wise",
+                    "icon": "icon-vat1",
+                    "description": "कर खातेनिहाय",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
                     "label": "व्हॅट दायित्वे",
                     "link": "/pages/vat-report/liabilities",
                     "icon": "icon-vat1",
@@ -570,6 +647,21 @@
                     "link": "/pages/vat-report/payments",
                     "icon": "icon-vat1",
                     "description": "व्हॅट देयके",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "व्हॅट बंधन",
+                    "link": "/pages/vat-report/obligations",
+                    "icon": "icon-vat1",
+                    "description": "व्हॅट बंधन",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {

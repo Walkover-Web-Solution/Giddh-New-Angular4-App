@@ -17,6 +17,7 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
     selector: "purchase-register-expand",
@@ -50,26 +51,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public modalUniqueName: string;
     public imgPath: string;
     public expand: boolean = false;
-    public showFieldFilter = {
-        date: false,
-        account: false,
-        voucher_type: false,
-        voucher_no: false,
-        purchase: false,
-        return: false,
-        qty_rate: false,
-        value: false,
-        discount: false,
-        tax: false,
-        net_purchase: false,
-        parent_group: false,
-        purchase_account: false,
-        tax_no: false,
-        address: false,
-        pincode: false,
-        email: false,
-        mobile_no: false,
-    };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -114,6 +95,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Datasource of Purchase Register report */
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
     
     constructor(
         private store: Store<AppState>,
@@ -201,8 +184,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             .subscribe((res: PurchaseRegisteDetailedResponse) => {
                 if (res) {
                     this.PurchaseRegisteDetailedItems = res;
-                    _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {
+                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
                         obj.date = this.getDateToDMY(obj.date);
+                        return obj;
                     });
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
@@ -294,9 +278,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true,
             },
             {
-                "value": "qty_rate",
-                "label": "Qty-Rate",
+                "value": "app_rate",
+                "label": "Rate",
                 "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
+                "value": "app_unit",
+                "label": "Unit",
+                "checked": true,
+                "isCommonLocaleData": true
             },
             {
                 "value": "discount",
@@ -327,14 +318,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             this.detectChange();
         }, 200);
         this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRegistedDetails(PurchaseDetailedfilter));
-    }
-
-    public pageChanged(ev: any): void {
-        if (ev.page === this.getDetailedPurchaseRequestFilter.page) {
-            return;
-        }
-        this.getDetailedPurchaseRequestFilter.page = ev.page;
-        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
 
     public sortbyApi(ord, key) {
@@ -368,12 +351,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public emitExpand() {
         this.expand = !this.expand;
-    }
-
-    public columnFilter(event, column) {
-        if (event && column) {
-            this.showFieldFilter[column] = event;
-        }
     }
 
     public hideListItems() {
@@ -484,7 +461,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.customiseColumns = this.customiseColumns?.map((column) => {
-                column.label = this.localeData[column.value];
+                if (column.isCommonLocaleData) {
+                    column.label = this.commonLocaleData[column.value];
+                } else {
+                    column.label = this.localeData[column.value];
+                }
                 return column;
             });
             this.monthNames = [
@@ -567,8 +548,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public getSelectedTableColumns(event: any): void {
         this.displayedColumns = event;
-        const displayColumnsSet = new Set(this.displayedColumns);
-        Object.keys(this.showFieldFilter).forEach((key) => (this.showFieldFilter[key] = displayColumnsSet.has(key)));
     }
 
     /**
@@ -635,5 +614,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
         this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
         this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+    }
+
+    /**
+     * Handle Page Change event and Make API Call
+     *
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public handlePageChange(event: any): void {
+        this.getDetailedPurchaseRequestFilter.page = event.pageIndex + 1
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
 }

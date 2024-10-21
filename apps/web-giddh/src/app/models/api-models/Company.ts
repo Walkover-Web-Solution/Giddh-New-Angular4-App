@@ -406,6 +406,7 @@ export class BranchFilterRequest {
     to: string;
     query?: string;
     companyUniqueName?: string;
+    branchUniqueName?: string;
     hierarchyType?: string;
 }
 

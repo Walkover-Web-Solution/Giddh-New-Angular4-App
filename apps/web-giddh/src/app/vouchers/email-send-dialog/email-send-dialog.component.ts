@@ -20,9 +20,9 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
     @Input() selectedItem: any;
     /** Success event emitter */
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Form Group for send email form */
     public sendEmailForm: FormGroup;
@@ -113,10 +113,13 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
             return;
         }
         const emailsArray = this.sendEmailForm.get('email.to').value?.split(',').map(email => email.trim());
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.purchase].includes(this.selectedItem?.type ?? this.voucherType)) {
-            this.successEvent.emit(emailsArray);
+        if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
+            this.successEvent.emit({ 
+                email: emailsArray, 
+                invoiceType: this.copyTypes.value, 
+                uniqueName: this.selectedItem?.uniqueName });
         } else {
-            this.successEvent.emit({ email: emailsArray, invoiceType: this.copyTypes.value, uniqueName: this.selectedItem?.uniqueName });
+            this.successEvent.emit(emailsArray);
         }
     }
 

@@ -188,11 +188,10 @@
                 <reactive-dropdown-field
                     *ngIf="bulkUpdateForm.get('action').value === 'warehouse'"
                     [name]="'invoice'"
-                    [lable]="'localeData?.select_warehouse'"
+                    [label]="'localeData?.select_warehouse'"
                     [placeholder]="commonLocaleData?.app_select"
                     [options]="warehouses"
                     formControlName="warehouseUniqueName"
-                    (selectedOption)="resetFormData()"
                     class="w-100"
                 >
                 </reactive-dropdown-field>

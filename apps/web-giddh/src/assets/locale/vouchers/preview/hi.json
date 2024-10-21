@@ -290,5 +290,7 @@
     "by_user": "[USER] द्वारा",
     "po_created": "[VALUE] के लिए खरीद आदेश",
     "value_changed": "[FIELD] को अपडेट किया गया [VALUE]",
-    "voucher_created": "[VALUE] के लिए बनाया गया वाउचर"
+    "voucher_created": "[VALUE] के लिए बनाया गया वाउचर",
+    "revision_history": "संशोधन इतिहास",
+    "download_po_filename": "खरीद-आदेश.pdf"
 }

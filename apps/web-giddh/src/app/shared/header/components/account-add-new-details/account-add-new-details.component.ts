@@ -195,7 +195,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
-    public isForeignCurrecny: boolean = false;
+    public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
     public tempSaveBulkData: any[] = [];
     /** Holds company branches */
@@ -770,7 +770,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @param {string} type
      * @memberof AccountAddNewDetailsComponent
      */
-    public openingBalanceTypeChanged(type: string) {
+    public openingBalanceTypeChanged(type: string): void {
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -816,7 +816,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
             }
         ];
-        accountRequest.accountOpeningBalance = this.company.isActive ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
+
+        const accountOpeningBalanceValue = this.addAccountForm.get('accountOpeningBalance')?.value;
+
+        const isAccountOpeningBalanceValid = accountOpeningBalanceValue?.some((balance: any) => {
+            return balance.branch || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+
+        const isBranchModeOpeningBalanceValid = branchModeOpeningBalance.some((balance: any) => {
+            return balance.branch?.name || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+
+        accountRequest.accountOpeningBalance = this.company.isActive
+            ? (isAccountOpeningBalanceValid ? accountOpeningBalanceValue : [])
+            : (isBranchModeOpeningBalanceValid ? branchModeOpeningBalance : []);
 
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
@@ -1718,9 +1731,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openBulkAddDialog(): void {
-        this.isForeignCurrecny = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
+        this.isForeignCurrency = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
         let data = {
-            foreignCurrency: this.isForeignCurrecny,
+            foreignCurrency: this.isForeignCurrency,
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : []
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {

@@ -466,6 +466,9 @@ aside-menu-account .container-fluid {
 .row-gap15 {
     row-gap: 15px;
 }
+.row-gap2 {
+    row-gap: 20px;
+}
 
 .border-bottom {
     border-bottom-color: var(--color-ledger-grid-border-color);
@@ -544,6 +547,9 @@ aside-menu-account .container-fluid {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+.text-wrap {
+    text-wrap: wrap;
 }
 .cp {
     cursor: pointer !important;

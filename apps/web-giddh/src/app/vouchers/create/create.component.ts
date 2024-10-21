@@ -86,9 +86,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /* Selector for adjustment modal */
     @ViewChild('adjustmentModal', { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Holds current voucher type */
     public voucherType: string = VoucherTypeEnum.sales.toString();
+    /** Hold url Voucher Type */
+    public urlVoucherType: string = '';
     /** Holds images folder path */
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */
@@ -215,6 +217,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public accountAsideMenuRef: MatDialogRef<any>;
     /** True if it's voucher update mode */
     public isUpdateMode: boolean = false;
+    /** True if voucher copy mode */
+    public isCopyMode: boolean = false;
     /** Holds parent group unique name for create account modal */
     public accountParentGroup: string = '';
     /** True if account has unsaved changes */
@@ -409,6 +413,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Total Deposit Amount  */
     private totalDepositAmount: number = 0;
+    /** Holds current route query parameters */
+    public queryParams: any = {};
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
+
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
      * need to apply max characters limit on Notes/notes2/messsage2
@@ -538,16 +547,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getWarehouses();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response) {                
                 let params = response[0];
-                let queryParams = response[1];
+                this.queryParams = response[1];
 
-                if (queryParams?.redirect) {
-                    this.redirectUrl = queryParams?.redirect;
+                if (this.queryParams?.redirect) {
+                    this.redirectUrl = this.queryParams.redirect;
                 }
 
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
+                this.urlVoucherType = params.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 if (this.voucherApiVersion !== 2) {
@@ -557,14 +567,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.resetVoucherForm(!params?.uniqueName, true);
 
                 /** Open account dropdown on create */
-                if (params?.uniqueName) {
-                    this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
-                } else {
-                    this.depositAccountName = "";
-                }
-
                 this.getVoucherType();
-
 
                 if (params?.accountUniqueName && !params?.uniqueName) {
                     this.searchAccount(params?.accountUniqueName, 1, true);
@@ -572,9 +575,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.searchAccount();
                 }
 
-                if (params?.accountUniqueName && queryParams?.entryUniqueNames) {
+                if (params?.accountUniqueName && this.queryParams?.entryUniqueNames) {
                     this.isPendingEntries = true;
-                    this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: queryParams?.entryUniqueNames.split(",") } });
+                    this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: this.queryParams?.entryUniqueNames.split(",") } });
                 } else {
                     this.isPendingEntries = false;
                 }
@@ -595,9 +598,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceForm.get('type').patchValue(this.voucherType);
 
                 if (params?.uniqueName) {
-                    this.isUpdateMode = true;
+                    if (params?.action === 'copy') {
+                        this.isCopyMode = true;
+                    } else {
+                        this.isUpdateMode = true;
+                        this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
+                    }
                     this.useDefaultAccountDetails = false;
                     this.getVoucherDetails(params);
+                    this.getUpdateVoucherText();
+                } else {
+                    this.depositAccountName = "";
                 }
 
                 if (params?.accountUniqueName === "cash") {
@@ -770,7 +781,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getVoucherType(response);
                     }
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
-                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName) ;
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
                     this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
                     this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber);
@@ -801,7 +812,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
-                    this.invoiceForm.get('number')?.patchValue(response.number);
+                    this.invoiceForm.get('number')?.patchValue(this.isCopyMode ? null : response.number);
                     this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
                     this.invoiceForm.get('passportNumber').patchValue(response?.passportNumber);
 
@@ -813,8 +824,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             value: response.referenceVoucher.uniqueName,
                             additional: {
                                 voucherType: response.referenceVoucher.voucherType,
-                                voucherNumber: response.referenceVoucher.number,
-                                voucherDate: response.referenceVoucher.date
+                                voucherNumber: this.isCopyMode ? null : response.referenceVoucher.number,
+                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) :response.referenceVoucher.date
                             }
                         });
                     }
@@ -1968,7 +1979,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && this.account?.baseCurrency !== accountData.currency) {
-            this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
+            this.componentStore.getBriefAccounts({ currency: accountData?.currency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
         }
 
         this.account.countryName = accountData.country?.countryName;
@@ -1982,7 +1993,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
-
+        
         let index = 0;
 
         if (this.useDefaultAccountDetails) {
@@ -2147,8 +2158,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getDepositFormGroup(): FormGroup {
         return this.formBuilder.group({
-            accountUniqueName: [''],
-            amountForAccount: [''],
+            accountUniqueName: [null],
+            amount: [''],
             currencySymbol: [''],
             type: ['DEBIT']
         });
@@ -2193,7 +2204,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
-            uniqueName: [entryData && copyUniqueName ? entryData?.uniqueName : ''],
+            uniqueName: [this.isCopyMode ? '' : (entryData && copyUniqueName ? entryData?.uniqueName : '')],
             showCodeType: [entryData && entryData?.hsnNumber ? 'hsn' : 'sac'], //temp
             hsnNumber: [entryData ? entryData?.hsnNumber : ''],
             sacNumber: [entryData ? entryData?.sacNumber : ''],
@@ -3467,35 +3478,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
         if (this.isPendingEntries) {
             this.saveVoucher(() => {
-                this.router.navigate(['/pages/invoice/preview/pending/sales']);
+                this.router.navigate(['/pages/vouchers/preview/sales/pending']);
             });
         } else {
             this.saveVoucher();
         }
     }
 
-    private redirectToGetAll(): void {
-        if (this.invoiceType.isPurchaseOrder) {
-            this.router.navigate(['/pages/purchase-management/purchase/order']);
-        } else {
-            if (this.invoiceType.isCashInvoice) {
-                if (this.invoiceType.isSalesInvoice) {
-                    this.router.navigate(['/pages/invoice/preview/sales']);
-                } else if (this.invoiceType.isDebitNote) {
-                    this.router.navigate(['/pages/invoice/preview/debit note']);
-                } else if (this.invoiceType.isCreditNote) {
-                    this.router.navigate(['/pages/invoice/preview/credit note']);
-                } else if (this.invoiceType.isPurchaseInvoice) {
-                    this.router.navigate(['/pages/purchase-management/purchase/bill']);
-                } else {
-                    this.router.navigate(['/pages/invoice/preview/sales']);
-                }
-            } else if (this.invoiceType.isPurchaseInvoice) {
-                this.router.navigate(['/pages/purchase-management/purchase/bill']);
-            } else {
-                this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
-            }
-        }
+    /**
+     * Redirect to Voucher Preview page
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private redirectToVoucherPreview(): void {
+        const queryParams = {
+            page: this.queryParams?.page ?? 1,
+            from: this.queryParams?.from ?? '',
+            to: this.queryParams?.to ?? ''
+        };
+        this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
 
     /**
@@ -3507,7 +3509,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.redirectUrl) {
             this.router.navigateByUrl(this.redirectUrl);
         } else {
-            this.redirectToGetAll();
+            this.redirectToVoucherPreview();
         }
     }
 
@@ -3617,8 +3619,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getDeposits(): any[] {
         const deposits = [];
         this.invoiceForm.get('deposits')['controls']?.forEach(control => {
-            if (!this.invoiceType.isCashInvoice && control.get("accountUniqueName").value && control.get("amountForAccount").value || this.invoiceType.isCashInvoice && control.get("accountUniqueName").value) {
-                deposits.push(control.value);
+            if (!this.invoiceType.isCashInvoice && control.get("accountUniqueName").value && control.get("amount").value) {
+                if (this.account.baseCurrencySymbol !== control.get("currencySymbol").value) {
+                    deposits.push({ amountForCompany: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
+                } else {
+                    deposits.push({ amountForAccount: control.get("amount").value, accountUniqueName: control.get("accountUniqueName").value });
+                }
+            } else if (this.invoiceType.isCashInvoice && control.get("accountUniqueName").value) {
+                deposits.push({ accountUniqueName: control.get("accountUniqueName").value });
             }
         });
         return deposits;
@@ -3650,6 +3658,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
+
+        if (invoiceForm.account.mobileNumber) {
+            invoiceForm.account.mobileNumber = this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber;
+        }
+
         if (!this.currentVoucherFormDetails?.depositAllowed) {
             delete invoiceForm.deposits;
         }
@@ -3770,7 +3783,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/purchase-management/purchase/order']);
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response.message);
@@ -3827,7 +3840,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
+                            this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/list']);
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
@@ -3909,7 +3922,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
             const deposits = this.invoiceForm.get('deposits') as FormArray;
-            let accountUniqueName = this.invoiceType.isCashInvoice ? (deposits.at(0).get('accountUniqueName')?.value ? deposits.at(0).get('accountUniqueName')?.value : 'cash') : invoiceForm.account?.uniqueName;
+            let accountUniqueName = this.invoiceType.isCashInvoice ? (deposits.at(0).get('accountUniqueName')?.value ?? invoiceForm.account?.uniqueName ?? 'cash') : invoiceForm.account?.uniqueName;
             invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
                 this.voucherService.updateVoucher(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -3919,7 +3932,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.redirectToGetAll();
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
@@ -4118,11 +4131,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * This will be use for send email after create voucher
      *
-     * @param {*} response
+     * @param {*} email
      * @memberof VoucherCreateComponent
      */
-    public sendEmail(response: any): void {
-        if (response) {
+    public sendEmail(email: any): void {
+        if (email) {
             if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
                 let req: ProformaGetRequest = new ProformaGetRequest();
 
@@ -4133,15 +4146,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     req.estimateNumber = this.voucherDetails?.number;
                 }
-                req.emailId = (response.email as string).split(',');
+                req.emailId = email;
                 this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
             } else {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.voucherDetails?.account?.uniqueName, payload: {
-                        email: { to: response.email.split(',') },
+                        email: { to: email.email },
                         voucherType: this.voucherDetails?.type,
-                        copyTypes: response.invoiceType ? response.invoiceType : [],
-                        uniqueName: response.uniqueName
+                        copyTypes: email.invoiceType ? email.invoiceType : [],
+                        uniqueName: email.uniqueName
                     }
                 });
             }
@@ -4227,7 +4240,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
      * @memberof VoucherCreateComponent
      */
-    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments?.forEach(adjustment => {
@@ -4331,8 +4344,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getTotalDepositAmount(): void {
         this.totalDepositAmount = 0;
         this.invoiceForm.get('deposits')['controls']?.forEach((control: any) => {
-            if (control.get("accountUniqueName").value && control.get('amountForAccount').value) {
-                this.totalDepositAmount += Number(control.get('amountForAccount').value);
+            if (control.get("accountUniqueName").value && control.get("amount").value) {
+                this.totalDepositAmount += Number(control.get("amount").value);
             }
         });
     }
@@ -4346,7 +4359,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getEmptyDepositAccountError(index: number): boolean {
         let deposits = this.invoiceForm?.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
-        if ((!currentDepositFormGroup.get("accountUniqueName").value) && currentDepositFormGroup.get("amountForAccount").value) {
+        if ((!currentDepositFormGroup.get("accountUniqueName").value) && currentDepositFormGroup.get("amount").value) {
             return true;
         }
         return false;

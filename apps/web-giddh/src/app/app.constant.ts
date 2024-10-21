@@ -658,3 +658,11 @@ export const ICICI_ALLOWED_COMPANIES = [
     'iciciiin16929619553650svnjv',
     'aaaain16192663354510ja2o4'
 ];
+
+/** Holds region Supported in www.giddh.com  */
+export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
+    'GB': 'uk',
+    'IN': 'in',
+    'AE': 'ae',
+    'GL': 'gl'
+};

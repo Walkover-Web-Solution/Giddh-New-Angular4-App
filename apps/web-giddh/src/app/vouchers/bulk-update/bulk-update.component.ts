@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
@@ -15,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 @Component({
     selector: 'app-bulk-update',
@@ -50,7 +51,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     /** Template Signatures Options */
     public templateSignaturesOptions: any[] = [];
     /** Holds Days Reference */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** True if voucher type is Purchase order */
     public isPOVoucher: boolean = false;
     /** This holds the fields which can be updated in bulk */
@@ -80,11 +81,11 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      *
      * @memberof BulkUpdateComponent
      */
-    public ngOnInit(): void {
+    public ngOnInit(): void {        
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
 
-        this.isPOVoucher = this.inputData?.voucherType === 'purchase-order';
+        this.isPOVoucher = this.inputData?.voucherType ===  VoucherTypeEnum.purchaseOrder;
         if (this.isPOVoucher) {
             this.bulkUpdateForm = this.formBuilder.group({
                 action: [''],
@@ -127,7 +128,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.slogan, value: 'slogan' },
             ];
 
-            if (this.inputData?.voucherType === "credit note" || this.inputData?.voucherType === "debit note") {
+            if ((this.inputData?.voucherType === VoucherTypeEnum.creditNote) || (this.inputData?.voucherType === VoucherTypeEnum.debitNote)) {
                 this.fieldOptions = this.fieldOptions?.filter(item => item?.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
             }
 
@@ -187,7 +188,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getCreatedTemplates(): void {
-        let voucherType = this.inputData?.voucherType === 'debit note' || this.inputData?.voucherType === 'credit note' ? 'voucher' : 'invoice';
+        let voucherType = (this.inputData?.voucherType === VoucherTypeEnum.creditNote) || (this.inputData?.voucherType === VoucherTypeEnum.debitNote) ? 'voucher' : 'invoice';
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.componentStore.getCreatedTemplates(voucherType);
@@ -364,9 +365,6 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                     this.bulkUpdateRequest({ dueDate: dueDate }, 'duedate');
                     break;
 
-                case 'shippingDetails':
-                    break;
-
                 case 'customFields':
                     this.bulkUpdateRequest({ customField1: this.bulkUpdateForm.get("customField1")?.value, customField2: this.bulkUpdateForm.get("customField2")?.value, customField3: this.bulkUpdateForm.get("customField3")?.value }, 'customfields');
                     break;
@@ -472,14 +470,13 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         let isValid = true;
         const form = this.bulkUpdateForm.value;
 
-        if (this.bulkUpdateForm.value.action) {
+        if (form.action) {
             if (form.action === BULK_UPDATE_FIELDS.purchasedate) {
                 if (!form.purchaseDate) {
                     isValid = false;
                     this.toasterService.showSnackBar('error', this.localeData?.po_date_error);
                 } else {
-                    let date = dayjs(form.purchaseDate).format(GIDDH_DATE_FORMAT);
-                    this.bulkUpdateForm.get('purchaseDate').patchValue(date);
+                    this.bulkUpdateForm.get('purchaseDate').patchValue(dayjs(form.purchaseDate).format(GIDDH_DATE_FORMAT));
                 }
             } else if (form.action === BULK_UPDATE_FIELDS.duedate) {
                 if (!form.dueDate) {

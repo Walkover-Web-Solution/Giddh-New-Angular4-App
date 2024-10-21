@@ -730,7 +730,7 @@
                                             *ngIf="currencySwitched">{{ company?.baseCurrency
                                             }}</ng-container><ng-container *ngIf="!currencySwitched">{{
                                             account?.baseCurrency }}</ng-container></span>
-                                    <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg"
+                                    <img alt="switch-icon" height="15px" src="{{ imgPath }}switch-icon.svg"
                                         class="cursor-pointer" (click)="switchCurrency()" />
                                     <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value |
                                         giddhCurrency }} <ng-container *ngIf="currencySwitched">{{ account?.baseCurrency
@@ -1459,12 +1459,12 @@
                                                                                 </div>
                                                                                 <div class="col" *ngIf="!invoiceType.isCashInvoice">
                                                                                     <input-field
-                                                                                        [name]="'amountForAccount_'+ depositIndex"
+                                                                                        [name]="'amount_'+ depositIndex"
                                                                                         [label]="commonLocaleData?.app_amount"
                                                                                         [placeholder]="localeData?.enter_deposit_amount"
                                                                                         [type]="'number'"
                                                                                         (input)="$event && calculateBalanceDue()"
-                                                                                        formControlName="amountForAccount"
+                                                                                        formControlName="amount"
                                                                                     >
                                                                                     </input-field>
                                                                                 </div>
@@ -1816,6 +1816,7 @@
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice && !isPendingEntries" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_sales_update_account }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isEstimateInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isProformaInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="(invoiceType.isPaymentInvoice || invoiceType.isReceiptInvoice) && !isProdMode" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice && !isPendingEntries" (click)="generateVoucher()">{{ localeData?.generate_sales }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="isPendingEntries && !invoiceType.isCashInvoice" (click)="generateVoucher()">{{ localeData?.generate_invoice }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" (click)="generateVoucher()">{{ localeData?.generate_cash }}</button>
@@ -1898,7 +1899,7 @@
 <ng-template #adjustmentModal>
     <voucher-adjustments [account]="account" [voucherDetails]="invoiceForm?.value" [voucherTotals]="voucherTotals"
         [adjustedVoucherType]="voucherType" [isUpdateMode]="isUpdateMode"
-        [depositAmount]="invoiceForm.get('deposit.amountForAccount')?.value"
+        [depositAmount]="totalDepositAmount"
         [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
         (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)"
         [voucherForAdjustment]="vouchersForAdjustment">

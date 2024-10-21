@@ -5,8 +5,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { digitsOnly } from '../../../helpers';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -31,14 +30,13 @@ export class BulkAddDialogComponent implements OnInit {
     public company: any = {
         branch: null,
     };
-    public bulkAddAccountForm: UntypedFormGroup;
+    public bulkAddAccountForm: FormGroup;
 
     constructor(
         private store: Store<AppState>,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
-        private _fb: UntypedFormBuilder,
         private accountsAction: AccountsAction,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
@@ -59,10 +57,10 @@ export class BulkAddDialogComponent implements OnInit {
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
                 formArray?.clear();
                 this.branches.forEach((item) => {
-                    if (item?.alias) {
+                    if (item?.name) {
                         formArray?.push(this.openingBulkGet(
                             {
-                                name: item.alias,
+                                name: item.name,
                                 uniqueName: item.uniqueName
                             }
                         ));
@@ -112,10 +110,10 @@ export class BulkAddDialogComponent implements OnInit {
      * @memberof BulkAddDialogComponent
      */
     public initNewForm(): void {
-        this.bulkAddAccountForm = this._fb.group({
+        this.bulkAddAccountForm = this.formBuilder.group({
             openingBalanceType: ['CREDIT'],
             openingBalance: [''],
-            customFields: this._fb.array([])
+            customFields: this.formBuilder.array([])
         });
 
         this.bulkAddAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {

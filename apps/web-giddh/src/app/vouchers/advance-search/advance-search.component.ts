@@ -23,6 +23,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment';
     /** Holds Advance Filter Values */
     @Input() public advanceFilters: any;
+    /** Holds true if  EInvoice is enabled */
+    @Input() public isEInvoiceEnabled: boolean;
     /** Emits Apply Filter Event */
     @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
     /** Emits Close Dailog Event */
@@ -233,6 +235,34 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Update search form value based on total range changed value
+     *
+     * @param {IOption} item
+     * @memberof AdvanceSearchComponent
+     */
+    public estimateProformaAmountRangeChanged(item: IOption): void {
+        this.searchForm.get('amountGreaterThan')?.patchValue(false);
+        this.searchForm.get('amountLessThan')?.patchValue(false);
+        this.searchForm.get('amountExclude')?.patchValue(false);
+        this.searchForm.get('amountEquals')?.patchValue(false);
+
+        switch (item?.value) {
+            case 'greaterThan':
+                this.searchForm.get('amountGreaterThan')?.patchValue(true);
+                break;
+            case 'lessThan':
+                this.searchForm.get('amountLessThan')?.patchValue(true);
+                break;
+            case 'exclude':
+                this.searchForm.get('amountExclude')?.patchValue(true);
+                break;
+            case 'equals':
+                this.searchForm.get('amountEquals')?.patchValue(true);
+                break;
+        }
+    }
+
+    /**
      * Update search form value based on due total range changed value
      *
      * @param {IOption} item
@@ -349,6 +379,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                     } else {
                         this.searchForm.get(controlName)?.patchValue(null);
                     }
+                    clearDateFields(['expireFrom', 'expireTo', 'dueFrom', 'dueTo']);
                     break;
 
                 case 'proforma':
@@ -358,6 +389,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                     } else {
                         this.searchForm.get(controlName)?.patchValue(null);
                     }
+                    clearDateFields(['voucherDate', 'dueDate', 'dueFrom', 'dueTo']);
                     break;
 
                 case 'purchase-order':
@@ -367,6 +399,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                     } else {
                         this.searchForm.get(controlName)?.patchValue(null);
                     }
+                    clearDateFields(['voucherDate', 'dueDate', 'expireFrom', 'expireTo']);
                     break;
 
                 default:

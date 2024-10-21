@@ -237,7 +237,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
-    public isForeignCurrecny: boolean = false;
+    public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
     public tempSaveBulkData: any[] = [];
     /** Account Opening Balance list */
@@ -926,18 +926,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
-        let branchModeOpeningBalance = [
-            {
-                branch: {
-                    name: this.company?.branch?.name,
-                    uniqueName: this.company?.branch?.uniqueName
-                },
-                openingBalance: this.addAccountForm.get('openingBalance')?.value,
-                foreignOpeningBalance: this.addAccountForm.get('foreignOpeningBalance')?.value,
-                openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
-            }
-        ];
-        accountRequest.accountOpeningBalance = this.company?.isActive ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
+
+        const accountOpeningBalanceValue = this.addAccountForm.get('accountOpeningBalance')?.value;
+        accountRequest.accountOpeningBalance = this.mergeOpeningBalanceData(accountOpeningBalanceValue);
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -1018,6 +1009,33 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
+    }
+
+    /**
+     * This will check the account opening balance data and merge it with both previous and updated data."
+     *
+     * @param {*} accountOpeningBalanceValue
+     * @return {*}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public mergeOpeningBalanceData(accountOpeningBalanceValue: any): any {
+        const updatedOpeningBalance = [...this.accountOpeningBalance];
+
+        accountOpeningBalanceValue?.forEach(updatedItem => {
+            const existingIndex = updatedOpeningBalance.findIndex(item => item.branch.uniqueName === updatedItem.branch.uniqueName);
+
+            if (existingIndex > -1) {
+                updatedOpeningBalance[existingIndex] = { ...updatedOpeningBalance[existingIndex], ...updatedItem };
+            } else {
+                updatedOpeningBalance.push(updatedItem);
+            }
+        });
+
+        if (!accountOpeningBalanceValue.length) {
+            return this.accountOpeningBalance;
+        }
+
+        return updatedOpeningBalance;
     }
 
     /**
@@ -2262,9 +2280,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
       * @memberof AccountUpdateNewDetailsComponent
       */
     public openBulkAddDialog(): void {
-        this.isForeignCurrecny = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
+        this.isForeignCurrency = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
         let data = {
-            foreignCurrency: this.isForeignCurrecny,
+            foreignCurrency: this.isForeignCurrency,
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {

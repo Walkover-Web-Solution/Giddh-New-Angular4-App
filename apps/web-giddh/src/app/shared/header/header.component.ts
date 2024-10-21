@@ -256,6 +256,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -601,7 +603,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         // region subscribe to last state for showing title of page this.selectedPage
-        this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
+        this.store.pipe(select(s => s.session.lastState), takeUntil(this.destroyed$)).subscribe(s => {
             this.isLedgerAccSelected = false;
             const lastState = s?.toLowerCase();
 
@@ -1182,11 +1184,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp?.alias) {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
-            } else {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(ev?.toLowerCase());
-            }
+            return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
         });
     }
 
@@ -1203,11 +1201,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         if (branchName) {
             this.currentCompanyBranches = branches?.filter(branch => {
-                if (!branch?.alias) {
-                    return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
-                } else {
-                    return branch?.alias.toLowerCase().includes(branchName?.toLowerCase());
-                }
+                return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
             });
         } else {
             this.currentCompanyBranches = branches;
@@ -1494,7 +1488,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
-                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page") || (document.getElementsByClassName("static-tabs-on-page") && document.getElementsByClassName("static-tabs-on-page").length === 0))) {
+                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page")?.length)) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');

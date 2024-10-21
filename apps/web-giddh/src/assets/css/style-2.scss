@@ -8,6 +8,7 @@
 $custom-typography: mat-typography-config($font-family: var(--font-regular),
     );
 @include angular-material-typography($custom-typography);
+@import "../css/global/utility.scss";
 @import "../css/ngx-bs-datepicker.scss";
 @import "../css/global/add-company.scss";
 @import "../css/global/aside-modal.scss";
@@ -44,6 +45,8 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/tax-authority.scss";
 @import "../css/global/adjustment-inventory.scss";
 @import "../css/global/d3-tree-chart.scss";
+@import "../css/global/vouchers-preview.scss";
+@import "../css/global/custom-paginator.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -155,6 +158,7 @@ textarea {
 
 .mobile-number-wrapper {
     z-index: 9;
+
     input.error {
         border: 1px solid var(--color-danger);
     }
@@ -1086,11 +1090,6 @@ textarea {
         margin-left: 20px !important;
     }
 }
-.institutions-dialog-body {
-    .mdc-list-item__primary-text {
-        color: var(--color-common-primary-text) !important;
-    }
-}
 
 .create-branch-page {
     .mat-select-search-branch {
@@ -1140,6 +1139,19 @@ textarea {
         .mat-select-search-clear {
             margin-right: 0 !important;
         }
+    }
+}
+
+.text-limit {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.institutions-dialog-body {
+    .mdc-list-item__primary-text {
+        color: var(--color-common-primary-text) !important;
     }
 }
 
@@ -1341,7 +1353,7 @@ aside-create-group {
                     }
                 }
 
-            // Units are not displaying after creation once the scroll comes on the page
+                // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
                         .cdk-virtual-scroll-viewport {
@@ -3851,6 +3863,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .cursor-pointer {
     cursor: pointer !important;
+}
+
+.pointer-event-none {
+    pointer-events: none !important;
 }
 
 .cursor-default {
@@ -13456,20 +13472,6 @@ voucher-component {
     color: var(--color-black);
 }
 
-.readonly-field {
-    .dropdown-bg {
-        display: none !important;
-    }
-
-    .mat-mdc-form-field {
-        background-color: var(--color-primary-input-bar-background) !important;
-    }
-
-    .dropdown-bg {
-        background-color: transparent !important;
-    }
-}
-
 .new-branch-transfer-page {
     .cdk-overlay-container {
         z-index: 99999 !important;
@@ -13678,7 +13680,8 @@ aside-menu-product-service {
         .mat-list-wrap {
             .mat-mdc-list {
                 .mat-mdc-list-item {
-                    height: 60px;
+                    height: auto;
+                    min-height: 60px;
                 }
             }
         }

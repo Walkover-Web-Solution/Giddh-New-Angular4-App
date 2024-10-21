@@ -8,7 +8,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
 import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -87,6 +87,7 @@ export class GeneralService {
 
     constructor(
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) { }
 
@@ -97,7 +98,7 @@ export class GeneralService {
     public createQueryString(url: string, params: any) {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
-                const delimiter = url.indexOf('?') === -1 ? '?' : '&';
+                const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
                 url += `${delimiter}${key}=${params[key]}`
             }
         });
@@ -611,6 +612,23 @@ export class GeneralService {
     }
 
     /**
+     *Get cookie value
+     *
+     * @param {*} name
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public getCookieValue(name: any): any {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            const cookieValue = parts.pop().split(';').shift();
+            return cookieValue.toUpperCase();
+        }
+        return null;
+    }
+
+    /**
      * Handles the voucher date change modal configuration
      *
      * @param {boolean} isVoucherDateSelected
@@ -683,16 +701,17 @@ export class GeneralService {
     public fileReturnConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes,
+            text: localeData?.submit_file_return,
             color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no
+            text: commonLocaleData?.app_cancel
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
+        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -700,7 +719,8 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons
+            buttons,
+            actionBtnWrapperCssClass
         };
     }
 
@@ -1076,8 +1096,8 @@ export class GeneralService {
 
 
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (this.voucherApiVersion === 2 && item.exchangeRate !== undefined) {
-                grandTotalConversionRate = item.exchangeRate;
+            if (this.voucherApiVersion === 2) {
+                grandTotalConversionRate = item.exchangeRate ?? 1;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
@@ -1706,7 +1726,7 @@ export class GeneralService {
     * @returns {boolean}
     * @memberof GeneralService
     */
-    public checkCompanySupportGocardless(countryCode: string): boolean {
+    public checkCompanySupportGoCardless(countryCode: string): boolean {
         const gocardlessSupportedCountryCodeList = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
         return gocardlessSupportedCountryCodeList.includes(countryCode);
     }
@@ -2114,6 +2134,24 @@ export class GeneralService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Update current page query params
+     *
+     * @param {Params} queryParams
+     * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @memberof GeneralService
+     */
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling: queryParamsHandling
+            }
+        );
     }
 }
 

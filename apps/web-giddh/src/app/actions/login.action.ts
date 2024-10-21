@@ -31,6 +31,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ROUTES } from '../routes-array';
 import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
 import { LocaleService } from '../services/locale.service';
+import { COUNTRY_REGION_MAP } from '../app.constant';
 
 @Injectable()
 export class LoginActions {
@@ -341,8 +342,10 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
+                const countryRegion = localStorage.getItem('Country-Region');
+                const region = COUNTRY_REGION_MAP[countryRegion] || null;
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://test.giddh.com/login/';
+                    window.location.href = region === "gl" ? "https://giddh.com/login" : `https://giddh.com/${region}/login`;
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();

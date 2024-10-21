@@ -51,6 +51,7 @@ export class EstimateSettings {
     duePeriod: number;
     autoMail: boolean;
     enableEstimate: boolean;
+    autoWhatsApp: boolean;
 }
 
 export class ProformaSettings {
@@ -70,6 +71,7 @@ export class ProformaSettings {
     autoChangeStatusOnExp?: any;
     sendSms: boolean;
     enableProforma: boolean;
+    poAutoWhatsApp: boolean;
 }
 
 export class InvoiceSettings {
@@ -83,7 +85,9 @@ export class InvoiceSettings {
         this.salesRoundOff = false;
         this.purchaseRoundOff = false;
         this.debitNoteRoundOff = false;
-        this.creditNoteRoundOff = false;
+        this.creditNoteRoundOff = false;     
+        this.autoWhatsAppInvoice = true;
+        this.autoWhatsAppCreditNote = true;
     }
     duePeriod?: any;
     autoMail: boolean;
@@ -131,4 +135,9 @@ export class InvoiceSettings {
     purchaseRoundOff: boolean;
     debitNoteRoundOff: boolean;
     creditNoteRoundOff: boolean;
+    autoWhatsAppInvoice: boolean;
+    autoWhatsAppCreditNote: boolean;
+    autoWhatsAppReceipt: boolean;
+    autoWhatsAppDebitNote: boolean;
+    autoWhatsAppPayment: boolean;
 }

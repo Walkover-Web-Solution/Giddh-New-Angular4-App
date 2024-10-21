@@ -61,7 +61,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
@@ -119,7 +119,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public closeAsidePaneIfMobile(event?: any): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
-        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/invoice/preview/settings/sales")) {
+        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/invoice/preview/settings/sales") && !this.router.url.includes("/pages/vouchers/preview/sales/settings")) {
             this.closeAsideEvent.emit(event);
         }
     }
@@ -176,6 +176,23 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             this.showSettingHeading = true;
         } else {
             this.showSettingHeading = false;
+        }
+    }
+
+    /**
+     * This will add/remove class tag menu
+     *
+     * @param {boolean} menuStatus
+     * @memberof AsideSettingComponent
+     */
+    public toggleTagMenu(menuStatus: boolean): void {
+        this.isTagMenuOpened = menuStatus;
+        if (menuStatus) {
+            document.querySelector("body")?.classList?.add("tags-menu-open");
+        } else {
+            setTimeout(() => {
+                document.querySelector("body")?.classList?.remove("tags-menu-open");
+            }, 500);
         }
     }
 }

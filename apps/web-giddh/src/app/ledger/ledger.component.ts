@@ -253,7 +253,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         itemsPerPage: 0,
         page: 0,
         totalPages: 0,
-        showPagination: false
+        showPagination: false,
+        prevToken: null,
+        nextToken: null
     };
     /** Holds restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
@@ -450,8 +452,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public pageChanged(event: any): void {
-        this.trxRequest.page = event.page;
-
+        this.trxRequest.paginationToken = event;
         if (this.isAdvanceSearchImplemented) {
             this.advanceSearchRequest.page = event.page;
             this.getAdvanceSearchTxn();
@@ -513,13 +514,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.currentCompanyBranches$.subscribe(response => {
                 if (response && response.length) {
                     this.currentCompanyBranches = response.map(branch => ({
-                        label: branch?.alias,
+                        label: branch?.name,
                         value: branch?.uniqueName,
                         name: branch?.name,
                         parentBranch: branch?.parentBranch
                     }));
                     this.currentCompanyBranches.unshift({
-                        label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        label: this.activeCompany ? this.activeCompany.name : '',
                         name: this.activeCompany ? this.activeCompany.name : '',
                         value: this.activeCompany ? this.activeCompany.uniqueName : '',
                         isCompany: true
@@ -536,7 +537,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {
                                 name: this.activeCompany ? this.activeCompany.name : '',
-                                alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                                alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                                 uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                             };
                         }
@@ -642,6 +643,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
                 this.searchText = '';
+                this.trxRequest.paginationToken = '';
                 this.resetBlankTransaction();
 
                 this.isCompanyCreated$.pipe(take(1)).subscribe(s => {
@@ -731,7 +733,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         itemsPerPage: lt.count,
                         page: lt.page,
                         totalPages: lt.totalPages,
-                        showPagination: (lt.totalPages > 1) ? true : false
+                        showPagination: (lt.totalPages > 1) ? true : false,
+                        prevToken: lt.prevToken,
+                        nextToken: lt.nextToken
                     };
 
                     if (!this.cdRf['destroyed']) {

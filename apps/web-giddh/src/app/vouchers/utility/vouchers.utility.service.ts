@@ -309,62 +309,65 @@ export class VouchersUtilityService {
     }
 
     public cleanVoucherObject(invoiceForm: any): any {
-
-        invoiceForm.deposits.forEach((response) => {
-            delete response.currencySymbol;
-            delete response.type;
-        });
-
-        delete invoiceForm.account.billingDetails.index;
-        delete invoiceForm.account.shippingDetails.index;
-        delete invoiceForm.company.billingDetails.index;
-        delete invoiceForm.company.shippingDetails.index;
-        delete invoiceForm.grandTotalMultiCurrency;
-        delete invoiceForm.chequeNumber;
-        delete invoiceForm.chequeClearanceDate;
-        delete invoiceForm.isAdvanceReceipt;
-        delete invoiceForm.salesPurchaseAsReceiptPayment;
-
-        invoiceForm?.entries?.forEach(entry => {
-            delete entry.showCodeType;
-            delete entry.totalDiscount;
-            delete entry.totalTax;
-            delete entry.totalTaxWithoutCess;
-            delete entry.totalCess;
-            delete entry.total;
-            delete entry.requiredTax;
-            delete entry.calculateTotal;
-
-            entry.taxes?.forEach(tax => {
-                delete tax.taxType;
-                delete tax.taxDetail;
+        if (invoiceForm) {
+            invoiceForm.deposits?.forEach((response) => {
+                delete response.currencySymbol;
+                delete response.type;
             });
 
-            if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
-                if (!entry.taxes) {
-                    entry.taxes = [];
+            delete invoiceForm.account.billingDetails.index;
+            delete invoiceForm.account.shippingDetails.index;
+            delete invoiceForm.company.billingDetails.index;
+            delete invoiceForm.company.shippingDetails.index;
+            delete invoiceForm.grandTotalMultiCurrency;
+            delete invoiceForm.chequeNumber;
+            delete invoiceForm.chequeClearanceDate;
+            delete invoiceForm.isAdvanceReceipt;
+            delete invoiceForm.salesPurchaseAsReceiptPayment;
+
+            invoiceForm.entries?.forEach(entry => {
+                delete entry.showCodeType;
+                delete entry.totalDiscount;
+                delete entry.totalTax;
+                delete entry.totalTaxWithoutCess;
+                delete entry.totalCess;
+                delete entry.total;
+                delete entry.requiredTax;
+                delete entry.calculateTotal;
+
+                entry.taxes?.forEach(tax => {
+                    delete tax.taxType;
+                    delete tax.taxDetail;
+                });
+
+                if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
+                    if (!entry.taxes) {
+                        entry.taxes = [];
+                    }
+
+                    entry.taxes.push({
+                        uniqueName: entry.otherTax?.uniqueName,
+                        calculationMethod: entry.otherTax?.calculationMethod
+                    });
                 }
 
-                entry.taxes.push({
-                    uniqueName: entry.otherTax?.uniqueName,
-                    calculationMethod: entry.otherTax?.calculationMethod
-                });
-            }
+                if (!entry.transactions[0]?.stock?.uniqueName) {
+                    delete entry.transactions[0].stock;
+                }
 
-            if (!entry.transactions[0]?.stock?.uniqueName) {
-                delete entry.transactions[0].stock;
-            }
+                if (entry.transactions[0].stock) {
+                    delete entry.transactions[0].stock.maxQuantity;
+                }
 
-            if (entry.transactions[0].stock) {
-                delete entry.transactions[0].stock.maxQuantity;
-            }
+                delete entry.otherTax;
+            });
 
-            delete entry.otherTax;
-        });
+            invoiceForm = cleaner?.clean(invoiceForm, {
+                nullCleaner: true
+            });
 
-        invoiceForm = this.cleanObject(invoiceForm);
-
-        return invoiceForm;
+            return invoiceForm;
+        }
     }
 
     /**
@@ -523,12 +526,12 @@ export class VouchersUtilityService {
      */
     public getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean, localeData: any): string {
         switch (type) {
-            case 'sales': return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
-            case 'purchase': return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
-            case 'credit note': return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
-            case 'debit note': return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
-            case 'receipt': return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
-            case 'payment': return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
+            case VoucherTypeEnum.sales: return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
+            case VoucherTypeEnum.purchase: return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
+            case VoucherTypeEnum.creditNote: return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
+            case VoucherTypeEnum.debitNote: return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
+            case VoucherTypeEnum.receipt: return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
+            case VoucherTypeEnum.payment: return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
         }
     }
 

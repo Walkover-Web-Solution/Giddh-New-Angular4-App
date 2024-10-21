@@ -13,7 +13,7 @@
             mat-stroked-button
             color="primary"
             [routerLink]="['/pages/user-details/subscription/buy-plan/' + subscriptionId]"
-            *ngIf="activeTabIndex === 3 && selectedCompany?.planVersion === 1 && !isSubscriptionLoading"
+            *ngIf="activeTabIndex === 3 && profileData?.planVersion === 1 && !isSubscriptionLoading"
         >
             {{ commonLocaleData?.app_buy_new_plan }}
         </button>
@@ -359,7 +359,7 @@
             <mat-tab [label]="localeData?.subscription?.tab_heading">
                 <ng-container
                     class="wrap-tab-content-pd-15"
-                    *ngIf=" selectedCompany?.planVersion === 1"
+                    *ngIf=" profileData?.planVersion === 1"
                 >
                     <subscription-v1
                         [localeData]="localeData"
@@ -368,7 +368,7 @@
                         (subscriptionId)="subscriptionId = $event"
                     ></subscription-v1>
                 </ng-container>
-                <ng-container *ngIf="selectedCompany?.planVersion === 2">
+                <ng-container *ngIf="profileData?.planVersion === 2">
                     <subscription-list></subscription-list>
                 </ng-container>
             </mat-tab>
