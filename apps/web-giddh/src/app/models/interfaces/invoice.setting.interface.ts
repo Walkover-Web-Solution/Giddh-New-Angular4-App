@@ -71,7 +71,7 @@ export class ProformaSettings {
     autoChangeStatusOnExp?: any;
     sendSms: boolean;
     enableProforma: boolean;
-    poAutoWhatsApp: boolean;
+    autoWhatsApp: boolean;
 }
 
 export class InvoiceSettings {
