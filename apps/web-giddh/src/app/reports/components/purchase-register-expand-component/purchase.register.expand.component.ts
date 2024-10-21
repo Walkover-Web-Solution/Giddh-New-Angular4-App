@@ -97,7 +97,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Purchase Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    
+
     constructor(
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -280,12 +280,14 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             {
                 "value": "app_unit",
                 "label": "Unit",
-                "checked": true
+                "checked": true,
+                "isCommonLocaleData": true
             },
             {
                 "value": "app_rate",
                 "label": "Rate",
                 "checked": true,
+                "isCommonLocaleData": true
             },
             {
                 "value": "discount",
@@ -459,7 +461,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.customiseColumns = this.customiseColumns?.map((column) => {
-                column.label = this.localeData[column.value];
+                if (column.isCommonLocaleData) {
+                    column.label = this.commonLocaleData[column.value];
+                } else {
+                    column.label = this.localeData[column.value];
+                }
                 return column;
             });
             this.monthNames = [

@@ -161,9 +161,9 @@
                                     [label]="commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select_region"
                                     [options]="countyList"
-                                    [showError]="isFormSubmitted && !changeBillingForm.get('county')?.value"
-                                    [defaultValue]="changeBillingForm.get('county')?.value?.label"
-                                    (selectedOption)="changeBillingForm.get('county')?.patchValue($event)"
+                                    [showError]="isFormSubmitted && !changeBillingForm.get('state')?.value"
+                                    [defaultValue]="selectedState"
+                                    (selectedOption)="changeBillingForm.get('state')?.patchValue($event)"
                                 >
                                 </dropdown-field>
                             </div>
