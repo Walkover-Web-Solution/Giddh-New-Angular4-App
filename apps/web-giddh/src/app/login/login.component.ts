@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL, OTP_WIDGET_ID, OTP_WIDGET_TOKEN } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -439,7 +439,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         let configuration = {
             widgetId: OTP_WIDGET_ID,
-            tokenAuth: OTP_TOKEN_AUTH,
+            tokenAuth: OTP_WIDGET_TOKEN,
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateLogin(data);
