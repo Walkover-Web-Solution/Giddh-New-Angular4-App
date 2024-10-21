@@ -97,7 +97,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Purchase Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    
+
     constructor(
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -278,14 +278,14 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true,
             },
             {
-                "value": "app_rate",
-                "label": "Rate",
+                "value": "app_unit",
+                "label": "Unit",
                 "checked": true,
                 "isCommonLocaleData": true
             },
             {
-                "value": "app_unit",
-                "label": "Unit",
+                "value": "app_rate",
+                "label": "Rate",
                 "checked": true,
                 "isCommonLocaleData": true
             },

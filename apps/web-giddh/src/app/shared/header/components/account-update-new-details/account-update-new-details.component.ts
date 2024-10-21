@@ -1034,7 +1034,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (!accountOpeningBalanceValue.length) {
             return this.accountOpeningBalance;
         }
-
         return updatedOpeningBalance;
     }
 
