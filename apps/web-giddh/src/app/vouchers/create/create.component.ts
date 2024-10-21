@@ -2028,8 +2028,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"].get("customerName")?.patchValue(accountData?.name);
             this.invoiceForm.controls["account"].get("attentionTo").setValue(accountData?.attentionTo);
             this.invoiceForm.controls["account"].get("email").setValue(accountData?.email);
-            this.invoiceForm.controls["account"].get("mobileNumber").setValue(accountData?.mobileNo);
-            this.account.mobileNumber = accountData?.mobileNo;
+            this.invoiceForm.controls["account"].get("mobileNumber").setValue(accountData?.mobileNo ?? '');
+            this.account.mobileNumber = accountData?.mobileNo ?? '';
         } else {
             if (!this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !this.invoiceType.isCashInvoice) {
                 const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(accountData.addresses, this.invoiceForm.controls["account"].get("billingDetails")?.value);
