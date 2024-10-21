@@ -2094,7 +2094,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqueName: ['', Validators.required],
                 attentionTo: [''],
                 mobileNumber: [''],
-                callingCode: [''],
                 email: ['', Validators.email],
                 billingDetails: this.getAddressFormGroup(),
                 shippingDetails: this.getAddressFormGroup()
