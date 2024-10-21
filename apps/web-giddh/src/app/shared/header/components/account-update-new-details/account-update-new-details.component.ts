@@ -926,30 +926,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
-        let branchModeOpeningBalance = [
-            {
-                branch: {
-                    name: this.company?.branch?.name,
-                    uniqueName: this.company?.branch?.uniqueName
-                },
-                openingBalance: this.addAccountForm.get('openingBalance')?.value,
-                foreignOpeningBalance: this.addAccountForm.get('foreignOpeningBalance')?.value,
-                openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
-            }
-        ];
 
         const accountOpeningBalanceValue = this.addAccountForm.get('accountOpeningBalance')?.value;
-        const isAccountOpeningBalanceValid = accountOpeningBalanceValue?.some((balance: any) => {
-            return balance.branch || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
-        });
-        const isBranchModeOpeningBalanceValid = branchModeOpeningBalance.some((balance: any) => {
-            return balance.branch?.name || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
-        });
-
-        accountRequest.accountOpeningBalance = this.company.isActive
-            ? (isAccountOpeningBalanceValid ? accountOpeningBalanceValue : [])
-            : (isBranchModeOpeningBalanceValid ? branchModeOpeningBalance : []);
-
+        accountRequest.accountOpeningBalance = this.mergeOpeningBalanceData(accountOpeningBalanceValue);
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -1030,6 +1009,33 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
+    }
+
+    /**
+     * This will check the account opening balance data and merge it with both previous and updated data."
+     *
+     * @param {*} accountOpeningBalanceValue
+     * @return {*}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public mergeOpeningBalanceData(accountOpeningBalanceValue: any): any {
+        const updatedOpeningBalance = [...this.accountOpeningBalance];
+
+        accountOpeningBalanceValue?.forEach(updatedItem => {
+            const existingIndex = updatedOpeningBalance.findIndex(item => item.branch.uniqueName === updatedItem.branch.uniqueName);
+
+            if (existingIndex > -1) {
+                updatedOpeningBalance[existingIndex] = { ...updatedOpeningBalance[existingIndex], ...updatedItem };
+            } else {
+                updatedOpeningBalance.push(updatedItem);
+            }
+        });
+
+        if (!accountOpeningBalanceValue.length) {
+            return this.accountOpeningBalance;
+        }
+
+        return updatedOpeningBalance;
     }
 
     /**
