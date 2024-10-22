@@ -144,7 +144,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.selectedGstNumber = params.selectedGst;
             if ((params?.entityType === 'registered-notes') || (params?.entityType === 'unregistered-notes')) {
-                this.filterParam.entityType = null;
+                this.filterParam.entityType = '';
                 this.filterParam.type = params.entityType;
             } else {
                 this.filterParam.entityType = this.selectedGst === GstReport.Gstr2 ? params.entityType : '';
