@@ -24,7 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /* This will hold the invoice settings */
-    public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, poAutoWhatsApp: false, changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, generateAutoPurchaseNumber: false } };
+    public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, poAutoWhatsApp: false,autoWhatsApp: false,  changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, generateAutoPurchaseNumber: false } };
     /* This will hold the PB lock date */
     public lockDate: Date = new Date();
     /* This will hold if email updated */
