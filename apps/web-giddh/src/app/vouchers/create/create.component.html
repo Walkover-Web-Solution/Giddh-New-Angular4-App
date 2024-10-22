@@ -363,9 +363,6 @@
                                                     <input type="tel"
                                                         class="mat-form-field-border mat-form-field-height" #initContact
                                                         aria-autocomplete="none" autocomplete="off"
-                                                        (blur)="
-                                                        invoiceForm.controls['account'].get('mobileNumber').patchValue((intlClass?.phoneNumber?.replace('+', '')));
-                                                        "
                                                         (keypress)="intlClass?.onlyPhoneNumber($event); validateMobileField()"
                                                         id="init-contact"
                                                         [placeholder]="commonLocaleData?.app_mobile_number"
