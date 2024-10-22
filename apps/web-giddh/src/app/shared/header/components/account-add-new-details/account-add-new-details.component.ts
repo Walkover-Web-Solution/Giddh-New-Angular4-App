@@ -204,6 +204,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public company: any = {
         branch: null,
     };
+    /** True if update data on temp bulk data  */
+    public isBulkDataUpdated: boolean = false;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -818,11 +820,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         ];
 
         const accountOpeningBalanceValue = this.addAccountForm.get('accountOpeningBalance')?.value;
-
         const isAccountOpeningBalanceValid = accountOpeningBalanceValue?.some((balance: any) => {
             return balance.branch || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
         });
-
         const isBranchModeOpeningBalanceValid = branchModeOpeningBalance.some((balance: any) => {
             return balance.branch?.name || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
         });
@@ -830,7 +830,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         accountRequest.accountOpeningBalance = this.company.isActive
             ? (isAccountOpeningBalanceValid ? accountOpeningBalanceValue : [])
             : (isBranchModeOpeningBalanceValid ? branchModeOpeningBalance : []);
-
+        if (this.company.isActive) {
+            accountRequest.accountOpeningBalance = this.isBulkDataUpdated ? this.tempSaveBulkData : [];
+            accountRequest.accountOpeningBalance = accountRequest.accountOpeningBalance?.filter((res: any) => res?.branch?.uniqueName);
+        }
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -1752,6 +1755,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
+                this.isBulkDataUpdated = true;
             }
         });
     }
