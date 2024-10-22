@@ -1,25 +1,32 @@
 .setting-items {
-padding: 5px 0 0;
-mat-list {
+    padding: 5px 0 0;
+
+    mat-list {
         padding: 0;
         list-style: none;
         font-size: var(--font-size-15);
         font-family: var(--font-semibold);
+
         mat-list-item {
             padding: 10px 20px;
             height: auto !important;
             margin-bottom: 0px;
+
             a {
                 cursor: pointer;
+
                 img {
                     margin-right: 12px;
                 }
+
                 span {
                     color: var(--color-sidebar-primary-anchor-text);
+
                     i {
                         margin-right: 10px;
                         font-size: 22px;
                     }
+
                     &:first-child {
                         line-height: 1.6;
                         height: 20px;
@@ -29,6 +36,7 @@ mat-list {
                         width: 28px;
                         float: left;
                     }
+
                     &:last-child {
                         float: left;
                         width: 80%;
@@ -36,30 +44,38 @@ mat-list {
                     }
                 }
             }
+
             &:hover {
                 background-color: var(--color-giddh-common-background);
+
                 a {
                     span {
                         color: var(--color-primary-right-sidebar-list-text-hover) !important;
+
                         i {
                             color: var(--color-primary-right-sidebar-list-text-hover) !important;
                         }
                     }
+
                     span {
                         color: var(--color-primary-right-sidebar-list-text-hover) !important;
                     }
                 }
             }
         }
+
         .active-link {
             background-color: var(--color-sidebar-anchor-text-hover);
+
             a {
                 span {
                     color: var(--color-primary-right-sidebar-list-text-hover) !important;
+
                     i {
                         color: var(--color-primary-right-sidebar-list-text-hover) !important;
                     }
                 }
+
                 span {
                     color: var(--color-primary-right-sidebar-list-text-hover) !important;
                 }
@@ -68,25 +84,28 @@ mat-list {
     }
 }
 
+
 body {
-    &.aside-setting {
+    &.tags-menu-open {
         .cdk-overlay-pane {
-            &:has(.tags-menu-contianer) {
-                top: var(--header-height) !important;
-                right: 0px !important;
-                transform: translateX(-240px) !important; // 240px is width of setting sidebar
-            .mat-mdc-menu-panel{
+            top: var(--header-height) !important;
+            right: 0px !important;
+            transform: translateX(-240px) !important; // 240px is width of setting sidebar
+
+            .mat-mdc-menu-panel {
                 max-width: unset !important;
+
                 .mat-mdc-menu-content {
                     padding: 0 !important;
-                        .tags-menu-contianer {  
-                            padding: 15px !important;
-                            width: 480px;
-                            height: calc(100vh - (var(--header-height)));
-                        }
+
+                    .tags-menu-contianer {
+                        padding: 15px !important;
+                        width: 480px;
+                        height: calc(100vh - (var(--header-height)));
                     }
                 }
             }
+
         }
     }
 }
