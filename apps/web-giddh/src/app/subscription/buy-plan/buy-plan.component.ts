@@ -412,12 +412,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             if (this.payType === 'trial') {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
-                                if (response?.duration === 'MONTHLY' && response?.region?.code !== 'IND') {
+                                if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
                                     let model = {
                                         planUniqueName: response?.planDetails?.uniqueName,
                                         paymentProvider: this.thirdStepForm.value.paymentProvider,
                                         subscriptionId: response.subscriptionId,
-                                        duration: response?.duration,
+                                        duration: this.firstStepForm.get('duration')?.value,
                                         promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                                     };
                                     if (response?.status?.toLowerCase() === 'active') {
@@ -525,12 +525,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
             }
             if (response && response.dueAmount > 0) {
-                if (response?.duration === 'MONTHLY' && response?.region?.code !== 'IND') {
+                if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,
                         subscriptionId: response.subscriptionId,
-                        duration: response?.duration,
+                        duration: this.firstStepForm.get('duration')?.value,
                         promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                     };
                     this.subscriptionComponentStore.buyPlan(model);

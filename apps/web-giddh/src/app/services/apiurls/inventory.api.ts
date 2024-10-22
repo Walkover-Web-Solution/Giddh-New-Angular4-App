@@ -109,9 +109,9 @@ export const INVENTORY_API = {
     INVENTORY_GROUP_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/group-wise?from=:from&to=:to',
     INVENTORY_TRANSACTION_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/transaction-wise?from=:from&to=:to',
     INVENTORY_ADJUST: {
-        REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&from=:from&to=:to&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy', // POST call
+        REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&from=:from&to=:to&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy&inventoryType=:inventoryType', // POST call
         DELETE: 'company/:companyUniqueName/inventory-adjustment/:referenceNo?voucherVersion=2', // DELETE call
-        GET_REASON: 'company/:companyUniqueName/inventory-adjustment/reason/get-all?count=200',// GET call
+        GET_REASON: 'company/:companyUniqueName/inventory-adjustment/reason/get-all?count=2000',// GET call
         CREATE_REASON: 'company/:companyUniqueName/inventory-adjustment/reason', // GET call
         GET: 'company/:companyUniqueName/inventory-adjustment/:referenceNo', // GET call
         CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName', // POST call

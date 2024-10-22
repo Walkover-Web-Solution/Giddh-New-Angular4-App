@@ -58,6 +58,7 @@ import { ExportMasterDialogComponent } from './header/components/export-master-d
 import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CallBackPageModule } from './call-back-page/call-back-page.module';
+import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -177,7 +178,8 @@ export function provideConfig() {
         GenericAsideMenuAccountModule,
         MasterComponent,
         MasterExportOptionComponent,
-        CallBackPageModule
+        CallBackPageModule,
+        D3TreeChartModule
     ],
     providers: [
         {

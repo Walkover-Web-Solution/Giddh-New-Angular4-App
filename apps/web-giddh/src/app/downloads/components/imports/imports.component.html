@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="import-table-container">
+    <div class="import-table-container overflow-visible">
         <div class="d-flex pd-t15 pd-b15">
             <div
                 class="activity-filter-wrap"
@@ -25,7 +25,7 @@
                                         (selected)="handleBranchChange($event)"
                                         [isFilterEnabled]="true"
                                         [placeholder]="commonLocaleData?.app_select_entity"
-                                        [fixedValue]="currentBranch?.alias"
+                                        [fixedValue]="currentBranch?.name"
                                         class="entity-dropdown"
                                     >
                                         <ng-template #optionTemplate let-option="option">
@@ -80,7 +80,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="table-responsive table-content" *ngIf="!isLoading && dataSource?.length">
+        <div class="table-responsive table-content overflow-visible" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="import-table">
                 <!-- Requested importDate Column -->
                 <ng-container matColumnDef="importDate">

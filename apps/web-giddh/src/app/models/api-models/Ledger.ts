@@ -229,6 +229,8 @@ export class TransactionsResponse implements ITransactions {
     public convertedCurrencySymbol?: string;
     public convertedCurrencyCode?: string;
     public periodClosingBalance?: { amount: number; type: string; };
+    public prevToken?: string;
+    public nextToken?: string;
 }
 
 export class TransactionsRequest {
@@ -242,6 +244,7 @@ export class TransactionsRequest {
     public reversePage: boolean = false;
     public accountCurrency: boolean = false;
     public branchUniqueName?: string;
+    public paginationToken?: string = '';
 }
 
 export interface ReconcileRequest {

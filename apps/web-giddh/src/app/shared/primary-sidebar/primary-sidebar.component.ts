@@ -499,6 +499,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             item.time = +new Date();
             let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
             this.doEntryInDb(entity, item, fromInvalidState);
+            this.closeAccountModal(true);
         }, 200);
     }
 

@@ -897,7 +897,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.addressConfiguration.linkedEntities = response.body.map(result => ({
                         ...result,
                         isDefault: false,
-                        label: result.alias,
+                        label: result.name,
                         value: result?.uniqueName
                     }));
                 }
