@@ -785,7 +785,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName) ;
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
                     this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
-                    this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber);
+                    this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber ?? '');
+                    this.account.mobileNumber = response.account?.mobileNumber ?? '';
                 }
 
                 if (response?.purchaseOrderDetails?.length) {
