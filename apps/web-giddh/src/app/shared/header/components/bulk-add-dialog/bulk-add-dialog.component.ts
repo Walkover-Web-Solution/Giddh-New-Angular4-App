@@ -171,6 +171,8 @@ export class BulkAddDialogComponent implements OnInit {
      */
     public saveOpeningBalance(): void {
         if (this.bulkAddAccountForm.valid) {
+            const branchesWithOpeningBalance = this.bulkAddAccountForm?.value.customFields.filter(branch => branch.openingBalance !== "" && branch.openingBalance !== null);
+            this.bulkAddAccountForm.value.customFields = branchesWithOpeningBalance;
             this.dialogRef.close(this.bulkAddAccountForm.value);
         }
     }

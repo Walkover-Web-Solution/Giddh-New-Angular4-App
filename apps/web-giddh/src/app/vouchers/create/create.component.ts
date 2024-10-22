@@ -548,7 +548,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getWarehouses();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {                
+            if (response) {
                 let params = response[0];
                 this.queryParams = response[1];
 
@@ -1994,7 +1994,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
-        
+
         let index = 0;
 
         if (this.useDefaultAccountDetails) {
