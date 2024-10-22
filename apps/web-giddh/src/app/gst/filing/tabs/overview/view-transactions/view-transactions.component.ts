@@ -92,11 +92,11 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
         this.breakpointObserver
-            .observe(['(max-width: 768px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-            });
+        .observe(['(max-width: 768px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+        });
     }
 
     public ngOnInit() {
@@ -105,8 +105,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_invoices, value: 'invoices' },
             { label: this.commonLocaleData?.app_credit_notes, value: 'credit-notes' },
             { label: this.commonLocaleData?.app_debit_notes, value: 'debit-notes' },
-            // { label: this.localeData?.advance_receipt, value: 'advance-receipt' },
-            // { label: this.localeData?.adjusted_advance_receipt, value: 'adjusted-advance-receipt' },
+            { label: this.localeData?.advance_receipt, value: 'advance-receipt' },
+            { label: this.localeData?.adjusted_advance_receipt, value: 'adjusted-advance-receipt' },
         ];
 
         this.gstr2entityType = [
@@ -143,13 +143,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.selectedGstNumber = params.selectedGst;
-            if ((params?.entityType === 'registered-notes') || (params?.entityType === 'unregistered-notes')) {
-                this.filterParam.entityType = null;
-                this.filterParam.type = params.entityType;
-            } else {
-                this.filterParam.entityType = this.selectedGst === GstReport.Gstr2 ? params.entityType : '';
-                this.filterParam.type = params.type;
-            }
+            this.filterParam.entityType = this.selectedGst === GstReport.Gstr2 ? params.entityType : '';
+            this.filterParam.type = params.type;
             this.filterParam.status = params?.status;
             this.filterParam.from = params.from;
             this.filterParam.to = params.to;
@@ -182,7 +177,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.selectedInvoice = invoice;
             this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
 
-            if (this.voucherApiVersion !== 2) {
+            if(this.voucherApiVersion !== 2) {
                 downloadVoucherRequestObject = {
                     voucherNumber: [invoice.voucherNumber],
                     voucherType: invoice.voucherType,
@@ -311,7 +306,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof ViewTransactionsComponent
      */
     public onDownloadInvoiceEvent(invoiceCopy): void {
-        if (this.voucherApiVersion === 2) {
+        if(this.voucherApiVersion === 2) {
             let model: DownloadVoucherRequest = {
                 voucherType: this.selectedInvoice.voucherType,
                 voucherNumber: [this.selectedInvoice.voucherNumber],
