@@ -24,7 +24,11 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon pull-right"
+                                                class="pull-right"
+                                                [ngClass]="{
+                                                    'icon-company-profile': option.consolidatedBranch,
+                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                }"
                                                 *ngIf="!option.isCompany"
                                                 tooltip="{{commonLocaleData?.app_branch}}"
                                             ></i>

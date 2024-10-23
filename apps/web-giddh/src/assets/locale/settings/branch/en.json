@@ -43,5 +43,6 @@
     "flat_view": "Flat view",
     "hierarchy_view": "Hierarchy view",
     "parent_branch": "Parent Branch",
-    "select_parent_branch": "Select Parent Branch"
+    "select_parent_branch": "Select Parent Branch",
+    "consolidated": "Consolidated"
 }

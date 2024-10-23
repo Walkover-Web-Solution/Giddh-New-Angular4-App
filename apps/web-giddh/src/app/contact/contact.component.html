@@ -63,7 +63,8 @@
                                             class="form-group mr-r15 pull-left linked-entities mb-0"
                                             name="currentBranch"
                                             *ngIf="
-                                                currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
+                                                currentCompanyBranches?.length > 2 &&
+                                                currentOrganizationType === 'COMPANY'
                                             "
                                         >
                                             <div>
@@ -87,7 +88,13 @@
                                                             >
                                                                 <span class="entity-icon">
                                                                     <i
-                                                                        class="icon-branch-icon pull-right"
+                                                                        class="pull-right"
+                                                                        [ngClass]="{
+                                                                            'icon-company-profile':
+                                                                                option.consolidatedBranch,
+                                                                            'icon-branch-icon':
+                                                                                !option.consolidatedBranch
+                                                                        }"
                                                                         *ngIf="!option.isCompany"
                                                                         tooltip="{{ commonLocaleData?.app_branch }}"
                                                                     ></i>
@@ -101,7 +108,9 @@
                                                                     <div class="item giddh-limit single-line-clamp">
                                                                         {{ option?.label || "-" }}
                                                                     </div>
-                                                                    <div class="item-unique giddh-limit single-line-clamp">
+                                                                    <div
+                                                                        class="item-unique giddh-limit single-line-clamp"
+                                                                    >
                                                                         {{ option?.name || "-" }}
                                                                     </div>
                                                                 </span>
@@ -331,7 +340,9 @@
                                 <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
-                                        <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_receipt }}</span>
+                                        <span *ngIf="activeTab === 'customer'">{{
+                                            commonLocaleData?.app_receipt
+                                        }}</span>
                                         <div>
                                             <span class="d-inline-flex number-total">
                                                 <amount-field
@@ -363,15 +374,15 @@
                                 </div>
                             </div>
                         </div>
-                            <div
-                                class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
-                                *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
-                            >
-                                <p (click)="showGiddhDatepicker($event)">
-                                    <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
-                                    <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                                </p>
-                            </div>
+                        <div
+                            class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
+                            *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
+                        >
+                            <p (click)="showGiddhDatepicker($event)">
+                                <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
+                                <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
+                            </p>
+                        </div>
                     </div>
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
                         <div class="pd-b2 mr-b1 overflow-visible">

@@ -36,7 +36,10 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon"
+                                                [ngClass]="{
+                                                    'icon-company-profile': option.consolidatedBranch,
+                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                }"
                                                 *ngIf="!option.isCompany"
                                                 matTooltip="{{ commonLocaleData?.app_branch }}"
                                                 matTooltipPosition="above"
@@ -49,7 +52,9 @@
                                             ></i>
                                         </span>
                                         <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">{{ option?.label || "-" }}</div>
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option?.label || "-" }}
+                                            </div>
                                             <div class="item-unique giddh-limit single-line-clamp">
                                                 {{ option?.name || "-" }}
                                             </div>
@@ -103,7 +108,13 @@
                             <span class="icon-advance-filter ml-2"></span>
                         </div>
                     </button>
-                    <button *ngIf="voucherApiVersion ===2" mat-stroked-button color="primary" (click)="exportReport()" aria-label="export">
+                    <button
+                        *ngIf="voucherApiVersion === 2"
+                        mat-stroked-button
+                        color="primary"
+                        (click)="exportReport()"
+                        aria-label="export"
+                    >
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
@@ -119,7 +130,13 @@
                 </div>
             </div>
             <div class="btn-group mr-t15 pull-left mobile-view">
-                <button mat-stroked-button color="primary" class="w-100" (click)="createNewCustomerEvent.emit(true)" aria-label="new customer">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    class="w-100"
+                    (click)="createNewCustomerEvent.emit(true)"
+                    aria-label="new customer"
+                >
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -147,7 +164,11 @@
                         {{ commonLocaleData?.app_due }}
                         <div>
                             <span class="d-inline-flex number-total">
-                                <amount-field [amount]="totalDueAmounts" [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="totalDueAmounts"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field
                                 >/-
                             </span>
@@ -157,7 +178,7 @@
             </div>
         </div>
     </div>
-    <div class="contact-main aging-page overflow-visible"  *ngIf="!isLoading">
+    <div class="contact-main aging-page overflow-visible" *ngIf="!isLoading">
         <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper overflow-visible">
             <div *ngIf="!isMobileScreen" class="table-responsive overflow-visible">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
@@ -176,15 +197,23 @@
                 </div>
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
-            <div class="no-data"  *ngIf="
-            !(dueAmountReportData$ | async)?.results?.length &&
-            !(getAgingReportRequestInProcess$ | async) &&
-            !showClearFilter &&
-            !isAdvanceSearchApplied
-        ">
+            <div
+                class="no-data"
+                *ngIf="
+                    !(dueAmountReportData$ | async)?.results?.length &&
+                    !(getAgingReportRequestInProcess$ | async) &&
+                    !showClearFilter &&
+                    !isAdvanceSearchApplied
+                "
+            >
                 <div class="align-item-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
-                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)" aria-label="new customer">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        (click)="createNewCustomerEvent.emit(true)"
+                        aria-label="new customer"
+                    >
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
@@ -294,7 +323,6 @@
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_name">
                     <span class="pd-l15">{{ element.name }}</span>
-
                 </td>
             </ng-container>
 
@@ -321,7 +349,15 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_due_amount">
-                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.futureDueAmount > 0}" (click)="element.futureDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'upcoming-due') : ''">
+                    <span
+                        class="d-flex justify-content-end"
+                        [ngClass]="{ 'cursor-pointer': element.futureDueAmount > 0 }"
+                        (click)="
+                            element.futureDueAmount > 0
+                                ? showUnpaidInvoiceList(element?.uniqueName, 'upcoming-due')
+                                : ''
+                        "
+                    >
                         <amount-field
                             [amount]="element.futureDueAmount"
                             [currencySymbol]="false"
@@ -357,7 +393,15 @@
                         '0 - ' + (agingDropDownoptions$ | async)?.fourth + ' ' + commonLocaleData?.app_days
                     "
                 >
-                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[0].dueAmount > 0}" (click)="element.currentAndPastDueAmount[0].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range0') : ''">
+                    <span
+                        class="d-flex justify-content-end"
+                        [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[0].dueAmount > 0 }"
+                        (click)="
+                            element.currentAndPastDueAmount[0].dueAmount > 0
+                                ? showUnpaidInvoiceList(element?.uniqueName, 'range0')
+                                : ''
+                        "
+                    >
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[0].dueAmount"
                             [currencySymbol]="false"
@@ -400,7 +444,15 @@
                     "
                 >
                     <span (click)="openAgingDropDown()">
-                        <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[1].dueAmount > 0}" (click)="element.currentAndPastDueAmount[1].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range1') : ''">
+                        <span
+                            class="d-flex justify-content-end"
+                            [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[1].dueAmount > 0 }"
+                            (click)="
+                                element.currentAndPastDueAmount[1].dueAmount > 0
+                                    ? showUnpaidInvoiceList(element?.uniqueName, 'range1')
+                                    : ''
+                            "
+                        >
                             <amount-field
                                 [amount]="element.currentAndPastDueAmount[1].dueAmount"
                                 [currencySymbol]="false"
@@ -443,7 +495,15 @@
                         commonLocaleData?.app_days
                     "
                 >
-                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[2].dueAmount > 0}" (click)="element.currentAndPastDueAmount[2].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range2') : ''">
+                    <span
+                        class="d-flex justify-content-end"
+                        [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[2].dueAmount > 0 }"
+                        (click)="
+                            element.currentAndPastDueAmount[2].dueAmount > 0
+                                ? showUnpaidInvoiceList(element?.uniqueName, 'range2')
+                                : ''
+                        "
+                    >
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[2].dueAmount"
                             [currencySymbol]="false"
@@ -475,7 +535,15 @@
                     *matCellDef="let element"
                     [attr.data-title]="(agingDropDownoptions$ | async)?.sixth + 1 + ' ' + commonLocaleData?.app_days"
                 >
-                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[3].dueAmount > 0}" (click)="element.currentAndPastDueAmount[3].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range3') : ''">
+                    <span
+                        class="d-flex justify-content-end"
+                        [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[3].dueAmount > 0 }"
+                        (click)="
+                            element.currentAndPastDueAmount[3].dueAmount > 0
+                                ? showUnpaidInvoiceList(element?.uniqueName, 'range3')
+                                : ''
+                        "
+                    >
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[3].dueAmount"
                             [currencySymbol]="false"
@@ -495,7 +563,13 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_total_amount">
-                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.totalDueAmount > 0}" (click)="element.totalDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'total-due') : ''">
+                    <span
+                        class="d-flex justify-content-end"
+                        [ngClass]="{ 'cursor-pointer': element.totalDueAmount > 0 }"
+                        (click)="
+                            element.totalDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'total-due') : ''
+                        "
+                    >
                         <amount-field [amount]="element.totalDueAmount" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
@@ -560,12 +634,28 @@
         <div class="list-wrapper pd-15">
             <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
                 <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
-                    <mat-list-item class="list-item px-2"  *cdkVirtualFor="let item of unpaidInvoiceData">
-                        <a [href]="item?.voucherNumber !== 'OPENING BALANCE' ? ('/pages/invoice/preview/sales?voucherUniqueName=' + item?.uniqueName + '&accountUniqueName=' + item?.account?.uniqueName) : domSantizer('javascript:;')" [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined" [ngClass]="{ 'cursor-default' : item?.voucherNumber === 'OPENING BALANCE'}">
+                    <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
+                        <a
+                            [href]="
+                                item?.voucherNumber !== 'OPENING BALANCE'
+                                    ? '/pages/invoice/preview/sales?voucherUniqueName=' +
+                                      item?.uniqueName +
+                                      '&accountUniqueName=' +
+                                      item?.account?.uniqueName
+                                    : domSantizer('javascript:;')
+                            "
+                            [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined"
+                            [ngClass]="{ 'cursor-default': item?.voucherNumber === 'OPENING BALANCE' }"
+                        >
                             <div class="d-flex justify-content-space-between align-items-center">
                                 <div>
-                                    <p class="font-14"> <span class="color-primary">{{ item?.voucherNumber }}</span> |  <span class="light-gray">{{ item?.voucherDate }}</span></p>
-                                    <p class="customer-name font-16">{{ item?.account?.customerName || item?.account?.name }}</p>
+                                    <p class="font-14">
+                                        <span class="color-primary">{{ item?.voucherNumber }}</span> |
+                                        <span class="light-gray">{{ item?.voucherDate }}</span>
+                                    </p>
+                                    <p class="customer-name font-16">
+                                        {{ item?.account?.customerName || item?.account?.name }}
+                                    </p>
                                 </div>
                                 <div>
                                     <amount-field
@@ -577,7 +667,7 @@
                                 </div>
                             </div>
                         </a>
-                        </mat-list-item>
+                    </mat-list-item>
                 </cdk-virtual-scroll-viewport>
             </mat-list>
             <div *ngIf="unpaidInvoiceIsLoading">

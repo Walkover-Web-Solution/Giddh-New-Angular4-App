@@ -29,6 +29,7 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
+import { OrganizationType } from '../../models/user-login-state';
 
 /**
  * Warehouse component
@@ -109,6 +110,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         type: SettingsAsideFormType.EditWarehouse,
         linkedEntities: []
     };
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     /** @ignore */
     constructor(
@@ -137,6 +140,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
