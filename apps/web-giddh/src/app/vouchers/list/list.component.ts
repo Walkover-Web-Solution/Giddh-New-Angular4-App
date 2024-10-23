@@ -1597,8 +1597,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const model = {
             accountUniqueName: voucher.customerUniqueName
         };
-
-        if (voucher === VoucherTypeEnum.generateEstimate) {
+        
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) { 
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;
@@ -1606,7 +1606,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.convertToInvoice({
             request: model,
-            voucherType: voucher?.voucherType ?? this.voucherType
+            voucherType: this.voucherType
         });
     }
 
