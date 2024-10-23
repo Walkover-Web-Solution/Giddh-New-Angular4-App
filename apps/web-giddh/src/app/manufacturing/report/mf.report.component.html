@@ -43,7 +43,11 @@
                                         <a href="javascript:void(0)" class="list-item d-flex">
                                             <span class="entity-icon">
                                                 <i
-                                                    class="icon-branch-icon pull-right"
+                                                    [ngClass]="{
+                                                        'icon-company-profile': option.consolidatedBranch,
+                                                        'icon-branch-icon': !option.consolidatedBranch
+                                                    }"
+                                                    class="pull-right"
                                                     *ngIf="!option.isCompany"
                                                     tooltip="Branch"
                                                 ></i>
@@ -238,7 +242,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
-                            <td data-title="Date">{{ dayjs(item.date, "DD-MM-YYYY") | date: "d MMM y" }}</td>
+                            <td data-title="Date">{{ dayjs(item.date, "DD-MM-YYYY") | date : "d MMM y" }}</td>
                             <td data-title="Voucher No." class="cursor-pointer">{{ item.voucherNumber }}</td>
                             <td data-title="Product Name">{{ item.stockName }}</td>
                             <td data-title="Qty Outwards">{{ item.manufacturingQuantity }}</td>

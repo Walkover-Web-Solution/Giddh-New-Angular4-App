@@ -31,10 +31,18 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container>
-                                                <a href="javascript:void(0);" aria-label="branch" class="list-item d-flex">
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    aria-label="branch"
+                                                    class="list-item d-flex"
+                                                >
                                                     <span class="entity-icon">
                                                         <i
-                                                            class="icon-branch-icon pull-right"
+                                                            class="pull-right"
+                                                            [ngClass]="{
+                                                                'icon-company-profile': option.consolidatedBranch,
+                                                                'icon-branch-icon': !option.consolidatedBranch
+                                                            }"
                                                             *ngIf="!option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                             [matTooltipPosition]="'above'"
@@ -295,7 +303,6 @@
                                 *matCellDef="let entry"
                                 [attr.data-title]="localeData?.product_service"
                                 class="daybook-w-200"
-
                             ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="quantity">
@@ -312,7 +319,6 @@
                                 *matCellDef="let entry"
                                 class="text-right daybook-w-100"
                                 [attr.data-title]="localeData?.qty"
-
                             ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="unit">
@@ -324,7 +330,11 @@
                             >
                                 {{ commonLocaleData?.app_unit }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit" class="daybook-w-100"
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_unit"
+                                class="daybook-w-100"
                             ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="rate">
@@ -352,7 +362,12 @@
                             >
                                 {{ commonLocaleData?.app_hsn_sac }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_hsn_sac" class="daybook-w-100"></td>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_hsn_sac"
+                                class="daybook-w-100"
+                            ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="sku">
                             <th
@@ -363,7 +378,12 @@
                             >
                                 {{ commonLocaleData?.app_sku }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_sku" class="daybook-w-100"></td>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_sku"
+                                class="daybook-w-100"
+                            ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="warehouse">
                             <th
@@ -398,7 +418,12 @@
                                             [dataSource]="entry.otherTransactions"
                                         >
                                             <ng-container matColumnDef="expanded_entry_date">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-100"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -406,7 +431,12 @@
                                                 ></td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_particular">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-300"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-300"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -417,7 +447,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_voucher_name">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-200"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-200"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -425,7 +460,12 @@
                                                 ></td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_voucher_no">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-150"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-150"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -433,7 +473,12 @@
                                                 ></td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_debit_amount">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="text-right daybook-w-150"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-150"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -454,7 +499,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_credit_amount">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="text-right daybook-w-150"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-150"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -478,7 +528,12 @@
                                                 *ngIf="isEntryExpanded"
                                                 matColumnDef="expanded_product_service"
                                             >
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-200"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-200"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -489,7 +544,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_quantity">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="text-right daybook-w-100"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-100"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -504,7 +564,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_unit">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-100"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -515,7 +580,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_rate">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef  class="text-right daybook-w-150"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-150"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -534,7 +604,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_hsn_sac">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef  class="daybook-w-100"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -545,7 +620,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_sku">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-100"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -556,7 +636,12 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_warehouse">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef  class="daybook-w-200"></th>
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-200"
+                                                ></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"

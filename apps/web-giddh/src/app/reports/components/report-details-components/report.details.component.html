@@ -10,7 +10,9 @@
         <div class="report-breadcrum d-md-none d-lg-none">
             <ul class="list-inline d-inline-block middle nav-report">
                 <li class="active" id="giddh-page-heading-link">
-                    <a href="javascript:void(0);" aria-label="report" (click)="goToDashboard()">{{ commonLocaleData?.app_report }}</a>
+                    <a href="javascript:void(0);" aria-label="report" (click)="goToDashboard()">{{
+                        commonLocaleData?.app_report
+                    }}</a>
                     <span class="d-inline-block pl-1"> ></span>
                 </li>
                 <li>
@@ -41,7 +43,11 @@
                             <a href="javascript:void(0);" aria-label="icon" class="list-item d-flex">
                                 <span class="entity-icon">
                                     <i
-                                        class="icon-branch-icon pull-right"
+                                        [ngClass]="{
+                                            'icon-company-profile': option.consolidatedBranch,
+                                            'icon-branch-icon': !option.consolidatedBranch
+                                        }"
+                                        class="pull-right"
                                         *ngIf="!option?.isCompany"
                                         [tooltip]="commonLocaleData?.app_branch"
                                     ></i>
@@ -115,14 +121,23 @@
                             >
                         </li>
                         <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle href="javascript:void(0);" aria-label="weekly" class="dropdown-item dropdown-toggle cursor-pointer" (click)="(false)"
+                            <a
+                                dropdownToggle
+                                href="javascript:void(0);"
+                                aria-label="weekly"
+                                class="dropdown-item dropdown-toggle cursor-pointer"
+                                (click)="(false)"
                                 >{{ commonLocaleData?.app_duration?.weekly }} <span class="caret"></span
                             ></a>
                             <ul class="dropdown-menu report-dropdown" role="menu">
                                 <li role="menuitem" *ngFor="let month of monthNames">
-                                    <a href="javascript:void(0);" aria-label="month" (click)="populateRecords('weekly', month)" class="dropdown-item">{{
-                                        month | slice: 0:3
-                                    }}</a>
+                                    <a
+                                        href="javascript:void(0);"
+                                        aria-label="month"
+                                        (click)="populateRecords('weekly', month)"
+                                        class="dropdown-item"
+                                        >{{ month | slice : 0 : 3 }}</a
+                                    >
                                 </li>
                             </ul>
                         </li>

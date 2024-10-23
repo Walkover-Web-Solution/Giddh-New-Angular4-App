@@ -25,11 +25,12 @@
                             aria-label="cross icon"
                             [matTooltip]="localeData?.reset_search"
                         >
-                            <i aria-hidden="true"  class="icon-cross d-inline-block font-12 mr-1"></i> 
+                            <i aria-hidden="true" class="icon-cross d-inline-block font-12 mr-1"></i>
                             <span>{{ commonLocaleData?.app_clear_filter }}</span>
                         </button>
                     </div>
                     <button
+                        *ngIf="!isCompany"
                         aria-label="create warehouse"
                         mat-stroked-button
                         color="primary"
@@ -69,13 +70,9 @@
                                     }}</span
                                 >
                                 <div class="btn-group" dropdown>
-                                    <button
-                                        mat-icon-button
-                                        [matMenuTriggerFor]="menu"
-                                        aria-label="vertical dots"
-                                    >
+                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="vertical dots">
                                         <span class="icon-dots-three-vertical mr-0 font-14 d-block"></span>
-                                     </button>
+                                    </button>
                                     <mat-menu #menu="matMenu">
                                         <button mat-menu-item (click)="editWarehouse(warehouse)">
                                             {{ commonLocaleData?.app_edit }}
@@ -159,8 +156,7 @@
     <ng-template #warehouseOnBoardingModal>
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
-                </ng-template>
+                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref"> </ng-template>
             </div>
         </div>
     </ng-template>
