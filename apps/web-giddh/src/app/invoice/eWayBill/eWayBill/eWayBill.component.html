@@ -42,7 +42,11 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon pull-right"
+                                                [ngClass]="{
+                                                    'icon-company-profile': option.consolidatedBranch,
+                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                }"
+                                                class="pull-right"
                                                 *ngIf="!option.isCompany"
                                                 tooltip="{{ commonLocaleData?.app_branch }}"
                                             ></i>
@@ -116,21 +120,11 @@
                                                 <div class="flex-fill">{{ commonLocaleData?.app_date }}</div>
                                                 <div class="icon-pointer">
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-top
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('invoiceDate', 'asc')"
                                                     ></div>
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-bottom
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('invoiceDate', 'desc')"
                                                     ></div>
                                                 </div>
@@ -182,21 +176,11 @@
                                                 <div class="flex-fill">{{ localeData?.ewaybill_no }}</div>
                                                 <div class="icon-pointer">
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-top
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('ewbNo', 'asc')"
                                                     ></div>
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-bottom
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('ewbNo', 'desc')"
                                                     ></div>
                                                 </div>
@@ -208,21 +192,11 @@
                                                 <div class="flex-fill">{{ localeData?.ewaybill_date }}</div>
                                                 <div class="icon-pointer">
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-top
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('billingDate', 'asc')"
                                                     ></div>
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-bottom
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('billingDate', 'desc')"
                                                     ></div>
                                                 </div>
@@ -236,21 +210,11 @@
                                                 </div>
                                                 <div class="icon-pointer">
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-top
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('totalValue', 'asc')"
                                                     ></div>
                                                     <div
-                                                        class="
-                                                            glyphicon glyphicon-triangle-bottom
-                                                            text-light-2
-                                                            d-block
-                                                            font-xxs
-                                                        "
+                                                        class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                                         (click)="sortbyApi('totalValue', 'desc')"
                                                     ></div>
                                                 </div>
@@ -269,7 +233,9 @@
                                             [attr.data-title]="commonLocaleData?.app_invoice_no"
                                             class="nowrap download-arrow"
                                         >
-                                            <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
+                                            <a href="javascript:;" class="d-inline-block color-link">{{
+                                                item?.docNumber
+                                            }}</a>
                                             <a
                                                 (click)="onSelectEwayDownload(item)"
                                                 [tooltip]="localeData?.download_eway_bill"
@@ -317,7 +283,7 @@
                                                 <a
                                                     href="javascript:void(0)"
                                                     class="dropdown-toggle color-link"
-                                                    [id]="'actionbutton_'+ i"
+                                                    [id]="'actionbutton_' + i"
                                                     dropdownToggle
                                                     (click)="showActionsMenu($event)"
                                                     >{{ commonLocaleData?.app_actions }} <i class="caret"></i
@@ -406,7 +372,8 @@
                                     value="1"
                                 />
                                 <label for="transMode1"
-                                    ><img src="assets/icon/4.svg " alt="road img" /> {{ commonLocaleData?.app_road }}</label
+                                    ><img src="assets/icon/4.svg " alt="road img" />
+                                    {{ commonLocaleData?.app_road }}</label
                                 >
                             </li>
                             <li>
@@ -418,7 +385,8 @@
                                     value="2"
                                 />
                                 <label for="transMode2"
-                                    ><img src="assets/icon/3.svg " alt="rail img" /> {{ commonLocaleData?.app_rail }}</label
+                                    ><img src="assets/icon/3.svg " alt="rail img" />
+                                    {{ commonLocaleData?.app_rail }}</label
                                 >
                             </li>
                             <li>
@@ -430,7 +398,8 @@
                                     value="3"
                                 />
                                 <label for="transMode3"
-                                    ><img src="assets/icon/1.svg " alt="air img" /> {{ commonLocaleData?.app_air }}</label
+                                    ><img src="assets/icon/1.svg " alt="air img" />
+                                    {{ commonLocaleData?.app_air }}</label
                                 >
                             </li>
                             <li>
@@ -442,7 +411,8 @@
                                     value="4"
                                 />
                                 <label for="transMode4"
-                                    ><img src="assets/icon/2.svg " alt="ship img" /> {{ commonLocaleData?.app_ship }}</label
+                                    ><img src="assets/icon/2.svg " alt="ship img" />
+                                    {{ commonLocaleData?.app_ship }}</label
                                 >
                             </li>
                         </ul>
@@ -630,7 +600,12 @@
                             >
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()" aria-label="cancel">
+                            <button
+                                type="submit"
+                                class="btn btn-danger mr-2"
+                                (click)="closeModel()"
+                                aria-label="cancel"
+                            >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>

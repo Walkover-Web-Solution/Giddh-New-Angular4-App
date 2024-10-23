@@ -7,7 +7,7 @@
 >
     <div class="relative">
         <div class="clearfix">
-            <div class="col-sm-12 mt-2  text-right">
+            <div class="col-sm-12 mt-2 text-right">
                 <button mat-stroked-button color="primary" class="mr-0" (click)="openAddBranchModal()">
                     {{ localeData?.create_branch }}
                 </button>
@@ -78,7 +78,14 @@
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                         ></i>
                                                         <div>
-                                                            <h2>{{ branch.name }}</h2>
+                                                            <h2>
+                                                                {{ branch.name }}
+                                                                {{
+                                                                    branch.consolidatedBranch
+                                                                        ? "(" + localeData?.consolidated + ")"
+                                                                        : ""
+                                                                }}
+                                                            </h2>
                                                         </div>
                                                     </div>
                                                     <div class="pull-right right-card-section">

@@ -41,7 +41,11 @@
                             <a href="javascript:void(0)" class="list-item d-flex">
                                 <span class="entity-icon">
                                     <i
-                                        class="icon-branch-icon pull-right"
+                                        [ngClass]="{
+                                            'icon-company-profile': option.consolidatedBranch,
+                                            'icon-branch-icon': !option.consolidatedBranch
+                                        }"
+                                        class="pull-right"
                                         *ngIf="!option?.isCompany"
                                         [tooltip]="commonLocaleData?.app_branch"
                                     ></i>
@@ -117,7 +121,7 @@
                             <ul class="dropdown-menu report-dropdown" role="menu">
                                 <li role="menuitem" *ngFor="let month of monthNames">
                                     <a (click)="populateRecords('weekly', month)" class="dropdown-item">{{
-                                        month | slice: 0:3
+                                        month | slice : 0 : 3
                                     }}</a>
                                 </li>
                             </ul>

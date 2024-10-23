@@ -333,7 +333,11 @@
                                                 <a href="javascript:void(0)" class="list-item d-flex" aria-label="list">
                                                     <span class="entity-icon">
                                                         <i
-                                                            class="icon-branch-icon pull-right"
+                                                            [ngClass]="{
+                                                                'icon-company-profile': option.consolidatedBranch,
+                                                                'icon-branch-icon': !option.consolidatedBranch
+                                                            }"
+                                                            class="pull-right"
                                                             *ngIf="!option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                             matTooltipClass="tooltip-black"
@@ -422,7 +426,11 @@
                                                     >
                                                         <span class="entity-icon">
                                                             <i
-                                                                class="icon-branch-icon pull-right"
+                                                                [ngClass]="{
+                                                                    'icon-company-profile': option.consolidatedBranch,
+                                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                                }"
+                                                                class="pull-right"
                                                                 *ngIf="!option.isCompany"
                                                                 [matTooltip]="commonLocaleData?.app_branch"
                                                                 matTooltipClass="tooltip-black"
@@ -513,7 +521,11 @@
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 || selectedDebitTransactionIds?.size > 0 || selectedCreditTransactionIds?.size > 0"
+                                        *ngIf="
+                                            entryUniqueNamesForBulkAction?.length > 0 ||
+                                            selectedDebitTransactionIds?.size > 0 ||
+                                            selectedCreditTransactionIds?.size > 0
+                                        "
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -646,10 +658,25 @@
                                         </h3>
                                     </div>
                                     <div class="d-flex align-items-center column-gap2">
-                                        <button mat-raised-button color="primary" type="button" aria-label="create bulk entry" *ngIf="transactionCountConvertToEntries > 0" (click)="saveBulkBankTransaction()">
-                                            <span>{{ transactionCountConvertToEntries }} - {{ localeData?.convert_to_entries }}</span>
+                                        <button
+                                            mat-raised-button
+                                            color="primary"
+                                            type="button"
+                                            aria-label="create bulk entry"
+                                            *ngIf="transactionCountConvertToEntries > 0"
+                                            (click)="saveBulkBankTransaction()"
+                                        >
+                                            <span
+                                                >{{ transactionCountConvertToEntries }} -
+                                                {{ localeData?.convert_to_entries }}</span
+                                            >
                                         </button>
-                                        <button mat-stroked-button type="button" class="min-width-unset" aria-label="close">
+                                        <button
+                                            mat-stroked-button
+                                            type="button"
+                                            class="min-width-unset"
+                                            aria-label="close"
+                                        >
                                             <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
                                                 commonLocaleData?.app_close
                                             }}</span>
@@ -723,8 +750,9 @@
                                                         <div
                                                             class="ledger-row"
                                                             [ngClass]="{
-                                                                'compound-entry' :txn.id === lc.selectedBankTxnUniqueName,
-                                                                'highlighted-transaction' : txn?.selectedAccount?.name
+                                                                'compound-entry':
+                                                                    txn.id === lc.selectedBankTxnUniqueName,
+                                                                'highlighted-transaction': txn?.selectedAccount?.name
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
@@ -739,7 +767,9 @@
                                                                                 i
                                                                             "
                                                                             [checked]="
-                                                                                selectedDebitTransactionIds?.has(txn?.id)
+                                                                                selectedDebitTransactionIds?.has(
+                                                                                    txn?.id
+                                                                                )
                                                                             "
                                                                             [ngClass]="{
                                                                                 'd-none':
@@ -1074,8 +1104,9 @@
                                                         <div
                                                             class="ledger-row"
                                                             [ngClass]="{
-                                                                'compound-entry': txn.id === lc.selectedBankTxnUniqueName,
-                                                                'highlighted-transaction' : txn?.selectedAccount?.name
+                                                                'compound-entry':
+                                                                    txn.id === lc.selectedBankTxnUniqueName,
+                                                                'highlighted-transaction': txn?.selectedAccount?.name
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
