@@ -61,6 +61,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     public profileForm: FormGroup;
     /** This will hold region */
     public region: string;
+    /** Holds Portal Login Url */
+    public portalLoginUrl: string = "";
 
     constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) {
         this.initProfileForm();
@@ -72,7 +74,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : '';
+        this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : 'in';
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -89,38 +91,43 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.profileData && changes.profileData.currentValue !== changes.profileData.previousValue) {
+            let allowUpdate: boolean = false;
             if (this.profileData?.alias || this.profileData?.name) {
-                this.initProfileForm(this.profileData);
+                this.profileForm.patchValue(this.profileData);
+                this.portalLoginUrl = `${this.portalUrl}${this.profileData.portalDomain}/${this.region}/login`;
             }
 
             if (this.organizationType === 'COMPANY') {
                 this.profileForm?.get('name')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('name');
                     }
                 });
                 this.profileForm?.get('portalDomain')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('portalDomain');
                     }
                 });
                 this.profileForm?.get('nameAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('nameAlias');
                     }
                 });
                 this.profileForm?.get('headQuarterAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('headQuarterAlias');
                     }
                 });
             } else {
                 this.profileForm?.get('alias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value) {
+                    if (value && allowUpdate) {
                         this.profileUpdated('alias');
                     }
                 });
             }
+            setTimeout(() => {
+                allowUpdate = true;
+            }, 1500);
         }
     }
 
@@ -201,7 +208,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public copyUrl(): void {
-        const urlToCopy = `${this.portalUrl}${this.profileData.portalDomain}?region=${this.region}`;
+        const urlToCopy = this.portalLoginUrl;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
         setTimeout(() => {

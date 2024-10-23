@@ -17,6 +17,11 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+/** Branch Hierarchy Type */
+export enum BranchHierarchyType {
+    Flatten = 'flatten',
+    Tree = 'tree'
+};
 
 /** Regex for mobile number */
 export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
@@ -651,3 +656,11 @@ export const ICICI_ALLOWED_COMPANIES = [
     'iciciiin16929619553650svnjv',
     'aaaain16192663354510ja2o4'
 ];
+
+/** Holds region Supported in www.giddh.com  */
+export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
+    'GB': 'uk',
+    'IN': 'in',
+    'AE': 'ae',
+    'GL': 'gl'
+};

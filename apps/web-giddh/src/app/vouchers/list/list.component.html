@@ -1173,7 +1173,7 @@
 
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="pd-t15"> 
+                <div class="pd-t15" *ngIf="activeModule === 'pending'"> 
                     <app-invoice-generate [selectedVoucher]="voucherType"></app-invoice-generate>
                 </div>
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible" *ngIf="false">
@@ -1715,10 +1715,12 @@
 
             <!-- setting-content-start --> <!-- ===== HIDE THIS TAB FOR NOW ===== -->
             <mat-tab [label]="localeData?.tabs?.settings" class="setting-svg" *ngIf="activeTabGroup !== 3 && activeTabGroup !== 4">
-                <div class="pd-t15" *ngIf="voucherType  !== 'purchase'"> 
-                    <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
-                </div>
-                <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting>
+                <ng-container *ngIf="activeModule === 'settings'">
+                    <div class="pd-t15" *ngIf="voucherType  !== 'purchase'"> 
+                        <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
+                    </div>
+                    <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting>
+                </ng-container>
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4" *ngIf="false">
                     <mat-tab *ngIf="activeTabGroup === 0">
                       <ng-template mat-tab-label>
@@ -2220,7 +2222,7 @@
 
             <!-- template-content-start -->
             <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="pd-t15"> 
+                <div class="pd-t15" *ngIf="activeModule === 'templates'"> 
                     <edit-invoice></edit-invoice>
                 </div>
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
@@ -2845,7 +2847,7 @@
             [isEInvoiceEnabled]="isEInvoiceEnabled"
             [advanceFilters]="advanceFilters"
             (applyFilterEvent)="applyAdvanceSearch($event)"
-            (closeDialogEvent)="closeAdvanceSearchDialog(true)"
+            (closeDialogEvent)="closeAdvanceSearchDialog()"
         ></app-advance-search>
     </ng-template>
         

@@ -8,8 +8,8 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { Router } from '@angular/router';
-import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -87,6 +87,7 @@ export class GeneralService {
 
     constructor(
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) { }
 
@@ -611,6 +612,34 @@ export class GeneralService {
     }
 
     /**
+     *Get cookie value
+     *
+     * @param {*} name
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public getCookieValue(name: any): any {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            const cookieValue = parts.pop().split(';').shift();
+            return cookieValue.toUpperCase();
+        }
+        return null;
+    }
+    /**
+     * This will be use for get giddh region url
+     *
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getGiddhRegionUrl(): string {
+        const countryRegion = localStorage.getItem('Country-Region');
+        const region = COUNTRY_REGION_MAP[countryRegion] || null;
+        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+    }
+
+    /**
      * Handles the voucher date change modal configuration
      *
      * @param {boolean} isVoucherDateSelected
@@ -683,16 +712,17 @@ export class GeneralService {
     public fileReturnConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes,
+            text: localeData?.submit_file_return,
             color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no
+            text: commonLocaleData?.app_cancel
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
+        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -700,7 +730,8 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons
+            buttons,
+            actionBtnWrapperCssClass
         };
     }
 
@@ -2114,6 +2145,24 @@ export class GeneralService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Update current page query params
+     *
+     * @param {Params} queryParams
+     * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @memberof GeneralService
+     */
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling: queryParamsHandling
+            }
+        );
     }
 }
 

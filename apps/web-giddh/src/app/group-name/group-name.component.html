@@ -1,0 +1,171 @@
+<ng-container
+  appTranslate
+  [file]="'inventory'"
+  (commonLocaleData)="commonLocaleData = $event"
+  (localeData)="localeData = $event"
+  >
+  <hamburger-menu class="hamburger-menu"></hamburger-menu>
+  <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+  <div class="container-fluid py-3" *ngIf="!isLoading">
+    <div class="stock-balance-wrapper">
+      <div>
+        <div class="d-flex column-gap15">
+            <mat-select
+                name="selectedBranch"
+                [multiple]="true"
+                [(ngModel)]="selectedBranch"
+                class="stock-mat-salect group-select"
+                [placeholder]="localeData?.header?.select_branch"
+            >
+                <mat-option class="balance-options">
+                    <ngx-mat-select-search
+                        [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+                        [formControl]="branchesDropdown"
+                        [placeholderLabel]="localeData?.header?.select_branch"
+                        class="mat-select-search-inventory"
+                    >
+                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                    </ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
+                    {{ branch?.name }}
+                </mat-option>
+            </mat-select>
+            <!-- <mat-select
+                [multiple]="true"
+                class="stock-mat-salect group-select"
+                [placeholder]="localeData?.header?.select_account_group"
+            >
+                <mat-option class="balance-options">
+                    <ngx-mat-select-search
+                        [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+                        [placeholderLabel]="localeData?.header?.select_account_group"
+                        class="mat-select-search-inventory"
+                    >
+                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                    </ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option class="balance-options">Account</mat-option>
+            </mat-select> -->
+        </div>
+
+        <div class="searching-stocks mt-3 w-100 overflow-x-auto">
+          <div class="list-head d-flex align-items-center">
+              <div class="account-name h-100 d-flex align-items-center p-2">
+                <h4>Account Name</h4>
+              </div>
+              <div class="unique-name-wrapper d-flex align-items-center justify-content-center">
+                  <!-- <h4 class="unique-name font-15">{{ commonLocaleData?.app_unique_name }}</h4> -->
+              </div>
+              <div class="wrapper-warehouse">
+                  <div class="warehouse-list d-flex align-items-center position-relative font-15">
+                      <ng-container>
+                          <div class="warehouse-list-head odd-even-shade d-flex flex-column align-items-center justify-content-center">
+                              <p class="warehouse-list-head-num font-15 fw-bold">Branch Name</p>
+                          </div>
+                      </ng-container>
+                  </div>
+              </div>
+          </div>
+          <div class="stock-table-wrapper d-flex flex-column">
+              <div class="stock-table cursor-pointer d-grid">
+                  <div class="grid-title-left p-2">
+                      <p class="inner-name mat-table-sticky fw-bold w-100 h-100 font-15 text-black d-flex align-items-center">Account Name</p>
+                  </div>
+                  <div class="stock-warehouse-list-container d-flex">
+                      <div class="grid-list-div list-grid stock-list-unexpanded align-items-center justify-content-center unique-name d-inline-flex h-auto">
+                            <span class="unique-name-wrap">Unique Name</span>
+                      </div>
+
+                      <div class="warehouse-list-wrapper d-flex">
+                          <ng-container>
+                              <div class="warehouse-list warehouse-even">
+                                  <div class="stock-list-body h-100">
+                                      <div class="stock-list-box h-100">
+                                          <div class="stock-list-unexpanded h-100 w-100">
+                                              <div class="stock-list-box-heading proper-spacing-list h-100 w-100 d-flex justify-content-center align-items-center">
+                                                    <!-- <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+                                                        <div class="form-group m-0">
+                                                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
+                                                                <input
+                                                                    type="number"
+                                                                    id="numbertel"
+                                                                    min="0"
+                                                                    class="form-control text-right mr-1"
+                                                                    digitsOnlyDirective
+                                                                    [placeholder]="
+                                                                        commonLocaleData?.app_numbers?.zero +
+                                                                        '' +
+                                                                        commonLocaleData?.app_numbers?.zero +
+                                                                        '.' +
+                                                                        commonLocaleData?.app_numbers?.zero +
+                                                                        '' +
+                                                                        commonLocaleData?.app_numbers?.zero
+                                                                    "
+                                                                />
+                                                                <div
+                                                                    class="input-group-addon"
+                                                                    (click)="openingBalanceTypeChanged('DEBIT')"
+                                                                    [ngClass]="{
+                                                                        'active-toggle-btn':
+                                                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
+                                                                            addAccountForm.get('openingBalance')?.value > 0,
+                                                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                                                    }"
+                                                                    *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                                                >
+                                                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                                                </div>
+                                                                <div
+                                                                    class="input-group-addon"
+                                                                    (click)="openingBalanceTypeChanged('CREDIT')"
+                                                                    [ngClass]="{
+                                                                        'active-toggle-btn':
+                                                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
+                                                                            addAccountForm.get('openingBalance')?.value > 0,
+                                                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                                                    }"
+                                                                    *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                                                >
+                                                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form> -->
+                                                </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </ng-container>
+                      </div>
+                  </div>
+              </div>
+              <div class="no-data-found text-center" *ngIf="stocksList?.length <= 0">
+                  <img src="{{ imgPath }}search-data-not-found.svg" alt="result not found" /><br />
+                  {{ commonLocaleData?.app_no_result_found }}
+              </div>
+          </div>
+      </div>
+      <div class="pagination-wrapper mt-4">
+          <!-- <pagination
+              [totalItems]="GroupStockReportRequest?.totalItems"
+              [(ngModel)]="GroupStockReportRequest.page"
+              [maxSize]="5"
+              class="pagination-sm"
+              [boundaryLinks]="true"
+              [itemsPerPage]="GroupStockReportRequest.count"
+              [rotate]="false"
+              (pageChanged)="pageChanged($event)"
+              [firstText]="commonLocaleData?.app_first"
+              [previousText]="commonLocaleData?.app_previous"
+              [nextText]="commonLocaleData?.app_next"
+              [lastText]="commonLocaleData?.app_last"
+          ></pagination> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

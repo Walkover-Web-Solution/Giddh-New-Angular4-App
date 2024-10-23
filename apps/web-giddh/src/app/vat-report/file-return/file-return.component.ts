@@ -102,7 +102,6 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         };
 
         this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
-
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
             data: {
@@ -111,7 +110,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         });
 
         confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response === "Yes") {
+            if (response === this.localeData?.submit_file_return) {
                 this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res.status === 'success') {
                         if (res?.body) {

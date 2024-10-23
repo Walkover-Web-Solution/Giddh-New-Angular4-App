@@ -361,7 +361,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
 
                 this.getSelectedTabIndex();
-                if (this.universalDate) {
+                // 'pending', 'settings', 'templates' These tabs are not voucher list
+                if (this.universalDate && !['pending', 'settings', 'templates'].includes(this.activeModule)) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
                 }
@@ -638,6 +639,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (response && response.voucherType === this.voucherType) {
             this.dataSource = [];
             this.totalResults = response?.totalItems;
+            this.selectAllVouchers({ checked: false });
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
 
@@ -1500,7 +1502,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const tempKeysInAdvanceFiltersForm = ['dueAmount', 'dateRange', 'grandTotalOperation', 'invoiceTotalAmount', 'invoiceDateRange'];
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
-
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
             sort: this.advanceFilters.sort,
@@ -1545,13 +1546,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /**
      * Close Advance Search Dialog
      *
-     * @param {boolean} isClosed
+     *
      * @memberof VoucherListComponent
      */
-    public closeAdvanceSearchDialog(isClosed: boolean): void {
-        if (isClosed) {
-            this.selectAllVouchers({ checked: false });
-        }
+    public closeAdvanceSearchDialog(): void {
         this.advanceSearchDialogRef?.close();
     }
 
