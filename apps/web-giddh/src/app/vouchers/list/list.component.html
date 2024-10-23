@@ -1456,7 +1456,7 @@
                                                 <i class="icon-envelope"></i>
                                             </button>
                                             <button *ngIf="!isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'" 
-                                                [routerLink]="['/pages/purchase-management/purchase-order/new/' + element.uniqueName]">
+                                                (click)="copyVoucher(element)">
                                                 <i class="icon-copy-small"></i>
                                             </button>
                                             <button *ngIf="!isCompany" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
@@ -1680,8 +1680,7 @@
                                             <button mat-menu-item 
                                                 aria-label="copy icon"
                                                 *ngIf="!isCompany"
-                                                [routerLink]="['/pages/proforma-invoice/invoice/purchase/' + element.account?.uniqueName + '/' 
-                                                + element?.uniqueName + '/copy']"
+                                                (click)="copyVoucher(element)"
                                             >
                                             {{ commonLocaleData?.app_copy }}
                                             </button>
