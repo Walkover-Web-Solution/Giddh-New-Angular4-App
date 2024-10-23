@@ -362,8 +362,8 @@ Implement the lifecycle hook interfaces. Don't just use methods without implemen
 
 ## Electron Build for Test
 
-1. Checkout the production branch: git checkout giddh-2.0.
-2. Pull the latest changes from the production branch: git pull origin giddh-2.0.
+1. Checkout the test branch: git checkout giddh-2.0.
+2. Pull the latest changes from the test branch: git pull origin giddh-2.0.
 3. Update the version for the Angular package and the Electron Giddh package (e.g., if the current version is 8.2.15, increase the suffix from 15 to 16).
 4. Run the Windows package build: npm run package:windows.
 5. Check the Electron build in the electrongiddh-packages folder (e.g., look for a file like giddh Setup 8.2.20.exe).
