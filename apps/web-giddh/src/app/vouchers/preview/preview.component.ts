@@ -1117,7 +1117,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Edit voucher redirect to voucher edit page with respective voucher
+     * Handle Edit/Copy voucher redirect to voucher edit/create page with respective voucher
      *
      * @memberof VouchersPreviewComponent
      */
