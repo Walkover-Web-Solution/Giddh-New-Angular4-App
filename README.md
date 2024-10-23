@@ -352,7 +352,7 @@ Implement the lifecycle hook interfaces. Don't just use methods without implemen
 
 ## Electron Build for Production
 
-1. Checkout the production branch: git checkout production.
+1. Checkout the Electron Production Branch (1apr-prod-build branch): git checkout 1apr-prod-build.
 2. Pull the latest changes from the production branch: git pull origin production.
 3. Update the version for the Angular package and the Electron Giddh package (e.g., if the current version is 8.2.15, increase the suffix from 15 to 16).
 4. Run the Windows package build: npm run package:windows.
@@ -362,7 +362,7 @@ Implement the lifecycle hook interfaces. Don't just use methods without implemen
 
 ## Electron Build for Test
 
-1. Checkout the test branch: git checkout giddh-2.0.
+1. Checkout the Electron Test Branch (test-electron-build): git checkout test-electron-build.
 2. Pull the latest changes from the test branch: git pull origin giddh-2.0.
 3. Update the version for the Angular package and the Electron Giddh package (e.g., if the current version is 8.2.15, increase the suffix from 15 to 16).
 4. Run the Windows package build: npm run package:windows.
