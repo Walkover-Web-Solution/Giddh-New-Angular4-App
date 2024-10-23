@@ -618,4 +618,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * Send voucher type whatsapp option.
+     *
+     * @param {string} voucherType
+     * @returns {boolean}
+     * @memberof InvoiceSettingComponent
+     */
+    public getWhatsappSettingLabel(voucherType: string): string {
+        return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
+    }
 }
