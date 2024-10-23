@@ -46,7 +46,11 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon pull-right"
+                                                [ngClass]="{
+                                                    'icon-company-profile': option.consolidatedBranch,
+                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                }"
+                                                class="pull-right"
                                                 *ngIf="!option.isCompany"
                                                 tooltip="{{ commonLocaleData?.app_branch }}"
                                             ></i>
@@ -81,25 +85,14 @@
                     </div>
                 </div>
                 <div
-                    class="
-                        clear-filter
-                        align-items-center
-                        d-flex
-                        justify-content-xl-center justify-content-lg-start
-                        w-50
-                    "
+                    class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                     *ngIf="showClearFilter"
                 >
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
-                <div
-                    *ngIf="selectedPayments?.length > 0"
-                    class="btn-group ml-auto"
-                    dropdown
-                    #dp="bs-dropdown"
-                >
+                <div *ngIf="selectedPayments?.length > 0" class="btn-group ml-auto" dropdown #dp="bs-dropdown">
                     <button
                         class="btn btn-default mr-r15"
                         [tooltip]="commonLocaleData?.app_export"
@@ -124,9 +117,12 @@
                             aria-labelledby="button-basic"
                         >
                             <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
-                                    commonLocaleData?.app_delete
-                                }}</a>
+                                <a
+                                    class="dropdown-item cp"
+                                    href="javascript:void(0)"
+                                    (click)="openConfirmationPopup()"
+                                    >{{ commonLocaleData?.app_delete }}</a
+                                >
                             </li>
                         </ul>
                     </ng-container>
@@ -141,10 +137,7 @@
                         <span class="icon-advance-filter"></span>
                     </div>
                     <div class="btn-group ml-3" *ngIf="selectedPayments?.length > 0 || allPayments?.length > 0">
-                        <button
-                            class="btn btn-primary"
-                            (click)="openBulkExport(bulkExport)"
-                        >
+                        <button class="btn btn-primary" (click)="openBulkExport(bulkExport)">
                             {{ commonLocaleData?.app_export }}
                         </button>
                     </div>
@@ -494,7 +487,11 @@
                 </table>
             </div>
 
-            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper mt-2">
+            <div
+                [hidden]="isLoading"
+                *ngIf="pageConfiguration.totalItems > paginationLimit"
+                class="pagination-wrapper mt-2"
+            >
                 <pagination
                     [totalItems]="pageConfiguration.totalItems"
                     [(ngModel)]="pageConfiguration.currentPage"
@@ -611,7 +608,7 @@
 <ng-template #bulkExport>
     <bulk-export-voucher
         [type]="'payment'"
-        [dateRange]="{ from: fromDate, to: toDate}"
+        [dateRange]="{ from: fromDate, to: toDate }"
         [advanceSearch]="lastListingFilters"
         [voucherUniqueNames]="selectedPayments"
         [totalItems]="

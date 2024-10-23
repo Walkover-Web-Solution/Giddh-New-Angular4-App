@@ -43,7 +43,7 @@
             </div>
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
-                    <!-- <div class="filter-dropdown-branch mr-b15" *ngIf="isCompany && allBranches?.length > 1">
+                    <div class="filter-dropdown-branch mr-b15" *ngIf="isCompany && allBranches?.length > 1">
                         <mat-select
                             name="branch"
                             class="branch-mat-salect"
@@ -69,7 +69,7 @@
                                 {{ branch?.name ?? "-" }}
                             </mat-option>
                         </mat-select>
-                    </div> -->
+                    </div>
                     <div class="branch-form-field">
                         <div class="address-dropdown">
                             <input-field

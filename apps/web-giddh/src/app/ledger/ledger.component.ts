@@ -517,7 +517,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         label: branch?.name,
                         value: branch?.uniqueName,
                         name: branch?.name,
-                        parentBranch: branch?.parentBranch
+                        parentBranch: branch?.parentBranch,
+                        consolidatedBranch: branch?.consolidatedBranch
                     }));
                     this.currentCompanyBranches.unshift({
                         label: this.activeCompany ? this.activeCompany.name : '',
