@@ -349,3 +349,24 @@ Just like files, functions also follow the single responsibility princinple. Def
 ## Lifecycle Hooks
 
 Implement the lifecycle hook interfaces. Don't just use methods without implementing the Lifecycle Hook Interfaces.
+
+## Electron Build for Production
+
+1. Checkout the production branch: git checkout production.
+2. Pull the latest changes from the production branch: git pull origin production.
+3. Update the version for the Angular package and the Electron Giddh package (e.g., if the current version is 8.2.15, increase the suffix from 15 to 16).
+4. Run the Windows package build: npm run package:windows.
+5. Check the Electron build in the electrongiddh-packages folder (e.g., look for a file like giddh Setup 8.2.20.exe).
+6. Provide the build to the tester for sanity testing.
+7. After the sanity check, upload the Electron build to the AWS S3 path (Coordinate with the lead for uploading the build to the AWS S3 path).
+
+## Electron Build for Test
+
+1. Checkout the production branch: git checkout giddh-2.0.
+2. Pull the latest changes from the production branch: git pull origin giddh-2.0.
+3. Update the version for the Angular package and the Electron Giddh package (e.g., if the current version is 8.2.15, increase the suffix from 15 to 16).
+4. Run the Windows package build: npm run package:windows.
+5. Check the Electron build in the electrongiddh-packages folder (e.g., look for a file like giddh Setup 8.2.20.exe).
+6. Provide the build to the tester for sanity testing.
+7. After the sanity check, upload the Electron build to the AWS S3 path (Coordinate with the lead for uploading the build to the AWS S3 path).
+
