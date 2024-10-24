@@ -58,7 +58,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.isElectron = isElectron;
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
-            if (ss.user && ss.user.session && ss.user.session.id) {
+            if (ss?.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
                 a.isNewUser = true;
                 this._generalService.user = { ...ss.user.user, ...a };

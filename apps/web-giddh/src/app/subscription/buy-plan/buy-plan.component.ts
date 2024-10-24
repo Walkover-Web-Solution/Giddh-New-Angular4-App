@@ -412,7 +412,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             if (this.payType === 'trial') {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
-                                if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
+                                if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND') {
                                     let model = {
                                         planUniqueName: response?.planDetails?.uniqueName,
                                         paymentProvider: this.thirdStepForm.value.paymentProvider,
@@ -525,7 +525,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
             }
             if (response && response.dueAmount > 0) {
-                if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
+                if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
                         paymentProvider: this.thirdStepForm.value.paymentProvider,
@@ -1318,26 +1318,28 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.thirdStepForm.get('paymentProvider')?.patchValue(provider);
         };
 
-
-
-        if (duration === 'MONTHLY' || duration === 'DAILY') {
-            if (entityCode === 'GLB' || entityCode === 'ARE') {
-                filterProviders('PAYPAL');
-            } else if (entityCode === 'GBR') {
+        if (entityCode === 'GBR') {
+            if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Exclude Razorpay for monthly GBR
                 this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
-            } else if (entityCode === 'IND') {
+            } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
                 filterProviders('RAZORPAY');
             }
-        } else if (duration === 'YEARLY') {
-            if (entityCode === 'GLB' || entityCode === 'GBR' || entityCode === 'IND' || entityCode === 'ARE') {
-                // Only Razorpay for yearly GBR
+        } else if (entityCode !== 'IND') {
+            if (duration === 'MONTHLY' || duration === 'DAILY') {
+                // Only PayPal for non-IND countries with monthly duration
+                filterProviders('PAYPAL');
+            } else if (duration === 'YEARLY') {
+                // Only Razorpay for non-IND countries with yearly duration
                 filterProviders('RAZORPAY');
             }
+        } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
+            // Only Razorpay for IND with any duration
+            filterProviders('RAZORPAY');
         }
 
-        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && duration === 'MONTHLY') {
+        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && (duration === 'MONTHLY' || duration === 'DAILY')) {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
         } else {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
