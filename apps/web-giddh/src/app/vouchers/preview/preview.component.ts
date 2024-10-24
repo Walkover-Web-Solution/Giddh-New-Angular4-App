@@ -231,7 +231,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.advanceFilters.page = Number(params.page);
                     this.advanceFilters.from = params.from ?? '';
                     this.advanceFilters.to = params.to ?? '';
-                    this.getAllVouchers();
+                    const searchString = params.search;
+                    if (searchString) {
+                        this.search.setValue(searchString);
+                    } else {
+                        this.getAllVouchers();
+                    }
                 }
             }
         });
@@ -250,9 +255,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     sort: '',
                     sortBy: ''
                 };
-
                 this.isSearching = true;
-
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -646,7 +649,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                 this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
-            } else {
+            } else {                
                 this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             }
         }
@@ -922,7 +925,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.isLoadMore = false;
             this.getAllApiCallCount++;
             this.changeDetection.detectChanges();
-
+            
             if (this.invoiceList?.length) {
                 this.setSelectedInvoice(!this.selectedInvoice ? this.params.voucherUniqueName : this.invoiceList[0].uniqueName);
             }
@@ -1122,12 +1125,23 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public editCopyVoucher(actionType: 'edit' | 'copy' = 'edit'): void {
+        const queryParams = {
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+            page: this.advanceFilters.page
+        }
+        
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (actionType === 'edit' && searchString?.length){
+            queryParams['search'] = searchString;
+        }
+
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`]);
+            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`]);
+            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else {
-            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/${actionType}`]);
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/${actionType}`], { queryParams: queryParams });
         }
     }
 

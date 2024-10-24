@@ -3509,6 +3509,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             from: this.queryParams?.from ?? '',
             to: this.queryParams?.to ?? ''
         };
+
+        if (this.queryParams?.search?.length) {
+            queryParams['search'] = this.queryParams?.search;
+        }
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
 
