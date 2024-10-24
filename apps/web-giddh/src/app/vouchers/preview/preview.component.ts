@@ -231,7 +231,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.advanceFilters.page = Number(params.page);
                     this.advanceFilters.from = params.from ?? '';
                     this.advanceFilters.to = params.to ?? '';
-                    this.getAllVouchers();
+                    const searchString = params.search;
+                    if (searchString) {
+                        this.search.setValue(searchString);
+                    } else {
+                        this.getAllVouchers();
+                    }
                 }
             }
         });
@@ -250,9 +255,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     sort: '',
                     sortBy: ''
                 };
-
                 this.isSearching = true;
-
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -1126,6 +1129,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
             page: this.advanceFilters.page
+        }
+
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length){
+            queryParams['search'] = searchString;
         }
 
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
