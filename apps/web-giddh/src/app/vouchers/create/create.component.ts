@@ -1993,7 +1993,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
-        
+
         let index = 0;
 
         if (this.useDefaultAccountDetails) {
@@ -3503,6 +3503,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             from: this.queryParams?.from ?? '',
             to: this.queryParams?.to ?? ''
         };
+
+        if (this.queryParams?.search?.length) {
+            queryParams['search'] = this.queryParams?.search;
+        }
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${this.invoiceForm.get('uniqueName').value}`], { queryParams: queryParams });
     }
 
