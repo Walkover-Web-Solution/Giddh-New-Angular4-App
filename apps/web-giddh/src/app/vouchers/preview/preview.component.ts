@@ -243,7 +243,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if ((search || search === '')) {
+            if (search || search === '') {
                 // Reset Filter
                 this.pageNumberHistory = [1];
                 this.advanceFilters = {
@@ -649,7 +649,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                 this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
-            } else {                
+            } else {
                 this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             }
         }
@@ -925,7 +925,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.isLoadMore = false;
             this.getAllApiCallCount++;
             this.changeDetection.detectChanges();
-            
+
             if (this.invoiceList?.length) {
                 this.setSelectedInvoice(!this.selectedInvoice ? this.params.voucherUniqueName : this.invoiceList[0].uniqueName);
             }
@@ -1130,10 +1130,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             to: this.advanceFilters.to,
             page: this.advanceFilters.page
         }
-        
+
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
         if (searchString?.length){
-            queryParams['search'] = searchString 
+            queryParams['search'] = searchString;
         }
 
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
