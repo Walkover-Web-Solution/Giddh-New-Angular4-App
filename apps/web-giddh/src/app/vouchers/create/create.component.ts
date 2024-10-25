@@ -218,6 +218,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public accountAsideMenuRef: MatDialogRef<any>;
     /** True if it's voucher update mode */
     public isUpdateMode: boolean = false;
+    /** True if voucher copy mode */
+    public isCopyMode: boolean = false;
     /** Holds parent group unique name for create account modal */
     public accountParentGroup: string = '';
     /** True if account has unsaved changes */
@@ -545,7 +547,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getWarehouses();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response) {                
                 let params = response[0];
                 this.queryParams = response[1];
 
@@ -565,14 +567,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.resetVoucherForm(!params?.uniqueName, true);
 
                 /** Open account dropdown on create */
-                if (params?.uniqueName) {
-                    this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
-                } else {
-                    this.depositAccountName = "";
-                }
-
                 this.getVoucherType();
-
 
                 if (params?.accountUniqueName && !params?.uniqueName) {
                     this.searchAccount(params?.accountUniqueName, 1, true);
@@ -603,10 +598,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceForm.get('type').patchValue(this.voucherType);
 
                 if (params?.uniqueName) {
-                    this.isUpdateMode = true;
+                    if (params?.action === 'copy') {
+                        this.isCopyMode = true;
+                    } else {
+                        this.isUpdateMode = true;
+                        this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
+                    }
                     this.useDefaultAccountDetails = false;
                     this.getVoucherDetails(params);
                     this.getUpdateVoucherText();
+                } else {
+                    this.depositAccountName = "";
                 }
 
                 if (params?.accountUniqueName === "cash") {
@@ -779,7 +781,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getVoucherType(response);
                     }
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
-                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName) ;
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
                     this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
                     this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber ?? '');
@@ -787,7 +789,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.initIntl(this.invoiceForm.controls["account"].get("mobileNumber")?.value);
                 }
 
-                if (response?.purchaseOrderDetails?.length) {
+                if (response?.purchaseOrderDetails?.length && !this.isCopyMode) {
                     this.purchaseOrderDetailsForEdit = response?.purchaseOrderDetails;
                     this.invoiceForm.get("linkedPo")?.patchValue(response?.purchaseOrderDetails?.map(po => { return po.uniqueName; }));
                     this.selectedPoItems = this.invoiceForm.get("linkedPo")?.value;
@@ -812,7 +814,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
-                    this.invoiceForm.get('number')?.patchValue(response.number);
+                    this.invoiceForm.get('number')?.patchValue(this.isCopyMode ? null : response.number);
                     this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
                     this.invoiceForm.get('passportNumber').patchValue(response?.passportNumber);
 
@@ -824,8 +826,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             value: response.referenceVoucher.uniqueName,
                             additional: {
                                 voucherType: response.referenceVoucher.voucherType,
-                                voucherNumber: response.referenceVoucher.number,
-                                voucherDate: response.referenceVoucher.date
+                                voucherNumber: this.isCopyMode ? null : response.referenceVoucher.number,
+                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) :response.referenceVoucher.date
                             }
                         });
                     }
@@ -849,8 +851,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     this.invoiceForm.get('isRcmEntry').patchValue((response.subVoucher === SubVoucher.ReverseCharge) ? true : false);
-
-                    if (response.adjustments?.length) {
+                    
+                    if (response.adjustments?.length && !this.isCopyMode) {
                         response.adjustments = response.adjustments?.map(adjustment => {
                             adjustment.adjustmentAmount = adjustment.amount;
                             return adjustment;
@@ -984,22 +986,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         /** Linked purchase orders list */
         this.componentStore.linkedPoOrders$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.linkedPoNumbers = response;
-
-            if (this.purchaseOrderDetailsForEdit && this.isUpdateMode) {
-                setTimeout(() => {
-                    this.purchaseOrderDetailsForEdit?.forEach(order => {
-                        if (!this.linkedPoNumbers || !this.linkedPoNumbers[order?.uniqueName]) {
-                            this.purchaseOrders.push({ label: order?.number, value: order?.uniqueName, additional: { grandTotal: order?.grandTotal?.amountForAccount, totalPending: order?.entries?.length } });
-
-                            this.linkedPoNumbers[order?.uniqueName] = [];
-                            this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order?.number;
-                            this.linkedPoNumbers[order?.uniqueName]['items'] = order?.entries;
-                        }
-                    });
-
-                    this.filterPurchaseOrder("");
-                }, 200);
+            if (!this.isCopyMode) {
+                this.linkedPoNumbers = response;
+    
+                if (this.purchaseOrderDetailsForEdit && this.isUpdateMode) {
+                    setTimeout(() => {
+                        this.purchaseOrderDetailsForEdit?.forEach(order => {
+                            if (!this.linkedPoNumbers || !this.linkedPoNumbers[order?.uniqueName]) {
+                                this.purchaseOrders.push({ label: order?.number, value: order?.uniqueName, additional: { grandTotal: order?.grandTotal?.amountForAccount, totalPending: order?.entries?.length } });
+    
+                                this.linkedPoNumbers[order?.uniqueName] = [];
+                                this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order?.number;
+                                this.linkedPoNumbers[order?.uniqueName]['items'] = order?.entries;
+                            }
+                        });
+    
+                        this.filterPurchaseOrder("");
+                    }, 200);
+                }
             }
         });
 
@@ -2206,7 +2210,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
-            uniqueName: [entryData && copyUniqueName ? entryData?.uniqueName : ''],
+            uniqueName: [this.isCopyMode ? '' : (entryData && copyUniqueName ? entryData?.uniqueName : '')],
             showCodeType: [entryData && entryData?.hsnNumber ? 'hsn' : 'sac'], //temp
             hsnNumber: [entryData ? entryData?.hsnNumber : ''],
             sacNumber: [entryData ? entryData?.sacNumber : ''],
