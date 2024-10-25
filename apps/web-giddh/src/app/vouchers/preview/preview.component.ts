@@ -649,7 +649,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                 this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
-            } else {                
+            } else {
                 this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             }
         }
@@ -925,7 +925,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.isLoadMore = false;
             this.getAllApiCallCount++;
             this.changeDetection.detectChanges();
-            
+
             if (this.invoiceList?.length) {
                 this.setSelectedInvoice(!this.selectedInvoice ? this.params.voucherUniqueName : this.invoiceList[0].uniqueName);
             }
@@ -1130,14 +1130,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             to: this.advanceFilters.to,
             page: this.advanceFilters.page
         }
-        
-        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
-        if (actionType === 'edit' && searchString?.length){
-            queryParams['search'] = searchString;
-        }
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
-        if (searchString?.length){
+        if (actionType === 'edit' && searchString?.length) {
             queryParams['search'] = searchString;
         }
 
