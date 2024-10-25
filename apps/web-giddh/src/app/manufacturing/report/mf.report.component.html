@@ -44,8 +44,8 @@
                                             <span class="entity-icon">
                                                 <i
                                                     [ngClass]="{
-                                                        'icon-company-profile': option.consolidatedBranch,
-                                                        'icon-branch-icon': !option.consolidatedBranch
+                                                        'icon-company-profile': option?.consolidatedBranch,
+                                                        'icon-branch-icon': !option?.consolidatedBranch
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"

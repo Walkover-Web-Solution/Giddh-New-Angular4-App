@@ -26,8 +26,8 @@
                                             <i
                                                 class="pull-right"
                                                 [ngClass]="{
-                                                    'icon-company-profile': option.consolidatedBranch,
-                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                    'icon-company-profile': option?.consolidatedBranch,
+                                                    'icon-branch-icon': !option?.consolidatedBranch
                                                 }"
                                                 *ngIf="!option.isCompany"
                                                 tooltip="{{commonLocaleData?.app_branch}}"
