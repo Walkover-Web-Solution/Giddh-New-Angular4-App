@@ -712,17 +712,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        const queryParams =  { 
-            page: this.advanceFilters.page, 
-            from: this.advanceFilters.from, 
-            to: this.advanceFilters.to, 
+        const queryParams =  {
+            page: this.advanceFilters.page,
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
         };
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
         if (searchString?.length){
             queryParams['search'] = searchString;
         };
-        
+
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${voucherUniqueName}`], {
             queryParams: queryParams
         });
@@ -1702,8 +1702,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const model = {
             accountUniqueName: voucher.customerUniqueName
         };
-        
-        if (this.voucherType === VoucherTypeEnum.generateEstimate) { 
+
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;

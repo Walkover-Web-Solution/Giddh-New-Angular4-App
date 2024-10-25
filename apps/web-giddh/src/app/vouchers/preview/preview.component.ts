@@ -1136,6 +1136,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             queryParams['search'] = searchString;
         }
 
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length){
+            queryParams['search'] = searchString;
+        }
+
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
             this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
