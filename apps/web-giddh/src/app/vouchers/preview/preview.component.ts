@@ -1120,11 +1120,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Edit voucher redirect to voucher edit page with respective voucher
+     * Handle Edit/Copy voucher redirect to voucher edit/create page with respective voucher
      *
      * @memberof VouchersPreviewComponent
      */
-    public editVoucher(): void {
+    public editCopyVoucher(actionType: 'edit' | 'copy' = 'edit'): void {
         const queryParams = {
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
@@ -1132,16 +1132,16 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
-        if (searchString?.length){
+        if (actionType === 'edit' && searchString?.length) {
             queryParams['search'] = searchString;
         }
 
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else {
-            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/${actionType}`], { queryParams: queryParams });
         }
     }
 
@@ -1164,18 +1164,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Copy Invoice and redirect to respective page
-     *
-     * @memberof VouchersPreviewComponent
-     */
-    public copyInvoice(): void {
-        if (this.voucherType === VoucherTypeEnum.purchase) {
-            this.router.navigate([`/pages/proforma-invoice/invoice/purchase/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.uniqueName}/copy`]);
-        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-            this.router.navigate([`/pages/purchase-management/purchase-order/new/${this.selectedInvoice?.uniqueName}`]);
-        }
-    }
 
     /**
      * Handle Estimate Proforma Actions API Call
