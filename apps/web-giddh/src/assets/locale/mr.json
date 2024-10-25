@@ -749,5 +749,6 @@
     "app_user_settings": "वापरकर्ता सेटिंग्ज",
     "app_subscription": "वर्गणी",
     "app_custom_email": "कस्टम ईमेल",
-    "app_custom_email_template": "कस्टम ईमेल टेम्पलेट"
+    "app_custom_email_template": "कस्टम ईमेल टेम्पलेट",
+    "app_send_voucher_type_whatsapp": "व्हाट्सएप द्वारे [VOUCHER_TYPE] पाठवा"
 }

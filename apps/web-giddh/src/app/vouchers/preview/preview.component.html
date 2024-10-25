@@ -54,7 +54,7 @@
                 </ng-container>
             </div>
             <div class="mat-grid-wrapper">
-                <div class="mat-list-wrap" *ngIf="!(getVouchersInProgress$ | async)" >
+                <div class="mat-list-wrap" *ngIf="(getVouchersInProgress$ | async) === false" >
                     <mat-list>
                         <app-cdk-scroll
                             [scrollTriggerDistance]="30"
@@ -340,7 +340,7 @@
                 *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
             ></giddh-page-loader>
             
-            <ng-container *ngIf="!(isVoucherDownloading$ | async)">
+            <ng-container *ngIf="(isVoucherDownloading$ | async) === false">
                 <div class="pdf-preview" *ngIf="voucherType === voucherTypeEnum.purchase">
                     <div class="position-relative">
                         <h5 class="pd-l15 py-2">
