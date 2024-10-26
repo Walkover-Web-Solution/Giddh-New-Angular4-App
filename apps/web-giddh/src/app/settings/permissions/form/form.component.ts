@@ -69,6 +69,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    
+    public remainingUsers : number = 0;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
@@ -133,7 +135,14 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             if (activeCompany && activeCompany.userEntityRoles && activeCompany.userEntityRoles.length && activeCompany.userEntityRoles[0] && activeCompany.userEntityRoles[0].role && activeCompany.userEntityRoles[0].role.uniqueName === 'super_admin') {
                 this.isSuperAdminCompany = true;
             } else {
-                this.isSuperAdminCompany = false;
+                this.isSuperAdminCompany = false; 
+            }
+            if (activeCompany?.moduleRestrictionStatus) {
+                activeCompany?.moduleRestrictionStatus.filter((module)=>{
+                    if (module?.moduleName === 'Users'){
+                        this.remainingUsers = module?.remainingUsers;
+                    }
+                });
             }
         });
 

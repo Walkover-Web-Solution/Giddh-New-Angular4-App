@@ -61,6 +61,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
+    /** Stores the active company information */
+    public activeCompany$: Observable<any> ;
     public GstAsidePaneState: string = 'out';
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
@@ -91,6 +93,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
+    public isActiveCompany : any = null;
 
     constructor(
         private store: Store<AppState>,
@@ -106,12 +109,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.isActiveCompany = response;
+        });
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
             if (this.holdActiveRoute) {
