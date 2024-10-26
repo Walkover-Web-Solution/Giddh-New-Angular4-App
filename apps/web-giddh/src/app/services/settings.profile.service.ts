@@ -262,6 +262,8 @@ export class SettingsProfileService {
         return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<SmsKeyClass, string> = res;
             data.queryString = {};
+            console.log(data);
+            
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
     }

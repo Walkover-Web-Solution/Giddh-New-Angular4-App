@@ -4,6 +4,18 @@
     </div>
 
     <!-- region gstr1 -->
+    <div class="white-row plan-issue" *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing') && selectedGst === GstReport.Gstr1">
+        <p class="upgrade-section">
+            <span class="upgrade-text">
+              You currently don’t have access to this module. Upgrade your plan to unlock it without any hassle.
+            </span>
+          
+            <button mat-stroked-button color="primary" aria-label="back" (click)="createCompanyInSubscription(isActiveCompany?.subscription.subscriptionId)">
+              Upgrade
+            </button>
+            
+        </p>
+    </div>
     <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
         <div class="wrap-GSTR-1-title col-lg-4 col-sm-8 col-12 xs-mb-1">
             <a href="javascript:void(0);" [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
@@ -102,6 +114,7 @@
                             class="btn btn-primary authenticate-btn pull-right"
                             [ngClass]="{ 'btn-success': gstAuthenticated }"
                             (click)="toggleSettingAsidePane($event, 'TAXPRO')"
+                            [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing')"
                         >
                             {{
                                 gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate

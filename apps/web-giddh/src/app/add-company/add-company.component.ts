@@ -28,6 +28,7 @@ import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
 import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
+import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -37,7 +38,7 @@ declare var window: any;
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [AddCompanyComponentStore, ChangeBillingComponentStore]
+    providers: [AddCompanyComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore]
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -228,6 +229,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     /** Holds Store Get Billing Details observable*/
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
+    /** Holds View Subscription list observable*/
+    public viewSubscriptionData$ = this.ViewSubscriptionComponentStore.select(state => state.viewSubscription);
+    /** Hold the data of view  subscription */
+    public viewSubscriptionData: any;
+    public userLimit = 2;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -250,7 +256,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private activateRoute: ActivatedRoute,
         public router: Router,
         private commonService: CommonService,
-        private readonly changeBillingComponentStore: ChangeBillingComponentStore
+        private readonly changeBillingComponentStore: ChangeBillingComponentStore,
+        private ViewSubscriptionComponentStore: ViewSubscriptionComponentStore
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -271,6 +278,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (res?.subscriptionId) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
                 this.getCountryListBySubscriptionId(res?.subscriptionId);
+                this.getSubscriptionData(res?.subscriptionId);
                 this.isCreateBySubscription = true;
             }
         });
@@ -359,6 +367,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
+        this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.viewSubscriptionData = response;
+        });
+
         this.changeDetection.detectChanges();
     }
 
@@ -370,6 +382,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public getBillingDetails(): void {
         this.changeBillingComponentStore.getBillingDetails(null);
+    }
+
+    /**
+     * Fetches subscription data by its ID.
+     *
+     * @param id - The ID of the subscription to fetch.
+     * @memberof ViewSubscriptionComponent
+     */
+    public getSubscriptionData(id: any): void {
+        this.ViewSubscriptionComponentStore.viewSubscriptionsById(id);
     }
 
     /**
@@ -641,7 +663,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
     }
-
+    public isSuperAdmin(): boolean {
+        console.log("oo",(Boolean(this.thirdStepForm.get('creatorSuperAdmin').value)) , typeof(this.thirdStepForm.get('creatorSuperAdmin').value));
+        
+        return Boolean(this.thirdStepForm.get('creatorSuperAdmin').value) === true;
+    }
     /**
      * This will be use for add new user
      *
@@ -650,6 +676,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public addNewUser(): void {
         const isSuperAdmin = Boolean(this.thirdStepForm.get('creatorSuperAdmin').value) === false;
+        console.log("isSuperAdmin",isSuperAdmin);
+        
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         let mappingForm = this.formBuilder.group({
             emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)], // Add email validation
@@ -671,9 +699,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {number} index
      * @memberof AddCompanyComponent
      */
-    public removeUser(index: number): void {
+    public removeUser(index: number , isSuperAdmin: boolean = false): void {
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
-        if (index === 0) {
+        if (index === 0 && !isSuperAdmin) {
             mappings.reset(); // Reset the control at index 0
         } else {
             mappings.removeAt(index);
@@ -1450,8 +1478,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public setOwnerPermission(event: any): void {
-        const isSuperAdmin = Boolean(event?.value) === true;
+        const isSuperAdmin = event?.value === "true";
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
+        console.log(this.thirdStepForm.get('creatorSuperAdmin').value);
+        
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
         permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
             const roleUniqueNameControl = permissionGroup.get('roleUniqueName');
@@ -1462,6 +1492,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             roleUniqueNameControl.updateValueAndValidity();
         });
+        if(isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === this.userLimit)){
+            this.removeUser(this.thirdStepForm.get('permissionRoles').value.length-1, isSuperAdmin);
+            console.log("okkk");
+        }
+        if(!isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === 0)){
+            this.addNewUser();
+        }
     }
 
     /**

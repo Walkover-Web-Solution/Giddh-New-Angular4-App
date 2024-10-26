@@ -72,8 +72,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Stores the active company information */
-    public activeCompany$: Observable<any> = null;
+    /** Stores the active company information observable */
+    public activeCompany$: Observable<any> = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
     /** True if user has invoice setting permissions */
@@ -86,6 +86,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
+    /** Stores the active company information */
+    public selectedCompany : any = null;
 
     constructor(
         private commonActions: CommonActions,
@@ -111,7 +113,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.selectedCompany = response;
+        });
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
         });
@@ -138,10 +142,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     });
                 }
             } else {
-                let companyCountry;
-                this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
-                    companyCountry = response?.countryV2?.alpha2CountryCode;
-                });
+                let companyCountry = this.selectedCompany;
                 if (companyCountry === 'IN') {
                     const requestObject = {
                         formName: 'onboarding',
@@ -245,6 +246,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.saveWebhook(objToSave);
             }
         }
+    }
+
+    /**
+     * Navigates to the page for creating a new company.
+     * @param subscriptionId 
+     */
+    public createCompanyInSubscription(subscriptionId: string): void {
+        this.router.navigate(['/pages/new-company/' + subscriptionId]);
     }
 
     /**
