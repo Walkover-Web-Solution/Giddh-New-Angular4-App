@@ -62,7 +62,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
     /** Stores the active company information */
-    public activeCompany$: Observable<any> ;
+    public activeCompany$: Observable<any>;
     public GstAsidePaneState: string = 'out';
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
@@ -93,7 +93,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
-    public isActiveCompany : any = null;
+    public isActiveCompany: any = null;
 
     constructor(
         private store: Store<AppState>,
@@ -369,5 +369,14 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to },
                 queryParamsHandling: 'merge'
             });
+    }
+
+    /**
+    * Navigates to the page for creating a new company.
+    * @memberof FilingHeaderComponent
+    * @param subscriptionId
+    */
+    public createCompanyInSubscription(subscriptionId: string): void {
+        this.router.navigate(['/pages/new-company/', subscriptionId]);
     }
 }

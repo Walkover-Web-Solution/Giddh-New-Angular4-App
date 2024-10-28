@@ -29,39 +29,38 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public email: string;
     public selectedPermission: string;
     public activeGroup$: Observable<GroupResponse>;
+    public activeCompany$: Observable<any>;
     public activeGroupSharedWith$: Observable<ShareRequestForm[]>;
     public allPermissions$: Observable<GetAllPermissionResponse[]>;
     /** Email id validation regex pattern */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
     public remainingUsers: number = 0;
     public activeCompany: any;
-    
+
 
     @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction, private router: Router, private settingsProfileActions: SettingsProfileActions, private componentStore: GstSettingComponentStore) {
+    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction, private router: Router, private settingsProfileActions: SettingsProfileActions) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 if (activeCompany?.moduleRestrictionStatus) {
-                    activeCompany.moduleRestrictionStatus.filter((module) => {
-                        if (module?.moduleName === 'Users') {
-                            this.remainingUsers = module?.remainingUsers;
-                        }
-                    });
+                    let module = activeCompany.moduleRestrictionStatus.find(
+                        (module) => module?.moduleName === 'Users'
+                    );
+                    this.remainingUsers = module.remainingUsers;
                 }
-                console.log("ok", activeCompany);
             }
         });
-    
     }
 
     public getGroupSharedWith() {
@@ -74,7 +73,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
     /**
      * Navigates to the page for creating a new company.
-     * @param subscriptionId 
+     * @param subscriptionId
      */
     public createCompanyInSubscription(subscriptionId: string): void {
         this.router.navigate(['/pages/new-company/', subscriptionId]);
@@ -89,18 +88,18 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         };
         let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
-        setTimeout(()=>{
+        setTimeout(() => {
             this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        },500);
+        }, 500);
         this.email = '';
         this.selectedPermission = '';
     }
 
     public async unShareGroup(entryUniqueName: string, groupUniqueName: string) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
-        setTimeout(()=>{
+        setTimeout(() => {
             this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        },500);
+        }, 500);
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {

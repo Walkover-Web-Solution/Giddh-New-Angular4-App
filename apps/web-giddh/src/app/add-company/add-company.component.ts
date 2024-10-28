@@ -231,9 +231,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** Holds View Subscription list observable*/
     public viewSubscriptionData$ = this.ViewSubscriptionComponentStore.select(state => state.viewSubscription);
-    /** Hold the data of view  subscription */
-    public viewSubscriptionData: any;
-    public userLimit = 2;
+    public remainingUsers: number = 0;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -368,10 +366,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.viewSubscriptionData = response;
+            if (response?.moduleRestrictionStatus) {
+                let module = response.moduleRestrictionStatus.find(
+                    (module) => module?.moduleName === 'Users'
+                );
+                this.remainingUsers = module.remainingUsers;
+            }
         });
 
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -663,11 +665,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
     }
-    public isSuperAdmin(): boolean {
-        console.log("oo",(Boolean(this.thirdStepForm.get('creatorSuperAdmin').value)) , typeof(this.thirdStepForm.get('creatorSuperAdmin').value));
-        
-        return Boolean(this.thirdStepForm.get('creatorSuperAdmin').value) === true;
-    }
+
     /**
      * This will be use for add new user
      *
@@ -675,9 +673,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public addNewUser(): void {
-        const isSuperAdmin = Boolean(this.thirdStepForm.get('creatorSuperAdmin').value) === false;
-        console.log("isSuperAdmin",isSuperAdmin);
-        
+        const isSuperAdmin = this.thirdStepForm.get('creatorSuperAdmin').value === 'false';
+
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         let mappingForm = this.formBuilder.group({
             emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)], // Add email validation
@@ -695,11 +692,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /**
      * This will be use for remove  user
-     *
+     * @param {boolean} isSuperAdmin if isSuperAdmin is true then zero index will be removed from the third-form.
      * @param {number} index
      * @memberof AddCompanyComponent
      */
-    public removeUser(index: number , isSuperAdmin: boolean = false): void {
+    public removeUser(index: number, isSuperAdmin: boolean = false): void {
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         if (index === 0 && !isSuperAdmin) {
             mappings.reset(); // Reset the control at index 0
@@ -1480,8 +1477,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public setOwnerPermission(event: any): void {
         const isSuperAdmin = event?.value === "true";
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
-        console.log(this.thirdStepForm.get('creatorSuperAdmin').value);
-        
+
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
         permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
             const roleUniqueNameControl = permissionGroup.get('roleUniqueName');
@@ -1492,11 +1488,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             roleUniqueNameControl.updateValueAndValidity();
         });
-        if(isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === this.userLimit)){
-            this.removeUser(this.thirdStepForm.get('permissionRoles').value.length-1, isSuperAdmin);
-            console.log("okkk");
+        if (isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === this.remainingUsers)) {
+            this.removeUser(this.thirdStepForm.get('permissionRoles').value.length - 1, isSuperAdmin);
         }
-        if(!isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === 0)){
+        // If there is 1 remaining user and the user is a SuperAdmin, hide the form. If there is 1 remaining user and the user is not a SuperAdmin, show the form.
+        if (!isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === 0)) {
             this.addNewUser();
         }
     }
