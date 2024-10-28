@@ -61,7 +61,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
-    /** Stores the active company information */
+    /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
     public GstAsidePaneState: string = 'out';
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
@@ -93,6 +93,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
+    /** Active company details */
     public isActiveCompany: any = null;
 
     constructor(

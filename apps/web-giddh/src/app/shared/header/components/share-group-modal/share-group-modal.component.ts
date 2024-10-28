@@ -12,13 +12,11 @@ import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
-import { GstSettingComponentStore } from 'apps/web-giddh/src/app/gst/gst-setting/utility/gst-setting.store';
 
 @Component({
     selector: 'share-group-modal',
     templateUrl: './share-group-modal.component.html',
-    styleUrls: [`./share-group-modal.component.scss`],
-    providers: [GstSettingComponentStore]
+    styleUrls: [`./share-group-modal.component.scss`]
 })
 
 export class ShareGroupModalComponent implements OnInit, OnDestroy {
@@ -29,12 +27,15 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public email: string;
     public selectedPermission: string;
     public activeGroup$: Observable<GroupResponse>;
+    /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
     public activeGroupSharedWith$: Observable<ShareRequestForm[]>;
     public allPermissions$: Observable<GetAllPermissionResponse[]>;
     /** Email id validation regex pattern */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
+    /** Holds user module restriction */
     public remainingUsers: number = 0;
+    /** Active company details */
     public activeCompany: any;
 
 

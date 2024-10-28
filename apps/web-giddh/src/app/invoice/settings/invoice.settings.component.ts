@@ -73,7 +73,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the active company information observable */
-    public activeCompany$: Observable<any> = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
+    public activeCompany$: Observable<any> = null;
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
     /** True if user has invoice setting permissions */
@@ -86,7 +86,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
-    /** Stores the active company information */
+    /** Active company details */
     public selectedCompany : any = null;
 
     constructor(
@@ -103,6 +103,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     /**
@@ -142,7 +143,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     });
                 }
             } else {
-                let companyCountry = this.selectedCompany;
+                let companyCountry = this.selectedCompany?.countryV2?.alpha2CountryCode;
                 if (companyCountry === 'IN') {
                     const requestObject = {
                         formName: 'onboarding',
@@ -250,7 +251,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     /**
      * Navigates to the page for creating a new company.
-     * @param subscriptionId 
+     * @param subscriptionId
+     * @memberof  InvoiceSettingComponent
      */
     public createCompanyInSubscription(subscriptionId: string): void {
         this.router.navigate(['/pages/new-company/' + subscriptionId]);
