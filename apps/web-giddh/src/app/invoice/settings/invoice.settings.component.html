@@ -1049,6 +1049,7 @@
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
                                                     [disabled] = "(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')"
+
                                                 >
                                                 </mat-slide-toggle>
                                                 <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
@@ -1081,18 +1082,20 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="white-row plan-issue" *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')">
-                                                <p class="upgrade-section">
-                                                    <span class="upgrade-text">
-                                                      You currently don’t have access to this module. Upgrade your plan to unlock it without any hassle.
-                                                    </span>
-                                                  
-                                                    <button mat-stroked-button color="primary" aria-label="back" (click)="createCompanyInSubscription(selectedCompany?.subscription.subscriptionId)">
-                                                      Upgrade
-                                                    </button>
-                                                    
-                                                </p>
-                                            </div>
+                                            <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')" class="pd-l1">
+                                                <span>
+                                                    {{ commonLocaleData?.app_no_access_limit_module }}
+                                                    <button
+                                                        mat-buttonx
+                                                        color="primary"
+                                                        aria-label="upgrade"
+                                                        class="p-0 font-weight-bold"
+                                                        (click)="createCompanyInSubscription(selectedCompany?.subscription.subscriptionId)"
+                                                    >
+                                                        {{ commonLocaleData?.app_upgrade }}
+                                                     </button>
+                                                 </span>
+                                             </div>
                                         </div>
                                     </div>
                                     <div

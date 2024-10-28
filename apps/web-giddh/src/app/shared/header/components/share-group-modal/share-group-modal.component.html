@@ -8,18 +8,7 @@
             <h3 class="pd-b1">{{ localeData?.share_with }}</h3>
             <div class="add-mailer">
                 <!--share group from-->
-                <div class="white-row plan-issue" *ngIf="remainingUsers <= 0">
-                    <p class="upgrade-section">
-                        <span class="upgrade-text">
-                          You currently don’t have access to this module. Upgrade your plan to unlock it without any hassle.
-                        </span>
-                      
-                        <button mat-stroked-button color="primary" aria-label="back" (click)="createCompanyInSubscription(activeCompany?.subscription.subscriptionId)">
-                          Upgrade
-                        </button>
-                        
-                    </p>
-                </div>
+
                 <form
                     name="shareGroupForm"
                     #shareGroupForm="ngForm"
@@ -67,6 +56,21 @@
                         <!-- /btn-group -->
                     </div>
                 </form>
+
+                <div *ngIf="remainingUsers <= 0" class="text-align-left">
+                    <span>
+                        {{ commonLocaleData?.app_no_access_limit_module }}
+                        <button
+                            mat-button
+                            color="primary"
+                            aria-label="upgrade"
+                            class="p-0 font-weight-bold"
+                            (click)="createCompanyInSubscription(activeCompany?.subscription.subscriptionId)"
+                        >
+                            {{ commonLocaleData?.app_upgrade }}
+                        </button>
+                    </span>
+                </div>
 
                 <!--shared with array-->
                 <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
