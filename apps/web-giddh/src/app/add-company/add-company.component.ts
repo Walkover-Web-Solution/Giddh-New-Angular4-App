@@ -231,6 +231,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** Holds View Subscription list observable*/
     public viewSubscriptionData$ = this.ViewSubscriptionComponentStore.select(state => state.viewSubscription);
+    /** Holds user module restriction */
     public remainingUsers: number = 0;
 
     constructor(
@@ -373,7 +374,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.remainingUsers = module.remainingUsers;
             }
         });
-
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -390,7 +391,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * Fetches subscription data by its ID.
      *
      * @param id - The ID of the subscription to fetch.
-     * @memberof ViewSubscriptionComponent
+     * @memberof AddCompanyComponent
      */
     public getSubscriptionData(id: any): void {
         this.ViewSubscriptionComponentStore.viewSubscriptionsById(id);
