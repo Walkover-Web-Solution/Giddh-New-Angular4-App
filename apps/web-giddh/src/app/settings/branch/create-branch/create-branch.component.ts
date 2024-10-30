@@ -149,7 +149,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 this.allBranches = response.body.results?.filter(branch => !branch?.isCompany);
                 this.branches = response.body.results?.filter(branch => !branch?.isCompany);
                 this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-                this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
             }
         });
     }

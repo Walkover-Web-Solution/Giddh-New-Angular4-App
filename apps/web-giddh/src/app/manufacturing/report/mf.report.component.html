@@ -7,7 +7,7 @@
         </div>
         <div>
             <label class="d-none">&nbsp;</label>
-            <button *ngIf="(!isCompany || !isConsolidatedBranch)" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">
+            <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">
                 Create Manufacture
             </button>
         </div>
@@ -111,7 +111,7 @@
                             <div>
                                 <label class="d-block">&nbsp;</label>
                                 <button
-                                    *ngIf="(!isCompany || !isConsolidatedBranch)"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
                                     class="btn isActive pull-right mr-0 mobile-none"
                                     (click)="goToCreateNewPage()"
                                     type="button"

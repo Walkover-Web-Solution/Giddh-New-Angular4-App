@@ -238,7 +238,7 @@ export class ListManufacturingComponent implements OnInit {
                             isCompany: true
                         });
                         this.isCompany = this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches?.length > 2;
-                        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+                        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
                         let currentBranchUniqueName;
                         if (!this.currentBranch?.uniqueName) {
                             // Assign the current branch only when it is not selected. This check is necessary as

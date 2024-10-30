@@ -166,7 +166,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this._generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this._generalService.isCurrentBranchConsolidated;
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
         this.getTransportersList();

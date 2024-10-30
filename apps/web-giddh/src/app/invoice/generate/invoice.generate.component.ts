@@ -182,7 +182,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (response) {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
-                this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
             }
         });
 

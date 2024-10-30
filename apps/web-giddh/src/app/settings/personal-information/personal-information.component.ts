@@ -77,7 +77,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : 'in';
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);

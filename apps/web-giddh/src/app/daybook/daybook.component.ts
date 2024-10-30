@@ -175,7 +175,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.lc = new LedgerVM();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 

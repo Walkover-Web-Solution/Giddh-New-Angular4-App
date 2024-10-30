@@ -157,7 +157,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this._generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this._generalService.isCurrentBranchConsolidated;
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

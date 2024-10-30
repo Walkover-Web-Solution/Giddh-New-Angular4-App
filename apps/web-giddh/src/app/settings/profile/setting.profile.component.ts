@@ -229,7 +229,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.getCountry();
         this.getCurrency();
         currencyNumberSystems.map(currency => {

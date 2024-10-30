@@ -143,7 +143,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
 
         this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }

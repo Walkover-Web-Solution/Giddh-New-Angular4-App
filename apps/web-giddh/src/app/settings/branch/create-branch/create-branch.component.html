@@ -43,7 +43,10 @@
             </div>
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
-                    <div class="filter-dropdown-branch mr-b15" *ngIf="(isCompany || isConsolidatedBranch) && allBranches?.length > 1">
+                    <div
+                        class="filter-dropdown-branch mr-b15"
+                        *ngIf="allBranches?.length > 1 && (isCompany || isConsolidatedBranch)"
+                    >
                         <mat-select
                             name="branch"
                             class="branch-mat-salect"
@@ -75,9 +78,7 @@
                             <input-field
                                 [label]="commonLocaleData?.app_branch_name"
                                 [maxlength]="50"
-                                [class.error-box]="
-                                    branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid
-                                "
+                                [class.error-box]="branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid"
                                 [type]="'text'"
                                 formControlName="name"
                                 [placeholder]="localeData?.enter_name"

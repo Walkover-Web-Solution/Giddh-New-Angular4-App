@@ -465,7 +465,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {

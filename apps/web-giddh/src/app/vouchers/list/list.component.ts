@@ -339,7 +339,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.setInitialAdvanceFilter(true);
         this.getInvoiceSettings();
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;

@@ -124,7 +124,7 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
 
         // get activeCompany gst number
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
