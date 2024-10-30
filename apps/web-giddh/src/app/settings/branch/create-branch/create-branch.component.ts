@@ -101,6 +101,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public asideAccountAsidePaneRef: MatDialogRef<any>;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** This will use for instance of branches Dropdown */
     public branchesDropdown: FormControl;
     /** This will use for instance of branches Dropdown */
@@ -147,6 +149,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 this.allBranches = response.body.results?.filter(branch => !branch?.isCompany);
                 this.branches = response.body.results?.filter(branch => !branch?.isCompany);
                 this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+                this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
             }
         });
     }

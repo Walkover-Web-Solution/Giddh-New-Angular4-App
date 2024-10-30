@@ -222,9 +222,9 @@
                                                                     <i
                                                                         [ngClass]="{
                                                                             'icon-company-profile':
-                                                                                option.consolidatedBranch,
+                                                                                option?.consolidatedBranch,
                                                                             'icon-branch-icon':
-                                                                                !option.consolidatedBranch
+                                                                                !option?.consolidatedBranch
                                                                         }"
                                                                         class="pull-right"
                                                                         *ngIf="item?.entity === 'BRANCH'"
@@ -378,9 +378,9 @@
                                                                     <i
                                                                         [ngClass]="{
                                                                             'icon-company-profile':
-                                                                                option.consolidatedBranch,
+                                                                                option?.consolidatedBranch,
                                                                             'icon-branch-icon':
-                                                                                !option.consolidatedBranch
+                                                                                !option?.consolidatedBranch
                                                                         }"
                                                                         class="pull-right"
                                                                         *ngIf="item?.entity === 'BRANCH'"
@@ -493,9 +493,9 @@
                                                                     <i
                                                                         [ngClass]="{
                                                                             'icon-company-profile':
-                                                                                option.consolidatedBranch,
+                                                                                option?.consolidatedBranch,
                                                                             'icon-branch-icon':
-                                                                                !option.consolidatedBranch
+                                                                                !option?.consolidatedBranch
                                                                         }"
                                                                         class="pull-right"
                                                                         *ngIf="item?.entity === 'BRANCH'"

@@ -22,7 +22,7 @@
                 <div class="input-group flex-nowrap mr-b15">
                     <div
                         class="form-group linked-entities mr-r15 mb-0"
-                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                     >
                         <sh-select
                             [options]="currentCompanyBranches"
@@ -42,8 +42,8 @@
                                         <span class="entity-icon">
                                             <i
                                                 [ngClass]="{
-                                                    'icon-company-profile': option.consolidatedBranch,
-                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                    'icon-company-profile': option?.consolidatedBranch,
+                                                    'icon-branch-icon': !option?.consolidatedBranch
                                                 }"
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"

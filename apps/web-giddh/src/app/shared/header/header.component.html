@@ -128,8 +128,8 @@
                                     <div class="menu-dropdown-wrapper">
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
-                                                (currentCompanyBranches?.length <= 1 &&
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                (!isConsolidatedBranch && currentCompanyBranches?.length <= 1 &&
                                                     currentOrganizationType === 'COMPANY')
                                             "
                                         >
@@ -189,9 +189,9 @@
                                             </ul>
                                         </div>
                                         <div
-                                            *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
-                                                (currentCompanyBranches?.length <= 1 &&
+                                       *ngIf="
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                (!isConsolidatedBranch && currentCompanyBranches?.length <= 1 &&
                                                     currentOrganizationType === 'COMPANY')
                                             "
                                         >
@@ -252,9 +252,9 @@
                                             </ul>
                                         </div>
                                         <div
-                                            *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
-                                                (currentCompanyBranches?.length <= 1 &&
+                                           *ngIf="
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                (!isConsolidatedBranch || currentCompanyBranches?.length <= 1 &&
                                                     currentOrganizationType === 'COMPANY')
                                             "
                                         >
@@ -334,9 +334,10 @@
                                         </div>
                                         <div
                                             class="mr-t2 mr-b05 align-items-center"
-                                            *ngIf="
-                                                currentCompanyBranches?.length > 1 &&
-                                                currentOrganizationType === 'COMPANY'
+                                           *ngIf="
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                (isConsolidatedBranch || currentCompanyBranches?.length <= 1 &&
+                                                    currentOrganizationType === 'COMPANY')
                                             "
                                         >
                                             <span>{{ localeData?.go_to_branch_information }} </span>
@@ -351,8 +352,8 @@
                                         </div>
                                         <ng-container
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
-                                                (currentCompanyBranches?.length <= 1 &&
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
+                                                (!isConsolidatedBranch && currentCompanyBranches?.length <= 1 &&
                                                     currentOrganizationType === 'COMPANY')
                                             "
                                         >

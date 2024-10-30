@@ -291,6 +291,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public accountOtherApplicableDiscount: any[] = [];
     /** False if there is no data in account search */
     public isAccountSearchData: boolean = true;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private accountService: AccountService,
@@ -330,6 +332,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
         if (this.isPettyCash) {
             document.querySelector('body').classList.add('ledger-body');
         }
@@ -1332,7 +1336,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public changeRcmCheckboxState(event: any): void {
-        if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
+        if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
             return;
         }
         this.isRcmEntry = !this.isRcmEntry;
@@ -1346,7 +1350,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public toggleRcmCheckbox(event: any, element: string): void {
-        if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
+        if (!this.isPettyCash && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch) && (this.branches && this.branches.length > 1)) {
             return;
         }
         let isChecked;

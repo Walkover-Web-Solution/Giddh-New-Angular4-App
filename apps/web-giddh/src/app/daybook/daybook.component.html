@@ -15,7 +15,7 @@
                         <div class="d-flex company-date-picker">
                             <div
                                 class="form-group mb-0 mr-r15 linked-entities"
-                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                                *ngIf="currentCompanyBranches?.length > 2 &&( currentOrganizationType === 'COMPANY'|| isConsolidatedBranch)"
                             >
                                 <div class="form-group mb-0">
                                     <sh-select

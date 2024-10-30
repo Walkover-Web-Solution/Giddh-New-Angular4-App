@@ -14,7 +14,7 @@
         </div>
     </div>
     <div *ngIf="
-            currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
+            currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
         " class="input-width">
         <dropdown-field [label]="commonLocaleData?.app_entity" [options]="currentCompanyBranches" width="100%"
             (selectedOption)="

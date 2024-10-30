@@ -221,6 +221,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                 uniqueName: selectBranchUniqueName
             }
         };
+        this.generalService.currentConsolidatedBranch = false;
         if (selectBranchUniqueName) {
             this.setOrganizationDetails(OrganizationType.Branch, details);
         } else {
@@ -387,7 +388,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
-                    this.switchBranch(company, branchUniqueName, event);
+                    this.switchBranch(company, branchUniqueName, event, branch);
                 } else {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
                 }
@@ -395,7 +396,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        this.switchBranch(company, branchUniqueName, event);
+        this.switchBranch(company, branchUniqueName, event, branch);
     }
 
     /**
@@ -407,7 +408,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {*} event
      * @memberof CompanyBranchComponent
      */
-    private switchBranch(company: any, branchUniqueName: string, event: any): void {
+    private switchBranch(company: any, branchUniqueName: string, event: any, branch: any): void {
+        if (branch?.consolidatedBranch) {
+            this.generalService.currentConsolidatedBranch = true;
+        } else {
+            this.generalService.currentConsolidatedBranch = false;
+        }
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branchUniqueName, false);

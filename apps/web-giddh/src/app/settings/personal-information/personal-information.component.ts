@@ -63,6 +63,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     public region: string;
     /** Holds Portal Login Url */
     public portalLoginUrl: string = "";
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) {
         this.initProfileForm();
@@ -74,6 +76,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
         this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : 'in';
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);

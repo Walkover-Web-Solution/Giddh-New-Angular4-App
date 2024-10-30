@@ -21,7 +21,7 @@
                             *ngIf="
                                 showLabels &&
                                 currentCompanyBranches?.length > 2 &&
-                                currentOrganizationType === 'COMPANY'
+                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                             "
                         >
                             <div class="form-group">
@@ -203,7 +203,7 @@
             <div class="d-flex flex-column">
                 <div
                     class="form-group mr-r15 linked-entities"
-                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <div class="form-group mb-0">
                         <sh-select
@@ -224,8 +224,8 @@
                                         <span class="entity-icon">
                                             <i
                                                 [ngClass]="{
-                                                    'icon-company-profile': option.consolidatedBranch,
-                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                    'icon-company-profile': option?.consolidatedBranch,
+                                                    'icon-branch-icon': !option?.consolidatedBranch
                                                 }"
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"

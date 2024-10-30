@@ -138,6 +138,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public minDate: any;
     /** Holds End Date of Financial Year */
     public maxDate: any;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         public dialog: MatDialog,
@@ -195,6 +197,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();

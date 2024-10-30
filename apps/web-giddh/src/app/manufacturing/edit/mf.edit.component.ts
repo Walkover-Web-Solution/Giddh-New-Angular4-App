@@ -114,6 +114,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public currentOrganizationType: string;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -140,6 +142,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
         this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
         this.store.dispatch(this.inventoryAction.GetStock());
 
