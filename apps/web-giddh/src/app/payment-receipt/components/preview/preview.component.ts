@@ -107,7 +107,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      * @memberof PreviewComponent
      */
     public ngOnInit(): void {
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         if (this.voucherType === this.receiptVoucherType) {
             this.translationFile = "advance-receipt";
         } else if (this.voucherType === this.paymentVoucherType) {

@@ -209,7 +209,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
-                this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
                 let currentBranchUniqueName;
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as

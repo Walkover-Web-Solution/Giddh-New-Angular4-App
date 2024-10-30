@@ -51,7 +51,7 @@
                 {{ commonLocaleData?.app_clear }}
             </button>
             <button
-              *ngIf="(!isCompany || !isConsolidatedBranch)"
+              *ngIf="(!isCompany && !isConsolidatedBranch)"
                 id="add-adjustment-btn"
                 mat-stroked-button
                 color="primary"

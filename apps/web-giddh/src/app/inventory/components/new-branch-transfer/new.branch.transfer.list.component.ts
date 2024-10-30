@@ -153,7 +153,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this._generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this._generalService.isCurrentBranchConsolidated;
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
         branchTransferVoucherTypes.map(voucherType => {

@@ -112,7 +112,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakPointObservar.observe([
             '(max-width: 767px)'

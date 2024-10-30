@@ -98,7 +98,7 @@
                     >
                         <span class="icon-export-icon"></span>
                     </button>
-                    <ng-container *ngIf="(!isCompany || !isConsolidatedBranch)">
+                    <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                         <button
                             dropdownToggle
                             type="button"

@@ -104,7 +104,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {

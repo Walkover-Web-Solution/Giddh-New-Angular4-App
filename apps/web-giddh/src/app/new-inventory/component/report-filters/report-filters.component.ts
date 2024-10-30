@@ -549,7 +549,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-                this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
 
                 if (!this.isCompany || !this.isConsolidatedBranch) {
                     this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
@@ -591,7 +591,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.stockReportRequestExport.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
 
         if (!this.isCompany || !this.isConsolidatedBranch) {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];

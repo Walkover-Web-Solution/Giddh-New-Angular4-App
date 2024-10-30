@@ -99,7 +99,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.getCurrentPeriod$ = this.store.pipe(select(store => store.gstR.currentPeriod), take(1));
 
         this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {

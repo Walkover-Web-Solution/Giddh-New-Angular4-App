@@ -216,12 +216,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
         this.generalService.voucherApiVersion = company?.voucherVersion;
+        this.generalService.isCurrentBranchConsolidated = false;
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
             }
         };
-        this.generalService.currentConsolidatedBranch = false;
         if (selectBranchUniqueName) {
             this.setOrganizationDetails(OrganizationType.Branch, details);
         } else {
@@ -409,11 +409,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof CompanyBranchComponent
      */
     private switchBranch(company: any, branchUniqueName: string, event: any, branch: any): void {
-        if (branch?.consolidatedBranch) {
-            this.generalService.currentConsolidatedBranch = true;
-        } else {
-            this.generalService.currentConsolidatedBranch = false;
-        }
+        this.generalService.isCurrentBranchConsolidated = branch?.consolidatedBranch ? true : false;
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branchUniqueName, false);

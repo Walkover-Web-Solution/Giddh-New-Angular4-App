@@ -27,7 +27,7 @@ export class GeneralService {
     /** Stores the branch unique name */
     public currentBranchUniqueName: string;
     /** Stores the current branch consolidated */
-    public currentConsolidatedBranch: boolean;
+    public isCurrentBranchConsolidated: boolean;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

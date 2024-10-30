@@ -55,7 +55,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -154,7 +154,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                     if (organization) {
                         if (organization.type === OrganizationType.Branch) {
                             organizationIndex = 1;
-                        } else if (organization.type === OrganizationType.Company || this.isConsolidatedBranch || !organization.type) {
+                        } else if ((organization.type === OrganizationType.Company || this.isConsolidatedBranch) || !organization.type) {
                             organizationIndex = 0;
                         }
                     }

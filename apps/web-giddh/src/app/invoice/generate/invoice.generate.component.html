@@ -15,11 +15,7 @@
                     class="btn-dropdown-dr-cr"
                     *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'"
                 >
-                    <div
-                        class="btn-group d-inline-block mr-b1"
-                        dropdown
-                        #dp="bs-dropdown"
-                    >
+                    <div class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
                         <button
                             dropdownToggle
                             type="button"
@@ -64,13 +60,7 @@
                                         />
                                     </div>
                                     <button
-                                        class="
-                                            clear-filter
-                                            btn btn-filter
-                                            align-items-center
-                                            d-flex
-                                            justify-content-center
-                                        "
+                                        class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
                                         *ngIf="customDateSelected && isMobileView"
                                         (click)="resetDateSearch()"
                                     >
@@ -78,8 +68,9 @@
                                     </button>
                                 </div>
                                 <span>
+                                {{!isCompany}}    {{!isConsolidatedBranch}}:{{!isCompany && !isConsolidatedBranch}}
                                     <button
-                                        *ngIf="!isCompany || !isConsolidatedBranch"
+                                        *ngIf="!isCompany && !isConsolidatedBranch"
                                         [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(false)"
@@ -88,7 +79,7 @@
                                         {{ localeData?.generate_multiple }}
                                     </button>
                                     <button
-                                        *ngIf="!isCompany || !isConsolidatedBranch"
+                                        *ngIf="!isCompany && !isConsolidatedBranch"
                                         [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(true)"
@@ -98,7 +89,7 @@
                                     </button>
                                     <button
                                         type="button"
-                                        *ngIf="(!isCompany || !isConsolidatedBranch) && !isMobileView"
+                                        *ngIf="(!isCompany && !isConsolidatedBranch) && !isMobileView"
                                         placement="top"
                                         [tooltip]="localeData?.works_for_single_entry"
                                         [hidden]="selectedLedgerItems?.length === 0 || !togglePrevGenBtn"
