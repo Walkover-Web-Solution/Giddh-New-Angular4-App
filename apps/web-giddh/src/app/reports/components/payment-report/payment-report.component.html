@@ -25,7 +25,7 @@
                     </button> -->
                     <div
                         class="input-group linked-entities mr-r15"
-                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                     >
                         <sh-select
                             [options]="currentCompanyBranches"
@@ -98,7 +98,7 @@
                     >
                         <span class="icon-export-icon"></span>
                     </button>
-                    <ng-container *ngIf="!isCompany">
+                    <ng-container *ngIf="(!isCompany || !isConsolidatedBranch)">
                         <button
                             dropdownToggle
                             type="button"

@@ -112,6 +112,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     /** @ignore */
     constructor(
@@ -141,6 +143,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
 
         this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }

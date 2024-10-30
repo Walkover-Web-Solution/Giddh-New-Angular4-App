@@ -64,7 +64,7 @@
                                             name="currentBranch"
                                             *ngIf="
                                                 currentCompanyBranches?.length > 2 &&
-                                                currentOrganizationType === 'COMPANY'
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                             "
                                         >
                                             <div>

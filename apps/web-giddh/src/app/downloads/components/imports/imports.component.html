@@ -9,7 +9,10 @@
         <div class="d-flex pd-t15 pd-b15">
             <div
                 class="activity-filter-wrap"
-                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                *ngIf="
+                    currentCompanyBranches?.length > 2 &&
+                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                "
             >
                 <div class="clearfix">
                     <div class="col-xs-12 col-sm-12">

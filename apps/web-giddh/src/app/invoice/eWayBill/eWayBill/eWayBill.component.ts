@@ -135,6 +135,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public initialApiCalled: boolean = false;
     /** Stores the tax details of a company */
     public taxes: IOption[] = [];
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -207,6 +209,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
@@ -723,7 +727,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.EwayBillfilterRequest.gstin = event.value;
         }
 
-        if ((this.currentCompanyBranches?.length > 2 && this.currentOrganizationType === 'COMPANY') || this.EwayBillfilterRequest.gstin) {
+        if ((this.currentCompanyBranches?.length > 2 && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch)) || this.EwayBillfilterRequest.gstin) {
             this.EwayBillfilterRequest.page = 0;
             this.getAllFilteredInvoice();
         }

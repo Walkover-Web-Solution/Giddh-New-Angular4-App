@@ -97,6 +97,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /* this wll store mobile screen size */
     public isMobileScreen: boolean = true;
     /* Stores warehouses for a company */
@@ -207,6 +209,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
+                this.isConsolidatedBranch = this.generalService.currentConsolidatedBranch;
                 let currentBranchUniqueName;
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
