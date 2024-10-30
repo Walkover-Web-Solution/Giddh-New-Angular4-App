@@ -57,6 +57,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** True if current organization is company */
     @Input() public isCompany: boolean;
+    /** True if current organization is consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;

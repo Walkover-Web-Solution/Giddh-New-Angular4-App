@@ -4,7 +4,7 @@
             <div class="d-flex flex-wrap">
                 <div
                     class="file-type-label mr-r15 linked-entities"
-                    *ngIf="currentCompanyBranches?.length > 1 && currentOrganizationType === 'COMPANY'"
+                    *ngIf="currentCompanyBranches?.length > 1 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <label class="d-block">{{commonLocaleData?.app_entity}}</label>
                     <div class="form-group">
@@ -26,8 +26,8 @@
                                             <i
                                                 class="pull-right"
                                                 [ngClass]="{
-                                                    'icon-company-profile': option.consolidatedBranch,
-                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                    'icon-company-profile': option?.consolidatedBranch,
+                                                    'icon-branch-icon': !option?.consolidatedBranch
                                                 }"
                                                 *ngIf="!option.isCompany"
                                                 tooltip="{{commonLocaleData?.app_branch}}"

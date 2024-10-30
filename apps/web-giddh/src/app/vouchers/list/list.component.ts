@@ -274,6 +274,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public accountParentGroup: string = "";
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Send Email Dialog Ref */
     public sendEmailModalDialogRef: MatDialogRef<any>;
     /** Holds Currently used Voucher */
@@ -336,6 +338,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.setInitialAdvanceFilter(true);
         this.getInvoiceSettings();
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;

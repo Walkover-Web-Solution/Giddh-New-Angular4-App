@@ -17,7 +17,7 @@
                 </div>
                 <div
                     class="form-group mr-r15 pull-left linked-entities mb-0"
-                    *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY'  || isConsolidatedBranch)"
                 >
                     <div class="form-group mb-0">
                         <sh-select
@@ -37,8 +37,8 @@
                                         <span class="entity-icon">
                                             <i
                                                 [ngClass]="{
-                                                    'icon-company-profile': option.consolidatedBranch,
-                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                    'icon-company-profile': option?.consolidatedBranch,
+                                                    'icon-branch-icon': !option?.consolidatedBranch
                                                 }"
                                                 *ngIf="!option.isCompany"
                                                 matTooltip="{{ commonLocaleData?.app_branch }}"

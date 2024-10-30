@@ -106,6 +106,8 @@ export class InventorySidebarComponent implements OnDestroy {
     public moduleType: string = '';
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Holds current page url */
     private currentUrl: string = "";
 
@@ -143,6 +145,7 @@ export class InventorySidebarComponent implements OnDestroy {
         this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.length) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length >= 2;
+                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
                 this.changeDetection.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {

@@ -27,7 +27,7 @@
                 <!-- NOTE - This code is only active for Test Environment - End -->
                     <div
                         class="input-group linked-entities mr-r15"
-                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                     >
                         <sh-select
                             [options]="currentCompanyBranches"
@@ -47,8 +47,8 @@
                                         <span class="entity-icon">
                                             <i
                                                 [ngClass]="{
-                                                    'icon-company-profile': option.consolidatedBranch,
-                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                    'icon-company-profile': option?.consolidatedBranch,
+                                                    'icon-branch-icon': !option?.consolidatedBranch
                                                 }"
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"
@@ -100,7 +100,7 @@
                     >
                         <span class="icon-export-icon"></span>
                     </button>
-                    <ng-container *ngIf="!isCompany">
+                    <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                         <button
                             dropdownToggle
                             type="button"
