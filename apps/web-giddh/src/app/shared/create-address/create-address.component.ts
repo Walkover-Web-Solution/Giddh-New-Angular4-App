@@ -212,6 +212,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                     alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
+                    parentBranchName: [this.branchToUpdate.parentBranchName ?? ''],
                     linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
                         return item?.uniqueName ===
                             this.branchToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName

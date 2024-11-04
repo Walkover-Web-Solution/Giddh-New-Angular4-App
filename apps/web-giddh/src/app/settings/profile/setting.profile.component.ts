@@ -844,7 +844,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public updateBranchProfile(value: any): void {
-        this.currentBranchDetails.name = this.companyProfileObj.name;
+        this.currentBranchDetails.name = this.currentOrganizationType === OrganizationType.Company ? this.companyProfileObj.name : this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias ;
         this.currentBranchDetails.alias = this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias;
 
         this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))

@@ -1456,7 +1456,11 @@
                                                 <i class="icon-envelope"></i>
                                             </button>
                                             <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'"
+<<<<<<< HEAD
                                                 (click)="copyVoucher(element)">
+=======
+                                                [routerLink]="['/pages/purchase-management/purchase-order/new/' + element.uniqueName]">
+>>>>>>> a727a5376a6724f3bb118b27ab3024ccaacca1ff
                                                 <i class="icon-copy-small"></i>
                                             </button>
                                             <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
