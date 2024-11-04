@@ -94,7 +94,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of dayjs */
     public dayjs = dayjs;
     /** Active company details */
-    public isActiveCompany: any = null;
+    public activeCompany: any = null;
 
     constructor(
         private store: Store<AppState>,
@@ -118,7 +118,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.showGstFiling = true;
         }
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            this.isActiveCompany = response;
+            this.activeCompany = response;
         });
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
