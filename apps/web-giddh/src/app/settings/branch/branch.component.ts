@@ -137,6 +137,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector("body")?.classList?.add("setting-branch-body");
         this.getOnboardingForm();
         this.searchBranchQuery.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(query => {
             if (query !== undefined && query !== null) {
@@ -268,7 +269,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.branchToUpdate = {
                 name: branch.name,
                 alias: branch.name,
-                linkedEntities: branch.addresses || []
+                linkedEntities: branch.addresses || [],
+                parentBranchName: branch?.parentBranch?.name
             };
             this.toggleAsidePane();
         });
@@ -332,6 +334,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        document.querySelector("body")?.classList?.remove("setting-branch-body");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
