@@ -69,7 +69,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+    /** Holds user module restriction */
     public remainingUsers : number = 0;
 
     constructor(
@@ -141,7 +141,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 let module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === 'Users'
                 );
-                this.remainingUsers = module.remainingUsers;
+                this.remainingUsers = module.remainingUsers; 
             }
         });
 

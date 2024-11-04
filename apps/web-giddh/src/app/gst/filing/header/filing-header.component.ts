@@ -373,11 +373,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-    * Navigates to the page for creating a new company.
+    * Navigates to the page for buy plan.
     * @memberof FilingHeaderComponent
     * @param subscriptionId
     */
-    public createCompanyInSubscription(subscriptionId: string): void {
-        this.router.navigate(['/pages/new-company/', subscriptionId]);
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 }

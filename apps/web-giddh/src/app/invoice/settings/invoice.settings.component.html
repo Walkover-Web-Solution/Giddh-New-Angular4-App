@@ -1086,11 +1086,11 @@
                                                 <span>
                                                     {{ commonLocaleData?.app_no_access_limit_module }}
                                                     <button
-                                                        mat-buttonx
+                                                        mat-stroked-button
                                                         color="primary"
                                                         aria-label="upgrade"
-                                                        class="p-0 font-weight-bold"
-                                                        (click)="createCompanyInSubscription(selectedCompany?.subscription.subscriptionId)"
+                                                        class="mr-0"
+                                                        (click)="buyPlan(selectedCompany?.subscription.subscriptionId)"
                                                     >
                                                         {{ commonLocaleData?.app_upgrade }}
                                                      </button>

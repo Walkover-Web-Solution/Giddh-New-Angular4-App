@@ -61,11 +61,11 @@
                     <span>
                         {{ commonLocaleData?.app_no_access_limit_module }}
                         <button
-                            mat-button
+                            mat-stroked-button
                             color="primary"
                             aria-label="upgrade"
-                            class="p-0 font-weight-bold"
-                            (click)="createCompanyInSubscription(activeCompany?.subscription.subscriptionId)"
+                            class="mr-0"
+                            (click)="buyPlan(activeCompany?.subscription.subscriptionId)"
                         >
                             {{ commonLocaleData?.app_upgrade }}
                         </button>

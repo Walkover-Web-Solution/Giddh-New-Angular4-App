@@ -87,7 +87,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** Active tab name */
     public activeTab: string;
     /** Active company details */
-    public selectedCompany : any = null;
+    public selectedCompany: any = null;
 
     constructor(
         private commonActions: CommonActions,
@@ -122,7 +122,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
         this.initSettingObj();
 
-        this._route.queryParams.pipe(delay(200),takeUntil(this.destroyed$)).subscribe((val) => {
+        this._route.queryParams.pipe(delay(200), takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tabIndex) {
                 this.selectTab(val.tabIndex);
             }
@@ -250,12 +250,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates to the page for creating a new company.
+     * Navigates to the page for buy plan.
      * @param subscriptionId
      * @memberof  InvoiceSettingComponent
      */
-    public createCompanyInSubscription(subscriptionId: string): void {
-        this.router.navigate(['/pages/new-company/' + subscriptionId]);
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 
     /**
