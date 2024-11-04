@@ -301,7 +301,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -844,7 +844,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public updateBranchProfile(value: any): void {
-        this.currentBranchDetails.name = this.currentOrganizationType === OrganizationType.Company ? this.companyProfileObj.name : this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias ;
+        this.currentBranchDetails.name = this.currentOrganizationType === OrganizationType.Company ? this.companyProfileObj.name : value?.alias ?? this.companyProfileObj.alias;
         this.currentBranchDetails.alias = this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias;
 
         this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
