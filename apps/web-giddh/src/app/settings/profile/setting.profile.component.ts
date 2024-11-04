@@ -193,6 +193,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private isGetLinkedEntitiesInProgress: boolean = false;
     /** Holds true if get states API call in progress */
     private isGetStatesInProgress: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private commonService: CommonService,
@@ -226,6 +228,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.getCountry();
         this.getCurrency();
         currencyNumberSystems.map(currency => {
@@ -355,7 +359,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 if (loadTabChangeApi && this.currentTab === "address") {
                     this.handleTabChanged("address");
                 }
-                if (this.currentOrganizationType === OrganizationType.Company) {
+                if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
                     this.handleCompanyProfileResponse(response);
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {
                     this.companyProfileObj = {
@@ -822,7 +826,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleSaveProfile(value: any): void {
-        if (this.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
             if ('manageInventory' in value) {
                 this.updateInventorySetting(value.manageInventory);
             } else {
@@ -1021,7 +1025,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
-                if (this.currentOrganizationType === OrganizationType.Company) {
+                if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
                     this.loadAddresses('GET');
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
@@ -1243,7 +1247,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     private loadAddresses(method: string, params?: any): void {
-        if (this.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
             this.shouldShowAddressLoader = true;
             this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.shouldShowAddressLoader = false;

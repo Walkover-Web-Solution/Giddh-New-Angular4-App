@@ -14,7 +14,7 @@
                     </button>
                     <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
                         <div
-                            *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                            *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                             class="input-group form-group linked-entities mb-0 mr-r1"
                         >
                             <sh-select
@@ -35,8 +35,8 @@
                                             <span class="entity-icon">
                                                 <i
                                                     [ngClass]="{
-                                                        'icon-company-profile': option.consolidatedBranch,
-                                                        'icon-branch-icon': !option.consolidatedBranch
+                                                        'icon-company-profile': option?.consolidatedBranch,
+                                                        'icon-branch-icon': !option?.consolidatedBranch
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"

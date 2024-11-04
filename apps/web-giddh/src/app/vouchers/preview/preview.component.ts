@@ -89,6 +89,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public showPaymentDetails: boolean;
     /** Holds true if company mode */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Holds create new voucher text and url */
     public createNewVoucher: any = {
         text: '',
@@ -214,6 +216,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VouchersPreviewComponent
     */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         merge(this.activatedRoute.params, this.activatedRoute.queryParams).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 if (params?.voucherType) {

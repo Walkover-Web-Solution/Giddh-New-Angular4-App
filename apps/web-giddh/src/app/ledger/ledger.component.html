@@ -95,7 +95,7 @@
                                             mat-stroked-button
                                             color="warn"
                                             [disabled]="
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
                                             id="delete-ledger-mobile-view"
@@ -111,7 +111,7 @@
                                             aria-label="generate"
                                             mat-stroked-button
                                             [disabled]="
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
                                             class="btn btn-warning"
@@ -128,7 +128,8 @@
                                         aria-label="attachfile"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         class="btn btn-success mr-0 font-15"
                                         id="attach-file-mobile-view"
@@ -253,7 +254,8 @@
                                         aria-label="delete"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="delete-ledger"
@@ -269,7 +271,8 @@
                                         aria-label="generate"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
                                         class="d-flex align-items-center justify-content-center icon-button-width"
@@ -285,7 +288,8 @@
                                         aria-label="file"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="attach-file"
@@ -311,7 +315,7 @@
                                 *ngIf="
                                     showBranchSwitcher &&
                                     currentCompanyBranches?.length > 2 &&
-                                    currentOrganizationType === 'COMPANY' &&
+                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                     isMobileScreen
                                 "
                             >
@@ -401,7 +405,7 @@
                                     *ngIf="
                                         showBranchSwitcher &&
                                         currentCompanyBranches?.length > 2 &&
-                                        currentOrganizationType === 'COMPANY'
+                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                     "
                                 >
                                     <div class="form-group">
@@ -788,7 +792,9 @@
                                                                                 )
                                                                             "
                                                                             [disabled]="
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             "
                                                                         ></mat-checkbox>
@@ -860,7 +866,8 @@
                                                                         [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
                                                                         [disabled]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [isPaginationEnabled]="true"
@@ -872,12 +879,15 @@
                                                                         [notFoundMsg]="noResultsFoundLabel"
                                                                         [showSearchSuggestion]="
                                                                             !(
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             )
                                                                         "
                                                                         [readonlyInput]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
@@ -1002,7 +1012,8 @@
                                                                     [currentTxn]="lc.currentBlankTxn"
                                                                     [needToReCalculate]="needToReCalculate"
                                                                     [isReadOnly]="
-                                                                        currentOrganizationType === 'COMPANY' &&
+                                                                        (currentOrganizationType === 'COMPANY' ||
+                                                                            isConsolidatedBranch) &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -1142,7 +1153,9 @@
                                                                                 )
                                                                             "
                                                                             [disabled]="
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             "
                                                                         ></mat-checkbox>
@@ -1211,7 +1224,8 @@
                                                                         [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
                                                                         [disabled]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         (selected)="
@@ -1230,12 +1244,15 @@
                                                                         [notFoundMsg]="noResultsFoundLabel"
                                                                         [showSearchSuggestion]="
                                                                             !(
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             )
                                                                         "
                                                                         [readonlyInput]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
@@ -1351,7 +1368,8 @@
                                                                     [currentTxn]="lc.currentBlankTxn"
                                                                     [needToReCalculate]="needToReCalculate"
                                                                     [isReadOnly]="
-                                                                        currentOrganizationType === 'COMPANY' &&
+                                                                        (currentOrganizationType === 'COMPANY' ||
+                                                                            isConsolidatedBranch) &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"

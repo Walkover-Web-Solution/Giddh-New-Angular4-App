@@ -126,6 +126,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public fromDate: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** True if show clear */
     public showClearFilter: boolean = false;
     /* dayjs object */
@@ -461,7 +463,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public isFilterActive(): void {
-        if ((this.isCompany && this.selectedBranch?.length) || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
+        if (((this.isCompany|| this.isConsolidatedBranch) && this.selectedBranch?.length) || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
             this.showClearFilter = true;
         } else {
             this.showClearFilter = false;
@@ -510,7 +512,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
 
-            if (!this.isCompany) {
+            if (!this.isCompany || !this.isConsolidatedBranch) {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             }
@@ -547,8 +549,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
 
-                if (!this.isCompany) {
+                if (!this.isCompany || !this.isConsolidatedBranch) {
                     this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                     this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                     this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
@@ -567,7 +570,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getBranches(apiCall: boolean = true): void {
         this.allWarehouses = [];
-        if (!this.isCompany) {
+        if (!this.isCompany || !this.isConsolidatedBranch) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
             this.allWarehouses = currentBranch[0]?.warehouses;
         } else {
@@ -588,8 +591,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.stockReportRequestExport.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
 
-        if (!this.isCompany) {
+        if (!this.isCompany || !this.isConsolidatedBranch) {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];

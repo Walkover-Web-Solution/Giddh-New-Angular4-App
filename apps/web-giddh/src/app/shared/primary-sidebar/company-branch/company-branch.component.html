@@ -122,10 +122,6 @@
                         <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <ng-container *ngFor="let branch of companyBranches?.branches">
                                 <li
-                                    *ngIf="
-                                        activeCompany?.uniqueName !== companyBranches?.uniqueName ||
-                                        currentBranchUniqueName
-                                    "
                                     [tooltip]="companyBranches.name"
                                     placement="bottom"
                                 >
@@ -148,7 +144,6 @@
                             </ng-container>
                             <li *ngFor="let branch of companyBranches?.branches">
                                 <a
-                                    *ngIf="!branch?.consolidatedBranch"
                                     class="d-flex align-items-center"
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
@@ -161,6 +156,9 @@
                                         <span class="branch-alias">
                                             {{ branch?.name }}
                                         </span>
+                                           <span *ngIf="branch?.consolidatedBranch" class="font-12 branch-company-name">{{
+                                                localeData?.company_consolidated_data
+                                            }}</span>
                                         <!-- Company name will show once we release the concept of headquarters -->
                                         <!-- <span class="font-11 branch-company-name">{{companyBranches?.name}}</span> -->
                                     </span>
