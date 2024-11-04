@@ -2,7 +2,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -73,11 +73,15 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates to the page for creating a new company.
+     * Navigates to the page for buy plan.
      * @param subscriptionId
+     * @memberof  ShareGroupModalComponent
      */
-    public createCompanyInSubscription(subscriptionId: string): void {
-        this.router.navigate(['/pages/new-company/', subscriptionId]);
+    public buyPlan(subscriptionId: string): void {
+        this.closeModal();
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 
     public async shareGroup() {
