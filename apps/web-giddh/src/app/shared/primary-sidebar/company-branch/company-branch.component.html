@@ -121,10 +121,7 @@
                     <ul class="list-style-none font-15" *ngIf="!branchRefreshInProcess">
                         <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <ng-container *ngFor="let branch of companyBranches?.branches">
-                                <li
-                                    [tooltip]="companyBranches.name"
-                                    placement="bottom"
-                                >
+                                <li [tooltip]="companyBranches.name" placement="bottom">
                                     <a
                                         *ngIf="!branch?.parentBranch && branch?.consolidatedBranch"
                                         class="d-flex align-items-center head-branch"
@@ -135,9 +132,10 @@
                                         <i class="icon-head-branch mr-2"></i>
                                         <span class="d-flex flex-column">
                                             <span class="branch-alias">{{ companyBranches?.name }}</span>
-                                            <span class="font-12 branch-company-name">{{
-                                                localeData?.company_consolidated_data
-                                            }}</span>
+                                            <span class="font-12 branch-company-name"
+                                                >{{ commonLocaleData?.app_company }}
+                                                {{ commonLocaleData?.app_mode }}</span
+                                            >
                                         </span>
                                     </a>
                                 </li>
@@ -156,9 +154,9 @@
                                         <span class="branch-alias">
                                             {{ branch?.name }}
                                         </span>
-                                           <span *ngIf="branch?.consolidatedBranch" class="font-12 branch-company-name">{{
-                                                localeData?.company_consolidated_data
-                                            }}</span>
+                                        <span *ngIf="branch?.consolidatedBranch" class="font-12 branch-company-name">{{
+                                            localeData?.company_consolidated_data
+                                        }}</span>
                                         <!-- Company name will show once we release the concept of headquarters -->
                                         <!-- <span class="font-11 branch-company-name">{{companyBranches?.name}}</span> -->
                                     </span>
