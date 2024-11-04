@@ -113,7 +113,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
             this.waitAndReloadCompany();
             setTimeout(() => {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-            }, 1000);
+            }, 500);
         }
     }
 
@@ -146,7 +146,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
             setTimeout(() => {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-            }, 1000);
+            }, 500);
         }, 2000);
     }
 

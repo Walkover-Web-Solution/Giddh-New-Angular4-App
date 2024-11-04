@@ -87,7 +87,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** Active tab name */
     public activeTab: string;
     /** Active company details */
-    public selectedCompany: any = null;
+    public activeCompany: any = null;
 
     constructor(
         private commonActions: CommonActions,
@@ -115,7 +115,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            this.selectedCompany = response;
+            this.activeCompany = response;
         });
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
@@ -143,7 +143,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     });
                 }
             } else {
-                let companyCountry = this.selectedCompany?.countryV2?.alpha2CountryCode;
+                let companyCountry = this.activeCompany?.countryV2?.alpha2CountryCode;
                 if (companyCountry === 'IN') {
                     const requestObject = {
                         formName: 'onboarding',
