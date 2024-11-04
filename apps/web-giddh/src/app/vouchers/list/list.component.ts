@@ -711,8 +711,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
+        const queryParams =  {
+            page: this.advanceFilters.page,
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+        };
+
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length){
+            queryParams['search'] = searchString;
+        };
+
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${voucherUniqueName}`], {
-            queryParams: { page: this.advanceFilters.page, from: this.advanceFilters.from, to: this.advanceFilters.to }
+            queryParams: queryParams
         });
     }
 
@@ -1910,6 +1921,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.componentStore.purchaseOrderBulkUpdateAction({ payload: { purchaseNumbers }, actionType: actionType });
         } else if (event?.purchaseOrders) {
             this.componentStore.purchaseOrderBulkUpdateAction({ payload: event, actionType: actionType });
+        }
+    }
+
+    /**
+     * Handle Copy voucher redirect to voucher create page with respective voucher
+     *
+     * @memberof VoucherListComponent
+     */
+    public copyVoucher(voucher: any): void {
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+        } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
+            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+        } else {
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
         }
     }
 }
