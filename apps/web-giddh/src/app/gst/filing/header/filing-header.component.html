@@ -102,6 +102,7 @@
                             class="btn btn-primary authenticate-btn pull-right"
                             [ngClass]="{ 'btn-success': gstAuthenticated }"
                             (click)="toggleSettingAsidePane($event, 'TAXPRO')"
+                            [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing')"
                         >
                             {{
                                 gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate
@@ -110,6 +111,20 @@
                     </div>
                 </li>
             </ul>
+            <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing')" class="row pull-right">
+                <span class="pull-right">
+                    {{ commonLocaleData?.app_no_access_limit_module }}
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        aria-label="upgrade"
+                        class="mr-0"
+                        (click)="buyPlan(activeCompany?.subscription.subscriptionId)"
+                    >
+                        {{ commonLocaleData?.app_upgrade }}
+                    </button>
+                 </span>
+            </div>
         </div>
     </div>
     <!-- endregion -->

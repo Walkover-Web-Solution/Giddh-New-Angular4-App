@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { InvoiceSettingComponent } from './invoice.settings.component';
-
+import { MatButtonModule } from '@angular/material/button';
 import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
@@ -24,7 +24,8 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         BsDatepickerModule.forRoot(),
         MatSlideToggleModule,
         ValidateSectionPermissionDirectiveModule,
-        GiddhDatepickerModule
+        GiddhDatepickerModule,
+        MatButtonModule
     ],
     exports: [
         InvoiceSettingComponent

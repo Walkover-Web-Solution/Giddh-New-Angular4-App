@@ -8,6 +8,7 @@
             <h3 class="pd-b1">{{ localeData?.share_with }}</h3>
             <div class="add-mailer">
                 <!--share group from-->
+
                 <form
                     name="shareGroupForm"
                     #shareGroupForm="ngForm"
@@ -46,7 +47,7 @@
                             <button
                                 class="btn btn-success btn-share ml-0"
                                 type="submit"
-                                [disabled]="shareGroupForm.invalid"
+                                [disabled]="shareGroupForm.invalid || remainingUsers <= 0"
                                 (click)="shareGroup()"
                             >
                                 {{ commonLocaleData?.app_share }}
@@ -55,6 +56,21 @@
                         <!-- /btn-group -->
                     </div>
                 </form>
+
+                <div *ngIf="remainingUsers <= 0" class="text-align-left">
+                    <span>
+                        {{ commonLocaleData?.app_no_access_limit_module }}
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            aria-label="upgrade"
+                            class="mr-0"
+                            (click)="buyPlan(activeCompany?.subscription.subscriptionId)"
+                        >
+                            {{ commonLocaleData?.app_upgrade }}
+                        </button>
+                    </span>
+                </div>
 
                 <!--shared with array-->
                 <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
