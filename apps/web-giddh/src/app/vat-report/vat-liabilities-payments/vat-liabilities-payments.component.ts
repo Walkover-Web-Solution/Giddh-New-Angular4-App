@@ -30,6 +30,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if current organization is company */
     public isCompanyMode: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Holds Branch List */
     public branchList: any;
     /** Holds Tax Number List */
@@ -107,6 +109,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getUniversalDatePickerDate();
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -124,7 +128,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         });
 
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
-        if (this.isCompanyMode) {
+        if (this.isCompanyMode || this.isConsolidatedBranch) {
             this.loadTaxDetails();
             this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
@@ -159,7 +163,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                 if (this.taxesList.length === 1) {
                     this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
                 }
-                if (this.isCompanyMode) {
+                if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
                 this.getURLHMRCAuthorization();

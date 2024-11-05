@@ -177,6 +177,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         label: '',
         placeholder: ''
     }
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -202,6 +204,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.isSalesTaxRateWise = SalesTaxReport.TaxWise === this.salesTaxReportType;
         this.isSalesTaxAccountWise = SalesTaxReport.AccountWise === this.salesTaxReportType;
         this.isVatReport = this.moduleType === "VAT_REPORT";
@@ -402,7 +406,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
@@ -428,7 +433,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
-                    if (this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company) {
+                    if (this.hasTaxNumber || (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch)) {
                         this.loadTaxDetails();
                     }
                 }

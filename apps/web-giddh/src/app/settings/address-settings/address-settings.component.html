@@ -1,7 +1,7 @@
 <div class="container-fluid" [ngClass]="{ 'setting-profile-container': !addressOnly }">
     <div class="row">
         <div
-            *ngIf="organizationType === 'COMPANY'"
+            *ngIf="(organizationType === 'COMPANY')"
             class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
         >
             <div class="search-container">
@@ -32,7 +32,7 @@
             </button>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100 overflow-visible">
+        <div *ngIf="(organizationType === 'COMPANY' || isConsolidatedBranch)" class="w-100 overflow-visible">
             <div class="table-responsive overflow-visible">
                 <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view">
                     <ng-container matColumnDef="no">
@@ -291,7 +291,7 @@
             </div>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4 mb-5">
+        <div *ngIf="(organizationType === 'COMPANY' || isConsolidatedBranch)" class="w-100 text-center mt-4 mb-5">
             <pagination
                 [(ngModel)]="paginationConfig.page"
                 *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"

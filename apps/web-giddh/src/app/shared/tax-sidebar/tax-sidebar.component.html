@@ -233,7 +233,7 @@
                             <span>{{ localeData?.with_held_setting }}</span>
                         </a>
                     </li>
-                    <li *ngIf="isCompany && showGstMenus">
+                    <li *ngIf="(isCompany || isConsolidatedBranch) && showGstMenus">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"

@@ -57,8 +57,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
 import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 import { CallBackPageModule } from './call-back-page/call-back-page.module';
+import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -178,8 +178,8 @@ export function provideConfig() {
         GenericAsideMenuAccountModule,
         MasterComponent,
         MasterExportOptionComponent,
-        D3TreeChartModule,
-        CallBackPageModule
+        CallBackPageModule,
+        D3TreeChartModule
     ],
     providers: [
         {

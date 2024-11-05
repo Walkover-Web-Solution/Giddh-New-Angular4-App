@@ -112,6 +112,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public inventoryType: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private generalService: GeneralService,
@@ -161,6 +163,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.componentStore.organisationMode$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
                 if (!this.isCompany) {
                     this.displayedColumns.push('action');
                 }
@@ -212,7 +215,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

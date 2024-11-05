@@ -12,6 +12,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
 import { WarehouseActions } from '../warehouse/action/warehouse.action';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'address-settings',
@@ -141,12 +142,14 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     private deleteAddressConfirmationModalRef: MatDialogRef<any>;
     /** Holds Aside Account AsidePane Dialog Reference */
     private asideAccountAsidePaneRef: MatDialogRef<any>;
-
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     /** @ignore */
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
+        private generalService: GeneralService,
         private settingsBranchActions: SettingsBranchActions,
         public dialog: MatDialog
     ) { }
@@ -157,6 +160,8 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: "", count: 2 })); // count is 2 because we only have to check if there are more than 1 records
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = "";

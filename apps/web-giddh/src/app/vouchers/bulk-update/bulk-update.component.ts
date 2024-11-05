@@ -81,7 +81,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      *
      * @memberof BulkUpdateComponent
      */
-    public ngOnInit(): void {
+    public ngOnInit(): void {        
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
 
@@ -470,14 +470,13 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         let isValid = true;
         const form = this.bulkUpdateForm.value;
 
-        if (this.bulkUpdateForm.value.action) {
+        if (form.action) {
             if (form.action === BULK_UPDATE_FIELDS.purchasedate) {
                 if (!form.purchaseDate) {
                     isValid = false;
                     this.toasterService.showSnackBar('error', this.localeData?.po_date_error);
                 } else {
-                    let date = dayjs(form.purchaseDate).format(GIDDH_DATE_FORMAT);
-                    this.bulkUpdateForm.get('purchaseDate').patchValue(date);
+                    this.bulkUpdateForm.get('purchaseDate').patchValue(dayjs(form.purchaseDate).format(GIDDH_DATE_FORMAT));
                 }
             } else if (form.action === BULK_UPDATE_FIELDS.duedate) {
                 if (!form.dueDate) {
