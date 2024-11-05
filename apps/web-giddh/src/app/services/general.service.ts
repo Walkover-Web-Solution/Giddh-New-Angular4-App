@@ -2152,9 +2152,8 @@ export class GeneralService {
     /**
      * Round a Number to Company Decimal Places
      *
-     * 
      * @param {number} value
-     * @param {number} companyDecimalPlaces
+     * @param {number} [companyDecimalPlaces=2]
      * @returns {number}
      * @memberof GeneralService
      */
@@ -2162,7 +2161,7 @@ export class GeneralService {
         const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
-    
+
     /**
      * Update current page query params
      *
