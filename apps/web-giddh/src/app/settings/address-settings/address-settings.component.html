@@ -1,6 +1,5 @@
 <div class="container-fluid" [ngClass]="{ 'setting-profile-container': !addressOnly }">
     <div class="row">
-        {{organizationType === 'COMPANY'}} : {{isConsolidatedBranch}}
         <div
             *ngIf="(organizationType === 'COMPANY' || isConsolidatedBranch)"
             class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"

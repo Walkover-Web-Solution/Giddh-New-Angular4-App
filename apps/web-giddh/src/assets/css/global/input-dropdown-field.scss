@@ -383,6 +383,12 @@ add-company {
     }
 }
 
+.mat-pseudo-checkbox {
+    &.mat-pseudo-checkbox-full {
+        color: var(--color-common-primary-text);
+    }
+}
+
 /*------ dropdown option checkbox color ------*/
 .mat-pseudo-checkbox-checked,
 .mat-pseudo-checkbox-indeterminate {
