@@ -337,13 +337,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.setInitialAdvanceFilter(true);
-        this.getInvoiceSettings();
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
+                this.getInvoiceSettings();
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -368,7 +368,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         /** Universal date */
@@ -711,14 +710,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        const queryParams =  {
+        const queryParams = {
             page: this.advanceFilters.page,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
         };
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
-        if (searchString?.length){
+        if (searchString?.length) {
             queryParams['search'] = searchString;
         };
 
