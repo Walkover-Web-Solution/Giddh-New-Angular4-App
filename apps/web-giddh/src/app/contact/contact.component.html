@@ -573,7 +573,7 @@
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
-                    class="w-100"
+                    class="w-100 position-relative"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
@@ -920,7 +920,7 @@
                     *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
-                    class="w-100"
+                    class="w-100 position-relative"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
@@ -1374,16 +1374,12 @@
                                 </button>
                                 <button
                                     mat-stroked-button
-                                    *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
+                                    *ngIf="isPlaidSupportedCountry && !isGetAllIntegratedBankInProgress"
                                     class="btn-small min-width-150 contact-ipad-responsive"
                                     [routerLink]="['/pages/settings/integration/payment']"
                                     aria-label="bank"
                                 >
-                                    {{
-                                        isPlaidSupportedCountry
-                                            ? localeData?.connect_bank
-                                            : localeData?.connect_icici_bank
-                                    }}
+                                    {{ localeData?.connect_bank }}
                                 </button>
                             </div>
                             <ng-container
