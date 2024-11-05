@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: "discount-dropdown",
@@ -37,7 +38,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     public totalDiscountAmount: number = 0;
 
     constructor(
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private generalService: GeneralService
     ) {
         this.discountForm = this.formBuilder.group({
             percentage: [''],
@@ -139,18 +141,6 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             isActive: [discount.isActive ?? false]
         });
     }
-    /**
-     * Round a Number to Company Decimal Places
-     *
-     * @private
-     * @param {*} value
-     * @returns {number}
-     * @memberof DiscountDropdownComponent
-     */
-    private roundOffValueByCompanyDecimalPlace(value: number): number {
-        const decimalPlaces = this.companyDecimalPlaces === 4 ? 10000 : 100;
-        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
-    }
 
     /**
      * Calculates discount
@@ -174,7 +164,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         }
-        this.totalDiscountAmount = this.roundOffValueByCompanyDecimalPlace(this.totalDiscountAmount);
+        this.totalDiscountAmount = this.generalService.roundOffValueByCompanyDecimalPlace(this.totalDiscountAmount, this.companyDecimalPlaces);
 
         this.emitSelectedDiscounts();
     }
