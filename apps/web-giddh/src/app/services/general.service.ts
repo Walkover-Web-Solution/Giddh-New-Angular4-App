@@ -26,8 +26,6 @@ export class GeneralService {
     public currentOrganizationType: OrganizationType;
     /** Stores the branch unique name */
     public currentBranchUniqueName: string;
-    /** Stores the current branch consolidated */
-    public isCurrentBranchConsolidated: boolean;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

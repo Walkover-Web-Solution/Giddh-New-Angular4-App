@@ -241,7 +241,12 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            if (response?.isBranchConsolidated) {
+                this.isConsolidatedBranch = response?.isBranchConsolidated;
+            }
+        });
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];

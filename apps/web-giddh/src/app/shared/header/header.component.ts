@@ -533,6 +533,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        // this.generalService.isCurrentBranchConsolidated = Boolean(localStorage.getItem("Consolidated"));
         /** If this is true, it means we are in branch consolidated mode.  */
         this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
