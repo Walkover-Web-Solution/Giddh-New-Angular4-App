@@ -146,8 +146,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public getBranchWiseData(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
-                this.allBranches = response.body.results?.filter(branch => !branch?.isCompany);
-                this.branches = response.body.results?.filter(branch => !branch?.isCompany);
+                const branches = cloneDeep(response.body);
+                this.allBranches = branches.results?.filter(branch => !branch?.isCompany);
+                this.branches = branches.results?.filter(branch => !branch?.isCompany)?.map(branch => {
+                    const { name, uniqueName, ...rest } = branch;
+                    return branch = { label: name, value: uniqueName, ...rest };
+                });
                 this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
                 this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
             }
