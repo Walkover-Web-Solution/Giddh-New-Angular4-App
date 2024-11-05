@@ -2140,9 +2140,8 @@ export class GeneralService {
     /**
      * Round a Number to Company Decimal Places
      *
-     * 
      * @param {number} value
-     * @param {number} companyDecimalPlaces
+     * @param {number} [companyDecimalPlaces=2]
      * @returns {number}
      * @memberof GeneralService
      */
