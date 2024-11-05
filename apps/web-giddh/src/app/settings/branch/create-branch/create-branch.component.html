@@ -47,31 +47,13 @@
                         class="filter-dropdown-branch mr-b15"
                         *ngIf="allBranches?.length > 1 && (isCompany || isConsolidatedBranch)"
                     >
-                        <mat-select
-                            name="branch"
-                            class="branch-mat-salect"
-                            [placeholder]="localeData?.parent_branch"
+                        <reactive-dropdown-field
+                            [label]="localeData?.parent_branch"
+                            [placeholder]="localeData?.select_parent_branch"
+                            [options]="branches"
                             formControlName="parentBranchUniqueName"
                         >
-                            <mat-option class="branch-options">
-                                <ngx-mat-select-search
-                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                    [formControl]="branchesDropdown ? branchesDropdown : null"
-                                    [placeholderLabel]="localeData?.select_parent_branch"
-                                    class="mat-select-search-branch"
-                                >
-                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                </ngx-mat-select-search>
-                            </mat-option>
-
-                            <mat-option
-                                class="branch-options"
-                                *ngFor="let branch of branches"
-                                [value]="branch?.uniqueName"
-                            >
-                                {{ branch?.name ?? "-" }}
-                            </mat-option>
-                        </mat-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="branch-form-field">
                         <div class="address-dropdown">
