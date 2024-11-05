@@ -367,7 +367,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 this.getSelectedTabIndex();
                 // 'pending', 'settings', 'templates' These tabs are not voucher list
-                let tab = !this.isCompany ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
+                let tab = (!this.isCompany && !this.isConsolidatedBranch )? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
                 if (this.universalDate && !tab.includes(this.activeModule)) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
@@ -739,7 +739,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getSelectedTabIndex(): void {
-        if (!this.isCompany) {
+        if (!this.isCompany && !this.isConsolidatedBranch) {
             if (this.activeTabGroup === 0) {
                 if (this.voucherType === 'estimates' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
@@ -833,7 +833,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private redirectToSelectedTab(selectedTabIndex: number): void {
         let voucherType = "";
         let activeModule = "";
-        if (!this.isCompany) {
+        if (!this.isCompany && !this.isConsolidatedBranch) {
             if (this.activeTabGroup === 0) {
                 if (selectedTabIndex === 0) {
                     voucherType = "estimates";
