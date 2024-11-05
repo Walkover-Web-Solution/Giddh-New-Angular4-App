@@ -1374,16 +1374,12 @@
                                 </button>
                                 <button
                                     mat-stroked-button
-                                    *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
+                                    *ngIf="isPlaidSupportedCountry && !isGetAllIntegratedBankInProgress"
                                     class="btn-small min-width-150 contact-ipad-responsive"
                                     [routerLink]="['/pages/settings/integration/payment']"
                                     aria-label="bank"
                                 >
-                                    {{
-                                        isPlaidSupportedCountry
-                                            ? localeData?.connect_bank
-                                            : localeData?.connect_icici_bank
-                                    }}
+                                    {{ localeData?.connect_bank }}
                                 </button>
                             </div>
                             <ng-container
