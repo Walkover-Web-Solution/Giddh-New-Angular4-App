@@ -341,6 +341,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.setInitialAdvanceFilter(true);
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -374,7 +375,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
             }
         });
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
