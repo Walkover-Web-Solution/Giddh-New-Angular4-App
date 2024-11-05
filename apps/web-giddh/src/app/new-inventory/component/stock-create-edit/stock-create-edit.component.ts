@@ -23,6 +23,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CreateRecipeComponent } from "../recipe/create-recipe/create-recipe.component";
 import { GeneralService } from "../../../services/general.service";
 import { ManufacturingService } from "../../../services/manufacturing.service";
+import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
+import { SettingsDiscountService } from "../../../services/settings.discount.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -60,6 +62,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public salesAccounts: IOption[] = [];
     /** Taxes list */
     public taxes: any[] = [];
+    /** Holds Discounts list */
+    public discountsList: IDiscountList[] = [];
     /** Object of stock form */
     public stockForm: any = {
         type: null,
@@ -74,6 +78,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         hsnNumber: null,
         sacNumber: null,
         taxes: null,
+        discounts: null,
         skuCode: null,
         openingQuantity: null,
         openingAmount: null,
@@ -253,7 +258,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private location: Location,
         private generalService: GeneralService,
-        private manufacturingService: ManufacturingService
+        private manufacturingService: ManufacturingService,
+        private settingsDiscountService: SettingsDiscountService
     ) {
     }
 
@@ -269,6 +275,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         document.querySelector("body").classList.add("stock-create-edit");
 
         this.getTaxes();
+        this.getAllDiscounts();
         this.getWarehouses();
         this.getVariantCustomFields();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -879,6 +886,20 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.taxes = response || [];
             }
             this.changeDetection.detectChanges();
+        });
+    }
+
+    /**
+     * Get all discounts api call
+     *
+     * @private
+     * @memberof StockCreateEditComponent
+     */
+    private getAllDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.discountsList = cloneDeep(response.body);
+            }
         });
     }
 
