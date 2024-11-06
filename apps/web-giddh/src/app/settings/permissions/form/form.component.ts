@@ -70,7 +70,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds user module restriction */
-    public remainingUsers : number = 0;
+    public remainingUsers: number = 0;
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
@@ -83,6 +85,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     ) {
         this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
     }
 
     public ngOnDestroy() {
@@ -99,7 +102,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
                 let to: any = dayjs(this.userdata.to, GIDDH_DATE_FORMAT);
-                    this.dateRangePickerValue = [from, to];
+                this.dateRangePickerValue = [from, to];
             }
             this.initAcForm(this.userdata);
         } else {
@@ -131,7 +134,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.userEntityRoles && activeCompany.userEntityRoles.length && activeCompany.userEntityRoles[0] && activeCompany.userEntityRoles[0].role && activeCompany.userEntityRoles[0].role.uniqueName === 'super_admin') {
                 this.isSuperAdminCompany = true;
             } else {
@@ -141,7 +144,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 let module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === 'Users'
                 );
-                this.remainingUsers = module.remainingUsers; 
+                this.remainingUsers = module.remainingUsers;
             }
         });
 
