@@ -178,7 +178,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                 && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
                 // This will by default show the current organization unique name and non consolidated entity as selected linked entity
-                const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(i => i?.uniqueName === this.currentOrganizationUniqueName && !i?.isConsilated);
+                const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(linked => linked?.uniqueName === this.currentOrganizationUniqueName && !linked?.isConsilated);
                 this.addressForm.get('linkedEntity')?.patchValue(currentOrganizationUniqueNameObj);
             }
         } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
