@@ -172,6 +172,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.autoSelectSearchOption = true;
             this.searchRequest.q = this.reportUniqueName;
         }
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
@@ -549,12 +555,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-                this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
-
                 if (!this.isCompany || !this.isConsolidatedBranch) {
                     this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                     this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
@@ -595,11 +595,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.stockReportRequestExport.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
 
         if (!this.isCompany || !this.isConsolidatedBranch) {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];

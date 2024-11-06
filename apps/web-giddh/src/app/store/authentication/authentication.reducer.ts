@@ -96,7 +96,7 @@ export interface SessionState {
     filters: any;
 }
 
-export interface BranchConsolidatedState {
+export interface IBranchConsolidatedState {
     isBranchConsolidated: boolean;
 }
 
@@ -163,7 +163,7 @@ const sessionInitialState: SessionState = {
     activeTheme: null,
     filters: null
 };
-const branchConsolidatedInitialState: BranchConsolidatedState = {
+const branchConsolidatedInitialState: IBranchConsolidatedState = {
     isBranchConsolidated: false
 };
 
@@ -472,7 +472,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
     }
 }
 
-export function BranchConsolidatedReducer(state: BranchConsolidatedState = branchConsolidatedInitialState, action: CustomActions): BranchConsolidatedState {
+export function BranchConsolidatedReducer(state: IBranchConsolidatedState = branchConsolidatedInitialState, action: CustomActions): IBranchConsolidatedState {
     switch (action.type) {
         case CommonActions.SET_BRANCH_CONSOLIDATED: {
             return Object.assign({}, state, {

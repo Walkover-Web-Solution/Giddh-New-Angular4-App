@@ -38,7 +38,7 @@ export interface AppState {
     home: fromHome.HomeState;
     login: fromLogin.AuthenticationState;
     session: fromLogin.SessionState;
-    branchConsolidated: fromLogin.BranchConsolidatedState;
+    branchConsolidated: fromLogin.IBranchConsolidatedState;
     company: fromCompany.CurrentCompanyState;
     sales: fromSales.SalesState;
     groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
