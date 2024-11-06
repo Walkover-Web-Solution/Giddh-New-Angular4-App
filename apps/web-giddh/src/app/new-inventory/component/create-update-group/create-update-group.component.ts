@@ -16,12 +16,14 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
+import { InventoryComponentStore } from "../inventory.store";
 
 @Component({
     selector: 'create-update-group',
     templateUrl: './create-update-group.component.html',
     styleUrls: ['./create-update-group.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [InventoryComponentStore]
 })
 export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Holds group unique name if updating group  */
@@ -74,6 +76,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return this.groupForm?.dirty;
     }
+    /** Discounts list Observable */
+    public discountsList$: Observable<any> = this.componentStore.discountsList$;
 
     constructor(
         private store: Store<AppState>,
@@ -85,7 +89,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private dialog: MatDialog,
         private location: Location,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private componentStore: InventoryComponentStore
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
     }
@@ -102,6 +107,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         document.querySelector("body").classList.add("group-create-update");
         this.initGroupForm();
         this.getTaxes();
+        this.getAllDiscounts();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.stockType = params?.type?.toUpperCase();
@@ -154,6 +160,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             parentStockGroupUniqueName: [!this.groupUniqueName && this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : ''],
             isSubGroup: [!this.groupUniqueName && this.activeGroup?.uniqueName ? true : false],
             taxes: null,
+            discounts: null,
             type: null
         });
 
@@ -182,6 +189,16 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             }
             this.changeDetection.detectChanges();
         });
+    }
+
+    /**
+    * Get all discounts
+    *
+    * @private
+    * @memberof CreateUpdateGroupComponent
+    */
+    private getAllDiscounts(): void {
+        this.componentStore.getDiscountList();
     }
 
     /**
@@ -498,7 +515,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     sacNumber: response.body.sacNumber,
                     parentStockGroupUniqueName: response.body.parentStockGroup ? response.body.parentStockGroup.uniqueName : '',
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
-                    taxes: response.body.taxes
+                    taxes: response.body.taxes,
+                    discounts: response.body.discounts
                 });
                 this.groupForm.updateValueAndValidity();
                 this.changeDetection.detectChanges();
