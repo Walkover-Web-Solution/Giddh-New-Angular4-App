@@ -11,6 +11,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatReportComponentStore } from '../utility/vat.report.store';
 import { cloneDeep } from '../../lodash-optimized';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'vat-liabilities-payments',
@@ -92,7 +94,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private modalService: BsModalService,
         private router: Router,
-        private componentStore: VatReportComponentStore
+        private componentStore: VatReportComponentStore,
+        private store: Store<AppState>
     ) {
         this.initVatLiabilityPaymentForm();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -110,7 +113,11 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getUniversalDatePickerDate();
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
