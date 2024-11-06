@@ -1216,6 +1216,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.hsnNumber = response.body.hsnNumber;
                 this.stockForm.sacNumber = response.body.sacNumber;
                 this.stockForm.taxes = response.body.taxes;
+                this.stockForm.discounts = response.body.discounts;
                 this.stockForm.skuCode = response.body.skuCode;
                 this.stockForm.openingQuantity = response.body.openingQuantity;
                 this.stockForm.openingAmount = response.body.openingAmount;

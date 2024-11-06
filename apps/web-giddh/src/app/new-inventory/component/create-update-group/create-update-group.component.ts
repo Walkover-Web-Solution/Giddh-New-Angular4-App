@@ -16,6 +16,8 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
+import { SettingsDiscountService } from "../../../services/settings.discount.service";
+import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 
 @Component({
     selector: 'create-update-group',
@@ -52,6 +54,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public stockGroupName: string = "";
     /** Taxes list */
     public taxes: any[] = [];
+    /** Holds Discounts list */
+    public discountsList: IDiscountList[] = [];
     /** Holds list of selected taxes */
     private selectedTaxes: any[] = [];
     /** Holds temporarily list of taxes */
@@ -85,7 +89,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private dialog: MatDialog,
         private location: Location,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
     }
@@ -102,6 +107,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         document.querySelector("body").classList.add("group-create-update");
         this.initGroupForm();
         this.getTaxes();
+        this.getAllDiscounts();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.stockType = params?.type?.toUpperCase();
@@ -154,6 +160,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             parentStockGroupUniqueName: [!this.groupUniqueName && this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : ''],
             isSubGroup: [!this.groupUniqueName && this.activeGroup?.uniqueName ? true : false],
             taxes: null,
+            discounts: null,
             type: null
         });
 
@@ -181,6 +188,20 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.taxes = response || [];
             }
             this.changeDetection.detectChanges();
+        });
+    }
+
+    /**
+    * Get all discounts api call
+    *
+    * @private
+    * @memberof CreateUpdateGroupComponent
+    */
+    private getAllDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.discountsList = cloneDeep(response.body);
+            }
         });
     }
 
@@ -498,7 +519,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     sacNumber: response.body.sacNumber,
                     parentStockGroupUniqueName: response.body.parentStockGroup ? response.body.parentStockGroup.uniqueName : '',
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
-                    taxes: response.body.taxes
+                    taxes: response.body.taxes,
+                    discounts: response.body.discounts
                 });
                 this.groupForm.updateValueAndValidity();
                 this.changeDetection.detectChanges();

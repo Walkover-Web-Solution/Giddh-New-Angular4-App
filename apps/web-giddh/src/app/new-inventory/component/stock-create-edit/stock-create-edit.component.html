@@ -185,16 +185,14 @@
                                                     name="discounts"
                                                     [placeholder]="localeData?.select_discounts"
                                                     multiple
-                                                    [value]="stockForm.discounts"
-                                                    (openedChange)="openedSelectTax($event)"
+                                                    [(ngModel)]="stockForm.discounts"
                                                 >
                                                     <mat-option
                                                         *ngFor="let discount of discountsList"
-                                                        [value]="discount?.uniqueName"
-                                                        [disabled]="discount.isDisabled"
-                                                        [selected]="discount.isChecked"
-                                                        (onSelectionChange)="!discount.isDisabled ? selectTax(discount) : ''"
-                                                        >{{ discount.name }}</mat-option
+                                                        [value]="discount.uniqueName"
+                                                    >
+                                                        {{ discount.name }}
+                                                    </mat-option
                                                     >
                                                     <mat-option
                                                         *ngIf="!discountsList?.length"
