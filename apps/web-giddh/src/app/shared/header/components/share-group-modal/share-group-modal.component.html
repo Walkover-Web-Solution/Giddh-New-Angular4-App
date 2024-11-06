@@ -57,7 +57,7 @@
                     </div>
                 </form>
 
-                <div *ngIf="remainingUsers <= 0" class="text-align-left">
+                <div *ngIf="remainingUsers <= 0 && (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Users')" class="text-align-left">
                     <span>
                         {{ commonLocaleData?.app_no_access_limit_module }}
                         <button
