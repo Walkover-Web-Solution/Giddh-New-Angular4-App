@@ -139,7 +139,11 @@ export class GstComponent implements OnInit, OnDestroy {
         this.loadTaxDetails();
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
 
         this.getCurrentPeriod$.subscribe(a => {
             if (a && a.from) {
