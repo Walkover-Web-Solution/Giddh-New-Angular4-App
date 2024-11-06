@@ -200,7 +200,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     private getAllDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.length) {
-                this.discountsList = cloneDeep(response.body);
+                this.discountsList = response.body;
             }
         });
     }
