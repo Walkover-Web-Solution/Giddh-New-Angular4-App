@@ -88,7 +88,11 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnInit(): void {
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         currencyNumberSystems.map(currency => {
             this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });

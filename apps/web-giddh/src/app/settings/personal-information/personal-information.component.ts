@@ -79,9 +79,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      */
     public ngOnInit(): void {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-            if (response?.isBranchConsolidated) {
-                this.isConsolidatedBranch = response?.isBranchConsolidated;
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
         this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : 'in';

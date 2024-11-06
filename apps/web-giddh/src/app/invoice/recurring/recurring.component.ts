@@ -117,7 +117,11 @@ export class RecurringComponent implements OnInit, OnDestroy {
             if (response) {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
-                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
+                this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
             }
         });
 
