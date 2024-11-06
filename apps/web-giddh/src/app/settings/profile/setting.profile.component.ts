@@ -384,7 +384,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.settings.currentBranch), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentBranchDetails = response;
-                if (this.currentOrganizationType === OrganizationType.Branch) {
+                if (this.currentOrganizationType === OrganizationType.Branch && !this.isConsolidatedBranch) {
                     this.handleBranchProfileResponse(response);
                 }
             }
