@@ -16,14 +16,14 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
-import { SettingsDiscountService } from "../../../services/settings.discount.service";
-import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
+import { InventoryComponentStore } from "../inventory.store";
 
 @Component({
     selector: 'create-update-group',
     templateUrl: './create-update-group.component.html',
     styleUrls: ['./create-update-group.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [InventoryComponentStore]
 })
 export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Holds group unique name if updating group  */
@@ -54,8 +54,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public stockGroupName: string = "";
     /** Taxes list */
     public taxes: any[] = [];
-    /** Holds Discounts list */
-    public discountsList: IDiscountList[] = [];
     /** Holds list of selected taxes */
     private selectedTaxes: any[] = [];
     /** Holds temporarily list of taxes */
@@ -78,6 +76,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return this.groupForm?.dirty;
     }
+    /** Discounts list Observable */
+    public discountsList$: Observable<any> = this.componentStore.discountsList$;
 
     constructor(
         private store: Store<AppState>,
@@ -90,7 +90,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private location: Location,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private settingsDiscountService: SettingsDiscountService
+        private componentStore: InventoryComponentStore
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
     }
@@ -192,17 +192,13 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Get all discounts api call
+    * Get all discounts
     *
     * @private
     * @memberof CreateUpdateGroupComponent
     */
     private getAllDiscounts(): void {
-        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body?.length) {
-                this.discountsList = response.body;
-            }
-        });
+        this.componentStore.getDiscountList();
     }
 
     /**

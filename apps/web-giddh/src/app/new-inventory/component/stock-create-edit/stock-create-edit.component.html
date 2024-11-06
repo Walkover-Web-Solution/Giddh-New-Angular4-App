@@ -188,14 +188,14 @@
                                                     [(ngModel)]="stockForm.discounts"
                                                 >
                                                     <mat-option
-                                                        *ngFor="let discount of discountsList"
+                                                        *ngFor="let discount of discountsList$ | async"
                                                         [value]="discount.uniqueName"
                                                     >
                                                         {{ discount.name }}
                                                     </mat-option
                                                     >
                                                     <mat-option
-                                                        *ngIf="!discountsList?.length"
+                                                        *ngIf="!(discountsList$ | async)?.length"
                                                         class="create-update-no-data"
                                                         [disabled]="true"
                                                     >
