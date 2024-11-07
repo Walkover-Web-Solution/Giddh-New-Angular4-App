@@ -752,7 +752,7 @@
                                 <div class="vouchers-entry-table">
                                     <table formArrayName="entries" class="w-100">
                                         <thead>
-                                            <tr>
+                                            <tr class="text-right">
                                                 <th [width]="hasStock ? '20%' : '25%'" class="text-left product-column">
                                                     {{ invoiceType.isReceiptInvoice ? localeData?.receipt_mode :
                                                     invoiceType.isPaymentInvoice ? localeData?.payment_mode :
@@ -785,7 +785,8 @@
                                             <ng-container
                                                 *ngFor="let entry of invoiceForm?.get('entries')['controls']; let entryIndex = index">
                                                 <tr [formGroupName]="entryIndex"
-                                                    (click)="activeEntryIndex = entryIndex; getStockVariants(entry?.value, entryIndex); $event.stopPropagation()">
+                                                    (click)="activeEntryIndex = entryIndex; getStockVariants(entry?.value, entryIndex); $event.stopPropagation()"
+                                                    class="text-right">
                                                     <!-- Product/Service -->
                                                     <td [width]="hasStock ? '20%' : '25%'"
                                                         class="text-left product-column">
