@@ -129,8 +129,8 @@
                                         <div
                                             *ngIf="
                                                 (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
-                                                (!isConsolidatedBranch && currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                (currentCompanyBranches?.length <= 1 &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex justify-content-between">
@@ -189,10 +189,10 @@
                                             </ul>
                                         </div>
                                         <div
-                                       *ngIf="
+                                            *ngIf="
                                                 (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
-                                                (!isConsolidatedBranch && currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                (currentCompanyBranches?.length <= 1 &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -252,10 +252,10 @@
                                             </ul>
                                         </div>
                                         <div
-                                           *ngIf="
+                                            *ngIf="
                                                 (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
-                                                (!isConsolidatedBranch || currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                (currentCompanyBranches?.length <= 1 &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -334,10 +334,9 @@
                                         </div>
                                         <div
                                             class="mr-t2 mr-b05 align-items-center"
-                                           *ngIf="
-                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
-                                                (isConsolidatedBranch || currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                            *ngIf="
+                                                currentCompanyBranches?.length > 1 &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                             "
                                         >
                                             <span>{{ localeData?.go_to_branch_information }} </span>
@@ -353,8 +352,8 @@
                                         <ng-container
                                             *ngIf="
                                                 (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
-                                                (!isConsolidatedBranch && currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                (currentCompanyBranches?.length <= 1 &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
