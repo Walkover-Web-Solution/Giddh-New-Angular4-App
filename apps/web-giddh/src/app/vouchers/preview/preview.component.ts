@@ -1154,10 +1154,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public actionVoucher(action: string, event?: any): void {
         if (action) {
-            if (action === 'open') {
+            if (this.invoiceType.isPurchaseOrder) {
+                action = action === "cancel" ? "cancelled" : action;
                 this.componentStore.purchaseOrderStatusUpdate({ accountUniqueName: this.selectedInvoice?.vendor?.uniqueName, payload: { action: action, purchaseNumber: this.selectedInvoice?.voucherNumber } });
             } else {
-                this.componentStore.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
+                this.componentStore.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action } });
             }
         } else {
             this.componentStore.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
