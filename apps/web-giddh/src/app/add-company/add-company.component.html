@@ -453,7 +453,7 @@
                         </ng-container>
                     </form>
                 </mat-step>
-                <ng-container *ngIf="isNewUserLoggedIn">
+                <ng-container  *ngIf="isNewUserLoggedIn">
                     <mat-step [stepControl]="thirdStepForm">
                         <form [formGroup]="thirdStepForm" name="thirdStepForm" autocomplete="off" novalidate>
                             <ng-template matStepLabel>{{ commonLocaleData?.app_share }}</ng-template>
@@ -546,8 +546,11 @@
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-lg-12">
-                                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewUser()">
-                                                <i class="icon-plus"></i> {{ localeData?.add_user }}
+                                            <a class="mr-0 add-new" href="javascript:void(0);"
+                                                (click)="remainingUsers > (thirdStepForm.get('creatorSuperAdmin').value === 'true') + thirdStepForm.get('permissionRoles').value.length ? addNewUser() : null"
+                                                [class.cursor-disable]="remainingUsers <= (thirdStepForm.get('creatorSuperAdmin').value === 'true') + thirdStepForm.get('permissionRoles').value.length"
+                                                >
+                                                    <i class="icon-plus"></i> {{ localeData?.add_user }}
                                             </a>
                                         </div>
                                     </div>

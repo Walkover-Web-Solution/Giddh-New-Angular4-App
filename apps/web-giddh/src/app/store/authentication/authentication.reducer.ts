@@ -96,6 +96,10 @@ export interface SessionState {
     filters: any;
 }
 
+export interface IBranchConsolidatedState {
+    isBranchConsolidated: boolean;
+}
+
 /**
  * Setting the InitialState for this Reducer's Store
  */
@@ -158,6 +162,9 @@ const sessionInitialState: SessionState = {
     currentLocale: null,
     activeTheme: null,
     filters: null
+};
+const branchConsolidatedInitialState: IBranchConsolidatedState = {
+    isBranchConsolidated: false
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -458,6 +465,18 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
         case LoginActions.hideTwoWayOtpPopup: {
             return Object.assign({}, state, {
                 isLoginWithPasswordIsShowVerifyOtp: false
+            });
+        }
+        default:
+            return state;
+    }
+}
+
+export function BranchConsolidatedReducer(state: IBranchConsolidatedState = branchConsolidatedInitialState, action: CustomActions): IBranchConsolidatedState {
+    switch (action.type) {
+        case CommonActions.SET_BRANCH_CONSOLIDATED: {
+            return Object.assign({}, state, {
+                isBranchConsolidated: action.payload
             });
         }
         default:

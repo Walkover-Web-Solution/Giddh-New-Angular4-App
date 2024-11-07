@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
-import { ReplaySubject } from "rxjs";
+import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
@@ -23,11 +23,13 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CreateRecipeComponent } from "../recipe/create-recipe/create-recipe.component";
 import { GeneralService } from "../../../services/general.service";
 import { ManufacturingService } from "../../../services/manufacturing.service";
+import { InventoryComponentStore } from "../inventory.store";
 
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
-    styleUrls: ["./stock-create-edit.component.scss"]
+    styleUrls: ["./stock-create-edit.component.scss"],
+    providers: [InventoryComponentStore]
 })
 export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Instance of stock create/edit form */
@@ -74,6 +76,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         hsnNumber: null,
         sacNumber: null,
         taxes: null,
+        discounts: null,
         skuCode: null,
         openingQuantity: null,
         openingAmount: null,
@@ -238,6 +241,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private companyCustomFields: any[] = [];
     /** Holds variant custom fields data */
     private variantCustomFields: any[] = [];
+    /** Discounts list Observable */
+    public discountsList$: Observable<any> = this.componentStore.discountsList$;
 
     constructor(
         private inventoryService: InventoryService,
@@ -253,7 +258,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private location: Location,
         private generalService: GeneralService,
-        private manufacturingService: ManufacturingService
+        private manufacturingService: ManufacturingService,
+        private componentStore: InventoryComponentStore
     ) {
     }
 
@@ -269,6 +275,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         document.querySelector("body").classList.add("stock-create-edit");
 
         this.getTaxes();
+        this.getAllDiscounts();
         this.getWarehouses();
         this.getVariantCustomFields();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -883,6 +890,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Get all discounts
+     *
+     * @private
+     * @memberof StockCreateEditComponent
+     */
+    private getAllDiscounts(): void {
+        this.componentStore.getDiscountList();
+    }
+
+    /**
     * This will reset the taxes list
     *
     * @memberof StockCreateEditComponent
@@ -1195,6 +1212,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.hsnNumber = response.body.hsnNumber;
                 this.stockForm.sacNumber = response.body.sacNumber;
                 this.stockForm.taxes = response.body.taxes;
+                this.stockForm.discounts = response.body.discounts;
                 this.stockForm.skuCode = response.body.skuCode;
                 this.stockForm.openingQuantity = response.body.openingQuantity;
                 this.stockForm.openingAmount = response.body.openingAmount;

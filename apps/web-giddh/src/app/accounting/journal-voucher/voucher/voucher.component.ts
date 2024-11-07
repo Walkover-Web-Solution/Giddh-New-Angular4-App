@@ -81,6 +81,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public currentDate: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /** True if consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -316,6 +318,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private searchService: SearchService,
         private changeDetectionRef: ChangeDetectorRef,
         public dialog: MatDialog,
+        private generalService: GeneralService,
         private eleRef: ElementRef) {
         this.initJournalVoucherForm();
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
@@ -825,7 +828,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
                 transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
             }
-            const amount = this.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value);
+            const amount = this.generalService.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value);
             transaction.get('amount')?.patchValue(amount);
             transaction.get('actualAmount')?.patchValue(amount);
             transaction.get('total')?.patchValue(amount);
@@ -875,16 +878,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
 
             if (byEntryControl) {
-                byEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
+                byEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
             }
             if (toEntryControl) {
-                toEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newSales));
+                toEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(newSales));
             }
             if (discountEntryControl) {
-                discountEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newDiscount));
+                discountEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(newDiscount));
             }
             if (taxEntryControl) {
-                taxEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newTax));
+                taxEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(newTax));
             }
             const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
             this.totalCreditAmount = totalCreditAndDebit.totalCredit;
@@ -892,18 +895,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
-    /**
-     * Round a Number to Company Decimal Places
-     *
-     * @private
-     * @param {*} value
-     * @returns {number}
-     * @memberof AccountAsVoucherComponent
-     */
-    private roundOffValueByCompanyDecimalPlace(value: number): number {
-        const decimalPlaces = this.companyDecimalPlaces === 4 ? 10000 : 100;
-        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
-    }
 
     /**
      * Get Each transaction control
@@ -1495,8 +1486,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        totalCredit = this.roundOffValueByCompanyDecimalPlace(totalCredit);
-        totalDebit = this.roundOffValueByCompanyDecimalPlace(totalDebit);
+        totalCredit = this.generalService.roundOffValueByCompanyDecimalPlace(totalCredit);
+        totalDebit = this.generalService.roundOffValueByCompanyDecimalPlace(totalDebit);
 
         return { totalCredit, totalDebit };
     }

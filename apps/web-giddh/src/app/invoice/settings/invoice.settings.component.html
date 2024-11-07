@@ -563,8 +563,8 @@
                                             <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                                 <mat-slide-toggle
                                                     aria-label="auto whatsApp"
-                                                    [(ngModel)]="proformaSetting.poAutoWhatsApp"
-                                                    name="poAutoWhatsApp"
+                                                    [(ngModel)]="proformaSetting.autoWhatsApp"
+                                                    name="autoWhatsApp"
                                                     class="show-on-mobile"
                                                     color="primary"
                                                 >
@@ -574,8 +574,8 @@
                                             <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                                 <mat-slide-toggle
                                                     aria-label="auto whatsApp"
-                                                    [(ngModel)]="proformaSetting.poAutoWhatsApp"
-                                                    name="poAutoWhatsApp"
+                                                    [(ngModel)]="proformaSetting.autoWhatsApp"
+                                                    name="autoWhatsApp"
                                                     class="hide-on-mobile"
                                                     color="primary"
                                                 >
@@ -1029,6 +1029,7 @@
                                                     class="show-on-mobile"
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
+                                                    [disabled] = "(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')"
                                                 >
                                                 </mat-slide-toggle>
                                                 <label class="left-gap">{{
@@ -1047,6 +1048,8 @@
                                                     class="hide-on-mobile"
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
+                                                    [disabled] = "(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')"
+
                                                 >
                                                 </mat-slide-toggle>
                                                 <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
@@ -1079,6 +1082,20 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')" class="pd-l1">
+                                                <span>
+                                                    {{ commonLocaleData?.app_no_access_limit_module }}
+                                                    <button
+                                                        mat-stroked-button
+                                                        color="primary"
+                                                        aria-label="upgrade"
+                                                        class="mr-0"
+                                                        (click)="buyPlan(activeCompany?.subscription.subscriptionId)"
+                                                    >
+                                                        {{ commonLocaleData?.app_upgrade }}
+                                                     </button>
+                                                 </span>
+                                             </div>
                                         </div>
                                     </div>
                                     <div

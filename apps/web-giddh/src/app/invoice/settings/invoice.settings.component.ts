@@ -72,7 +72,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Stores the active company information */
+    /** Stores the active company information observable */
     public activeCompany$: Observable<any> = null;
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
@@ -86,6 +86,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
+    /** Active company details */
+    public activeCompany: any = null;
 
     constructor(
         private commonActions: CommonActions,
@@ -101,6 +103,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     /**
@@ -111,13 +114,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.activeCompany = response;
+        });
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
         });
         this.initSettingObj();
 
-        this._route.queryParams.pipe(delay(200),takeUntil(this.destroyed$)).subscribe((val) => {
+        this._route.queryParams.pipe(delay(200), takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tabIndex) {
                 this.selectTab(val.tabIndex);
             }
@@ -138,10 +143,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     });
                 }
             } else {
-                let companyCountry;
-                this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
-                    companyCountry = response?.countryV2?.alpha2CountryCode;
-                });
+                let companyCountry = this.activeCompany?.countryV2?.alpha2CountryCode;
                 if (companyCountry === 'IN') {
                     const requestObject = {
                         formName: 'onboarding',
@@ -245,6 +247,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.saveWebhook(objToSave);
             }
         }
+    }
+
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  InvoiceSettingComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 
     /**
