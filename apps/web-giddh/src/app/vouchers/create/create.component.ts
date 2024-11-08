@@ -547,7 +547,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getWarehouses();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {                
+            if (response) {
                 let params = response[0];
                 this.queryParams = response[1];
 
@@ -781,7 +781,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getVoucherType(response);
                     }
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
-                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName) ;
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
                     this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
                     this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber ?? '');
@@ -827,7 +827,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             additional: {
                                 voucherType: response.referenceVoucher.voucherType,
                                 voucherNumber: this.isCopyMode ? null : response.referenceVoucher.number,
-                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) :response.referenceVoucher.date
+                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) : response.referenceVoucher.date
                             }
                         });
                     }
@@ -851,7 +851,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     this.invoiceForm.get('isRcmEntry').patchValue((response.subVoucher === SubVoucher.ReverseCharge) ? true : false);
-                    
+
                     if (response.adjustments?.length && !this.isCopyMode) {
                         response.adjustments = response.adjustments?.map(adjustment => {
                             adjustment.adjustmentAmount = adjustment.amount;
@@ -988,19 +988,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.linkedPoOrders$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!this.isCopyMode) {
                 this.linkedPoNumbers = response;
-    
+
                 if (this.purchaseOrderDetailsForEdit && this.isUpdateMode) {
                     setTimeout(() => {
                         this.purchaseOrderDetailsForEdit?.forEach(order => {
                             if (!this.linkedPoNumbers || !this.linkedPoNumbers[order?.uniqueName]) {
                                 this.purchaseOrders.push({ label: order?.number, value: order?.uniqueName, additional: { grandTotal: order?.grandTotal?.amountForAccount, totalPending: order?.entries?.length } });
-    
+
                                 this.linkedPoNumbers[order?.uniqueName] = [];
                                 this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order?.number;
                                 this.linkedPoNumbers[order?.uniqueName]['items'] = order?.entries;
                             }
                         });
-    
+
                         this.filterPurchaseOrder("");
                     }, 200);
                 }
@@ -2251,7 +2251,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     stock: this.formBuilder.group({
                         name: [entryData ? entryData?.transactions[0]?.stock?.name : ''],
                         quantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : 1],
-                        maxQuantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : undefined], //temp (for PO linking in PB)
+                        maxQuantity: [this.getStockMaxQuantity(entryData)], //temp (for PO linking in PB)
                         rate: this.formBuilder.group({
                             rateForAccount: [entryData ? entryData?.transactions[0]?.stock?.rate?.rateForAccount ?? entryData?.transactions[0]?.stock?.rate?.amountForAccount : 1]
                         }),
@@ -2329,6 +2329,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             taxType: [tax?.taxType], //temp
             taxDetail: [tax?.taxDetail] //temp
         });
+    }
+
+    /**
+     * Calculate max quantity for PO linking in PB 
+     * 
+     * @param entryData 
+     * @returns 
+     */
+    private getStockMaxQuantity(entryData): number | undefined {
+        let maxQuantity = undefined;
+        if (this.invoiceType.isPurchaseInvoice && entryData.purchaseOrderLinkSummaries?.length > 0) {
+            entryData.purchaseOrderLinkSummaries.forEach(summary => {
+                if (!isNaN(Number(summary.unUsedQuantity))) {
+                    if (entryData?.transactions[0]?.stock) {
+                        maxQuantity = summary.unUsedQuantity + entryData?.transactions[0]?.stock?.quantity;
+                    } else {
+                        maxQuantity = summary.usedQuantity;
+                    }
+                }
+            });
+        }
+        return maxQuantity;
     }
 
     /**
@@ -4751,7 +4773,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleQuantityBlur(transaction: any): void {
-        if (transaction.get("stock.quantity")?.value !== undefined && this.invoiceType.isPurchaseInvoice && transaction.get("stock.maxQuantity")?.value !== undefined && transaction.get("stock.maxQuantity")?.value !== null) {
+        if (this.invoiceType.isPurchaseInvoice && transaction.get("stock.quantity")?.value !== undefined && transaction.get("stock.maxQuantity")?.value !== undefined && transaction.get("stock.maxQuantity")?.value !== null) {
             if (transaction.get("stock.quantity")?.value > transaction.get("stock.maxQuantity")?.value) {
                 transaction.get("stock.quantity")?.patchValue(transaction.get("stock.maxQuantity")?.value);
                 this.toasterService.showSnackBar("error", this.localeData?.quantity_error + " (" + transaction.get("stock.maxQuantity")?.value + ")");
