@@ -90,6 +90,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnInit(): void {
+        this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(entity => !entity?.isConsolidated);
         this.setFormData();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -178,7 +179,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                 && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
                 // This will by default show the current organization unique name and non consolidated entity as selected linked entity
-                const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(linked => linked?.uniqueName === this.currentOrganizationUniqueName && !linked?.isConsilated);
+                const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(linked => linked?.uniqueName === this.currentOrganizationUniqueName);
                 this.addressForm.get('linkedEntity')?.patchValue(currentOrganizationUniqueNameObj);
             }
         } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
