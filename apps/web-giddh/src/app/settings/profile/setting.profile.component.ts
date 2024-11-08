@@ -215,6 +215,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -228,12 +234,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.getCountry();
         this.getCurrency();
         currencyNumberSystems.map(currency => {
@@ -320,7 +320,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (!this.initialDataFetched) {
                 this.initialDataFetched = true;
                 if (organization) {
-                    if (organization.type === OrganizationType.Branch) {
+                    if (organization.type === OrganizationType.Branch || this.isConsolidatedBranch) {
                         this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                         this.currentOrganizationType = OrganizationType.Branch;
                     } else if (organization.type === OrganizationType.Company) {
@@ -363,9 +363,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 if (loadTabChangeApi && this.currentTab === "address") {
                     this.handleTabChanged("address");
                 }
-                if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
+                if (this.currentOrganizationType === OrganizationType.Company) {
                     this.handleCompanyProfileResponse(response);
-                } else if (this.currentOrganizationType === OrganizationType.Branch) {
+                } else if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
                     this.companyProfileObj = {
                         ...this.companyProfileObj,
                         country: {
@@ -384,7 +384,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.settings.currentBranch), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentBranchDetails = response;
-                if (this.currentOrganizationType === OrganizationType.Branch && !this.isConsolidatedBranch) {
+                if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
                     this.handleBranchProfileResponse(response);
                 }
             }
@@ -830,13 +830,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleSaveProfile(value: any): void {
-        if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
+        if (this.currentOrganizationType === OrganizationType.Company) {
             if ('manageInventory' in value) {
                 this.updateInventorySetting(value.manageInventory);
             } else {
                 this.patchProfile({ ...value });
             }
-        } else if (this.currentOrganizationType === OrganizationType.Branch) {
+        } else if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
             this.updateBranchProfile(value);
         }
     }
@@ -1029,9 +1029,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
-                if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
+                if (this.currentOrganizationType === OrganizationType.Company) {
                     this.loadAddresses('GET');
-                } else if (this.currentOrganizationType === OrganizationType.Branch) {
+                } else if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                 }
                 this._toasty.successToast('Address created successfully');
@@ -1251,7 +1251,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     private loadAddresses(method: string, params?: any): void {
-        if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
+        if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
             this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
