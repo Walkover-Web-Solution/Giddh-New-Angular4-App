@@ -121,7 +121,7 @@
                     <ul class="list-style-none font-15" *ngIf="!branchRefreshInProcess">
                         <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <ng-container *ngFor="let branch of companyBranches?.branches">
-                                <li [tooltip]="companyBranches.name" placement="bottom">
+                                <li [tooltip]="companyBranches.name" placement="bottom" *ngIf="currentBranchUniqueName">
                                     <a
                                         *ngIf="!branch?.parentBranch && branch?.consolidatedBranch"
                                         class="d-flex align-items-center head-branch"
