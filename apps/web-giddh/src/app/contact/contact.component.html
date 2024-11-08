@@ -373,9 +373,9 @@
                                 </p>
                             </div>
                     </div>
-                    <div class="contact-main customer-page on-mobile-view overflow-visible">
-                        <div class="pd-b2 mr-b1 overflow-visible">
-                            <div class="overflow-visible">
+                    <div class="contact-main customer-page on-mobile-view overflow-x-auto">
+                        <div class="pd-b2 mr-b1 overflow-x-auto">
+                            <div class="overflow-x-auto">
                                 <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
@@ -556,7 +556,7 @@
     </div>
 
     <ng-template #mainTable>
-        <div class="table-responsive vendor-page all-table overflow-visible">
+        <div class="table-responsive vendor-page all-table overflow-x-auto">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"

@@ -92,3 +92,8 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
         width: fit-content;
     }
 }
+@media screen and (max-width: 1200px){
+    .giddh-table tbody > tr > td{
+        min-width: 105px;
+    }
+}

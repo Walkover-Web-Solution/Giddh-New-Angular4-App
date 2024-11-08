@@ -67,7 +67,7 @@
 }
 
 .inventory-report-table {
-    overflow-x: visible !important;
+    overflow-x: auto !important;
 
     .mat-table-sticky {
         top: 60px !important;
@@ -213,5 +213,10 @@
                 padding-left: 0;
             }
         }
+    }
+}
+@media screen and (max-width: 1200px) {
+    .total-details-box {
+        width: 183px;
     }
 }

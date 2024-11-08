@@ -2808,8 +2808,8 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .mat-form-field-appearance-fill .mat-form-field-underline::before {
     background: none !important;
 }
-.overflow-visible {
-    overflow: visible !important;
+.overflow-auto {
+    overflow-x: auto !important;
 }
 .container-modal-class {
     .mat-dialog-container {
