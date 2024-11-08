@@ -265,7 +265,7 @@
             *ngIf="!(getAgingReportRequestInProcess$ | async)"
             mat-table
             [dataSource]="agingReportDataSource"
-            class="w-100 main-table"
+            class="w-100 main-table position-relative"
         >
             <ng-container matColumnDef="customerName">
                 <th
