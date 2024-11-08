@@ -30,7 +30,6 @@ import { trigger, state, style, transition, animate } from "@angular/animations"
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 
@@ -313,8 +312,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private salesAction: SalesActions,
-        private settingsProfileActions: SettingsProfileActions
+        private salesAction: SalesActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -324,7 +322,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
             }
         });
-        this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
@@ -341,7 +338,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
         this.setInitialAdvanceFilter(true);
-        this.getInvoiceSettings();
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
@@ -352,7 +348,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
-                if (this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
+
+                if (this.isEInvoiceEnabled != undefined && this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
                     this.componentStore.getInvoiceSettings();
                 }
                 this.setInitialAdvanceFilter(true);
@@ -378,7 +375,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
             }
         });
-
+        this.getInvoiceSettings();
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -617,6 +614,35 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+
+                this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
+
+                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+
+                    if (!this.isEInvoiceEnabled) {
+                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    } else {
+                        if (!this.displayedColumns?.includes("einvoicestatus")) {
+                            const lastIndex = this.displayedColumns.length - 1;
+                            this.displayedColumns.splice(lastIndex, 0, "einvoicestatus");
+                        }
+                    }
+                } else if (this.voucherType === VoucherTypeEnum.purchase) {
+                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
+                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
+                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    this.applyRoundOff = true;
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.applyRoundOff = true;
+                }
+            }
+        });
     }
 
     /**
@@ -1122,31 +1148,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
-            if (!settings) {
-                this.componentStore.getInvoiceSettings();
-            } else {
-                this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    }
-                } else if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
-                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
-                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    this.applyRoundOff = true;
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    this.applyRoundOff = true;
-                }
-            }
-        });
+        this.componentStore.getInvoiceSettings();
     }
 
     /**
