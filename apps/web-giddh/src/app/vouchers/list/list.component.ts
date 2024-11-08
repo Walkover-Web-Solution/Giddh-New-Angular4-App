@@ -624,11 +624,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                     if (!this.isEInvoiceEnabled) {
                         this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    } else {
-                        if (!this.displayedColumns?.includes("einvoicestatus")) {
-                            const lastIndex = this.displayedColumns.length - 1;
-                            this.displayedColumns.splice(lastIndex, 0, "einvoicestatus");
-                        }
+                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
                     }
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
