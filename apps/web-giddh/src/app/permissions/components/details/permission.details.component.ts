@@ -17,7 +17,7 @@ import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remo
 })
 
 export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-    public pageList: IPageStr[];
+    public pageList: any[];
     public newRole: any = {};
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public allRoles: any;
@@ -35,6 +35,8 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     public commonLocaleData: any = {};
     /* Holds Table column */
     public displayedColumns: string[] = ['admin', 'adminicon', 'view'];
+    /* Holds original page list */
+    private originalPageList: any[];
 
     constructor(private router: Router,
         private store: Store<AppState>,
@@ -67,7 +69,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
                 this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
             }
             this.newRole = permission.newRole;
-            this.pageList = permission.pages;
+            this.originalPageList = permission.pages;
         });
 
         // listener for add update role case
@@ -94,8 +96,11 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     * @memberof PermissionDetailsComponent
     */
     public ngAfterViewInit(): void {
-        this.pageList = this.pageList.map(item => {
-            return { label: item, value: item, additional: { isDisabled: this.checkForAlreadyExistInPageArray(String(item)) } }
+        this.pageList = [];
+        this.originalPageList?.forEach(item => {
+            if (!this.checkForAlreadyExistInPageArray(String(item))) {
+                this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
+            }
         });
 
         if (this.roleObj?.scopes) {
@@ -135,11 +140,18 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             });
             pageObj.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
             this.roleObj?.scopes?.push(pageObj);
+            this.pageList.splice(this.pageList?.findIndex((list: any) => list.value === page), 1);
         }
     }
 
     public removePageFromScope(page: string) {
         this.roleObj.scopes.splice(this.roleObj.scopes?.findIndex((o: Scope) => o.name === page), 1);
+        this.pageList = [];
+        this.originalPageList?.forEach(item => {
+            if (!this.checkForAlreadyExistInPageArray(String(item))) {
+                this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
+            }
+        });
     }
 
     public checkForAlreadyExistInPageArray(page: string): boolean {
