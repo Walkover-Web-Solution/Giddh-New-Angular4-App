@@ -610,9 +610,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (settings) {
-
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
 
