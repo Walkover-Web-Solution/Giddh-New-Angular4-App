@@ -71,16 +71,3 @@
         }
     }
 }
-@media screen and (min-width:1200px) {
-    .tb-wrapper {
-        width: 100%;
-        margin: auto;
-    }
-    @media (min-width: 1200px) {
-        .col-lg-12 {
-            -ms-flex: 0 0 100%;
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-    }
-}

@@ -525,9 +525,9 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive overflow-visible">
+                    <div class="table-responsive overflow-x-auto">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
-                        <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
+                        <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100 over">
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef width="50px"> 
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
@@ -557,7 +557,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="invoice">
-                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')" width="15%">
+                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')" width="15%" class="invoice-date-width">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -581,7 +581,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%" class="invoice-date-width"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -670,7 +670,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="invoice-date-width">
                                     {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
@@ -2295,7 +2295,7 @@
              
             <!-- receipt-content-start -->
             <mat-tab [label]="localeData?.tabs?.receipt" *ngIf="activeTabGroup === 3">
-                <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-x-auto">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <div class="custom-datepicker-wrapper">
@@ -2316,7 +2316,7 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
+                            <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export" class="invoice-date-width"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
@@ -2328,7 +2328,7 @@
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap5 receipt-doc">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -2382,7 +2382,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="table-responsive overflow-visible">
+                    <div class="table-responsive overflow-x-auto">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">

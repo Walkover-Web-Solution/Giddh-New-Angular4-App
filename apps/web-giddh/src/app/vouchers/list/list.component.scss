@@ -68,7 +68,7 @@ table {
             white-space: normal;
 
             &.invoice-date-width {
-                min-width: 130px;
+                min-width: 162px;
             }
         }
     }
@@ -160,5 +160,17 @@ table {
 @media screen and (max-width: 1024px) {
     .video-link {
         display: none;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .video-link {
+        top: 4px;
+        right: 4px;
+        width: 200px;
+    }
+}
+@media screen and (min-width:992px){
+    .invoice-date-width {
+        min-width: 162px;
     }
 }

@@ -12906,7 +12906,7 @@ hamburger-menu {
 
                 i {
                     position: absolute;
-                    left: 16px;
+                    left: 10px;
                     top: 50%;
                     transform: translateY(-50%);
                 }
@@ -13857,6 +13857,13 @@ import-wizard {
             .menu {
                 min-width: 200px !important;
             }
+        }
+    }
+}
+@media screen and (min-width) {
+    .customise-filter-button {
+        i {
+            left: 9px;
         }
     }
 }

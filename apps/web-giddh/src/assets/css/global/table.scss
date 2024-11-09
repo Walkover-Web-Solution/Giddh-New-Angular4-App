@@ -71,14 +71,14 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
             border-collapse: inherit;
         }
         .mat-mdc-tab-group {
-            overflow: visible !important;
+            overflow: auto !important;
         }
         .mat-mdc-tab-body-wrapper {
-            overflow: visible !important;
+            overflow-x: auto  !important;
             .mat-mdc-tab-body {
-                overflow: visible !important;
+                overflow: auto !important;
                 .mat-mdc-tab-body-content {
-                    overflow: visible !important;
+                    overflow: auto !important;
                 }
             }
         }
@@ -90,10 +90,5 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
     inset-inline: 0; 
     @media screen and (max-width: 992px) {
         width: fit-content;
-    }
-}
-@media screen and (max-width: 1200px){
-    .giddh-table tbody > tr > td{
-        min-width: 105px;
     }
 }

@@ -216,7 +216,16 @@
     }
 }
 @media screen and (max-width: 1200px) {
-    .total-details-box {
-        width: 183px;
+    .inventory-transaction-list{
+        .total-details-box {
+            min-width: 188px;
+        }
+    }
+}
+@media screen and (min-width: 1400px) {
+    .inventory-transaction-list{
+        .total-details-box {
+            min-width: 180px;
+        }
     }
 }
