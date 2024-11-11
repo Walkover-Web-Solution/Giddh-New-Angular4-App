@@ -328,9 +328,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row overflow-x-auto" *ngIf="isDataAvailable">
-                <div class="col-12 horizontal-padding overflow-x-auto">
-                    <div class="table-responsive inventory-report-table overflow-x-auto table-header-sticky" *ngIf="displayedColumns?.length">
+            <div class="row overflow-visible" *ngIf="isDataAvailable">
+                <div class="col-12 horizontal-padding overflow-visible">
+                    <div class="table-responsive inventory-report-table overflow-visible table-header-sticky" *ngIf="displayedColumns?.length">
                         <table
                             mat-table
                             [dataSource]="dataSource"

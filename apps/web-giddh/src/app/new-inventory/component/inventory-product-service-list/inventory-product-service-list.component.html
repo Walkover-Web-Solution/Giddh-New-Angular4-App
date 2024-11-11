@@ -88,7 +88,7 @@
 <div class="product-list-container">
     <div class="p-3">
         <div class="top-content">
-            <div class="d-flex w-100 justify-content-between overflow-x-hide">
+            <div class="d-flex w-100 justify-content-between overflow-visible">
                 <div class="total-details-box border-none mr-3 opening-box">
                     <h5>
                         Group Count
@@ -108,8 +108,8 @@
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
+    <div class="table-responsive table-header-sticky">
+        <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view table-header-sticky">
             <ng-container matColumnDef="select">
                 <th mat-header-cell *matHeaderCellDef>
                     <mat-checkbox

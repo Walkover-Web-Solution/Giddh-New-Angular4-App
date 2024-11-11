@@ -67,10 +67,13 @@
 }
 
 .inventory-report-table {
-    overflow-x: auto !important;
+    overflow: visible !important;
 
     .mat-table-sticky {
         top: 60px !important;
+    }
+    .common-wd{
+        min-width: 110px;
     }
 }
 
@@ -148,7 +151,7 @@
         min-width: 187px;
     }
     .inventory-report-table {
-        overflow-x: scroll !important;
+        overflow-x: visible !important;
     }
 }
 
@@ -219,13 +222,6 @@
     .inventory-transaction-list{
         .total-details-box {
             min-width: 188px;
-        }
-    }
-}
-@media screen and (min-width: 1400px) {
-    .inventory-transaction-list{
-        .total-details-box {
-            min-width: 180px;
         }
     }
 }

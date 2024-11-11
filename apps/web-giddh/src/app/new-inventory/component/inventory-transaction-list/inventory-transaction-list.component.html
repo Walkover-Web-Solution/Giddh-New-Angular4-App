@@ -331,7 +331,7 @@
                 "
             >
                 <div class="col-12 horizontal-padding">
-                    <div class="table-responsive inventory-report-table table-header-sticky overflow-x-auto" *ngIf="displayedColumns?.length">
+                    <div class="table-responsive inventory-report-table table-header-sticky overflow-visible" *ngIf="displayedColumns?.length">
                         <table
                             mat-table
                             [dataSource]="dataSource"
@@ -345,7 +345,7 @@
                                 <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.date }}
                                 </th>
-                                <td data-title="Date" mat-cell *matCellDef="let element">
+                                <td data-title="Date" mat-cell *matCellDef="let element" class="common-wd">
                                     {{ element?.entryDate ?? "-" }}
                                 </td>
                             </ng-container>

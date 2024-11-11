@@ -71,7 +71,7 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
             border-collapse: inherit;
         }
         .mat-mdc-tab-group {
-            overflow: auto !important;
+            overflow: visible !important;
         }
         .mat-mdc-tab-body-wrapper {
             overflow: visible !important;
