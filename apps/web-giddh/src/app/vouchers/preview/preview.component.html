@@ -262,7 +262,7 @@
                             </ng-container>
                         </mat-menu>
                         <span *ngIf="isShowInvoiceStatus()" class="invoice-status border-radius-5 text-capitalize">
-                            {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action ?? selectedInvoice.status  }}
+                            {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action ?? selectedInvoice?.status  }}
                         </span>
                         <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
