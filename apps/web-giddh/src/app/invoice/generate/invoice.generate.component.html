@@ -68,7 +68,6 @@
                                     </button>
                                 </div>
                                 <span>
-                                {{!isCompany}}    {{!isConsolidatedBranch}}:{{!isCompany && !isConsolidatedBranch}}
                                     <button
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                         [hidden]="selectedLedgerItems?.length === 0"
