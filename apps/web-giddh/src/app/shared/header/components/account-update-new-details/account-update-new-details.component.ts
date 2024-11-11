@@ -1584,7 +1584,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.activeAccountName;
-            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.discounts = [String(this.selectedDiscounts)];
             assignDiscountObject.isAccount = true;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }

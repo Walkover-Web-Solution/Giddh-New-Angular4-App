@@ -33,7 +33,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     }
 
     public isLoading$ = this.select((state) => state.isLoading);
-    public discountsList$: Observable<IDiscountList[]> = this.select((state) => state.discountsList);
+    public discountsList$: Observable<any> = this.select((state) => state.discountsList);
 
     /**
      * This will use for Export Item Wise Report Data
@@ -192,9 +192,14 @@ export class InventoryComponentStore extends ComponentStore<any> {
             switchMap(() => {
                 return this.settingsDiscountService.GetDiscounts().pipe(
                     tapResponse(
-                        (res: BaseResponse<IDiscountList[], any>) => {
+                        (res: BaseResponse<any, any>) => {
+                            const discounts = res?.body?.map(discount => {
+                                 discount['label']= discount?.name;
+                                 discount['value']= discount?.uniqueName;
+                                 return discount;
+                            });
                             return this.patchState({
-                                discountsList: res?.body ?? []
+                                discountsList: discounts
                             });
                         },
                         (error: any) => {
