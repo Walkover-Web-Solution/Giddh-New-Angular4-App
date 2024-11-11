@@ -74,7 +74,7 @@ table {
             word-break: break-all;
             white-space: normal;
 
-            &.invoice-w-doc {
+            &.invoice-column-width{
                 min-width: 162px;
                 @media screen and (min-width:992px) {
                     min-width: 94px;

@@ -67,12 +67,12 @@
 }
 
 .inventory-report-table {
-    overflow: visible !important;
+    overflow-x: visible !important;
 
     .mat-table-sticky {
         top: 60px !important;
     }
-    .common-wd{
+    .common-column-widh{
         min-width: 110px;
     }
 }
