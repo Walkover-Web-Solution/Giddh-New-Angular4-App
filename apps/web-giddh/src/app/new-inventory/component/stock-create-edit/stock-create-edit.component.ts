@@ -24,6 +24,7 @@ import { CreateRecipeComponent } from "../recipe/create-recipe/create-recipe.com
 import { GeneralService } from "../../../services/general.service";
 import { ManufacturingService } from "../../../services/manufacturing.service";
 import { InventoryComponentStore } from "../inventory.store";
+import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 
 @Component({
     selector: "stock-create-edit",
@@ -77,6 +78,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         sacNumber: null,
         taxes: null,
         discounts: null,
+        discountLabel: null, // temp
         skuCode: null,
         openingQuantity: null,
         openingAmount: null,
@@ -243,6 +245,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private variantCustomFields: any[] = [];
     /** Discounts list Observable */
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
+    /** Discounts list */
+    public discountsList: IDiscountList[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -896,6 +900,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private getAllDiscounts(): void {
+        this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+            if (response) {
+                this.discountsList = response;
+            }
+        });
         this.componentStore.getDiscountList();
     }
 
@@ -1083,6 +1092,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public formatRequest(): any {
         let stockForm = cloneDeep(this.stockForm);
+        delete stockForm.discountLabel;
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
 
         stockForm.customFields = stockForm.customFields?.map(customField => {
@@ -1282,6 +1292,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockUnitName = response.body?.stockUnit?.name;
                 this.stockGroupName = response.body?.stockGroup?.name;
                 this.customFieldsData = response.body?.customFields;
+                this.stockForm.discountLabel = this.discountsList?.find(discount => discount.uniqueName === this.stockForm?.discounts[0])?.name;
                 this.mapCustomFieldsData();
                 this.findPurchaseAccountName();
                 this.findSalesAccountName();
