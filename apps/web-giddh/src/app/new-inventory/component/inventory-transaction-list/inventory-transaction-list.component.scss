@@ -67,7 +67,7 @@
 }
 
 .inventory-report-table {
-    overflow-x: scroll !important;
+    overflow-x: visible !important;
 
     .mat-table-sticky {
         top: 60px !important;
@@ -151,7 +151,7 @@
         min-width: 187px;
     }
     .inventory-report-table {
-        overflow-x: visible !important;
+        overflow-x: scroll !important;
     }
 }
 
