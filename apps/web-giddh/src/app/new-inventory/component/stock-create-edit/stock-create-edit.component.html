@@ -177,6 +177,21 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <dropdown-field
+                                                [name]="'discounts'"
+                                                [placeholder]="localeData?.select_discounts"
+                                                [label]="commonLocaleData?.app_discount"
+                                                [options]="discountsList"
+                                                (selectedOption)="
+                                                    stockForm.discounts = [$event?.value];
+                                                "
+                                                [defaultValue]="stockForm.discountLabel"
+                                            >
+                                            </dropdown-field>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
