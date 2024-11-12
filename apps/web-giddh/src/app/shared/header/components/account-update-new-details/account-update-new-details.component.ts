@@ -50,7 +50,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, differenceBy, flattenDeep, isEqual, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
@@ -147,7 +147,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
-    public selectedDiscounts: any[] = [];
+    public selectedDiscounts: string = null;
     public selectedDiscountList: any[] = [];
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
@@ -1581,10 +1581,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
         if (this.activeAccountName) {
-            uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.activeAccountName;
-            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.discounts = [this.selectedDiscounts];
             assignDiscountObject.isAccount = true;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
@@ -2067,7 +2066,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         });
                     }
                     this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        this.selectedDiscounts = [];
+                        this.selectedDiscounts = null;
                         this.forceClearDiscount$ = observableOf({ status: true });
                         if (response?.status === 'success') {
                             if (response.body) {
@@ -2075,12 +2074,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                     let list = response.body[accountDetails?.uniqueName];
                                     Object.keys(list)?.forEach(key => {
                                         let UniqueName = list[key]['discount']['uniqueName'];
-                                        this.selectedDiscounts.push(UniqueName);
+                                        this.selectedDiscounts = UniqueName;
                                     });
                                 }
                             }
                         }
-                        uniq(this.selectedDiscounts);
                     });
                     this._accountService
                         .getPortalUsers(accountDetails?.uniqueName)
