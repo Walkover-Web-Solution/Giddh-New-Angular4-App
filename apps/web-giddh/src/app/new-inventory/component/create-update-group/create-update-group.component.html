@@ -124,6 +124,19 @@
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
+                                    <div class="col-sm-12 col-lg-6 ml-lg-2">
+                                        <reactive-dropdown-field
+                                                class="input-width"
+                                                [name]="'discounts'"
+                                                [placeholder]="localeData?.select_discounts"
+                                                [label]="commonLocaleData?.app_discount"
+                                                [labelValue]="groupForm?.get('discountLabel')?.value"
+                                                (onClear)="groupForm.get('discounts')?.patchValue(null)"
+                                                [options]="discountsList$ | async"
+                                                formControlName="discounts"
+                                            >
+                                            </reactive-dropdown-field>
+                                    </div>
                                 </div>
                                 <div class="row mr-t15">
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
