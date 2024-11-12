@@ -1,83 +1,214 @@
 <div class="dialog-header">
-  <span mat-dialog-title class="font-16">Bulk Update</span>
-  <i mat-dialog-close class="icon-cross icon-font-16"></i>
+    <span mat-dialog-title class="font-16">{{ localeData?.bulk_update }}</span>
+    <i mat-dialog-close class="icon-cross icon-font-16"></i>
 </div>
-<div mat-dialog-content class="dialog-body">
-  <p class="mr-b1">Choose a field from the dropdown and update with new information.</p>
-  <div class="d-flex column-gap1 mr-b15">
-    <dropdown-field
-      [name]="'invoice'"
-      [placeholder]="'Select'"
-      class="w-100"
-    >
-    </dropdown-field>
-    <!-- pdf-template-click -->
-    <dropdown-field
-      [name]="'template'"
-      [placeholder]="'Select'"
-      class="w-100"
-    >
-    </dropdown-field>
-    <!-- notes-click -->
-    <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
-      <textarea
-        matInput
-        rows="3"
-      ></textarea>
-    </mat-form-field> -->
-    <!-- due-date-click -->
-    <!-- <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Select Date'"
-      [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
-      [appearance]="'outline'" class="w-100">
-    </giddh-datepicker> -->
-    <!-- signature-click -->
-    <!-- <dropdown-field
-      [name]="'signature'"
-      [placeholder]="'Select'"
-      class="w-100"
-    >
-    </dropdown-field> -->
-  </div>
-  <!-- signature-image-click -->
-  <!-- <div class="bulk-upload mr-b15">
-    <input type="file" name="bulkUploadfileInput" id="bulkUploadfileInput">
-    <label for="bulkUploadfileInput" class="upload-logo cp w-100 bdr d-flex align-items-center justify-content-center overflow-hidden pd-15">Upload your logo</label>
-  </div> -->
-  <!-- signature-slogan-click -->
-  <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
-    <textarea
-      matInput
-      rows="3"
-    ></textarea>
-  </mat-form-field> -->
+<ng-container *ngIf="!isPOVoucher">
+    <div mat-dialog-content class="dialog-body" [formGroup]="bulkUpdateForm">
+        <p class="mr-b1">{{ localeData?.choose_field_bulk_update }}</p>
+        <div class="d-flex column-gap1 mr-b15">
+            <reactive-dropdown-field
+                [name]="'invoice'"
+                [placeholder]="commonLocaleData?.app_select"
+                [options]="fieldOptions"
+                formControlName="selectedField"
+                (selectedOption)="resetFormData(); handleSelectedFieldSelect();"
+                class="w-100"
+            >
+            </reactive-dropdown-field>
+            <!-- pdf-template-click -->
+            <reactive-dropdown-field
+                *ngIf="bulkUpdateForm.get('selectedField')?.value === 'pdfTemplate'"
+                [name]="'template'"
+                [placeholder]="commonLocaleData?.app_select"
+                class="w-100"
+                [options]="templatesList"
+                [labelValue]="templateName"
+                formControlName="templateUniqueName"
+            >
+            </reactive-dropdown-field>
+            <!-- notes-click -->
+            <mat-form-field
+                appearance="outline"
+                class="w-100 mr-b15"
+                *ngIf="bulkUpdateForm.get('selectedField')?.value === 'notes'"
+            >
+                <textarea
+                    matInput
+                    rows="3"
+                    [maxlength]="!showNotesAtLastPage ? 200 : null"
+                    formControlName="message2"
+                ></textarea>
+                <ng-container *ngIf="bulkUpdateForm.get('message2')?.value && !showNotesAtLastPage">
+                    <span class="max-character-label">{{ commonLocaleData?.app_characters_left }}:&nbsp;</span>
+                    <span class="max-character-value">{{ 200 - bulkUpdateForm.get("message2")?.value?.length }}</span>
+                </ng-container>
+            </mat-form-field>
+            <!-- due-date-click -->
+            <giddh-datepicker
+                *ngIf="bulkUpdateForm.get('selectedField')?.value === 'dueDate'"
+                (keydown.enter)="$event.preventDefault()"
+                [label]="commonLocaleData?.app_select_date"
+                [placeholder]="commonLocaleData?.app_select_date"
+                name="dueDate"
+                [showToggleIcon]="false"
+                [appearance]="'outline'"
+                class="w-100"
+                formControlName="dueDate"
+            >
+            </giddh-datepicker>
+            <!-- signature-click -->
+            <reactive-dropdown-field
+                *ngIf="bulkUpdateForm.get('selectedField')?.value === 'signature'"
+                [name]="'signature'"
+                [placeholder]="commonLocaleData?.app_select"
+                class="w-100"
+                [options]="templateSignaturesOptions"
+                [labelValue]="signatureName"
+                formControlName="signatureOption"
+            ></reactive-dropdown-field>
+        </div>
+        <!-- signature-image-click -->
+        <div
+            class="bulk-upload mr-b15"
+            *ngIf="
+                bulkUpdateForm.get('selectedField')?.value === 'signature' &&
+                bulkUpdateForm.get('signatureOption')?.value === 'image'
+            "
+        >
+            <ng-container *ngIf="!bulkUpdateForm.get('imageSignatureUniqueName')?.value">
+                <input type="file" name="bulkUploadfileInput" id="bulkUploadfileInput" (change)="uploadImage()" />
+                <label
+                    for="bulkUploadfileInput"
+                    class="upload-logo cp w-100 bdr d-flex align-items-center justify-content-center overflow-hidden pd-15"
+                    >{{ localeData?.upload_logo }}</label
+                >
+            </ng-container>
+            <ng-container *ngIf="bulkUpdateForm.get('imageSignatureUniqueName')?.value">
+                <div class="signature-image">
+                    <img alt="" required id="signatureImage" [src]="signatureSrc" />
+                </div>
+                <div class="d-flex mt-1 justify-content-center">
+                    <button class="btn btn-danger" type="button" (click)="clearImage()">
+                        {{ commonLocaleData?.app_clear }}
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+        <!-- signature-slogan-click -->
+        <mat-form-field
+            appearance="outline"
+            class="w-100 mr-b15"
+            *ngIf="
+                bulkUpdateForm.get('selectedField')?.value === 'signature' &&
+                bulkUpdateForm.get('signatureOption')?.value === 'slogan'
+            "
+        >
+            <textarea matInput rows="3" formControlName="slogan"></textarea>
+        </mat-form-field>
 
-  <!-- custom-field-click -->
-  <!-- <div class="d-flex column-gap1 mr-b15">
-    <input-field
-      [type]="'text'"
-      [placeholder]="'Custom Field 1'"
-      [label]="'Custom Field 1'"
-      class="w-100 text-right"
-    >
-    </input-field>
-    <input-field
-      [type]="'text'"
-      [placeholder]="'Custom Field 2'"
-      [label]="'Custom Field 2'"
-      class="w-100 text-right"
-    >
-    </input-field>
-    <input-field
-      [type]="'text'"
-      [placeholder]="'Custom Field 3'"
-      [label]="'Custom Field 3'"
-      class="w-100 text-right"
-    >
-    </input-field>
-  </div> -->
-  <p>Note: All the selected invoices will be updated with new information and you cannot undo this.</p>
-  <div class="d-flex column-gap1 mr-t15">
-    <button mat-stroked-button color="primary">Update</button>
-    <button mat-stroked-button mat-dialog-close>Cancel</button>
-  </div>
-</div>
+        <!-- custom-field-click -->
+        <div class="d-flex column-gap1 mr-b15" *ngIf="bulkUpdateForm.get('selectedField')?.value === 'customFields'">
+            <input-field
+                [type]="'text'"
+                [placeholder]="localeData?.custom_field1"
+                [label]="localeData?.custom_field1"
+                formControlName="customField1"
+                class="w-100 text-right"
+            >
+            </input-field>
+            <input-field
+                [type]="'text'"
+                [placeholder]="localeData?.custom_field2"
+                [label]="localeData?.custom_field2"
+                formControlName="customField2"
+                class="w-100 text-right"
+            >
+            </input-field>
+            <input-field
+                [type]="'text'"
+                [placeholder]="localeData?.custom_field3"
+                [label]="localeData?.custom_field3"
+                formControlName="customField3"
+                class="w-100 text-right"
+            >
+            </input-field>
+        </div>
+        <p>{{ localeData?.bulk_invoice_update_note }}</p>
+        <div class="d-flex column-gap1 mr-t15">
+            <button
+                mat-stroked-button
+                color="primary"
+                (click)="updateBulkInvoice()"
+                [disabled]="(bulkUpdateVoucherInProgress$ | async) || (uploadImageBase64InProgress$ | async)"
+            >
+                {{ commonLocaleData?.app_update }}
+            </button>
+            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="isPOVoucher">
+    <div mat-dialog-content class="dialog-body" [formGroup]="bulkUpdateForm">
+        <p class="mr-b1">{{ localeData?.choose_field_bulk_update }}</p>
+        <div class="d-flex column-gap1 mr-t15 mr-b15">
+            <reactive-dropdown-field
+                [name]="'invoice'"
+                [placeholder]="commonLocaleData?.app_select"
+                [options]="bulkUpdateFields"
+                formControlName="action"
+                (selectedOption)="resetFormData()"
+                class="w-100"
+            >
+            </reactive-dropdown-field>
+            <ng-container *ngIf="bulkUpdateForm.get('action').value">
+                <giddh-datepicker
+                    *ngIf="bulkUpdateForm.get('action').value === 'purchasedate'"
+                    (keydown.enter)="$event.preventDefault()"
+                    [label]="commonLocaleData?.app_select_date"
+                    [placeholder]="commonLocaleData?.app_select_date"
+                    name="voucherDate"
+                    [showToggleIcon]="false"
+                    [appearance]="'outline'"
+                    formControlName="purchaseDate"
+                    class="w-100"
+                >
+                </giddh-datepicker>
+                <giddh-datepicker
+                    *ngIf="bulkUpdateForm.get('action').value === 'duedate'"
+                    (keydown.enter)="$event.preventDefault()"
+                    [label]="commonLocaleData?.app_select_date"
+                    [placeholder]="commonLocaleData?.app_select_date"
+                    name="voucherDate"
+                    [showToggleIcon]="false"
+                    [appearance]="'outline'"
+                    formControlName="dueDate"
+                    class="w-100"
+                >
+                </giddh-datepicker>
+                <reactive-dropdown-field
+                    *ngIf="bulkUpdateForm.get('action').value === 'warehouse'"
+                    [name]="'invoice'"
+                    [label]="'localeData?.select_warehouse'"
+                    [placeholder]="commonLocaleData?.app_select"
+                    [options]="warehouses"
+                    formControlName="warehouseUniqueName"
+                    class="w-100"
+                >
+                </reactive-dropdown-field>
+            </ng-container>
+        </div>
+
+        <p>{{ localeData?.bulk_invoice_update_note }}</p>
+        <div class="d-flex column-gap1 mr-t15">
+            <button
+                mat-stroked-button
+                color="primary"
+                (click)="updateBulkPO()"
+                [disabled]="bulkUpdateVoucherInProgress$ | async"
+            >
+                {{ commonLocaleData?.app_update }}
+            </button>
+            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+        </div>
+    </div>
+</ng-container>

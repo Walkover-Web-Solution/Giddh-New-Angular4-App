@@ -1,17 +1,27 @@
-<div class="dialog-header">
-  <span mat-dialog-title class="font-16">Convert to Bill</span>
-  <i mat-dialog-close class="icon-cross icon-font-16"></i>
-</div>
-<div mat-dialog-content class="dialog-body">
-  <input-field
-    [type]="'tel'"
-    [label]="'Purchase Bill Number'"
-    class="w-50"
-  >
-  </input-field>
-  <span class="ml-1">2116</span>
-  <div class="d-flex column-gap1 justify-content-end">
-    <button mat-stroked-button color="primary">Save</button>
-    <button mat-stroked-button>Cancel</button>
-  </div>
-</div>
+<form [formGroup]="convertToBillForm" autocomplete="off" novalidate (ngSubmit)="onFormSubmit()">
+    <div class="dialog-header">
+        <span mat-dialog-title class="font-16">{{ localeData?.convert_to_bill }}</span>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
+    </div>
+    <mat-dialog-content class="dialog-body custom-height">
+        <ng-container
+            formArrayName="purchaseOrders"
+            *ngFor="let voucher of convertToBillForm?.get('purchaseOrders')?.controls; let i = index"
+        >
+            <div [formGroupName]="i">
+                <input-field
+                    [type]="'tel'"
+                    [label]="localeData?.purchase_bill_number"
+                    class="w-50"
+                    formControlName="purchaseNumber"
+                >
+                </input-field>
+                <p class="ml-1 mr-b1">{{ convertToBillForm?.get("purchaseOrders")?.value[i]?.orderNumber }}</p>
+            </div>
+        </ng-container>
+        <div class="d-flex column-gap1 justify-content-end">
+            <button mat-stroked-button color="primary" type="submit">{{ commonLocaleData?.app_save }}</button>
+            <button mat-stroked-button mat-dialog-close type="button">{{ commonLocaleData?.app_cancel }}</button>
+        </div>
+    </mat-dialog-content>
+</form>

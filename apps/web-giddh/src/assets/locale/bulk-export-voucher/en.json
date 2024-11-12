@@ -8,5 +8,7 @@
         "customer": "Customer",
         "transport": "Transport",
         "attachment": "Attachment"
-    }
+    },
+    "invalid_email": "Invalid Email Id [EMAIL]",
+    "email_required": "Please enter atleast 1 Recipient Email Id"
 }

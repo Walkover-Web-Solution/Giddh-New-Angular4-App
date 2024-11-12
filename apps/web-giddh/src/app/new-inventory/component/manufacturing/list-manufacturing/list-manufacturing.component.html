@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <section id="list-manufacture" class="p-3 clearfix">
+    <section id="list-manufacture" class="p-3 clearfix overflow-visible">
         <hamburger-menu></hamburger-menu>
         <div class="col-12 col-sm-12">
             <div class="form-fields clearfix">
@@ -100,7 +100,7 @@
             <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
         <section
-            class="list-table-wrapper table-responsive mobile-card-wrapper"
+            class="list-table-wrapper table-responsive mobile-card-wrapper table-header-sticky overflow-visible"
             *ngIf="!isReportLoading && dataSource?.length > 0"
         >
             <table mat-table [dataSource]="dataSource" class="w-100 manufacturing-table on-mobile-view">

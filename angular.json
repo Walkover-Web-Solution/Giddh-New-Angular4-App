@@ -395,7 +395,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://app.giddh.com/",
+                            "baseHref": "https://books.giddh.com/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",

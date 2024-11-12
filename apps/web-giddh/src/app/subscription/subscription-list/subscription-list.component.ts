@@ -18,7 +18,6 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
-import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
 @Component({
@@ -128,8 +127,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private readonly componentStoreCompanyListDialog: CompanyListDialogComponentStore,
         private generalActions: GeneralActions,
         private router: Router,
-        private toasterService: ToasterService,
-        private settingsProfileActions: SettingsProfileActions
+        private toasterService: ToasterService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -169,7 +167,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 this.subscriptionRequestParams.totalItems = 0;
             }
         });
-
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;

@@ -67,6 +67,7 @@ declare var TEST_ENV: boolean;
 declare var LOCAL_ENV: boolean;
 declare var APP_FOLDER: string;
 declare var ApiUrl: string;
+declare var UkApiUrl: string;
 declare var PORTAL_URL: string;
 declare var isElectron: boolean;
 declare var fileChooser: any;
@@ -93,6 +94,7 @@ interface GlobalEnvironment {
     System: SystemJS;
     AppUrl: string;
     ApiUrl: string;
+    UkApiUrl: string;
     PORTAL_URL: string;
     isElectron: boolean;
     errlyticsNeeded: boolean;

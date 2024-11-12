@@ -19,7 +19,9 @@
                                 <div class="col manufacturing-date">
                                     <giddh-datepicker
                                         name="date"
-                                        [cssClass]="'w-100 disable-bg' + (errorFields.date ? ' required-field-error' : '')"
+                                        [cssClass]="
+                                            'w-100 disable-bg' + (errorFields.date ? ' required-field-error' : '')
+                                        "
                                         [showToggleIcon]="false"
                                         [(ngModel)]="manufacturingObject.manufacturingDetails[0].date"
                                         (dateSelected)="errorFields.date = false"
@@ -35,7 +37,8 @@
                                         [placeholder]="commonLocaleData?.app_select_warehouse"
                                         [options]="warehouses"
                                         (selectedOption)="
-                                            manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value;
+                                            manufacturingObject.manufacturingDetails[0].warehouseUniqueName =
+                                                $event.value;
                                             selectedWarehouseName = $event.label
                                         "
                                         [defaultValue]="selectedWarehouseName"
@@ -64,7 +67,11 @@
                             </div>
                             <hr class="my-3 max-width-stock" />
                         </div>
-                        <watch-video class="ml-auto" [cssClass]="'text-primary'" [moduleName]="'MANUFACTURING'"></watch-video>
+                        <watch-video
+                            class="ml-auto"
+                            [cssClass]="'text-primary'"
+                            [moduleName]="'MANUFACTURING'"
+                        ></watch-video>
                     </div>
                 </div>
                 <div class="row max-width-stock position-relative">
@@ -90,7 +97,8 @@
                                                     $event,
                                                     true,
                                                     0
-                                                )
+                                                );
+                                                loadStockVariantsByStockUniqueName($event?.value)
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].stockName"
                                             [enableDynamicSearch]="true"
@@ -106,12 +114,12 @@
                                         </dropdown-field>
                                     </div>
 
-                                    <div *ngIf="manufacturingObject.manufacturingDetails[0].variants?.length > 1">
+                                    <div *ngIf="stockVariants?.length > 1">
                                         <dropdown-field
                                             [cssClass]="errorFields.finishedStockVariant ? ' required-field-error' : ''"
                                             [name]="'variantUniqueName'"
                                             [placeholder]="commonLocaleData?.app_select_variant"
-                                            [options]="manufacturingObject.manufacturingDetails[0].variants"
+                                            [options]="stockVariants"
                                             (selectedOption)="
                                                 errorFields.finishedStockVariant = false;
                                                 manufacturingObject.manufacturingDetails[0].variant.name = $event.label;
@@ -370,7 +378,8 @@
                                                                     <div class="field-m-width">
                                                                         <select-field
                                                                             [cssClass]="
-                                                                                'disable-bg w-100 ' + linkedStock.cssClass
+                                                                                'disable-bg w-100 ' +
+                                                                                linkedStock.cssClass
                                                                             "
                                                                             [name]="'variantUnit' + i"
                                                                             [scrollableElementId]="'variantUnit' + i"
@@ -506,8 +515,8 @@
                                                                 >
                                                                     <select-field
                                                                         [cssClass]="
-                                                                                'disable-bg w-100 ' + expense.cssClass
-                                                                            "
+                                                                            'disable-bg w-100 ' + expense.cssClass
+                                                                        "
                                                                         [name]="'baseAccountUniqueName_' + i"
                                                                         [placeholder]="localeData?.liability_assets"
                                                                         [options]="liabilitiesAssetAccounts"
@@ -542,11 +551,11 @@
                                                                 </div>
                                                             </td>
                                                             <td class="table-variant">
-                                                                <div >
+                                                                <div>
                                                                     <select-field
-                                                                              [cssClass]="
-                                                                                'disable-bg w-100 ' + expense.cssClass
-                                                                            "
+                                                                        [cssClass]="
+                                                                            'disable-bg w-100 ' + expense.cssClass
+                                                                        "
                                                                         [name]="'expenseAccount_' + i"
                                                                         [placeholder]="localeData?.expense_acc"
                                                                         [options]="expenseAccounts"
@@ -578,9 +587,10 @@
                                                             <td class="table-rate">
                                                                 <div>
                                                                     <text-field
-                                                                                [cssClass]="
-                                                                                'disable-bg w-100 text-right ' + expense.cssClass
-                                                                            "
+                                                                        [cssClass]="
+                                                                            'disable-bg w-100 text-right ' +
+                                                                            expense.cssClass
+                                                                        "
                                                                         [type]="'text'"
                                                                         [name]="'amount' + i"
                                                                         [(ngModel)]="expense.transactions[0].amount"

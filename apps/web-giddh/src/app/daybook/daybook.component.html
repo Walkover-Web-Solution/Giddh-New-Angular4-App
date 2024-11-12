@@ -27,7 +27,7 @@
                                         (selected)="handleBranchChange($event)"
                                         [isFilterEnabled]="true"
                                         [placeholder]="localeData?.select_entity"
-                                        [fixedValue]="currentBranch?.alias"
+                                        [fixedValue]="currentBranch?.name"
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container>
@@ -144,9 +144,9 @@
             </div>
         </div>
 
-        <div class="container-fluid">
-            <div class="clearfix mr-t15 daybook-table">
-                <div class="clearfix trial-balance table-responsive">
+        <div class="container-fluid overflow-visible">
+            <div class="clearfix mr-t15 daybook-table overflow-visible">
+                <div class="clearfix trial-balance table-responsive table-header-sticky overflow-visible">
                     <table
                         mat-table
                         class="w-100 on-mobile-view tb-head"

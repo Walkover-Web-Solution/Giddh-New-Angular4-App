@@ -9,8 +9,8 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { Router } from '@angular/router';
-import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
@@ -46,7 +46,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public isSendSmsEnabled: boolean = false;
     public isElectron = isElectron;
     public voucherRequest = null;
-    public voucherDetailsInProcess$: Observable<boolean> = of(true);
     public accountUniqueName: string = '';
     public selectedInvoiceNo: string = '';
     public selectedVoucherType: string = null;
@@ -92,7 +91,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         });
 
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
-        this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 

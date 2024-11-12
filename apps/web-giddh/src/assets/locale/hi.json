@@ -349,7 +349,11 @@
         "partially_paid": "आंशिक रूप से भुगतान किया",
         "unpaid": "अवैतनिक",
         "hold": "होल्ड",
-        "cancel": "रद्द करना"
+        "cancel": "रद्द करना",
+        "open": "खुला",
+        "expired": "समाप्त",
+        "converted": "परिवर्तित",
+        "partially_converted": "आंशिक रूप से परिवर्तित"
     },
     "app_date_options": {
         "on": "पर",
@@ -744,5 +748,6 @@
     "app_user_settings": "उपयोगकर्ता सेटिंग",
     "app_subscription": "सदस्यता",
     "app_custom_email": "कस्टम ईमेल",
-    "app_custom_email_template": "कस्टम ईमेल टेम्पलेट"
+    "app_custom_email_template": "कस्टम ईमेल टेम्पलेट",
+    "app_send_voucher_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] भेजें"
 }

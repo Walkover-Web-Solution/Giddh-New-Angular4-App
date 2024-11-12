@@ -4,15 +4,16 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="relative">
+    <div class="relative overflow-visible">
         <hamburger-menu [pageHeading]="isMobileScreen ? getPageHeading() : ''"></hamburger-menu>
-        <div class="clearfix petty-cash">
+        <div class="clearfix petty-cash overflow-visible">
             <mat-tab-group
                 mat-stretch-tabs="false"
                 animationDuration="0ms"
                 [selectedIndex]="selectedTabIndex"
                 (selectedTabChange)="tabChanged($event)"
                 [disableRipple]="true"
+                class="table-header-sticky"
             >
                 <mat-tab [label]="localeData?.pending">
                     <div class="container-fluid mr-b15" *ngIf="!isSelectedRow">
@@ -115,7 +116,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="expense-head">
+                    <div class="expense-head overflow-visible">
                         <ng-container *ngIf="currentSelectedTab === 'rejected'">
                             <app-rejected-list
                                 #rejectedListComponent

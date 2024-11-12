@@ -11,7 +11,7 @@
             [innerHTML]="inputData?.configuration?.messageText"
         ></p>
         <p [ngClass]="inputData?.configuration?.footerCssClass">{{ inputData?.configuration?.footerText }}</p>
-        <div class="d-flex column-gap15">
+        <div class="d-flex column-gap15 mt-4" [ngClass]="inputData?.configuration?.actionBtnWrapperCssClass">
             <ng-container *ngFor="let button of inputData?.configuration?.buttons">
                 <button
                     *ngIf="!inputData?.configuration?.disableRipple"

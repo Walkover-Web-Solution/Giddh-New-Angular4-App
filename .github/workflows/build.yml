@@ -136,15 +136,15 @@ jobs:
       - name: Create ZIP folder
         run: zip -r public.zip public
       - name: Deploy to TEST env.
-        if: ${{ env.BUILD_ENV == 'Test' }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 cp \
-            --acl private \
-            --region ap-south-1 \
-            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
+      if: ${{ env.BUILD_ENV == 'Test' }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws s3 cp \
+          --acl private \
+          --region ap-south-1 \
+          /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
       - name: Deploy to STAGE env.
         if: ${{ env.BUILD_ENV == 'Stage' }}
         env:

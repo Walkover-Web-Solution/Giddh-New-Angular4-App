@@ -61,6 +61,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initSalesTaxReportForm();
+        this.loadTaxDetails();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -82,6 +83,23 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
                 this.pagination.totalPages = response.totalPages;
             }
         });
+
+        // Subscribe Tax Number Observable
+        this.componentStore.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.getFormControl('taxNumber').patchValue(response.body[0]);
+            }
+        });
+    }
+
+    /**
+    * Loads the tax details of a company
+    *
+    * @private
+    * @memberof TaxAuthorityReportComponent
+    */
+    private loadTaxDetails(): void {
+        this.componentStore.getTaxNumber();
     }
 
     /**

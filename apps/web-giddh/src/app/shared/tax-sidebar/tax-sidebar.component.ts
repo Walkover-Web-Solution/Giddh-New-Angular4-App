@@ -58,6 +58,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public vatSupportedCountries: string[] = VAT_SUPPORTED_COUNTRIES;
     /* This will hold list of sales tax supported countries */
     public salesTaxSupportedCountries: string[] = SALES_TAX_SUPPORTED_COUNTRIES;
+    /* This will hold list of trn supported countries */
+    public trnSupportedCountries: string[] = TRN_SUPPORTED_COUNTRIES;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Holds current date period for GST report */
@@ -112,13 +114,18 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
 
                 this.showGstMenus = false;
                 this.showTaxMenus = false;
-                this.showTaxMenus = false;
+                this.showSalesTaxMenus = false;
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showTaxMenus = true;
                 } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                     this.showGstMenus = true;
                 } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showSalesTaxMenus = true;
+                } else if (this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                    this.showTaxMenus = true;
+                }
+                if (this.localeData) {
+                    this.translationComplete(true);
                 }
             }
             this.changeDetectionRef.detectChanges();

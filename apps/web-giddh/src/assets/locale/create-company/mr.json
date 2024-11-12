@@ -17,6 +17,8 @@
 	"max_character_limit_error": "कमाल वर्णांची मर्यादा: 100",
 	"select_business_type": "व्यवसाय प्रकार निवडा",
 	"select_business_nature": "व्यवसाय स्वरूप निवडा",
+    "other_business_nature": "इतर व्यवसाय स्वरूप",
+    "enter_business_nature": "व्यवसाय निसर्ग प्रविष्ट करा",
 	"enter_tax": "[TAX_NAME] प्रविष्ट करा",
     "invalid_tax": "अवैध [TAX_NAME]",
 	"same_as_company": "कंपनी म्हणून",

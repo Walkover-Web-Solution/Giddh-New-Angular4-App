@@ -20,7 +20,6 @@ import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purcha
 import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
-import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
@@ -47,6 +46,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
 
 @NgModule({
     declarations: [
@@ -55,7 +55,6 @@ import { MatInputModule } from '@angular/material/input';
         PurchaseOrderPreviewComponent,
         PurchaseComponent,
         PurchaseRecordComponent,
-        PurchaseSettingComponent,
         PurchaseAdvanceSearchComponent,
         BulkConvertComponent
     ],
@@ -102,7 +101,8 @@ import { MatInputModule } from '@angular/material/input';
         AsideMenuProductServiceModule,
         FormFieldsModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        PurchaseSettingModule
     ]
 })
 export class PurchaseModule {

@@ -34,7 +34,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { BranchHierarchyType, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -254,6 +254,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSubscriptionPage: boolean = false;
     /** Hold plan version  */
     public planVersion: number;
+    /** Hold broadcast event */
+    public broadcast: any;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -507,6 +509,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
+        this.broadcast = new BroadcastChannel("subscription");
+        this.broadcast.onmessage = (event) => {
+            if (event?.data?.activeCompany !== undefined && event?.data?.activeCompany !== null) {
+                this.getCurrentCompanyData();
+            }
+        };
+
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
@@ -592,7 +601,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         // region subscribe to last state for showing title of page this.selectedPage
-        this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
+        this.store.pipe(select(s => s.session.lastState), takeUntil(this.destroyed$)).subscribe(s => {
             this.isLedgerAccSelected = false;
             const lastState = s?.toLowerCase();
 
@@ -788,7 +797,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login` : `https://test.giddh.com/login`;
+                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
@@ -1112,7 +1121,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.menuStateChange.emit(false);
         }
 
-        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings")  || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
+        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
             this.collapseSidebar(true);
         }
     }
@@ -1163,6 +1172,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnDestroy() {
+        this.broadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1172,11 +1182,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp?.alias) {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
-            } else {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(ev?.toLowerCase());
-            }
+            return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
         });
     }
 
@@ -1193,11 +1199,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         if (branchName) {
             this.currentCompanyBranches = branches?.filter(branch => {
-                if (!branch?.alias) {
-                    return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
-                } else {
-                    return branch?.alias.toLowerCase().includes(branchName?.toLowerCase());
-                }
+                return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
             });
         } else {
             this.currentCompanyBranches = branches;
@@ -1484,7 +1486,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
-                !this.router.url.includes("/vendor")) {
+                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page")?.length)) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1529,7 +1531,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
         this.isGoToBranch = false;
-        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") )) {
+        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings"))) {
             return;
         }
 
@@ -1648,7 +1650,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public loadCompanyBranches(): void {
         if (this.generalService.companyUniqueName) {
             // Avoid API call if new user is onboarded
-            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
         }
     }
 
@@ -1706,7 +1708,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         })
     }
-    
+
     /**
      * This function will check if page has tabs to show/hide page heading
      *

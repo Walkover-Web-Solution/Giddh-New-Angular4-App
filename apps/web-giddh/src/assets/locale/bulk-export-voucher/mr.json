@@ -8,5 +8,7 @@
 		"customer": "ग्राहक",
 		"transport": "वाहतूक",
         "attachment": "संलग्नक"
-	}
+	},
+    "invalid_email": "अवैध ईमेल आयडी [EMAIL]",
+    "email_required": "कृपया किमान 1 प्राप्तकर्ता ईमेल आयडी प्रविष्ट करा"
 }
