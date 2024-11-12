@@ -42,7 +42,7 @@
     </div>
 
     <!--add/edit group form-->
-    <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
+    <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100 dropdown-height" style="height: 100vh;">
         <group-add
             class="form-box"
             *ngIf="showAddNewGroup$ | async"
