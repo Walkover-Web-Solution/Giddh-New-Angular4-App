@@ -237,10 +237,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public totalResults: number = 0;
     /** Holds Selected Vouchers */
     public selectedVouchers: any[] = [];
+    /** Holds Selected Pending Vouchers */
+    public selectedPendingVouchers: any[] = [];
     /** Holds Voucher Name that suports csv file export */
     public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase', 'receipt', 'payment'];
     /** Holds True if all Vouchers are Selected */
     public allVouchersSelected: boolean = false;
+    /** Holds True if all Pending Vouchers are Selected */
+    public allPendingVouchersSelected: boolean = false;
     /** Holds Eway Bill Dialog Ref */
     public ewayBillDialogRef: any;
     /** Holds Advance Search Dialog Ref */
@@ -711,14 +715,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        const queryParams =  {
+        const queryParams = {
             page: this.advanceFilters.page,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
         };
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
-        if (searchString?.length){
+        if (searchString?.length) {
             queryParams['search'] = searchString;
         };
 
@@ -973,6 +977,39 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    /**
+  * Handle Select table pending item event
+  *
+  * @param {*} event
+  * @param {*} voucher
+  * @memberof VoucherListComponent
+  */
+    public selectPendingVoucher(event: any, voucher: any): void {
+        if (event?.checked) {
+            this.selectedPendingVouchers.push(voucher);
+        } else {
+            this.selectedPendingVouchers = this.selectedPendingVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName !== voucher?.uniqueName);
+        }
+        this.allPendingVouchersSelected = this.dataSource?.length === this.selectedVouchers?.length;
+    }
+
+    /**
+    * Handle Select All Pending items
+    *
+    * @param {*} event
+    * @memberof VoucherListComponent
+    */
+    public selectAllPendingVouchers(event: any): void {
+        this.selectedPendingVouchers = [];
+        this.allPendingVouchersSelected = event?.checked;
+        if (event?.checked) {
+            this.dataSource?.forEach(voucher => {
+                this.selectedPendingVouchers.push(voucher);
+            });
+        }
+    }
+
 
     /**
      * Export CSV File and Download
@@ -1503,6 +1540,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+    * Check pending voucher is selected
+    *
+    * @param {*} voucher
+    * @return {*}  {boolean}
+    * @memberof VoucherListComponent
+    */
+    public isPendingVoucherSelected(voucher: any): boolean {
+        const isSelected = this.selectedPendingVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName === voucher?.uniqueName);
+        return isSelected?.length ? true : false;
+    }
+
+    /**
      * Apply Advance Search/ Filter
      *
      * @param {*} event
@@ -1608,8 +1657,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const model = {
             accountUniqueName: voucher.customerUniqueName
         };
-        
-        if (this.voucherType === VoucherTypeEnum.generateEstimate) { 
+
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;

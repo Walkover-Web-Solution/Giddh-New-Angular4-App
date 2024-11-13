@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { CustomTemplateResponse } from "../../models/api-models/Invoice";
@@ -155,6 +155,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
     public getLastVouchersInProgress$ = this.select((state) => state.getLastVouchersInProgress);
     public discountsList$ = this.select((state) => state.discountsList);
+    public pendingVoucherList$ = this.store.pipe(select(state => state.invoice.ledgers));
     public invoiceSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
@@ -220,7 +221,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public createEwayBill$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
     public sessionUserEmail$: Observable<any> = this.select(this.store.select(state => state.session.user), (response) => response);
-    
+
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -1662,7 +1663,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
-    
+
     readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any}>) => {
         return data.pipe(
             switchMap((req) => {
