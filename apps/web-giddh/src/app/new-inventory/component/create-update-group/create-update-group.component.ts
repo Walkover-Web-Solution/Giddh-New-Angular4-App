@@ -332,7 +332,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.groupForm.controls['type'].setValue(this.stockType);
         const model = this.groupForm?.value;
         if (!Array.isArray(model.discounts)) {
-            model.discounts = [model.discounts]
+            model.discounts = model.discounts?.length ? [model.discounts] : [];
         }
         delete model.discountLabel;
         if (this.groupUniqueName) {
