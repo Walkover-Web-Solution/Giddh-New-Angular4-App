@@ -5,6 +5,8 @@ import { VoucherListComponent } from "./list/list.component";
 import { VouchersPreviewComponent } from "./preview/preview.component";
 import { VoucherCreateComponent } from "./create/create.component";
 import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmation-guard";
+import { VoucherShivaniComponent } from "./shivani/shivani.component";
+
 
 const routes: Routes = [
     {
@@ -38,7 +40,11 @@ const routes: Routes = [
                 path: ":voucherType/:accountUniqueName/:uniqueName/:action",
                 component: VoucherCreateComponent,
                 canDeactivate: [PageLeaveConfirmationGuard]
-            }
+            },
+            {
+                path: "shivani",
+                component: VoucherShivaniComponent
+            },
         ]
     }
 ];
