@@ -8,17 +8,17 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, auditTime, combineLatest, debounceTime, delay, distinctUntilChanged, merge, of, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
-import { cloneDeep } from "../../lodash-optimized";
+import { cloneDeep, forEach, indexOf, orderBy } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
@@ -33,6 +33,8 @@ import { OrganizationType } from "../../models/user-login-state";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass } from "../../models/api-models/Invoice";
+import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 
 // invoice-table
 export interface PeriodicElement {
@@ -235,6 +237,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
     public totalResults: number = 0;
+    /** Holds Pending Total Results Count */
+    public pendingTotalResults: number = 0;
     /** Holds Selected Vouchers */
     public selectedVouchers: any[] = [];
     /** Holds Selected Pending Vouchers */
@@ -301,6 +305,38 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** Holds current route query parameters */
     public queryParams: any = {};
+    /** True if today selected */
+    public todaySelected: boolean = false;
+    /** True if voucher generate in process */
+    public generateVoucherInProcess: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds response of bulk generate popup */
+    private isCombined: boolean = null;
+    /** Duplicate copy of entry unique names for bulk action variable */
+    public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
+    public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
+    public isGetAllRequestInProcess$: Observable<boolean> = of(true);
+    public ledgersData: GetAllLedgersOfInvoicesResponse;
+    /** selected profile currency symbol */
+    public baseCurrencySymbol: string = '';
+    /** selected profile currency type */
+    public baseCurrency: string = '';
+    public selectedLedgerItems: string[] = [];
+    public selectedCountOfAccounts: string[] = [];
+    /** True if custom date selected */
+    public customDateSelected: boolean = false;
+    /** Comparision filters */
+    public comparisionFilters: any = [
+        { label: '', value: 'greaterThan' },
+        { label: '', value: 'lessThan' },
+        { label: '', value: 'greaterThanOrEquals' },
+        { label: '', value: 'lessThanOrEquals' },
+        { label: '', value: 'equals' }
+    ];
+    /** True if user has pending invoices list permissions */
+    public hasPendingVouchersListPermissions: boolean = true;
+    public togglePrevGenBtn: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -316,7 +352,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private salesAction: SalesActions,
-        private settingsProfileActions: SettingsProfileActions
+        private settingsProfileActions: SettingsProfileActions,
+        private invoiceActions: InvoiceActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -612,6 +649,98 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.allVouchersSelected = false;
             }
         });
+
+        this.componentStore.pendingVoucherList$.pipe(takeUntil(this.destroyed$)).subscribe((res: GetAllLedgersForInvoiceResponse) => {
+            if (res && res.results) {
+
+                let response = cloneDeep(res);
+                console.log(response);
+
+                this.pendingTotalResults = response?.totalItems;
+                this.selectAllPendingVouchers({ checked: false });
+                response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
+                    return dayjs(item.entryDate, GIDDH_DATE_FORMAT);
+                }, 'desc');
+
+                if (response && response.results) {
+                    response.results.map(item => {
+                        item = this.addToolTiptext(item);
+                        item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPendingVouchers, item?.uniqueName);
+                    });
+                }
+                this.ledgersData = response?.results;
+                this.isGetAllRequestInProcess$ = of(false);
+                if (this.todaySelected) {
+                    this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
+                    this.ledgerSearchRequest.from = response.fromDate;
+                    this.ledgerSearchRequest.to = response.toDate;
+
+                    this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                }
+
+            }
+        });
+
+        // combineLatest([this.componentStore.createEwayBill$, this.componentStore.invoiceDataHasError$])
+        //     .pipe(takeUntil(this.destroyed$), auditTime(700))
+        //     .subscribe(async results => {
+        //         if (results) {
+        //             /** get voucher success and no any error during get voucher then show create voucher component   */
+        //             if (results[0] && !results[1] && this.selectedItem) {
+        //                 this.showEditMode = true;
+        //             } else {
+        //                 this.showEditMode = false;
+        //             }
+        //         }
+        //     });
+
+        // this.store.pipe(select(stores => stores.receipt.voucher),
+        //     distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
+        //         if (voucher) {
+        //             this.voucherDetails = voucher;
+        //             if (voucher?.templateDetails?.templateUniqueName) {
+        //                 this.getInvoiceTemplateDetails(voucher.templateDetails.templateUniqueName)
+        //             }
+        //             this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.selectedVoucher));
+        //         }
+        //     });
+
+        // listen for bulk invoice generate and successfully generate and do the things
+        this.componentStore.isBulkInvoiceGenerated$.subscribe(result => {
+            if (result) {
+                this.selectAllPendingVouchers(false);
+                this.getLedgersOfInvoice();
+            }
+        });
+        this.componentStore.isBulkInvoiceGeneratedWithoutErr$.subscribe(result => {
+            if (result) {
+                this.getLedgersOfInvoice();
+            }
+        });
+    }
+
+    private addToolTiptext(item: ILedgersInvoiceResult): any {
+        try {
+            let grandTotalAmountForCompany, grandTotalAmountForAccount;
+            if (item.total && item.totalForCompany) {
+                grandTotalAmountForCompany = Number(item.totalForCompany.amount) || 0;
+                grandTotalAmountForAccount = Number(item.total.amount) || 0;
+            }
+
+            let grandTotalConversionRate = 0;
+            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
+            }
+
+            let currencyConversion = this.localeData?.currency_conversion;
+            currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+
+            item['totalTooltipText'] = currencyConversion;
+
+        } catch (error) {
+        }
+        return item;
     }
 
     /**
@@ -1128,10 +1257,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.customDateSelected = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.advanceFilters.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.advanceFilters.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
 
             if (window.localStorage) {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
@@ -1139,6 +1271,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.advanceFiltersApplied = true;
             this.getVouchers(this.isUniversalDateApplicable);
             this.getVoucherBalances();
+            this.isGetAllRequestInProcess$ = of(true);
+            this.isUniversalDateApplicable = false;
+            this.getLedgersOfInvoice();
         }
     }
 
@@ -1829,6 +1964,31 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         // get application date
         this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
             universalDate = date;
+            setTimeout(() => {
+                this.componentStore.todaySelected$.pipe(take(1)).subscribe(response => {
+                    this.todaySelected = response;
+
+                    if (this.universalDate && !this.todaySelected) {
+                        this.ledgerSearchRequest.dateRange = this.universalDate;
+
+                        this.selectedDateRange = { startDate: dayjs(date[0]), endDate: dayjs(date[1]) };
+                        this.selectedDateRangeUi = dayjs(date[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(date[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+                        this.ledgerSearchRequest.from = dayjs(date[0]).format(GIDDH_DATE_FORMAT);
+                        this.ledgerSearchRequest.to = dayjs(date[1]).format(GIDDH_DATE_FORMAT);
+
+                        this.isUniversalDateApplicable = true;
+                    } else {
+                        this.universalDate = [];
+                        this.ledgerSearchRequest.dateRange = this.universalDate;
+                        this.ledgerSearchRequest.from = "";
+                        this.ledgerSearchRequest.to = "";
+                        this.isUniversalDateApplicable = false;
+                    }
+
+                    this.getLedgersOfInvoice();
+                });
+            }, 100);
         });
 
         // set date picker date as application date
@@ -1986,5 +2146,114 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else {
             this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
         }
+    }
+
+    public getLedgersOfInvoice() {
+        this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
+        if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length === 0) {
+            this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
+            this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
+        }
+        this.selectedLedgerItems = [];
+        this.selectedCountOfAccounts = [];
+    }
+
+    public prepareModelForLedgerApi() {
+        let model: InvoiceFilterClass = {};
+        let o = cloneDeep(this.ledgerSearchRequest);
+        if (o && o.accountUniqueName) {
+            model.accountUniqueName = o.accountUniqueName;
+        }
+        if (o.entryTotal) {
+            model.entryTotal = o.entryTotal;
+        }
+        if (o.description) {
+            model.description = o.description;
+        }
+        if (o.entryTotalBy === this.comparisionFilters[0]?.value) {
+            model.totalIsMore = true;
+        } else if (o.entryTotalBy === this.comparisionFilters[1]?.value) {
+            model.totalIsLess = true;
+        } else if (o.entryTotalBy === this.comparisionFilters[2]?.value) {
+            model.totalIsMore = true;
+            model.totalIsEqual = true;
+        } else if (o.entryTotalBy === this.comparisionFilters[3]?.value) {
+            model.totalIsLess = true;
+            model.totalIsEqual = true;
+        } else if (o.entryTotalBy === this.comparisionFilters[4]?.value) {
+            model.totalIsEqual = true;
+        }
+        return model;
+    }
+
+
+    public prepareQueryParamsForLedgerApi() {
+        let o = cloneDeep(this.ledgerSearchRequest);
+        let fromDate = null;
+        let toDate = null;
+        if (this.universalDate && this.universalDate.length) {
+            fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+            toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        }
+
+        return {
+            from: this.isUniversalDateApplicable ? fromDate : o.from,
+            to: this.isUniversalDateApplicable ? toDate : o.to,
+            count: o.count,
+            page: o.page,
+            voucherType: this.voucherType
+        };
+    }
+
+    public resetDateSearch() {
+        this.ledgerSearchRequest.dateRange = this.universalDate;
+        this.customDateSelected = false;
+        if (this.universalDate && !this.todaySelected) {
+            this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+            this.isUniversalDateApplicable = true;
+        } else {
+            this.universalDate = [];
+            this.ledgerSearchRequest.dateRange = this.universalDate;
+            this.ledgerSearchRequest.from = "";
+            this.ledgerSearchRequest.to = "";
+            this.isUniversalDateApplicable = false;
+        }
+        this.getLedgersOfInvoice();
+        this.insertItemsIntoArr();
+    }
+
+    public insertItemsIntoArr() {
+        if (this.ledgersData) {
+            forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+                let idx = indexOf(this.selectedLedgerItems, item?.uniqueName);
+                if (item.isSelected) {
+                    if (idx === -1) {
+                        this.selectedLedgerItems.push(item?.uniqueName);
+                        this.selectedCountOfAccounts.push(item.account?.uniqueName);
+                    }
+                } else {
+                    if (idx !== -1) {
+                        this.selectedLedgerItems.splice(idx);
+                        this.selectedCountOfAccounts.splice(idx);
+                    }
+                }
+            });
+        }
+        // check if all selected entries are from same account
+        if (this.selectedCountOfAccounts.length) {
+            this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
+        } else {
+            this.togglePrevGenBtn = false;
+        }
+    }
+
+    public pageChanged(event: any): void {
+        this.ledgerSearchRequest.page = event.page;
+        this.selectedLedgerItems = [];
+        this.selectedCountOfAccounts = [];
+        this.togglePrevGenBtn = false;
+        this.getLedgersOfInvoice();
     }
 }

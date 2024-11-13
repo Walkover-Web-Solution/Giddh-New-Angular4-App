@@ -155,7 +155,6 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
     public getLastVouchersInProgress$ = this.select((state) => state.getLastVouchersInProgress);
     public discountsList$ = this.select((state) => state.discountsList);
-    public pendingVoucherList$ = this.store.pipe(select(state => state.invoice.ledgers));
     public invoiceSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
@@ -221,6 +220,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public createEwayBill$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
     public sessionUserEmail$: Observable<any> = this.select(this.store.select(state => state.session.user), (response) => response);
+    public pendingVoucherList$: Observable<any> = this.select(this.store.select(state => state.invoice.ledgers), (response) => response);
+    public isBulkInvoiceGenerated$: Observable<any> = this.select(this.store.select(state => state.invoice.isBulkInvoiceGenerated), (response) => response);
+    public isBulkInvoiceGeneratedWithoutErr$: Observable<any> = this.select(this.store.select(state => state.invoice.isBulkInvoiceGeneratedWithoutErrors), (response) => response);
+    public voucherDetailsInProcess$: Observable<any> = this.select(this.store.select(state => state.receipt.voucherDetailsInProcess), (response) => response);
+    public getLedgerDataInProcess$: Observable<any> = this.select(this.store.select(state => state.invoice.isGetAllLedgerDataInProgress), (response) => response);
+    public todaySelected$: Observable<any> = this.select(this.store.select(state => state.session.todaySelected), (response) => response);
+    public invoiceDataHasError$: Observable<any> = this.select(this.store.select(state => state.receipt.invoiceDataHasError), (response) => response);
 
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
@@ -1496,16 +1502,16 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly downloadVoucherPdf = this.effect((data: Observable<{ model: any, type: string, fileType: string, voucherType: string, isDownloadFromDialog: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
-                if (req.isDownloadFromDialog){
+                if (req.isDownloadFromDialog) {
                     this.patchState({ isVoucherFileDownloading: true });
                 } else {
-                    this.patchState({ isVoucherDownloading: true , isVoucherDownloadError: false});
+                    this.patchState({ isVoucherDownloading: true, isVoucherDownloadError: false });
                 }
                 return this.voucherService.downloadPdfFile(req.model, req.type, req.fileType, req.voucherType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                if (req.isDownloadFromDialog){
+                                if (req.isDownloadFromDialog) {
                                     return this.patchState({
                                         isVoucherFileDownloading: false,
                                         downloadVoucherFileResponse: res?.body ?? {}
@@ -1517,7 +1523,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                     });
                                 }
                             } else if (res.status !== "error") {
-                                if (req.isDownloadFromDialog){
+                                if (req.isDownloadFromDialog) {
                                     return this.patchState({
                                         isVoucherFileDownloading: false,
                                         downloadVoucherFileResponse: res ?? {}
@@ -1530,7 +1536,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                 }
                             } else {
                                 res.message && this.toaster.showSnackBar("error", res.message);
-                                if (req.isDownloadFromDialog){
+                                if (req.isDownloadFromDialog) {
                                     return this.patchState({
                                         isVoucherFileDownloading: false,
                                         downloadVoucherFileResponse: {}
@@ -1546,7 +1552,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
-                            if (req.isDownloadFromDialog){
+                            if (req.isDownloadFromDialog) {
                                 return this.patchState({
                                     isVoucherFileDownloading: false,
                                     downloadVoucherFileResponse: null
@@ -1664,7 +1670,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any}>) => {
+    readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ cancelEInvoiceInProgress: true });
