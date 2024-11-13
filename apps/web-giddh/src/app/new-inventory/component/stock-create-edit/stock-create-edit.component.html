@@ -187,7 +187,9 @@
                                                 (selectedOption)="
                                                     stockForm.discounts = [$event?.value];
                                                 "
-                                                [defaultValue]="stockForm.discountLabel"
+                                                [allowValueReset]="true"
+                                                (onClear)="stockForm.discounts = []"
+                                                [defaultValue]="stockForm.discountLabel ?? ''"
                                             >
                                             </dropdown-field>
                                         </div>

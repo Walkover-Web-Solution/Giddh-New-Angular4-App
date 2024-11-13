@@ -130,7 +130,7 @@
                                                 [name]="'discounts'"
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
-                                                [labelValue]="groupForm?.get('discountLabel')?.value"
+                                                [labelValue]="groupForm?.get('discountLabel')?.value ?? ''"
                                                 (onClear)="groupForm.get('discounts')?.patchValue(null)"
                                                 [options]="discountsList$ | async"
                                                 formControlName="discounts"
