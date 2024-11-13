@@ -1094,7 +1094,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockForm = cloneDeep(this.stockForm);
         delete stockForm.discountLabel;
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
-
+        stockForm.discounts = stockForm.discounts?.[0]?.length ? stockForm.discounts : [];
         stockForm.customFields = stockForm.customFields?.map(customField => {
             return {
                 uniqueName: customField?.uniqueName,
