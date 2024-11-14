@@ -7,13 +7,17 @@ import { Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
+import { IDiscountList } from "../../models/api-models/SettingsDiscount";
+import { SettingsDiscountService } from "../../services/settings.discount.service";
 
 export interface InventoryState {
     isLoading: boolean;
+    discountsList: IDiscountList[];
 }
 
 const DEFAULT_STATE: InventoryState = {
-    isLoading: false
+    isLoading: false,
+    discountsList: null
 };
 
 @Injectable()
@@ -21,6 +25,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     constructor(
         private store: Store<AppState>,
         private inventoryService: InventoryService,
+        private settingsDiscountService: SettingsDiscountService,
         private toaster: ToasterService,
         public router: Router
     ) {
@@ -28,6 +33,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     }
 
     public isLoading$ = this.select((state) => state.isLoading);
+    public discountsList$: Observable<any> = this.select((state) => state.discountsList);
 
     /**
      * This will use for Export Item Wise Report Data
@@ -172,6 +178,38 @@ export class InventoryComponentStore extends ComponentStore<any> {
                         }
                     ),
                 )
+            })
+        );
+    });
+
+    /**
+     * Get All Discount List
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly getDiscountList = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap(() => {
+                return this.settingsDiscountService.GetDiscounts().pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            const discounts = res?.body?.map(discount => {
+                                 discount['label']= discount?.name;
+                                 discount['value']= discount?.uniqueName;
+                                 return discount;
+                            });
+                            return this.patchState({
+                                discountsList: discounts
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                discountsList: []
+                            });
+                        }
+                    )
+                );
             })
         );
     });
