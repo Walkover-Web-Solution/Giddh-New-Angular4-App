@@ -6,6 +6,7 @@ import { VouchersPreviewComponent } from "./preview/preview.component";
 import { VoucherCreateComponent } from "./create/create.component";
 import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmation-guard";
 import { VoucherShivaniComponent } from "./shivani/shivani.component";
+import { secondComponent } from "./second/second.component";
 
 
 const routes: Routes = [
@@ -45,6 +46,10 @@ const routes: Routes = [
                 path: "shivani",
                 component: VoucherShivaniComponent
             },
+            {
+                path: "second",
+                component: secondComponent
+            }
         ]
     }
 ];

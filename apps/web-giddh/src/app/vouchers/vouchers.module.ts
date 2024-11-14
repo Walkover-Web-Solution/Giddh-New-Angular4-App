@@ -90,7 +90,7 @@ import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
 import { A11yModule } from "@angular/cdk/a11y";
 import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
 import { VoucherShivaniComponent } from "./shivani/shivani.component";
-
+import { secondComponent } from "./second/second.component";
 
 @NgModule({
     declarations: [
@@ -117,6 +117,7 @@ import { VoucherShivaniComponent } from "./shivani/shivani.component";
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
         VoucherShivaniComponent,
+        secondComponent,
     ],
     imports: [
         CommonModule,
