@@ -3,35 +3,6 @@
     padding: 0;
     border-right: 1px solid transparent;
 }
-
-// .return-content {
-//     padding: 15px;
-//     background-color: var(--color-white);
-// }
-
-.btn-primary {
-    border-color: var(--color-common-secondary-border) !important;
-}
-.btn-primary.disabled,
-.btn-primary.disabled.active,
-.btn-primary.disabled:active,
-.btn-primary.disabled:focus,
-.btn-primary.disabled:hover,
-.btn-primary[disabled],
-.btn-primary[disabled].active,
-.btn-primary[disabled]:active,
-.btn-primary[disabled]:focus,
-.btn-primary[disabled]:hover,
-fieldset[disabled] .btn-primary,
-fieldset[disabled] .btn-primary.active,
-fieldset[disabled] .btn-primary:active,
-fieldset[disabled] .btn-primary:focus,
-fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
-.btn-primary.disabled,
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active,
-.btn-primary.active,
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
@@ -315,10 +286,6 @@ hr {
     content: none;
 }
 
-.rotate-90 {
-    transform: rotate(-90deg);
-}
-
 :focus {
     outline: none !important;
 }
@@ -480,5 +447,14 @@ hr {
         li {
             margin-bottom: 8px;
         }
+    }
+}
+.month-selection {
+    // color: var(--color-nero) !important;
+    background: var(--color-denary-button-background) !important;
+    height: 38px;
+    border-radius: 18px;
+    &::placeholder {
+        color: var(--color-denary-button-text) !important;
     }
 }

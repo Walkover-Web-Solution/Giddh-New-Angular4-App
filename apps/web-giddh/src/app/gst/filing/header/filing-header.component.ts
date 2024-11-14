@@ -59,6 +59,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** True if current organization is company */
     @Input() public isCompany: boolean;
     // @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
+    // <!-- Divyanshu: Convert this into material -->
     @ViewChild("cancelConfirmationModel") cancelConfirmationModel: TemplateRef<any>;
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
@@ -244,6 +245,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public closeAsidePane() {
+        // <!-- Divyanshu: Convert this into material -->
         this.GstAsidePaneState = 'out';
     }
 
@@ -360,6 +362,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         } else {
+            // <!-- Divyanshu: Convert this into material -->
             this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
         }
     }

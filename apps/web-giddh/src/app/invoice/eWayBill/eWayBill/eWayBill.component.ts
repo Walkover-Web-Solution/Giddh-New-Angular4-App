@@ -19,7 +19,6 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -43,8 +42,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
     public asideMenuState: string = 'out';
-    /* this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
     public cancelEwayInProcess$: Observable<boolean>;
@@ -151,7 +148,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private _location: LocationService,
         private _cd: ChangeDetectorRef,
         private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver,
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
         private gstReconcileService: GstReconcileService,
@@ -176,25 +172,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
                 });
                 this.statesSource$ = observableOf(this.states);
-            }
-        });
-
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
-                }
             }
         });
 

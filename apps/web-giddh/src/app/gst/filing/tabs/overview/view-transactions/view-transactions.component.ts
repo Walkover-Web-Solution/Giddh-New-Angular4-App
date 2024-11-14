@@ -17,7 +17,6 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { saveAs } from 'file-saver';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
 
@@ -44,6 +43,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    // <!-- Divyanshu: Convert this into material -->
     @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
@@ -70,8 +70,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     /** selected Invoice object */
     public selectedInvoice: GstTransactionSummary;
     /** Returns the enum to be used in template */
-    /** It will store mobile size */
-    public isMobileScreen: boolean = false;
     public get GstReport() {
         return GstReport;
     }
@@ -86,17 +84,10 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
         private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver,
         private receiptService: ReceiptService) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
-        this.breakpointObserver
-            .observe(['(max-width: 768px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-            });
     }
 
     public ngOnInit() {
@@ -344,6 +335,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     } else {
+                        // <!-- Divyanshu: Convert this into material -->
                         this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                 });

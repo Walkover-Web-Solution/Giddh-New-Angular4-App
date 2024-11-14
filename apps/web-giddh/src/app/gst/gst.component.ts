@@ -19,7 +19,8 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
     templateUrl: './gst.component.html',
@@ -48,8 +49,6 @@ export class GstComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
     public asideMenuState: string = 'out';
-    /** this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     public showCalendar: boolean = false;
     public period: any = null;
     public companies: CompanyResponse[] = [];
@@ -94,6 +93,14 @@ export class GstComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** True if user selected month */
+    public customMonthSelected: boolean = false;
+    /** Custom selected month */
+    public customMonth: string = '';
+    /** Holds start month/year */
+    public startAt: Date = new Date();
+    /** Holds selected date */
+    public date: FormControl = new FormControl('');
 
     constructor(
         private store: Store<AppState>,
@@ -103,8 +110,7 @@ export class GstComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private cdRf: ChangeDetectorRef,
         private gstReconcileService: GstReconcileService,
-        private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver
+        private generalService: GeneralService
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
@@ -125,19 +131,8 @@ export class GstComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
         this.loadTaxDetails();
-
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-
         this.getCurrentPeriod$.subscribe(a => {
             if (a && a.from) {
                 let date = {
@@ -170,15 +165,6 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.loadTaxReport();
             }
         });
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
-                }
-            }
-        });
     }
 
     /**
@@ -201,22 +187,22 @@ export class GstComponent implements OnInit, OnDestroy {
      * @param {*} ev
      * @memberof GstComponent
      */
-    public periodChanged(ev) {
-        if (ev && ev.picker) {
+    public periodChanged(date) {
+        // if (ev && ev.picker) {
             this.currentPeriod = {
-                from: dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
-                to: dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
+                from: dayjs(date.from).format(GIDDH_DATE_FORMAT),
+                to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = false;
-        } else {
-            this.currentPeriod = {
-                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
-            };
-            this.isMonthSelected = true;
-        }
-        this.selectedMonth = ev;
-        this.showCalendar = false;
+        // } else {
+        //     this.currentPeriod = {
+        //         from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+        //         to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+        //     };
+        //     this.isMonthSelected = true;
+        // }
+        // this.selectedMonth = ev;
+        // this.showCalendar = false;
         this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
 
         if (this.activeCompanyGstNumber) {
@@ -384,5 +370,38 @@ export class GstComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr2, request));
             this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
         }
+    }
+
+     /**
+     * Selects date and calls api
+     *
+     * @param {*} event
+     * @memberof GstComponent
+     */
+     public dateSelected(event: any): void {
+        this.customMonthSelected = true; 
+        // this.from = dayjs(event[0]).format(GIDDH_DATE_FORMAT);
+        // this.to = dayjs(event[1]).format(GIDDH_DATE_FORMAT);
+        this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
+        this.date.setValue(this.customMonth);
+        console.log("dateSelected", this.customMonth);
+        
+        this.periodChanged({from: event[0], to: event[1]});
+
+    }
+
+    /**
+     * Sets month/year
+     *
+     * @param {*} date
+     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @memberof GstComponent
+     */
+    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
+        datepicker.close();
+        let selectedMonth = new Date(date);
+        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        this.dateSelected([firstDay, lastDay]);
     }
 }

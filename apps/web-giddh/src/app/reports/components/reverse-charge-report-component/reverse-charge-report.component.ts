@@ -14,7 +14,6 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { UntypedFormControl } from "@angular/forms";
 @Component({
@@ -86,8 +85,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /* True, if mobile screen size is detected **/
-    public isMobileScreen: boolean = true;
     /** True if today selected */
     public todaySelected: boolean = false;
     displayedColumns: string[] = [
@@ -115,7 +112,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private modalService: BsModalService,
-        private breakPointObservar: BreakpointObserver,
         private router: Router
     ) {
     }
@@ -127,25 +123,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
-
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
-                }
-            }
-        });
-
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;

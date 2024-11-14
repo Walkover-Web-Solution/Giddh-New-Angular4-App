@@ -26,6 +26,7 @@
         </div>
         <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+            <!-- Divyanshu: Convert this into material -->
             <div class="btn-group filter d-inline-block" dropdown>
                 <button
                     id="button-basic"
@@ -51,6 +52,7 @@
             <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
                 <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block" dropdown>
+                <!-- Divyanshu: Convert this into material -->
                 <button
                     id="button-basic2"
                     dropdownToggle
@@ -270,6 +272,7 @@
             </table>
         </div>
         <!-- pagination -->
+         <!-- Divyanshu: Convert this into material -->
         <div class="pagination-wrapper text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
             <pagination
                 [maxSize]="6"
@@ -311,6 +314,7 @@
 </div>
 
 <!-- Download or Send Invoice on mail -->
+<!-- Divyanshu: Convert this into material -->
 <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">

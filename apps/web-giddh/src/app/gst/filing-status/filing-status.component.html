@@ -19,7 +19,6 @@
                             <mat-datepicker (monthSelected)="setMonthAndYear($event, picker)" [startView]="'multi-year'"
                                 [startAt]="startAt" #picker></mat-datepicker>
                         </mat-form-field>
-
                     </div>
 
                     <button class="ml-5" mat-stroked-button (click)="initializeForm()" *ngIf="customMonthSelected">

@@ -15,7 +15,6 @@ import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.a
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
@@ -29,8 +28,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
     public asideMenuState: string = 'out';
-    /** This will check mobile screen size */
-    public isMobileScreen: boolean = false;
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
     public selectedGstr: string = null;
@@ -83,7 +80,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private gstAction: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
-        private breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         public modalService: BsModalService
     ) {
@@ -104,15 +100,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.showGstFiling = true;
         }
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
@@ -218,15 +205,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                                 (this.gstr3BData.sup_details.osup_zero ?
                                     (this.gstr3BData.sup_details.osup_zero.csamt ? this.gstr3BData.sup_details.osup_zero.csamt : 0) : 0));
                     }
-                }
-            }
-        });
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
                 }
             }
         });

@@ -6,7 +6,7 @@
     <!-- region gstr1 -->
     <div class="list-style d-flex justify-content-between align-items-center" *ngIf="selectedGst === GstReport.Gstr1">
         <div class="wrap-GSTR-1-title">
-            <a href="javascript:void(0);" [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
+            <a [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
                 <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
             </a>
             <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img"  />
@@ -14,6 +14,7 @@
             <div class="text-middle nav-top">
                 <div class="text-middle head head-font-weight">
                     {{ localeData?.gstr1_label }}
+                    <!-- Divyanshu: Convert this into material -->
                     <div
                         *ngIf="showDate"
                         class="btn-group dropdown d-inline-block"
@@ -23,6 +24,7 @@
                         (clickOutside)="monthWise?.hide()"
                         [attachOutsideOnClick]="true"
                     >
+                        <!-- Divyanshu: Convert this into material -->
                         <button
                             id="button-nested"
                             dropdownToggle
@@ -127,6 +129,7 @@
             <div class="text-middle nav-top">
                 <div class="text-middle head-font-weight">
                     {{ localeData?.gstr2_label }}
+                    <!-- Divyanshu: Convert this into material -->
                     <div
                         *ngIf="showDate"
                         class="btn-group dropdown d-inline-block"
@@ -136,6 +139,7 @@
                         (clickOutside)="monthWise?.hide()"
                         [attachOutsideOnClick]="true"
                     >
+                    <!-- Divyanshu: Convert this into material -->
                         <button
                             id="button-nested"
                             dropdownToggle
@@ -194,6 +198,7 @@
                     <i class="icon-download"></i>
                     {{ commonLocaleData?.app_download }}
                 </button>
+                <!-- Divyanshu: Convert this into material -->
                 <ul
                     id="dropdown-menu"
                     *dropdownMenu
@@ -284,7 +289,7 @@
         </div>
     </div>
 </div> -->
-
+<!-- Divyanshu: Convert this into material -->
 <ng-template #cancelConfirmationModel>
     <confirm-modal
         [body]="localeData?.filing?.cancel_title"
@@ -294,6 +299,7 @@
 </ng-template>
 
 <!--push to portal modal -->
+<!-- Divyanshu: Convert this into material -->
 <div
     bsModal
     #pushToPortalModal="bs-modal"
