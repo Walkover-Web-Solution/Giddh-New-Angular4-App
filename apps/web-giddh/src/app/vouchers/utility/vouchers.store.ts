@@ -227,6 +227,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public getLedgerDataInProcess$: Observable<any> = this.select(this.store.select(state => state.invoice.isGetAllLedgerDataInProgress), (response) => response);
     public todaySelected$: Observable<any> = this.select(this.store.select(state => state.session.todaySelected), (response) => response);
     public invoiceDataHasError$: Observable<any> = this.select(this.store.select(state => state.receipt.invoiceDataHasError), (response) => response);
+    public isAccountUpdated$: Observable<any> = this.select(this.store.select(state => state.common.isAccountUpdated), (response) => response);
+    public universalPendingDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
 
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {

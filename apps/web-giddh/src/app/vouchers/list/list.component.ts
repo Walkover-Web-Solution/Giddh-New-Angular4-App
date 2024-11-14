@@ -8,7 +8,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, auditTime, combineLatest, debounceTime, delay, distinctUntilChanged, merge, of, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, auditTime, combineLatest, debounceTime, delay, distinctUntilChanged, find, groupBy, merge, of, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -18,7 +18,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helper
 import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
-import { cloneDeep, forEach, indexOf, orderBy } from "../../lodash-optimized";
+import { cloneDeep, forEach, indexOf, orderBy, uniq } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
@@ -33,8 +33,10 @@ import { OrganizationType } from "../../models/user-login-state";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
-import { GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass } from "../../models/api-models/Invoice";
+import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
+import { CommonActions } from "../../actions/common.actions";
+import { ConfirmModalComponent } from "../../theme/confirm-modal/confirm-modal.component";
 
 // invoice-table
 export interface PeriodicElement {
@@ -318,6 +320,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
     public isGetAllRequestInProcess$: Observable<boolean> = of(true);
     public ledgersData: GetAllLedgersOfInvoicesResponse;
+    /** selected pending voucher */
+    public selectedItem: InvoicePreviewDetailsVm;
+    /** Selected account unique name */
+    public selectedAccountUniqueName: string = '';
     /** selected profile currency symbol */
     public baseCurrencySymbol: string = '';
     /** selected profile currency type */
@@ -337,7 +343,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** True if user has pending invoices list permissions */
     public hasPendingVouchersListPermissions: boolean = true;
     public togglePrevGenBtn: boolean = false;
-
+    /** Stores the voucher API version of company */
+    private voucherApiVersion: 1 | 2;
+    /** Instance of modal */
+    public modalDialogRef: any;
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -353,7 +362,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private adjustmentUtilityService: AdjustmentUtilityService,
         private salesAction: SalesActions,
         private settingsProfileActions: SettingsProfileActions,
-        private invoiceActions: InvoiceActions
+        private invoiceActions: InvoiceActions,
+        private commonActions: CommonActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -379,13 +389,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.setInitialAdvanceFilter(true);
         this.getInvoiceSettings();
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+                console.log(this.voucherType, this.invoiceType, this.activeModule);
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
@@ -406,6 +417,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 if (this.universalDate && !['pending', 'settings', 'templates'].includes(this.activeModule)) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
+                }
+                if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
+                    this.getLedgersOfInvoice();
                 }
             }
         });
@@ -463,6 +477,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                     this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
                     this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+
                     this.isUniversalDateApplicable = true;
 
                     if (window.localStorage) {
@@ -470,6 +485,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.from = this.queryParams.from;
@@ -634,6 +650,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.accountAsideMenuRef?.close();
+                if (this.activeModule === 'pending') {
+                    this.getLedgersOfInvoice();
+                }
             }
         });
 
@@ -650,12 +669,72 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.invoice.showBulkGenerateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.message) {
+                if (this.modalDialogRef && this.dialog.getDialogById(this.modalDialogRef.id)) {
+                    return;
+                }
+                this.store.dispatch(this.invoiceActions.setBulkGenerateConfirm(null));
+
+                this.modalDialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+
+                this.modalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (typeof response === "boolean") {
+                        if (response) {
+                            this.generateBulkInvoice(this.isCombined, true);
+                        } else {
+                            this.generateBulkInvoice(this.isCombined, false);
+                        }
+                    }
+                });
+            }
+        });
+
+
+        this.componentStore.universalPendingDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            if (dateObj) {
+                this.universalDate = cloneDeep(dateObj);
+
+                setTimeout(() => {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
+
+                        if (this.universalDate && !this.todaySelected) {
+                            this.ledgerSearchRequest.dateRange = this.universalDate;
+
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+                            this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+
+                            this.isUniversalDateApplicable = true;
+                        } else {
+                            this.universalDate = [];
+                            this.ledgerSearchRequest.dateRange = this.universalDate;
+                            this.ledgerSearchRequest.from = "";
+                            this.ledgerSearchRequest.to = "";
+                            this.isUniversalDateApplicable = false;
+                        }
+
+                        this.getLedgersOfInvoice();
+                    });
+                }, 100);
+            }
+        });
+
         this.componentStore.pendingVoucherList$.pipe(takeUntil(this.destroyed$)).subscribe((res: GetAllLedgersForInvoiceResponse) => {
             if (res && res.results) {
 
                 let response = cloneDeep(res);
-                console.log(response);
-
                 this.pendingTotalResults = response?.totalItems;
                 this.selectAllPendingVouchers({ checked: false });
                 response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
@@ -682,29 +761,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        // combineLatest([this.componentStore.createEwayBill$, this.componentStore.invoiceDataHasError$])
-        //     .pipe(takeUntil(this.destroyed$), auditTime(700))
-        //     .subscribe(async results => {
-        //         if (results) {
-        //             /** get voucher success and no any error during get voucher then show create voucher component   */
-        //             if (results[0] && !results[1] && this.selectedItem) {
-        //                 this.showEditMode = true;
-        //             } else {
-        //                 this.showEditMode = false;
-        //             }
-        //         }
-        //     });
-
-        // this.store.pipe(select(stores => stores.receipt.voucher),
-        //     distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
-        //         if (voucher) {
-        //             this.voucherDetails = voucher;
-        //             if (voucher?.templateDetails?.templateUniqueName) {
-        //                 this.getInvoiceTemplateDetails(voucher.templateDetails.templateUniqueName)
-        //             }
-        //             this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.selectedVoucher));
-        //         }
-        //     });
 
         // listen for bulk invoice generate and successfully generate and do the things
         this.componentStore.isBulkInvoiceGenerated$.subscribe(result => {
@@ -904,10 +960,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else if (this.activeTabGroup === 3) {
             if (this.voucherType === 'receipt' && this.activeModule === 'list') {
                 this.selectedTabIndex = 0;
+            } else if (this.voucherType === 'receipt' && this.activeModule === 'pending') {
+                this.selectedTabIndex = 1;
             }
         } else if (this.activeTabGroup === 4) {
             if (this.voucherType === 'payment' && this.activeModule === 'list') {
                 this.selectedTabIndex = 0;
+            } else if (this.voucherType === 'payment' && this.activeModule === 'pending') {
+                this.selectedTabIndex = 1;
             }
         }
     }
@@ -974,11 +1034,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (selectedTabIndex === 0) {
                 voucherType = "receipt";
                 activeModule = "list";
+            } else if (selectedTabIndex === 1) {
+                voucherType = "receipt";
+                activeModule = "pending";
             }
         } else if (this.activeTabGroup === 4) {
             if (selectedTabIndex === 0) {
                 voucherType = "payment";
                 activeModule = "list";
+            } else if (selectedTabIndex === 1) {
+                voucherType = "payment";
+                activeModule = "pending";
             }
         }
         if (this.queryParams.page) {
@@ -1070,9 +1136,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public handlePageChange(event: any): void {
-        this.advanceFilters.count = event.pageSize;
-        this.advanceFilters.page = event.pageIndex + 1;
-        this.getVouchers(false);
+        if (this.activeModule === 'pending') {
+            this.ledgerSearchRequest.page = event.pageIndex + 1;
+            this.ledgerSearchRequest.count = event.pageSize;
+            this.getLedgersOfInvoice();
+        } else {
+            this.advanceFilters.count = event.pageSize;
+            this.advanceFilters.page = event.pageIndex + 1;
+            this.getVouchers(false);
+        }
     }
 
     /**
@@ -1264,16 +1336,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.advanceFilters.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.ledgerSearchRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.isUniversalDateApplicable = false;
+            this.advanceFiltersApplied = true;
 
             if (window.localStorage) {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
             }
-            this.advanceFiltersApplied = true;
-            this.getVouchers(this.isUniversalDateApplicable);
-            this.getVoucherBalances();
-            this.isGetAllRequestInProcess$ = of(true);
-            this.isUniversalDateApplicable = false;
-            this.getLedgersOfInvoice();
+
+            if (this.activeModule === 'pending') {
+                this.getLedgersOfInvoice();
+            } else {
+                this.getVouchers(this.isUniversalDateApplicable);
+                this.getVoucherBalances();
+            }
         }
     }
 
@@ -1872,7 +1947,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public goToLedger(voucher: any): void {
-        let url = '/pages/ledger/' + voucher?.account?.uniqueName + '/' + this.advanceFilters.from + '/' + this.advanceFilters.to;
+        const fromDate = this.activeModule === 'pending ' ? this.ledgerSearchRequest.from : this.advanceFilters.from;
+        const toDate = this.activeModule === 'pending ' ? this.ledgerSearchRequest.to : this.advanceFilters.to;
+        let url = '/pages/ledger/' + voucher?.account?.uniqueName + '/' + fromDate + '/' + toDate;
         this.openUrl(url);
     }
 
@@ -1964,31 +2041,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         // get application date
         this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
             universalDate = date;
-            setTimeout(() => {
-                this.componentStore.todaySelected$.pipe(take(1)).subscribe(response => {
-                    this.todaySelected = response;
-
-                    if (this.universalDate && !this.todaySelected) {
-                        this.ledgerSearchRequest.dateRange = this.universalDate;
-
-                        this.selectedDateRange = { startDate: dayjs(date[0]), endDate: dayjs(date[1]) };
-                        this.selectedDateRangeUi = dayjs(date[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(date[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
-                        this.ledgerSearchRequest.from = dayjs(date[0]).format(GIDDH_DATE_FORMAT);
-                        this.ledgerSearchRequest.to = dayjs(date[1]).format(GIDDH_DATE_FORMAT);
-
-                        this.isUniversalDateApplicable = true;
-                    } else {
-                        this.universalDate = [];
-                        this.ledgerSearchRequest.dateRange = this.universalDate;
-                        this.ledgerSearchRequest.from = "";
-                        this.ledgerSearchRequest.to = "";
-                        this.isUniversalDateApplicable = false;
-                    }
-
-                    this.getLedgersOfInvoice();
-                });
-            }, 100);
         });
 
         // set date picker date as application date
@@ -2149,6 +2201,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public getLedgersOfInvoice() {
+        this.isGetAllRequestInProcess$ = of(true);
         this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
         if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length === 0) {
             this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
@@ -2204,7 +2257,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             voucherType: this.voucherType
         };
     }
-
     public resetDateSearch() {
         this.ledgerSearchRequest.dateRange = this.universalDate;
         this.customDateSelected = false;
@@ -2223,6 +2275,31 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.getLedgersOfInvoice();
         this.insertItemsIntoArr();
     }
+    // public resetDateSearch() {
+    //     let universalDate;
+    //     // get application date
+    //     this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
+    //         universalDate = date;
+    //     });
+    //     this.ledgerSearchRequest.dateRange = universalDate;
+    //     this.customDateSelected = false;
+    //     if (universalDate && !this.todaySelected) {
+    //         // set date picker date as application date
+    //         if (universalDate?.length > 1) {
+    //             this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+    //             this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+    //         }
+    //         this.isUniversalDateApplicable = true;
+    //     } else {
+    //         this.universalDate = [];
+    //         this.ledgerSearchRequest.dateRange = universalDate;
+    //         this.ledgerSearchRequest.from = "";
+    //         this.ledgerSearchRequest.to = "";
+    //         this.isUniversalDateApplicable = false;
+    //     }
+    //     this.getLedgersOfInvoice();
+    //     this.insertItemsIntoArr();
+    // }
 
     public insertItemsIntoArr() {
         if (this.ledgersData) {
@@ -2249,11 +2326,77 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public pageChanged(event: any): void {
-        this.ledgerSearchRequest.page = event.page;
-        this.selectedLedgerItems = [];
-        this.selectedCountOfAccounts = [];
-        this.togglePrevGenBtn = false;
-        this.getLedgersOfInvoice();
+    public previewInvoice() {
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/vouchers/' + this.selectedPendingVouchers[0]?.voucherType + '/' + this.selectedPendingVouchers[0]?.account?.uniqueName + '/create'], { queryParams: { entryUniqueNames: this.selectedPendingVouchers[0]?.uniqueName } });
+        } else {
+            this.generateVoucherInProcess = false;
+            let model = {
+                uniqueNames: uniq(this.selectedPendingVouchers)
+            };
+
+            let res = this.selectedPendingVouchers[0];
+            this.selectedItem = cloneDeep(res);
+            if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
+                this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
+            } else {
+                this.selectedAccountUniqueName = '';
+            }
+
+            this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
+
+            if (res?.account?.uniqueName) {
+                this.generateVoucherInProcess = true;
+                this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
+            }
+        }
     }
+
+    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean) {
+        console.log(action, generateEInvoice, this.selectedPendingVouchers);
+        if (this.selectedPendingVouchers?.length <= 0 && typeof generateEInvoice !== "boolean") {
+            return false;
+        }
+        let arr: GenBulkInvoiceGroupByObj[] = [];
+        forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
+            console.log(item);
+            if (item) {
+                arr.push({ accUniqueName: item.account?.uniqueName, uniqueName: item?.uniqueName });
+            }
+        });
+        console.log(arr);
+        // let res = groupBy(arr, 'accUniqueName');
+        let res;
+        if (this.voucherApiVersion === 2) {
+            let model: GenerateBulkInvoiceObject[] = [];
+            if (typeof generateEInvoice === "boolean") {
+                model = this.entryUniqueNamesForBulkActionDuplicateCopy;
+            } else {
+                forEach(res, (item: any): void => {
+                    forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
+                        model.push(obj?.uniqueName);
+                    });
+                });
+            }
+            this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(model);
+            this.isCombined = action;
+            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model, generateEInvoice: generateEInvoice }));
+        } else {
+            let model: GenerateBulkInvoiceRequest[] = [];
+            forEach(res, (item: any): void => {
+                let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
+                obj.entries = [];
+                forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
+                    obj.accountUniqueName = o.accUniqueName;
+                    obj.entries.push(o?.uniqueName);
+                });
+                model.push(obj);
+            });
+            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
+        }
+
+        this.selectedPendingVouchers = [];
+        this.selectedCountOfAccounts = [];
+    }
+
 }
