@@ -463,7 +463,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <td mat-cell *matCellDef="let item" >
+                            <td mat-cell *matCellDef="let item" class="text-right">
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p *ngIf="stock.rate">{{ stock.rate | giddhCurrency }}</p>
                                     <p *ngIf="!stock.rate">-</p>
