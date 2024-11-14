@@ -3229,11 +3229,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getSelectedDiscounts(entryIndex: number, discounts?: any): void {
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+        discountsFormArray.clear();
         if (discounts?.length) {
-            const entryFormGroup = this.getEntryFormGroup(entryIndex);
-            const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
-            discountsFormArray.clear();
-            discounts?.forEach(discount => {
+            discounts.forEach(discount => {
                 discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
             });
         }
