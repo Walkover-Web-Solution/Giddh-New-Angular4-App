@@ -305,13 +305,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public generateVoucherInProcess: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
-    /** Holds response of bulk generate popup */
-    private isCombined: boolean = null;
     /** Duplicate copy of entry unique names for bulk action variable */
     public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
-    public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
-    public isGetAllRequestInProcess$: Observable<boolean> = of(true);
-    public ledgersData: any;
     /** selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
     /** Selected account unique name */
@@ -320,25 +315,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public baseCurrencySymbol: string = '';
     /** selected profile currency type */
     public baseCurrency: string = '';
-    public selectedLedgerItems: string[] = [];
-    public selectedCountOfAccounts: string[] = [];
     /** True if custom date selected */
     public customDateSelected: boolean = false;
-    /** Comparision filters */
-    public comparisionFilters: any = [
-        { label: '', value: 'greaterThan' },
-        { label: '', value: 'lessThan' },
-        { label: '', value: 'greaterThanOrEquals' },
-        { label: '', value: 'lessThanOrEquals' },
-        { label: '', value: 'equals' }
-    ];
-    /** True if user has pending invoices list permissions */
-    public hasPendingVouchersListPermissions: boolean = true;
-    public togglePrevGenBtn: boolean = false;
     /** Stores the voucher API version of company */
     private voucherApiVersion: 1 | 2;
     /** Instance of modal */
     public modalDialogRef: any;
+    /** Instance of ledger search request */
+    public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
+    /** False if pending get in process */
+    public isGetAllRequestInProcess$: Observable<boolean> = of(true);
+    /** Holds Ledger Data */
+    public ledgersData: any[] = [];
+    /** Holds voucher type for credit/debit note*/
+    public voucherTypes: any = [
+        { label: 'Credit Note', value: 'credit note' },
+        { label: 'Debit Note', value: 'debit note' }
+    ];
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
@@ -675,10 +669,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                             this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
+                            this.isUniversalDateApplicable = true;
+
                             this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                             this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-
-                            this.isUniversalDateApplicable = true;
                         } else {
                             this.universalDate = [];
                             this.ledgerSearchRequest.dateRange = this.universalDate;
@@ -2162,200 +2156,211 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
         }
     }
-
-    public getLedgersOfInvoice() {
+    /**
+     *Fetch ledgers for invoices.
+     *
+     * @memberof VoucherListComponent
+     */
+    public getLedgersOfInvoice(): void {
         this.isGetAllRequestInProcess$ = of(true);
-        this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
-        if (this.ledgersData && this.ledgersData && this.ledgersData.length === 0) {
-            this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
-            this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
-        }
-        this.selectedLedgerItems = [];
-        this.selectedCountOfAccounts = [];
-    }
+        this.dispatchLedgerRequest();
 
-    public prepareModelForLedgerApi() {
-        let model: InvoiceFilterClass = {};
-        let o = cloneDeep(this.ledgerSearchRequest);
-        if (o && o.accountUniqueName) {
-            model.accountUniqueName = o.accountUniqueName;
-        }
-        if (o.entryTotal) {
-            model.entryTotal = o.entryTotal;
-        }
-        if (o.description) {
-            model.description = o.description;
-        }
-        if (o.entryTotalBy === this.comparisionFilters[0]?.value) {
-            model.totalIsMore = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[1]?.value) {
-            model.totalIsLess = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[2]?.value) {
-            model.totalIsMore = true;
-            model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[3]?.value) {
-            model.totalIsLess = true;
-            model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[4]?.value) {
-            model.totalIsEqual = true;
-        }
-        return model;
-    }
-
-
-    public prepareQueryParamsForLedgerApi() {
-        let o = cloneDeep(this.ledgerSearchRequest);
-        let fromDate = null;
-        let toDate = null;
-        if (this.universalDate && this.universalDate.length) {
-            fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        }
-
-        return {
-            from: this.isUniversalDateApplicable ? fromDate : o.from,
-            to: this.isUniversalDateApplicable ? toDate : o.to,
-            count: o.count,
-            page: o.page,
-            voucherType: this.voucherType
-        };
-    }
-    public resetDateSearch() {
-        this.ledgerSearchRequest.dateRange = this.universalDate;
-        this.customDateSelected = false;
-        if (this.universalDate && !this.todaySelected) {
-            this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
-            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
-            this.isUniversalDateApplicable = true;
-        } else {
-            this.universalDate = [];
-            this.ledgerSearchRequest.dateRange = this.universalDate;
-            this.ledgerSearchRequest.from = "";
-            this.ledgerSearchRequest.to = "";
-            this.isUniversalDateApplicable = false;
-        }
-        this.getLedgersOfInvoice();
-        this.insertItemsIntoArr();
-    }
-    // public resetDateSearch() {
-    //     let universalDate;
-    //     // get application date
-    //     this.componentStore.universalDate$.pipe(take(1)).subscribe(date => {
-    //         universalDate = date;
-    //     });
-    //     this.ledgerSearchRequest.dateRange = universalDate;
-    //     this.customDateSelected = false;
-    //     if (universalDate && !this.todaySelected) {
-    //         // set date picker date as application date
-    //         if (universalDate?.length > 1) {
-    //             this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
-    //             this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-    //         }
-    //         this.isUniversalDateApplicable = true;
-    //     } else {
-    //         this.universalDate = [];
-    //         this.ledgerSearchRequest.dateRange = universalDate;
-    //         this.ledgerSearchRequest.from = "";
-    //         this.ledgerSearchRequest.to = "";
-    //         this.isUniversalDateApplicable = false;
-    //     }
-    //     this.getLedgersOfInvoice();
-    //     this.insertItemsIntoArr();
-    // }
-
-    public insertItemsIntoArr() {
-        if (this.ledgersData) {
-            forEach(this.ledgersData, (item: ILedgersInvoiceResult) => {
-                let idx = indexOf(this.selectedLedgerItems, item?.uniqueName);
-                if (item.isSelected) {
-                    if (idx === -1) {
-                        this.selectedLedgerItems.push(item?.uniqueName);
-                        this.selectedCountOfAccounts.push(item.account?.uniqueName);
-                    }
-                } else {
-                    if (idx !== -1) {
-                        this.selectedLedgerItems.splice(idx);
-                        this.selectedCountOfAccounts.splice(idx);
-                    }
-                }
-            });
-        }
-        // check if all selected entries are from same account
-        if (this.selectedCountOfAccounts.length) {
-            this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
-        } else {
-            this.togglePrevGenBtn = false;
-        }
-    }
-
-    public previewInvoice() {
-        if (this.voucherApiVersion === 2) {
-            this.router.navigate(['/pages/vouchers/' + this.selectedPendingVouchers[0]?.voucherType + '/' + this.selectedPendingVouchers[0]?.account?.uniqueName + '/create'], { queryParams: { entryUniqueNames: this.selectedPendingVouchers[0]?.uniqueName } });
-        } else {
-            this.generateVoucherInProcess = false;
-            let model = {
-                uniqueNames: uniq(this.selectedPendingVouchers)
-            };
-
-            let res = this.selectedPendingVouchers[0];
-            this.selectedItem = cloneDeep(res);
-            if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
-                this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
-            } else {
-                this.selectedAccountUniqueName = '';
-            }
-
-            this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
-
-            if (res?.account?.uniqueName) {
-                this.generateVoucherInProcess = true;
-                this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
-            }
-        }
-    }
-
-    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean) {
-        if (this.selectedPendingVouchers?.length <= 0 && typeof generateEInvoice !== "boolean") {
-            return false;
-        }
-        let arr: GenBulkInvoiceGroupByObj[] = [];
-        forEach(this.selectedPendingVouchers, (item: ILedgersInvoiceResult): void => {
-            if (item) {
-                arr.push({ accUniqueName: item.account?.uniqueName, uniqueName: item?.uniqueName });
-            }
-        });
-        let res = groupBy(arr, 'accUniqueName');
-        if (this.voucherApiVersion === 2) {
-            let model: GenerateBulkInvoiceObject[] = [];
-            if (typeof generateEInvoice === "boolean") {
-                model = this.entryUniqueNamesForBulkActionDuplicateCopy;
-            } else {
-                forEach(res, (item: any): void => {
-                    forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
-                        model.push(obj?.uniqueName);
-                    });
-                });
-            }
-            this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(model);
-            this.isCombined = action;
-            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model, generateEInvoice: generateEInvoice }));
-        } else {
-            let model: GenerateBulkInvoiceRequest[] = [];
-            forEach(res, (item: any): void => {
-                let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
-                obj.entries = [];
-                forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
-                    obj.accountUniqueName = o.accUniqueName;
-                    obj.entries.push(o?.uniqueName);
-                });
-                model.push(obj);
-            });
-            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
+        if (this.isLedgerDataEmpty()) {
+            this.decrementPageIfNeeded();
+            this.dispatchLedgerRequest();
         }
 
         this.selectedPendingVouchers = [];
-        this.selectedCountOfAccounts = [];
     }
 
+    /**
+     * Dispatches a request to fetch ledgers.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private dispatchLedgerRequest(): void {
+        this.store.dispatch(
+            this.invoiceActions.GetAllLedgersForInvoice(
+                this.prepareQueryParamsForLedgerApi(),
+                this.prepareModelForLedgerApi()
+            )
+        );
+    }
+
+    /**
+     * Checks if ledger data is empty.
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    private isLedgerDataEmpty(): boolean {
+        return !this.ledgersData || this.ledgersData.length === 0;
+    }
+
+    /**
+     * Decrements the page if it's greater than 1.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private decrementPageIfNeeded(): void {
+        if (this.ledgerSearchRequest.page > 1) {
+            this.ledgerSearchRequest.page -= 1;
+        }
+    }
+
+    /**
+     *  Prepares the model for the ledger API request.
+     *
+     * @return {*}  {*}
+     * @memberof VoucherListComponent
+     */
+    public prepareModelForLedgerApi(): any {
+        const model: Partial<InvoiceFilterClass> = {};
+        const reqObj = cloneDeep(this.ledgerSearchRequest);
+
+        if (reqObj.accountUniqueName) model.accountUniqueName = reqObj.accountUniqueName;
+        if (reqObj.entryTotal) model.entryTotal = reqObj.entryTotal;
+        if (reqObj.description) model.description = reqObj.description;
+
+        return model;
+    }
+
+    /**
+     *  Prepares query parameters for the ledger API request.
+     *
+     * @return {*}  {*}
+     * @memberof VoucherListComponent
+     */
+    public prepareQueryParamsForLedgerApi(): any {
+        const reqObj = cloneDeep(this.ledgerSearchRequest);
+        const fromDate = this.isUniversalDateApplicable
+            ? dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT)
+            : reqObj.from;
+        const toDate = this.isUniversalDateApplicable
+            ? dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT)
+            : reqObj.to;
+
+        return { from: fromDate, to: toDate, count: reqObj.count, page: reqObj.page, voucherType: this.voucherType };
+    }
+
+    /**
+     * Resets the date search filters.
+     *
+     * @memberof VoucherListComponent
+     */
+    public resetDateSearch(): void {
+        if (this.universalDate && !this.todaySelected) {
+            this.applyUniversalDate();
+        } else {
+            this.clearDateFilters();
+        }
+
+        this.getLedgersOfInvoice();
+    }
+
+    /**
+     * Applies the universal date to the search filters.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private applyUniversalDate(): void {
+        this.isUniversalDateApplicable = true;
+        this.selectedDateRange = {
+            startDate: dayjs(this.universalDate[0]),
+            endDate: dayjs(this.universalDate[1])
+        };
+        this.selectedDateRangeUi = `${dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI)} - ${dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI)}`;
+    }
+
+    /**
+     * Clears date filters.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private clearDateFilters(): void {
+        this.universalDate = [];
+        this.isUniversalDateApplicable = false;
+        this.customDateSelected = false;
+    }
+
+    /**
+     *  Navigates to the preview invoice page.
+     *
+     * @memberof VoucherListComponent
+     */
+    public previewInvoice(): void {
+        const voucher = this.selectedPendingVouchers[0];
+        if (voucher) {
+            this.router.navigate(
+                [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
+                { queryParams: { entryUniqueNames: voucher.uniqueName } }
+            );
+        }
+    }
+
+    /**
+     * Generates bulk invoices.
+     *
+     * @param {boolean} action
+     * @param {boolean} [generateEInvoice]
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean): boolean {
+        if (this.selectedPendingVouchers?.length === 0 && typeof generateEInvoice !== 'boolean') {
+            return false;
+        }
+
+        const groupedVouchers = this.groupPendingVouchersByAccount();
+        const model = typeof generateEInvoice === 'boolean'
+            ? this.entryUniqueNamesForBulkActionDuplicateCopy
+            : this.flattenGroupedVouchers(groupedVouchers);
+
+        this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(model);
+        this.store.dispatch(
+            this.invoiceActions.GenerateBulkInvoice(
+                { combined: action },
+                { entryUniqueNames: model, generateEInvoice }
+            )
+        );
+
+        this.selectedPendingVouchers = [];
+        return true;
+    }
+
+    /**
+     * Groups pending vouchers by account unique name.
+     *
+     * @private
+     * @return {*}  {Record<string, GenBulkInvoiceGroupByObj[]>}
+     * @memberof VoucherListComponent
+     */
+    private groupPendingVouchersByAccount(): Record<string, GenBulkInvoiceGroupByObj[]> {
+        const arr: GenBulkInvoiceGroupByObj[] = this.selectedPendingVouchers.map(item => ({
+            accUniqueName: item.account?.uniqueName,
+            uniqueName: item?.uniqueName
+        }));
+        return groupBy(arr, 'accUniqueName');
+    }
+
+    /**
+     *  Flattens grouped vouchers into an array of unique names.
+     *
+     * @private
+     * @param {Record<string, GenBulkInvoiceGroupByObj[]>} grouped
+     * @return {*}  {string[]}
+     * @memberof VoucherListComponent
+     */
+    private flattenGroupedVouchers(grouped: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
+        const model: string[] = [];
+        forEach(grouped, items => {
+            items.forEach(obj => model.push(obj?.uniqueName));
+        });
+        return model;
+    }
 }
