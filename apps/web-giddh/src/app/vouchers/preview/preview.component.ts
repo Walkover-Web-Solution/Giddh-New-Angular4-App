@@ -437,10 +437,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                const defaultThermalTemplate = response?.filter(response => response.templateType === 'thermal_template');
-                if (defaultThermalTemplate?.length > 0) {
-                    this.defaultThermalTemplate = defaultThermalTemplate[0];
-                }
+                this.defaultThermalTemplate = response?.find(response =>  response.isDefault && (response.templateType === 'thermal_template'));
             }
         });
 
