@@ -17,7 +17,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helper
 import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
-import { cloneDeep, forEach, groupBy, indexOf, orderBy, uniq } from "../../lodash-optimized";
+import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
@@ -32,7 +32,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
-import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
+import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { CommonActions } from "../../actions/common.actions";
 
@@ -699,7 +699,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 if (response && response.results) {
                     response.results.map(item => {
-                        item = this.addToolTiptext(item);
+                        item = this.addToolTipText(item);
                         item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPendingVouchers, item?.uniqueName);
                     });
                 }
@@ -730,29 +730,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getLedgersOfInvoice();
             }
         });
-    }
-
-    private addToolTiptext(item: ILedgersInvoiceResult): any {
-        try {
-            let grandTotalAmountForCompany, grandTotalAmountForAccount;
-            if (item.total && item.totalForCompany) {
-                grandTotalAmountForCompany = Number(item.totalForCompany.amount) || 0;
-                grandTotalAmountForAccount = Number(item.total.amount) || 0;
-            }
-
-            let grandTotalConversionRate = 0;
-            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
-            }
-
-            let currencyConversion = this.localeData?.currency_conversion;
-            currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
-
-            item['totalTooltipText'] = currencyConversion;
-
-        } catch (error) {
-        }
-        return item;
     }
 
     /**
@@ -1136,12 +1113,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-  * Handle Select table pending item event
-  *
-  * @param {*} event
-  * @param {*} voucher
-  * @memberof VoucherListComponent
-  */
+      * Handle Select table pending item event
+      *
+      * @param {*} event
+      * @param {*} voucher
+      * @memberof VoucherListComponent
+      */
     public selectPendingVoucher(event: any, voucher: any): void {
         if (event?.checked) {
             this.selectedPendingVouchers.push(voucher);
@@ -1904,10 +1881,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public goToLedger(voucher: any): void {
-        const fromDate = this.activeModule === 'pending ' ? this.ledgerSearchRequest.from : this.advanceFilters.from;
-        const toDate = this.activeModule === 'pending ' ? this.ledgerSearchRequest.to : this.advanceFilters.to;
-        let url = '/pages/ledger/' + voucher?.account?.uniqueName + '/' + fromDate + '/' + toDate;
-        this.openUrl(url);
+        const fromDate = this.activeModule === 'pending'
+            ? this.ledgerSearchRequest?.from
+            : this.advanceFilters?.from;
+
+        const toDate = this.activeModule === 'pending'
+            ? this.ledgerSearchRequest?.to
+            : this.advanceFilters?.to;
+
+        const accountUniqueName = voucher?.account?.uniqueName;
+
+        if (accountUniqueName && fromDate && toDate) {
+            const url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            this.openUrl(url);
+        }
     }
 
     /**
@@ -2363,4 +2350,42 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
         return model;
     }
+
+    /**
+     * Add tooltip text in ledger invoices
+     *
+     * @private
+     * @param {ILedgersInvoiceResult} item
+     * @return {*}  {ILedgersInvoiceResult}
+     * @memberof VoucherListComponent
+     */
+    private addToolTipText(item: ILedgersInvoiceResult): ILedgersInvoiceResult {
+        try {
+            if (!item?.total || !item?.totalForCompany) {
+                return item;
+            }
+
+            const grandTotalAmountForCompany = Number(item.totalForCompany.amount) || 0;
+            const grandTotalAmountForAccount = Number(item.total.amount) || 0;
+
+            // Calculate conversion rate
+            const grandTotalConversionRate = grandTotalAmountForAccount
+                ? +(grandTotalAmountForCompany / grandTotalAmountForAccount).toFixed(this.giddhBalanceDecimalPlaces)
+                : 0;
+
+            // Replace placeholders in the tooltip template
+            const currencyConversion = this.localeData?.currency_conversion
+                ?.replace("[BASE_CURRENCY]", this.baseCurrency)
+                ?.replace("[AMOUNT]", grandTotalAmountForCompany.toLocaleString())
+                ?.replace("[CONVERSION_RATE]", grandTotalConversionRate.toString());
+
+            // Assign tooltip text to the item
+            item.totalTooltipText = currencyConversion || '';
+
+        } catch (error) {
+        }
+
+        return item;
+    }
+
 }

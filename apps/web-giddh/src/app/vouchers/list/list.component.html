@@ -3801,7 +3801,7 @@
                                                 <mat-checkbox
                                                     color="primary"
                                                     [checked]="isPendingVoucherSelected(element)"
-                                                    [value]="element.uniqueName"
+                                                    [value]="element?.uniqueName"
                                                     (change)="selectPendingVoucher($event, element)"
                                                 ></mat-checkbox>
                                             </div>
@@ -3817,11 +3817,11 @@
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
-                                    <th mat-header-cell *matHeaderCellDef>Particular</th>
+                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_particular }}</th>
                                     <td mat-cell *matCellDef="let element" class="p-0">
                                         <ng-container *ngFor="let transaction of element?.transactions">
-                                            <p>{{ transaction.particular.name }}</p>
-                                            <p *ngIf="transaction.inventory && transaction.inventory.stock">
+                                            <p>{{ transaction?.particular?.name }}</p>
+                                            <p *ngIf="transaction?.inventory && transaction.inventory?.stock">
                                                 ({{ transaction.inventory.stock.name }})
                                             </p>
                                         </ng-container>
