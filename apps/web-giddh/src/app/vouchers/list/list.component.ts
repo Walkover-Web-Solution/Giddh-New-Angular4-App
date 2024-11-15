@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/c
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, auditTime, combineLatest, debounceTime, delay, distinctUntilChanged, find, groupBy, merge, of, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, of, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -18,7 +17,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helper
 import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
-import { cloneDeep, forEach, indexOf, orderBy, uniq } from "../../lodash-optimized";
+import { cloneDeep, forEach, groupBy, indexOf, orderBy, uniq } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
@@ -36,7 +35,6 @@ import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-
 import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { CommonActions } from "../../actions/common.actions";
-import { ConfirmModalComponent } from "../../theme/confirm-modal/confirm-modal.component";
 
 // invoice-table
 export interface PeriodicElement {
@@ -61,10 +59,6 @@ export interface PeriodicElementPending {
     total: string;
     description: string;
 }
-// pending-table
-const PENDING_DATA: PeriodicElementPending[] = [
-    { position: 1, date: '08-04-2023', particular: 'Sales', amount: 'H', account: 'USA debtor', total: '₹23.1', description: '' }
-];
 
 // bill-table
 export interface PeriodicElementBill {
@@ -112,8 +106,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dataSource: any[] = [];
     /** Holds Table Display columns for Sales Voucher */
     public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
-    /** Holds Table data source for Pending */
-    public dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
     /** Holds Table Display columns for Estimate Voucher */
     public displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
     /** Holds Table Display columns for Proforma Voucher */
@@ -319,7 +311,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
     public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
     public isGetAllRequestInProcess$: Observable<boolean> = of(true);
-    public ledgersData: GetAllLedgersOfInvoicesResponse;
+    public ledgersData: any;
     /** selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
     /** Selected account unique name */
@@ -396,7 +388,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
-                console.log(this.voucherType, this.invoiceType, this.activeModule);
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
@@ -666,35 +657,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (response) {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
-            }
-        });
-
-        this.store.pipe(select(state => state.invoice.showBulkGenerateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.message) {
-                if (this.modalDialogRef && this.dialog.getDialogById(this.modalDialogRef.id)) {
-                    return;
-                }
-                this.store.dispatch(this.invoiceActions.setBulkGenerateConfirm(null));
-
-                this.modalDialogRef = this.dialog.open(ConfirmModalComponent, {
-                    data: {
-                        title: this.commonLocaleData?.app_confirm,
-                        body: response?.message,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
-                });
-
-                this.modalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                    if (typeof response === "boolean") {
-                        if (response) {
-                            this.generateBulkInvoice(this.isCombined, true);
-                        } else {
-                            this.generateBulkInvoice(this.isCombined, false);
-                        }
-                    }
-                });
             }
         });
 
@@ -1192,7 +1154,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else {
             this.selectedPendingVouchers = this.selectedPendingVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName !== voucher?.uniqueName);
         }
-        this.allPendingVouchersSelected = this.dataSource?.length === this.selectedVouchers?.length;
+        this.allPendingVouchersSelected = this.ledgersData?.length === this.selectedPendingVouchers?.length;
     }
 
     /**
@@ -1204,8 +1166,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public selectAllPendingVouchers(event: any): void {
         this.selectedPendingVouchers = [];
         this.allPendingVouchersSelected = event?.checked;
+
         if (event?.checked) {
-            this.dataSource?.forEach(voucher => {
+            this.ledgersData?.forEach(voucher => {
                 this.selectedPendingVouchers.push(voucher);
             });
         }
@@ -2203,7 +2166,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public getLedgersOfInvoice() {
         this.isGetAllRequestInProcess$ = of(true);
         this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
-        if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length === 0) {
+        if (this.ledgersData && this.ledgersData && this.ledgersData.length === 0) {
             this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
             this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
         }
@@ -2303,7 +2266,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     public insertItemsIntoArr() {
         if (this.ledgersData) {
-            forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+            forEach(this.ledgersData, (item: ILedgersInvoiceResult) => {
                 let idx = indexOf(this.selectedLedgerItems, item?.uniqueName);
                 if (item.isSelected) {
                     if (idx === -1) {
@@ -2353,20 +2316,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public generateBulkInvoice(action: boolean, generateEInvoice?: boolean) {
-        console.log(action, generateEInvoice, this.selectedPendingVouchers);
         if (this.selectedPendingVouchers?.length <= 0 && typeof generateEInvoice !== "boolean") {
             return false;
         }
         let arr: GenBulkInvoiceGroupByObj[] = [];
-        forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
-            console.log(item);
+        forEach(this.selectedPendingVouchers, (item: ILedgersInvoiceResult): void => {
             if (item) {
                 arr.push({ accUniqueName: item.account?.uniqueName, uniqueName: item?.uniqueName });
             }
         });
-        console.log(arr);
-        // let res = groupBy(arr, 'accUniqueName');
-        let res;
+        let res = groupBy(arr, 'accUniqueName');
         if (this.voucherApiVersion === 2) {
             let model: GenerateBulkInvoiceObject[] = [];
             if (typeof generateEInvoice === "boolean") {

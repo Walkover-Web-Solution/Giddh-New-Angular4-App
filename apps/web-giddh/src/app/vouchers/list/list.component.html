@@ -1755,7 +1755,7 @@
                                 <button
                                     mat-stroked-button
                                     color="primary"
-                                    *ngIf="selectedPendingVouchers?.length === 1"
+                                    *ngIf="!isCompany && selectedPendingVouchers?.length === 1"
                                     (click)="previewInvoice()"
                                 >
                                     {{ localeData?.preview_generate }}
@@ -1789,7 +1789,7 @@
                                             <mat-checkbox
                                                 color="primary"
                                                 [value]="true"
-                                                [checked]="selectedPendingVouchers"
+                                                [checked]="allPendingVouchersSelected"
                                                 (change)="selectAllPendingVouchers($event)"
                                             ></mat-checkbox>
                                         </span>
@@ -1849,7 +1849,7 @@
                                 <ng-container matColumnDef="account">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_account }}</th>
                                     <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                        <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                        <div class="cursor-pointer" (dblclick)="!isCompany ? element.showAccountDetails = true : false">
                                             {{ element?.account?.name | titlecase }}
                                         </div>
                                         <mat-card
@@ -3744,6 +3744,7 @@
                                     color="primary"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
+                                    (click)="generateBulkInvoice(false)"
                                 >
                                     {{ localeData?.generate_multiple }}
                                 </button>
@@ -3752,6 +3753,7 @@
                                     color="primary"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
+                                    (click)="generateBulkInvoice(true)"
                                 >
                                     {{ localeData?.generate_compound }}
                                 </button>
@@ -3792,7 +3794,7 @@
                                             <mat-checkbox
                                                 color="primary"
                                                 [value]="true"
-                                                [checked]="selectedPendingVouchers"
+                                                [checked]="allPendingVouchersSelected"
                                                 (change)="selectAllPendingVouchers($event)"
                                             ></mat-checkbox>
                                         </span>
@@ -3852,7 +3854,7 @@
                                 <ng-container matColumnDef="account">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_account }}</th>
                                     <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                        <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                        <div class="cursor-pointer" (dblclick)="!isCompany ? element.showAccountDetails = true : false">
                                             {{ element?.account?.name | titlecase }}
                                         </div>
                                         <mat-card
