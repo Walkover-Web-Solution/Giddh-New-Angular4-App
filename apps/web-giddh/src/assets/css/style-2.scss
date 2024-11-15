@@ -1146,13 +1146,12 @@ textarea {
         color: var(--color-common-primary-text) !important;
     }
 }
-
-<<<<<<< HEAD
 .setting-branch-body {
     .mat-mdc-tab-body-content {
         overflow: visible !important;
-    }
-=======
+ }
+}
+
 .pending-table {
     .mat-mdc-table {
         .mat-mdc-cell {
@@ -1162,7 +1161,6 @@ textarea {
         tbody tr:hover td {
             background: var(--color-table-row-hover-primary-background) !important;
         }
->>>>>>> a8514f7dfe6c6e7152586943dd0f67dce5b037f8
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
