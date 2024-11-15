@@ -111,7 +111,7 @@
                     </div>
                 </li>
             </ul>
-            <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing')" class="row pull-right">
+            <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing')" class="row pull-right mr-15">
                 <span class="pull-right">
                     {{ commonLocaleData?.app_no_access_limit_module }}
                     <button
