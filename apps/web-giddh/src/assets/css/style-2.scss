@@ -1146,10 +1146,17 @@ textarea {
         color: var(--color-common-primary-text) !important;
     }
 }
-
 .setting-branch-body {
     .mat-mdc-tab-body-content {
         overflow: visible !important;
+ }
+}
+
+.pending-table {
+    .mat-mdc-table {
+        .mdc-data-table__row {
+            height: 70px !important;
+        }
     }
 }
 
@@ -10692,7 +10699,7 @@ body {
     }
 }
 
-.group-create-update {  
+.group-create-update {
     .cdk-overlay-connected-position-bounding-box {
         .mat-select-panel {
             .mat-option-disabled {
