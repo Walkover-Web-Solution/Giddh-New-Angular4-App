@@ -1154,13 +1154,10 @@ textarea {
 
 .pending-table {
     .mat-mdc-table {
-        .mat-mdc-cell {
-            padding: 14px 10px !important;
+        .mdc-data-table__row {
+            height: 70px !important;
         }
     }
-        tbody tr:hover td {
-            background: var(--color-table-row-hover-primary-background) !important;
-        }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
