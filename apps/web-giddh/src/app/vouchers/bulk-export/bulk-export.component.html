@@ -17,7 +17,11 @@
             <div
                 class="pd-b15 custom-mat-form-field"
                 [ngClass]="{
-                    'border-bottom': inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'
+                    'border-bottom':
+                        inputData?.voucherType === 'receipt' ||
+                        inputData?.voucherType === 'payment' ||
+                        inputData?.voucherType === 'credit note' ||
+                        inputData?.voucherType === 'debit note'
                 }"
                 *ngIf="inputData?.voucherType === 'sales'"
             >
@@ -38,17 +42,20 @@
                     {{ commonLocaleData?.app_download }}
                 </button>
             </div>
-            <div *ngIf="inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'">
+            <div
+                *ngIf="
+                    inputData?.voucherType === 'receipt' ||
+                    inputData?.voucherType === 'payment' ||
+                    inputData?.voucherType === 'credit note' ||
+                    inputData?.voucherType === 'debit note'
+                "
+            >
                 <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
                     <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
                 </mat-form-field>
                 <button mat-stroked-button color="primary" (click)="exportVouchers(true)" [disabled]="!exportForm.get('copyTypes').value && inputData?.voucherType === 'sales'">{{ commonLocaleData?.app_send_email }}</button> -->
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    (click)="exportVouchers(false)"
-                >
+                <button mat-stroked-button color="primary" (click)="exportVouchers(false)">
                     {{ commonLocaleData?.app_download }}
                 </button>
             </div>
