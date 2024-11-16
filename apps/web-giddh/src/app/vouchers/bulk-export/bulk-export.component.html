@@ -1,12 +1,21 @@
-<ng-container appTranslate [file]="'bulk-export-voucher'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'bulk-export-voucher'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="dialog-header">
-        <span mat-dialog-title class="font-16">{{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ inputData?.totalItems }}</span>
+        <span mat-dialog-title class="font-16"
+            >{{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }}
+            {{ inputData?.totalItems }}</span
+        >
         <i mat-dialog-close class="icon-cross icon-font-16"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
         <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
-            <div class="border-bottom pd-b15 custom-mat-form-field" *ngIf="inputData?.voucherType === 'sales'">
+            <!-- Hide this class border-bottom due to hide mail feature -->
+            <div class="pd-b15 custom-mat-form-field" *ngIf="inputData?.voucherType === 'sales'">
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.select_copy }}</mat-label>
                     <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">
@@ -15,16 +24,23 @@
                         <mat-option value="TRANSPORT">{{ localeData?.invoice_copy_options?.transport }}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button mat-stroked-button color="primary" (click)="exportVouchers(false)" [disabled]="!exportForm.get('copyTypes').value">{{ commonLocaleData?.app_download }}</button>
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    (click)="exportVouchers(false)"
+                    [disabled]="!exportForm.get('copyTypes').value"
+                >
+                    {{ commonLocaleData?.app_download }}
+                </button>
             </div>
-            <div class="pd-t15">
+            <!-- <div class="pd-t15">
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
                     <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
                 </mat-form-field>
                 <button mat-stroked-button color="primary" (click)="exportVouchers(true)" [disabled]="!exportForm.get('copyTypes').value && inputData?.voucherType === 'sales'">{{ commonLocaleData?.app_send_email }}</button>
                 <button *ngIf="inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'" mat-stroked-button color="primary" class="mr-l15" (click)="exportVouchers(false)">{{ commonLocaleData?.app_download }}</button>
-            </div>
+            </div> -->
         </div>
     </div>
 </ng-container>
