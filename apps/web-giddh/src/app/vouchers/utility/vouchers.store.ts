@@ -222,14 +222,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public sessionUserEmail$: Observable<any> = this.select(this.store.select(state => state.session.user), (response) => response);
     public pendingVoucherList$: Observable<any> = this.select(this.store.select(state => state.invoice.ledgers), (response) => response);
     public isBulkInvoiceGenerated$: Observable<any> = this.select(this.store.select(state => state.invoice.isBulkInvoiceGenerated), (response) => response);
-    public isBulkInvoiceGeneratedWithoutErr$: Observable<any> = this.select(this.store.select(state => state.invoice.isBulkInvoiceGeneratedWithoutErrors), (response) => response);
-    public voucherDetailsInProcess$: Observable<any> = this.select(this.store.select(state => state.receipt.voucherDetailsInProcess), (response) => response);
+    public isBulkInvoiceGeneratedWithoutError$: Observable<any> = this.select(this.store.select(state => state.invoice.isBulkInvoiceGeneratedWithoutErrors), (response) => response);
     public getLedgerDataInProcess$: Observable<any> = this.select(this.store.select(state => state.invoice.isGetAllLedgerDataInProgress), (response) => response);
     public todaySelected$: Observable<any> = this.select(this.store.select(state => state.session.todaySelected), (response) => response);
-    public invoiceDataHasError$: Observable<any> = this.select(this.store.select(state => state.receipt.invoiceDataHasError), (response) => response);
     public isAccountUpdated$: Observable<any> = this.select(this.store.select(state => state.common.isAccountUpdated), (response) => response);
     public universalPendingDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
-
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
