@@ -14,8 +14,13 @@
     <div mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
         <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
-            <!-- Hide this class border-bottom due to hide mail feature -->
-            <div class="pd-b15 custom-mat-form-field" *ngIf="inputData?.voucherType === 'sales'">
+            <div
+                class="pd-b15 custom-mat-form-field"
+                [ngClass]="{
+                    'border-bottom': inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'
+                }"
+                *ngIf="inputData?.voucherType === 'sales'"
+            >
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.select_copy }}</mat-label>
                     <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">
@@ -33,14 +38,20 @@
                     {{ commonLocaleData?.app_download }}
                 </button>
             </div>
-            <!-- <div class="pd-t15">
-                <mat-form-field appearance="outline" class="w-100 mr-b15">
+            <div *ngIf="inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'">
+                <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
                     <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
                 </mat-form-field>
-                <button mat-stroked-button color="primary" (click)="exportVouchers(true)" [disabled]="!exportForm.get('copyTypes').value && inputData?.voucherType === 'sales'">{{ commonLocaleData?.app_send_email }}</button>
-                <button *ngIf="inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'" mat-stroked-button color="primary" class="mr-l15" (click)="exportVouchers(false)">{{ commonLocaleData?.app_download }}</button>
-            </div> -->
+                <button mat-stroked-button color="primary" (click)="exportVouchers(true)" [disabled]="!exportForm.get('copyTypes').value && inputData?.voucherType === 'sales'">{{ commonLocaleData?.app_send_email }}</button> -->
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    (click)="exportVouchers(false)"
+                >
+                    {{ commonLocaleData?.app_download }}
+                </button>
+            </div>
         </div>
     </div>
 </ng-container>
