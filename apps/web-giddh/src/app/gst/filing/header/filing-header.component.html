@@ -70,7 +70,7 @@
         </div>
 
         <div class="col-lg-8 col-sm-4 col-12">
-            <ul class="list-inline list-middle download-drop-down">
+            <ul class="list-inline list-middle download-drop-down d-flex align-items-center justify-content-end row-gap15">
                 <li>
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
                 </li>
@@ -82,6 +82,8 @@
                     >
                         {{ localeData?.filing?.errors }}
                     </button>
+                </li>
+                <li>
                     <button type="button" class="btn btn-sky-blue mr-0 gstr-button" (click)="pushToPortalModal?.show()">
                         <i class="icon-download"></i>
                         {{ commonLocaleData?.app_download }}
@@ -89,8 +91,9 @@
                 </li>
 
                 <li>
-                    <div *ngIf="isCompany && showGstFiling">
-                        <button
+                    <ng-container *ngIf="isCompany && showGstFiling">
+                        <li>
+                            <button
                             class="btn btn-primary pull-right"
                             [disabled]="!gstAuthenticated"
                             (click)="pullFromGstIn($event)"
@@ -98,6 +101,8 @@
                         >
                             {{ localeData?.filing?.pull_from_gstn }}
                         </button>
+                        </li>
+                        <li>
                         <button
                             class="btn btn-primary authenticate-btn pull-right"
                             [ngClass]="{ 'btn-success': gstAuthenticated }"
@@ -108,12 +113,13 @@
                                 gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate
                             }}
                         </button>
-                    </div>
+                        </li>
+                    </ng-container>
                 </li>
             </ul>
             <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing')" class="row pull-right mr-15">
-                <span class="pull-right">
-                    {{ commonLocaleData?.app_no_access_limit_module }}
+                <span class="pull-right d-flex align-items-center column-gap5">
+                    <div class="flex-content">{{ commonLocaleData?.app_no_access_limit_module }}</div>
                     <button
                         mat-stroked-button
                         color="primary"
