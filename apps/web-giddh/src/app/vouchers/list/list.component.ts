@@ -332,6 +332,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         { label: 'Credit Note', value: 'credit note' },
         { label: 'Debit Note', value: 'debit note' }
     ];
+    /** Holds voucher type enum */
+    public voucherTypeEnum: any = VoucherTypeEnum;
 
     constructor(
         private activatedRoute: ActivatedRoute,
