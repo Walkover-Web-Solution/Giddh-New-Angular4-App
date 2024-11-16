@@ -317,10 +317,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public baseCurrency: string = '';
     /** True if custom date selected */
     public customDateSelected: boolean = false;
-    /** Stores the voucher API version of company */
-    private voucherApiVersion: 1 | 2;
-    /** Instance of modal */
-    public modalDialogRef: any;
     /** Instance of ledger search request */
     public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
     /** False if pending get in process */
@@ -377,7 +373,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.setInitialAdvanceFilter(true);
         this.getInvoiceSettings();
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
@@ -662,17 +657,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.universalDate = cloneDeep(dateObj);
 
                 setTimeout(() => {
-                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                    this.componentStore.todaySelected$.pipe(take(1)).subscribe(response => {
                         this.todaySelected = response;
-
                         if (this.universalDate && !this.todaySelected) {
                             this.ledgerSearchRequest.dateRange = this.universalDate;
-
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                             this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
                             this.isUniversalDateApplicable = true;
-
                             this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                             this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                         } else {
@@ -682,7 +673,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.ledgerSearchRequest.to = "";
                             this.isUniversalDateApplicable = false;
                         }
-
                         this.getLedgersOfInvoice();
                     });
                 }, 100);
@@ -719,7 +709,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-
         // listen for bulk invoice generate and successfully generate and do the things
         this.componentStore.isBulkInvoiceGenerated$.subscribe(result => {
             if (result) {
@@ -727,7 +716,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getLedgersOfInvoice();
             }
         });
-        this.componentStore.isBulkInvoiceGeneratedWithoutErr$.subscribe(result => {
+        this.componentStore.isBulkInvoiceGeneratedWithoutError$.subscribe(result => {
             if (result) {
                 this.getLedgersOfInvoice();
             }
@@ -2362,30 +2351,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private addToolTipText(item: ILedgersInvoiceResult): ILedgersInvoiceResult {
-        try {
-            if (!item?.total || !item?.totalForCompany) {
-                return item;
-            }
-
-            const grandTotalAmountForCompany = Number(item.totalForCompany.amount) || 0;
-            const grandTotalAmountForAccount = Number(item.total.amount) || 0;
-
-            // Calculate conversion rate
-            const grandTotalConversionRate = grandTotalAmountForAccount
-                ? +(grandTotalAmountForCompany / grandTotalAmountForAccount).toFixed(this.giddhBalanceDecimalPlaces)
-                : 0;
-
-            // Replace placeholders in the tooltip template
-            const currencyConversion = this.localeData?.currency_conversion
-                ?.replace("[BASE_CURRENCY]", this.baseCurrency)
-                ?.replace("[AMOUNT]", grandTotalAmountForCompany.toLocaleString())
-                ?.replace("[CONVERSION_RATE]", grandTotalConversionRate.toString());
-
-            // Assign tooltip text to the item
-            item.totalTooltipText = currencyConversion || '';
-
-        } catch (error) {
+        if (!item?.total || !item?.totalForCompany) {
+            return item;
         }
+
+        const grandTotalAmountForCompany = Number(item.totalForCompany.amount) || 0;
+        const grandTotalAmountForAccount = Number(item.total.amount) || 0;
+
+        // Calculate conversion rate
+        const grandTotalConversionRate = grandTotalAmountForAccount
+            ? +(grandTotalAmountForCompany / grandTotalAmountForAccount).toFixed(this.giddhBalanceDecimalPlaces)
+            : 0;
+
+        // Replace placeholders in the tooltip template
+        const currencyConversion = this.localeData?.currency_conversion
+            ?.replace("[BASE_CURRENCY]", this.baseCurrency)
+            ?.replace("[AMOUNT]", grandTotalAmountForCompany.toLocaleString())
+            ?.replace("[CONVERSION_RATE]", grandTotalConversionRate.toString());
+
+        // Assign tooltip text to the item
+        item.totalTooltipText = currencyConversion || '';
 
         return item;
     }
