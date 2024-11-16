@@ -449,12 +449,3 @@ hr {
         }
     }
 }
-.month-selection {
-    // color: var(--color-nero) !important;
-    background: var(--color-denary-button-background) !important;
-    height: 38px;
-    border-radius: 18px;
-    &::placeholder {
-        color: var(--color-denary-button-text) !important;
-    }
-}

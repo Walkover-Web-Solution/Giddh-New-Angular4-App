@@ -19,6 +19,8 @@ import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -84,18 +86,21 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public showGstFiling: boolean = false;
     /** This will use for selected month on datepicker*/
     public selectedMonth: any = null;
-    /** This will use for date selected */
-    public dateSelected: boolean = false;
     /** This will use for hold url */
     public holdActiveRoute: boolean;
     /** This will use for date show */
     public showDate: boolean = true;
-    /** This will use for string date show */
-    public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
     /** asideAuthentication Dialog Open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
+    /** Custom selected month */
+    public customMonth: string = '';
+    /** Holds start month/year */
+    public startAt: Date = new Date();
+    /** Holds selected date */
+    public date: FormControl = new FormControl('');
+
 
     constructor(
         private store: Store<AppState>,
@@ -149,8 +154,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 };
                 if (!this.selectedMonth) {
                     this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                    this.date.setValue(dayjs(this.selectedMonth).format("MMMM YYYY"));
                 }
-                this.visibleSelectMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MMMM YYYY');
+                // this.visibleSelectMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MMMM YYYY');
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
             this.selectedGst = params['return_type'];
@@ -234,7 +240,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedService = selectedService;
         }
         // this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
-        this.dialog.open(this.asideAuthenticationDialog,{
+        this.dialog.open(this.asideAuthenticationDialog, {
             position: {
                 right: '0',
                 top: '0'
@@ -322,14 +328,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} ev
      * @memberof FilingHeaderComponent
      */
-    public periodChanged(event?: any): void {
-        if (event) {
-            this.selectedMonth = event;
+    public periodChanged(date: any): void {
+        if (date) {
+            this.selectedMonth = date;
             this.currentPeriod = {
-                from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(date.from).format(GIDDH_DATE_FORMAT),
+                to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
             };
-            this.dateSelected = true;
+            this.isMonthSelected = true;
+            // this.dateSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
             if (this.selectedGst === GstReport.Gstr1) {
                 this.navigateToOverview();
@@ -381,5 +388,32 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to },
                 queryParamsHandling: 'merge'
             });
+    }
+
+    /**
+     * Sets month/year
+     *
+     * @param {*} date
+     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @memberof FilingHeaderComponent
+     */
+    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
+        datepicker.close();
+        let selectedMonth = new Date(date);
+        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        this.dateSelected([firstDay, lastDay]);
+    }
+
+    /**
+     * Selects date and calls api
+     *
+     * @param {*} event
+     * @memberof FilingHeaderComponent
+     */
+    public dateSelected(event: any): void {
+        this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
+        this.date.setValue(this.customMonth);
+        this.periodChanged({ from: event[0], to: event[1] });
     }
 }

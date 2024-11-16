@@ -1,8 +1,4 @@
 <div class="list-filter">
-    <div class="pull-right">
-        <div class="btn-toolbar"></div>
-    </div>
-
     <!-- region gstr1 -->
     <div class="list-style d-flex justify-content-between align-items-center" *ngIf="selectedGst === GstReport.Gstr1">
         <div class="wrap-GSTR-1-title">
@@ -12,60 +8,11 @@
             <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img"  />
 
             <div class="text-middle nav-top">
-                <div class="text-middle head head-font-weight">
+                <div class="text-middle head head-font-weight d-flex align-items-center column-gap1">
                     {{ localeData?.gstr1_label }}
-                    <!-- Divyanshu: Convert this into material -->
-                    <div
-                        *ngIf="showDate"
-                        class="btn-group dropdown d-inline-block"
-                        dropdown
-                        [autoClose]="false"
-                        #monthWise="bs-dropdown"
-                        (clickOutside)="monthWise?.hide()"
-                        [attachOutsideOnClick]="true"
-                    >
-                        <!-- Divyanshu: Convert this into material -->
-                        <button
-                            id="button-nested"
-                            dropdownToggle
-                            type="button"
-                            class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
-                            aria-controls="dropdown-nested"
-                        >
-                            <ng-container>
-                                {{ visibleSelectMonth }}
-                            </ng-container>
-                            <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                            <li role="menuitem">
-                                <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
-                                    <bs-datepicker-inline
-                                        name="fromDate"
-                                        (click)="$event.stopPropagation()"
-                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
-                                        [bsConfig]="{
-                                            startView: 'month',
-                                            dateInputFormat: 'MM/YYYY',
-                                            adaptivePosition: true,
-                                            minMode: 'month'
-                                        }"
-                                        [ngModelOptions]="{ standalone: true }"
-                                    >
-                                    </bs-datepicker-inline>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="datepicker-header" *ngIf="!showDate">
-                        <ng-container *ngIf="isMonthSelected">
-                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                        </ng-container>
-                        <ng-container *ngIf="!isMonthSelected">
-                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                            {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container
-                        >
-                    </div>
+                     <div *ngIf="showDate">
+                        <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
+                     </div>
                 </div>
                 <div class="font-xs text-middle normal">{{ localeData?.outward_supplies_details }}</div>
             </div>
@@ -129,58 +76,9 @@
             <div class="text-middle nav-top">
                 <div class="text-middle head-font-weight">
                     {{ localeData?.gstr2_label }}
-                    <!-- Divyanshu: Convert this into material -->
-                    <div
-                        *ngIf="showDate"
-                        class="btn-group dropdown d-inline-block"
-                        dropdown
-                        [autoClose]="false"
-                        #monthWise="bs-dropdown"
-                        (clickOutside)="monthWise?.hide()"
-                        [attachOutsideOnClick]="true"
-                    >
-                    <!-- Divyanshu: Convert this into material -->
-                        <button
-                            id="button-nested"
-                            dropdownToggle
-                            type="button"
-                            class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
-                            aria-controls="dropdown-nested"
-                        >
-                            <ng-container>
-                                {{ visibleSelectMonth }}
-                            </ng-container>
-                            <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                            <li role="menuitem">
-                                <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker" >
-                                    <bs-datepicker-inline
-                                        name="fromDate"
-                                        (click)="$event.stopPropagation()"
-                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
-                                        [bsConfig]="{
-                                            startView: 'month',
-                                            dateInputFormat: 'MM/YYYY',
-                                            adaptivePosition: true,
-                                            minMode: 'month'
-                                        }"
-                                        [ngModelOptions]="{ standalone: true }"
-                                    >
-                                    </bs-datepicker-inline>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="datepicker-header" *ngIf="!showDate">
-                        <ng-container *ngIf="isMonthSelected">
-                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                        </ng-container>
-                        <ng-container *ngIf="!isMonthSelected">
-                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                            {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container
-                        >
-                    </div>
+                    <div *ngIf="showDate">
+                        <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
+                     </div>
                 </div>
                 <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
             </div>
@@ -319,3 +217,25 @@
     </div>
 </div>
 <!-- endregion -->
+
+<!-- Define the ng-template -->
+<ng-template #monthSelectionDatePicker>
+    <input 
+        matInput 
+        [matDatepicker]="picker" 
+        [placeholder]="date?.value ?? '--'" 
+        autocomplete="off"
+        (focus)="picker.open()" 
+        (click)="picker.open()"
+        class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer" 
+        name="date" 
+        readonly 
+    />
+    <mat-datepicker 
+        (monthSelected)="setMonthAndYear($event, picker)" 
+        [startView]="'multi-year'"
+        [startAt]="startAt" 
+        #picker
+    >
+    </mat-datepicker>
+</ng-template>

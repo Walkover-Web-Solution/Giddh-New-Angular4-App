@@ -13869,3 +13869,14 @@ import-wizard {
     height: 25px !important;
     padding: 0 !important;
 }
+
+// Mat Datepicker for Year and Month selection
+.month-selection {
+    border-radius: 50px !important;
+    background: var(--color-denary-button-background) !important;
+    height: 38px;
+    border-radius: 18px;
+    &::placeholder {
+        color: var(--color-denary-button-text) !important;
+    }
+}

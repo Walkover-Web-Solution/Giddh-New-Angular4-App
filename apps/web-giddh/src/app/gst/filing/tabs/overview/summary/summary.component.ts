@@ -74,7 +74,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
                 this.gstrOverviewData = data;
             }
         });
-
+        
         let request: GstOverViewRequest = new GstOverViewRequest();
         request.from = this.currentPeriod.from;
         request.to = this.currentPeriod.to;

@@ -12,6 +12,7 @@ import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -21,7 +22,6 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
     encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', { static: false }) public staticTabs: TabsetComponent;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
@@ -35,7 +35,6 @@ export class FilingComponent implements OnInit, OnDestroy {
     public isTransactionSummary: boolean = false;
     public showTaxPro: boolean = false;
     public fileReturn: {} = { isAuthenticate: false };
-    public selectedTabId: number = null;
     public gstFileSuccess$: Observable<boolean> = of(false);
     public fileReturnSucces: boolean = false;
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
@@ -62,7 +61,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = false;
     /** Holds active tab index */
-    public activeTabIndex: number;
+    public activeTabIndex: number = 0;
 
     constructor(
         private route: Router,
@@ -140,10 +139,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     }
 
     public selectTabFromUrl(tab: number) {
-        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
-            this.selectedTabId = tab;
-            this.staticTabs.tabs[this.selectedTabId].active = true;
-        }
+        this.activeTabIndex = tab;
     }
 
     public ngOnDestroy(): void {
@@ -280,9 +276,11 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public getLoadingGstText(selectedGst: any): string {
-        let text = this.localeData?.loading_gst_data;
-        text = text?.replace("[SELECTED_GST]", selectedGst);
-        return text;
+        if (this.localeData) {
+            let text = this.localeData?.filing?.loading_gst_data;
+            text = text?.replace("[SELECTED_GST]", selectedGst);
+            return text;
+        }
     }
 
     /**
@@ -291,7 +289,10 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof FilingComponent
      */
-    public onTabChange(event: any): void {
-        this.activeTabIndex = event?.index;
+    public onTabChange(event: MatTabChangeEvent): void {
+        if (typeof event?.index === 'number') {
+            this.activeTabIndex = event?.index;
+            this.selectedTab = event.tab.textLabel;
+        }
     }
 }
