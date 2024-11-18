@@ -321,8 +321,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public customDateSelected: boolean = false;
     /** Instance of ledger search request */
     public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
-    /** False if pending get in process */
-    public isGetAllRequestInProcess$: Observable<boolean> = of(true);
+    /** Loading Observable */
+    public isGetAllRequestInProcess$: Observable<any> = this.componentStore.getLedgerDataInProcess$;
     /** Holds Ledger Data */
     public ledgersData: any[] = [];
     /** Holds voucher type for credit/debit note*/
@@ -412,6 +412,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getVoucherBalances();
                 }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
+                    this.ledgersData = [];
+                    this.customDateSelected = false;
                     this.getLedgersOfInvoice();
                 }
             }
@@ -705,7 +707,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     });
                 }
                 this.ledgersData = response?.results;
-                this.isGetAllRequestInProcess$ = of(false);
                 if (this.todaySelected) {
                     this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
                     this.ledgerSearchRequest.from = response.fromDate;
@@ -1254,7 +1255,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public selectAllPendingVouchers(event: any): void {
         this.selectedPendingVouchers = [];
         this.allPendingVouchersSelected = event?.checked;
-
         if (event?.checked) {
             this.ledgersData?.forEach(voucher => {
                 this.selectedPendingVouchers.push(voucher);
@@ -2266,7 +2266,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getLedgersOfInvoice(): void {
-        this.isGetAllRequestInProcess$ = of(true);
         this.dispatchLedgerRequest();
 
         if (this.isLedgerDataEmpty()) {
