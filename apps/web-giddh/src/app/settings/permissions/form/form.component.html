@@ -288,9 +288,8 @@
     </div>
     <div
         *ngIf="
-            permissionForm.invalid ||
-            (remainingUsers === 0 &&
-                (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Users'))
+            remainingUsers === 0 &&
+            (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Users')
         "
         class="pd-t1"
     >
