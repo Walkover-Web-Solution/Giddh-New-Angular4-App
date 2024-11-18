@@ -202,6 +202,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = "https://giddh.com/help/sync-with-tally-1591360375828781";
 
     constructor(
         private router: Router,
