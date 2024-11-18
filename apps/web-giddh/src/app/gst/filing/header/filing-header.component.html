@@ -1,5 +1,5 @@
 <div class="list-filter">
-    <!-- region gstr1 -->
+    <!-- GSTR1 -->
     <div class="list-style d-flex justify-content-between align-items-center" *ngIf="selectedGst === GstReport.Gstr1">
         <div class="wrap-GSTR-1-title">
             <a [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
@@ -34,7 +34,7 @@
                     <button 
                         mat-stroked-button
                         color="primary"
-                        (click)="pushToPortalModal?.show()">
+                        (click)="openPushToPortalDialog()">
                         <i class="icon-download"></i>
                         {{ commonLocaleData?.app_download }}
                     </button>
@@ -54,7 +54,7 @@
                         mat-stroked-button
                         color="primary"
                         [ngClass]="{ 'btn-success': gstAuthenticated }"
-                        (click)="toggleSettingAsidePane($event, 'TAXPRO')"
+                        (click)="openSettingAsidePane($event, 'TAXPRO')"
                     >
                         {{
                             gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate
@@ -64,9 +64,8 @@
             </ul>
         </div>
     </div>
-    <!-- endregion -->
 
-    <!-- region gstr2 -->
+    <!-- GSTR2 -->
     <div class="list-style d-flex justify-content-between align-items-center" *ngIf="selectedGst === GstReport.Gstr2">
         <div>
             <a href="javascript:void(0);" aria-label="back img"  id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
@@ -74,7 +73,7 @@
             </a>
             <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img"  />
             <div class="text-middle nav-top">
-                <div class="text-middle head-font-weight">
+                <div class="text-middle head-font-weight d-flex align-items-center column-gap1">
                     {{ localeData?.gstr2_label }}
                     <div *ngIf="showDate">
                         <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
@@ -83,45 +82,33 @@
                 <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
             </div>
         </div>
-
-
         <div class="d-flex column-gap1 align-items-center">
-            <div class="d-inline-flex align-items-center column-gap1" dropdown #dropdown="bs-dropdown">
+            <div class="d-inline-flex align-items-center column-gap1">
                 <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'"></watch-video>
                 <button
                     mat-stroked-button
-                    color="primary" 
-                    dropdownToggle
+                    color="primary"
+                    aria-labelledby="button-triggers-manual"
+                    [matMenuTriggerFor]="downloadMenu"
                 >
                     <i class="icon-download"></i>
                     {{ commonLocaleData?.app_download }}
                 </button>
-                <!-- Divyanshu: Convert this into material -->
-                <ul
-                    id="dropdown-menu"
-                    *dropdownMenu
-                    class="dropdown-menu dropdown-menu-right"
-                    role="menu"
-                    aria-labelledby="button-triggers-manual"
-                >
-                    <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download"  (click)="onDownloadSheetGSTR('main')">{{
-                            localeData?.filing?.download_sheet
-                        }}</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download" (click)="onDownloadSheetGSTR('error')">{{
-                            localeData?.filing?.download_error_sheet
-                        }}</a>
-                    </li>
-                </ul>
+                <mat-menu #downloadMenu="matMenu">
+                    <button mat-menu-item aria-label="download"  (click)="onDownloadSheetGSTR('main')">
+                        {{ localeData?.filing?.download_sheet }}
+                    </button>
+                    <button mat-menu-item aria-label="download" (click)="onDownloadSheetGSTR('error')">
+                        {{ localeData?.filing?.download_error_sheet }}
+                    </button>
+                </mat-menu>
             </div>
             <div *ngIf="isCompany && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
                 <button
                     mat-stroked-button
                     color="primary"
                     [ngClass]="{ 'btn-success': gstAuthenticated }"
-                    (click)="!gstAuthenticated ? toggleSettingAsidePane($event, 'TAXPRO') : ''"               
+                    (click)="!gstAuthenticated ? openSettingAsidePane($event, 'TAXPRO') : ''"               
                 >
                     {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
                 </button>
@@ -137,86 +124,39 @@
             </div>
         </div>
     </div>
-    <!-- endregion -->
 </div>
 
-<!-- <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-<gst-aside-menu
-    *ngIf="GstAsidePaneState === 'in'"
-    [selectedService]="selectedService"
-    [returnType]="selectedGst"
-    [class]="GstAsidePaneState"
-    [@slideInOut]="GstAsidePaneState"
-    (closeAsideEvent)="toggleSettingAsidePane($event)"
-    (fileGst)="fileGstReturnV2()"
-    (cancelConfirmationEvent)="cancelConfirmationModel?.show()"
-    (fileGstComplete)="closeAsidePane()"
-    [localeData]="localeData"
-    [commonLocaleData]="commonLocaleData"
-></gst-aside-menu> -->
-
+<!-- Authentication Dialog -->
 <ng-template #asideAuthentication>
     <gst-aside-menu
         [selectedService]="selectedService"
         [returnType]="selectedGst"
-        [class]="GstAsidePaneState"
         (fileGst)="fileGstReturnV2()"
-        (cancelConfirmationEvent)="cancelConfirmationModel?.show()"
-        (fileGstComplete)="closeAsidePane()"
+        (cancelConfirmationEvent)="openCancelConfirmationDialog()"
+        (closeAsideEvent)="asideAuthenticationDialogRef.close()"
+        (fileGstComplete)="asideAuthenticationDialogRef.close()"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     ></gst-aside-menu>
 </ng-template>
 
-
-<!-- region cancel confirmation modal -->
-<!-- <div
-    bsModal
-    #cancelConfirmationModel="bs-modal"
-    class="modal z-index-for-aside fade"
-    role="dialog"
-    [config]="{ ignoreBackdropClick: true }"
->
-    <div class="modal-dialog modal-md second">
-        <div class="modal-content">
-            <confirm-modal
-                [body]="localeData?.filing?.cancel_title"
-                (successCallBack)="cancelConfirmationModel.hide(); toggleSettingAsidePane(null)"
-                (cancelCallBack)="cancelConfirmationModel.hide()"
-            ></confirm-modal>
-        </div>
-    </div>
-</div> -->
-<!-- Divyanshu: Convert this into material -->
-<ng-template #cancelConfirmationModel>
+<!-- Region Cancel Confirmation Dialog -->
+<ng-template #cancelConfirmationDialog>
     <confirm-modal
         [body]="localeData?.filing?.cancel_title"
-        (successCallBack)="cancelConfirmationModel.hide(); toggleSettingAsidePane(null)"
-        (cancelCallBack)="cancelConfirmationModel.hide()"
+        (successCallBack)="cancelConfirmationDialogRef.close(); asideAuthenticationDialogRef.close()"
+        (cancelCallBack)="cancelConfirmationDialogRef.close()"
     ></confirm-modal>
 </ng-template>
 
-<!--push to portal modal -->
-<!-- Divyanshu: Convert this into material -->
-<div
-    bsModal
-    #pushToPortalModal="bs-modal"
-    class="modal z-index-for-aside fade"
-    role="dialog"
-    [config]="{ ignoreBackdropClick: true }"
->
-    <div class="modal-dialog modal-md second push-to-portal-modal">
-        <div class="modal-content">
-            <push-to-portal
-                [localeData]="localeData"
-                (cancelCallBack)="pushToPortalModal?.hide()"
-                (downloadExcel)="onDownloadSheetGSTR('main')"
-                (downloadJson)="onDownloadJsonGSTR('main')"
-            ></push-to-portal>
-        </div>
-    </div>
-</div>
-<!-- endregion -->
+<!-- Push to portal Dialog -->
+<ng-template #pushToPortalDialog>
+    <push-to-portal
+        [localeData]="localeData"
+        (downloadExcel)="onDownloadSheetGSTR('main')"
+        (downloadJson)="onDownloadJsonGSTR('main')"
+    ></push-to-portal>
+</ng-template>
 
 <!-- Define the ng-template -->
 <ng-template #monthSelectionDatePicker>

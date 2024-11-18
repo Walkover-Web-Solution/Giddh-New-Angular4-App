@@ -78,6 +78,23 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Holds gst number */
     public selectedGstNumber: string = '';
+    /** Holds table displayed columns name */
+    public displayedColumns: string[] = [
+        'invoiceDate',
+        'invoiceNumber',
+        'customerGSTIN',
+        'customerName',
+        'status',
+        'actionOnGSTN',
+        'placeOfSupply',
+        'reverseCharge',
+        'taxableAmount',
+        'igst',
+        'cgst',
+        'sgst',
+        'cess',
+        'totalInvoiceValue'
+    ];
 
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -167,24 +184,26 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.viewFilteredTxn('page', event.page);
     }
 
-    public onSelectInvoice(invoice) {
-        let downloadVoucherRequestObject;
-        if (invoice && invoice.account) {
-            this.selectedInvoice = invoice;
-            this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
+    public onSelectInvoice(invoice: any): void {
+        if (invoice.voucherType !== 'purchase') {
+            let downloadVoucherRequestObject;
+            if (invoice && invoice.account) {
+                this.selectedInvoice = invoice;
+                this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
 
-            if (this.voucherApiVersion !== 2) {
-                downloadVoucherRequestObject = {
-                    voucherNumber: [invoice.voucherNumber],
-                    voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account?.uniqueName
-                };
+                if (this.voucherApiVersion !== 2) {
+                    downloadVoucherRequestObject = {
+                        voucherNumber: [invoice.voucherNumber],
+                        voucherType: invoice.voucherType,
+                        accountUniqueName: invoice.account?.uniqueName
+                    };
 
-                this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                }
             }
+            this.loadDownloadOrSendMailComponent();
+            this.downloadOrSendMailModel?.show();
         }
-        this.loadDownloadOrSendMailComponent();
-        this.downloadOrSendMailModel?.show();
     }
 
     public loadDownloadOrSendMailComponent() {
@@ -219,6 +238,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public mapFilters() {
         let filters = _.cloneDeep(this.filterParam);
         if (this.selectedGst === GstReport.Gstr1) {
+            this.displayedColumns.splice(4, 0, 'voucherType');
             let selected = _.find(this.gstr1entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;

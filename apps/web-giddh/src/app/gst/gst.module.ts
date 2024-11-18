@@ -57,6 +57,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -106,7 +107,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatTabsModule,
         MatDialogModule,
         MatCheckboxModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatMenuModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

@@ -8,6 +8,7 @@ import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 interface SequenceConfig {
     name: string;
@@ -48,6 +49,8 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
         return GstReport;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds table displayed columns name */
+    public displayedColumns: string[] = ['description', 'total_transactions', 'taxable_amount', 'igst', 'cgst', 'sgst', 'cess'];
 
     constructor(private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
@@ -64,17 +67,17 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
         this.gstr1OverviewData$.subscribe(data => {
-            if (this.selectedGst === GstReport.Gstr1) {
-                this.gstrOverviewData = data;
+            if (data && this.selectedGst === GstReport.Gstr1) {
+                this.gstrOverviewData = this.transformedSummaryData(data);
             }
         });
 
-        this.gstr2OverviewData$.subscribe(data => {
-            if (this.selectedGst === GstReport.Gstr2) {
-                this.gstrOverviewData = data;
+        this.gstr2OverviewData$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && this.selectedGst === GstReport.Gstr2) {
+                this.gstrOverviewData = this.transformedSummaryData(data);
             }
         });
-        
+
         let request: GstOverViewRequest = new GstOverViewRequest();
         request.from = this.currentPeriod.from;
         request.to = this.currentPeriod.to;
@@ -85,6 +88,33 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
             }
         });
+    }
+
+    /**
+     * Transformed Summary data to display in table
+     * 
+     * @param data 
+     * @returns 
+     */
+    private transformedSummaryData(data: GstOverViewResult): GstOverViewResult {
+        const results = cloneDeep(data);
+        if (results?.summary?.length) {
+            const transformedSummary = [];
+            results.summary.forEach((item, index) => {
+                transformedSummary.push(item);
+                if (Array.isArray(item.transactions)) {
+                    transformedSummary.push(
+                        ...item.transactions.map(transaction => ({
+                            ...transaction,
+                            parentIndex: index
+                        }))
+                    );
+                }
+            });
+
+            results.summary = transformedSummary;
+        }
+        return results;
     }
 
     /**

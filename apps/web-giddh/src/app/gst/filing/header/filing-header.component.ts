@@ -18,7 +18,7 @@ import { GstReport } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 
@@ -61,12 +61,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** True if current organization is company */
     @Input() public isCompany: boolean;
     // @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
-    // <!-- Divyanshu: Convert this into material -->
-    @ViewChild("cancelConfirmationModel") cancelConfirmationModel: TemplateRef<any>;
+    /** Holds cancel confirmation dialog template ref */
+    @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
+    /** Holds cancel Confirmation dialog ref */
+    public cancelConfirmationDialogRef: MatDialogRef<any>;
+    /** Holds cancel push To Portal Dialog template ref */
+    @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
-    public GstAsidePaneState: string = 'out';
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
@@ -92,8 +95,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public showDate: boolean = true;
     /** Instance of dayjs */
     public dayjs = dayjs;
-    /** asideAuthentication Dialog Open */
+    /** AsideAuthentication Dialog Open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
+    /** Holds Aside Authentication Dialog Ref */
+    public asideAuthenticationDialogRef: MatDialogRef<any>;
     /** Custom selected month */
     public customMonth: string = '';
     /** Holds start month/year */
@@ -199,7 +204,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
-                this.toggleSettingAsidePane(null, 'TAXPRO');
+                this.openSettingAsidePane(null, 'TAXPRO');
             }
         }
 
@@ -209,29 +214,29 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {
                     this.fileGstr3B(gsp);
                 } else if (gsp === 'VAYANA' && !this.isVayanaAuthenticated) {
-                    this.toggleSettingAsidePane(null, gsp);
+                    this.openSettingAsidePane(null, gsp);
                 }
 
                 if (gsp === 'TAXPRO' && this.isTaxproAuthenticated) {
                     this.fileGstr3B(gsp);
                 } else if (gsp === 'TAXPRO' && !this.isTaxproAuthenticated) {
-                    this.toggleSettingAsidePane(null, gsp);
+                    this.openSettingAsidePane(null, gsp);
                 }
 
             } else {
-                this.toggleSettingAsidePane(null, gsp);
+                this.openSettingAsidePane(null, gsp);
             }
         }
     }
 
     /**
-     * Toggle Setting Aside Pane
+     * Open 
      *
      * @param {*} event
      * @param {('JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA')} [selectedService]
      * @memberof FilingHeaderComponent
      */
-    public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
+    public openSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
         if (event) {
             event.preventDefault();
         }
@@ -239,20 +244,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (selectedService) {
             this.selectedService = selectedService;
         }
-        // this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
-        this.dialog.open(this.asideAuthenticationDialog, {
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {
             position: {
                 right: '0',
                 top: '0'
             },
-            width: '760px',
-            height: '100vh !important'
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            disableClose: true
         })
-    }
-
-    public closeAsidePane() {
-        // <!-- Divyanshu: Convert this into material -->
-        this.GstAsidePaneState = 'out';
     }
 
     /**
@@ -315,11 +315,24 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(this.invoicePurchaseActions.FileGSTR3B({ from: this.currentPeriod.from, to: this.currentPeriod.to }, this.activeCompanyGstNumber, via));
     }
 
-    public toggleCancelModel() {
-        // this.cancelConfirmationModel.toggle();
-        this.dialog.open(this.cancelConfirmationModel, {
-            width: '600px'
+    /**
+     * Open cancel confirmation dialog
+     *
+     * @memberof FilingHeaderComponent
+     */
+    public openCancelConfirmationDialog(): void {
+        this.cancelConfirmationDialogRef = this.dialog.open(this.cancelConfirmationDialog, {
+            panelClass: ['mat-dialog-sm']
         });
+    }
+
+    /**
+     * Open push to portal dialog
+     *
+     * @memberof FilingHeaderComponent
+     */
+    public openPushToPortalDialog(): void {
+        this.dialog.open(this.pushToPortalDialog);
     }
 
     /**

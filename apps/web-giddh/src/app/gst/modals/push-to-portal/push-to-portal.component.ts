@@ -10,8 +10,6 @@ export class PushToPortalComponent {
     @Input() public localeData;
     /** This will emit the download excel  for gstr1 */
     @Output() public downloadExcel: EventEmitter<any> = new EventEmitter();
-    /** This will emit the cancel popup  hide */
-    @Output() public cancelCallBack: EventEmitter<any> = new EventEmitter();
     /** This will emit the download json  for gstr1 */
     @Output() public downloadJson: EventEmitter<any> = new EventEmitter();
 
@@ -33,15 +31,5 @@ export class PushToPortalComponent {
     */
     public onDownloadJson(event: Event): void {
         this.downloadJson.emit(event);
-    }
-
-    /**
-     *This will emit the cancel popup  hide
-     *
-     * @param {Event} event
-     * @memberof PushToPortalComponent
-     */
-    public onCancel(event: Event): void {
-        this.cancelCallBack.emit(event);
     }
 }
