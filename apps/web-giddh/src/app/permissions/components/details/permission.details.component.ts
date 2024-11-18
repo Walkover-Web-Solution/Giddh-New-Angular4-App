@@ -7,7 +7,7 @@ import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
-import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permission.utility';
+import { IPage, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
@@ -35,7 +35,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     public commonLocaleData: any = {};
     /* Holds Table column */
     public displayedColumns: string[] = ['admin', 'adminicon', 'view'];
-    /* Holds original page list */
+    /** Holds original page list */
     private originalPageList: any[];
 
     constructor(private router: Router,
@@ -97,11 +97,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     */
     public ngAfterViewInit(): void {
         this.pageList = [];
-        this.originalPageList?.forEach(item => {
-            if (!this.checkForAlreadyExistInPageArray(String(item))) {
-                this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
-            }
-        });
+        this.checkExistsDataInPageResponse();
 
         if (this.roleObj?.scopes) {
             this.roleObj.scopes = this.roleObj?.scopes.map(item => {
@@ -141,17 +137,14 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             pageObj.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
             this.roleObj?.scopes?.push(pageObj);
             this.pageList.splice(this.pageList?.findIndex((list: any) => list.value === page), 1);
+            this.pageName = null;
         }
     }
 
     public removePageFromScope(page: string) {
         this.roleObj.scopes.splice(this.roleObj.scopes?.findIndex((o: Scope) => o.name === page), 1);
         this.pageList = [];
-        this.originalPageList?.forEach(item => {
-            if (!this.checkForAlreadyExistInPageArray(String(item))) {
-                this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
-            }
-        });
+        this.checkExistsDataInPageResponse();
     }
 
     public checkForAlreadyExistInPageArray(page: string): boolean {
@@ -365,6 +358,19 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         } else {
             return res.permissions[0].isSelected = false;
         }
+    }
+
+    /**
+     * Checks if the page list already contains the current page. If not, adds it to the page list.//+
+     *
+     * @memberof PermissionDetailsComponent
+     */
+    public checkExistsDataInPageResponse(): void {
+        this.originalPageList?.forEach(item => {
+            if (!this.checkForAlreadyExistInPageArray(String(item))) {
+                this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
+            }
+        });
     }
 
 }
