@@ -6,7 +6,10 @@
     autocomplete="off"
 >
     <div class="d-flex align-items-center justify-content-between form-wrapper">
-        <div class="field-wrapper d-flex align-items-center column-gap15 row-gap15" [ngClass]="{ 'flex-wrap w-100 permission-update-mode': isUpdtCase}">
+        <div
+            class="field-wrapper d-flex align-items-center column-gap15 row-gap15"
+            [ngClass]="{ 'flex-wrap w-100 permission-update-mode': isUpdtCase }"
+        >
             <div>
                 <input-field
                     [label]="isLblShow ? localeData?.unique_name_email_label : ''"
@@ -47,10 +50,7 @@
                     </span>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <section
-                        class="mr-b1 time-span-dropdown custom-date-range-menu"
-                        (click)="$event.stopPropagation()"
-                    >
+                    <section class="mr-b1 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
                         <div class="pd-15">
                             <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
                                 <mat-radio-button
@@ -85,7 +85,7 @@
                                             [matDatepickerToggleIcon]="false"
                                             appearance="outline"
                                             (click)="picker.open()"
-                                            class="w-100"                                                     
+                                            class="w-100"
                                         >
                                             <mat-label>{{ localeData?.from_to_label }}</mat-label>
                                             <mat-date-range-input [rangePicker]="picker">
@@ -148,7 +148,7 @@
                     </button>
                     <mat-menu #menurange="matMenu">
                         <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
-                            <div class="pd-15">  
+                            <div class="pd-15">
                                 <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
                                     <mat-radio-button
                                         value="cidr_range"
@@ -251,13 +251,19 @@
                     </mat-menu>
                 </div>
             </div>
-            <div class="action-button text-right text-xl-left" [ngClass]="{ 'text-xl-right' : isUpdtCase}">
+            <div class="action-button text-right text-xl-left" [ngClass]="{ 'text-xl-right': isUpdtCase }">
                 <div class="add-btn">
                     <button
                         mat-stroked-button
                         color="primary"
                         [ladda]="createPermissionInProcess$ | async"
-                        [disabled]="permissionForm.invalid || (remainingUsers === 0 && (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Users'))"
+                        [disabled]="
+                            permissionForm.invalid ||
+                            (remainingUsers === 0 &&
+                                (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
+                                    'Users'
+                                ))
+                        "
                         class="btn custom-btn"
                     >
                         <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
@@ -279,5 +285,29 @@
                 {{ localeData?.add_custom_role }}
             </button>
         </div>
+    </div>
+    <div
+        *ngIf="
+            permissionForm.invalid ||
+            (remainingUsers === 0 &&
+                (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Users'))
+        "
+        class="pd-t1"
+    >
+        <span>
+            {{ commonLocaleData?.app_no_access_limit_module }}
+            <button
+                mat-stroked-button
+                color="primary"
+                aria-label="upgrade"
+                class="mr-0"
+                [routerLink]="[
+                    '/pages/user-details/subscription/buy-plan/' +
+                        (activeCompany$ | async)?.subscription?.subscriptionId
+                ]"
+            >
+                {{ commonLocaleData?.app_upgrade }}
+            </button>
+        </span>
     </div>
 </form>
