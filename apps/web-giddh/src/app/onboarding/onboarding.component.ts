@@ -45,6 +45,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public accountAsideMenuState: string = "out";
     /** Account group unique name */
     public selectedGroupForCreateAcc: string = "";
+    /** Sync with tally */
+    public syncWithTallyHelpDocUrl: string = "https://giddh.com/help/sync-with-tally-1591360375828781";
     /** Holds account details */
     public accountDetails: any;
     /** Observable for create account success*/
