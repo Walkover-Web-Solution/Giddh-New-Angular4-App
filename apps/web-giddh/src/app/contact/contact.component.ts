@@ -531,7 +531,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isIciciAccountPendingForApproval = false;
             this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
             if (response?.integratedBankList?.length > 0) {
-                let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                let approvalPendingAccounts = response?.integratedBankList?.filter(account => !account.errorMessage);
                 if (!approvalPendingAccounts?.length) {
                     this.isIciciAccountPendingForApproval = true;
                 }
@@ -1612,10 +1612,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
         if (this.selectedAccountsList?.length) {
-            this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
+            this.selectedAccountsList = this.selectedAccountsList?.filter(itemObject => {
                 return itemObject?.bankPaymentDetails === true;
             });
-            this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
+            this.selectedAccountsList = this.selectedAccountsList?.filter((data, index) => {
                 return this.selectedAccountsList?.indexOf(data) === index;
             });
         }
