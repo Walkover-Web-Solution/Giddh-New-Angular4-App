@@ -15,15 +15,15 @@
                         {{ localeData?.filing?.download_excel }}
                     </button>
                 </div>
-                <ul class="list-group">
-                    <li class="list-group-item">
+                <mat-list>
+                    <mat-list-item>
                         <p class="summary-content font-15">{{ localeData?.filing?.excel_file_support }}</p>
-                    </li>
-                    <li class="list-group-item">
+                    </mat-list-item>
+                    <mat-list-item>
                         <p class="summary-content font-15 last-content">{{ localeData?.filing?.organised_accountant }}</p>
-                    </li>
-                </ul>
-                <a class="mr-0 downloads-button json-button" target="_blank" href="https://www.gst.gov.in/download/returns"
+                    </mat-list-item>
+                </mat-list>
+                <a class="mr-0 downloads-button json-button" target="_blank" [href]="gstReturnGovtLink"
                     ><span class="return-link font-15">{{ localeData?.filing?.gst_offline_utility }} </span></a
                 >
             </div>
@@ -38,11 +38,11 @@
                         {{ localeData?.filing?.download_json }}
                     </button>
                 </div>
-                <ul class="list-group">
-                    <li class="list-group-item">
+                <mat-list>
+                    <mat-list-item>
                         <p class="summary-content font-15">{{ localeData?.filing?.json_support }}</p>
-                    </li>
-                </ul>
+                    </mat-list-item>
+                </mat-list>
             </div>
         </div>
     </div>

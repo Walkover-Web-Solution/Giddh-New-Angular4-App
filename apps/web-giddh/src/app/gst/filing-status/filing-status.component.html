@@ -61,13 +61,18 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
 
-                    <div class="pagination-wrapper mt-auto" *ngIf="pagination.totalPages > 1 && !isLoading">
-                        <pagination class="pagination-sm" [(ngModel)]="pagination.page"
-                            [totalItems]="pagination.totalItems" [maxSize]="5" [boundaryLinks]="true"
-                            [itemsPerPage]="pagination.count" [rotate]="false" (pageChanged)="pageChanged($event)"
-                            [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
-                            [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
-                        </pagination>
+                    <div class="d-flex justify-content-end" *ngIf="pagination.totalPages > 1 && !isLoading">
+                        <mat-paginator
+                            class="mt-3"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [pageIndex]="pageIndex"
+                            (page)="pageChanged($event)"
+                            [length]="pagination.totalItems"
+                            [pageSize]="pagination.count"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                        ></mat-paginator>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!dataSource.length && !isLoading">

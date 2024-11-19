@@ -6885,6 +6885,35 @@ GST filing
 //     display: block;
 //     border-right: 1px solid var(--color-common-secondary-border);
 // }
+.tax-engine {
+    .summary-content {
+      .gstr-3b-user.table, .gstr-3b-report {
+        tr {
+        height: auto;
+        > th, td {
+            border: 1px solid var(--color-table-primary-content-bar-border) !important;
+            padding: 10px 30px 10px 10px !important;
+          }
+          &.bg-thead {
+            th {        
+              background-color: var(--color-dark-fog) !important;
+              color: var(--color-nero);
+            }
+          } 
+          &.text-muted {
+            th,td {
+                background-color: var(--color-transparent-background) !important;
+            }
+          }
+          &:hover {
+            th, td {
+                background-color: var(--color-invoice-preview-giddh-table-tbody-tr-background-hover) !important;
+            }
+          }
+        }
+      }
+    }
+  }
 
 .tax-engine .column {
     height: 100%;

@@ -234,217 +234,20 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <table
-                class="transactions-table table-striped table zi-table table-hover"
-                *ngIf=" false && 
-                    !(viewTransactionInProgress$ | async) &&
-                    (viewTransaction$ | async) &&
-                    (viewTransaction$ | async)?.totalItems
-                "
-            >
-                <thead>
-                    <tr>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ localeData?.filing?.invoice_date }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ localeData?.filing?.invoice_no }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ commonLocaleData?.app_customer_gstin }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ commonLocaleData?.app_customer_name }}</div>
-                            </div>
-                        </th>
-                        <th
-                            class="text-left"
-                            *ngIf="selectedGst === GstReport.Gstr1 && filterParam.entityType === 'unregistered-notes'"
-                        >
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ commonLocaleData?.app_type }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left" *ngIf="selectedGst === GstReport.Gstr1">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ commonLocaleData?.app_voucher_type }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ commonLocaleData?.app_status }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ localeData?.filing?.gstn_action }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="pull-left over-flow">{{ localeData?.filing?.place_supply }}</div>
-                            </div>
-                        </th>
-                        <th class="text-left">
-                            <div class="relative">
-                                <div class="over-flow">{{ commonLocaleData?.app_reverse_charge }}</div>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="relative">
-                                <div class="over-flow">{{ localeData?.filing?.taxable_amount }}</div>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="relative">
-                                <div class="over-flow">{{ localeData?.filing?.igst }}</div>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="relative">
-                                <div class="over-flow">{{ localeData?.filing?.cgst }}</div>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="relative">
-                                <div class="over-flow">{{ localeData?.filing?.sgst }}</div>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="relative">
-                                <div class="over-flow">{{ commonLocaleData?.app_cess }}</div>
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="relative">
-                                <div class="over-flow">{{ localeData?.filing?.total_invoice_value }}</div>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
-                        <!-- <td>{{ item.voucherDate ? item.voucherDate : "-" }}</td> -->
-                        <!-- <td class="btn-link" *ngIf="item.voucherType !== 'purchase'" (click)="onSelectInvoice(item)">
-                            {{ item.voucherNumber ? item.voucherNumber : "-" }}
-
-                            <span *ngIf="isMobileScreen" class="d-inline-flex text-decoration-none btn-link"
-                                ><i class="icon-download-circle ml-2"></i
-                            ></span>
-                        </td>
-                        <td *ngIf="item.voucherType === 'purchase'">
-                            {{ item.voucherNumber ? item.voucherNumber : "-" }}
-                        </td> -->
-                        <!-- <td>
-                            {{ item.accountGstin ? item.accountGstin : "-" }}
-                        </td> -->
-                        <!-- <td class="white-normal">{{ item.accountName ? item.accountName : "-" }}</td> -->
-                        <td *ngIf="selectedGst === GstReport.Gstr1 && filterParam.entityType === 'unregistered-notes'">
-                            {{ item?.typ ? item?.typ : "-" }}
-                        </td>
-                        <td *ngIf="selectedGst === GstReport.Gstr1">
-                            {{ item?.voucherType ? (item?.voucherType | titlecase) : "-" }}
-                        </td>
-                        <td>{{ item?.status ? item?.status : "-" }}</td>
-                        <td>{{ item.actionOnGstin ? item.actionOnGstin : "-" }}</td>
-                        <td>
-                            {{ item.pos ? item.pos : "-" }}
-                        </td>
-                        <td>{{ item.reverseCharge ? item.reverseCharge : "-" }}</td>
-                        <td class="text-right">
-                            <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees icon-font-11"></i>
-                                <amount-field
-                                    [amount]="item?.taxableAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td class="text-right">
-                            <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees icon-font-11"></i>
-                                <amount-field
-                                    [amount]="item?.igstAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td class="text-right">
-                            <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees icon-font-11"></i>
-                                <amount-field
-                                    [amount]="item?.cgstAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td class="text-right">
-                            <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees icon-font-11"></i>
-                                <amount-field
-                                    [amount]="item?.sgstAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td class="text-right">
-                            <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees icon-font-11"></i>
-                                <amount-field
-                                    [amount]="item?.cessAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                        <td class="text-right">
-                            <span class="d-inline-flex align-items-center">
-                                <i class="icon-rupees icon-font-11"></i>
-                                <amount-field
-                                    [amount]="item?.totalAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
         <!-- pagination -->
-         <!-- Divyanshu: Convert this into material -->
-        <div class="pagination-wrapper text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
-            <pagination
-                [maxSize]="6"
-                [totalItems]="(viewTransaction$ | async)?.totalItems"
-                [itemsPerPage]="(viewTransaction$ | async)?.count"
-                (pageChanged)="pageChanged($event)"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [rotate]="false"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
+        <div class="pagination-wrapper justify-content-end" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
+            <mat-paginator
+                (page)="pageChanged($event)"
+                [length]="(viewTransaction$ | async)?.totalItems"
+                [pageSize]="(viewTransaction$ | async)?.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="pageIndex"
+                class="mt-15"
             >
-            </pagination>
+            </mat-paginator>
         </div>
         <!-- no records -->
         <div
@@ -468,11 +271,8 @@
 </div>
 
 <!-- Download or Send Invoice on mail -->
-<!-- Divyanshu: Convert this into material -->
-<div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div element-view-container-ref #downloadOrSendMailComponent="elementviewcontainerref"></div>
-        </div>
-    </div>
-</div>
+
+<!-- NEED TO WORK ON THIS -->
+<ng-template #downloadOrSendMailDialog>
+    <div element-view-container-ref #downloadOrSendMailComponent="elementviewcontainerref"></div>
+</ng-template>

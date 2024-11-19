@@ -161,7 +161,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
                     this.date.setValue(dayjs(this.selectedMonth).format("MMMM YYYY"));
                 }
-                // this.visibleSelectMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MMMM YYYY');
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
             this.selectedGst = params['return_type'];
@@ -349,7 +348,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = true;
-            // this.dateSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
             if (this.selectedGst === GstReport.Gstr1) {
                 this.navigateToOverview();

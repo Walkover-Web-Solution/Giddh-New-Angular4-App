@@ -12,7 +12,8 @@ export class PushToPortalComponent {
     @Output() public downloadExcel: EventEmitter<any> = new EventEmitter();
     /** This will emit the download json  for gstr1 */
     @Output() public downloadJson: EventEmitter<any> = new EventEmitter();
-
+    /** Holds GST return govt link */
+    public gstReturnGovtLink: string = 'https://www.gst.gov.in/download/returns';
     /**
      * This will use for download success sheet
      *

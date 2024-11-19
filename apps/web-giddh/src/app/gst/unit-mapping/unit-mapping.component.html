@@ -4,7 +4,6 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-
 <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
@@ -29,19 +28,11 @@
             <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
                 <div class="unit-value overflow-hidden">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
                 <div class="map-unit-value">
-                    <!-- <select-field
-                        [cssClass]="'form-control mat-field-border'"
-                        [placeholder]="'Select Unit'"
-                        [options]="units"
-                        [defaultValue]="unit?.mappedGstUnit"
-                        (selectedOption)="unit.mappedGstUnit = $event?.value"
-                    ></select-field> -->
-
                     <dropdown-field
                         [label]="commonLocaleData?.app_unit"
                         [placeholder]="localeData?.select_unit"
                         [options]="units"
-                        [defaultValue]="unit?.mappedGstUnit"
+                        [defaultValue]="unit?.mappedGstUnit ?? ''"
                         (selectedOption)="unit.mappedGstUnit = $event?.value"
                     ></dropdown-field>
                 </div>
