@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
+import { SubscriptionUpgradeButtonModule } from '../../shared/subscription-upgrade-button/subscription-upgrade-button.module';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         MatSlideToggleModule,
         ValidateSectionPermissionDirectiveModule,
         GiddhDatepickerModule,
-        MatButtonModule
+        MatButtonModule,
+        SubscriptionUpgradeButtonModule
     ],
     exports: [
         InvoiceSettingComponent

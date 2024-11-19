@@ -1029,7 +1029,7 @@
                                                     class="show-on-mobile"
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
-                                                    [disabled] = "(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')"
+                                                    [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.EInvoice)"
                                                 >
                                                 </mat-slide-toggle>
                                                 <label class="left-gap">{{
@@ -1048,7 +1048,7 @@
                                                     class="hide-on-mobile"
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
-                                                    [disabled] = "(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')"
+                                                    [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.EInvoice)"
 
                                                 >
                                                 </mat-slide-toggle>
@@ -1082,20 +1082,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('E-invoice')" class="pd-l1">
-                                                <span>
-                                                    {{ commonLocaleData?.app_no_access_limit_module }}
-                                                    <button
-                                                        mat-stroked-button
-                                                        color="primary"
-                                                        aria-label="upgrade"
-                                                        class="mr-0"
-                                                        (click)="buyPlan(activeCompany?.subscription.subscriptionId)"
-                                                    >
-                                                        {{ commonLocaleData?.app_upgrade }}
-                                                     </button>
-                                                 </span>
-                                             </div>
+                                            <span class="pd-l1">
+                                                <restricted-module-message [activeCompany]="activeCompany$ | async" [restrictedModule]="restrictedModules.EInvoice"
+                                                    [commonLocaleData]="commonLocaleData" (upgradeClick)="buyPlan($event)">
+                                                </restricted-module-message>
+                                            </span>
                                         </div>
                                     </div>
                                     <div
