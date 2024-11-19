@@ -8,9 +8,160 @@
         <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
         <span mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></span>
     </div>
-    <mat-dialog-content class="dialog-body d-flex flex-column h-100">
+    <mat-dialog-content class="dialog-body d-flex flex-column h-100 template-froala-wrapper">
         <div class="overflow-auto">
             <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
+                <div class="stock-width">
+                    <div class="row flex-column-reverse flex-md-row">
+                        <div class="col-md-8 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
+                            <div class="row row-gap mr-t1">
+                                <div class="col-sm-4 col-lg-4">
+                                    <input-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [type]="'text'"
+                                        [name]="'triggerName'"
+                                        [placeholder]="'Enter Trigger Name'"
+                                        formControlName=""
+                                    >
+                                    </input-field>
+                                </div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <reactive-dropdown-field
+                                        [name]="'entity'"
+                                        [placeholder]="'Select Voucher Type'"
+                                        [options]="voucherOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
+                                        <!-- (selectedOption)="" -->
+                                    </reactive-dropdown-field>
+                                </div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <reactive-dropdown-field
+                                        [name]="'entity'"
+                                        [placeholder]="'Select Trigger Module'"
+                                        [options]="tirggerOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
+                                        <!-- (selectedOption)="" -->
+                                    </reactive-dropdown-field>
+                                </div>
+                            </div>
+                            <div class="row row-gap mr-t2 mr-b2">
+                                <div class="col-sm-4 col-lg-4">
+                                    <reactive-dropdown-field
+                                        [name]="'entity'"
+                                        [placeholder]="'Select Entity'"
+                                        [options]="entityOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
+                                        <!-- (selectedOption)="" -->
+                                    </reactive-dropdown-field>
+                                </div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <!-- [(ngModel)]="selectedBranch"
+                                    (ngModelChange)="resetWarehouse(); getBranches()" -->
+                                    <mat-select
+                                        name="selectedBranch"
+                                        [multiple]="true"
+                                        class="entity-mat-salect"
+                                        [placeholder]="'Select Account / Group'"
+                                    >
+                                        <mat-option class="balance-options">
+                                            <!-- [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+                                            [formControl]="branchesDropdown"
+                                            [placeholderLabel]="localeData?.header?.select_branch" -->
+                                            <ngx-mat-select-search class="mat-select-search-inventory">
+                                                <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+
+                                        <mat-option
+                                            class="balance-options"
+                                            *ngFor="let branch of entityAccountGroupOptions"
+                                            [value]="branch?.uniqueName"
+                                        >
+                                            {{ branch?.name ?? "-" }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <reactive-dropdown-field
+                                        [name]="'entity'"
+                                        [placeholder]="'Select Action'"
+                                        [options]="actionOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
+                                        <!-- (selectedOption)="" -->
+                                    </reactive-dropdown-field>
+                                </div>
+                            </div>
+                            <div class="row row-gap mr-t1">
+                                <div class="col-sm-4 col-lg-4">
+                                    <reactive-dropdown-field
+                                        [name]="'entity'"
+                                        [placeholder]="'Select Condition'"
+                                        [options]="conditionOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
+                                        <!-- (selectedOption)="" -->
+                                    </reactive-dropdown-field>
+                                </div>
+                                <ng-container *ngIf="true">
+                                    <div class="col-sm-4 col-lg-4">
+                                        <input-field
+                                            [cssClass]="'form-control mat-field-border'"
+                                            [type]="'number'"
+                                            [name]="'triggerAmount'"
+                                            [placeholder]="'Enter Amount'"
+                                            formControlName=""
+                                        >
+                                        </input-field>
+                                    </div>
+                                    <div class="col-sm-4 col-lg-4">
+                                        <reactive-dropdown-field
+                                            [name]="'trigger'"
+                                            [placeholder]="'Select Condition Type Module'"
+                                            [options]="conditionOptions"
+                                            formControlName=""
+                                            class="w-100"
+                                        >
+                                            <!-- (selectedOption)="" -->
+                                        </reactive-dropdown-field>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="false">
+                                    <div class="col-sm-4 col-lg-4">
+                                        <reactive-dropdown-field
+                                            [name]="'triggerDays'"
+                                            [placeholder]="'Select Days'"
+                                            [options]="daysOptions"
+                                            formControlName=""
+                                            class="w-100"
+                                        >
+                                            <!-- (selectedOption)="" -->
+                                        </reactive-dropdown-field>
+                                    </div>
+                                    <div class="col-sm-4 col-lg-4">
+                                        <reactive-dropdown-field
+                                            [name]="'trigger'"
+                                            [placeholder]="'Select Condition Type'"
+                                            [options]="conditionOptions"
+                                            formControlName=""
+                                            class="w-100"
+                                        >
+                                            <!-- (selectedOption)="" -->
+                                        </reactive-dropdown-field>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="chip-gap">
                     <div class="form-group position-relative">
                         <select-multiple-fields

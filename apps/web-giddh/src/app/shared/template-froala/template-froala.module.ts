@@ -11,6 +11,8 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -26,7 +28,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         MatButtonModule,
         MatDialogModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        NgxMatSelectSearchModule,
+        MatSelectModule
     ],
     exports: [
         TemplateFroalaComponent

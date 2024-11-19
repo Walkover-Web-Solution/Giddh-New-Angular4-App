@@ -116,6 +116,16 @@ export class TemplateFroalaComponent implements OnInit {
     public bccEmails: any[] = [];
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
+    /** Holds field options */
+    public entityOptions: any[] = [];
+    public entityAccountGroupOptions: any[] = [];
+    public voucherOptions: any[] = [];
+    public tirggerOptions: any[] = [];
+    public actionOptions: any[] = [];
+    public conditionOptions: any[] = [];
+    public daysOptions: any[] = [];
+
+
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
