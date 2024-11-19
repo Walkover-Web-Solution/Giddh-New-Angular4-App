@@ -19,7 +19,8 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
     templateUrl: './gst.component.html',
@@ -42,14 +43,10 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
     ]
 })
 export class GstComponent implements OnInit, OnDestroy {
-    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
     public asideMenuState: string = 'out';
-    /** this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     public showCalendar: boolean = false;
     public period: any = null;
     public companies: CompanyResponse[] = [];
@@ -74,7 +71,6 @@ export class GstComponent implements OnInit, OnDestroy {
     public selectedMonth: any = null;
     public userEmail: string = '';
     public returnGstr3B: {} = { via: null };
-    public datepickerVisibility: any = 'hidden';
     /** Stores the tax details of a company */
     public taxes: IOption[] = [];
     /** True, if API is in progress */
@@ -96,6 +92,12 @@ export class GstComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** Custom selected month */
+    public customMonth: string = '';
+    /** Holds start month/year */
+    public startAt: Date = new Date();
+    /** Holds selected date */
+    public date: FormControl = new FormControl('');
 
     constructor(
         private store: Store<AppState>,
@@ -105,8 +107,7 @@ export class GstComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private cdRf: ChangeDetectorRef,
         private gstReconcileService: GstReconcileService,
-        private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver
+        private generalService: GeneralService
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
@@ -127,24 +128,13 @@ export class GstComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
         this.loadTaxDetails();
-
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-
         this.getCurrentPeriod$.subscribe(a => {
             if (a && a.from) {
                 let date = {
@@ -153,6 +143,8 @@ export class GstComponent implements OnInit, OnDestroy {
                 };
                 if (date.startDate === a.from && date.endDate === a.to) {
                     this.selectedMonth = dayjs(a.from, GIDDH_DATE_FORMAT).toISOString();
+                    this.date.setValue(dayjs(this.selectedMonth).format("MMMM YYYY"));
+                    
                     this.isMonthSelected = true;
                 } else {
                     this.isMonthSelected = false;
@@ -167,6 +159,7 @@ export class GstComponent implements OnInit, OnDestroy {
                     to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                this.date.setValue(dayjs(this.selectedMonth).format("MMMM YYYY"));
                 this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
@@ -175,15 +168,6 @@ export class GstComponent implements OnInit, OnDestroy {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
                 this.loadTaxReport();
-            }
-        });
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
-                }
             }
         });
     }
@@ -208,22 +192,22 @@ export class GstComponent implements OnInit, OnDestroy {
      * @param {*} ev
      * @memberof GstComponent
      */
-    public periodChanged(ev) {
-        if (ev && ev.picker) {
+    public periodChanged(date) {
+        // if (ev && ev.picker) {
             this.currentPeriod = {
-                from: dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
-                to: dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
-            };
-            this.isMonthSelected = false;
-        } else {
-            this.currentPeriod = {
-                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(date.from).format(GIDDH_DATE_FORMAT),
+                to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = true;
-        }
-        this.selectedMonth = ev;
-        this.showCalendar = false;
+        // } else {
+        //     this.currentPeriod = {
+        //         from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+        //         to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+        //     };
+        //     this.isMonthSelected = true;
+        // }
+        // this.selectedMonth = ev;
+        // this.showCalendar = false;
         this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
 
         if (this.activeCompanyGstNumber) {
@@ -286,36 +270,8 @@ export class GstComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Open Month Wise Calendar
-     *
-     * @param {*} ev
-     * @memberof GstComponent
-     */
-    public openMonthWiseCalendar(ev) {
-        if (ev && this.monthWise) {
-            ev ? this.monthWise.show() : this.monthWise.hide();
-        }
-    }
-
     public navigateToTab(tab, returnType) {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab, selectedGst: this.activeCompanyGstNumber } });
-    }
-
-    public onOpenChange(data: boolean) {
-        this.openMonthWiseCalendar(data);
-    }
-
-    public updateDatepickerVisibility(visibility) {
-        this.datepickerVisibility = visibility;
-    }
-
-    public checkIfDatepickerVisible() {
-        setTimeout(() => {
-            if (this.datepickerVisibility === "hidden") {
-                this.periodDropdown.hide();
-            }
-        }, 500);
     }
 
     /**
@@ -368,7 +324,7 @@ export class GstComponent implements OnInit, OnDestroy {
 
                 if (!this.activeCompanyGstNumber && this.taxes?.length > 0) {
                     this.activeCompanyGstNumber = this.taxes[0]?.value;
-                    this.selectTax();
+                    // this.selectTax();
                 }
             }
             this.isTaxApiInProgress = false;
@@ -391,5 +347,33 @@ export class GstComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr2, request));
             this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
         }
+    }
+
+     /**
+     * Selects date and calls api
+     *
+     * @param {*} event
+     * @memberof GstComponent
+     */
+     public dateSelected(event: any): void {
+        this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
+        this.date.setValue(this.customMonth);
+        this.periodChanged({from: event[0], to: event[1]});
+
+    }
+
+    /**
+     * Sets month/year
+     *
+     * @param {*} date
+     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @memberof GstComponent
+     */
+    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
+        datepicker.close();
+        let selectedMonth = new Date(date);
+        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        this.dateSelected([firstDay, lastDay]);
     }
 }

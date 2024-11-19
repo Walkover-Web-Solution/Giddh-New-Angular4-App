@@ -10,7 +10,26 @@
             }
         }
     }
-
+    &.table-striped {
+        .mdc-data-table__content {
+            .mat-mdc-row {
+                &:hover {
+                    &:not(.no-hover) {
+                        .mat-mdc-cell {
+                            background-color: var(--color-dark-fog) !important;
+                        }
+                    }
+                }
+                &:not(.no-strip, :hover) {
+                    &:nth-of-type(odd) {
+                        .mat-mdc-cell {
+                            background-color: var(--color-wild-sand) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
@@ -25,7 +44,6 @@
             }
         }
     }
-
 }
 
 /*--- menu-button-color ---*/
@@ -81,8 +99,7 @@ aging-report {
 }
 
 // This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
-$listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors here, separated by commas (,)
-
+$listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors here, separated by commas (,)
 .table-header-sticky {
     &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
         table {

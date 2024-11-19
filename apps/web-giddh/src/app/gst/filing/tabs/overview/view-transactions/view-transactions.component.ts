@@ -1,5 +1,5 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,9 +17,10 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { saveAs } from 'file-saver';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
+import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 export const filterTransaction = {
     entityType: '',
@@ -44,7 +45,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    /** Download or send mail dialog reference */
+    @ViewChild('downloadOrSendMailDialog') downloadOrSendMailDialog!: TemplateRef<any>;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
     public gstr1entityType = [];
@@ -70,8 +72,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     /** selected Invoice object */
     public selectedInvoice: GstTransactionSummary;
     /** Returns the enum to be used in template */
-    /** It will store mobile size */
-    public isMobileScreen: boolean = false;
     public get GstReport() {
         return GstReport;
     }
@@ -80,23 +80,40 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Holds gst number */
     public selectedGstNumber: string = '';
+    /** Holds table displayed columns name */
+    public displayedColumns: string[] = [
+        'invoiceDate',
+        'invoiceNumber',
+        'customerGSTIN',
+        'customerName',
+        'status',
+        'actionOnGSTN',
+        'placeOfSupply',
+        'reverseCharge',
+        'taxableAmount',
+        'igst',
+        'cgst',
+        'sgst',
+        'cess',
+        'totalInvoiceValue'
+    ];
+     /** Hold table page index number*/
+     public pageIndex: number = 0;
+     /** Holds page size options */
+     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+     /** Holds download or send mail dialog reference */
+     public downloadOrSendMailDialogRef: MatDialogRef<any>;
 
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
         private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver,
-        private receiptService: ReceiptService) {
+        private receiptService: ReceiptService,
+        private dialog: MatDialog) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
-        this.breakpointObserver
-            .observe(['(max-width: 768px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-            });
     }
 
     public ngOnInit() {
@@ -137,6 +154,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         ];
 
         this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.filterParam['count'] = this.pageSizeOptions[0];
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;
@@ -172,28 +190,38 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
-    public pageChanged(event) {
-        this.viewFilteredTxn('page', event.page);
+    /**
+     * Handle page change   
+     *
+     * @param {*} event
+     * @memberof SubscriptionComponent
+     */
+    public pageChanged(event: any): void {
+        this.filterParam['count'] = event.pageSize;
+        this.pageIndex = event.pageIndex;
+        this.viewFilteredTxn('page', event.pageIndex + 1);
     }
 
-    public onSelectInvoice(invoice) {
-        let downloadVoucherRequestObject;
-        if (invoice && invoice.account) {
-            this.selectedInvoice = invoice;
-            this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
+    public onSelectInvoice(invoice: any): void {
+        if (invoice.voucherType !== 'purchase') {
+            let downloadVoucherRequestObject;
+            if (invoice && invoice.account) {
+                this.selectedInvoice = invoice;
+                this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
 
-            if (this.voucherApiVersion !== 2) {
-                downloadVoucherRequestObject = {
-                    voucherNumber: [invoice.voucherNumber],
-                    voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account?.uniqueName
-                };
+                if (this.voucherApiVersion !== 2) {
+                    downloadVoucherRequestObject = {
+                        voucherNumber: [invoice.voucherNumber],
+                        voucherType: invoice.voucherType,
+                        accountUniqueName: invoice.account?.uniqueName
+                    };
 
-                this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                }
             }
+            this.loadDownloadOrSendMailComponent();
+            this.openDownloadOrSendMailDialog();
         }
-        this.loadDownloadOrSendMailComponent();
-        this.downloadOrSendMailModel?.show();
     }
 
     public loadDownloadOrSendMailComponent() {
@@ -213,7 +241,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public closeDownloadOrSendMailPopup(userResponse: any) {
-        this.downloadOrSendMailModel.hide();
+        this.downloadOrSendMailDialogRef.close();
         if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
@@ -228,6 +256,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public mapFilters() {
         let filters = _.cloneDeep(this.filterParam);
         if (this.selectedGst === GstReport.Gstr1) {
+            this.displayedColumns.splice(4, 0, 'voucherType');
             let selected = _.find(this.gstr1entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
@@ -344,6 +373,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     } else {
+                        // <!-- Divyanshu: Convert this into material -->
                         this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
@@ -360,5 +390,17 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         let text = this.localeData?.filing?.filter_type;
         text = text?.replace("[FILTER]", this.selectedFilter?.entityType);
         return text;
+    }
+
+    /**
+     * Open download or send mail dialog
+     *
+     * @returns {void}
+     * @memberof ViewTransactionsComponent
+     */
+    public openDownloadOrSendMailDialog(): void {
+        this.downloadOrSendMailDialogRef = this.dialog.open(this.downloadOrSendMailDialog, {
+            panelClass: ['mat-dialog-md']
+        });
     }
 }

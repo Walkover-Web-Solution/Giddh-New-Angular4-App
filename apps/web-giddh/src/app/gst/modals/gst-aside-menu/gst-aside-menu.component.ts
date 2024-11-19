@@ -213,7 +213,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
         this.taxProForm.otp = '';
     }
 
-    public toggleCancelModel() {
+    public toggleCancelModel(): void {
         this.cancelConfirmationEvent.emit(true);
     }
 

@@ -52,6 +52,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { GstSettingComponent } from './gst-setting/gst-setting.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -96,7 +103,14 @@ import { MatDividerModule } from '@angular/material/divider';
         MatNativeDateModule,
         WatchVideoModule,
         MatTooltipModule,
-        MatDividerModule
+        MatDividerModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        MatPaginatorModule,
+        MatMenuModule,
+        MatListModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]
