@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -6,19 +6,23 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { BROADCAST_CHANNELS } from "../../app.constant";
-import { SettingIntegrationComponentStore } from "../../settings/integration/utility/setting.integration.store";
+import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
 import { IOption } from '../../theme/ng-select/option.interface';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import {  isEmpty } from '../../lodash-optimized';
+import { isEmpty } from '../../lodash-optimized';
+import { BankIntegrationComponentStore } from "./utility/bank-integration.store";
+import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
+import { ToasterService } from "../../services/toaster.service";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
     selector: 'bank-integration',
     templateUrl: './bank-integration.component.html',
     styleUrls: ['./bank-integration.component.scss'],
+    providers: [BankIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BankIntegrationComponent implements OnInit {
@@ -47,8 +51,22 @@ export class BankIntegrationComponent implements OnInit {
     public isLoading: boolean = false;
     /** List of connected bank accounts */
     public connectedBankAccounts: any[] = [];
-     /** True, if is integration module are in scope  */
-     public hasIntegrationScope: boolean = false;
+    /** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
+    /** Holds array of company uniqueNames which ICICI allowed companies */
+    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    /** Holds image path */
+    public imgPath: string = '';
+    /** Holds Create New Account Dialog Ref */
+    public createNewAccountDialogRef: MatDialogRef<any>;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+      /** Instance of create new account modal */
+      @ViewChild('createNewAccountModal', { static: true }) public createNewAccountModal: TemplateRef<any>;
 
     /** @ignore */
     constructor(
@@ -57,18 +75,33 @@ export class BankIntegrationComponent implements OnInit {
         private generalService: GeneralService,
         private settingsPermissionActions: SettingsPermissionActions,
         private activateRoute: ActivatedRoute,
-        private componentStore:SettingIntegrationComponentStore,
-        private salesService : SalesService,
+        private componentStore: BankIntegrationComponentStore,
+        private salesService: SalesService,
         private settingsIntegrationService: SettingsIntegrationService,
-    ) {}
+        private changeDetectionRef: ChangeDetectorRef,
+        private toasty: ToasterService,
+        public dialog: MatDialog
+    ) { }
 
+
+    /**
+     * This will open create new account modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public openCreateNewAccountModal(): void {
+        this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
+            width: '630px',
+            disableClose: true
+        });
+    }
     /**
      * Initializes the component message
      *
      * @memberof BankIntegrationComponent
      */
     public ngOnInit(): void {
-       
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {
@@ -96,6 +129,7 @@ export class BankIntegrationComponent implements OnInit {
                 } else {
                     this.isIciciBankSupportedCountry = false;
                 }
+                this.changeDetectionRef.detectChanges();
             }
         });
 
@@ -147,7 +181,7 @@ export class BankIntegrationComponent implements OnInit {
                 this.loadPaymentData();
             }
         });
-    
+
     }
     private loadDefaultBankAccountsSuggestions(): void {
         this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -183,17 +217,44 @@ export class BankIntegrationComponent implements OnInit {
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
 
-                // this.connectedBankAccounts.forEach(bankAccount => {
-                //     if (bankAccount?.bankResource?.payor?.length > 0) {
-                //         bankAccount?.bankResource?.payor.forEach(payor => {
-                //             this.getPayorRegistrationStatus(bankAccount, payor);
-                //         });
-                //     }
-                // });
+                this.connectedBankAccounts.forEach(bankAccount => {
+                    if (bankAccount?.bankResource?.payor?.length > 0) {
+                        bankAccount?.bankResource?.payor.forEach(payor => {
+                            this.getPayorRegistrationStatus(bankAccount, payor);
+                        });
+                    }
+                });
             }
 
-            // this.changeDetectionRef.detectChanges();
+            this.changeDetectionRef.detectChanges();
         });
+    }
+
+    /**
+     * This will get the payor account registration status
+     *
+     * @param {*} bankAccount
+     * @param {*} payor
+     * @memberof SettingIntegrationComponent
+     */
+    public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
+        if (bankAccount?.bankResource?.uniqueName?.length && payor?.urn?.length) {
+            let request;
+
+            if (this.isPlaidSupportedCountry) {
+                request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, urn: payor.urn };
+            } else {
+                request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, bankUserId: payor.urn };
+            }
+
+            this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
+                payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
+
+                if (!payor.isConnected && response?.body?.message) {
+                    this.toasty.errorToast(response?.body?.message);
+                }
+            });
+        }
     }
 
 }

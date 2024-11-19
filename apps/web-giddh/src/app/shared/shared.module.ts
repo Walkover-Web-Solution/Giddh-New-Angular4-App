@@ -84,8 +84,7 @@ export function provideConfig() {
         ExportGroupLedgerComponent,
         MasterComponent,
         ExportMasterDialogComponent,
-        MasterExportOptionComponent,
-        BankIntegrationComponent
+        MasterExportOptionComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -178,8 +177,7 @@ export function provideConfig() {
         GenericAsideMenuAccountModule,
         MasterComponent,
         MasterExportOptionComponent,
-        D3TreeChartModule,
-        BankIntegrationComponent
+        D3TreeChartModule
     ],
     providers: [
         {

@@ -2,17 +2,16 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InstitutionsRequest } from '../../../models/api-models/SettingsIntegraion';
-import { SettingIntegrationComponentStore } from '../utility/setting.integration.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BankIntegrationComponent } from '../bank-integration.component';
+import { BankIntegrationComponentStore } from '../utility/bank-integration.store';
 
 @Component({
     selector: 'institutions-list',
     styleUrls: ['./institutions-list.component.scss'],
     templateUrl: './institutions-list.component.html',
-    providers: [BankIntegrationComponent],
+    providers: [BankIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -41,7 +40,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     public filteredBanks: any[] = [];
 
     constructor(
-        private componentStore: SettingIntegrationComponentStore, 
+        private componentStore: BankIntegrationComponentStore, 
         public dialogRef: MatDialogRef<InstitutionsListComponent>,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
