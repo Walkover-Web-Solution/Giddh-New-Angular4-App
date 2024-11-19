@@ -58,6 +58,7 @@ import { ExportMasterDialogComponent } from './header/components/export-master-d
 import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
+import { BankIntegrationComponent } from './bank-integration/bank-integration.component';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -83,7 +84,8 @@ export function provideConfig() {
         ExportGroupLedgerComponent,
         MasterComponent,
         ExportMasterDialogComponent,
-        MasterExportOptionComponent
+        MasterExportOptionComponent,
+        BankIntegrationComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -176,7 +178,8 @@ export function provideConfig() {
         GenericAsideMenuAccountModule,
         MasterComponent,
         MasterExportOptionComponent,
-        D3TreeChartModule
+        D3TreeChartModule,
+        BankIntegrationComponent
     ],
     providers: [
         {

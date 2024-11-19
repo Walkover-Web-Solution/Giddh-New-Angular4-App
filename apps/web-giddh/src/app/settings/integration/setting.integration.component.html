@@ -381,7 +381,8 @@
                     isGocardlessSupportedCountry
                 "
             >
-                <div class="clearfix box mat-tab-bottom-spacing">
+            <bank-integration></bank-integration>
+                <!-- <div class="clearfix box mat-tab-bottom-spacing">
                     <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
                             <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
@@ -432,7 +433,7 @@
                             </button>
                         </div>
                     </ng-container> -->
-                    <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
+                    <!-- <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
                         <div class="form-group">
                             <button
                                 aria-label="connect bank"
@@ -660,7 +661,7 @@
                             </div>
                         </ng-container>
                     </div>
-                </div>
+                </div> -->
             </mat-tab>
 
             <mat-tab [label]="localeData?.tally?.heading" *ngIf="voucherApiVersion === 2">

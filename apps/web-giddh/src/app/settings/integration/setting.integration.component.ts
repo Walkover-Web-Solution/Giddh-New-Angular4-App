@@ -30,6 +30,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
 import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { BankIntegrationComponent } from '../../shared/bank-integration/bank-integration.component';
 
 @Component({
     selector: 'setting-integration',
