@@ -9,68 +9,35 @@
             <div class="add-mailer">
                 <!--share group from-->
 
-                <form
-                    name="shareGroupForm"
-                    #shareGroupForm="ngForm"
-                    novalidate=""
-                    class="form-inline clearfix"
-                    autocomplete="off"
-                >
+                <form name="shareGroupForm" #shareGroupForm="ngForm" novalidate="" class="form-inline clearfix"
+                    autocomplete="off">
                     <div class="input-group form-group w-100 d-flex justify-content-between">
                         <div class="input-share-width">
-                            <input
-                                name="userEmail"
-                                type="email"
-                                [(ngModel)]="email"
-                                required
-                                [placeholder]="commonLocaleData?.app_email_id"
-                                class="form-control w-100 mr-0"
-                                [pattern]="giddhEmailRegex"
-                            />
+                            <input name="userEmail" type="email" [(ngModel)]="email" required
+                                [placeholder]="commonLocaleData?.app_email_id" class="form-control w-100 mr-0"
+                                [pattern]="giddhEmailRegex" />
                         </div>
                         <div class="input-group-btn d-flex justify-content-between">
-                            <select
-                                name="selectedPermission"
-                                class="form-control selected-permission"
-                                [(ngModel)]="selectedPermission"
-                                aria-label="select permission"
-                                required
-                            >
+                            <select name="selectedPermission" class="form-control selected-permission"
+                                [(ngModel)]="selectedPermission" aria-label="select permission" required>
                                 <option value="">{{ localeData?.select_permission }}</option>
-                                <option
-                                    [value]="permission?.uniqueName"
-                                    *ngFor="let permission of allPermissions$ | async"
-                                >
+                                <option [value]="permission?.uniqueName"
+                                    *ngFor="let permission of allPermissions$ | async">
                                     {{ permission?.name }}
                                 </option>
                             </select>
-                            <button
-                                class="btn btn-success btn-share ml-0"
-                                type="submit"
-                                [disabled]="shareGroupForm.invalid || remainingUsers <= 0"
-                                (click)="shareGroup()"
-                            >
+                            <button class="btn btn-success btn-share ml-0" type="submit"
+                                [disabled]="shareGroupForm.invalid || remainingUsers <= 0" (click)="shareGroup()">
                                 {{ commonLocaleData?.app_share }}
                             </button>
                         </div>
                         <!-- /btn-group -->
                     </div>
                 </form>
-
-                <div *ngIf="remainingUsers <= 0 && (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Users')" class="text-align-left">
-                    <span>
-                        {{ commonLocaleData?.app_no_access_limit_module }}
-                        <button
-                            mat-stroked-button
-                            color="primary"
-                            aria-label="upgrade"
-                            class="mr-0"
-                            (click)="buyPlan(activeCompany?.subscription.subscriptionId)"
-                        >
-                            {{ commonLocaleData?.app_upgrade }}
-                        </button>
-                    </span>
-                </div>
+                <restricted-module-message [activeCompany]="activeCompany$ | async"
+                    [restrictedModule]="restrictedModules.Users" [commonLocaleData]="commonLocaleData"
+                    [remainingCount]="remainingUsers" (upgradeClick)="buyPlan($event)">
+                </restricted-module-message>
 
                 <!--shared with array-->
                 <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
@@ -86,27 +53,19 @@
                                 </div>
 
                                 <div class="custom-select position-relative">
-                                    <select
-                                        name="selectedPermission_{{ i }}"
-                                        class="form-control cp"
-                                        (change)="updatePermission(val, $event)"
-                                    >
-                                        <option
-                                            [selected]="val?.roleUniqueName === permission?.uniqueName"
+                                    <select name="selectedPermission_{{ i }}" class="form-control cp"
+                                        (change)="updatePermission(val, $event)">
+                                        <option [selected]="val?.roleUniqueName === permission?.uniqueName"
                                             [value]="permission?.uniqueName"
-                                            *ngFor="let permission of allPermissions$ | async"
-                                        >
+                                            *ngFor="let permission of allPermissions$ | async">
                                             {{ permission?.name }}
                                         </option>
                                     </select>
                                     <span class="select-drop d-none"><i class="fa fa-caret-down"></i></span>
                                 </div>
                                 <span class="delete-icon pull-right cp">
-                                    <i
-                                        (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
-                                        class="icon-trash"
-                                        aria-hidden="true"
-                                    ></i>
+                                    <i (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)" class="icon-trash"
+                                        aria-hidden="true"></i>
                                 </span>
                             </li>
                         </ul>

@@ -18,6 +18,7 @@ import { GstReport } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
+import { RestrictedModules } from '../../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -95,6 +96,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public dayjs = dayjs;
     /** Active company details */
     public activeCompany: any = null;
+    /** Enum for restricted modules */
+    public restrictedModules = RestrictedModules;
 
     constructor(
         private store: Store<AppState>,
