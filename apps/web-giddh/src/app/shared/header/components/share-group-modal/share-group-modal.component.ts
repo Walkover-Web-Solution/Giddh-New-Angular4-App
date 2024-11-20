@@ -39,7 +39,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     /** Active company details */
     public activeCompany: any;
     /** Enum for restricted modules */
-    public restrictedModules = RestrictedModules;
+    public restrictedModules: any = RestrictedModules;
 
 
     @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();

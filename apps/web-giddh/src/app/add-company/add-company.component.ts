@@ -1584,7 +1584,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public canAddNewUser(): boolean {
         const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value === 'true' ? 1 : 0;
-        const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value.length;
+        const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value?.length;
         return this.remainingUsers > (superAdminCount + selectedRolesCount);
     }
 
@@ -1597,18 +1597,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.canAddNewUser()) {
             this.addNewUser();
         }
-    }
-
-    /**
-     * Checks if new user addition should be disabled
-     *
-     * @return {*}  {boolean}
-     * @memberof AddCompanyComponent
-     */
-    public isAddUserDisabled(): boolean {
-        const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value === 'true' ? 1 : 0;
-        const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value.length;
-        return this.remainingUsers <= (superAdminCount + selectedRolesCount);
     }
 
     /**

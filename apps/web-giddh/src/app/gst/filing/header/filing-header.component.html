@@ -91,9 +91,8 @@
                     </li>
                 </ng-container>
             </ul>
-            <restricted-module-message [activeCompany]="activeCompany$ | async"
-                [restrictedModule]="restrictedModules.TaxFilling" [commonLocaleData]="commonLocaleData"
-                (upgradeClick)="buyPlan($event)">
+            <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                (onUpgradePlan)="buyPlan($event)">
             </restricted-module-message>
         </div>
         <!-- endregion -->

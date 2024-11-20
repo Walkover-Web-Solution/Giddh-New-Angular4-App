@@ -1,30 +1,44 @@
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { RestrictedModules } from '../../app.constant';
 import { Router } from '@angular/router';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
 @Component({
     selector: 'restricted-module-message',
     styleUrls: [`./subscription-upgrade-button.component.scss`],
     templateUrl: './subscription-upgrade-button.component.html'
 })
 export class SubscriptionUpgradeButtonComponent implements OnDestroy {
-    /** Active company details */
-    @Input() public activeCompany: any;
     /** Type of restricted module to check */
     @Input() public restrictedModule: RestrictedModules;
-    /** Common locale data for translations */
-    @Input() public commonLocaleData: any;
     /** Remaining count for specific features (like users) */
     @Input() public remainingCount?: number = null;
     /** Flag to determine if component should use router navigation or emit event */
     @Input() public useRouterLink: boolean = false;
     /** Event emitter for upgrade button click */
-    @Output() public upgradeClick = new EventEmitter<string>();
+    @Output() public onUpgradePlan = new EventEmitter<string>();
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Active company details */
+    public activeCompany: any;
+    /** Common locale data for translations */
+    public commonLocaleData: any;
 
-    constructor(private router: Router) { }
-
+    constructor(private router: Router,
+        private store: Store<AppState>
+    ) {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
+        this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.commonLocaleData = response;
+            }
+        });
+    }
     /**
      * Gets the router link array for subscription upgrade
      *
@@ -53,7 +67,7 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
         if (this.useRouterLink) {
             this.router.navigate(this.getRouterLink());
         } else {
-            this.upgradeClick.emit(subscriptionId);
+            this.onUpgradePlan.emit(subscriptionId);
         }
     }
 
