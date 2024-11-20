@@ -23,8 +23,8 @@ import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -136,8 +136,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public initialApiCalled: boolean = false;
     /** Stores the tax details of a company */
     public taxes: IOption[] = [];
-    /** Datasource of Purchase Register report */
-    // public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    /** Holds active tab index */
+    public activeTabIndex: number = 0;
+    /** Stores the selected tab */
+    public selectedTab: string;
+    /** Stores the displayed columns */
+    public displayedColumns: string[] = ['index', 'invoiceDate', 'docNumber', 'customerName', 'customerGstin', 'ewbNo', 'ewayBillDate', 'totalValue', 'actions'];
+    /** Stores the cancel dialog reference */
+    public cancelDialogRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -176,7 +182,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.EwayBillfilterRequest.gstin = response;
             }
         });
@@ -191,13 +197,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.updateEwayVehicleform.transDocDate = dayjs().toDate();
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
                 this.cancelEwayForm.reset();
-                this.closeModel();
+                this.cancelDialogRef.close();
             }
         });
         this.updateEwayvehicleSuccess$.subscribe(p => {
@@ -311,7 +318,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -366,7 +373,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             }
         });
     }
-
 
     /**
      * Branch change handler
@@ -430,52 +436,63 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
     }
 
-    // public openModal(ewayItem: any, template: TemplateRef<any>) {
-    //     this.modalRef = this.modalService.show(template);
-    //     this.selectedEwayItem = ewayItem;
-    // }
-
-    public openModal(): void {
+    /**
+     * Open add vehicle dialog
+     *
+     * @memberof EWayBillComponent
+     */
+    public openAddVehicleDialog(ewayItem: Result): void {
+        this.selectedEwayItem = ewayItem;
         this.dialog.open(this.vehicleDialog, {
-            width: '630px'
+            panelClass: "mat-dialog-md",
+            disableClose: true
         });
     }
 
-    public cancelOpenModal(): void {
-        this.dialog.open(this.cancelDialog, {
-            width: '630px'
+    /**
+     * Open cancel dialog
+     *
+     * @memberof EWayBillComponent
+     */
+    public openCancelDialog(ewayItem: any): void {
+        this.selectedEwayItem = ewayItem;
+        this.cancelDialogRef = this.dialog.open(this.cancelDialog, {
+            panelClass: "mat-dialog-md",
+            disableClose: true
         })
     }
 
-    public openModalWithClass(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-xl modal-consolidated-details' })
-        );
-    }
-    public cancelEwayBill(cancelEway: NgForm) {
-
-        this.cancelEwayRequest = _.cloneDeep(cancelEway?.value);
-        this.cancelEwayRequest.ewbNo = this.selectedEwayItem.ewbNo;
-        if (cancelEway.valid) {
+    /**
+     * Cancel eway bill
+     *
+     * @param {any} cancelEwayFormValue
+     * @memberof EWayBillComponent
+     */
+    public cancelEwayBill(cancelEwayFormValue: any): void {
+        if (cancelEwayFormValue) {
+            this.cancelEwayRequest = _.cloneDeep(cancelEwayFormValue);
+            this.cancelEwayRequest['ewbNo'] = this.selectedEwayItem.ewbNo;
             this.store.dispatch(this.invoiceActions.cancelEwayBill(this.cancelEwayRequest));
-        }
-
-    }
-
-    public updateEwayTransport(updateEwayTransportfrom: NgForm) {
-
-        this.updateEwayVehicleObj = updateEwayTransportfrom?.value;
-        this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
-        this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
-        if (updateEwayTransportfrom.valid) {
-            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom?.value));
         }
         this.detectChange();
     }
-    public closeModel() {
-        this.modalRef.hide();
+
+    /**
+     * Update eway transport
+     *
+     * @param {any} updateEwayTransportfromValue
+     * @memberof EWayBillComponent
+     */
+    public updateEwayTransport(updateEwayTransportfromValue: any): void {
+        if (updateEwayTransportfromValue) {
+            this.updateEwayVehicleObj = updateEwayTransportfromValue;
+            this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
+            this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
+            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfromValue));
+        }
+        this.detectChange();
     }
+
     public sortbyApi(key, ord) {
         this.EwayBillfilterRequest.searchOn = null;
         this.EwayBillfilterRequest.searchTerm = null;
@@ -556,7 +573,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (o.branchUniqueName) {
             model.branchUniqueName = o.branchUniqueName;
         }
-        if(o.gstin) {
+        if (o.gstin) {
             model.gstin = o.gstin;
         }
 
@@ -721,6 +738,19 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if ((this.currentCompanyBranches?.length > 2 && this.currentOrganizationType === 'COMPANY') || this.EwayBillfilterRequest.gstin) {
             this.EwayBillfilterRequest.page = 0;
             this.getAllFilteredInvoice();
+        }
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof EWayBillComponent
+     */
+    public onTabChange(event: MatTabChangeEvent): void {
+        if (typeof event?.index === 'number') {
+            this.activeTabIndex = event?.index;
+            this.selectedTab = event.tab.textLabel;
         }
     }
 }

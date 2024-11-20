@@ -81,6 +81,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -173,7 +175,9 @@ import { MatButtonModule } from '@angular/material/button';
         GenerateEWayBillModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        MatMenuModule,
+        MatTooltipModule
     ],
     exports: [
         InvoiceRoutingModule,

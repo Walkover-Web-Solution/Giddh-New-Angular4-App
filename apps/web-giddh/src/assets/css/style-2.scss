@@ -13893,3 +13893,18 @@ import-wizard {
         color: var(--color-denary-button-text) !important;
     }
 }
+
+.download-arrow {
+    .icon-download1 {
+        visibility: hidden;
+        opacity: 0;
+        font-size: 17px;
+        transition: 0.5s all ease;
+    }
+    &:hover {
+      .icon-download1 {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
