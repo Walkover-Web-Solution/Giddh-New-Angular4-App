@@ -736,7 +736,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.EwayBillfilterRequest.gstin = event.value;
         }
 
-        if ((this.currentCompanyBranches?.length > 2 && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch)) || this.EwayBillfilterRequest.gstin) {
+        if ((this.currentCompanyBranches?.length > 2 && (this.currentOrganizationType === 'COMPANY')) || this.EwayBillfilterRequest.gstin) {
             this.EwayBillfilterRequest.page = 0;
             this.getAllFilteredInvoice();
         }
