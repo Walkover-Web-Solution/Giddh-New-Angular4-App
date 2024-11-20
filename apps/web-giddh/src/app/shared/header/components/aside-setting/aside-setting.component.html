@@ -53,6 +53,16 @@
                         </ng-template>
                     </ng-container>
                 </mat-list>
+                <mat-list role="list" >
+                        <ng-container >
+                            <mat-list-item role="listitem" [ngClass]="{ 'active-link':!isTagMenuOpened }">
+                                <a href="javascript:;" aria-label="icon" class="d-block clearfix"   [routerLink]="['/pages/triggers']">
+                                    <span><i class="icon-integration1"></i></span>
+                                    <span>Triggers</span>
+                                </a>
+                            </mat-list-item>
+                        </ng-container>
+                </mat-list>
             </div>
         </div>
     </div>

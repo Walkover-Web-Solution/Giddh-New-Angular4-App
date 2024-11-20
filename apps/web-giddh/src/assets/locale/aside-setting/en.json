@@ -43,6 +43,12 @@
                     ]
                 },
                 {
+                    "label": "Triggers",
+                    "link": "/pages/triggers",
+                    "icon": "<i class='icon-integration1'></i>",
+                    "linked_pages": []
+                },
+                {
                     "label": "Tags",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"

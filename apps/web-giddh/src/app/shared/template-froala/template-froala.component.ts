@@ -124,8 +124,7 @@ export class TemplateFroalaComponent implements OnInit {
     public actionOptions: any[] = [];
     public conditionOptions: any[] = [];
     public daysOptions: any[] = [];
-
-
+    public timeOptions: any[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
