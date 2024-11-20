@@ -136,12 +136,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public initialApiCalled: boolean = false;
     /** Stores the tax details of a company */
     public taxes: IOption[] = [];
-<<<<<<< HEAD
-    /** Datasource of Purchase Register report */
-    // public dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
-=======
     /** Holds active tab index */
     public activeTabIndex: number = 0;
     /** Stores the selected tab */
@@ -150,7 +144,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['index', 'invoiceDate', 'docNumber', 'customerName', 'customerGstin', 'ewbNo', 'ewayBillDate', 'totalValue', 'actions'];
     /** Stores the cancel dialog reference */
     public cancelDialogRef: MatDialogRef<any>;
->>>>>>> fc9bbba9c4 (Ewaybill code complete | Version 2)
 
     constructor(
         private store: Store<AppState>,
@@ -204,16 +197,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-<<<<<<< HEAD
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
-=======
         this.updateEwayVehicleform.transDocDate = dayjs().toDate();
->>>>>>> fc9bbba9c4 (Ewaybill code complete | Version 2)
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
