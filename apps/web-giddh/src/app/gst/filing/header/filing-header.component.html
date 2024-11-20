@@ -85,7 +85,7 @@
                     </div>
                 </li>
             </ul>
-            <span class="pull-right" *ngIf="isCompany && showGstFiling">
+            <span class="pull-right filling-header-message" *ngIf="isCompany && showGstFiling">
                 <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
                     (onUpgradePlan)="buyPlan($event)">
                 </restricted-module-message>
