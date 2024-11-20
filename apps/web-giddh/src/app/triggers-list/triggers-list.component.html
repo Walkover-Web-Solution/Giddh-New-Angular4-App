@@ -1,14 +1,6 @@
-<!-- <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container appTranslate [file]="'triggers-list'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
-    <div class="relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()"
-            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
-            [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
-        </div>
-    </div>
     <div class="obligations position-relative pd-15">
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap">
@@ -19,104 +11,98 @@
                             class="giddh-datepicker date-range-picker" />
                     </div>
                 </div>
-                <div class="col flex-grow-0" *ngIf="taxesList?.length > 1" >
-                    <dropdown-field [label]="commonLocaleData?.app_vat" [options]="taxesList"
-                        (selectedOption)="taxNumberSelected($event)" [placeholder]="commonLocaleData?.app_enter_vat">
-                    </dropdown-field>
-                </div>
-                <div class="col flex-grow-0">
-                    <dropdown-field [label]="commonLocaleData?.app_status" [options]="statusList" (selectedOption)="statusSelected($event)"
-                        [placeholder]="localeData?.select_status"
-                        [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
-                </div>
-                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
-                    <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
-                        (selectedOption)="branchSelected($event)"
-                        [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
-                </div>
-                <div class="col flex-grow-0">
-                    <button mat-stroked-button color="primary" (click)="getVatObligations()">{{
-                        commonLocaleData?.app_search }}</button>
-                </div>
             </div>
 
-            <div class="position-center position-absolute" *ngIf="isLoading">
+            <!-- <div class="position-center position-absolute" *ngIf="isLoading">
                 <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
-            </div>
-            <div class="row mt-5" *ngIf="!isLoading">
+            </div> -->
+            <div class="row mt-5">
                 <div class="table-responsive">
-                    <table mat-table [dataSource]="tableDataSource" class="w-100" *ngIf="tableDataSource.length">
-                        <ng-container matColumnDef="start">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_start_date }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element?.start }}
-                            </td>
+                    <table mat-table [dataSource]="dataSource" class="giddh-table table activity-table">
+                        <!-- Title Column -->
+                        <ng-container matColumnDef="title">
+                            <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.title }} </mat-cell>
                         </ng-container>
-                        <ng-container matColumnDef="end">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_end_date }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element?.end }}
-                            </td>
+
+                        <!-- Entity Column -->
+                        <ng-container matColumnDef="entity">
+                            <mat-header-cell *matHeaderCellDef> Entity </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.entity }} </mat-cell>
                         </ng-container>
-                        <ng-container matColumnDef="due">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_due }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element?.due }}
-                            </td>
+
+                        <!-- Email Subject Column -->
+                        <ng-container matColumnDef="emailSubject">
+                            <mat-header-cell *matHeaderCellDef> Email Subject </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.emailSubject }} </mat-cell>
                         </ng-container>
-                        <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_status }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="element?.status === 'F'">{{ localeData?.status_fulfilled
-                                    }}</ng-container>
-                                <ng-container *ngIf="element?.status === 'O'">{{
-                                    localeData?.status_open}}</ng-container>
-                            </td>
+
+                        <!-- Trigger Module Column -->
+                        <ng-container matColumnDef="triggerModule">
+                            <mat-header-cell *matHeaderCellDef> Trigger Module </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.triggerModule }} </mat-cell>
                         </ng-container>
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_action }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                <button class="action-btn" *ngIf="element.status ===  'F'" mat-stroked-button
-                                    (click)="openViewReturnDialog(element?.start, element?.end, element?.periodKey)">{{
-                                    localeData?.view_return }}</button>
-                                <button class="action-btn" *ngIf="element.status ===  'O'" mat-stroked-button
-                                    (click)="openFileReturnDialog(element?.start, element?.end, element?.periodKey)">
-                                    {{ localeData?.file_return }}</button>
-                            </td>
+
+                        <!-- Execution Time Column -->
+                        <ng-container matColumnDef="executionTime">
+                            <mat-header-cell *matHeaderCellDef> Execution Time </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.executionTime.time }} <br />
+                                {{ element.executionTime.dayOfWeek || element.executionTime.dayOfMonth }}
+                            </mat-cell>
                         </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                        <!-- Conditions Column -->
+                        <ng-container matColumnDef="conditions">
+                            <mat-header-cell *matHeaderCellDef> Conditions </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                DUE_BY: {{ element.conditions.DUE_BY.key }} = {{ element.conditions.DUE_BY.value
+                                }}<br />
+                                DUE_AMOUNT: {{ element.conditions.DUE_AMOUNT.key }} = {{
+                                element.conditions.DUE_AMOUNT.value }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.actions.join(', ') }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Disabled Column -->
+                        <ng-container matColumnDef="disabled">
+                            <mat-header-cell *matHeaderCellDef> Disabled </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.disabled ? 'Yes' : 'No' }} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                     </table>
-                    <section *ngIf="!tableDataSource?.length">
-                        <div *ngIf="getFormControl('taxNumber').value">
-                            <div *ngIf="connectToHMRCUrl" class="position-center position-absolute">
-                                <a mat-stroked-button color="primary" [href]="connectToHMRCUrl">
-                                    {{ localeData?.connect_to_hmrc }}
-                                </a>
-                            </div>
-                            <div class="no-data"  *ngIf="!connectToHMRCUrl">
-                                <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
-                            </div>
-                        </div>
-                        <div class="no-data" *ngIf="!getFormControl('taxNumber').value">
-                            <h1>{{ localeData?.no_vrn_available }}</h1>
+                    <section *ngIf="!dataSource.length">
+                        <div class="no-data">
+                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                         </div>
                     </section>
+                    <div
+                    class="pagination-wrapper justify-content-end"
+                >
+                    <mat-paginator
+                        (page)="handlePageChange($event)"
+                        [length]="20"
+                        [pageSize]="20"
+                        [showFirstLastButtons]="true"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [hidePageSize]="false"
+                        [pageIndex]="1"
+                        class="mt-15"
+                    >
+                    </mat-paginator>
+                </div>
                 </div>
             </div>
         </div>
     </div>
-</ng-container> -->
+</ng-container>
 
 <!-- Universal Date Picker  -->
 <ng-template #datepickerTemplate>

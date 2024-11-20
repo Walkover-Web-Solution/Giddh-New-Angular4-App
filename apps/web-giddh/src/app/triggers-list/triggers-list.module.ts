@@ -13,6 +13,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TriggersListComponent } from './triggers-list.component';
 import { TriggersListRoutingModule } from './tiggers-list.routing.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { MatTableModule } from '@angular/material/table';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -27,7 +33,13 @@ import { TriggersListRoutingModule } from './tiggers-list.routing.module';
         NgxMatSelectSearchModule,
         MatSelectModule,
         MatCheckboxModule,
-        TriggersListRoutingModule
+        TriggersListRoutingModule,
+        TranslateDirectiveModule,
+        MatTableModule,
+        GiddhDateRangepickerModule,
+        GiddhPageLoaderModule,
+        HamburgerMenuModule,
+        MatPaginatorModule
     ],
     exports: [
         TriggersListComponent
