@@ -1,7 +1,8 @@
-<ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+ <ng-container
+  appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    >
     <div class="clearfix box mat-tab-bottom-spacing">
-        {{ isIciciBankSupportedCountry }}
         <ng-container  *ngIf="isIciciBankSupportedCountry">
             <ng-template>
                 <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
@@ -29,7 +30,7 @@
                     </p>
                 </div>
             </div>
-        </ng-container>
+        </ng-container> 
         <!-- This is not using no due to gocardless -->
         <!-- <ng-container *ngIf="isPlaidSupportedCountry">
             <div class="form-group">
@@ -52,7 +53,9 @@
         <div class="connected-accounts">
             <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
                 localeData?.payment?.connected_accounts
-                }}</b><br />
+                }}
+            </b>
+            <br />
             <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
             <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
                 <div class="account-wrapper"
@@ -210,6 +213,47 @@
                 [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
             >
             </icici-account-create-edit>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #createNewAccountUserModal>
+    <div class="user-modal">
+        <div class="modal-content">
+            <icici-payor-account-create-edit
+                [commonLocaleData]="commonLocaleData"
+                [activeBankAccount]="activeBankAccount"
+                (getAllBankAccounts)="getAllBankAccounts()"
+                (closeModalEvent)="createNewAccountUserModalRef?.close()"
+            ></icici-payor-account-create-edit>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #editAccountUserModal>
+    <div class="user-modal">
+        <div class="modal-content">
+            <icici-payor-account-create-edit
+                [commonLocaleData]="commonLocaleData"
+                [activeBankAccount]="activeBankAccount"
+                [activePayorAccount]="activePayorAccount"
+                (getAllBankAccounts)="getAllBankAccounts()"
+                (closeModalEvent)="editAccountUserModalRef?.close()"
+            >
+            </icici-payor-account-create-edit>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #confirmationModal>
+    <div class="modal-md">
+        <div class="modal-content">
+            <confirm-modal
+                [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
+                (cancelCallBack)="confirmationModalRef?.close()"
+                (successCallBack)="deleteBankAccountLogin(true)"
+            >
+            </confirm-modal>
         </div>
     </div>
 </ng-template>

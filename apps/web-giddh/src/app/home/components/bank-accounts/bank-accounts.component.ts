@@ -9,6 +9,10 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { BROADCAST_CHANNELS } from '../../../app.constant';
 import { CommonActions } from '../../../actions/common.actions';
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
+
+
 
 @Component({
     selector: 'bank-accounts',
@@ -32,12 +36,18 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** True if relogin required in any bank account */
     public reLoginRequired: boolean = false;
+   /** Holds Create New Account Dialog Ref */
+   public createNewAccountDialogRef: MatDialogRef<any>;
+   /** Hold reference number */
+   public referenceNumber: string = '';
+    
 
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
         private commonAction: CommonActions,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        public dialog: MatDialog
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -101,5 +111,32 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+
+    /**
+    * This function will use for get institutions details
+    *
+    * @param {*} element
+    * @memberof SettingIntegrationComponent
+    */
+    public openInstitutionsDialog(): void {
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData,
+        }
+        const dialogRef = this.dialog.open(InstitutionsListComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.referenceNumber = response;
+            }
+        });
     }
 }

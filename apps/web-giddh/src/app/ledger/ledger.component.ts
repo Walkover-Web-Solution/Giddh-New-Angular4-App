@@ -37,7 +37,7 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
 import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
 import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
@@ -49,6 +49,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
+import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
 
 @Component({
     selector: 'ledger',
@@ -310,6 +311,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public transactionCountConvertToEntries: number = null;
     /** Holds bank transactions account name */
     private bankTransactionsWithAccountName: any[] = [];
+    /** Hold reference number */
+   public referenceNumber: string = '';
 
     constructor(
         private store: Store<AppState>,
@@ -459,6 +462,31 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this.getTransactionData();
         }
+    }
+     /**
+    * This function will use for get institutions details
+    *
+    * @param {*} element
+    * @memberof SettingIntegrationComponent
+    */
+     public openInstitutionsDialog(): void {
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData,
+        }
+        const dialogRef = this.dialog.open(InstitutionsListComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.referenceNumber = response;
+            }
+        });
     }
 
     public ngOnInit() {

@@ -44,8 +44,8 @@
                 </div>
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <a class="connect-bank" *ngIf="bankAccounts?.length > 0"
-                [routerLink]="['/pages/settings/integration/payment']">{{ localeData?.connect_bank }}</a>
+            <button type="button" mat-stroked-button color="primary" class="connect-bank" *ngIf="bankAccounts?.length > 0"
+                (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
         </mat-card-content>
     </mat-card>
 </div>

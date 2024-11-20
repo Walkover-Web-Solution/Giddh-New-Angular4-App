@@ -57,8 +57,6 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
      * @memberof InstitutionsListComponent
      */
     public ngOnInit(): void {
-        this.localeData = this.inputData?.localeData;
-        this.commonLocaleData = this.inputData?.commonLocaleData;
         this.getAllInstitutionsList();
         this.institutionsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

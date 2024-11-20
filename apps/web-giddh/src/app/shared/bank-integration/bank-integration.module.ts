@@ -26,6 +26,8 @@ import { WatchVideoModule } from "../../theme/watch-video/watch-video.module";
 import { NgModule } from "@angular/core";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { SettingIntegrationPaymentModule } from "../../settings/integration/payment/setting.integration.payment.module";
+import { AccountNumberMaskModule } from "../helpers/pipes/accountNumberMaskPipe/accountNumberMask.module";
+import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
 
 @NgModule({
     declarations: [BankIntegrationComponent, InstitutionsListComponent ],
@@ -57,7 +59,9 @@ import { SettingIntegrationPaymentModule } from "../../settings/integration/paym
         MatDatepickerModule,
         WatchVideoModule,
         TranslateDirectiveModule,
-        SettingIntegrationPaymentModule
+        SettingIntegrationPaymentModule,
+        AccountNumberMaskModule,
+        GiddhPageLoaderModule
 
     ],
     exports: [BankIntegrationComponent, InstitutionsListComponent]

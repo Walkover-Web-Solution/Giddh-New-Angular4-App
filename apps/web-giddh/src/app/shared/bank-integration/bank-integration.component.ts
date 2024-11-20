@@ -17,6 +17,8 @@ import { BankIntegrationComponentStore } from "./utility/bank-integration.store"
 import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
 import { ToasterService } from "../../services/toaster.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { NgForm } from '@angular/forms';
+import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
 
 @Component({
     selector: 'bank-integration',
@@ -26,10 +28,12 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BankIntegrationComponent implements OnInit {
+
     public isIciciBankSupportedCountry: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
-    public _companyActions: CompanyActions;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will have bank account details */
+    public activeBankAccount: any;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
     /** Holds true if current company country is gocardless supported country */
@@ -65,11 +69,33 @@ export class BankIntegrationComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-      /** Instance of create new account modal */
-      @ViewChild('createNewAccountModal', { static: true }) public createNewAccountModal: TemplateRef<any>;
+    /** Holds Edit New Account Dialog Ref */
+    public editAccountModalRef: MatDialogRef<any>;
+    /** Holds Create New Account User Dialog Ref */
+    public createNewAccountUserModalRef: MatDialogRef<any>;
+    /** Hold editAccountUserModal mat dailog reference */
+    public editAccountUserModalRef: any;
+    /** This will have payor account details */
+    public activePayorAccount: any;
+    /** Hold confirmationModalRef mat dailog reference */
+    public confirmationModalRef: any;
+
+    @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
+    /** Instance of create new account modal */
+    @ViewChild('createNewAccountModal', { static: true }) public createNewAccountModal: TemplateRef<any>;
+    /** Instance of edit account modal */
+    @ViewChild('editAccountModal', { static: true }) public editAccountModal: TemplateRef<any>;
+    /** Instance of create new account user modal */
+    @ViewChild('createNewAccountUserModal', { static: true }) public createNewAccountUserModal: TemplateRef<any>;
+    /** Edit Account User Dailog Template Reference */
+    @ViewChild('editAccountUserModal', { static: true }) public editAccountUserModal: TemplateRef<any>;
+    /** Instance of delete account user modal */
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+
 
     /** @ignore */
     constructor(
+        private _companyActions: CompanyActions,
         private router: Router,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -85,6 +111,32 @@ export class BankIntegrationComponent implements OnInit {
 
 
     /**
+   * This function will use for get institutions details
+   *
+   * @param {*} element
+   * @memberof SettingIntegrationComponent
+   */
+    public openInstitutionsDialog(): void {
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData,
+        }
+        const dialogRef = this.dialog.open(InstitutionsListComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.referenceNumber = response;
+            }
+        });
+    }
+
+    /**
      * This will open create new account modal
      *
      * @memberof SettingIntegrationComponent
@@ -95,12 +147,14 @@ export class BankIntegrationComponent implements OnInit {
             disableClose: true
         });
     }
+
     /**
      * Initializes the component message
      *
      * @memberof BankIntegrationComponent
      */
     public ngOnInit(): void {
+        this.loadPaymentData();
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
@@ -194,20 +248,26 @@ export class BankIntegrationComponent implements OnInit {
             }
         });
     }
-    public loadPaymentData(event?: any): void {
+
+    public loadPaymentData(): void {
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
             this.isAddAndManageOpenedFromOutside = result;
         });
-        if (event && event instanceof TabDirective || !event) {
-            this.loadDefaultBankAccountsSuggestions();
-            this.getAllBankAccounts();
-            this.store.dispatch(this._companyActions.getAllRegistrations());
-            this.store.pipe(take(1)).subscribe(s => {
-                this.selectedCompanyUniqueName = s.session.companyUniqueName;
-                this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-            });
-        }
+        this.loadDefaultBankAccountsSuggestions();
+        this.getAllBankAccounts();
+        this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.pipe(take(1)).subscribe(s => {
+            this.selectedCompanyUniqueName = s.session.companyUniqueName;
+            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+        });
+
     }
+
+    /**
+     * This will get all connected bank accounts
+     *
+     * @memberof SettingIntegrationComponent
+     */
     public getAllBankAccounts(): void {
         this.isLoading = true;
         this.connectedBankAccounts = [];
@@ -257,4 +317,98 @@ export class BankIntegrationComponent implements OnInit {
         }
     }
 
+    /**
+     * This will open edit account modal
+     *
+     * @param {*} bankAccount
+     * @memberof SettingIntegrationComponent
+     */
+    public openEditAccountModal(bankAccount: any): void {
+        this.activeBankAccount = bankAccount;
+        this.editAccountModalRef = this.dialog.open(this.editAccountModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
+    }
+    /**
+    * This will open the create new account user modal
+    *
+    * @param {*} bankAccount
+    * @memberof SettingIntegrationComponent
+    */
+    public openCreateNewAccountUserModal(bankAccount: any): void {
+        this.activeBankAccount = bankAccount;
+        this.createNewAccountUserModalRef = this.dialog.open(this.createNewAccountUserModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
+    }
+
+    /**
+    * This will open the edit account user modal
+    *
+    * @param {*} bankAccount
+    * @param {*} payor
+    * @memberof SettingIntegrationComponent
+    */
+    public openEditAccountUserModal(bankAccount: any, payor: any): void {
+        this.activeBankAccount = bankAccount;
+        this.activePayorAccount = payor;
+        this.editAccountUserModalRef = this.dialog.open(this.editAccountUserModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
+    }
+    /**
+    * This will show the delete bank account login confirmation modal
+    *
+    * @param {*} bankAccount
+    * @param {*} payor
+    * @memberof SettingIntegrationComponent
+    */
+    public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
+        if (this.isPlaidSupportedCountry) {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.bankUserId, loginId: payor?.loginId };
+        } else {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.bankUserId, loginId: payor?.loginId };
+        }
+        this.confirmationModalRef = this.dialog.open(this.confirmationModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
+    }
+
+    /**
+     * This will delete/deregister the bank account login
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public deleteBankAccountLogin(): void {
+        let model;
+        if (this.isPlaidSupportedCountry) {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.bankUserId }
+        } else {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, bankUserId: this.activeBankAccount?.bankUserId }
+        }
+        this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
+            if (response?.status === "success") {
+                this.getAllBankAccounts();
+            } else {
+                this.toasty.clearAllToaster();
+                this.toasty.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+    * This returns the account unique name of account
+    *
+    * @param {number} index
+    * @param {*} item
+    * @returns {*}
+    * @memberof SettingIntegrationComponent
+    */
+    public trackByAccountUniqueName(index: number, item: any): any {
+        return item?.bankResource?.uniqueName;
+    }
 }
