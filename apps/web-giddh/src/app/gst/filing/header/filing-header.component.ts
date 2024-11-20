@@ -60,17 +60,18 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** True if current organization is company */
     @Input() public isCompany: boolean;
+    // @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
     /** True if current organization is consolidated branch */
     @Input() public isConsolidatedBranch: boolean;
-    public gstAuthenticated$: Observable<boolean>;
-    /** Stores the active company information observable*/
-    public activeCompany$: Observable<any>;
     /** Holds cancel confirmation dialog template ref */
     @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
     /** Holds cancel Confirmation dialog ref */
     public cancelConfirmationDialogRef: MatDialogRef<any>;
     /** Holds cancel push To Portal Dialog template ref */
     @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
+    /** Directive to get reference of element */
+    @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
+    public gstAuthenticated$: Observable<boolean>;
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
@@ -96,8 +97,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public showDate: boolean = true;
     /** Instance of dayjs */
     public dayjs = dayjs;
-    /** Active company details */
-    public activeCompany: any = null;
     /** AsideAuthentication Dialog Open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     /** Holds Aside Authentication Dialog Ref */
@@ -124,16 +123,12 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
-        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
-        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            this.activeCompany = response;
-        });
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
             if (this.holdActiveRoute) {
@@ -405,15 +400,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to },
                 queryParamsHandling: 'merge'
             });
-    }
-
-    /**
-    * Navigates to the page for buy plan.
-    * @memberof FilingHeaderComponent
-    * @param subscriptionId
-    */
-    public buyPlan(subscriptionId: string): void {
-        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 
     /**

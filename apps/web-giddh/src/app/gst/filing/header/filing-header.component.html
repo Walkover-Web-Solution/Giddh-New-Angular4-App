@@ -62,16 +62,6 @@
                     </button>
                 </li>
             </ul>
-            <div *ngIf="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty('Tax filing')"
-                class="row pull-right mr-15">
-                <span class="pull-right d-flex align-items-center column-gap5">
-                    <div>{{ commonLocaleData?.app_no_access_limit_module }}</div>
-                    <button mat-stroked-button color="primary" aria-label="upgrade" class="mr-0"
-                        (click)="buyPlan(activeCompany?.subscription.subscriptionId)">
-                        {{ commonLocaleData?.app_upgrade }}
-                    </button>
-                </span>
-            </div>
         </div>
     </div>
 
