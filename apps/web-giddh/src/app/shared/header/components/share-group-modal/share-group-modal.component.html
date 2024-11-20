@@ -34,9 +34,8 @@
                         <!-- /btn-group -->
                     </div>
                 </form>
-                <restricted-module-message [activeCompany]="activeCompany$ | async"
-                    [restrictedModule]="restrictedModules.Users" [commonLocaleData]="commonLocaleData"
-                    [remainingCount]="remainingUsers" (upgradeClick)="buyPlan($event)">
+                <restricted-module-message [restrictedModule]="restrictedModules.Users"
+                    [remainingCount]="remainingUsers" (onUpgradePlan)="buyPlan($event)">
                 </restricted-module-message>
 
                 <!--shared with array-->

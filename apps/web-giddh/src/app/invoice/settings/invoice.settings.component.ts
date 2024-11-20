@@ -89,7 +89,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** Active company details */
     public activeCompany: any = null;
     /** Enum for restricted modules */
-    public restrictedModules = RestrictedModules;
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private commonActions: CommonActions,

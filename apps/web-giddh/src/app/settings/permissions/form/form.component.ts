@@ -75,7 +75,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
-    public restrictedModules = RestrictedModules;
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,

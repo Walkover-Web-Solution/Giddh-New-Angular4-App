@@ -97,7 +97,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Active company details */
     public activeCompany: any = null;
     /** Enum for restricted modules */
-    public restrictedModules = RestrictedModules;
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private store: Store<AppState>,
