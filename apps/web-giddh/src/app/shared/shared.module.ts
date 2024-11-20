@@ -59,6 +59,7 @@ import { MasterExportOptionComponent } from './header/components/master-export-o
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CallBackPageModule } from './call-back-page/call-back-page.module';
 import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
+import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -137,7 +138,8 @@ export function provideConfig() {
         MatButtonModule,
         MatDialogModule,
         MatTooltipModule,
-        CallBackPageModule
+        CallBackPageModule,
+        SubscriptionUpgradeButtonModule
     ],
     exports: [
         CommonModule,
@@ -179,7 +181,8 @@ export function provideConfig() {
         MasterComponent,
         MasterExportOptionComponent,
         CallBackPageModule,
-        D3TreeChartModule
+        D3TreeChartModule,
+        SubscriptionUpgradeButtonModule
     ],
     providers: [
         {

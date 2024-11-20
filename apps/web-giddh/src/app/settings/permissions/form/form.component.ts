@@ -16,6 +16,7 @@ dayjs.extend(customParseFormat);
 import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
+import { RestrictedModules } from '../../../app.constant';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -73,6 +74,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public remainingUsers: number = 0;
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,

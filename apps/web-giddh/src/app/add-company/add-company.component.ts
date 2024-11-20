@@ -1577,6 +1577,29 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
+     * Checks if new user can be added based on remaining users and current selections
+     *
+     * @return {*}  {boolean}
+     * @memberof AddCompanyComponent
+     */
+    public canAddNewUser(): boolean {
+        const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value === 'true' ? 1 : 0;
+        const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value?.length;
+        return this.remainingUsers > (superAdminCount + selectedRolesCount);
+    }
+
+    /**
+     * Handles the add new user action
+     *
+     * @memberof AddCompanyComponent
+     */
+    public handleAddNewUser(): void {
+        if (this.canAddNewUser()) {
+            this.addNewUser();
+        }
+    }
+
+    /**
      * This will call on component destroy
      *
      * @memberof AddCompanyComponent
