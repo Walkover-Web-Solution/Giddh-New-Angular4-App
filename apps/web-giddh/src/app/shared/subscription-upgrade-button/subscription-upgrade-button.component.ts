@@ -33,24 +33,6 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
                 this.activeCompany = activeCompany;
             }
         });
-        this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.commonLocaleData = response;
-            }
-        });
-    }
-    /**
-     * Gets the router link array for subscription upgrade
-     *
-     * @returns {string[]} Array containing the router link segments
-     * @memberof SubscriptionUpgradeButtonComponent
-     */
-    public getRouterLink(): string[] {
-        const subscriptionId = this.activeCompany?.subscription?.subscriptionId;
-        if (!subscriptionId) {
-            return;
-        }
-        return ['/pages/user-details/subscription/buy-plan/', subscriptionId];
     }
 
     /**
@@ -59,13 +41,13 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
      *
      * @memberof SubscriptionUpgradeButtonComponent
      */
-    public onUpgradeClick(): void {
+    public onUpgrade(): void {
         const subscriptionId = this.activeCompany?.subscription?.subscriptionId;
         if (!subscriptionId) {
             return;
         }
         if (this.useRouterLink) {
-            this.router.navigate(this.getRouterLink());
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/', subscriptionId]);
         } else {
             this.onUpgradePlan.emit(subscriptionId);
         }
