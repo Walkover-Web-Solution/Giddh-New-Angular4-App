@@ -165,8 +165,8 @@
         [matDatepicker]="picker" 
         [placeholder]="date?.value ?? '--'" 
         autocomplete="off"
-        (focus)="picker.open()" 
-        (click)="picker.open()"
+        (focus)="picker?.open()" 
+        (click)="picker?.open()"
         class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer" 
         name="date" 
         readonly
