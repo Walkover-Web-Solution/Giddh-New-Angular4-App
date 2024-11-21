@@ -50,6 +50,7 @@ import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
+import { SettingsIntegrationService } from '../services/settings.integraion.service';
 
 @Component({
     selector: 'ledger',
@@ -312,7 +313,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds bank transactions account name */
     private bankTransactionsWithAccountName: any[] = [];
     /** Hold reference number */
-   public referenceNumber: string = '';
+    public referenceNumber: string = '';
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -337,7 +340,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private router: Router
+        private router: Router,
+        private settingsIntegrationService: SettingsIntegrationService,
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -356,6 +360,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
     }
+    /** True if active account is bank account */
+    public get isBankAccount(): boolean {
+        return this.lc.activeAccount?.parentGroups?.some(group => group.uniqueName === 'bankaccounts');
+    }
+    /** True if active account is bank account */
+    public isBankAccountConnected: boolean;
 
     public toggleShow() {
         this.Shown = this.Shown ? false : true;
@@ -463,30 +473,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getTransactionData();
         }
     }
-     /**
-    * This function will use for get institutions details
-    *
-    * @param {*} element
-    * @memberof SettingIntegrationComponent
-    */
-     public openInstitutionsDialog(): void {
-        let data = {
-            localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData,
-        }
-        const dialogRef = this.dialog.open(InstitutionsListComponent, {
-            data: data,
-            width: 'var(--aside-pane-width)',
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'institutionsListDialog'
-        });
-
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.referenceNumber = response;
+    /**
+   * This function will use for get institutions details
+   *
+   * @param {*} element
+   * @memberof SettingIntegrationComponent
+   */
+    public openInstitutionsDialog(): void {
+        if (this.isBankAccountConnected) {
+          this.router.navigate(["/pages/settings/integration/payment"])
+        } else {
+            let data = {
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
             }
-        });
+            const dialogRef = this.dialog.open(InstitutionsListComponent, {
+                data: data,
+                width: 'var(--aside-pane-width)',
+                panelClass: 'subscription-sidebar',
+                role: 'alertdialog',
+                ariaLabel: 'institutionsListDialog'
+            });
+
+            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.referenceNumber = response;
+                }
+            });
+        }
     }
 
     public ngOnInit() {
@@ -669,6 +683,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (params['accountUniqueName']) {
                 this.isShowLedgerColumnarReportTable = false;
                 this.lc.accountUnq = params['accountUniqueName'];
+                if (this.isBankAccount) {
+                    this.getAllBankAccounts(params['accountUniqueName']);
+                }
                 this.needToShowLoader = true;
                 this.searchText = '';
                 this.trxRequest.paginationToken = '';
@@ -2606,12 +2623,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
+            console.log("translationComplete");
+            
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 
                 if (data[0] && data[1]) {
 
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
+                    if (this.isBankAccount) {
+                        this.getAllBankAccounts();
+                    }
                     this.loadDefaultSearchSuggestions();
                     this.profileObj = profile;
                     this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -3058,9 +3080,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Initiate request to open plaid popup
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof LedgerComponent
      */
     public getPlaidLinkToken(itemId?: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
+        this.getAllBankAccounts();
     }
+
+    /**
+    * This will get all connected bank accounts
+    *
+    * @memberof LedgerComponent
+    */
+    public getAllBankAccounts(accountUniqueName?: string): void {
+        this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
+            if (response?.body) {
+                const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
+                if (result) {
+                    this.isBankAccountConnected = true;
+                }
+            }
+        });
+    }
+
 }
