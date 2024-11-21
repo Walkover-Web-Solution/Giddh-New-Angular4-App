@@ -93,7 +93,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      */
     public reconcileTabChanged(event: MatTabChangeEvent) {
         if (typeof event?.index === 'number') {
-            this.activeTabIndex = event?.index;
+            this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
             let action = '';
             switch (event.tab.textLabel) {

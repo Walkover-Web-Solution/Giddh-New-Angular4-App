@@ -356,7 +356,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                     }
                     return saveAs(res, `${this.selectedInvoice.voucherNumber}.` + 'pdf');
                 } else {
-                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    this.toaster.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
             });
         } else {
@@ -373,8 +373,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     } else {
-                        // <!-- Divyanshu: Convert this into material -->
-                        this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                        this.toaster.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
         }

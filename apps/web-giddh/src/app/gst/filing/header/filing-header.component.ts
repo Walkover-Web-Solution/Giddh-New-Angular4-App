@@ -60,7 +60,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** True if current organization is company */
     @Input() public isCompany: boolean;
-    // @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
     /** True if current organization is consolidated branch */
     @Input() public isConsolidatedBranch: boolean;
     /** Holds cancel confirmation dialog template ref */
@@ -71,6 +70,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
+    /** AsideAuthentication Dialog Open */
+    @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     public gstAuthenticated$: Observable<boolean>;
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
@@ -97,8 +98,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public showDate: boolean = true;
     /** Instance of dayjs */
     public dayjs = dayjs;
-    /** AsideAuthentication Dialog Open */
-    @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     /** Holds Aside Authentication Dialog Ref */
     public asideAuthenticationDialogRef: MatDialogRef<any>;
     /** Custom selected month */
@@ -230,7 +229,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Open 
+     * Open setting aside pane dialog
      *
      * @param {*} event
      * @param {('JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA')} [selectedService]
@@ -272,7 +271,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
             this.store.dispatch(this.reconcileAction.DownloadGstrSheet(request));
         } else {
-            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.showSnackBar('error', this.localeData?.filing?.gst_unavailable);
         }
     }
 
@@ -290,7 +289,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (this.activeCompanyGstNumber) {
             this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
         } else {
-            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.showSnackBar('error', this.localeData?.filing?.gst_unavailable);
         }
     }
 
@@ -377,12 +376,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     let blobData = this.generalService.base64ToBlob(res?.body, "json", 512);
                     return saveAs(blobData, `${this.activeCompanyGstNumber}.json`);
                 } else {
-                    this.toasty.errorToast(res?.message);
+                    this.toasty.showSnackBar('error', res?.message);
                 }
             });
         } else {
-            // <!-- Divyanshu: Convert this into material -->
-            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.showSnackBar('error', this.localeData?.filing?.gst_unavailable);
         }
     }
 

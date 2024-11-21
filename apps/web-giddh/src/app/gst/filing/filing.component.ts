@@ -298,7 +298,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      */
     public onTabChange(event: MatTabChangeEvent): void {
         if (typeof event?.index === 'number') {
-            this.activeTabIndex = event?.index;
+            this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
         }
     }
