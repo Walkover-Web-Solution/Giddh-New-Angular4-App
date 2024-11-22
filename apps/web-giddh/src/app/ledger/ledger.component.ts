@@ -2623,7 +2623,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
-            console.log("translationComplete");
             
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 

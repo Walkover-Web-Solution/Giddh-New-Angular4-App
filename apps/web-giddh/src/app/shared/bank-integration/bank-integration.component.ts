@@ -19,6 +19,7 @@ import { ToasterService } from "../../services/toaster.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'bank-integration',
@@ -399,16 +400,55 @@ export class BankIntegrationComponent implements OnInit {
             }
         });
     }
-
     /**
-    * This returns the account unique name of account
-    *
-    * @param {number} index
-    * @param {*} item
-    * @returns {*}
-    * @memberof SettingIntegrationComponent
-    */
-    public trackByAccountUniqueName(index: number, item: any): any {
-        return item?.bankResource?.uniqueName;
+     * This will use for select bank account only for plaid integration
+     *
+     * @param {*} event
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+    public selectBankAccount(event: any, bank: any): void {
+        if (event?.value) {
+            let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
+            let accountForm = {
+                accountNumber: bank?.bankResource?.accountNumber,
+                accountUniqueName: event?.value,
+                paymentAlerts: []
+            };
+            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    if (response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
+    }
+      /**
+     * This will be use for delete bank account
+     *
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+      public deleteBankAccount(bank: any): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.payment?.confirm_bank_delete_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
+            }
+        });
     }
 }

@@ -40,7 +40,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
    public createNewAccountDialogRef: MatDialogRef<any>;
    /** Hold reference number */
    public referenceNumber: string = '';
-    
+   /** Holds true if current company country is gocardless supported country */
+   public isGocardlessSupportedCountry: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -139,4 +140,5 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
 }
