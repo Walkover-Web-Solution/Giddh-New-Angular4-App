@@ -316,6 +316,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public referenceNumber: string = '';
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -481,7 +485,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
    */
     public openInstitutionsDialog(): void {
         if (this.isBankAccountConnected) {
-          this.router.navigate(["/pages/settings/integration/payment"])
+            this.router.navigate(["/pages/settings/integration/payment"])
         } else {
             let data = {
                 localeData: this.localeData,
@@ -2623,11 +2627,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
-            
+
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 
                 if (data[0] && data[1]) {
-
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
                     if (this.isBankAccount) {
@@ -2678,6 +2681,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         } else {
                             this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
                         }
+                    }
+                    profile.userEntityRoles.forEach(role => {
+                        const scopes = role.role.scopes;
+                        if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
+                            this.hasIntegrationScope = true;
+                        }
+                    });
+                    if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                        this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
                 }
             });
@@ -3092,6 +3104,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     * @memberof LedgerComponent
     */
     public getAllBankAccounts(accountUniqueName?: string): void {
+        this.isBankAccountConnected = false;
         this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
             if (response?.body) {
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
