@@ -29,7 +29,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 
-
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes

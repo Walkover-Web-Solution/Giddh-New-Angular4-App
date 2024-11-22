@@ -3,7 +3,7 @@ import { Observable, ReplaySubject } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -11,8 +11,7 @@ import { BROADCAST_CHANNELS } from '../../../app.constant';
 import { CommonActions } from '../../../actions/common.actions';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
-
-
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'bank-accounts',
@@ -42,13 +41,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
    public referenceNumber: string = '';
    /** Holds true if current company country is gocardless supported country */
    public isGocardlessSupportedCountry: boolean;
+    /** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
+    
 
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private generalService: GeneralService,
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -80,6 +83,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         };
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            profile.userEntityRoles.forEach(role => {
+                const scopes = role.role.scopes;
+                if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
+                    this.hasIntegrationScope = true;
+                }
+            });
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+            }
+        })
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -119,7 +133,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     * This function will use for get institutions details
     *
     * @param {*} element
-    * @memberof SettingIntegrationComponent
+    * @memberof BankAccountsComponent
     */
     public openInstitutionsDialog(): void {
         let data = {
@@ -134,11 +148,10 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
             }
         });
-    }
-
+    }  
 }
