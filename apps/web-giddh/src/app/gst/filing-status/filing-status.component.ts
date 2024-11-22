@@ -62,7 +62,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public date: FormControl = new FormControl();
     /** Holds page Size Options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds Pagination Data */
     private pagination: any = {
@@ -234,7 +234,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Selects date and calls api
+     * Selects date and call api
      *
      * @param {*} event
      * @memberof FilingStatusComponent

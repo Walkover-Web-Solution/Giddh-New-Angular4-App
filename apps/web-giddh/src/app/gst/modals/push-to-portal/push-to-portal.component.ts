@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import { GST_UTILITY_DOWNLOAD_LINK } from '../../../app.constant';
 @Component({
     selector: 'push-to-portal',
     templateUrl: './push-to-portal.component.html',
@@ -12,8 +13,8 @@ export class PushToPortalComponent {
     @Output() public downloadExcel: EventEmitter<any> = new EventEmitter();
     /** This will emit the download json  for gstr1 */
     @Output() public downloadJson: EventEmitter<any> = new EventEmitter();
-    /** Holds GST return govt link */
-    public gstReturnGovtLink: string = 'https://www.gst.gov.in/download/returns';
+    /** Holds GST utility download link */
+    public gstUtilityDownloadLink: string = GST_UTILITY_DOWNLOAD_LINK;
     /**
      * This will use for download success sheet
      *

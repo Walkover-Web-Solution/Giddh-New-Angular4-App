@@ -39,12 +39,10 @@ export class HsnSummaryComponent implements OnInit, OnDestroy {
     ];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() { }
-
     public ngOnInit() {
         this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         if (this.selectedGst !== GstReport.Gstr1) {
-            this.displayedColumns = this.displayedColumns.filter(col => col !== 'rt');
+            this.displayedColumns = this.displayedColumns.filter(column => column !== 'rt');
         }
     }
 

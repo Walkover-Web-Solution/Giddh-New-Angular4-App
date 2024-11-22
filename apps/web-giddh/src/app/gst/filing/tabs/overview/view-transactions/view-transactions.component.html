@@ -73,8 +73,8 @@
             >
                 <!-- Invoice Date Column -->
                 <ng-container matColumnDef="invoiceDate">
-                    <th mat-header-cell *matHeaderCellDef> {{ localeData?.filing?.invoice_date }} </th>
-                    <td mat-cell *matCellDef="let item"> {{ item.voucherDate ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef class="date-width"> {{ localeData?.filing?.invoice_date }} </th>
+                    <td mat-cell *matCellDef="let item" class="date-width"> {{ item.voucherDate ?? "-" }} </td>
                 </ng-container>
 
                 <!-- Invoice # Column -->
@@ -272,7 +272,15 @@
 
 <!-- Download or Send Invoice on mail -->
 
-<!-- NEED TO WORK ON THIS -->
+<!-- Download or Send Invoice on mail template -->
 <ng-template #downloadOrSendMailDialog>
-    <div element-view-container-ref #downloadOrSendMailComponent="elementviewcontainerref"></div>
+    <download-or-send-mail-invoice
+        [selectedVoucher]="selectedInvoice"
+        [base64Data]="base64Data"
+        [selectedInvoiceForDelete]="selectedInvoiceForDelete"
+        [currentVoucherFilter]="filterParam.entityType"
+        (closeModelEvent)="closeDownloadOrSendMailPopup($event)"
+        (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)"
+        (downloadInvoiceEvent)="onDownloadInvoiceEvent($event)"
+    ></download-or-send-mail-invoice>
 </ng-template>

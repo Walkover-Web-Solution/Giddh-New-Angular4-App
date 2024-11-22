@@ -7,11 +7,12 @@
         <div class="row main-container">
             <div class="col left-side">
                 <div class="left-side-center">
-                    <button 
+                    <button
                         mat-stroked-button
                         color="primary"
-                        class="downloads-button" 
-                        (click)="onDownloadExcel($event)">
+                        class="downloads-button"
+                        (click)="onDownloadExcel($event)"
+                    >
                         {{ localeData?.filing?.download_excel }}
                     </button>
                 </div>
@@ -20,19 +21,21 @@
                         <p class="summary-content font-15">{{ localeData?.filing?.excel_file_support }}</p>
                     </mat-list-item>
                     <mat-list-item>
-                        <p class="summary-content font-15 last-content">{{ localeData?.filing?.organised_accountant }}</p>
+                        <p class="summary-content font-15 last-content">
+                            {{ localeData?.filing?.organised_accountant }}
+                        </p>
                     </mat-list-item>
                 </mat-list>
-                <a class="mr-0 downloads-button json-button" target="_blank" [href]="gstReturnGovtLink"
-                    ><span class="return-link font-15">{{ localeData?.filing?.gst_offline_utility }} </span></a
-                >
+                <a class="mr-0 downloads-button json-button" target="_blank" [href]="gstUtilityDownloadLink">
+                    <span class="return-link font-15">{{ localeData?.filing?.gst_offline_utility }} </span>
+                </a>
             </div>
             <div class="col right-side">
                 <div class="right-side-center">
-                    <button 
+                    <button
                         mat-stroked-button
                         color="primary"
-                        class="downloads-button" 
+                        class="downloads-button"
                         (click)="onDownloadJson($event)"
                     >
                         {{ localeData?.filing?.download_json }}

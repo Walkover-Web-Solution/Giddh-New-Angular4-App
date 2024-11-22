@@ -128,7 +128,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.providerOptions = [{label: this.localeData?.aside_menu?.giddh_provider1, value: 'TAXPRO'}];
+        this.providerOptions = [{ label: this.localeData?.aside_menu?.giddh_provider1, value: 'TAXPRO' }];
 
         this.reconcileOtpVerifySuccess$.subscribe(s => {
             if (s) {
@@ -213,6 +213,11 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
         this.taxProForm.otp = '';
     }
 
+    /**
+     * Toggle cancel model
+     *
+     * @memberof GstAsideMenuComponent
+     */
     public toggleCancelModel(): void {
         this.cancelConfirmationEvent.emit(true);
     }

@@ -12,7 +12,7 @@ import { AppState } from '../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
 import { GeneralService } from '../../services/general.service';
@@ -125,7 +125,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.isCompany = params['isCompany'] === 'true';
             if (!this.selectedMonth) {
                 this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-                this.date.setValue(dayjs(this.selectedMonth).format("MMMM YYYY"));
+                this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
@@ -590,7 +590,13 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         }
     }
 
-    public periodChanged(date) {
+    /**
+     * Period changed
+     *
+     * @param {*} date
+     * @memberof GstR3Component
+     */
+    public periodChanged(date): void {
         if (date) {
             this.selectedMonth = date;
             this.currentPeriod = {
@@ -717,7 +723,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     /**
-     * Selects date and calls api
+     * Selects date and call api
      *
      * @param {*} event
      * @memberof FilingHeaderComponent

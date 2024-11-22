@@ -64,7 +64,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     public activeTabIndex: number = 0;
     /** Holds page Size Options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
 
     constructor(
