@@ -1,17 +1,14 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ElementViewContainerRef } from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../../store';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
 import { GstReconcileActions } from '../../../../../actions/gst-reconcile/gst-reconcile.actions';
-import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { saveAs } from 'file-saver';
@@ -45,9 +42,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /** Download or send mail dialog reference */
-    @ViewChild('downloadOrSendMailDialog') downloadOrSendMailDialog!: TemplateRef<any>;
-    @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
+    /** Holds download or send mail dialog template reference */
+    @ViewChild('downloadOrSendMailDialog') downloadOrSendMailDialog: TemplateRef<any>;
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
     public gstr1entityType = [];
     public invoiceType = [];
@@ -97,14 +93,17 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         'cess',
         'totalInvoiceValue'
     ];
-     /** Hold table page index number*/
+     /** Hold table page index number */
      public pageIndex: number = 0;
      /** Holds page size options */
      public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
      /** Holds download or send mail dialog reference */
      public downloadOrSendMailDialogRef: MatDialogRef<any>;
 
-    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
+    constructor(private gstAction: GstReconcileActions, 
+        private store: Store<AppState>, private route: Router, 
+        private activatedRoute: ActivatedRoute, 
+        private invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
@@ -154,7 +153,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         ];
 
         this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-        this.filterParam['count'] = this.pageSizeOptions[0];
+        this.filterParam.count = this.pageSizeOptions[0];
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;
@@ -197,11 +196,19 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public pageChanged(event: any): void {
-        this.filterParam['count'] = event.pageSize;
-        this.pageIndex = event.pageIndex;
-        this.viewFilteredTxn('page', event.pageIndex + 1);
+        if (event) {
+            this.filterParam.count = event.pageSize;
+            this.pageIndex = event.pageIndex;
+            this.viewFilteredTxn('page', event.pageIndex + 1);
+        }
     }
 
+    /**
+     * This will handle invoice selection
+     *
+     * @param {*} invoice
+     * @memberof ViewTransactionsComponent
+     */
     public onSelectInvoice(invoice: any): void {
         if (invoice.voucherType !== 'purchase') {
             let downloadVoucherRequestObject;
@@ -219,29 +226,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
                 }
             }
-            this.loadDownloadOrSendMailComponent();
             this.openDownloadOrSendMailDialog();
         }
     }
 
-    public loadDownloadOrSendMailComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
-        let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
-        viewContainerRef.remove();
-
-        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-        viewContainerRef.insert(componentInstanceView.hostView);
-
-        let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
-        componentInstance.selectedVoucher = this.selectedInvoice;
-        componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
-        componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
-        componentInstance.downloadInvoiceEvent.subscribe(e => this.onDownloadInvoiceEvent(e));
-        componentInstance.currentVoucherFilter = this.filterParam.entityType;
-    }
-
     public closeDownloadOrSendMailPopup(userResponse: any) {
-        this.downloadOrSendMailDialogRef.close();
+        this.downloadOrSendMailDialogRef?.close();
         if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
@@ -399,7 +389,9 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public openDownloadOrSendMailDialog(): void {
         this.downloadOrSendMailDialogRef = this.dialog.open(this.downloadOrSendMailDialog, {
-            panelClass: ['mat-dialog-md']
+            height: '80vh',
+            width: '80vw',
+            maxWidth: '800px',
         });
     }
 }

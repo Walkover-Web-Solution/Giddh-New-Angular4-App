@@ -13,7 +13,7 @@ import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
@@ -159,7 +159,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 };
                 if (!this.selectedMonth) {
                     this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-                    this.date.setValue(dayjs(this.selectedMonth).format("MMMM YYYY"));
+                    this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
                 }
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
@@ -416,7 +416,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Selects date and calls api
+     * Selects date and call api
      *
      * @param {*} event
      * @memberof FilingHeaderComponent

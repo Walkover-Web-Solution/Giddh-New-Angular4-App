@@ -57,7 +57,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         totalItems: 0,
         count: API_COUNT_LIMIT,
     }
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;

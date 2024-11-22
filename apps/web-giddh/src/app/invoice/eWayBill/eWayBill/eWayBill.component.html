@@ -20,7 +20,7 @@
         <div class="input-group flex-nowrap column-gap15 align-items-center">
             <div
                 class="form-group linked-entities mr-r15 mb-0"
-                *ngIf="(currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY') || true"
+                *ngIf="(currentCompanyBranches?.length > 2) && currentOrganizationType === 'COMPANY'"
             >
                 <dropdown-field
                     [label]="commonLocaleData?.app_entity"
@@ -56,14 +56,14 @@
             [selectedIndex]="activeTabIndex"
             (selectedTabChange)="onTabChange($event)"
             class="table-header-sticky"
-            *ngIf="!(EwaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)"
+            *ngIf="!(ewaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)"
         >
             <mat-tab [label]="localeData?.tab_generated_bills">
                 <div class="table-responsive table-wrapper overflow-visible px-3">
                     <table
                         mat-table
                         class="table basic table-bordered giddh-table"
-                        [dataSource]="EwaybillLists?.results"
+                        [dataSource]="ewaybillLists?.results"
                     >
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef>#</th>
@@ -165,7 +165,7 @@
         </mat-tab-group>
         <div
             class="no-data"
-            *ngIf="!isLoading && EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)"
+            *ngIf="!isLoading && ewaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)"
         >
             <no-data></no-data>
         </div>
@@ -237,7 +237,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of EwaybillLists?.results">
+                        <tr *ngFor="let item of ewaybillLists?.results">
                             <td>{{ item?.invoiceDate }}</td>
                             <td>{{ item?.docNumber }}</td>
                             <td>{{ item?.customerName }}</td>

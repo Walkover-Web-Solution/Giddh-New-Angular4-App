@@ -36,7 +36,9 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
     @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
+    /** Holds vehicle dialog template reference */
     @ViewChild("addVehicle") vehicleDialog: TemplateRef<any>;
+    /** Holds cancellation dialog template reference */ 
     @ViewChild("cancellation") cancelDialog: TemplateRef<any>;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
@@ -48,7 +50,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public cancelEwaySuccess$: Observable<boolean>;
     public updateEwayvehicleProcess$: Observable<boolean>;
     public updateEwayvehicleSuccess$: Observable<boolean>;
-    public EwaybillLists: IEwayBillAllList;
+    public ewaybillLists: IEwayBillAllList;
     public modalRef: BsModalRef;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** True if api call in progress */
@@ -215,8 +217,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
         this.store.pipe(select(p => p.ewaybillstate.EwayBillList), takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
             if (o) {
-                this.EwaybillLists = _.cloneDeep(o);
-                this.EwaybillLists.results = o.results;
+                this.ewaybillLists = _.cloneDeep(o);
+                this.ewaybillLists.results = o.results;
 
                 if (this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(o.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(o.toDate, GIDDH_DATE_FORMAT) };
