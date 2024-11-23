@@ -44,7 +44,6 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/mat-menu.scss";
 @import "../css/global/tax-authority.scss";
 @import "../css/global/adjustment-inventory.scss";
-@import "../css/global/color.scss";
 @import "../css/global/d3-tree-chart.scss";
 @import "../css/global/vouchers-preview.scss";
 @import "../css/global/custom-paginator.scss";
@@ -6881,10 +6880,6 @@ GST filing
     width: auto;
 }
 
-// .tax-engine .column.list-column {
-//     display: block;
-//     border-right: 1px solid var(--color-common-secondary-border);
-// }
 .tax-engine {
     .summary-content {
       .gstr-3b-user.table, .gstr-3b-report {
