@@ -25,57 +25,13 @@
                             class="form-group linked-entities mr-r15 mb-0"
                             *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                         >
-                            <sh-select
+                            <dropdown-field
+                                [label]="commonLocaleData?.app_entity"
+                                [defaultValue]="currentBranch?.name ?? ''"
                                 [options]="currentCompanyBranches"
-                                [(ngModel)]="currentBranch.uniqueName"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
+                                (selectedOption)="currentBranch.uniqueName = $event.value; handleBranchChange($event)"
                                 [placeholder]="commonLocaleData?.app_select_entity"
-                                [fixedValue]="currentBranch?.alias"
-                                class="entity-dropdown"
-                            >
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                            <span class="entity-icon">
-                                                <i
-                                                    class="icon-branch-icon pull-right"
-                                                    *ngIf="!option.isCompany"
-                                                    [tooltip]="commonLocaleData?.app_branch"
-                                                ></i>
-                                                <i
-                                                    class="icon-company-profile pull-right"
-                                                    *ngIf="option.isCompany"
-                                                    [tooltip]="commonLocaleData?.app_company"
-                                                ></i>
-                                            </span>
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">
-                                                    {{ option.label || "-" }}
-                                                </div>
-                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || "-" }}
-                                                </div>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                            </sh-select>
-                            
-                            <!-- <dropdown-field
-                                [options]="currentCompanyBranches"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
-                                [placeholder]="commonLocaleData?.app_select_entity"
-                                [fixedValue]="currentBranch?.alias"
-                                class="entity-dropdown"
-                            ></dropdown-field> -->
+                            ></dropdown-field>
                         </div>
                         <div class="input-grp-date-range-picker d-flex">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -134,7 +90,7 @@
             </div>
 
             <div class="invoice-preview table-responsive table-header-sticky overflow-visible">
-                <table mat-table [dataSource]="reverseChargeReportResults?.items">
+                <table mat-table matSort [dataSource]="reverseChargeReportResults?.items">
                     <!-- Index Column -->
                     <ng-container matColumnDef="index">
                         <th mat-header-cell *matHeaderCellDef>#</th>
@@ -187,9 +143,21 @@
                     <!-- Voucher Type Column -->
                     <ng-container matColumnDef="voucherType">
                         <th mat-header-cell *matHeaderCellDef width="15%">
-                          {{ commonLocaleData?.app_voucher_type }}
+                            <span>{{ commonLocaleData?.app_voucher_type }}</span>
+                            <i [matMenuTriggerFor]="voucherMenu" class="fa fa-ellipsis-v px-2"></i>
+                            <mat-menu #voucherMenu="matMenu">
+                                <button mat-menu-item (click)="changeVoucherType('Journal')">
+                                    {{ commonLocaleData?.app_voucher_types?.journal }}
+                                </button>
+                                <button mat-menu-item (click)="changeVoucherType('Purchase')">
+                                    {{ commonLocaleData?.app_voucher_types?.purchase }}
+                                </button>
+                                <button mat-menu-item (click)="changeVoucherType('Debit Note')">
+                                    {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                                </button>
+                            </mat-menu>
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element.voucherType }}</td>
+                        <td mat-cell *matCellDef="let element">{{ element.voucherType | titlecase }}</td>
                     </ng-container>
                     
                     <!-- Invoice Number Column with Search -->

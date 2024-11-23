@@ -25,6 +25,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -206,7 +207,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
                 this.cancelEwayForm.reset();
-                this.cancelDialogRef.close();
+                this.cancelDialogRef?.close();
             }
         });
         this.updateEwayvehicleSuccess$.subscribe(p => {
@@ -473,7 +474,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      */
     public cancelEwayBill(cancelEwayFormValue: any): void {
         if (cancelEwayFormValue) {
-            this.cancelEwayRequest = _.cloneDeep(cancelEwayFormValue);
+            this.cancelEwayRequest = cloneDeep(cancelEwayFormValue);
             this.cancelEwayRequest['ewbNo'] = this.selectedEwayItem.ewbNo;
             this.store.dispatch(this.invoiceActions.cancelEwayBill(this.cancelEwayRequest));
         }
@@ -486,12 +487,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @param {any} updateEwayTransportfromValue
      * @memberof EWayBillComponent
      */
-    public updateEwayTransport(updateEwayTransportfromValue: any): void {
-        if (updateEwayTransportfromValue) {
-            this.updateEwayVehicleObj = updateEwayTransportfromValue;
+    public updateEwayTransport(updateEwayTransportFormValue: any): void {
+        if (updateEwayTransportFormValue) {
+            this.updateEwayVehicleObj = updateEwayTransportFormValue;
             this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
             this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
-            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfromValue));
+            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportFormValue));
         }
         this.detectChange();
     }
