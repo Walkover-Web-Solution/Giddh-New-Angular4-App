@@ -21,6 +21,7 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { RestrictedModules } from '../../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -73,6 +74,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** AsideAuthentication Dialog Open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     public gstAuthenticated$: Observable<boolean>;
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
@@ -106,7 +109,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public startAt: Date = new Date();
     /** Holds selected date */
     public date: FormControl = new FormControl('');
-
+    /** Active company details */
+    public activeCompany: any = null;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private store: Store<AppState>,
@@ -123,12 +129,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.activeCompany = response;
+        });
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
             if (this.holdActiveRoute) {
@@ -426,5 +436,14 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
         this.date.setValue(this.customMonth);
         this.periodChanged({ from: event[0], to: event[1] });
+    }
+
+    /**
+    * Navigates to the page for buy plan.
+    * @memberof FilingHeaderComponent
+    * @param subscriptionId
+    */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 }

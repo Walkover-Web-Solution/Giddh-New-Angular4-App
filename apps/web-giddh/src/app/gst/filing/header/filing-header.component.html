@@ -5,7 +5,7 @@
             <a [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
                 <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
             </a>
-            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img"  />
+            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img" />
 
             <div class="text-middle nav-top">
                 <div class="text-middle head head-font-weight d-flex align-items-center column-gap1">
@@ -55,6 +55,7 @@
                         color="primary"
                         [ngClass]="{ 'btn-success': gstAuthenticated }"
                         (click)="openSettingAsidePane($event, 'TAXPRO')"
+                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                     >
                         {{
                             gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate
@@ -62,6 +63,11 @@
                     </button>
                 </li>
             </ul>
+            <span class="pull-right filling-header-message" *ngIf="isCompany && showGstFiling">
+                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                    (onUpgradePlan)="buyPlan($event)">
+                </restricted-module-message>
+            </span>
         </div>
     </div>
 

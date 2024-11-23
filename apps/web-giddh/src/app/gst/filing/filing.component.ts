@@ -13,6 +13,7 @@ import { GstReport } from '../constants/gst.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { RestrictedModules } from '../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -62,6 +63,10 @@ export class FilingComponent implements OnInit, OnDestroy {
     public showGstFiling: boolean = false;
     /** Holds active tab index */
     public activeTabIndex: number = 0;
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private route: Router,
@@ -76,7 +81,7 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
         this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
-
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
