@@ -12,6 +12,7 @@ import { CommonActions } from '../../../actions/common.actions';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
 import { GeneralService } from '../../../services/general.service';
+import { profile } from 'console';
 
 @Component({
     selector: 'bank-accounts',
@@ -35,16 +36,15 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** True if relogin required in any bank account */
     public reLoginRequired: boolean = false;
-   /** Holds Create New Account Dialog Ref */
-   public createNewAccountDialogRef: MatDialogRef<any>;
-   /** Hold reference number */
-   public referenceNumber: string = '';
-   /** Holds true if current company country is gocardless supported country */
-   public isGocardlessSupportedCountry: boolean;
+    /** Holds Create New Account Dialog Ref */
+    public createNewAccountDialogRef: MatDialogRef<any>;
+    /** Hold reference number */
+    public referenceNumber: string = '';
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
     
-
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
@@ -83,13 +83,15 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         };
-        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+        if(profile?.userEntityRoles){
             profile.userEntityRoles.forEach(role => {
                 const scopes = role.role.scopes;
                 if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                     this.hasIntegrationScope = true;
                 }
             });
+        }
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
@@ -113,7 +115,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             this.changeDetectionRef.detectChanges();
         });
     }
-
     /**
      * Initiate request to open plaid popup
      *
@@ -122,13 +123,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public getPlaidLinkToken(itemId: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
     }
-
+    
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
-
     /**
     * This function will use for get institutions details
     *

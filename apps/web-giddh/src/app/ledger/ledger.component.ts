@@ -345,7 +345,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private router: Router,
-        private settingsIntegrationService: SettingsIntegrationService,
+        private settingsIntegrationService: SettingsIntegrationService
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -481,15 +481,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * This function will use for get institutions details
    *
    * @param {*} element
-   * @memberof SettingIntegrationComponent
+   * @memberof LedgerComponent
    */
     public openInstitutionsDialog(): void {
         if (this.isBankAccountConnected) {
-            this.router.navigate(["/pages/settings/integration/payment"])
+            this.router.navigate(["/pages/settings/integration/payment"]);
         } else {
             let data = {
                 localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData,
+                commonLocaleData: this.commonLocaleData
             }
             const dialogRef = this.dialog.open(InstitutionsListComponent, {
                 data: data,
@@ -499,7 +499,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ariaLabel: 'institutionsListDialog'
             });
 
-            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                 if (response) {
                     this.referenceNumber = response;
                 }

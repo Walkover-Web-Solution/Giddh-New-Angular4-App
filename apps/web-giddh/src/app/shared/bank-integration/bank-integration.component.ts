@@ -115,7 +115,7 @@ export class BankIntegrationComponent implements OnInit {
    * This function will use for get institutions details
    *
    * @param {*} element
-   * @memberof SettingIntegrationComponent
+   * @memberof BankIntegrationComponent
    */
     public openInstitutionsDialog(): void {
         let data = {
@@ -130,7 +130,7 @@ export class BankIntegrationComponent implements OnInit {
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
             }
@@ -140,7 +140,7 @@ export class BankIntegrationComponent implements OnInit {
     /**
      * This will open create new account modal
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof BankIntegrationComponent
      */
     public openCreateNewAccountModal(): void {
         this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
@@ -267,7 +267,7 @@ export class BankIntegrationComponent implements OnInit {
     /**
      * This will get all connected bank accounts
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof BankIntegrationComponent
      */
     public getAllBankAccounts(): void {
         this.isLoading = true;
@@ -296,7 +296,7 @@ export class BankIntegrationComponent implements OnInit {
      *
      * @param {*} bankAccount
      * @param {*} payor
-     * @memberof SettingIntegrationComponent
+     * @memberof BankIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
         if (bankAccount?.bankResource?.uniqueName?.length && payor?.urn?.length) {
@@ -322,7 +322,7 @@ export class BankIntegrationComponent implements OnInit {
      * This will open edit account modal
      *
      * @param {*} bankAccount
-     * @memberof SettingIntegrationComponent
+     * @memberof BankIntegrationComponent
      */
     public openEditAccountModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
@@ -335,7 +335,7 @@ export class BankIntegrationComponent implements OnInit {
     * This will open the create new account user modal
     *
     * @param {*} bankAccount
-    * @memberof SettingIntegrationComponent
+    * @memberof BankIntegrationComponent
     */
     public openCreateNewAccountUserModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
@@ -350,7 +350,7 @@ export class BankIntegrationComponent implements OnInit {
     *
     * @param {*} bankAccount
     * @param {*} payor
-    * @memberof SettingIntegrationComponent
+    * @memberof BankIntegrationComponent
     */
     public openEditAccountUserModal(bankAccount: any, payor: any): void {
         this.activeBankAccount = bankAccount;
@@ -365,7 +365,7 @@ export class BankIntegrationComponent implements OnInit {
     *
     * @param {*} bankAccount
     * @param {*} payor
-    * @memberof SettingIntegrationComponent
+    * @memberof BankIntegrationComponent
     */
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
         if (this.isPlaidSupportedCountry) {
@@ -382,7 +382,7 @@ export class BankIntegrationComponent implements OnInit {
     /**
      * This will delete/deregister the bank account login
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof BankIntegrationComponent
      */
     public deleteBankAccountLogin(): void {
         let model;
@@ -405,7 +405,7 @@ export class BankIntegrationComponent implements OnInit {
      *
      * @param {*} event
      * @param {*} bank
-     * @memberof SettingIntegrationComponent
+     * @memberof BankIntegrationComponent
      */
     public selectBankAccount(event: any, bank: any): void {
         if (event?.value) {
@@ -432,7 +432,7 @@ export class BankIntegrationComponent implements OnInit {
      * This will be use for delete bank account
      *
      * @param {*} bank
-     * @memberof SettingIntegrationComponent
+     * @memberof BankIntegrationComponent
      */
       public deleteBankAccount(bank: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {

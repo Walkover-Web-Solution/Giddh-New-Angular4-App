@@ -1220,7 +1220,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
             }
