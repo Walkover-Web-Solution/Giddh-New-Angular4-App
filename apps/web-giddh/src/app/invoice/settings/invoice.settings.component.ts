@@ -17,7 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { BootstrapToggleSwitch } from '../../app.constant';
+import { BootstrapToggleSwitch, RestrictedModules } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
@@ -88,6 +88,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public activeTab: string;
     /** Active company details */
     public activeCompany: any = null;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private commonActions: CommonActions,

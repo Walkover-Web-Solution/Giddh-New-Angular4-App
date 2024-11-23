@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
+import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -369,7 +369,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.moduleRestrictionStatus) {
                 let module = response.moduleRestrictionStatus.find(
-                    (module) => module?.moduleName === 'Users'
+                    (module) => module?.moduleName === RestrictedModules.Users
                 );
                 this.remainingUsers = module.remainingUsers;
             }
@@ -1574,6 +1574,29 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public back(): void {
         this.router.navigate(['/pages/user-details/subscription']);
+    }
+
+    /**
+     * Checks if new user can be added based on remaining users and current selections
+     *
+     * @return {*}  {boolean}
+     * @memberof AddCompanyComponent
+     */
+    public canAddNewUser(): boolean {
+        const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value === 'true' ? 1 : 0;
+        const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value?.length;
+        return this.remainingUsers > (superAdminCount + selectedRolesCount);
+    }
+
+    /**
+     * Handles the add new user action
+     *
+     * @memberof AddCompanyComponent
+     */
+    public handleAddNewUser(): void {
+        if (this.canAddNewUser()) {
+            this.addNewUser();
+        }
     }
 
     /**

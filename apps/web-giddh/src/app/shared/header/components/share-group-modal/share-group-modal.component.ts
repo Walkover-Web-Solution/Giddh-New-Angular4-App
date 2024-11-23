@@ -12,6 +12,7 @@ import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
+import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'share-group-modal',
@@ -37,6 +38,8 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public remainingUsers: number = 0;
     /** Active company details */
     public activeCompany: any;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
 
     @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
@@ -56,7 +59,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
                 if (activeCompany?.moduleRestrictionStatus) {
                     let module = activeCompany.moduleRestrictionStatus.find(
-                        (module) => module?.moduleName === 'Users'
+                        (module) => module?.moduleName === this.restrictedModules.Users
                     );
                     this.remainingUsers = module.remainingUsers;
                 }

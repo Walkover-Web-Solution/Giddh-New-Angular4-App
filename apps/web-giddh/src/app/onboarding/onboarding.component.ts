@@ -9,6 +9,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OnboardingComponentStore } from './utility/onboarding.store';
+import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 
 
 @Component({
@@ -56,7 +57,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
     /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = "https://giddh.com/help/sync-with-tally-1591360375828781";
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
     
     constructor(
         private _router: Router, private _generalService: GeneralService,

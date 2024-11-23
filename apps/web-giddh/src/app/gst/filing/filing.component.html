@@ -82,6 +82,7 @@
                                                 mat-stroked-button
                                                 color="primary"
                                                 (click)="fileReturn = { isAuthenticate: true }"
+                                                [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                             >
                                                 {{ localeData?.filing?.return_file }}
                                             </button>
