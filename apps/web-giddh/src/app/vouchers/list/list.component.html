@@ -1702,7 +1702,7 @@
 
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="pd-t15" *ngIf="activeModule === 'pending'">
+                <div *ngIf="activeModule === 'pending'">
                     <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                             <div class="d-flex align-items-center column-gap1">
@@ -3722,7 +3722,7 @@
 
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 3 || activeTabGroup === 4">
-                <div class="pd-t15" *ngIf="activeModule === 'pending'">
+                <div *ngIf="activeModule === 'pending'">
                     <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                             <div class="d-flex align-items-center column-gap1">

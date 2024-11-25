@@ -1094,7 +1094,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockForm = cloneDeep(this.stockForm);
         delete stockForm.discountLabel;
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
-
+        stockForm.discounts = stockForm.discounts?.[0]?.length ? stockForm.discounts : [];
         stockForm.customFields = stockForm.customFields?.map(customField => {
             return {
                 uniqueName: customField?.uniqueName,
@@ -1373,14 +1373,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
-                if (this.createRecipe.hasRecipeForStock()) {
+                if (this.createRecipe && this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
 
                 this.getVariantCustomFields();
                 this.updateCustomFieldObjectInVariant();
 
-                if (this.createRecipe.newVariants?.length) {
+                if (this.createRecipe && this.createRecipe.newVariants?.length) {
                     this.createRecipe.newVariants = [];
                     this.createRecipe.refreshVariantsList();
                     this.activeTabIndex = 2;

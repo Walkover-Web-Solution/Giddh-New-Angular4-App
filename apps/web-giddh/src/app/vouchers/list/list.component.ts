@@ -299,8 +299,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** Holds current route query parameters */
     public queryParams: any = {};
-    /** True if today selected */
-    public todaySelected: boolean = false;
     /** True if voucher generate in process */
     public generateVoucherInProcess: boolean = false;
     /** Decimal places from company settings */
@@ -401,7 +399,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getVoucherBalances();
                 }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
-                    this.ledgersData = [];
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
                 }
@@ -657,27 +654,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.universalPendingDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-
-                setTimeout(() => {
-                    this.componentStore.todaySelected$.pipe(take(1)).subscribe(response => {
-                        this.todaySelected = response;
-                        if (this.universalDate && !this.todaySelected) {
-                            this.ledgerSearchRequest.dateRange = this.universalDate;
-                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.isUniversalDateApplicable = true;
-                            this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                        } else {
-                            this.universalDate = [];
-                            this.ledgerSearchRequest.dateRange = this.universalDate;
-                            this.ledgerSearchRequest.from = "";
-                            this.ledgerSearchRequest.to = "";
-                            this.isUniversalDateApplicable = false;
-                        }
-                        this.getLedgersOfInvoice();
-                    });
-                }, 100);
+                if (this.universalDate) {
+                    this.ledgerSearchRequest.dateRange = this.universalDate;
+                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.isUniversalDateApplicable = true;
+                    this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                } else {
+                    this.universalDate = [];
+                    this.ledgerSearchRequest.dateRange = this.universalDate;
+                    this.ledgerSearchRequest.from = "";
+                    this.ledgerSearchRequest.to = "";
+                    this.isUniversalDateApplicable = false;
+                }
+                this.getLedgersOfInvoice();
             }
         });
 
@@ -685,6 +676,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res && res.results) {
 
                 let response = cloneDeep(res);
+                this.ledgersData = [];
                 this.pendingTotalResults = response?.totalItems;
                 this.selectAllPendingVouchers({ checked: false });
                 response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
@@ -698,15 +690,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     });
                 }
                 this.ledgersData = response?.results;
-                if (this.todaySelected) {
-                    this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
-                    this.ledgerSearchRequest.from = response.fromDate;
-                    this.ledgerSearchRequest.to = response.toDate;
-
-                    this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                }
-
             }
         });
 
@@ -2229,12 +2212,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public resetDateSearch(): void {
-        if (this.universalDate && !this.todaySelected) {
+        this.customDateSelected = false;
+        if (this.universalDate) {
             this.applyUniversalDate();
         } else {
             this.clearDateFilters();
         }
-
         this.getLedgersOfInvoice();
     }
 
@@ -2262,7 +2245,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private clearDateFilters(): void {
         this.universalDate = [];
         this.isUniversalDateApplicable = false;
-        this.customDateSelected = false;
     }
 
     /**
