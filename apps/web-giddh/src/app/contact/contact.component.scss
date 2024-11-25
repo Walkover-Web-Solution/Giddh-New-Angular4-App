@@ -23,6 +23,10 @@
     }
 }
 
+.vendor-z-index{
+    z-index: 101;
+}
+
 .dis {
     display: flex;
     .btn-group{
@@ -526,9 +530,6 @@ button.btn.btn-filter {
 }
 
 .all-table {
-    table {
-        z-index: -1;
-    }
     .mat-header-cell {
         &:first-of-type {
             width: 595px;
