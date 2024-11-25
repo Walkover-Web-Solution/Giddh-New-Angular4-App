@@ -50,7 +50,7 @@ import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
-import { SettingsIntegrationService } from '../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../services/settings.integration.service';
 
 @Component({
     selector: 'ledger',
