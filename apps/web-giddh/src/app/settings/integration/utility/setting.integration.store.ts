@@ -5,7 +5,7 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { SettingsIntegrationService } from "../../../services/settings.integraion.service";
+import { SettingsIntegrationService } from "../../../services/settings.integration.service";
 
 export interface SettingIntegrationState {
     institutionList: any;

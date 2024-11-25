@@ -18,7 +18,7 @@ import { EcommerceService } from '../../services/ecommerce.service';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
