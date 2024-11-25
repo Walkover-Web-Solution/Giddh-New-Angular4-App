@@ -12,7 +12,7 @@ import { CommonActions } from '../../../actions/common.actions';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
 import { GeneralService } from '../../../services/general.service';
-import { profile } from 'console';
+
 
 @Component({
     selector: 'bank-accounts',
