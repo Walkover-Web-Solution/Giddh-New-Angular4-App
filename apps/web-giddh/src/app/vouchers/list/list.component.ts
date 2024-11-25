@@ -33,8 +33,6 @@ import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
-import { CommonActions } from "../../actions/common.actions";
-import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 
 // invoice-table
 export interface PeriodicElement {
@@ -347,9 +345,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private salesAction: SalesActions,
-        private settingsProfileActions: SettingsProfileActions,
-        private invoiceActions: InvoiceActions,
-        private commonActions: CommonActions
+        private invoiceActions: InvoiceActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -380,7 +376,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.getInvoiceSettings();
+        
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
@@ -389,9 +385,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
-
+                
                 if (this.isEInvoiceEnabled != undefined && this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
-                    this.componentStore.getInvoiceSettings();
+                   this.componentStore.getInvoiceSettings();
                 }
                 this.setInitialAdvanceFilter(true);
                 if (this.queryParams.page) {
