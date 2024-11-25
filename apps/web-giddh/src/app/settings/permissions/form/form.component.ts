@@ -145,7 +145,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             }
             if (activeCompany?.moduleRestrictionStatus) {
                 let module = activeCompany.moduleRestrictionStatus.find(
-                    (module) => module?.moduleName === 'Users'
+                    (module) => module?.moduleName === this.restrictedModules.Users
                 );
                 this.remainingUsers = module.remainingUsers;
             }
