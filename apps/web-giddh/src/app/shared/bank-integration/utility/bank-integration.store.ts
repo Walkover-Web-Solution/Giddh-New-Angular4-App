@@ -4,7 +4,7 @@ import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
-import { SettingsIntegrationService } from "../../../services/settings.integraion.service";
+import { SettingsIntegrationService } from "../../../services/settings.integration.service";
 
 export interface BankIntegrationState {
     institutionList: any;
