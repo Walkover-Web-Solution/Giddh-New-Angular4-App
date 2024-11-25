@@ -16,6 +16,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
+import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 
 @Injectable()
 export class GeneralService {
@@ -84,9 +85,12 @@ export class GeneralService {
     private _currencyType = '1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000
 
     private _sessionId: string;
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
 
     constructor(
         private router: Router,
+        private _router: Router,
         private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) { }
@@ -2176,6 +2180,11 @@ export class GeneralService {
                 queryParamsHandling: queryParamsHandling
             }
         );
+    }
+    public syncWithTally(){
+        const url = this._router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
+        const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
+        window.open(cleanedUrl, '_blank');
     }
 }
 
