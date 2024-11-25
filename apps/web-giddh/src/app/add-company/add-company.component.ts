@@ -230,7 +230,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds Store Get Billing Details observable*/
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** Holds View Subscription list observable*/
-    public viewSubscriptionData$ = this.ViewSubscriptionComponentStore.select(state => state.viewSubscription);
+    public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
     /** Holds user module restriction */
     public remainingUsers: number = 0;
 
@@ -256,7 +256,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         public router: Router,
         private commonService: CommonService,
         private readonly changeBillingComponentStore: ChangeBillingComponentStore,
-        private ViewSubscriptionComponentStore: ViewSubscriptionComponentStore
+        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -394,7 +394,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public getSubscriptionData(id: any): void {
-        this.ViewSubscriptionComponentStore.viewSubscriptionsById(id);
+        this.viewSubscriptionComponentStore.viewSubscriptionsById(id);
     }
 
     /**
@@ -1574,6 +1574,29 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public back(): void {
         this.router.navigate(['/pages/user-details/subscription']);
+    }
+
+    /**
+     * Checks if new user can be added based on remaining users and current selections
+     *
+     * @return {*}  {boolean}
+     * @memberof AddCompanyComponent
+     */
+    public canAddNewUser(): boolean {
+        const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value === 'true' ? 1 : 0;
+        const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value?.length;
+        return this.remainingUsers > (superAdminCount + selectedRolesCount);
+    }
+
+    /**
+     * Handles the add new user action
+     *
+     * @memberof AddCompanyComponent
+     */
+    public handleAddNewUser(): void {
+        if (this.canAddNewUser()) {
+            this.addNewUser();
+        }
     }
 
     /**

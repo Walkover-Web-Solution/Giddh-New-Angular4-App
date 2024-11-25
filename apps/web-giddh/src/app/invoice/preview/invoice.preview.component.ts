@@ -313,12 +313,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.isMobileView = result.matches;
         });
 
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
-                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
             }
         });
         this.advanceSearchFilter.page = 1;

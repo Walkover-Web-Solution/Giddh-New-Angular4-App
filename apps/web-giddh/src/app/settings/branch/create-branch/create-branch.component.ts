@@ -153,7 +153,6 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     return branch = { label: name, value: uniqueName, ...rest };
                 });
                 this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
             }
         });
     }
@@ -164,6 +163,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         document.querySelector('body').classList.add('setting-sidebar-open');
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {

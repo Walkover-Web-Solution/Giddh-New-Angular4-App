@@ -1,10 +1,23 @@
 .mat-mdc-table {
+    &.table-strip {
+        .mdc-data-table__content {
+            .mat-mdc-row {
+                &:hover {
+                    .mat-mdc-cell {
+                        background-color: var(--color-table-row-hover-primary-background) !important;
+                    }
+                }
+            }
+        }
+    }
+
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
             z-index: 1;
         }
     }
+
     .mdc-data-table__content {
         .mat-mdc-row {
             .mat-mdc-cell {
@@ -12,6 +25,7 @@
             }
         }
     }
+
 }
 
 /*--- menu-button-color ---*/
@@ -30,6 +44,7 @@
 .mat-mdc-card {
     background-color: var(--color-body-background) !important;
 }
+
 /*--- trial-balance-expand ---*/
 trial-balance-grid,
 invoice-preview-details-component {
@@ -45,9 +60,11 @@ aging-report {
         .mat-column-name {
             width: 20%;
         }
+
         .mat-column-group {
             width: 10%;
         }
+
         .mat-column-upcoming {
             width: 12%;
         }
@@ -65,18 +82,23 @@ aging-report {
 
 // This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
 $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors here, separated by commas (,)
+
 .table-header-sticky {
-    &:not(:has(#{$listOfNotApplyBelowCodeSelectors})){
+    &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
         table {
             border-collapse: inherit;
         }
+
         .mat-mdc-tab-group {
             overflow: visible !important;
         }
+
         .mat-mdc-tab-body-wrapper {
             overflow: visible !important;
+
             .mat-mdc-tab-body {
                 overflow: visible !important;
+
                 .mat-mdc-tab-body-content {
                     overflow: visible !important;
                 }
@@ -86,8 +108,9 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
 }
 
 .header-content-sticky {
-    position: sticky; 
-    inset-inline: 0; 
+    position: sticky;
+    inset-inline: 0;
+
     @media screen and (max-width: 992px) {
         width: fit-content;
     }

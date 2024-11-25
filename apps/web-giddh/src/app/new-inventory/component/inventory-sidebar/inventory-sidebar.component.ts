@@ -142,10 +142,15 @@ export class InventorySidebarComponent implements OnDestroy {
             }
         });
 
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.length) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length >= 2;
-                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
                 this.changeDetection.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {

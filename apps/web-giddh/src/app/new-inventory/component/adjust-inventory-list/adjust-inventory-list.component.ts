@@ -17,7 +17,7 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 @Component({
@@ -160,10 +160,15 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.componentStore.organisationMode$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
-                this.isConsolidatedBranch = this.generalService.isCurrentBranchConsolidated;
                 if (!this.isCompany) {
                     this.displayedColumns.push('action');
                 }
