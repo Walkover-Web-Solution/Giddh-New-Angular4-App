@@ -11,7 +11,7 @@ import { SalesService } from "../../services/sales.service";
 import { IOption } from '../../theme/ng-select/option.interface';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from "../../actions/company.actions";
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { isEmpty } from '../../lodash-optimized';
 import { BankIntegrationComponentStore } from "./utility/bank-integration.store";
 import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
