@@ -17,14 +17,29 @@
                                     </input-field>
                                 </div>
                                 <div class="col-sm-4 col-lg-4">
-                                    <reactive-dropdown-field [name]="'entity'" [placeholder]="'Select Voucher Type'"
-                                        [options]="voucherOptions" formControlName="" class="w-100">
-                                        <!-- (selectedOption)="" -->
-                                    </reactive-dropdown-field>
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <mat-label>Select Voucher Type</mat-label>
+                                        <mat-select
+                                            [placeholder]="commonLocaleData?.app_select_tax"
+                                            [formControlName]=""
+                                            multiple
+                                        >
+                                            <mat-option *ngFor="let tax of voucherOptions" [value]="tax?.value">{{
+                                                tax?.label
+                                            }}</mat-option>
+                                            <mat-option
+                                                class="create-update-no-data"
+                                                [disabled]="true"
+                                                *ngIf="!voucherOptions?.length"
+                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                            >
+                                        </mat-select>
+                                    </mat-form-field>
                                 </div>
                                 <div class="col-sm-4 col-lg-4">
                                     <reactive-dropdown-field [name]="'entity'" [placeholder]="'Select Trigger Module'"
-                                        [options]="tirggerOptions" formControlName="" class="w-100">
+                                        [options]="tirggerOptions" formControlName="" class="w-100"
+                                        [labelValue]="tirggerOptions[0]?.label">
                                         <!-- (selectedOption)="" -->
                                     </reactive-dropdown-field>
                                 </div>
@@ -53,12 +68,12 @@
                                         <mat-option class="balance-options"
                                             *ngFor="let branch of entityAccountGroupOptions"
                                             [value]="branch?.uniqueName">
-                                            {{ branch?.name ?? "-" }}
+                                            {{ branch?.label ?? "-" }}
                                         </mat-option>
                                     </mat-select>
                                 </div>
                                 <div class="col-sm-4 col-lg-4">
-                                    <reactive-dropdown-field [name]="'entity'" [placeholder]="'Select Action'"
+                                    <reactive-dropdown-field [name]="'entity'"  [labelValue]="actionOptions[0]?.label" [placeholder]="'Select Action'"
                                         [options]="actionOptions" formControlName="" class="w-100">
                                         <!-- (selectedOption)="" -->
                                     </reactive-dropdown-field>

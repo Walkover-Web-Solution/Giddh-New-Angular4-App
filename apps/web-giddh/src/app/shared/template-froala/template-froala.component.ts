@@ -117,11 +117,28 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
     /** Holds field options */
-    public entityOptions: any[] = [];
-    public entityAccountGroupOptions: any[] = [];
-    public voucherOptions: any[] = [];
-    public tirggerOptions: any[] = [];
-    public actionOptions: any[] = [];
+    public entityOptions: any[] = [
+        {label:'Account', value:'account'},
+        {label:'Voucher', value:'voucher'},
+        {label:'Entry', value:'entry'}
+    ];
+    public entityAccountGroupOptions: any[] = [
+        {label:'Stock', value:'account'},
+        {label:'Walkover', value:'voucher'},
+        {label:'Dilpreet', value:'entry'}
+    ];
+    public voucherOptions: any[] = [
+        {label:'Purchase', value:'PURCHASE'},
+        {label:'Credit Note', value:'CR'},
+        {label:'Debit Note', value:'DR'},
+        {label:'Sales', value:'sales'}
+    ];
+    public tirggerOptions: any[] = [
+        {label:'Voucher Due', value:'VOUCHER_DUE'}
+    ];
+    public actionOptions: any[] = [
+        {label:'Attach Voucher PDF', value:'ATTACH_VOUCHER_PDF'}
+    ];
     public conditionOptions: any[] = [];
     public daysOptions: any[] = [];
     public timeOptions: any[] = [];
