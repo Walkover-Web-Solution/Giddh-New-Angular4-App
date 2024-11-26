@@ -12,12 +12,13 @@ import { CommonActions } from '../../../actions/common.actions';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
 import { GeneralService } from '../../../services/general.service';
-
+import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 
 @Component({
     selector: 'bank-accounts',
     templateUrl: 'bank-accounts.component.html',
-    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss']
+    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
+    providers: [BankIntegrationComponentStore]
 })
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
@@ -51,7 +52,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef,
         public dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private componentStore: BankIntegrationComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -150,7 +152,24 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
+                this.setupGocardlessMessageListener();
             }
         });
-    }  
+    } 
+    /**
+     * This will add and Remove the listener immediately after triggering getRequisition
+     * 
+     * @memberof BankIntegrationComponent
+     */
+    public setupGocardlessMessageListener(): void {
+        const messageHandler = (event) => {
+            if (event && event.data === "GOCARDLESS") {
+                if (this.referenceNumber) {
+                    this.componentStore.getRequisition(this.referenceNumber);
+                    window.removeEventListener('message', messageHandler);
+                }
+            }
+        };
+        window.addEventListener('message', messageHandler);
+    } 
 }
