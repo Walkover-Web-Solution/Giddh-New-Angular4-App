@@ -239,7 +239,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
-    public goTOLink():void {
+    public goToTallyLink():void {
         this._generalService.syncWithTally();
     }
     public ngOnInit() {
