@@ -2168,7 +2168,7 @@ export class GeneralService {
             }
         );
     }
-    public syncWithTally(){
+    public syncWithTally() {
         const url = this._router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
         const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
         window.open(cleanedUrl, '_blank');
