@@ -237,7 +237,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
     /**
-     * Sync with tally help document
+     * This will be use for sync with tally help documentation
      * 
      * @memberof SettingIntegrationComponent
      */

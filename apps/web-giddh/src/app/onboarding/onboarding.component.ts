@@ -67,7 +67,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
     /**
-     * Sync with tally help document
+     * This will be use for sync with tally help documentation
      * 
      * @memberof OnboardingComponent
      */
