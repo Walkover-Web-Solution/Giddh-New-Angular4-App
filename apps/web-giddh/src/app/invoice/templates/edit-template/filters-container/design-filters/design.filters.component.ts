@@ -94,6 +94,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(s => s.invoiceTemplate.sampleTemplates), take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
             this.sampleTemplates = cloneDeep(sampleTemplates);
+            console.log("sampleTemplates", this.sampleTemplates)
         });
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 

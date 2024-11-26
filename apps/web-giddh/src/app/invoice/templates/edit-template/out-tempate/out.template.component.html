@@ -5,7 +5,7 @@
 <ng-container [ngSwitch]="inputTemplate.templateType">
     <!-- GET_ALL TEMPLATE A -->
     <!-- *ngSwitchCase="'gst_template_a'"   -->
-    <gst-template-a
+    <!-- <gst-template-a
         *ngSwitchDefault
         [fieldsAndVisibility]="fieldsAndVisibility"
         [isPreviewMode]="isPreviewMode"
@@ -22,7 +22,7 @@
         [showGstComposition]="showGstComposition"
         [activeCompany]="activeCompany"
     >
-    </gst-template-a>
+    </gst-template-a> -->
 
     <!-- GET_ALL TEMPLATE E -->
     <gst-template-e
@@ -54,4 +54,23 @@
         [voucherType]="voucherType"
     >
     </thermal-template>
+
+    <tally-template
+        *ngSwitchDefault
+        [fieldsAndVisibility]="fieldsAndVisibility"
+        [isPreviewMode]="isPreviewMode"
+        [showLogo]="showLogo"
+        [imageSignatureSrc]="imageSignatureSrc"
+        [showImageSignature]="showImageSignature"
+        [companyGSTIN]="companyGSTIN"
+        [companyPAN]="companyPAN"
+        [inputTemplate]="inputTemplate"
+        [logoSrc]="logoSrc"
+        [templateUISectionVisibility]="templateUISectionVisibility"
+        (sectionName)="onClickSection($event)"
+        [voucherType]="voucherType"
+        [showGstComposition]="showGstComposition"
+        [activeCompany]="activeCompany"
+    >
+    </tally-template>
 </ng-container>

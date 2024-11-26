@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html id="defaults" lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body *ngIf="inputTemplate.sections && inputTemplate.sections" [ngStyle]="{
+            'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans',
+            'padding-top': inputTemplate.topMargin + 'px',
+            'padding-bottom': inputTemplate.bottomMargin + 'px',
+            'padding-right': inputTemplate.rightMargin + 'px',
+            'padding-left': inputTemplate.leftMargin + 'px',
+            'font-size': inputTemplate.fontDefault + 'px'
+        }">
+    <!--class="disabled-area"-->
+    <div>
+        <div id="Template-header" [ngClass]="{
+                    'disabled-area': !templateUISectionVisibility.header,
+                    ' ': templateUISectionVisibility.header
+                }" (click)="onClickSection('header')">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header"
+                aria-label="edit icon">
+                <i class="icon-edit-pencil"></i>
+            </a>
+            <header>
+                <!-- Header -->
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="padding-0 border-none">
+                                <table>
+                                    <tr>
+                                        <td class="border-none" width="33%"></td>
+                                        <td class="border-none" width="33%">
+                                            <h1 class="text-center">Tax Invoice</h1>
+                                        </td>
+                                        <td class="border-none text-right" width="33%">
+                                            <p>(Original for Recipient)</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td width="50%" class="padding-0">
+                                            <table>
+                                                <tr>
+                                                    <td class="border-none border-bottom">
+                                                        <div class="d-flex column-gap-10">
+                                                            <figure style="margin: 0">
+                                                                <img src="https://5.imimg.com/data5/SELLER/Default/2023/10/349042989/NX/DA/PW/33515520/giddh-accounting-software-500x500.png"
+                                                                    width="180px" height="180px" alt="" />
+                                                            </figure>
+                                                            <div>
+                                                                <strong>V.N. APPARELS</strong><br>
+                                                                PLOT NO-9, SAINI COLONY,<br>
+                                                                MOTI NAGAR, LUDHIANA-141010<br>
+                                                                UDYAM Reg No: UDYAM-PB-12-0019707 (Micro)<br>
+                                                                GSTIN/UIN: 03AASFV1021G1ZG<br>
+                                                                State Name: Punjab, Code: 03<br>
+                                                                E-Mail: apparelsvngmail.com
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none border-bottom">
+                                                        Consignee (Ship to):<br>
+                                                        <strong>INDIAN PINE</strong><br>
+                                                        C-4, GAUTAM BUDH NAGAR,<br>
+                                                        SECTOR-63, NOIDA, GAUTAM BUDDHA NAGAR,<br>
+                                                        UTTAR PRADESH<br>
+                                                        <table>
+                                                            <tr>
+                                                                <td class="border-none padding-0" width="100px">
+                                                                    GSTIN/UIN</td>
+                                                                <td class="border-none padding-0">: 09AQGPM5997C1ZE</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="border-none padding-0" width="100px">State
+                                                                    Name</td>
+                                                                <td class="border-none padding-0">: Uttar Pradesh, Code:
+                                                                    09</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none">
+                                                        Buyer (Bill to):<br>
+                                                        <strong>INDIAN PINE</strong><br>
+                                                        C-4, GAUTAM BUDH NAGAR,<br>
+                                                        SECTOR-63, NOIDA, GAUTAM BUDDHA NAGAR,<br>
+                                                        UTTAR PRADESH<br>
+                                                        <table>
+                                                            <tr>
+                                                                <td class="border-none padding-0" width="100px">
+                                                                    GSTIN/UIN</td>
+                                                                <td class="border-none padding-0">: 09AQGPM5997C1ZE</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="border-none padding-0" width="100px">State
+                                                                    Name</td>
+                                                                <td class="border-none padding-0">: Uttar Pradesh, Code:
+                                                                    09</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="50%" class="padding-0 vertical-align-top">
+                                            <table class="table-row-height">
+                                                <tr>
+                                                    <td width="50%" class="border-none border-bottom border-right">
+                                                        <span>Invoice No.</span>
+                                                        <p class="margin-0"><strong>VN/24-25/1298</strong></p>
+                                                    </td>
+                                                    <td width="50%" class="border-none border-bottom">
+                                                        <span>Dated</span>
+                                                        <p class="margin-0"><strong>18-Nov-24</strong></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none border-bottom border-right">Delivery Note
+                                                    </td>
+                                                    <td class="border-none border-bottom"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none border-bottom border-right">Reference No. &
+                                                        Date</td>
+                                                    <td class="border-none border-bottom">Other</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none border-bottom border-right">Buyer's Order No.
+                                                    </td>
+                                                    <td class="border-none border-bottom">Dated</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none border-bottom border-right">Dispatch Doc No.
+                                                    </td>
+                                                    <td class="border-none border-bottom">Delivery Note Date</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none border-bottom border-right">
+                                                        <span>Dispatched Through</span>
+                                                        <p class="margin-0"><strong>VRL</strong></p>
+                                                    </td>
+                                                    <td class="border-none border-bottom">
+                                                        <span>Destination</span>
+                                                        <p class="margin-0"><strong>KANPUR</strong></p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </header>
+        </div>
+        <div id="template-table " [ngClass]="{
+                    'disabled-area': !templateUISectionVisibility.table,
+                    ' ': templateUISectionVisibility.table
+                }" (click)="onClickSection('table')">
+            <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.table"
+                aria-label="edit icon">
+                <i class="icon-edit-pencil"></i>
+            </a>
+            <main>
+                <!-- Body -->
+                <table style="margin-top: 40px;">
+                    <tbody>
+                        <tr>
+                            <td class="padding-0 border-none">
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th width="30px" class="text-center">Sl No.</th>
+                                            <th>Description of Goods</th>
+                                            <th class="text-center">HSN/SAC</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th class="text-right">Rate</th>
+                                            <th class="text-center">per</th>
+                                            <th class="text-center">Disc. %</th>
+                                            <th class="text-right">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left text-center vertical-align-top">
+                                                1</td>
+                                            <td class="border-none border-right">
+                                                <strong>TSHIRT (COTTON)</strong>
+                                                <ul class="custom-list-style margin-0" type="none">
+                                                    <li>CL-011</li>
+                                                    <li>FULL SLEEVES ROUND NECK</li>
+                                                    <li>COLOUR-WHITE, BLACK</li>
+                                                    <li>S TO 2XL</li>
+                                                </ul>
+                                            </td>
+                                            <td class="border-none border-right text-center">61091000</td>
+                                            <td class="border-none border-right text-center"><strong>250 Pcs</strong>
+                                            </td>
+                                            <td class="border-none border-right text-right">275.00</td>
+                                            <td class="border-none border-right text-center">Pcs</td>
+                                            <td class="border-none border-right text-center"></td>
+                                            <td class="border-none border-right text-right"><strong>68,750.00</strong>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left text-center vertical-align-top">
+                                                2</td>
+                                            <td class="border-none border-right">
+                                                <strong>TSHIRT (COTTON)</strong>
+                                                <ul class="custom-list-style margin-0" type="none">
+                                                    <li>CL-011</li>
+                                                    <li>FULL SLEEVES ROUND NECK</li>
+                                                    <li>COLOUR-WHITE, BLACK</li>
+                                                    <li>S TO 2XL</li>
+                                                </ul>
+                                            </td>
+                                            <td class="border-none border-right text-center">61091000</td>
+                                            <td class="border-none border-right text-center"><strong>250 Pcs</strong>
+                                            </td>
+                                            <td class="border-none border-right text-right">275.00</td>
+                                            <td class="border-none border-right text-center">Pcs</td>
+                                            <td class="border-none border-right text-center"></td>
+                                            <td class="border-none border-right text-right"><strong>68,750.00</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left text-center vertical-align-top">
+                                                3</td>
+                                            <td class="border-none border-right">
+                                                <strong>TSHIRT (COTTON)</strong>
+                                                <ul class="custom-list-style margin-0" type="none">
+                                                    <li>CL-011</li>
+                                                    <li>FULL SLEEVES ROUND NECK</li>
+                                                    <li>COLOUR-WHITE, BLACK</li>
+                                                    <li>S TO 2XL</li>
+                                                </ul>
+                                            </td>
+                                            <td class="border-none border-right text-center">61091000</td>
+                                            <td class="border-none border-right text-center"><strong>250 Pcs</strong>
+                                            </td>
+                                            <td class="border-none border-right text-right">275.00</td>
+                                            <td class="border-none border-right text-center">Pcs</td>
+                                            <td class="border-none border-right text-center"></td>
+                                            <td class="border-none border-right text-right"><strong>68,750.00</strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="border-none border-right border-left"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right border-top text-right">12,875.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border-none border-right border-left"></td>
+                                            <td class="border-none border-right text-right">
+                                                <strong>IGST</strong>
+                                            </td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right"></td>
+                                            <td class="border-none border-right text-right">
+                                                <strong>12,875.00</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td class="text-right">Total</td>
+                                            <td></td>
+                                            <td class="text-center">
+                                                <strong>1000 Pcs</strong>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right">
+                                                <strong>12,875.00</strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td class="border-none">Amount Chargeable (in words)</td>
+                                        <td class="border-none text-right">E. & O.E</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border-none" colspan="100%"><strong>INR Two Lakh Seventy Thousand
+                                                Three Hundred Seventy Five Only</strong></td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="vertical-align-top" rowspan="2" width="50%">HSN/SAC</th>
+                                            <th class="text-center vertical-align-top" rowspan="2">Taxable Value</th>
+                                            <th class="text-center" colspan="2" width="25%">IGST</th>
+                                            <th class="text-right vertical-align-top" rowspan="2">Total Tax Amount</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" width="12.5%">Rate</th>
+                                            <th class="text-center" width="12.5%">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>61091000</td>
+                                            <td class="text-center">2,57,500.00</td>
+                                            <td class="text-center">5%</td>
+                                            <td class="text-center">12,875.00</td>
+                                            <td class="text-right">12,875.00</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-right"><strong>Total</strong></td>
+                                            <td class="text-center"><strong>22,3223</strong></td>
+                                            <td></td>
+                                            <td class="text-center"><strong>22,3223</strong></td>
+                                            <td class="text-right"><strong>22,3223</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <p>Tax Amount (in words): <strong>INR Twelve Thousand Eight Hundred Seventy Five
+                                        Only</strong></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </div>
+        <div id="template-footer " [ngClass]="{
+                    'disabled-area': !templateUISectionVisibility.footer,
+                    ' ': templateUISectionVisibility.footer
+                }" (click)="onClickSection('footer')">
+            <div class="clearfix">
+                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer"
+                    aria-label="edit icon">
+                    <i class="icon-edit-pencil"></i>
+                </a>
+                <footer>
+                    <!-- Footer -->
+                    <table style="margin-top: 40px;">
+                        <tbody>
+                            <tr>
+                                <td class="padding-0 border-none">
+                                    <table style="margin-top: auto;">
+                                        <tr>
+                                            <td class="border-none border-right" width="50%" rowspan="2">
+                                                <u><strong>Declaration: </strong></u>
+                                                <p class="margin-0">We declare that this invoice shows the actual price
+                                                    of the goods described and that all particulars are true and
+                                                    correct.</p>
+                                            </td>
+                                            <td class="border-none border-top text-right" width="50%">for V.N. APPARELS
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border-none text-right">Authorised Signatory</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </footer>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
