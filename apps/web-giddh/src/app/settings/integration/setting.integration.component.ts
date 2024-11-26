@@ -202,9 +202,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-
+    
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -223,8 +221,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private activateRoute: ActivatedRoute,
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef,
-        private componentStore: SettingIntegrationComponentStore,
-        private _generalService: GeneralService
+        private componentStore: SettingIntegrationComponentStore
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -239,8 +236,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
-    public goToTallyLink(): void {
-        this._generalService.syncWithTally();
+    /**
+     * Sync with tally help document
+     * 
+     * @memberof SettingIntegrationComponent
+     */
+    public tallyHelpDocLink(): void {
+        this.generalService.syncWithTally();
     }
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
