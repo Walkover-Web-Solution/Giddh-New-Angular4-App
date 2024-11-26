@@ -133,8 +133,25 @@ export class BankIntegrationComponent implements OnInit {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
+                this.setupGocardlessMessageListener();
             }
         });
+    }
+    /**
+     * This will add and Remove the listener immediately after triggering getRequisition
+     * 
+     * @memberof BankIntegrationComponent
+     */
+    public setupGocardlessMessageListener(): void {
+        const messageHandler = (event) => {
+            if (event && event.data === "GOCARDLESS") {
+                if (this.referenceNumber) {
+                    this.componentStore.getRequisition(this.referenceNumber);
+                    window.removeEventListener('message', messageHandler);
+                }
+            }
+        };
+        window.addEventListener('message', messageHandler);
     }
 
     /**
@@ -428,13 +445,13 @@ export class BankIntegrationComponent implements OnInit {
             });
         }
     }
-      /**
-     * This will be use for delete bank account
-     *
-     * @param {*} bank
-     * @memberof BankIntegrationComponent
-     */
-      public deleteBankAccount(bank: any): void {
+    /**
+   * This will be use for delete bank account
+   *
+   * @param {*} bank
+   * @memberof BankIntegrationComponent
+   */
+    public deleteBankAccount(bank: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '540px',
             data: {

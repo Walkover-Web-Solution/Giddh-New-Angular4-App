@@ -51,11 +51,13 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 import { saveAs } from 'file-saver';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
 import { SettingsIntegrationService } from '../services/settings.integration.service';
+import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
 
 @Component({
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
+    providers: [BankIntegrationComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -322,6 +324,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hasIntegrationScope: boolean = false;
     /** Holds true if current company country is gocardless supported country */
     public isGocardlessSupportedCountry: boolean;
+    /** Holds Store Requisition API success state as observable*/
+    public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
 
     constructor(
         private store: Store<AppState>,
@@ -347,7 +351,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private router: Router,
-        private settingsIntegrationService: SettingsIntegrationService
+        private settingsIntegrationService: SettingsIntegrationService,
+        private componentStore: BankIntegrationComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -504,9 +509,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
             dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                 if (response) {
                     this.referenceNumber = response;
+                    this.setupGocardlessMessageListener();
                 }
             });
         }
+    }
+    /**
+     * This will add and Remove the listener immediately after triggering getRequisition
+     * 
+     * @memberof LedgerComponent
+     */
+    public setupGocardlessMessageListener(): void {
+        const messageHandler = (event) => {
+            if (event && event.data === "GOCARDLESS") {
+                if (this.referenceNumber) {
+                    this.componentStore.getRequisition(this.referenceNumber);
+                    window.removeEventListener('message', messageHandler);
+                }
+            }
+        };
+        window.addEventListener('message', messageHandler);
     }
 
     public ngOnInit() {
