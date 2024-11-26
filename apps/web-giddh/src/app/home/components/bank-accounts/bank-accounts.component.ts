@@ -137,7 +137,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public openInstitutionsDialog(): void {
         let data = {
             localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData,
+            commonLocaleData: this.commonLocaleData
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
