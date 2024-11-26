@@ -38,7 +38,7 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
         TotalOverduesChartComponent,
         ProfitLossComponent,
         BankAccountsComponent,
-        CrDrComponent,
+        CrDrComponent
     ],
     exports: [HomeComponent],
     providers: [
