@@ -55,11 +55,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public isGoCardlessSupportedCountry: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
-    /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-
+    
     constructor(
-        private _router: Router, private _generalService: GeneralService,
+        private router: Router, 
+        private generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
@@ -67,23 +66,28 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
-    public goToTallyLink(): void {
-        this._generalService.syncWithTally();
+    /**
+     * Sync with tally help document
+     * 
+     * @memberof OnboardingComponent
+     */
+    public tallyHelpDocLink(): void {
+        this.generalService.syncWithTally();
     }
     public ngOnInit() {
-        this.voucherApiVersion = this._generalService.voucherApiVersion;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
-                this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+                this.isGoCardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
 
@@ -99,7 +103,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        this._generalService.IAmLoaded.next(true);
+        this.generalService.IAmLoaded.next(true);
     }
 
     /**
@@ -133,12 +137,12 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectConfigureBank() {
         if (this.companyCountry) {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
-            this._router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
+            this.router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
 
 
         } else {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration'));
-            this._router.navigate(['pages/settings/integration'], { replaceUrl: true });
+            this.router.navigate(['pages/settings/integration'], { replaceUrl: true });
 
         }
     }
