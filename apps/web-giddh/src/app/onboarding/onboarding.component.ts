@@ -72,7 +72,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof OnboardingComponent
      */
     public tallyHelpDocLink(): void {
-        this.generalService.syncWithTally();
+        this.generalService.syncWithTallyLink();
     }
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
