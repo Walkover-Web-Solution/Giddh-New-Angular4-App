@@ -679,6 +679,9 @@
                                     >
                                         {{ commonLocaleData?.app_generate_invoice }}
                                     </button>
+                                    <button *ngIf="account?.email" mat-menu-item class="menu-table-item" (click)="performActions(5, account, $event)">
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
                                     <!-- <button
                                         mat-menu-item
                                         class="menu-table-item"
@@ -1025,6 +1028,9 @@
                                         aria-label="record bill"
                                     >
                                         {{ commonLocaleData?.app_record_bill }}
+                                    </button>
+                                    <button *ngIf="account?.email" mat-menu-item class="menu-table-item" (click)="performActions(5, account, $event)">
+                                        {{ commonLocaleData?.app_send_email }}
                                     </button>
                                     <!-- <button
                                         mat-menu-item
