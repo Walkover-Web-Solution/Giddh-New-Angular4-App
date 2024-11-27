@@ -5,7 +5,6 @@
 <div mat-dialog-content class="dialog-body" [formGroup]="paymentForm">
     <div class="d-flex column-gap1 mr-b15">
         <giddh-datepicker
-            type="text"
             (keydown.enter)="$event.preventDefault()"
             [label]="localeData?.payment_date"
             [placeholder]="localeData?.payment_date"
@@ -79,7 +78,6 @@
         >
         </input-field>
         <giddh-datepicker
-            type="text"
             (keydown.enter)="$event.preventDefault()"
             [label]="commonLocaleData?.app_cheque_clearance_date"
             [placeholder]="commonLocaleData?.app_cheque_clearance_date"

@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../subscription/utility/subscription.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { COUNTRY_REGION_MAP } from '../app.constant';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'verify-subscription-transfer-ownership',
@@ -19,7 +21,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     /** This holds url to request id */
     public requestId: string = '';
     /** This holds url to login url */
-    public loginUrl: string = 'https://giddh.com/login';
+    public loginUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* it will store image path */
@@ -47,8 +49,11 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         private route: ActivatedRoute,
         public dialog: MatDialog,
         private componentStore: SubscriptionComponentStore,
-        private formBuilder: FormBuilder
-    ) { }
+        private formBuilder: FormBuilder,
+        private generalService: GeneralService
+    ) {
+        this.loginUrl = this.generalService.getGiddhRegionUrl();
+    }
 
 
     /**

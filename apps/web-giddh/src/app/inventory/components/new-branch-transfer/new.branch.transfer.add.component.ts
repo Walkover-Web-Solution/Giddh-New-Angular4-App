@@ -513,7 +513,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
                     if (this.editBranchTransferUniqueName || !d.isArchived) {
-                        branches.push(new LinkedStocksVM(d.name, d?.uniqueName, false, d.alias, d.warehouses, d.isArchived));
+                        branches.push(new LinkedStocksVM(d.name, d?.uniqueName, false, d.name, d.warehouses, d.isArchived));
                     }
                     if (d.warehouses?.length) {
                         this.senderWarehouses[d?.uniqueName] = [];
@@ -565,7 +565,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (branches) {
                 if (branches.results?.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({
-                        label: `${b.alias}`,
+                        label: `${b.name}`,
                         value: b?.uniqueName,
                         additional: b
                     }));
@@ -1315,14 +1315,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (this.isBranch) {
             // Find the current branch details
             selectedBranch = (branches) ? branches.find(branch => branch?.uniqueName === this._generalService.currentBranchUniqueName) : null;
-            branchName = selectedBranch ? selectedBranch.alias : '';
+            branchName = selectedBranch ? selectedBranch.name : '';
         } else {
             // Company session find the HO branch
             hoBranch = (branches) ? branches.find(branch => !branch.parentBranch) : null;
-            branchName = hoBranch ? hoBranch.alias : '';
+            branchName = hoBranch ? hoBranch.name : '';
         }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = this.isBranch ? branchName : hoBranch?.alias;
+            this.myCurrentCompany = this.isBranch ? branchName : hoBranch?.name;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
                 this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch?.name;

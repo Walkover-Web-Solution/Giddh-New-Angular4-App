@@ -361,7 +361,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
 
                 this.getSelectedTabIndex();
-                if (this.universalDate) {
+                // 'pending', 'settings', 'templates' These tabs are not voucher list
+                if (this.universalDate && !['pending', 'settings', 'templates'].includes(this.activeModule)) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
                 }
@@ -638,6 +639,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (response && response.voucherType === this.voucherType) {
             this.dataSource = [];
             this.totalResults = response?.totalItems;
+            this.selectAllVouchers({ checked: false });
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
 
@@ -709,8 +711,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
+        const queryParams =  {
+            page: this.advanceFilters.page,
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+        };
+
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length){
+            queryParams['search'] = searchString;
+        };
+
         this.router.navigate([`/pages/vouchers/view/${this.urlVoucherType}/${voucherUniqueName}`], {
-            queryParams: { page: this.advanceFilters.page, from: this.advanceFilters.from, to: this.advanceFilters.to }
+            queryParams: queryParams
         });
     }
 
@@ -1500,7 +1513,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const tempKeysInAdvanceFiltersForm = ['dueAmount', 'dateRange', 'grandTotalOperation', 'invoiceTotalAmount', 'invoiceDateRange'];
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
-
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
             sort: this.advanceFilters.sort,
@@ -1545,13 +1557,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /**
      * Close Advance Search Dialog
      *
-     * @param {boolean} isClosed
+     *
      * @memberof VoucherListComponent
      */
-    public closeAdvanceSearchDialog(isClosed: boolean): void {
-        if (isClosed) {
-            this.selectAllVouchers({ checked: false });
-        }
+    public closeAdvanceSearchDialog(): void {
         this.advanceSearchDialogRef?.close();
     }
 
@@ -1599,8 +1608,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const model = {
             accountUniqueName: voucher.customerUniqueName
         };
-
-        if (voucher === VoucherTypeEnum.generateEstimate) {
+        
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) { 
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;
@@ -1608,7 +1617,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.convertToInvoice({
             request: model,
-            voucherType: voucher?.voucherType ?? this.voucherType
+            voucherType: this.voucherType
         });
     }
 
@@ -1912,6 +1921,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.componentStore.purchaseOrderBulkUpdateAction({ payload: { purchaseNumbers }, actionType: actionType });
         } else if (event?.purchaseOrders) {
             this.componentStore.purchaseOrderBulkUpdateAction({ payload: event, actionType: actionType });
+        }
+    }
+
+    /**
+     * Handle Copy voucher redirect to voucher create page with respective voucher
+     *
+     * @memberof VoucherListComponent
+     */
+    public copyVoucher(voucher: any): void {
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+        } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
+            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+        } else {
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
         }
     }
 }

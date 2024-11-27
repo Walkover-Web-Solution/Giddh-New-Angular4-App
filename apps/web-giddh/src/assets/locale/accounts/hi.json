@@ -92,5 +92,6 @@
     "ifsc_code": "आईएफएससी कोड",
     "beneficiary_name": "लाभार्थी का नाम",
     "branch_name": "शाखा का नाम",
-    "swift_code": "स्विफ्ट कोड"
+    "swift_code": "स्विफ्ट कोड",
+    "bulk_add": "थोक जोड़ें"
 }

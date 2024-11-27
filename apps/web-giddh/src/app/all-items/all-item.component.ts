@@ -219,7 +219,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @param {AllItem} item Menu item
      * @memberof AllGiddhItemComponent
      */
-    public handleItemClick(item: AllItem): void {    
+    public handleItemClick(item: AllItem): void {
         if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         } else if (item?.additional?.queryParams?.isGstMenu === true) {
@@ -233,7 +233,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @param {*} subitem
      * @memberof AllGiddhItemComponent
      */
-    public redirectSubItemLink(subitem: any): void { 
+    public redirectSubItemLink(subitem: any): void {
         if (subitem) {
             if (subitem.submenu) {
                 this.createNewModalTitle = subitem.label
@@ -242,9 +242,9 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                     width: '630px'
                 });
             } else {
-                if(subitem?.additional?.tabIndex > 0 && subitem?.additional?.tab?.length){
-                    this.router.navigate([subitem.link], { queryParams: subitem?.additional} );
-                }else{
+                if ((subitem?.additional?.queryParams?.tabIndex >= 0) && subitem?.additional?.queryParams?.tab) {
+                    this.router.navigate([subitem.link], { queryParams: subitem?.additional?.queryParams });
+                } else {
                     this.router.navigate([subitem.link]);
                 }
             }

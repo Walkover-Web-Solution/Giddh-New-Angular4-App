@@ -726,7 +726,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'by',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -755,7 +755,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'to',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -772,15 +772,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.selectAccUnqName = filteredTaxData[0]?.additional?.name;
         } else {
             newTransactionFormGroup.patchValue({
-                amount: null,
-                actualAmount: null,
+                amount: 0,
+                actualAmount: 0,
                 particular: '',
                 currentBalance: '',
                 applyApplicableTaxes: false,
                 isInclusiveTax: false,
                 type: byOrTo,
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -1493,7 +1493,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
                 totalDebit += Number(control.get('amount').value) ?? 0;
             }
-        });
+            });
 
         totalCredit = this.roundOffValueByCompanyDecimalPlace(totalCredit);
         totalDebit = this.roundOffValueByCompanyDecimalPlace(totalDebit);

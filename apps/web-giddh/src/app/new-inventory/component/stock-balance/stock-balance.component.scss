@@ -621,3 +621,17 @@
         }
     }
 }
+
+.input-group {
+    .input-group-addon {
+        border-left: 1px solid var(--color-iron) !important;
+    }
+
+    input {
+        border-left: 1px solid var(--color-iron) !important;
+
+        &:focus {
+            border-left: 1px solid var(--color-blue) !important;
+        }
+    }
+}

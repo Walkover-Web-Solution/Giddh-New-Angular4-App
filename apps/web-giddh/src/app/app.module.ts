@@ -57,6 +57,22 @@ if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 
+let giddhRegion = document.cookie
+    .split('; ')
+    .find(cookie => cookie.startsWith('giddh_region='))
+    ?.split('=')[1];
+giddhRegion = giddhRegion?.toUpperCase();
+
+if (giddhRegion === "UK") {
+    localStorage.setItem("Country-Region", "GB");
+} else if (giddhRegion === "AE") {
+    localStorage.setItem("Country-Region", "AE");
+} else if (giddhRegion === "IN") {
+    localStorage.setItem("Country-Region", "IN");
+} else {
+    localStorage.setItem("Country-Region", "GL");
+}
+
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -110,9 +126,7 @@ if (!environment.production) {
         WindowRef,
         {
             provide: ServiceConfig,
-            useValue: localStorage.getItem('Country-Region') === 'GB'
-                ? { apiUrl: Configuration.UkApiUrl, appUrl: Configuration.AppUrl, _ }
-                : { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+            useValue: { apiUrl: localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
         },
         {
             provide: HTTP_INTERCEPTORS,

@@ -1,0 +1,19 @@
+<mat-button-toggle-group #group="matButtonToggleGroup" class="custom-paginator" [ngClass]="cssClass">
+    <mat-button-toggle
+        aria-label="Goto previous page"
+        [disabled]="!previousPageToken?.length"
+        (click)="emitsPageChangeEvent(false)"
+    >
+        {{ commonLocaleData?.app_previous }}
+    </mat-button-toggle>
+    <mat-button-toggle aria-label="Current Page" class="pointer-event-none page-count-wrapper">
+        {{ currentPage }}
+    </mat-button-toggle>
+    <mat-button-toggle
+        aria-label="Goto next page"
+        [disabled]="!nextPageToken?.length"
+        (click)="emitsPageChangeEvent(true)"
+    >
+        {{ commonLocaleData?.app_next }}
+    </mat-button-toggle>
+</mat-button-toggle-group>

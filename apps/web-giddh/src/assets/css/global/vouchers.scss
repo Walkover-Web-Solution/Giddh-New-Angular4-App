@@ -94,6 +94,14 @@
             margin-top: 15px !important;
         }
     }
+
+    table {
+        tr {
+            mat-checkbox {
+                transform: translateX(-7px);
+            }
+        }
+    }
 }
 
 .mat-menu-width-large {
