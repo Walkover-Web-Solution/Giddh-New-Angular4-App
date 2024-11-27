@@ -205,6 +205,35 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="
+                                                    invoiceSettings.purchaseBillSettings.poAutoWhatsApp
+                                                "
+                                                class="show-on-mobile"
+                                                name="poAutoWhatsApp"
+                                                color="primary"
+                                                aria-label="purchase order whatsapp"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label>{{ getWhatsappSettingLabel("purchase order") }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="
+                                                    invoiceSettings.purchaseBillSettings.poAutoWhatsApp
+                                                "
+                                                class="hide-on-mobile"
+                                                name="poAutoWhatsApp"
+                                                color="primary"
+                                                aria-label="purchase order whatsapp"
+                                            >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
@@ -359,9 +388,8 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    <div class="clearfix pd-t1 row" >
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
@@ -384,8 +412,6 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                </div>
-                                <ng-container *ngIf="voucherApiVersion === 2">
                                     <div class="clearfix pd-t1 row"> 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -409,32 +435,30 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clearfix pd-t1 row">
+                                    <div class="clearfix pd-t1 row"> 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppDebitNote"
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
                                                 class="show-on-mobile"
-                                                name="autoWhatsAppDebitNote"
+                                                name="autoWhatsAppPurchaseBill"
                                                 color="primary"
-                                                aria-label="autoWhatsAppDebitNote"
+                                                aria-label="autoWhatsAppPurchaseBill"
                                             >
                                             </mat-slide-toggle>
-                                            <label>{{ getWhatsappSettingLabel("debit note") }}</label>
+                                            <label>{{ getWhatsappSettingLabel("purchase bill") }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppDebitNote"
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
                                                 class="hide-on-mobile"
-                                                name="autoWhatsAppDebitNote"
+                                                name="autoWhatsAppPurchaseBill"
                                                 color="primary"
-                                                aria-label="autoWhatsAppDebitNote"
+                                                aria-label="autoWhatsAppPurchaseBill"
                                             >
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                </ng-container>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
+                                    <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
@@ -457,9 +481,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
+                                    <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
@@ -481,10 +503,9 @@
                                             >
                                             </mat-slide-toggle>
                                         </div>
+                                        
                                     </div>
-                                </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
+                                    <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <label>{{ commonLocaleData?.app_custom_email_template }}</label>
                                         </div>
@@ -497,7 +518,7 @@
                                             >
                                         </div>
                                     </div>
-                                </div>
+                                </ng-container>
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>

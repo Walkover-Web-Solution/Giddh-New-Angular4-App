@@ -128,9 +128,9 @@
                                     <div class="menu-dropdown-wrapper">
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex justify-content-between">
@@ -190,9 +190,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -253,9 +253,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -336,7 +336,7 @@
                                             class="mr-t2 mr-b05 align-items-center"
                                             *ngIf="
                                                 currentCompanyBranches?.length > 1 &&
-                                                currentOrganizationType === 'COMPANY'
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                             "
                                         >
                                             <span>{{ localeData?.go_to_branch_information }} </span>
@@ -351,9 +351,9 @@
                                         </div>
                                         <ng-container
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
@@ -397,32 +397,36 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                                <span class="d-flex">
-                                                    <i class="icon-invoice-new mr-r1"></i>
-                                                </span>
-                                                <span>
-                                                    <a
-                                                        class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/vouchers/receipt/create')"
-                                                    >
-                                                        {{ commonLocaleData?.app_voucher_types?.receipt }}
-                                                    </a>
-                                                </span>
-                                            </div> -->
-                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                                <span class="d-flex">
-                                                    <i class="icon-invoice-new mr-r1"></i>
-                                                </span>
-                                                <span>
-                                                    <a
-                                                        class="cursor-pointer"
-                                                        (click)="navigateToSubItemLink('/vouchers/payment/create')"
-                                                    >
-                                                        {{ commonLocaleData?.app_voucher_types?.payment }}
-                                                    </a>
-                                                </span>
-                                            </div> -->
+                                            <!-- NOTE - This code is only active for Test Environment - Start -->
+                                            <ng-container *ngIf="!isProdMode">
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-invoice-new mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="navigateToSubItemLink('/vouchers/receipt/create')"
+                                                        >
+                                                            {{ commonLocaleData?.app_voucher_types?.receipt }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-invoice-new mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="navigateToSubItemLink('/vouchers/payment/create')"
+                                                        >
+                                                            {{ commonLocaleData?.app_voucher_types?.payment }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </ng-container>
+                                            <!-- NOTE - This code is only active for Test Environment - End -->
                                             <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>

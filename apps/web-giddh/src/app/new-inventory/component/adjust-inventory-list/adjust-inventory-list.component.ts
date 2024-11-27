@@ -17,7 +17,7 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 @Component({
@@ -112,6 +112,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public inventoryType: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private generalService: GeneralService,
@@ -155,6 +157,12 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 this.adjustInventoryListRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.adjustInventoryListRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAllAdjustReports(false);
+            }
+        });
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
@@ -209,13 +217,14 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
@@ -232,7 +241,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : ''
                         };
                     }

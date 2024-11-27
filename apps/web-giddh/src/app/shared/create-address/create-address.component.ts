@@ -90,6 +90,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnInit(): void {
+        this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(entity => !entity?.isConsolidated);
         this.setFormData();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -177,8 +178,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             });
             if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                 && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
-                // This will by default show the current organization unique name as selected linked entity
-                const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(i => i?.uniqueName === this.currentOrganizationUniqueName);
+                // This will by default show the current organization unique name and non consolidated entity as selected linked entity
+                const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(linked => linked?.uniqueName === this.currentOrganizationUniqueName);
                 this.addressForm.get('linkedEntity')?.patchValue(currentOrganizationUniqueNameObj);
             }
         } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
@@ -212,7 +213,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                     alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
-                    parentBranchName: [this.branchToUpdate.parentBranchName],
+                    parentBranchName: [this.branchToUpdate.parentBranchName ?? ''],
                     linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
                         return item?.uniqueName ===
                             this.branchToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
@@ -325,7 +326,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
-
         if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
             let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                 return item = item.uniqueName;
@@ -348,7 +348,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             const trimmedTaxNumber = this.addressForm?.get('taxNumber')?.value?.trim();
             this.addressForm?.get('taxNumber')?.patchValue(trimmedTaxNumber);
         }
-
+        if (this.addressForm?.get('alias')?.value) {
+            this.addressForm?.get('name')?.patchValue(this.addressForm?.get('alias').value);
+        }
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.getRawValue(),

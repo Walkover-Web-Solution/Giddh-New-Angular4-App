@@ -79,6 +79,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public initialByProductLinkedStocks: any[] = [];
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** True if get manufacturing in progress */
     public isLoadingManufacturing: boolean = false;
     // /** Stores the default search results pagination details */
@@ -125,6 +127,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     private isByProductExpanded: boolean;
     /** True ifi is by other expenses expanded*/
     private isOtherExpenseExpanded: boolean;
+    /** Stores the list of stock variants */
+    public stockVariants: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -178,6 +182,11 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.getWarehouses();
         this.getStocks(this.manufacturingObject.manufacturingDetails[0], 1, "");
 
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.length) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length >= 2;
@@ -288,7 +297,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         this.preventByProductStocksApiCall = true;
-
         if (q) {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
@@ -381,7 +389,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -1285,7 +1292,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.increaseExpenseAmount = response.body.increaseAssetValue;
 
                 this.selectedInventoryType = response.body.inventoryType;
-
+                if (response.body.stockUniqueName) {
+                    this.loadStockVariantsByStockUniqueName(response.body.stockUniqueName);
+                }
                 let linkedStocks = [];
                 response.body.linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
@@ -1460,6 +1469,25 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * This will be use for load stock variants by stock unique name
+     *
+     * @param {string} stockUniqueName
+     * @memberof CreateManufacturingComponent
+     */
+    public loadStockVariantsByStockUniqueName(stockUniqueName: string): void {
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
+            this.stockVariants = [];
+            if (variants?.length) {
+                variants?.forEach(variant => {
+                    this.stockVariants.push({ label: variant?.name, value: variant?.uniqueName });
+                });
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
 
     /**
      * Delete manufacturing

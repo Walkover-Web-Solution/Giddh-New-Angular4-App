@@ -43,10 +43,6 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
      * @memberof CancelEInvoiceDialogComponent
      */
     public ngOnInit(): void {
-        if (!this.inputData) {
-            return;
-        }
-
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.selectedEInvoice = this.inputData.selectedEInvoice;
@@ -89,7 +85,6 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
             postObject.uniqueName = this.selectedEInvoice?.uniqueName;
             postObject.voucherType = this.voucherType;
             requestObject.accountUniqueName = this.selectedEInvoice?.account?.uniqueName
-            requestObject.voucherVersion = 2;
             this.componentStore.cancelEInvoice({ getRequestObject: requestObject, postRequestObject: postObject });
         }
     }
@@ -102,7 +97,7 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
     public handleBlurOnCancellationRemarks(): void {
         const cancellationRemarksControl = this.eInvoiceCancelForm?.get('cancellationRemarks');
         if (cancellationRemarksControl) {
-            cancellationRemarksControl.patchValue(cancellationRemarksControl.value.trim());
+            cancellationRemarksControl.patchValue(cancellationRemarksControl.value?.trim());
         }
     }
 

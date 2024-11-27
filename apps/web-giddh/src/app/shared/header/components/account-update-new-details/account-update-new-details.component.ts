@@ -50,7 +50,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, differenceBy, flattenDeep, isEqual, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
@@ -147,7 +147,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
-    public selectedDiscounts: any[] = [];
+    public selectedDiscounts: string = null;
     public selectedDiscountList: any[] = [];
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
@@ -237,7 +237,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
-    public isForeignCurrecny: boolean = false;
+    public isForeignCurrency: boolean = false;
     /** Hold all temporary save bulk balance data */
     public tempSaveBulkData: any[] = [];
     /** Account Opening Balance list */
@@ -248,6 +248,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public company: any = {
         branch: null,
     };
+    /** True if update data on temp bulk data  */
+    public isBulkDataUpdated: boolean = false;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -937,7 +939,22 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
             }
         ];
-        accountRequest.accountOpeningBalance = this.company?.isActive ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
+
+        const accountOpeningBalanceValue = this.addAccountForm.get('accountOpeningBalance')?.value;
+        const isAccountOpeningBalanceValid = accountOpeningBalanceValue?.some((balance: any) => {
+            return balance.branch || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+        const isBranchModeOpeningBalanceValid = branchModeOpeningBalance.some((balance: any) => {
+            return balance.branch?.name || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+
+        accountRequest.accountOpeningBalance = this.company.isActive
+            ? (isAccountOpeningBalanceValid ? accountOpeningBalanceValue : [])
+            : (isBranchModeOpeningBalanceValid ? branchModeOpeningBalance : []);
+        if (this.company.isActive) {
+            accountRequest.accountOpeningBalance = this.isBulkDataUpdated ? this.tempSaveBulkData : !this.tempSaveBulkData?.length ? this.accountOpeningBalance : this.mergeOpeningBalanceData(accountOpeningBalanceValue);
+            accountRequest.accountOpeningBalance = accountRequest.accountOpeningBalance?.filter((res: any) => res?.branch?.uniqueName);
+        }
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -1018,6 +1035,32 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
+    }
+
+    /**
+     * This will check the account opening balance data and merge it with both previous and updated data."
+     *
+     * @param {*} accountOpeningBalanceValue
+     * @return {*}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public mergeOpeningBalanceData(accountOpeningBalanceValue: any): any {
+        const updatedOpeningBalance = [...this.accountOpeningBalance];
+
+        accountOpeningBalanceValue?.forEach(updatedItem => {
+            const existingIndex = updatedOpeningBalance.findIndex(item => item.branch.uniqueName === updatedItem.branch.uniqueName);
+
+            if (existingIndex > -1) {
+                updatedOpeningBalance[existingIndex] = { ...updatedOpeningBalance[existingIndex], ...updatedItem };
+            } else {
+                updatedOpeningBalance.push(updatedItem);
+            }
+        });
+
+        if (!accountOpeningBalanceValue.length) {
+            return this.accountOpeningBalance;
+        }
+        return updatedOpeningBalance;
     }
 
     /**
@@ -1538,10 +1581,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
         if (this.activeAccountName) {
-            uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.activeAccountName;
-            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.discounts = this.selectedDiscounts?.length ? [this.selectedDiscounts] : [];
             assignDiscountObject.isAccount = true;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
@@ -2024,7 +2066,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         });
                     }
                     this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        this.selectedDiscounts = [];
+                        this.selectedDiscounts = null;
                         this.forceClearDiscount$ = observableOf({ status: true });
                         if (response?.status === 'success') {
                             if (response.body) {
@@ -2032,12 +2074,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                     let list = response.body[accountDetails?.uniqueName];
                                     Object.keys(list)?.forEach(key => {
                                         let UniqueName = list[key]['discount']['uniqueName'];
-                                        this.selectedDiscounts.push(UniqueName);
+                                        this.selectedDiscounts = UniqueName;
                                     });
                                 }
                             }
                         }
-                        uniq(this.selectedDiscounts);
                     });
                     this._accountService
                         .getPortalUsers(accountDetails?.uniqueName)
@@ -2262,9 +2303,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
       * @memberof AccountUpdateNewDetailsComponent
       */
     public openBulkAddDialog(): void {
-        this.isForeignCurrecny = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
+        this.isForeignCurrency = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
         let data = {
-            foreignCurrency: this.isForeignCurrecny,
+            foreignCurrency: this.isForeignCurrency,
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
@@ -2282,6 +2323,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
+                this.isBulkDataUpdated = true;
             }
         });
     }

@@ -256,6 +256,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -531,6 +535,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
@@ -797,7 +807,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login` : `https://test.giddh.com/login`;
+                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
@@ -1182,11 +1192,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp?.alias) {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
-            } else {
-                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(ev?.toLowerCase());
-            }
+            return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
         });
     }
 
@@ -1203,11 +1209,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         if (branchName) {
             this.currentCompanyBranches = branches?.filter(branch => {
-                if (!branch?.alias) {
-                    return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
-                } else {
-                    return branch?.alias.toLowerCase().includes(branchName?.toLowerCase());
-                }
+                return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
             });
         } else {
             this.currentCompanyBranches = branches;
@@ -1996,7 +1998,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
         localStorage.removeItem('isNewArchitecture');
-        localStorage.removeItem('Country-Region');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {

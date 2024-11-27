@@ -16,12 +16,15 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
+import { InventoryComponentStore } from "../inventory.store";
+import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 
 @Component({
     selector: 'create-update-group',
     templateUrl: './create-update-group.component.html',
     styleUrls: ['./create-update-group.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [InventoryComponentStore]
 })
 export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Holds group unique name if updating group  */
@@ -74,6 +77,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return this.groupForm?.dirty;
     }
+    /** Discounts list Observable */
+    public discountsList$: Observable<any> = this.componentStore.discountsList$;
+    /** Discounts list */
+    public discountsList: IDiscountList[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -85,7 +92,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private dialog: MatDialog,
         private location: Location,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private componentStore: InventoryComponentStore
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
     }
@@ -102,6 +110,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         document.querySelector("body").classList.add("group-create-update");
         this.initGroupForm();
         this.getTaxes();
+        this.getAllDiscounts();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.stockType = params?.type?.toUpperCase();
@@ -154,6 +163,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             parentStockGroupUniqueName: [!this.groupUniqueName && this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : ''],
             isSubGroup: [!this.groupUniqueName && this.activeGroup?.uniqueName ? true : false],
             taxes: null,
+            discounts: null,
+            discountLabel: [''],
             type: null
         });
 
@@ -182,6 +193,21 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             }
             this.changeDetection.detectChanges();
         });
+    }
+
+    /**
+    * Get all discounts
+    *
+    * @private
+    * @memberof CreateUpdateGroupComponent
+    */
+    private getAllDiscounts(): void {
+        this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+            if (response) {
+                this.discountsList = response;
+            }
+        });
+        this.componentStore.getDiscountList();
     }
 
     /**
@@ -304,6 +330,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
         this.groupForm.controls['type'].setValue(this.stockType);
+        const model = this.groupForm?.value;
+        if (!Array.isArray(model.discounts)) {
+            model.discounts = model.discounts?.length ? [model.discounts] : [];
+        }
+        delete model.discountLabel;
         if (this.groupUniqueName) {
             this.toggleLoader(true);
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -328,7 +359,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
 
         } else {
             this.toggleLoader(true);
-            this.inventoryService.CreateStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.CreateStockGroup(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
@@ -498,8 +529,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     sacNumber: response.body.sacNumber,
                     parentStockGroupUniqueName: response.body.parentStockGroup ? response.body.parentStockGroup.uniqueName : '',
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
-                    taxes: response.body.taxes
+                    taxes: response.body.taxes,
+                    discounts: response.body.discounts
                 });
+                this.groupForm.get('discountLabel').patchValue(this.discountsList?.find(discount => discount.uniqueName === response.body.discounts[0])?.name);
                 this.groupForm.updateValueAndValidity();
                 this.changeDetection.detectChanges();
             } else {

@@ -47,6 +47,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isHeaderProvided: boolean = true;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private toasterService: ToasterService,
@@ -101,6 +103,12 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      */
 
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
@@ -122,10 +130,11 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
@@ -134,9 +143,6 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
-                    if (this.currentBranch) {
-                        this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch?.alias ? ` (${this.currentBranch.alias})` : '');
-                    }
                 }
             } else {
                 if (this.generalService.companyUniqueName) {

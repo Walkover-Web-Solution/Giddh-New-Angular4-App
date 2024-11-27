@@ -8,14 +8,15 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { Router } from '@angular/router';
-import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
+import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 
 @Injectable()
 export class GeneralService {
@@ -84,9 +85,12 @@ export class GeneralService {
     private _currencyType = '1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000
 
     private _sessionId: string;
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
 
     constructor(
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) { }
 
@@ -611,6 +615,34 @@ export class GeneralService {
     }
 
     /**
+     *Get cookie value
+     *
+     * @param {*} name
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public getCookieValue(name: any): any {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            const cookieValue = parts.pop().split(';').shift();
+            return cookieValue.toUpperCase();
+        }
+        return null;
+    }
+    /**
+     * This will be use for get giddh region url
+     *
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getGiddhRegionUrl(): string {
+        const countryRegion = localStorage.getItem('Country-Region');
+        const region = COUNTRY_REGION_MAP[countryRegion] || null;
+        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+    }
+
+    /**
      * Handles the voucher date change modal configuration
      *
      * @param {boolean} isVoucherDateSelected
@@ -683,16 +715,17 @@ export class GeneralService {
     public fileReturnConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes,
+            text: localeData?.submit_file_return,
             color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no
+            text: commonLocaleData?.app_cancel
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
+        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -700,7 +733,8 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons
+            buttons,
+            actionBtnWrapperCssClass
         };
     }
 
@@ -2114,6 +2148,47 @@ export class GeneralService {
             footerCssClass,
             buttons
         };
+    }
+
+    /**
+     * Round a Number to Company Decimal Places
+     *
+     * @param {number} value
+     * @param {number} [companyDecimalPlaces=2]
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
+        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
+    }
+
+    /**
+     * Update current page query params
+     *
+     * @param {Params} queryParams
+     * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @memberof GeneralService
+     */
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling: queryParamsHandling
+            }
+        );
+    }
+    /**
+     * This will be use for sync with tally help documentation
+     * 
+     * @memberof GeneralService
+     */
+    public syncWithTallyLink() : void {
+        const url = this.router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
+        const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
+        window.open(cleanedUrl, '_blank');
     }
 }
 

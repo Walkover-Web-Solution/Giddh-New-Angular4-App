@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { merge, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -11,6 +11,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatReportComponentStore } from '../utility/vat.report.store';
 import { cloneDeep } from '../../lodash-optimized';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'vat-liabilities-payments',
@@ -30,6 +32,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if current organization is company */
     public isCompanyMode: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Holds Branch List */
     public branchList: any;
     /** Holds Tax Number List */
@@ -64,8 +68,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "type", "due"];
     /** Holds current table columns */
     public displayColumns: string[] = [];
-    /** Observable to store true if API Call is in progress */
-    public liabilityPaymentListInProgress$ = this.componentStore.select(state => state.liabilityPaymentListInProgress);
     /** Holds true if user in vat-payment */
     public isPaymentMode: boolean;
     /** Stores the current company */
@@ -78,6 +80,12 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     private currentBranch: any = {};
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
+    /** Hold HMRC portal url */
+    public connectToHMRCUrl: string = null;
+    /** True if API Call is in progress */
+    public isLoading: boolean;
+    /** Observable to store the HMRC portal url */
+    public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -86,7 +94,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private modalService: BsModalService,
         private router: Router,
-        private componentStore: VatReportComponentStore
+        private componentStore: VatReportComponentStore,
+        private store: Store<AppState>
     ) {
         this.initVatLiabilityPaymentForm();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -103,6 +112,12 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getUniversalDatePickerDate();
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -120,7 +135,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         });
 
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
-        if (this.isCompanyMode) {
+        if (this.isCompanyMode || this.isConsolidatedBranch) {
             this.loadTaxDetails();
             this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
@@ -130,7 +145,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                         this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.branchList = this.branchList.map(branch => {
                             return {
-                                label: branch?.alias,
+                                label: branch?.name,
                                 value: branch?.uniqueName
                             };
                         });
@@ -155,12 +170,27 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                 if (this.taxesList.length === 1) {
                     this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
                 }
-                if (this.isCompanyMode) {
+                if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
-                this.getLiabilitiesPayment();
+                this.getURLHMRCAuthorization();
             }
         });
+
+        this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response?.body) {
+                    this.connectToHMRCUrl = response.body;
+                } else {
+                    this.getLiabilitiesPayment();
+                }
+            }
+        });
+
+        merge(this.componentStore.liabilityPaymentListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.isLoading = response;
+            });
     }
     /**
     * Get Current company branches information
@@ -323,6 +353,15 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public getFormControl(control: string): any {
         return this.searchForm.get(control);
+    }
+
+    /**
+     * This will call API to get HMRC get authorization url
+     *
+     * @memberof VatLiabilitiesPayments
+     */
+    public getURLHMRCAuthorization(): void {
+        this.componentStore.getHMRCAuthorization(this.activeCompany.uniqueName);
     }
 
     /**

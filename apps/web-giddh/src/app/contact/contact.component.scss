@@ -23,6 +23,10 @@
     }
 }
 
+.vendor-z-index {
+    z-index: 101;
+}
+
 .dis {
     display: flex;
     .btn-group{
@@ -1000,4 +1004,9 @@ th.mat-header-cell {
 td.mat-cell {
     white-space: normal !important;
     word-break: keep-all !important;
+}
+@media screen and (max-width: 1200px) {
+    .min-width-230 {
+        min-width: 170px !important;
+    }
 }

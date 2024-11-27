@@ -26,6 +26,7 @@
                 <div class="list-header">
                     <filing-header
                         [isCompany]="isCompany"
+                        [isConsolidatedBranch]="isConsolidatedBranch"
                         [currentPeriod]="currentPeriod"
                         [selectedGst]="selectedGst"
                         [showTaxPro]="showTaxPro"
@@ -107,6 +108,7 @@
                                         <button
                                             class="btn btn-primary file-your-return btn-lg"
                                             (click)="fileReturn = { isAuthenticate: true }"
+                                            [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                         >
                                             {{ localeData?.filing?.return_file }}
                                         </button>

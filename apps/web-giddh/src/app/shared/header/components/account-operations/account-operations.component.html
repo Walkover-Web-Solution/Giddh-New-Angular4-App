@@ -42,7 +42,7 @@
     </div>
 
     <!--add/edit group form-->
-    <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
+    <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100 dropdown-wrapper">
         <group-add
             class="form-box"
             *ngIf="showAddNewGroup$ | async"
@@ -181,7 +181,7 @@
 </div>
 
 <!--delete Account modal  -->
-<div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #deleteAccountModal="bs-modal" class="modal fade align-content-center" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal

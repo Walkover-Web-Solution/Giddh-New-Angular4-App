@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
+import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -28,6 +28,7 @@ import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
 import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
+import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -37,7 +38,7 @@ declare var window: any;
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [AddCompanyComponentStore, ChangeBillingComponentStore]
+    providers: [AddCompanyComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore]
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -228,6 +229,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     /** Holds Store Get Billing Details observable*/
     public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
+    /** Holds View Subscription list observable*/
+    public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
+    /** Holds user module restriction */
+    public remainingUsers: number = 0;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -250,7 +255,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private activateRoute: ActivatedRoute,
         public router: Router,
         private commonService: CommonService,
-        private readonly changeBillingComponentStore: ChangeBillingComponentStore
+        private readonly changeBillingComponentStore: ChangeBillingComponentStore,
+        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -271,6 +277,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (res?.subscriptionId) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
                 this.getCountryListBySubscriptionId(res?.subscriptionId);
+                this.getSubscriptionData(res?.subscriptionId);
                 this.isCreateBySubscription = true;
             }
         });
@@ -359,6 +366,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
+        this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.moduleRestrictionStatus) {
+                let module = response.moduleRestrictionStatus.find(
+                    (module) => module?.moduleName === RestrictedModules.Users
+                );
+                this.remainingUsers = module.remainingUsers;
+            }
+        });
         this.changeDetection.detectChanges();
     }
 
@@ -370,6 +385,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public getBillingDetails(): void {
         this.changeBillingComponentStore.getBillingDetails(null);
+    }
+
+    /**
+     * Fetches subscription data by its ID.
+     *
+     * @param id - The ID of the subscription to fetch.
+     * @memberof AddCompanyComponent
+     */
+    public getSubscriptionData(id: any): void {
+        this.viewSubscriptionComponentStore.viewSubscriptionsById(id);
     }
 
     /**
@@ -649,7 +674,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public addNewUser(): void {
-        const isSuperAdmin = Boolean(this.thirdStepForm.get('creatorSuperAdmin').value) === false;
+        const isSuperAdmin = this.thirdStepForm.get('creatorSuperAdmin').value === 'false';
+
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         let mappingForm = this.formBuilder.group({
             emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)], // Add email validation
@@ -667,13 +693,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /**
      * This will be use for remove  user
-     *
+     * @param {boolean} isSuperAdmin if isSuperAdmin is true then zero index will be removed from the third-form.
      * @param {number} index
      * @memberof AddCompanyComponent
      */
-    public removeUser(index: number): void {
+    public removeUser(index: number, isSuperAdmin: boolean = false): void {
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
-        if (index === 0) {
+        if (index === 0 && !isSuperAdmin) {
             mappings.reset(); // Reset the control at index 0
         } else {
             mappings.removeAt(index);
@@ -1161,7 +1187,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this.generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this.generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this.generalService.getUtmParameter('utm_content');
-        this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
+        this.socketCompanyRequest.BusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
         this.generalService.removeUtmParameters();
     }
@@ -1251,6 +1277,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             delete this.company.creatorSuperAdmin;
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
+        this.nextStepForm();
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
@@ -1449,8 +1476,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public setOwnerPermission(event: any): void {
-        const isSuperAdmin = Boolean(event?.value) === true;
+        const isSuperAdmin = event?.value === "true";
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
+
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
         permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
             const roleUniqueNameControl = permissionGroup.get('roleUniqueName');
@@ -1461,6 +1489,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             roleUniqueNameControl.updateValueAndValidity();
         });
+        if (isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === this.remainingUsers)) {
+            this.removeUser(this.thirdStepForm.get('permissionRoles').value.length - 1, isSuperAdmin);
+        }
+        // If there is 1 remaining user and the user is a SuperAdmin, hide the form. If there is 1 remaining user and the user is not a SuperAdmin, show the form.
+        if (!isSuperAdmin && (this.thirdStepForm.get('permissionRoles').value.length === 0)) {
+            this.addNewUser();
+        }
     }
 
     /**
@@ -1539,6 +1574,29 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public back(): void {
         this.router.navigate(['/pages/user-details/subscription']);
+    }
+
+    /**
+     * Checks if new user can be added based on remaining users and current selections
+     *
+     * @return {*}  {boolean}
+     * @memberof AddCompanyComponent
+     */
+    public canAddNewUser(): boolean {
+        const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value === 'true' ? 1 : 0;
+        const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value?.length;
+        return this.remainingUsers > (superAdminCount + selectedRolesCount);
+    }
+
+    /**
+     * Handles the add new user action
+     *
+     * @memberof AddCompanyComponent
+     */
+    public handleAddNewUser(): void {
+        if (this.canAddNewUser()) {
+            this.addNewUser();
+        }
     }
 
     /**

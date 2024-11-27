@@ -212,12 +212,12 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.froalaTribute = new Tribute({
             values: tributeSuggestions,
-            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">@${item.original.value}@</span>`
+            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">@${item.original.value}</span>`
         });
 
         this.subjectTribute = new Tribute({
             values: tributeSuggestions,
-            selectTemplate: (item) => `@${item.original.value}@`
+            selectTemplate: (item) => `@${item.original.value}`
         });
 
         if (this.froalaEditor) {

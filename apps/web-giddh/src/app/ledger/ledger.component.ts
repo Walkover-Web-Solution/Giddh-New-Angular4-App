@@ -49,11 +49,15 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
+import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
+import { SettingsIntegrationService } from '../services/settings.integration.service';
+import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
 
 @Component({
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
+    providers: [BankIntegrationComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -253,7 +257,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         itemsPerPage: 0,
         page: 0,
         totalPages: 0,
-        showPagination: false
+        showPagination: false,
+        prevToken: null,
+        nextToken: null
     };
     /** Holds restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
@@ -308,6 +314,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public transactionCountConvertToEntries: number = null;
     /** Holds bank transactions account name */
     private bankTransactionsWithAccountName: any[] = [];
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Hold reference number */
+    public referenceNumber: string = '';
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
+    /** Holds Store Requisition API success state as observable*/
+    public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
 
     constructor(
         private store: Store<AppState>,
@@ -332,7 +350,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private router: Router
+        private router: Router,
+        private settingsIntegrationService: SettingsIntegrationService,
+        private componentStore: BankIntegrationComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -351,6 +371,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
     }
+    /** True if active account is bank account */
+    public get isBankAccount(): boolean {
+        return this.lc.activeAccount?.parentGroups?.some(group => group.uniqueName === 'bankaccounts');
+    }
+    /** True if active account is bank account */
+    public isBankAccountConnected: boolean;
 
     public toggleShow() {
         this.Shown = this.Shown ? false : true;
@@ -450,8 +476,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public pageChanged(event: any): void {
-        this.trxRequest.page = event.page;
-
+        this.trxRequest.paginationToken = event;
         if (this.isAdvanceSearchImplemented) {
             this.advanceSearchRequest.page = event.page;
             this.getAdvanceSearchTxn();
@@ -459,8 +484,60 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getTransactionData();
         }
     }
+    /**
+   * This function will use for get institutions details
+   *
+   * @param {*} element
+   * @memberof LedgerComponent
+   */
+    public openInstitutionsDialog(): void {
+        if (this.isBankAccountConnected) {
+            this.router.navigate(["/pages/settings/integration/payment"]);
+        } else {
+            let data = {
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
+            const dialogRef = this.dialog.open(InstitutionsListComponent, {
+                data: data,
+                width: 'var(--aside-pane-width)',
+                panelClass: 'subscription-sidebar',
+                role: 'alertdialog',
+                ariaLabel: 'institutionsListDialog'
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.referenceNumber = response;
+                    this.setupGocardlessMessageListener();
+                }
+            });
+        }
+    }
+    /**
+     * This will add and Remove the listener immediately after triggering getRequisition
+     * 
+     * @memberof LedgerComponent
+     */
+    public setupGocardlessMessageListener(): void {
+        const messageHandler = (event) => {
+            if (event && event.data === "GOCARDLESS") {
+                if (this.referenceNumber) {
+                    this.componentStore.getRequisition(this.referenceNumber);
+                    window.removeEventListener('message', messageHandler);
+                }
+            }
+        };
+        window.addEventListener('message', messageHandler);
+    }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
@@ -508,18 +585,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        if (this.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
             this.showBranchSwitcher = true;
             this.currentCompanyBranches$.subscribe(response => {
                 if (response && response.length) {
                     this.currentCompanyBranches = response.map(branch => ({
-                        label: branch?.alias,
+                        label: branch?.name,
                         value: branch?.uniqueName,
                         name: branch?.name,
-                        parentBranch: branch?.parentBranch
+                        parentBranch: branch?.parentBranch,
+                        consolidatedBranch: branch?.consolidatedBranch
                     }));
                     this.currentCompanyBranches.unshift({
-                        label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        label: this.activeCompany ? this.activeCompany.name : '',
                         name: this.activeCompany ? this.activeCompany.name : '',
                         value: this.activeCompany ? this.activeCompany.uniqueName : '',
                         isCompany: true
@@ -536,7 +614,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {
                                 name: this.activeCompany ? this.activeCompany.name : '',
-                                alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                                alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                                 uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                             };
                         }
@@ -640,8 +718,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (params['accountUniqueName']) {
                 this.isShowLedgerColumnarReportTable = false;
                 this.lc.accountUnq = params['accountUniqueName'];
+                if (this.isBankAccount) {
+                    this.getAllBankAccounts(params['accountUniqueName']);
+                }
                 this.needToShowLoader = true;
                 this.searchText = '';
+                this.trxRequest.paginationToken = '';
                 this.resetBlankTransaction();
 
                 this.isCompanyCreated$.pipe(take(1)).subscribe(s => {
@@ -731,7 +813,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         itemsPerPage: lt.count,
                         page: lt.page,
                         totalPages: lt.totalPages,
-                        showPagination: (lt.totalPages > 1) ? true : false
+                        showPagination: (lt.totalPages > 1) ? true : false,
+                        prevToken: lt.prevToken,
+                        nextToken: lt.nextToken
                     };
 
                     if (!this.cdRf['destroyed']) {
@@ -951,7 +1035,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankAccount.reLoginRequired = res.body.reLoginRequired;
                         this.bankAccount.itemId = res.body.itemId;
                         this.zone.runOutsideAngular(() => {
-                            this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                            this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
                             this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
                         });
@@ -1519,8 +1603,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (this.voucherApiVersion === 2) {
                 blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
             }
-
-            this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+            const model = cloneDeep(blankTransactionObj);
+            if (model.transactions[0]?.subVoucher === "ADVANCE_RECEIPT") {
+                /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
+                model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
+            }
+            this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
             this.loaderService.hide();
@@ -2571,11 +2659,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-
                 if (data[0] && data[1]) {
-
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
+                    if (this.isBankAccount) {
+                        this.getAllBankAccounts();
+                    }
                     this.loadDefaultSearchSuggestions();
                     this.profileObj = profile;
                     this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -2621,6 +2710,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         } else {
                             this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
                         }
+                    }
+                    profile.userEntityRoles.forEach(role => {
+                        const scopes = role.role.scopes;
+                        if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
+                            this.hasIntegrationScope = true;
+                        }
+                    });
+                    if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                        this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
                 }
             });
@@ -3022,9 +3120,28 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Initiate request to open plaid popup
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof LedgerComponent
      */
     public getPlaidLinkToken(itemId?: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
+        this.getAllBankAccounts();
     }
+
+    /**
+    * This will get all connected bank accounts
+    *
+    * @memberof LedgerComponent
+    */
+    public getAllBankAccounts(accountUniqueName?: string): void {
+        this.isBankAccountConnected = false;
+        this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
+            if (response?.body) {
+                const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
+                if (result) {
+                    this.isBankAccountConnected = true;
+                }
+            }
+        });
+    }
+
 }

@@ -13,6 +13,7 @@ import { GstReport } from '../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { RestrictedModules } from '../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -47,6 +48,8 @@ export class FilingComponent implements OnInit, OnDestroy {
     public gstr2OverviewDataInProgress$: Observable<boolean>;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
@@ -64,6 +67,10 @@ export class FilingComponent implements OnInit, OnDestroy {
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = false;
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private route: Router,
@@ -79,7 +86,7 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
         this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
-
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
@@ -122,6 +129,11 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
 
         // get activeCompany gst number
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {

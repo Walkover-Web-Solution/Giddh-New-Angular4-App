@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { Configuration } from "./app.constant";
+import { Configuration, COUNTRY_REGION_MAP } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -40,6 +40,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -58,7 +60,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.isElectron = isElectron;
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
-            if (ss.user && ss.user.session && ss.user.session.id) {
+            if (ss?.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
                 a.isNewUser = true;
                 this._generalService.user = { ...ss.user.user, ...a };
@@ -82,7 +84,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://giddh.com/login/';
+                    window.location.href = this._generalService.getGiddhRegionUrl() + '/';
                 } else {
                     this.router.navigate(['/login']);
                 }
@@ -149,11 +151,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, []);
+        reassignNavigationalArray(isMobile, (this._generalService.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && branches?.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

@@ -583,6 +583,51 @@
                     }
                 },
                 {
+                    "label": "कर प्राधिकरण",
+                    "link": "/pages/settings/reports/tax-authority",
+                    "icon": "icon-vat1",
+                    "description": "कर प्राधिकरण",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "कर दरानुसार",
+                    "link": "/pages/settings/reports/rate-wise",
+                    "icon": "icon-vat1",
+                    "description": "कर दरानुसार",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "कर खातेनिहाय",
+                    "link": "/pages/settings/reports/account-wise",
+                    "icon": "icon-vat1",
+                    "description": "कर खातेनिहाय",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "US"
+                            ]
+                        }
+                    }
+                },
+                {
                     "label": "व्हॅट दायित्वे",
                     "link": "/pages/vat-report/liabilities",
                     "icon": "icon-vat1",
@@ -602,6 +647,21 @@
                     "link": "/pages/vat-report/payments",
                     "icon": "icon-vat1",
                     "description": "व्हॅट देयके",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "व्हॅट बंधन",
+                    "link": "/pages/vat-report/obligations",
+                    "icon": "icon-vat1",
+                    "description": "व्हॅट बंधन",
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {

@@ -362,7 +362,9 @@ export class VouchersUtilityService {
                 delete entry.otherTax;
             });
 
-            invoiceForm = this.cleanObject(invoiceForm);
+            invoiceForm = cleaner?.clean(invoiceForm, {
+                nullCleaner: true
+            });
 
             return invoiceForm;
         }
@@ -500,11 +502,17 @@ export class VouchersUtilityService {
     public getSelectedAddressIndex(addressList: any[], selectedAddress: any): number {
         let selectedAddressIndex = -1;
         addressList?.forEach((add, index) => {
-            const address = typeof add?.address === "undefined" ? "" : typeof add?.address === "string" ? add?.address : add?.address[0];
+            const address = Array.isArray(add?.address) && add?.address[0]
+                ? add.address[0]
+                : (typeof add?.address === "string" ? add.address : "");
+            // Check if selectedAddress.address is an array and has at least one element
+            const selectedAddressAddress = Array.isArray(selectedAddress?.address) && selectedAddress.address[0]
+                ? selectedAddress.address[0]
+                : "";
             const state = add?.state?.name ? add?.state?.name : add?.stateName ? add?.stateName : "";
             const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
 
-            if (address === selectedAddress?.address[0] && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {
+            if (address === selectedAddressAddress && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {
                 selectedAddressIndex = index;
             }
         });
@@ -524,12 +532,12 @@ export class VouchersUtilityService {
      */
     public getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean, localeData: any): string {
         switch (type) {
-            case 'sales': return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
-            case 'purchase': return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
-            case 'credit note': return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
-            case 'debit note': return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
-            case 'receipt': return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
-            case 'payment': return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
+            case VoucherTypeEnum.sales: return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
+            case VoucherTypeEnum.purchase: return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
+            case VoucherTypeEnum.creditNote: return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
+            case VoucherTypeEnum.debitNote: return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
+            case VoucherTypeEnum.receipt: return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
+            case VoucherTypeEnum.payment: return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
         }
     }
 

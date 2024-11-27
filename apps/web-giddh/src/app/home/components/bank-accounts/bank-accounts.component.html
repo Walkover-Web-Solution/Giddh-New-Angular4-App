@@ -36,16 +36,17 @@
                     </div>
                 </cdk-virtual-scroll-viewport>
 
-                <div class="add-bank-details" *ngIf="!isLoading && bankAccounts?.length === 0">
+                <div class="add-bank-details" *ngIf="!isLoading && bankAccounts?.length === 0 ">
                     <p>{{ localeData?.no_banks_found }}</p>
-                    <a class="connect-bank" [routerLink]="['/pages/settings/integration/payment']">{{
-                        localeData?.connect_bank
-                        }}</a>
+                    <button type="button" mat-stroked-button color="primary" class="w-50" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
+                        (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
                 </div>
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <a class="connect-bank" *ngIf="bankAccounts?.length > 0"
-                [routerLink]="['/pages/settings/integration/payment']">{{ localeData?.connect_bank }}</a>
+            <div class="d-flex justify-content-center">
+            <button type="button" mat-stroked-button color="primary" class="w-50" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"
+                (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
+            </div>
         </mat-card-content>
     </mat-card>
 </div>

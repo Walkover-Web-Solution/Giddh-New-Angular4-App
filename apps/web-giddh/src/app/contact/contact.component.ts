@@ -239,6 +239,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -269,6 +271,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -322,6 +329,21 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                 });
 
+                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isIciciAccountPendingForApproval = false;
+                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+                    if (response?.integratedBankList?.length > 0) {
+                        let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                        if (!approvalPendingAccounts?.length) {
+                            this.isIciciAccountPendingForApproval = true;
+                        }
+
+                        this.isICICIIntegrated = true;
+                    } else {
+                        this.isICICIIntegrated = false;
+                    }
+                    this.cdRef.detectChanges();
+                });
 
                 if (this.activeTab === ContactsTab.customer.toLowerCase()) {
                     this.customiseColumns.splice(0, 0,
@@ -382,12 +404,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                             "checked": true
                         }
                     );
-                    this.customiseColumns.push(
-                        {
-                            value: "action",
-                            label: "Action",
-                            checked: true
-                        })
+                    if (this.isICICIIntegrated || this.isPlaidSupportedCountry) {
+                        this.customiseColumns.push(
+                            {
+                                value: "action",
+                                label: "Action",
+                                checked: true
+                            })
+                    }
                     this.moduleType = ContactsTab.vendor;
                     this.displayedColumns = [];
                 }
@@ -474,13 +498,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch?.alias,
+                    label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : "",
                     value: this.activeCompany ? this.activeCompany.uniqueName : "",
                     isCompany: true,
@@ -497,14 +522,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : "",
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : "",
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
                     this.currentBranchData = _.cloneDeep(this.currentBranch);
-                    if (this.currentBranch) {
-                        this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : "");
-                    }
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -528,22 +550,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.searchStr$.next(searchedText);
             }
-        });
-
-        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isIciciAccountPendingForApproval = false;
-            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-            if (response?.integratedBankList?.length > 0) {
-                let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
-                if (!approvalPendingAccounts?.length) {
-                    this.isIciciAccountPendingForApproval = true;
-                }
-
-                this.isICICIIntegrated = true;
-            } else {
-                this.isICICIIntegrated = false;
-            }
-            this.cdRef.detectChanges();
         });
     }
 
@@ -627,7 +633,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.currentBranch.name = this.activeCompany.name;
                 this.currentBranch.uniqueName = this.activeCompany?.uniqueName;
-                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
+                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : '';
             }
         }
 
@@ -1615,10 +1621,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
         if (this.selectedAccountsList?.length) {
-            this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
+            this.selectedAccountsList = this.selectedAccountsList?.filter(itemObject => {
                 return itemObject?.bankPaymentDetails === true;
             });
-            this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
+            this.selectedAccountsList = this.selectedAccountsList?.filter((data, index) => {
                 return this.selectedAccountsList?.indexOf(data) === index;
             });
         }
