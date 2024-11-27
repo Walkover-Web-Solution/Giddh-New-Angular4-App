@@ -1,36 +1,29 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { switchMap, catchError, EMPTY, Observable } from "rxjs";
 import { ToasterService } from "../../services/toaster.service";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ContactService } from "../../services/contact.service";
 
-export interface ContactState {
-}
-
-export const DEFAULT_CONTACT_STATE: ContactState = {
-};
-
 @Injectable()
-export class ContactComponentStore extends ComponentStore<ContactState> implements OnDestroy {
+export class ContactComponentStore extends ComponentStore<any> implements OnDestroy {
 
     constructor(
         private toasterService: ToasterService,
         private contactService: ContactService
     ) {
-        super(DEFAULT_CONTACT_STATE);
+        super();
     }
 
     /**
-     * Get Permissions Roles
+     * This will be use for send customer information
      *
-     * @memberof AddCompanyComponentStore
+     * @memberof ContactComponentStore
      */
-    readonly sendCustomerInformation = this.effect((data: any) => {
+    readonly sendCustomerInformation = this.effect((data: Observable<string>) => {
         return data.pipe(
-            switchMap((account: any) => {
-                this.patchState({ sendCustomerInformationInProgress: true });
+            switchMap((account: string) => {
                 return this.contactService.sendCustomerInformation(account).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -56,7 +49,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof AddCompanyComponentStore
+     * @memberof ContactComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

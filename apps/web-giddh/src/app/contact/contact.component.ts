@@ -591,18 +591,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.openEmailDialog();
                 break;
             case 5: // send email for customer information
-            if (event) {
-                event.stopPropagation();
-            }
-            this.sendCustomerInformation(account);
-            break;
+                if (event) {
+                    event.stopPropagation();
+                }
+                this.sendCustomerInformation(account);
+                break;
             default:
                 break;
         }
-    }
-
-    public sendCustomerInformation(account : any):void {
-        this.contactComponentStore.sendCustomerInformation(account);
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
@@ -1712,5 +1708,15 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     private resetColumns(): void {
         this.translationComplete(true);
+    }
+
+    /**
+     * This will be use for send customer information
+     *
+     * @param {*} account
+     * @memberof ContactComponent
+     */
+    public sendCustomerInformation(account: any): void {
+        this.contactComponentStore.sendCustomerInformation(account?.uniqueName);
     }
 }
