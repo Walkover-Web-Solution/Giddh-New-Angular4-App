@@ -203,9 +203,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-
+    
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -239,7 +237,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
-
+    /**
+     * This will be use for sync with tally help documentation
+     * 
+     * @memberof SettingIntegrationComponent
+     */
+    public tallyHelpDocLink(): void {
+        this.generalService.syncWithTallyLink();
+    }
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
