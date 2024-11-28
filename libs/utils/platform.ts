@@ -13,7 +13,7 @@ export function isElectron() {
     return typeof window !== 'undefined' && window.process && window.process.type;
 }
 
-export function download(filename, data, mimeType) {
+export function download(filename, data, mimeType): any {
     const blob = data;
     saveAs(blob, filename);
 }
