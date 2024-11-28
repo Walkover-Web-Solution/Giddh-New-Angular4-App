@@ -374,7 +374,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
@@ -383,9 +383,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
-                
+
                 if (this.isEInvoiceEnabled != undefined && this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
-                   this.componentStore.getInvoiceSettings();
+                    this.componentStore.getInvoiceSettings();
                 }
                 this.setInitialAdvanceFilter(true);
                 if (this.queryParams.page) {
@@ -475,6 +475,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
 
                 if (this.queryParams.page) {
+                    this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/' + this.activeModule], {
+                        queryParams: {
+                            page: this.queryParams.page,
+                            from: this.advanceFilters.from,
+                            to: this.advanceFilters.to
+                        }
+                    });
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
