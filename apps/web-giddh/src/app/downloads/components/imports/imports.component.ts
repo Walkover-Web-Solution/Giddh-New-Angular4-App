@@ -345,7 +345,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /**
     * Branch change handler
     *
-    * @memberof EWayBillComponent
+    * @memberof ImportsComponent
     */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
