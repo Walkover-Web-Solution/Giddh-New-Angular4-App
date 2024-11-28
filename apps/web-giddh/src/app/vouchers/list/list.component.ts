@@ -430,6 +430,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                 if (this.queryParams.page) {
+                    this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/' + this.activeModule], {
+                        queryParams: {
+                            page: this.queryParams.page,
+                            from: this.advanceFilters.from,
+                            to: this.advanceFilters.to
+                        }
+                    });
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
@@ -711,14 +718,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        const queryParams =  {
+        const queryParams = {
             page: this.advanceFilters.page,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
         };
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
-        if (searchString?.length){
+        if (searchString?.length) {
             queryParams['search'] = searchString;
         };
 
@@ -1608,8 +1615,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const model = {
             accountUniqueName: voucher.customerUniqueName
         };
-        
-        if (this.voucherType === VoucherTypeEnum.generateEstimate) { 
+
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;
