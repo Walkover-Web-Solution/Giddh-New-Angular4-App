@@ -25,10 +25,11 @@
                                         }}</span>
                                 </span>
                             </p>
+                            <ng-container *ngIf="bankaccount.accountBankTransactionTotal.bankName">
                             <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
-                                <span>{{ localeData?.in_giddh }}</span>
+                                <span>{{ localeData?.in }}&nbsp;{{ bankaccount.accountBankTransactionTotal.bankName }}</span>
                                 <span>{{ activeCompany.baseCurrencySymbol }}
-                                    {{ bankaccount.closingBalance.amount | giddhCurrency }}
+                                    {{ bankaccount.accountBankTransactionTotal.closingBalance.amount | giddhCurrency }}
                                     <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
                                         localeData?.cr_heading
                                         }}</span>
@@ -37,6 +38,7 @@
                                         }}</span>
                                 </span>
                             </p>
+                        </ng-container>
                             <ng-container *ngIf="bankaccount.reLoginRequired">
                                 <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name bank-menu">
                                     <span class="icon-dots-three-vertical"></span>
