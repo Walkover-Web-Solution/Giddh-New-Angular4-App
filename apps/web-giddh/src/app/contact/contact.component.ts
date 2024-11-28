@@ -57,6 +57,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { ContactComponentStore } from "./utility/contact.store";
 
 @Component({
     selector: "contact-detail",
@@ -74,6 +75,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
             transition("out => in", animate("400ms ease-in-out")),
         ]),
     ],
+    providers: [ContactComponentStore]
 })
 export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
@@ -245,7 +247,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private contactComponentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -596,6 +598,12 @@ export class ContactComponent implements OnInit, OnDestroy {
                     event.stopPropagation();
                 }
                 this.openEmailDialog();
+                break;
+            case 5: // send email for customer information
+                if (event) {
+                    event.stopPropagation();
+                }
+                this.sendCustomerInformation(account);
                 break;
             default:
                 break;
@@ -1709,5 +1717,15 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     private resetColumns(): void {
         this.translationComplete(true);
+    }
+
+    /**
+     * This will be use for send customer information
+     *
+     * @param {*} account
+     * @memberof ContactComponent
+     */
+    public sendCustomerInformation(account: any): void {
+        this.contactComponentStore.sendCustomerInformation(account?.uniqueName);
     }
 }

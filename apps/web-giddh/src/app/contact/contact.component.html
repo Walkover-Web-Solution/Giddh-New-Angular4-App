@@ -691,12 +691,15 @@
                                         {{ commonLocaleData?.app_generate_invoice }}
                                     </button>
                                     <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
+                                    mat-menu-item
+                                    class="menu-table-item"
+                                    (click)="performActions(4, account, $event)"
                                     >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button> -->
+                                <button *ngIf="account?.email" mat-menu-item class="menu-table-item" (click)="performActions(5, account, $event)">
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button>
                                 </mat-menu>
                             </div>
                         </td>
@@ -1038,12 +1041,15 @@
                                         {{ commonLocaleData?.app_record_bill }}
                                     </button>
                                     <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
+                                    mat-menu-item
+                                    class="menu-table-item"
+                                    (click)="performActions(4, account, $event)"
                                     >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button> -->
+                                <button *ngIf="account?.email" mat-menu-item class="menu-table-item" (click)="performActions(5, account, $event)">
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button>
                                 </mat-menu>
 
                                 <!--Modal for Mail/SMS-->
