@@ -482,7 +482,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);

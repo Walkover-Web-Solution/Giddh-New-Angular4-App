@@ -179,30 +179,19 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <mat-label>{{ commonLocaleData?.app_discount }}</mat-label>
-                                                <mat-select
-                                                    name="discounts"
-                                                    [placeholder]="localeData?.select_discounts"
-                                                    multiple
-                                                    [(ngModel)]="stockForm.discounts"
-                                                >
-                                                    <mat-option
-                                                        *ngFor="let discount of discountsList$ | async"
-                                                        [value]="discount.uniqueName"
-                                                    >
-                                                        {{ discount.name }}
-                                                    </mat-option
-                                                    >
-                                                    <mat-option
-                                                        *ngIf="!(discountsList$ | async)?.length"
-                                                        class="create-update-no-data"
-                                                        [disabled]="true"
-                                                    >
-                                                        {{ commonLocaleData?.app_no_result_found }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
+                                            <dropdown-field
+                                                [name]="'discounts'"
+                                                [placeholder]="localeData?.select_discounts"
+                                                [label]="commonLocaleData?.app_discount"
+                                                [options]="discountsList"
+                                                (selectedOption)="
+                                                    stockForm.discounts = [$event?.value];
+                                                "
+                                                [allowValueReset]="true"
+                                                (onClear)="stockForm.discounts = []"
+                                                [defaultValue]="stockForm.discountLabel ?? ''"
+                                            >
+                                            </dropdown-field>
                                         </div>
                                     </div>
                                 </div>

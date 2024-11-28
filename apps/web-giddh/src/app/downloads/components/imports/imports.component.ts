@@ -9,7 +9,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -366,7 +366,14 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                return download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel')
+                    .then(() => {
+                        if (Configuration.isElectron) {
+                            setTimeout(() => {
+                                window.close();
+                            }, 500);
+                        }
+                    });
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
@@ -386,7 +393,14 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel')
+                    .then(() => {
+                        if (Configuration.isElectron) {
+                            setTimeout(() => {
+                                window.close();
+                            }, 500);
+                        }
+                    });
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }

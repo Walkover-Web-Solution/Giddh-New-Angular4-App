@@ -22,7 +22,7 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div class="header-content-sticky">
+                    <div class="header-content-sticky vendor-z-index">
                         <div
                             *ngIf="
                                 (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
@@ -573,7 +573,7 @@
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
-                    class="w-100 position-relative"
+                    class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
@@ -691,12 +691,15 @@
                                         {{ commonLocaleData?.app_generate_invoice }}
                                     </button>
                                     <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
+                                    mat-menu-item
+                                    class="menu-table-item"
+                                    (click)="performActions(4, account, $event)"
                                     >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button> -->
+                                <button *ngIf="account?.email" mat-menu-item class="menu-table-item" (click)="performActions(5, account, $event)">
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button>
                                 </mat-menu>
                             </div>
                         </td>
@@ -920,7 +923,7 @@
                     *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
-                    class="w-100 position-relative"
+                    class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
@@ -1038,12 +1041,15 @@
                                         {{ commonLocaleData?.app_record_bill }}
                                     </button>
                                     <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
+                                    mat-menu-item
+                                    class="menu-table-item"
+                                    (click)="performActions(4, account, $event)"
                                     >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button> -->
+                                <button *ngIf="account?.email" mat-menu-item class="menu-table-item" (click)="performActions(5, account, $event)">
+                                    {{ commonLocaleData?.app_send_email }}
+                                </button>
                                 </mat-menu>
 
                                 <!--Modal for Mail/SMS-->

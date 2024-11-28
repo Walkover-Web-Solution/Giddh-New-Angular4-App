@@ -121,4 +121,20 @@ export class ContactService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
         }
     }
+
+    /**
+     * This will be use for send customer information
+     *
+     * @param {string} accountUniqueName
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof ContactService
+     */
+    public sendCustomerInformation(accountUniqueName: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + CONTACT_API.SEND_CUSTOMER_INFORMATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.request = '';
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
+    }
 }

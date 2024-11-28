@@ -1146,10 +1146,17 @@ textarea {
         color: var(--color-common-primary-text) !important;
     }
 }
-
 .setting-branch-body {
     .mat-mdc-tab-body-content {
         overflow: visible !important;
+ }
+}
+
+.pending-table {
+    .mat-mdc-table {
+        .mdc-data-table__row {
+            height: 70px !important;
+        }
     }
 }
 
@@ -10693,10 +10700,6 @@ body {
 }
 
 .group-create-update {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
-    }
-
     .cdk-overlay-connected-position-bounding-box {
         .mat-select-panel {
             .mat-option-disabled {
@@ -12904,7 +12907,7 @@ hamburger-menu {
 
                 i {
                     position: absolute;
-                    left: 16px;
+                    left: 10px;
                     top: 50%;
                     transform: translateY(-50%);
                 }

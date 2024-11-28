@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/c
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, of, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -18,7 +17,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helper
 import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
-import { cloneDeep } from "../../lodash-optimized";
+import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
@@ -30,9 +29,10 @@ import { trigger, state, style, transition, animate } from "@angular/animations"
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
+import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 
 // invoice-table
 export interface PeriodicElement {
@@ -57,10 +57,6 @@ export interface PeriodicElementPending {
     total: string;
     description: string;
 }
-// pending-table
-const PENDING_DATA: PeriodicElementPending[] = [
-    { position: 1, date: '08-04-2023', particular: 'Sales', amount: 'H', account: 'USA debtor', total: '₹23.1', description: '' }
-];
 
 // bill-table
 export interface PeriodicElementBill {
@@ -108,8 +104,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dataSource: any[] = [];
     /** Holds Table Display columns for Sales Voucher */
     public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
-    /** Holds Table data source for Pending */
-    public dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
     /** Holds Table Display columns for Estimate Voucher */
     public displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
     /** Holds Table Display columns for Proforma Voucher */
@@ -235,12 +229,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
     public totalResults: number = 0;
+    /** Holds Pending Total Results Count */
+    public pendingTotalResults: number = 0;
     /** Holds Selected Vouchers */
     public selectedVouchers: any[] = [];
+    /** Holds Selected Pending Vouchers */
+    public selectedPendingVouchers: any[] = [];
     /** Holds Voucher Name that suports csv file export */
     public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase', 'receipt', 'payment'];
     /** Holds True if all Vouchers are Selected */
     public allVouchersSelected: boolean = false;
+    /** Holds True if all Pending Vouchers are Selected */
+    public allPendingVouchersSelected: boolean = false;
     /** Holds Eway Bill Dialog Ref */
     public ewayBillDialogRef: any;
     /** Holds Advance Search Dialog Ref */
@@ -299,6 +299,35 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** Holds current route query parameters */
     public queryParams: any = {};
+    /** True if voucher generate in process */
+    public generateVoucherInProcess: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Duplicate copy of entry unique names for bulk action variable */
+    public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
+    /** selected pending voucher */
+    public selectedItem: InvoicePreviewDetailsVm;
+    /** Selected account unique name */
+    public selectedAccountUniqueName: string = '';
+    /** selected profile currency symbol */
+    public baseCurrencySymbol: string = '';
+    /** selected profile currency type */
+    public baseCurrency: string = '';
+    /** True if custom date selected */
+    public customDateSelected: boolean = false;
+    /** Instance of ledger search request */
+    public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
+    /** Loading Observable */
+    public isGetAllRequestInProcess$: Observable<any> = this.componentStore.getLedgerDataInProcess$;
+    /** Holds Ledger Data */
+    public ledgersData: any[] = [];
+    /** Holds voucher type for credit/debit note*/
+    public voucherTypes: any = [
+        { label: 'Credit Note', value: 'credit note' },
+        { label: 'Debit Note', value: 'debit note' }
+    ];
+    /** Holds voucher type enum */
+    public voucherTypeEnum: any = VoucherTypeEnum;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -314,7 +343,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private salesAction: SalesActions,
-        private settingsProfileActions: SettingsProfileActions
+        private invoiceActions: InvoiceActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -324,7 +353,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
             }
         });
-        this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
@@ -346,16 +374,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-
+        
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
-                this.getInvoiceSettings();
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
+                
+                if (this.isEInvoiceEnabled != undefined && this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
+                   this.componentStore.getInvoiceSettings();
+                }
                 this.setInitialAdvanceFilter(true);
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
@@ -371,15 +402,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 this.getSelectedTabIndex();
                 // 'pending', 'settings', 'templates' These tabs are not voucher list
-                let tab = (!this.isCompany && !this.isConsolidatedBranch )? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
+                let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
                 if (this.universalDate && !tab.includes(this.activeModule)) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
                 }
-
+                if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
+                    this.customDateSelected = false;
+                    this.getLedgersOfInvoice();
+                }
             }
         });
-
+        this.getInvoiceSettings();
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -431,6 +465,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                     this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
                     this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+
                     this.isUniversalDateApplicable = true;
 
                     if (window.localStorage) {
@@ -438,6 +473,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.from = this.queryParams.from;
@@ -602,6 +638,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.accountAsideMenuRef?.close();
+                if (this.activeModule === 'pending') {
+                    this.getLedgersOfInvoice();
+                }
             }
         });
 
@@ -615,6 +654,86 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (response) {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
+            }
+        });
+
+        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+            if (settings) {
+                this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
+                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+
+                    if (!this.isEInvoiceEnabled) {
+                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
+                    }
+                } else if (this.voucherType === VoucherTypeEnum.purchase) {
+                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
+                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
+                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    this.applyRoundOff = true;
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.applyRoundOff = true;
+                }
+            }
+        });
+
+        this.componentStore.universalPendingDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            if (dateObj) {
+                this.universalDate = cloneDeep(dateObj);
+                if (this.universalDate) {
+                    this.ledgerSearchRequest.dateRange = this.universalDate;
+                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.isUniversalDateApplicable = true;
+                    this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                } else {
+                    this.universalDate = [];
+                    this.ledgerSearchRequest.dateRange = this.universalDate;
+                    this.ledgerSearchRequest.from = "";
+                    this.ledgerSearchRequest.to = "";
+                    this.isUniversalDateApplicable = false;
+                }
+                this.getLedgersOfInvoice();
+            }
+        });
+
+        this.componentStore.pendingVoucherList$.pipe(takeUntil(this.destroyed$)).subscribe((res: GetAllLedgersForInvoiceResponse) => {
+            if (res && res.results) {
+
+                let response = cloneDeep(res);
+                this.ledgersData = [];
+                this.pendingTotalResults = response?.totalItems;
+                this.selectAllPendingVouchers({ checked: false });
+                response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
+                    return dayjs(item.entryDate, GIDDH_DATE_FORMAT);
+                }, 'desc');
+
+                if (response && response.results) {
+                    response.results.map(item => {
+                        item = this.addToolTipText(item);
+                        item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPendingVouchers, item?.uniqueName);
+                    });
+                }
+                this.ledgersData = response?.results;
+            }
+        });
+
+        // listen for bulk invoice generate and successfully generate and do the things
+        this.componentStore.isBulkInvoiceGenerated$.subscribe(result => {
+            if (result) {
+                this.selectAllPendingVouchers(false);
+                this.getLedgersOfInvoice();
+            }
+        });
+        this.componentStore.isBulkInvoiceGeneratedWithoutError$.subscribe(result => {
+            if (result) {
+                this.getLedgersOfInvoice();
             }
         });
     }
@@ -780,10 +899,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'receipt' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'payment' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
                 }
             }
         } else {
@@ -796,8 +919,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
+                } else if (this.voucherType === 'sales' && this.activeModule === 'settings') {
                     this.selectedTabIndex = 4;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 5;
                 }
             } else if (this.activeTabGroup === 1) {
                 if (this.voucherType === 'debit note' && this.activeModule === 'list') {
@@ -806,22 +931,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+                } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
                     this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 2) {
                 if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
-                }
-            } else if (this.activeTabGroup === 2) {
-                if (this.voucherType === 'receipt' && this.activeModule === 'list') {
-                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
+                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
+                if (this.voucherType === 'receipt' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'receipt' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
+                }
+            } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'payment' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
                 }
             }
         }
@@ -889,11 +1022,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 if (selectedTabIndex === 0) {
                     voucherType = "receipt";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "receipt";
+                    activeModule = "pending";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
                     voucherType = "payment";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "payment";
+                    activeModule = "pending";
                 }
             }
         } else {
@@ -912,6 +1051,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     activeModule = "pending";
                 } else if (selectedTabIndex === 4) {
                     voucherType = "sales";
+                    activeModule = "settings";
+                } else if (selectedTabIndex === 5) {
+                    voucherType = "sales";
                     activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 1) {
@@ -926,6 +1068,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     activeModule = "pending";
                 } else if (selectedTabIndex === 3) {
                     voucherType = "debit-note";
+                    activeModule = "settings";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "debit-note";
                     activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 2) {
@@ -935,16 +1080,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = "purchase";
                     activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "purchase";
+                    activeModule = "settings";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
                     voucherType = "receipt";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "receipt";
+                    activeModule = "pending";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
                     voucherType = "payment";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "payment";
+                    activeModule = "pending";
                 }
             }
         }
@@ -1038,9 +1192,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public handlePageChange(event: any): void {
-        this.advanceFilters.count = event.pageSize;
-        this.advanceFilters.page = event.pageIndex + 1;
-        this.getVouchers(false);
+        if (this.activeModule === 'pending') {
+            this.ledgerSearchRequest.page = event.pageIndex + 1;
+            this.ledgerSearchRequest.count = event.pageSize;
+            this.getLedgersOfInvoice();
+        } else {
+            this.advanceFilters.count = event.pageSize;
+            this.advanceFilters.page = event.pageIndex + 1;
+            this.getVouchers(false);
+        }
     }
 
     /**
@@ -1074,6 +1234,39 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    /**
+      * Handle Select table pending item event
+      *
+      * @param {*} event
+      * @param {*} voucher
+      * @memberof VoucherListComponent
+      */
+    public selectPendingVoucher(event: any, voucher: any): void {
+        if (event?.checked) {
+            this.selectedPendingVouchers.push(voucher);
+        } else {
+            this.selectedPendingVouchers = this.selectedPendingVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName !== voucher?.uniqueName);
+        }
+        this.allPendingVouchersSelected = this.ledgersData?.length === this.selectedPendingVouchers?.length;
+    }
+
+    /**
+    * Handle Select All Pending items
+    *
+    * @param {*} event
+    * @memberof VoucherListComponent
+    */
+    public selectAllPendingVouchers(event: any): void {
+        this.selectedPendingVouchers = [];
+        this.allPendingVouchersSelected = event?.checked;
+        if (event?.checked) {
+            this.ledgersData?.forEach(voucher => {
+                this.selectedPendingVouchers.push(voucher);
+            });
+        }
+    }
+
 
     /**
      * Export CSV File and Download
@@ -1122,31 +1315,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
-            if (!settings) {
-                this.componentStore.getInvoiceSettings();
-            } else {
-                this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    }
-                } else if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
-                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
-                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    this.applyRoundOff = true;
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    this.applyRoundOff = true;
-                }
-            }
-        });
+        this.componentStore.getInvoiceSettings();
     }
 
     /**
@@ -1192,17 +1361,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.customDateSelected = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.advanceFilters.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.advanceFilters.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.isUniversalDateApplicable = false;
+            this.advanceFiltersApplied = true;
 
             if (window.localStorage) {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
             }
-            this.advanceFiltersApplied = true;
-            this.getVouchers(this.isUniversalDateApplicable);
-            this.getVoucherBalances();
+
+            if (this.activeModule === 'pending') {
+                this.getLedgersOfInvoice();
+            } else {
+                this.getVouchers(this.isUniversalDateApplicable);
+                this.getVoucherBalances();
+            }
         }
     }
 
@@ -1604,6 +1782,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+    * Check pending voucher is selected
+    *
+    * @param {*} voucher
+    * @return {*}  {boolean}
+    * @memberof VoucherListComponent
+    */
+    public isPendingVoucherSelected(voucher: any): boolean {
+        const isSelected = this.selectedPendingVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName === voucher?.uniqueName);
+        return isSelected?.length ? true : false;
+    }
+
+    /**
      * Apply Advance Search/ Filter
      *
      * @param {*} event
@@ -1789,8 +1979,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public goToLedger(voucher: any): void {
-        let url = '/pages/ledger/' + voucher?.account?.uniqueName + '/' + this.advanceFilters.from + '/' + this.advanceFilters.to;
-        this.openUrl(url);
+        const fromDate = this.activeModule === 'pending'
+            ? this.ledgerSearchRequest?.from
+            : this.advanceFilters?.from;
+
+        const toDate = this.activeModule === 'pending'
+            ? this.ledgerSearchRequest?.to
+            : this.advanceFilters?.to;
+
+        const accountUniqueName = voucher?.account?.uniqueName;
+
+        if (accountUniqueName && fromDate && toDate) {
+            const url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            this.openUrl(url);
+        }
     }
 
     /**
@@ -2039,4 +2241,243 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
         }
     }
+    /**
+     *Fetch ledgers for invoices.
+     *
+     * @memberof VoucherListComponent
+     */
+    public getLedgersOfInvoice(): void {
+        this.dispatchLedgerRequest();
+
+        if (this.isLedgerDataEmpty()) {
+            this.decrementPageIfNeeded();
+            this.dispatchLedgerRequest();
+        }
+
+        this.selectedPendingVouchers = [];
+    }
+
+    /**
+     * Dispatches a request to fetch ledgers.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private dispatchLedgerRequest(): void {
+        this.store.dispatch(
+            this.invoiceActions.GetAllLedgersForInvoice(
+                this.prepareQueryParamsForLedgerApi(),
+                this.prepareModelForLedgerApi()
+            )
+        );
+    }
+
+    /**
+     * Checks if ledger data is empty.
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    private isLedgerDataEmpty(): boolean {
+        return !this.ledgersData || this.ledgersData.length === 0;
+    }
+
+    /**
+     * Decrements the page if it's greater than 1.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private decrementPageIfNeeded(): void {
+        if (this.ledgerSearchRequest.page > 1) {
+            this.ledgerSearchRequest.page -= 1;
+        }
+    }
+
+    /**
+     *  Prepares the model for the ledger API request.
+     *
+     * @return {*}  {*}
+     * @memberof VoucherListComponent
+     */
+    public prepareModelForLedgerApi(): any {
+        const model: Partial<InvoiceFilterClass> = {};
+        const reqObj = cloneDeep(this.ledgerSearchRequest);
+
+        if (reqObj.accountUniqueName) model.accountUniqueName = reqObj.accountUniqueName;
+        if (reqObj.entryTotal) model.entryTotal = reqObj.entryTotal;
+        if (reqObj.description) model.description = reqObj.description;
+
+        return model;
+    }
+
+    /**
+     *  Prepares query parameters for the ledger API request.
+     *
+     * @return {*}  {*}
+     * @memberof VoucherListComponent
+     */
+    public prepareQueryParamsForLedgerApi(): any {
+        const reqObj = cloneDeep(this.ledgerSearchRequest);
+        const fromDate = this.isUniversalDateApplicable
+            ? dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT)
+            : reqObj.from;
+        const toDate = this.isUniversalDateApplicable
+            ? dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT)
+            : reqObj.to;
+
+        return { from: fromDate, to: toDate, count: reqObj.count, page: reqObj.page, voucherType: this.voucherType };
+    }
+
+    /**
+     * Resets the date search filters.
+     *
+     * @memberof VoucherListComponent
+     */
+    public resetDateSearch(): void {
+        this.customDateSelected = false;
+        if (this.universalDate) {
+            this.applyUniversalDate();
+        } else {
+            this.clearDateFilters();
+        }
+        this.getLedgersOfInvoice();
+    }
+
+    /**
+     * Applies the universal date to the search filters.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private applyUniversalDate(): void {
+        this.isUniversalDateApplicable = true;
+        this.selectedDateRange = {
+            startDate: dayjs(this.universalDate[0]),
+            endDate: dayjs(this.universalDate[1])
+        };
+        this.selectedDateRangeUi = `${dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI)} - ${dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI)}`;
+    }
+
+    /**
+     * Clears date filters.
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private clearDateFilters(): void {
+        this.universalDate = [];
+        this.isUniversalDateApplicable = false;
+    }
+
+    /**
+     *  Navigates to the preview invoice page.
+     *
+     * @memberof VoucherListComponent
+     */
+    public previewInvoice(): void {
+        const voucher = this.selectedPendingVouchers[0];
+        if (voucher) {
+            this.router.navigate(
+                [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
+                { queryParams: { entryUniqueNames: voucher.uniqueName } }
+            );
+        }
+    }
+
+    /**
+     * Generates bulk invoices.
+     *
+     * @param {boolean} action
+     * @param {boolean} [generateEInvoice]
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean): boolean {
+        if (this.selectedPendingVouchers?.length === 0 && typeof generateEInvoice !== 'boolean') {
+            return false;
+        }
+
+        const groupedVouchers = this.groupPendingVouchersByAccount();
+        const model = typeof generateEInvoice === 'boolean'
+            ? this.entryUniqueNamesForBulkActionDuplicateCopy
+            : this.flattenGroupedVouchers(groupedVouchers);
+
+        this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(model);
+        this.store.dispatch(
+            this.invoiceActions.GenerateBulkInvoice(
+                { combined: action },
+                { entryUniqueNames: model, generateEInvoice }
+            )
+        );
+
+        this.selectedPendingVouchers = [];
+        return true;
+    }
+
+    /**
+     * Groups pending vouchers by account unique name.
+     *
+     * @private
+     * @return {*}  {Record<string, GenBulkInvoiceGroupByObj[]>}
+     * @memberof VoucherListComponent
+     */
+    private groupPendingVouchersByAccount(): Record<string, GenBulkInvoiceGroupByObj[]> {
+        const arr: GenBulkInvoiceGroupByObj[] = this.selectedPendingVouchers.map(item => ({
+            accUniqueName: item.account?.uniqueName,
+            uniqueName: item?.uniqueName
+        }));
+        return groupBy(arr, 'accUniqueName');
+    }
+
+    /**
+     *  Flattens grouped vouchers into an array of unique names.
+     *
+     * @private
+     * @param {Record<string, GenBulkInvoiceGroupByObj[]>} grouped
+     * @return {*}  {string[]}
+     * @memberof VoucherListComponent
+     */
+    private flattenGroupedVouchers(grouped: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
+        const model: string[] = [];
+        forEach(grouped, items => {
+            items.forEach(obj => model.push(obj?.uniqueName));
+        });
+        return model;
+    }
+
+    /**
+     * Add tooltip text in ledger invoices
+     *
+     * @private
+     * @param {ILedgersInvoiceResult} item
+     * @return {*}  {ILedgersInvoiceResult}
+     * @memberof VoucherListComponent
+     */
+    private addToolTipText(item: ILedgersInvoiceResult): ILedgersInvoiceResult {
+        if (!item?.total || !item?.totalForCompany) {
+            return item;
+        }
+
+        const grandTotalAmountForCompany = Number(item.totalForCompany.amount) || 0;
+        const grandTotalAmountForAccount = Number(item.total.amount) || 0;
+
+        // Calculate conversion rate
+        const grandTotalConversionRate = grandTotalAmountForAccount
+            ? +(grandTotalAmountForCompany / grandTotalAmountForAccount).toFixed(this.giddhBalanceDecimalPlaces)
+            : 0;
+
+        // Replace placeholders in the tooltip template
+        const currencyConversion = this.localeData?.currency_conversion
+            ?.replace("[BASE_CURRENCY]", this.baseCurrency)
+            ?.replace("[AMOUNT]", grandTotalAmountForCompany.toLocaleString())
+            ?.replace("[CONVERSION_RATE]", grandTotalConversionRate.toString());
+
+        // Assign tooltip text to the item
+        item.totalTooltipText = currencyConversion || '';
+
+        return item;
+    }
+
 }

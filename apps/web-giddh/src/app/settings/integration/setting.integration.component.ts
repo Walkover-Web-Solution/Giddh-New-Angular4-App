@@ -11,14 +11,14 @@ import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS, SYNC_TALLY_HELP_DOC_URL } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
@@ -30,6 +30,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
 import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { BankIntegrationComponent } from '../../shared/bank-integration/bank-integration.component';
 
 @Component({
     selector: 'setting-integration',
@@ -202,7 +203,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-
+    
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -236,7 +237,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
-
+    /**
+     * This will be use for sync with tally help documentation
+     * 
+     * @memberof SettingIntegrationComponent
+     */
+    public tallyHelpDocLink(): void {
+        this.generalService.syncWithTallyLink();
+    }
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
@@ -1217,7 +1225,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
             }
