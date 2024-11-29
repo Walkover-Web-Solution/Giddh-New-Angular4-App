@@ -40,6 +40,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public reLoginRequired: boolean = false;
     /** Holds Store refresh bank success message as observable*/
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
+    /** Holds Store refresh bank loading as observable*/
+    public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
     /** Hold reference number */

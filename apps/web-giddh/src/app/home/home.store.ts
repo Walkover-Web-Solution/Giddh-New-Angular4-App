@@ -6,10 +6,12 @@ import { ContactService } from "../services/contact.service";
 
 export interface HomeState {
     bankMessage: any;
+    isBankRefreshing: boolean
 }
 
 const DEFAULT_STATE: HomeState = {
-    bankMessage: null
+    bankMessage: null,
+    isBankRefreshing: false
 };
 
 @Injectable()
@@ -17,7 +19,7 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
 
     constructor(
         private toaster: ToasterService,
-        private ContactService: ContactService
+        private contactService: ContactService
     ) {
         super(DEFAULT_STATE);
     }
@@ -30,21 +32,21 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
     readonly refreshBank = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {
-                this.patchState({ bankMessage: null });
-                return this.ContactService.refreshBank().pipe(
+                this.patchState({ bankMessage: null, isBankRefreshing: true });
+                return this.contactService.refreshBank().pipe(
                     tapResponse(
                         (res: any) => {
-                            if (res?.status === "success") {
-                                res?.body && this.toaster.showSnackBar("success", res.body);
-                                return this.patchState({ bankMessage: res.body });
+                            if (res?.status === "success" && res?.body) {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ bankMessage: res.body, isBankRefreshing: false });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ bankMessage: null });
+                                return this.patchState({ bankMessage: null, isBankRefreshing: false });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
-                            return this.patchState({ bankMessage: null });
+                            return this.patchState({ bankMessage: null, isBankRefreshing: false });
                         }
                     ),
                     catchError((err) => EMPTY)

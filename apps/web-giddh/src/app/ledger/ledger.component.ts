@@ -329,6 +329,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** Holds Store refresh bank success message as observable*/
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
+    /** Holds Store refresh bank loading as observable*/
+    public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
 
     constructor(
         private store: Store<AppState>,
