@@ -1,9 +1,11 @@
 {
-    "select_to": "Select To",
+    "to": "To",
     "select_bcc": "Select Bcc",
     "select_cc": "Select Cc",
     "cc": "Cc",
     "bcc": "Bcc",
     "email_content_suggestions": "Type '@' to see suggestions",
-    "enter_subject_placeholder": "Enter subject here"
+    "enter_subject_placeholder": "Enter subject here",
+    "recipients": "Recipients",
+    "subject":"Subject"
 }

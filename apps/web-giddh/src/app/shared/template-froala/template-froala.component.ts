@@ -116,6 +116,10 @@ export class TemplateFroalaComponent implements OnInit {
     public bccEmails: any[] = [];
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
+    /** Hold display to bcc and cc on click */
+    public showBccCc :Boolean = false;
+    /** Hold cureent placeholder of input field */
+    public currentPlaceholder: string = "Recipients"
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
@@ -343,5 +347,14 @@ export class TemplateFroalaComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+    /**
+     * show bcc and cc on click
+     * 
+     * @memberof TemplateFroalaComponent
+     */
+    public onVisitField():void{
+        this.showBccCc = true;
+        this.currentPlaceholder = 'To'
     }
 }

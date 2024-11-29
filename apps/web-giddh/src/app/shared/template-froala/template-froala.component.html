@@ -4,25 +4,28 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div class="dialog-header d-flex align-items-center form-header">
+<div class="chat-box-z-index">
+    <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
         <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
         <span mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></span>
     </div>
+
     <mat-dialog-content class="dialog-body d-flex flex-column h-100">
         <div class="overflow-auto">
             <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
                 <div class="chip-gap">
                     <div class="form-group position-relative">
                         <select-multiple-fields
-                            [placeholder]="localeData?.select_to"
+                            [placeholder]="currentPlaceholder"
                             [options]="toEmails"
                             (selectedOption)="selectedToEmails = $event"
                             [selectedValues]="selectedToEmails"
                             [validations]="['email']"
                             [name]="'to'"
                             class="select-multiple-chiplist mb-3"
+                            (click)="onVisitField()"
                         ></select-multiple-fields>
-                        <div class="d-flex column-gap1 position-absolute chiplist-section">
+                        <div *ngIf="showBccCc" class="d-flex column-gap1 position-absolute chiplist-section">
                             <a class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc')">{{
                                 localeData?.cc
                             }}</a>
@@ -61,7 +64,7 @@
                             matInput
                             formControlName="emailSubject"
                             class="form-control border-bottom border-left-0 border-right-0 border-top-0"
-                            [placeholder]="localeData?.enter_subject_placeholder"
+                            [placeholder]="localeData?.subject"
                         />
                     </div>
                 </div>
@@ -78,4 +81,5 @@
             </div>
         </div>
     </mat-dialog-content>
+</div>
 </ng-container>
