@@ -121,9 +121,9 @@ export class ContactService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
         }
     }
-    
+
     /**
-     * refresh bank accounts
+     * Refresh bank accounts
      * 
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof ContactService

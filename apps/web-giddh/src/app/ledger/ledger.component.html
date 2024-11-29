@@ -465,18 +465,18 @@
 
                                 <div class="d-flex">
                                     <a
-                                        *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length"
+                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading"
                                         aria-label="show"
                                         mat-button
                                         href="javascript:void(0)"
                                         id="share"
                                         class="icomoon-ico d-flex align-items-center"
-                                        [matTooltip]="refreshBanksAccount"
+                                        [matTooltip]="commonLocaleData?.app_refresh"
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
-                                        (click)="getBankTransactions()"
+                                        (click)="refreshBank()"
                                     >
-                                        <i class="icon-refresh"></i>
+                                        <i aria-hidden="true" class="icon-refresh"></i>
                                     </a>
                                     <a
                                         aria-label="show"
@@ -597,6 +597,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-end" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
+                        <button type="button" mat-stroked-button color="primary"
+                            (click)="openInstitutionsDialog()">{{ isBankAccountConnected ? localeData?.re_connect_bank : localeData?.connect_bank }}</button>  
+                    </div>
+
                     <div
                         *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen"
                         class="advance-search-block mr-t05"

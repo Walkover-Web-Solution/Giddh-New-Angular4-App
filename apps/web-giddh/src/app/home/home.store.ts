@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "../services/toaster.service";
-import { Store } from "@ngrx/store";
-import { AppState } from "../store";
 import { ContactService } from "../services/contact.service";
 
 export interface HomeState {
@@ -19,14 +17,13 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
 
     constructor(
         private toaster: ToasterService,
-        private ContactService: ContactService,
-        // private store: Store<AppState>
+        private ContactService: ContactService
     ) {
         super(DEFAULT_STATE);
     }
 
     /**
-    *   refresh bank accounts
+    *   Refresh bank accounts
     *
     * @memberof HomeComponentStore
     */
@@ -37,7 +34,6 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
                 return this.ContactService.refreshBank().pipe(
                     tapResponse(
                         (res: any) => {
-                            console.log("res", res);
                             if (res?.status === "success") {
                                 res?.body && this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({ bankMessage: res.body });

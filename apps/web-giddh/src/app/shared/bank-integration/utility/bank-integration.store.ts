@@ -3,11 +3,10 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
-import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsIntegrationService } from "../../../services/settings.integration.service";
 
-export interface SettingIntegrationState {
+export interface BankIntegrationState {
     institutionList: any;
     requisitionList: any;
     institutionsListInProgress: boolean;
@@ -16,7 +15,7 @@ export interface SettingIntegrationState {
     deleteAccountSuccess: any;
 }
 
-export const DEFAULT_SETTING_INTEGRATION_STATE: SettingIntegrationState = {
+export const DEFAULT_BANK_INTEGRATION_STATE: BankIntegrationState = {
     institutionList: null,
     requisitionList: null,
     institutionsListInProgress: null,
@@ -26,13 +25,13 @@ export const DEFAULT_SETTING_INTEGRATION_STATE: SettingIntegrationState = {
 };
 
 @Injectable()
-export class SettingIntegrationComponentStore extends ComponentStore<SettingIntegrationState> implements OnDestroy {
+export class BankIntegrationComponentStore extends ComponentStore<BankIntegrationState> implements OnDestroy {
 
     constructor(
         private toasterService: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService
     ) {
-        super(DEFAULT_SETTING_INTEGRATION_STATE);
+        super(DEFAULT_BANK_INTEGRATION_STATE);
     }
 
     /**
