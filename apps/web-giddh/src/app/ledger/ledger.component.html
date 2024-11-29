@@ -466,15 +466,16 @@
                                 <div class="d-flex">
                                     <a
                                         *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading"
-                                        aria-label="show"
+                                        aria-label="refresh-bank-transactions"
                                         mat-button
                                         href="javascript:void(0)"
-                                        id="share"
+                                        id="refresh"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="commonLocaleData?.app_refresh"
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="refreshBank()"
+                                        [disabled]="(isBankRefreshing$ | async)"
                                     >
                                         <i aria-hidden="true" class="icon-refresh"></i>
                                     </a>

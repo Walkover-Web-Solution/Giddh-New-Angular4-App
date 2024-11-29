@@ -5,9 +5,12 @@
             <div class="panel-heading clearfix">
                 <strong>{{ localeData?.chart_title }}</strong>
             </div>
-            <div class="refersh-pd" (click)="refreshBank()"
-                *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"><i
-                    class="icon-refresh"></i></div>
+            <button mat-icon-button class="refresh-pd" [disabled]="(isBankRefreshing$ | async)" (click)="refreshBank()"
+                aria-label="{{ localeData?.refresh_bank_accounts }}"
+                matTooltip="{{ localeData?.refresh_bank_accounts }}"
+                *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0">
+                <i class="icon-refresh"></i>
+            </button>
         </div>
         <mat-card-content class="banks-scrollbar-wrapper" *ngIf="localeData">
             <div class="bank-details-block">
@@ -35,10 +38,12 @@
                                     <span>{{ activeCompany?.baseCurrencySymbol }}
                                         {{ bankaccount.accountBankTransactionTotal?.closingBalance?.amount |
                                         giddhCurrency }}
-                                        <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
+                                        <span
+                                            *ngIf="bankaccount.accountBankTransactionTotal.closingBalance.type == 'CREDIT'">{{
                                             localeData?.cr_heading
                                             }}</span>
-                                        <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
+                                        <span
+                                            *ngIf="bankaccount.accountBankTransactionTotal.closingBalance.type == 'DEBIT'">{{
                                             localeData?.dr_heading
                                             }}</span>
                                     </span>
@@ -69,7 +74,7 @@
             <div class="d-flex justify-content-center">
                 <button type="button" mat-stroked-button color="primary" class="w-50"
                     *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"
-                    (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
+                    (click)="openInstitutionsDialog()">-{{ localeData?.connect_bank }}</button>
             </div>
         </mat-card-content>
     </mat-card>
