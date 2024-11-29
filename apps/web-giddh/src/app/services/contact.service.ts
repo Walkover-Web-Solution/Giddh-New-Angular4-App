@@ -137,4 +137,21 @@ export class ContactService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
     }
+    
+    /**
+     * Refresh bank accounts
+     * 
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof ContactService
+     */
+    public refreshBank(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CONTACT_API.BANKACCOUNTS_REFRESH;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
 }

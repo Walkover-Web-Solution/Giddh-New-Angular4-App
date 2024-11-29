@@ -1,7 +1,13 @@
-<div id="live" appTranslate [file]="'home/bank-accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<div id="live" appTranslate [file]="'home/bank-accounts'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <mat-card>
-        <div class="panel-heading clearfix">
-            <strong>{{ localeData?.chart_title }}</strong>
+        <div class="d-flex justify-content-space-between align-items-center">
+            <div class="panel-heading clearfix">
+                <strong>{{ localeData?.chart_title }}</strong>
+            </div>
+            <div class="refersh-pd" (click)="refreshBank()"
+                *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"><i
+                    class="icon-refresh"></i></div>
         </div>
         <mat-card-content class="banks-scrollbar-wrapper" *ngIf="localeData">
             <div class="bank-details-block">
@@ -22,6 +28,22 @@
                                         }}</span>
                                 </span>
                             </p>
+                            <ng-container *ngIf="bankaccount?.accountBankTransactionTotal?.bankName">
+                                <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
+                                    <span>{{ localeData?.in }}&nbsp;{{ bankaccount.accountBankTransactionTotal.bankName
+                                        }}</span>
+                                    <span>{{ activeCompany?.baseCurrencySymbol }}
+                                        {{ bankaccount.accountBankTransactionTotal?.closingBalance?.amount |
+                                        giddhCurrency }}
+                                        <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
+                                            localeData?.cr_heading
+                                            }}</span>
+                                        <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
+                                            localeData?.dr_heading
+                                            }}</span>
+                                    </span>
+                                </p>
+                            </ng-container>
                             <ng-container *ngIf="bankaccount.reLoginRequired">
                                 <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name bank-menu">
                                     <span class="icon-dots-three-vertical"></span>
@@ -38,14 +60,16 @@
 
                 <div class="add-bank-details" *ngIf="!isLoading && bankAccounts?.length === 0 ">
                     <p>{{ localeData?.no_banks_found }}</p>
-                    <button type="button" mat-stroked-button color="primary" class="w-50" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
+                    <button type="button" mat-stroked-button color="primary" class="w-50"
+                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
                         (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
                 </div>
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="d-flex justify-content-center">
-            <button type="button" mat-stroked-button color="primary" class="w-50" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"
-                (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
+                <button type="button" mat-stroked-button color="primary" class="w-50"
+                    *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"
+                    (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
             </div>
         </mat-card-content>
     </mat-card>

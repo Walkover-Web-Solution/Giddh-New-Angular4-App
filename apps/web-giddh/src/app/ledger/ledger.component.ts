@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BANK_REFRESH_SUCCESS_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
@@ -52,12 +52,13 @@ import { saveAs } from 'file-saver';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
 import { SettingsIntegrationService } from '../services/settings.integration.service';
 import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
+import { HomeComponentStore } from '../home/home.store';
 
 @Component({
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
-    providers: [BankIntegrationComponentStore],
+    providers: [BankIntegrationComponentStore, HomeComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -326,6 +327,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
     /** Holds Store Requisition API success state as observable*/
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
+    /** Holds Store refresh bank success message as observable*/
+    private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
 
     constructor(
         private store: Store<AppState>,
@@ -352,7 +355,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private router: Router,
         private settingsIntegrationService: SettingsIntegrationService,
-        private componentStore: BankIntegrationComponentStore
+        private componentStore: BankIntegrationComponentStore,
+        private homeComponentStore: HomeComponentStore,
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -997,6 +1001,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.getBankTransactions();
             }
         };
+
+        this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response === BANK_REFRESH_SUCCESS_MESSAGE) {
+                this.getBankTransactions();
+            }
+        });
+
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3142,6 +3153,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Refresh bank
+     *
+     * @memberof LedgerComponent
+     */
+    public refreshBank() {
+        this.homeComponentStore.refreshBank();
     }
 
 }
