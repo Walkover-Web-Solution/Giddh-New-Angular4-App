@@ -1,5 +1,6 @@
 .form-header {
-    height: 40px !important;
+    top: 0px;
+    z-index: 1;
 }
 
 .chiplist-section {
@@ -10,4 +11,7 @@
 
 .form-control {
     border-radius: 0;
+}
+.chat-box-z-index{
+    z-index: 9999999 !important;
 }
