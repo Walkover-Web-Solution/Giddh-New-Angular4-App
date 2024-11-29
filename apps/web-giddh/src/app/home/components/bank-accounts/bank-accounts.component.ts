@@ -9,11 +9,13 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { BROADCAST_CHANNELS } from '../../../app.constant';
 import { CommonActions } from '../../../actions/common.actions';
+import { HomeComponentStore } from '../../home.store';
 
 @Component({
     selector: 'bank-accounts',
     templateUrl: 'bank-accounts.component.html',
-    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss']
+    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
+    providers: [HomeComponentStore]
 })
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
@@ -33,11 +35,14 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     /** True if relogin required in any bank account */
     public reLoginRequired: boolean = false;
 
+    public bankMessage$: Observable<any> = this.componentStore.select(state => state.bankMessage);
+
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
         private commonAction: CommonActions,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private componentStore: HomeComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -69,6 +74,14 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         };
+
+        this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log("response-home",response);
+            if(response === "Transactions refreshed successfully."){
+                console.log("response-home-inner",response);
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
+            }
+        });
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -96,6 +109,16 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      */
     public getPlaidLinkToken(itemId: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
+    }
+
+    /**
+     * refreshBank
+     *
+     * @memberof BankAccountsComponent
+     */
+    public refreshBank(){
+        console.log("refreshBank");
+        this.componentStore.refreshBank();
     }
 
     public ngOnDestroy() {

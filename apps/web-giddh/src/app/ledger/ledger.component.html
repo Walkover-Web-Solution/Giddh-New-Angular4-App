@@ -465,6 +465,20 @@
 
                                 <div class="d-flex">
                                     <a
+                                        *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length"
+                                        aria-label="show"
+                                        mat-button
+                                        href="javascript:void(0)"
+                                        id="share"
+                                        class="icomoon-ico d-flex align-items-center"
+                                        [matTooltip]="refreshBanksAccount"
+                                        [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
+                                        (click)="getBankTransactions()"
+                                    >
+                                        <i class="icon-refresh"></i>
+                                    </a>
+                                    <a
                                         aria-label="show"
                                         mat-button
                                         href="javascript:void(0)"
