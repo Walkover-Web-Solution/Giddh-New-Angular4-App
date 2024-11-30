@@ -1159,9 +1159,13 @@ textarea {
     .mat-mdc-table {
         .mdc-data-table__row {
             height: 70px !important;
+            &:hover {
+                background-color: var(--color-body-background) !important;
+            }
         }
     }
 }
+
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
