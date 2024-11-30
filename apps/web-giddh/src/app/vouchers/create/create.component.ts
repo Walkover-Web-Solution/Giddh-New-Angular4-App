@@ -1064,6 +1064,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.componentStore.ledgerEntries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
             if (response) {
                 response?.forEach((entry, entryIndex) => {
                     let item = entry.transactions[0];
@@ -1109,6 +1110,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     entryFormGroup.get("description")?.patchValue(entry.description);
+                    entryFormGroup.get("uniqueName")?.patchValue(entry.uniqueName);
 
                     const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
                     discountsFormArray.clear();
@@ -1192,7 +1194,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.stockVariants[entryIndex] = observableOf([]);
                         this.stockUnits[entryIndex] = observableOf([]);
                     }
-
                     this.checkIfEntriesHasStock();
                 });
             }
@@ -3512,7 +3513,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
         if (this.isPendingEntries) {
             this.saveVoucher(() => {
-                this.router.navigate(['/pages/vouchers/preview/sales/pending']);
+                this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
             this.saveVoucher();
@@ -3683,9 +3684,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const deposits = this.getDeposits();
 
         let invoiceForm = cloneDeep(this.invoiceForm.value);
+
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
-
         if (this.currencySwitched) {
             invoiceForm.exchangeRate = 1 / invoiceForm.exchangeRate;
         }
@@ -4985,7 +4986,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
         }
-
         this.checkIfEntriesHasStock();
     }
 

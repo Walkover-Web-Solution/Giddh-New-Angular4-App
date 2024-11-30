@@ -401,6 +401,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
 
                 this.getSelectedTabIndex();
+                this.ledgerSearchRequest.page = 1;
+                this.ledgerSearchRequest.count = PAGINATION_LIMIT;
                 // 'pending', 'settings', 'templates' These tabs are not voucher list
                 let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
                 if (this.universalDate && !tab.includes(this.activeModule)) {
@@ -708,7 +710,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.ledgerSearchRequest.to = "";
                     this.isUniversalDateApplicable = false;
                 }
-                this.getLedgersOfInvoice();
+                if (this.activeModule === 'pending') {
+                    this.getLedgersOfInvoice();
+                }
             }
         });
 
@@ -2381,16 +2385,33 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will be check account of same accouunt on selected pending vouchers
+     *
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    public isSameAccount(): boolean {
+        if (!this.selectedPendingVouchers?.length) {
+            return false;
+        }
+        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
+        return this.selectedPendingVouchers.every(voucher =>
+            voucher?.account?.uniqueName === firstAccountUniqueName
+        );
+    }
+
+    /**
      *  Navigates to the preview invoice page.
      *
      * @memberof VoucherListComponent
      */
     public previewInvoice(): void {
         const voucher = this.selectedPendingVouchers[0];
+        const uniqueNames = this.selectedPendingVouchers.map(voucher => voucher.uniqueName).join(',');
         if (voucher) {
             this.router.navigate(
                 [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
-                { queryParams: { entryUniqueNames: voucher.uniqueName } }
+                { queryParams: { entryUniqueNames: uniqueNames, voucherType:this.voucherType } }
             );
         }
     }
