@@ -1005,7 +1005,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
 
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response !== null) {
+            if (response) {
                 this.getBankTransactions();
             }
         });
