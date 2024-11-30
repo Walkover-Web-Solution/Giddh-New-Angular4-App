@@ -117,13 +117,13 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
     /** Hold display to bcc and cc on click */
-    public showBccCc :Boolean = false;
+    public showBccCc: Boolean = false;
     /** Hold cureent placeholder of input field */
     public currentPlaceholder: string = "Recipients"
     /** Hold visibilty of cc link after clicking */
-    public ccFieldVisible : boolean = false;
+    public ccFieldVisible: boolean = false;
     /** Hold visibilty of bcc link after clicking */
-    public bccFieldVisible : boolean = false;
+    public bccFieldVisible: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
