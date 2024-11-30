@@ -474,7 +474,7 @@
                                         [matTooltip]="commonLocaleData?.app_refresh"
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
-                                        (click)="refreshBank()"
+                                        (click)="refreshBankTransactions()"
                                         [disabled]="(isBankRefreshing$ | async)"
                                     >
                                         <i aria-hidden="true" class="icon-refresh"></i>
