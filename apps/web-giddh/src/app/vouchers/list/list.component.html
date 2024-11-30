@@ -1222,9 +1222,12 @@
                                     (click)="generateBulkInvoice(true)">
                                     {{ localeData?.generate_compound }}
                                 </button>
-                                <button mat-stroked-button color="primary"
-                                    *ngIf="!isCompany && selectedPendingVouchers?.length === 1"
-                                    (click)="previewInvoice()">
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    *ngIf="!isCompany && selectedPendingVouchers?.length && isSameAccount()"
+                                    (click)="previewInvoice()"
+                                >
                                     {{ localeData?.preview_generate }}
                                 </button>
                             </div>
