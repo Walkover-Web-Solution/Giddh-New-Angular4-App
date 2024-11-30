@@ -11163,6 +11163,14 @@ inventory-master {
     }
 }
 
+/* template froala */
+
+.template-froala-wrapper {
+    .cdk-overlay-container {
+        z-index: 999999;
+    }
+}
+
 /* responsive  starts here*/
 @media (max-width: 1440px) {
     .font-xxlarge {

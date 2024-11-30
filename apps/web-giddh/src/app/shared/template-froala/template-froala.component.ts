@@ -120,6 +120,10 @@ export class TemplateFroalaComponent implements OnInit {
     public showBccCc :Boolean = false;
     /** Hold cureent placeholder of input field */
     public currentPlaceholder: string = "Recipients"
+    /** Hold visibilty of cc link after clicking */
+    public ccFieldVisible : boolean = false;
+    /** Hold visibilty of bcc link after clicking */
+    public bccFieldVisible : boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
@@ -140,6 +144,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('template-froala-wrapper');
         this.initializeForm();
         this.getEmailContents();
         this.getEmailTemplates();
@@ -334,8 +339,10 @@ export class TemplateFroalaComponent implements OnInit {
     public toggleBccCc(type: string): void {
         if (type == "bcc") {
             this.showBcc = !this.showBcc;
-        } else {
+            this.bccFieldVisible = true;
+        } else if (type === "cc") {
             this.showCc = !this.showCc;
+            this.ccFieldVisible = true;
         }
     }
 

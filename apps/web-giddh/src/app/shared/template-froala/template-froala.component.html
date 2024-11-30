@@ -4,7 +4,6 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-<div class="chat-box-z-index">
     <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
         <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
         <span mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></span>
@@ -16,7 +15,7 @@
                 <div class="chip-gap">
                     <div class="form-group position-relative">
                         <select-multiple-fields
-                            [placeholder]="currentPlaceholder"
+                            [placeholder]="!selectedToEmails.length ? currentPlaceholder : '' "
                             [options]="toEmails"
                             (selectedOption)="selectedToEmails = $event"
                             [selectedValues]="selectedToEmails"
@@ -26,15 +25,15 @@
                             (click)="onVisitField()"
                         ></select-multiple-fields>
                         <div *ngIf="showBccCc" class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc')">{{
+                            <a *ngIf="!ccFieldVisible" class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc')">{{
                                 localeData?.cc
                             }}</a>
-                            <a class="btn-link" href="javascript:;" (click)="toggleBccCc('bcc')">{{
+                            <a *ngIf="!bccFieldVisible" class="btn-link" href="javascript:;" (click)="toggleBccCc('bcc')">{{
                                 localeData?.bcc
                             }}</a>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="showCc">
+                    <div class="form-group" *ngIf="showCc && ccFieldVisible">
                         <select-multiple-fields
                             [placeholder]="localeData?.select_cc"
                             [options]="ccEmails"
@@ -45,7 +44,7 @@
                             class="select-multiple-chiplist mb-3"
                         ></select-multiple-fields>
                     </div>
-                    <div class="form-group" *ngIf="showBcc">
+                    <div class="form-group" *ngIf="showBcc && bccFieldVisible">
                         <select-multiple-fields
                             [placeholder]="localeData?.select_bcc"
                             [options]="bccEmails"
@@ -81,5 +80,4 @@
             </div>
         </div>
     </mat-dialog-content>
-</div>
 </ng-container>
