@@ -1747,7 +1747,7 @@
                                 <button
                                     mat-stroked-button
                                     color="primary"
-                                    *ngIf="!isCompany && selectedPendingVouchers?.length === 1"
+                                    *ngIf="!isCompany && selectedPendingVouchers?.length && isSameAccount()"
                                     (click)="previewInvoice()"
                                 >
                                     {{ localeData?.preview_generate }}

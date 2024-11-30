@@ -547,7 +547,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getWarehouses();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {                
+            if (response) {
                 let params = response[0];
                 this.queryParams = response[1];
 
@@ -781,7 +781,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getVoucherType(response);
                     }
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
-                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName) ;
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
                     this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
                     this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
                     this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber ?? '');
@@ -827,7 +827,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             additional: {
                                 voucherType: response.referenceVoucher.voucherType,
                                 voucherNumber: this.isCopyMode ? null : response.referenceVoucher.number,
-                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) :response.referenceVoucher.date
+                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) : response.referenceVoucher.date
                             }
                         });
                     }
@@ -851,7 +851,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     this.invoiceForm.get('isRcmEntry').patchValue((response.subVoucher === SubVoucher.ReverseCharge) ? true : false);
-                    
+
                     if (response.adjustments?.length && !this.isCopyMode) {
                         response.adjustments = response.adjustments?.map(adjustment => {
                             adjustment.adjustmentAmount = adjustment.amount;
@@ -988,19 +988,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.linkedPoOrders$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!this.isCopyMode) {
                 this.linkedPoNumbers = response;
-    
+
                 if (this.purchaseOrderDetailsForEdit && this.isUpdateMode) {
                     setTimeout(() => {
                         this.purchaseOrderDetailsForEdit?.forEach(order => {
                             if (!this.linkedPoNumbers || !this.linkedPoNumbers[order?.uniqueName]) {
                                 this.purchaseOrders.push({ label: order?.number, value: order?.uniqueName, additional: { grandTotal: order?.grandTotal?.amountForAccount, totalPending: order?.entries?.length } });
-    
+
                                 this.linkedPoNumbers[order?.uniqueName] = [];
                                 this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order?.number;
                                 this.linkedPoNumbers[order?.uniqueName]['items'] = order?.entries;
                             }
                         });
-    
+
                         this.filterPurchaseOrder("");
                     }, 200);
                 }
@@ -1062,6 +1062,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.componentStore.ledgerEntries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
             if (response) {
                 response?.forEach((entry, entryIndex) => {
                     let item = entry.transactions[0];
@@ -1107,6 +1108,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     entryFormGroup.get("description")?.patchValue(entry.description);
+                    entryFormGroup.get("uniqueName")?.patchValue(entry.uniqueName);
 
                     const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
                     discountsFormArray.clear();
@@ -1190,7 +1192,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.stockVariants[entryIndex] = observableOf([]);
                         this.stockUnits[entryIndex] = observableOf([]);
                     }
-
                     this.checkIfEntriesHasStock();
                 });
             }
@@ -3488,7 +3489,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
         if (this.isPendingEntries) {
             this.saveVoucher(() => {
-                this.router.navigate(['/pages/vouchers/preview/sales/pending']);
+                this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
             this.saveVoucher();
@@ -3659,9 +3660,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const deposits = this.getDeposits();
 
         let invoiceForm = cloneDeep(this.invoiceForm.value);
+
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
-
         if (this.currencySwitched) {
             invoiceForm.exchangeRate = 1 / invoiceForm.exchangeRate;
         }
@@ -4961,7 +4962,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
         }
-
         this.checkIfEntriesHasStock();
     }
 
