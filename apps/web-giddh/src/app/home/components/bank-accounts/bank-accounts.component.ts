@@ -7,7 +7,7 @@ import { take, takeUntil } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { BANK_REFRESH_SUCCESS_MESSAGE, BROADCAST_CHANNELS } from '../../../app.constant';
+import { BROADCAST_CHANNELS } from '../../../app.constant';
 import { CommonActions } from '../../../actions/common.actions';
 import { HomeComponentStore } from '../../home.store';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -93,7 +93,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         };
 
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response === BANK_REFRESH_SUCCESS_MESSAGE) {
+            if (response !== null) {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         });
@@ -140,11 +140,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * refresh Bank
+     * Refresh bank transactions
      *
      * @memberof BankAccountsComponent
      */
-    public refreshBank() {
+    public refreshBankTransactions(): void {
         this.homeComponentStore.refreshBank();
     }
 

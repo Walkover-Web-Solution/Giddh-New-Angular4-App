@@ -6,7 +6,7 @@ import { ContactService } from "../services/contact.service";
 
 export interface HomeState {
     bankMessage: any;
-    isBankRefreshing: boolean
+    isBankRefreshing: boolean;
 }
 
 const DEFAULT_STATE: HomeState = {
@@ -25,9 +25,9 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
     }
 
     /**
-    *   Refresh bank accounts
+    *  Refresh bank accounts
     *
-    * @memberof HomeComponentStore
+    *  @memberof HomeComponentStore
     */
     readonly refreshBank = this.effect((data: Observable<void>) => {
         return data.pipe(

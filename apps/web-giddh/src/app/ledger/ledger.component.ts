@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BANK_REFRESH_SUCCESS_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
@@ -358,7 +358,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private router: Router,
         private settingsIntegrationService: SettingsIntegrationService,
         private componentStore: BankIntegrationComponentStore,
-        private homeComponentStore: HomeComponentStore,
+        private homeComponentStore: HomeComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -1005,7 +1005,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
 
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response === BANK_REFRESH_SUCCESS_MESSAGE) {
+            if (response !== null) {
                 this.getBankTransactions();
             }
         });
@@ -3158,11 +3158,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Refresh bank
+     * Refresh bank transactions
      *
      * @memberof LedgerComponent
      */
-    public refreshBank() {
+    public refreshBankTransactions(): void {
         this.homeComponentStore.refreshBank();
     }
 
