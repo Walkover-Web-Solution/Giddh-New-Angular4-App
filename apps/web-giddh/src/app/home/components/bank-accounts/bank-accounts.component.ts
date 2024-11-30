@@ -93,7 +93,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         };
 
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response !== null) {
+            if (response) {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         });
