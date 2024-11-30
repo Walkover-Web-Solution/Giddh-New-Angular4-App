@@ -1100,7 +1100,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     const entryDate = this.invoiceForm.get("date")?.value || this.universalDate;
 
                     let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-
                     if (typeof (entryDate) === "object") {
                         transactionFormGroup.get("date")?.patchValue(dayjs(entryDate).format(GIDDH_DATE_FORMAT));
                     } else {
@@ -1175,7 +1174,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         transactionFormGroup.get('stock.name')?.patchValue(item.stock.name);
                         transactionFormGroup.get('stock.uniqueName')?.patchValue(item.additional?.stock?.uniqueName);
                         transactionFormGroup.get('stock.quantity')?.patchValue(item.stock.quantity);
-                        transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(item.stock.rate.amountForAccount);
+                        transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(item.stock.rate.rateForAccount);
                         transactionFormGroup.get('stock.skuCode')?.patchValue(item.stock.sku);
                         transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(item.stock.skuCodeHeading);
                         transactionFormGroup.get('stock.stockUnit.code')?.patchValue(item.stock.stockUnit?.code);
