@@ -116,6 +116,16 @@ export class TemplateFroalaComponent implements OnInit {
     public bccEmails: any[] = [];
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
+    /** Hold display to bcc and cc on click */
+    public showBccCc: Boolean = false;
+    /** Hold false if user click on out of email section */
+    public clickedInsideEmailSection: boolean = false;
+    /** Holds all static emails (To, Cc, Bcc) combined in a single string */
+    public allStaticEmails: string = "";
+    /** This variable is used to store the count of hidden emails, formatted as a string */
+    public isHiddenEmails: string = "";
+    /** Holds the maximum number of emails to display */
+    public noOfMaximumEmailsShow: number = 2;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
@@ -136,6 +146,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('template-froala-wrapper');
         this.initializeForm();
         this.getEmailContents();
         this.getEmailTemplates();
@@ -162,13 +173,16 @@ export class TemplateFroalaComponent implements OnInit {
             if (response) {
                 if (response?.bcc?.length) {
                     this.showBcc = true;
+                    this.selectedBccEmails = response.bcc;
                 }
                 if (response?.cc?.length) {
                     this.showCc = true;
+                    this.selectedCcEmails = response.cc;
                 }
-                this.selectedToEmails = response.to;
-                this.selectedBccEmails = response.bcc;
-                this.selectedCcEmails = response.cc;
+                if (response?.to?.length) {
+                    this.selectedToEmails = response.to;
+                }
+                this.clickedOutsideEmail();
                 this.initializeForm(response);
             }
         });
@@ -329,9 +343,9 @@ export class TemplateFroalaComponent implements OnInit {
     */
     public toggleBccCc(type: string): void {
         if (type == "bcc") {
-            this.showBcc = !this.showBcc;
-        } else {
-            this.showCc = !this.showCc;
+            this.showBcc = true;
+        } else if (type === "cc") {
+            this.showCc = true;
         }
     }
 
@@ -341,7 +355,85 @@ export class TemplateFroalaComponent implements OnInit {
     * @memberof TemplateFroalaComponent
     */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('template-froala-wrapper');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+    /**
+     * Clicked inside Email section
+     * 
+     * @memberof TemplateFroalaComponent
+     */
+    public clickedInsideEmail(): void {
+        this.allStaticEmails = '';
+        this.isHiddenEmails = '';
+        this.clickedInsideEmailSection = true;
+    }
+
+    /**
+     * Clicked outside Email section
+     * 
+     * @memberof TemplateFroalaComponent
+     */
+    public clickedOutsideEmail(): void {
+        this.getAllStaticEmails();
+        this.clickedInsideEmailSection = false;
+
+        if (!this.selectedBccEmails.length) {
+            this.showBcc = false;
+        }
+
+        if (!this.selectedCcEmails.length) {
+            this.showCc = false;
+        }
+
+    }
+
+    /**
+     * Get all Emails 
+     * 
+     * @memberof TemplateFroalaComponent
+     */
+    private getAllStaticEmails(): void {
+        this.allStaticEmails = '';
+        this.isHiddenEmails = '';
+        if (this.selectedToEmails.length) {
+            this.allStaticEmails += this.selectedToEmails.at(0);
+            if (this.selectedToEmails.length > 1) {
+                this.allStaticEmails += `, ${this.selectedToEmails.at(1)}`;
+            }
+        }
+
+        if (this.selectedCcEmails.length && this.selectedToEmails.length < this.noOfMaximumEmailsShow) {
+            if (this.selectedToEmails.length === 1) {
+                this.allStaticEmails += `, ${this.selectedCcEmails.at(0)}`;
+            } else if (this.selectedToEmails.length === 0) {
+                this.allStaticEmails += this.selectedCcEmails.at(0);
+                if (this.selectedCcEmails.length > 1) {
+                    this.allStaticEmails += `, ${this.selectedCcEmails.at(1)}`;
+                }
+            }
+        }
+
+        if (this.selectedBccEmails.length) {
+            if (this.selectedToEmails.length + this.selectedCcEmails.length === 0) {
+                this.allStaticEmails += `Bcc: ${this.selectedBccEmails.at(0)}`;
+                if (this.selectedBccEmails.length > 1) {
+                    this.allStaticEmails += `, ${this.selectedBccEmails.at(1)}`;
+                }
+            } else if (this.allStaticEmails.split(',').length === 1) {
+                this.allStaticEmails += `, Bcc: ${this.selectedBccEmails.at(0)}`;
+            }
+        }
+
+        if (this.selectedToEmails.length + this.selectedCcEmails.length <= this.noOfMaximumEmailsShow && (this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow) > 0) {
+            this.isHiddenEmails += ` ${this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow} Bcc`;
+        } else if (this.selectedToEmails.length + this.selectedCcEmails.length > this.noOfMaximumEmailsShow) {
+            if (this.selectedBccEmails.length) {
+                this.isHiddenEmails += ` ${this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow} more (${this.selectedBccEmails.length} Bcc)`;
+            } else {
+                this.isHiddenEmails += ` ${this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow} more`;
+            }
+        }
     }
 }

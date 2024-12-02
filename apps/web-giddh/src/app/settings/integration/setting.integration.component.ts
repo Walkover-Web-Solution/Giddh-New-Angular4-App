@@ -222,7 +222,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private activateRoute: ActivatedRoute,
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef,
-        private componentStore: SettingIntegrationComponentStore
+        private componentStore: SettingIntegrationComponentStore,
+        private _generalService: GeneralService
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -237,14 +238,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
+
     /**
      * This will be use for sync with tally help documentation
      * 
      * @memberof SettingIntegrationComponent
      */
-    public tallyHelpDocLink(): void {
-        this.generalService.syncWithTallyLink();
+    public goTOLink():void {
+        this._generalService.syncWithTally();
     }
+    
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 

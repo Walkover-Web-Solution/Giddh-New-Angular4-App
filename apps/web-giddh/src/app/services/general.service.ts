@@ -90,6 +90,7 @@ export class GeneralService {
 
     constructor(
         private router: Router,
+        private _router: Router,
         private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) { }
@@ -2180,13 +2181,14 @@ export class GeneralService {
             }
         );
     }
+    
     /**
      * This will be use for sync with tally help documentation
      * 
      * @memberof GeneralService
      */
-    public syncWithTallyLink() : void {
-        const url = this.router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
+    public syncWithTally(){
+        const url = this._router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
         const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
         window.open(cleanedUrl, '_blank');
     }

@@ -26,7 +26,7 @@
     "enable_sms_proforma": "Enable send proforma via SMS",
     "invoice_lock_date": "Invoice Lock Date",
     "show_seal": "Show seal according to status of payment",
-    "auto_mail_update": "Auto mail when updated",
+    "auto_mail_update": "Auto mail when create and update",
     "enable_sms_invoice": "Enable send invoice via SMS",
     "custom_invoice_no": "Custom Invoice#",
     "branch_prefix": "Branch Prefix",

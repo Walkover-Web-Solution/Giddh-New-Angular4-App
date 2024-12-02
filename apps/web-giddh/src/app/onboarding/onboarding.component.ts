@@ -55,6 +55,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public isGoCardlessSupportedCountry: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+    /** Encoded URL to avoid query params */
+    public safeUrl: string;
     
     constructor(
         private router: Router, 
@@ -62,20 +66,18 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
-        private componentStore: OnboardingComponentStore
+        private componentStore: OnboardingComponentStore,
+        private _generalService: GeneralService
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
-    /**
-     * This will be use for sync with tally help documentation
-     * 
-     * @memberof OnboardingComponent
-     */
-    public tallyHelpDocLink(): void {
-        this.generalService.syncWithTallyLink();
+    public goToTallyLink():void {
+        this._generalService.syncWithTally();
     }
+
     public ngOnInit() {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.safeUrl = encodeURIComponent(this.syncWithTallyHelpDocUrl);
+        this.voucherApiVersion = this._generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {

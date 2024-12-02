@@ -61,7 +61,12 @@
                     <h1 class="border-btm mr-t4">{{ localeData?.have_data_tally }}</h1>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
                     <div class="d-flex column-gap15">
-                        <a mat-stroked-button color="primary" class="mt-2" (click)="tallyHelpDocLink()">
+                        <a
+                            mat-stroked-button
+                            color="primary"
+                            class="mt-2"
+                            (click)="goToTallyLink()"
+                        >
                             {{ localeData?.sync_with_tally }}
                         </a>
                         <a
