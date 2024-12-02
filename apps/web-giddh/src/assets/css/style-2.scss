@@ -11174,9 +11174,11 @@ inventory-master {
 
 /* template froala */
 
-.template-froala-wrapper {
-    .cdk-overlay-container {
-        z-index: 999999;
+body {
+    &.hide-chat-widget {
+        chat-widget {
+            display: none !important;
+        }
     }
 }
 
