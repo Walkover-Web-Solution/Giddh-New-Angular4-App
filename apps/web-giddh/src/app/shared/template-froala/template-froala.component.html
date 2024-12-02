@@ -12,48 +12,72 @@
     <mat-dialog-content class="dialog-body d-flex flex-column h-100">
         <div class="overflow-auto">
             <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
-                <div class="chip-gap">
+                
+                <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
                     <div class="form-group position-relative">
+                        <div class="d-flex" (click)="$event.stopPropagation(); clickedInsideEmail()">
+                        <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{localeData?.to}}</label>
                         <select-multiple-fields
-                            [placeholder]="!selectedToEmails.length ? currentPlaceholder : '' "
+                            [placeholder]="!(selectedToEmails.length || selectedCcEmails.length || selectedBccEmails.length || clickedInsideEmailSection) ? localeData.recipients : '' "
                             [options]="toEmails"
                             (selectedOption)="selectedToEmails = $event"
                             [selectedValues]="selectedToEmails"
                             [validations]="['email']"
                             [name]="'to'"
-                            class="select-multiple-chiplist mb-3"
-                            (click)="onVisitField()"
+                            class="select-multiple-chiplist mb-3 w-100"
+                            *ngIf="!(selectedToEmails.length || selectedCcEmails.length || selectedBccEmails.length || clickedInsideEmailSection) || clickedInsideEmailSection"
                         ></select-multiple-fields>
-                        <div *ngIf="showBccCc" class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a *ngIf="!ccFieldVisible" class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc')">{{
+                        </div>
+                        
+                        <div>
+                            {{allStaticEmails}}
+                            <span class="suffixEmails" *ngIf="isHiddenEmails.length" (click)="$event.stopPropagation(); clickedInsideEmail() ">{{isHiddenEmails}}</span>
+                        </div>
+                       
+                        <div *ngIf="clickedInsideEmailSection && !showCc && !showBcc" class="d-flex column-gap1 position-absolute chiplist-section">
+                            <a class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc'); $event.stopPropagation()">{{
                                 localeData?.cc
                             }}</a>
-                            <a *ngIf="!bccFieldVisible" class="btn-link" href="javascript:;" (click)="toggleBccCc('bcc')">{{
+                            <a class="btn-link" href="javascript:;" (click)="toggleBccCc('bcc'); $event.stopPropagation()">{{
                                 localeData?.bcc
                             }}</a>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="showCc && ccFieldVisible">
+                    <div class="form-group position-relative" *ngIf="showCc && clickedInsideEmailSection">
+                        <div class="d-flex">
+                        <label class="mr-r1">{{localeData?.cc}}</label>
                         <select-multiple-fields
-                            [placeholder]="localeData?.select_cc"
                             [options]="ccEmails"
                             (selectedOption)="selectedCcEmails = $event"
                             [selectedValues]="selectedCcEmails"
                             [validations]="['email']"
                             [name]="'cc'"
-                            class="select-multiple-chiplist mb-3"
+                            class="select-multiple-chiplist mb-3 w-100"
                         ></select-multiple-fields>
+                        </div>
+                        <div class="d-flex column-gap1 position-absolute chiplist-section">
+                            <a *ngIf="!showBcc" class="btn-link" href="javascript:;" (click)="toggleBccCc('bcc'); $event.stopPropagation() ">{{
+                                localeData?.bcc
+                            }}</a>
+                        </div>
                     </div>
-                    <div class="form-group" *ngIf="showBcc && bccFieldVisible">
+                    <div class="form-group position-relative" *ngIf="showBcc && clickedInsideEmailSection">
+                        <div class="d-flex">
+                        <label class="mr-r1">{{localeData?.bcc}}</label>
                         <select-multiple-fields
-                            [placeholder]="localeData?.select_bcc"
                             [options]="bccEmails"
                             (selectedOption)="selectedBccEmails = $event"
                             [selectedValues]="selectedBccEmails"
                             [validations]="['email']"
                             [name]="'bcc'"
-                            class="select-multiple-chiplist mb-3"
+                            class="select-multiple-chiplist mb-3 w-100"
                         ></select-multiple-fields>
+                        </div>
+                        <div  class="d-flex column-gap1 position-absolute chiplist-section">
+                            <a *ngIf="!showCc" class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc'); $event.stopPropagation()">{{
+                                localeData?.cc
+                            }}</a>
+                        </div>
                     </div>
                     <div class="form-group">
                         <input
