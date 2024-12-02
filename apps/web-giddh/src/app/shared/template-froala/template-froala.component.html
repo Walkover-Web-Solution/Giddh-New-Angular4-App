@@ -15,7 +15,7 @@
                 
                 <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
                     <div class="form-group position-relative">
-                        <div class="d-flex" (click)="$event.stopPropagation(); clickedInsideEmail()">
+                        <div class="d-flex">
                         <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{localeData?.to}}</label>
                         <select-multiple-fields
                             [placeholder]="!(selectedToEmails.length || selectedCcEmails.length || selectedBccEmails.length || clickedInsideEmailSection) ? localeData.recipients : '' "

@@ -244,7 +244,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * 
      * @memberof SettingIntegrationComponent
      */
-    public goTOLink():void {
+    public goToLink(): void {
         this._generalService.syncWithTally();
     }
     

@@ -1,7 +1,5 @@
 {
     "to": "To",
-    "select_bcc": "Select Bcc",
-    "select_cc": "Select Cc",
     "cc": "Cc",
     "bcc": "Bcc",
     "email_content_suggestions": "Type '@' to see suggestions",
