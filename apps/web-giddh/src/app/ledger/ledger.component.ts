@@ -2715,7 +2715,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
                         }
                     }
-                    profile.userEntityRoles.forEach(role => {
+                    profile.userEntityRoles?.forEach(role => {
                         const scopes = role.role.scopes;
                         if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                             this.hasIntegrationScope = true;

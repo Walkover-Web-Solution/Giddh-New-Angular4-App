@@ -47,7 +47,13 @@ p {
 .width-86 {
     width: 86% !important;
 }
+.dashboard-filter {
+    display: inline-flex;
+    color: var(--color-abbey);
+    align-items: center;
+}
 
-.refersh-pd {
-    padding: 15px 12px;
+.dashboard-filter .icon-collapse-icon {
+    margin-left: 8px;
+    font-size: var(--font-size-15);
 }

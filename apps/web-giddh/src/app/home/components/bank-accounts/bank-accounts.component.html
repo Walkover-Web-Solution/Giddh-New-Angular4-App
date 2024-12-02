@@ -1,16 +1,16 @@
 <div id="live" appTranslate [file]="'home/bank-accounts'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <mat-card>
-        <div class="d-flex justify-content-space-between align-items-center">
-            <div class="panel-heading clearfix">
-                <strong>{{ localeData?.chart_title }}</strong>
+        <div class="panel-heading d-flex justify-content-space-between">
+            <strong>{{ localeData?.chart_title }}</strong>
+        
+            <div class="dashboard-filter" [disabled]="(isBankRefreshing$ | async)" (click)="refreshBankTransactions()"
+                    aria-label="{{ localeData?.refresh_bank_accounts }}"
+                    matTooltip="{{ localeData?.refresh_bank_accounts }}"
+                    *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0">
+                    <i class="icon-refresh"></i>
             </div>
-            <button mat-icon-button class="refresh-pd" [disabled]="(isBankRefreshing$ | async)" (click)="refreshBankTransactions()"
-                aria-label="{{ localeData?.refresh_bank_accounts }}"
-                matTooltip="{{ localeData?.refresh_bank_accounts }}"
-                *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0">
-                <i class="icon-refresh"></i>
-            </button>
+
         </div>
         <mat-card-content class="banks-scrollbar-wrapper" *ngIf="localeData">
             <div class="bank-details-block">
