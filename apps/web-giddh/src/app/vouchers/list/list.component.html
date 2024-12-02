@@ -1828,14 +1828,11 @@
                                     </th>
                                     <td mat-cell *matCellDef="let element" class="text-right p-0">
                                         <ng-container *ngFor="let transaction of element?.transactions">
-                                            {{transaction | json}}:
-                                            {{element | json}}
-                                            {{activeCompany?.baseCurrency}}
                                             <p>
                                                 <amount-field
                                                     [amount]="transaction?.amount"
                                                     [currencySymbol]="element.accountCurrencySymbol"
-                                                    [currencyCode]="activeCompany?.baseCurrency"
+                                                    [currencyCode]="false"
                                                 >
                                                 </amount-field>
                                             </p>
@@ -1902,7 +1899,7 @@
                                             <amount-field
                                                 [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
-                                                [currencyCode]="activeCompany?.baseCurrency"
+                                                [currencyCode]="false"
                                             >
                                             </amount-field>
                                         </span>
@@ -3837,7 +3834,7 @@
                                                 <amount-field
                                                     [amount]="transaction?.amount"
                                                     [currencySymbol]="element.accountCurrencySymbol"
-                                                    [currencyCode]="activeCompany?.baseCurrency"
+                                                    [currencyCode]="false"
                                                 >
                                                 </amount-field>
                                             </p>
@@ -3904,7 +3901,7 @@
                                             <amount-field
                                                 [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
-                                                [currencyCode]="activeCompany?.baseCurrency"
+                                                [currencyCode]="false"
                                             >
                                             </amount-field>
                                         </span>
