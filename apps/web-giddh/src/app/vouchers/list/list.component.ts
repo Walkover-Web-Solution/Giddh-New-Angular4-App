@@ -305,7 +305,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public giddhBalanceDecimalPlaces: number = 2;
     /** Duplicate copy of entry unique names for bulk action variable */
     public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
-    /** selected pending voucher */
+    /** Selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
     /** Selected account unique name */
     public selectedAccountUniqueName: string = '';
@@ -322,10 +322,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Ledger Data */
     public ledgersData: any[] = [];
     /** Holds voucher type for credit/debit note*/
-    public voucherTypes: any = [
-        { label: 'Credit Note', value: 'credit note' },
-        { label: 'Debit Note', value: 'debit note' }
-    ];
+    public voucherTypes: any[] = [];
     /** Holds voucher type enum */
     public voucherTypeEnum: any = VoucherTypeEnum;
 
@@ -678,7 +675,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.pendingVoucherList$.pipe(takeUntil(this.destroyed$)).subscribe((res: GetAllLedgersForInvoiceResponse) => {
             if (res && res.results) {
-
                 let response = cloneDeep(res);
                 this.ledgersData = [];
                 this.pendingTotalResults = response?.totalItems;
@@ -870,15 +866,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedTabIndex = 2;
             }
         } else if (this.activeTabGroup === 3) {
-            if (this.voucherType === 'receipt' && this.activeModule === 'list') {
+            if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
                 this.selectedTabIndex = 0;
-            } else if (this.voucherType === 'receipt' && this.activeModule === 'pending') {
+            } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
                 this.selectedTabIndex = 1;
             }
         } else if (this.activeTabGroup === 4) {
-            if (this.voucherType === 'payment' && this.activeModule === 'list') {
+            if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
                 this.selectedTabIndex = 0;
-            } else if (this.voucherType === 'payment' && this.activeModule === 'pending') {
+            } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
                 this.selectedTabIndex = 1;
             }
         }
@@ -944,18 +940,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         } else if (this.activeTabGroup === 3) {
             if (selectedTabIndex === 0) {
-                voucherType = "receipt";
+                voucherType = this.voucherTypeEnum.receipt;
                 activeModule = "list";
             } else if (selectedTabIndex === 1) {
-                voucherType = "receipt";
+                voucherType = this.voucherTypeEnum.receipt;
                 activeModule = "pending";
             }
         } else if (this.activeTabGroup === 4) {
             if (selectedTabIndex === 0) {
-                voucherType = "payment";
+                voucherType = this.voucherTypeEnum.payment;
                 activeModule = "list";
             } else if (selectedTabIndex === 1) {
-                voucherType = "payment";
+                voucherType = this.voucherTypeEnum.payment;
                 activeModule = "pending";
             }
         }
@@ -2121,8 +2117,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
         }
     }
+
     /**
-     *Fetch ledgers for invoices.
+     * Fetch ledgers for invoices.
      *
      * @memberof VoucherListComponent
      */
@@ -2278,7 +2275,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (voucher) {
             this.router.navigate(
                 [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
-                { queryParams: { entryUniqueNames: uniqueNames, voucherType:this.voucherType } }
+                { queryParams: { entryUniqueNames: uniqueNames, voucherType: this.voucherType } }
             );
         }
     }
@@ -2375,6 +2372,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         item.totalTooltipText = currencyConversion || '';
 
         return item;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof RatioAnalysisChartComponent
+     */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.voucherTypes = [
+                { label: this.localeData.tabs.credit_note, value: 'credit note' },
+                { label: this.localeData.tabs.debit_note, value: 'debit note' }
+            ];
+        }
     }
 
 }

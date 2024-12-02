@@ -3,6 +3,7 @@
     [file]="'vouchers/preview'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="position-relative invoice-list overflow-visible">
