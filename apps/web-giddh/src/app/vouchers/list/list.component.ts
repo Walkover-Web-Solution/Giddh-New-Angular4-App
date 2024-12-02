@@ -34,31 +34,6 @@ import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
-import { CommonActions } from "../../actions/common.actions";
-
-// invoice-table
-export interface PeriodicElement {
-    invoice: string;
-    position: number;
-    customer: string;
-    invoicedate: string;
-    amount: string;
-    balance: string;
-    duedate: string;
-    invoicestatus: string;
-    status: string;
-}
-
-// pending-table
-export interface PeriodicElementPending {
-    date: string;
-    position: number;
-    particular: string;
-    amount: string;
-    account: string;
-    total: string;
-    description: string;
-}
 
 // bill-table
 export interface PeriodicElementBill {
@@ -325,6 +300,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public voucherTypes: any[] = [];
     /** Holds voucher type enum */
     public voucherTypeEnum: any = VoucherTypeEnum;
+    /** Returns true if all selected pending vouchers have the same account */
+    public get hasSameVoucherAccount(): boolean {
+        if (!this.selectedPendingVouchers?.length) {
+            return false;
+        }
+        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
+        return this.selectedPendingVouchers.every(voucher =>
+            voucher?.account?.uniqueName === firstAccountUniqueName
+        );
+    }
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -341,8 +328,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private adjustmentUtilityService: AdjustmentUtilityService,
         private salesAction: SalesActions,
         private settingsProfileActions: SettingsProfileActions,
-        private invoiceActions: InvoiceActions,
-        private commonActions: CommonActions
+        private invoiceActions: InvoiceActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -366,6 +352,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
         this.getInvoiceSettings();
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
@@ -696,12 +683,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         // listen for bulk invoice generate and successfully generate and do the things
         this.componentStore.isBulkInvoiceGenerated$.subscribe(result => {
             if (result) {
-                this.selectAllPendingVouchers(false);
-                this.getLedgersOfInvoice();
-            }
-        });
-        this.componentStore.isBulkInvoiceGeneratedWithoutError$.subscribe(result => {
-            if (result) {
+                this.selectAllPendingVouchers({ checked: false });
                 this.getLedgersOfInvoice();
             }
         });
@@ -2124,11 +2106,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getLedgersOfInvoice(): void {
-        this.dispatchLedgerRequest();
+        this.fetchLedgers();
 
         if (this.isLedgerDataEmpty()) {
             this.decrementPageIfNeeded();
-            this.dispatchLedgerRequest();
+            this.fetchLedgers();
         }
 
         this.selectedPendingVouchers = [];
@@ -2140,7 +2122,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @private
      * @memberof VoucherListComponent
      */
-    private dispatchLedgerRequest(): void {
+    private fetchLedgers(): void {
         this.store.dispatch(
             this.invoiceActions.GetAllLedgersForInvoice(
                 this.prepareQueryParamsForLedgerApi(),
@@ -2249,27 +2231,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be check account of same accouunt on selected pending vouchers
-     *
-     * @return {*}  {boolean}
-     * @memberof VoucherListComponent
-     */
-    public isSameAccount(): boolean {
-        if (!this.selectedPendingVouchers?.length) {
-            return false;
-        }
-        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
-        return this.selectedPendingVouchers.every(voucher =>
-            voucher?.account?.uniqueName === firstAccountUniqueName
-        );
-    }
-
-    /**
      *  Navigates to the preview invoice page.
      *
      * @memberof VoucherListComponent
      */
-    public previewInvoice(): void {
+    public invoiceGenerate(): void {
         const voucher = this.selectedPendingVouchers[0];
         const uniqueNames = this.selectedPendingVouchers.map(voucher => voucher.uniqueName).join(',');
         if (voucher) {
@@ -2288,9 +2254,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @return {*}  {boolean}
      * @memberof VoucherListComponent
      */
-    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean): boolean {
+    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean): void {
         if (this.selectedPendingVouchers?.length === 0 && typeof generateEInvoice !== 'boolean') {
-            return false;
+            return;
         }
 
         const groupedVouchers = this.groupPendingVouchersByAccount();
@@ -2307,7 +2273,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         );
 
         this.selectedPendingVouchers = [];
-        return true;
     }
 
     /**
@@ -2333,9 +2298,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @return {*}  {string[]}
      * @memberof VoucherListComponent
      */
-    private flattenGroupedVouchers(grouped: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
+    private flattenGroupedVouchers(groupedVoucher: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
         const model: string[] = [];
-        forEach(grouped, items => {
+        forEach(groupedVoucher, items => {
             items.forEach(obj => model.push(obj?.uniqueName));
         });
         return model;
@@ -2383,8 +2348,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.voucherTypes = [
-                { label: this.localeData.tabs.credit_note, value: 'credit note' },
-                { label: this.localeData.tabs.debit_note, value: 'debit note' }
+                { label: this.localeData.tabs.credit_note, value: VoucherTypeEnum.creditNote },
+                { label: this.localeData.tabs.debit_note, value: VoucherTypeEnum.debitNote }
             ];
         }
     }
