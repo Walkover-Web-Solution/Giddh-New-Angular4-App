@@ -172,7 +172,7 @@ export class HttpWrapperService {
     }
 
     /**
-     * Utility function to append timestamp
+     * Utility function to append timestamp and timezone
      *
      * @private
      * @param {string} url
@@ -181,6 +181,16 @@ export class HttpWrapperService {
      */
     private appendTimestamp(url: string): string {
         const timestamp = `t=${new Date().getTime()}`;
-        return url.includes("?") ? `${url}&${timestamp}` : `${url}?${timestamp}`;
+        
+        // Get timezone offset in minutes and convert to hours and minutes
+        const offset = -new Date().getTimezoneOffset();
+        const hours = Math.floor(Math.abs(offset) / 60);
+        const minutes = Math.abs(offset) % 60;
+        const sign = offset >= 0 ? '+' : '-';
+        
+        // Format timezone as UTC±HH:MM
+        const timezone = `z=UTC${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        
+        return url.includes("?") ? `${url}&${timestamp}&${timezone}` : `${url}?${timestamp}&${timezone}`;
     }
 }
