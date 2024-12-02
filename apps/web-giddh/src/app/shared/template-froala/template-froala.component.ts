@@ -116,8 +116,6 @@ export class TemplateFroalaComponent implements OnInit {
     public bccEmails: any[] = [];
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
-    /** Hold display to bcc and cc on click */
-    public showBccCc: Boolean = false;
     /** Hold false if user click on out of email section */
     public clickedInsideEmailSection: boolean = false;
     /** Holds all static emails (To, Cc, Bcc) combined in a single string */
@@ -378,16 +376,20 @@ export class TemplateFroalaComponent implements OnInit {
     public clickedOutsideEmail(): void {
         this.getAllStaticEmails();
         this.clickedInsideEmailSection = false;
-
-        if (!this.selectedBccEmails.length) {
-            this.showBcc = false;
-        }
-
-        if (!this.selectedCcEmails.length) {
-            this.showCc = false;
-        }
-
+        this.showBcc = this.selectedBccEmails.length > 0;
+        this.showCc = this.selectedCcEmails.length > 0;
     }
+
+    /**
+     * Calculates the total number of email addresses across To, Cc, and Bcc fields.
+     * 
+     * @returns {number} The total count of email addresses
+     * @memberof TemplateFroalaComponent
+     */
+    public getTotalEmailsCount(): number {
+        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
+    }
+
 
     /**
      * Get all Emails 
@@ -426,13 +428,13 @@ export class TemplateFroalaComponent implements OnInit {
             }
         }
 
-        if (this.selectedToEmails.length + this.selectedCcEmails.length <= this.noOfMaximumEmailsShow && (this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow) > 0) {
-            this.isHiddenEmails += ` ${this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow} Bcc`;
+        if ((this.selectedToEmails.length + this.selectedCcEmails.length <= this.noOfMaximumEmailsShow) && (this.getTotalEmailsCount() - this.noOfMaximumEmailsShow > 0)) {
+            this.isHiddenEmails += ` ${this.getTotalEmailsCount() - this.noOfMaximumEmailsShow} Bcc`;
         } else if (this.selectedToEmails.length + this.selectedCcEmails.length > this.noOfMaximumEmailsShow) {
             if (this.selectedBccEmails.length) {
-                this.isHiddenEmails += ` ${this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow} more (${this.selectedBccEmails.length} Bcc)`;
+                this.isHiddenEmails += ` ${this.getTotalEmailsCount() - this.noOfMaximumEmailsShow} more (${this.selectedBccEmails.length} Bcc)`;
             } else {
-                this.isHiddenEmails += ` ${this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length - this.noOfMaximumEmailsShow} more`;
+                this.isHiddenEmails += ` ${this.getTotalEmailsCount() - this.noOfMaximumEmailsShow} more`;
             }
         }
     }

@@ -3,7 +3,6 @@
     "cc": "Cc",
     "bcc": "Bcc",
     "email_content_suggestions": "Type '@' to see suggestions",
-    "enter_subject_placeholder": "Enter subject here",
     "recipients": "Recipients",
-    "subject":"Subject"
+    "subject": "Subject"
 }
