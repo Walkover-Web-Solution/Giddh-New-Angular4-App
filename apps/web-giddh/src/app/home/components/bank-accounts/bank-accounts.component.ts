@@ -50,6 +50,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
+    public isBankisConnected : boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -159,6 +160,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     * @memberof BankAccountsComponent
     */
     public openInstitutionsDialog(): void {
+        this.isBankisConnected = false;
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,

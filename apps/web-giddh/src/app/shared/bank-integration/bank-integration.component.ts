@@ -81,6 +81,7 @@ export class BankIntegrationComponent implements OnInit {
     /** Hold confirmationModalRef mat dailog reference */
     public confirmationModalRef: any;
 
+
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     /** Instance of create new account modal */
     @ViewChild('createNewAccountModal', { static: true }) public createNewAccountModal: TemplateRef<any>;
