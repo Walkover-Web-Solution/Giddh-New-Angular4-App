@@ -22,7 +22,7 @@
                                 (selectedOption)="selectedToEmails = $event"
                                 [selectedValues]="selectedToEmails"
                                 [validations]="['email']"
-                                [name]="'to'"
+                                [name]="emailType.To"
                                 class="select-multiple-chiplist mb-3 w-100"
                                 *ngIf="!(getTotalEmailsCount() || clickedInsideEmailSection) || clickedInsideEmailSection"
                             ></select-multiple-fields>
@@ -34,10 +34,10 @@
                         </div>
                        
                         <div *ngIf="clickedInsideEmailSection && !showCc && !showBcc" class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a class="btn-link under" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc('cc')">{{
+                            <a class="btn-link under" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)">{{
                                 localeData?.cc
                             }}</a>
-                            <a class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc('bcc')">{{
+                            <a class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)">{{
                                 localeData?.bcc
                             }}</a>
                         </div>
@@ -50,12 +50,12 @@
                             (selectedOption)="selectedCcEmails = $event"
                             [selectedValues]="selectedCcEmails"
                             [validations]="['email']"
-                            [name]="'cc'"
+                            [name]="emailType.Cc"
                             class="select-multiple-chiplist mb-3 w-100"
                         ></select-multiple-fields>
                         </div>
                         <div class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a *ngIf="!showBcc" class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc('bcc')">{{
+                            <a *ngIf="!showBcc" class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)">{{
                                 localeData?.bcc
                             }}</a>
                         </div>
@@ -68,12 +68,12 @@
                             (selectedOption)="selectedBccEmails = $event"
                             [selectedValues]="selectedBccEmails"
                             [validations]="['email']"
-                            [name]="'bcc'"
+                            [name]="emailType.Bcc"
                             class="select-multiple-chiplist mb-3 w-100"
                         ></select-multiple-fields>
                         </div>
                         <div class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a *ngIf="!showCc" class="btn-link under" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc('cc')">{{
+                            <a *ngIf="!showCc" class="btn-link under" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)">{{
                                 localeData?.cc
                             }}</a>
                         </div>
