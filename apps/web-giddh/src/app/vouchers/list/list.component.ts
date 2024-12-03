@@ -33,6 +33,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 
 // invoice-table
 export interface PeriodicElement {
@@ -131,8 +132,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** Holds advance search dailog template reference */
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
-    /** Holds export dailog template reference */
-    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Holds Payment template reference */
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Holds adjust payment dailog template reference */
@@ -1138,7 +1137,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(this.bulkExport, {
+        this.dialog.open(BulkExportComponent, {
             width: '600px',
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),

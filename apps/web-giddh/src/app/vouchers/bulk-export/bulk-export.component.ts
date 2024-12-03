@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
@@ -47,7 +47,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.exportForm = this.formBuilder.group({
             copyTypes: [''],
-            recipients: ['']
+            recipients: [''],
+            mergePdf: new FormControl<boolean>(false)
         });
 
         this.getRecipientEmail();
@@ -119,6 +120,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
 
         postRequest = cloneDeep(this.inputData?.advanceFilters);
         postRequest.uniqueNames = this.inputData?.voucherUniqueNames;
+        postRequest.mergePdf = this.exportForm.value?.mergePdf;
 
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             postRequest.copyTypes = this.exportForm.value?.copyTypes;
