@@ -399,43 +399,43 @@ export class TemplateFroalaComponent implements OnInit {
     private getAllStaticEmails(): void {
         this.allStaticEmails = '';
         this.isHiddenEmails = '';
-        if (this.selectedToEmails.length) {
-            this.allStaticEmails += this.selectedToEmails.at(0);
-            if (this.selectedToEmails.length > 1) {
-                this.allStaticEmails += `, ${this.selectedToEmails.at(1)}`;
-            }
-        }
 
-        if (this.selectedCcEmails.length && this.selectedToEmails.length < this.noOfMaximumEmailsShow) {
-            if (this.selectedToEmails.length === 1) {
-                this.allStaticEmails += `, ${this.selectedCcEmails.at(0)}`;
-            } else if (this.selectedToEmails.length === 0) {
-                this.allStaticEmails += this.selectedCcEmails.at(0);
-                if (this.selectedCcEmails.length > 1) {
-                    this.allStaticEmails += `, ${this.selectedCcEmails.at(1)}`;
+        // Helper function to append emails
+        const appendEmails = (emails: string[], prefix = '', limit = this.noOfMaximumEmailsShow - (this.allStaticEmails.trim() === "" ? 0 : this.allStaticEmails.split(',').length)) => {
+            for (let i = 0; i < Math.min(emails.length, limit); i++) {
+                if (this.allStaticEmails) {
+                    this.allStaticEmails += `, `;
                 }
+                this.allStaticEmails += `${i === 0 ? prefix : ""}${emails[i]}`;
             }
+        };
+
+        // Add To emails
+        appendEmails(this.selectedToEmails);
+
+        // Add Cc emails if there is space
+        if (this.selectedToEmails.length < this.noOfMaximumEmailsShow) {
+            appendEmails(this.selectedCcEmails);
         }
 
-        if (this.selectedBccEmails.length) {
-            if (this.selectedToEmails.length + this.selectedCcEmails.length === 0) {
-                this.allStaticEmails += `Bcc: ${this.selectedBccEmails.at(0)}`;
-                if (this.selectedBccEmails.length > 1) {
-                    this.allStaticEmails += `, ${this.selectedBccEmails.at(1)}`;
-                }
-            } else if (this.allStaticEmails.split(',').length === 1) {
-                this.allStaticEmails += `, Bcc: ${this.selectedBccEmails.at(0)}`;
-            }
+        // Add Bcc emails if there is space
+        if (this.allStaticEmails.split(',').length < this.noOfMaximumEmailsShow) {
+            appendEmails(this.selectedBccEmails, 'Bcc: ');
         }
+        
+        // Calculate hidden emails
+        const totalEmails = this.getTotalEmailsCount();
+        const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length;
+        const hiddenEmailsCount = totalEmails - this.noOfMaximumEmailsShow;
 
-        if ((this.selectedToEmails.length + this.selectedCcEmails.length <= this.noOfMaximumEmailsShow) && (this.getTotalEmailsCount() - this.noOfMaximumEmailsShow > 0)) {
-            this.isHiddenEmails += ` ${this.getTotalEmailsCount() - this.noOfMaximumEmailsShow} Bcc`;
-        } else if (this.selectedToEmails.length + this.selectedCcEmails.length > this.noOfMaximumEmailsShow) {
-            if (this.selectedBccEmails.length) {
-                this.isHiddenEmails += ` ${this.getTotalEmailsCount() - this.noOfMaximumEmailsShow} more (${this.selectedBccEmails.length} Bcc)`;
+        if (hiddenEmailsCount > 0) {
+            if (visibleEmails <= this.noOfMaximumEmailsShow) {
+                this.isHiddenEmails += ` ${hiddenEmailsCount} Bcc`;
             } else {
-                this.isHiddenEmails += ` ${this.getTotalEmailsCount() - this.noOfMaximumEmailsShow} more`;
+                const bccInfo = this.selectedBccEmails.length ? ` (${this.selectedBccEmails.length} Bcc)` : '';
+                this.isHiddenEmails += ` ${hiddenEmailsCount} more${bccInfo}`;
             }
         }
     }
+
 }
