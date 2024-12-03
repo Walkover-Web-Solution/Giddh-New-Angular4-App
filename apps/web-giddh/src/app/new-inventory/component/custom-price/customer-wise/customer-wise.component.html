@@ -169,7 +169,7 @@
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
                                                                                 (selectedOption)="updateDiscountInVariant(variant, $event)"
-                                                                                [defaultValue]="variant?.get('discountName')?.value || (discountsList?.length ? discountsList[0].label : '')">
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
                                                                             </dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
@@ -256,7 +256,7 @@
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
                                                                                 (selectedOption)="updateDiscountInVariant(variant, $event)"
-                                                                                [defaultValue]="variant?.get('discountName')?.value || (discountsList?.length ? discountsList[0].label : '')">
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
                                                                             </dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
