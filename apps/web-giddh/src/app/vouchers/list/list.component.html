@@ -133,7 +133,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.customerName | titlecase }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -354,7 +354,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -622,7 +622,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -885,7 +885,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -1114,7 +1114,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.customerName | titlecase }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -1230,8 +1230,8 @@
                                 <button
                                     mat-stroked-button
                                     color="primary"
-                                    *ngIf="!isCompany && selectedPendingVouchers?.length && isSameAccount()"
-                                    (click)="previewInvoice()"
+                                    *ngIf="!isCompany && selectedPendingVouchers?.length && hasSameVoucherAccount"
+                                    (click)="invoiceGenerate()"
                                 >
                                     {{ localeData?.preview_generate }}
                                 </button>
@@ -1286,7 +1286,7 @@
                                     <td mat-cell *matCellDef="let element" class="p-0">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>{{ transaction?.particular?.name }}</p>
-                                            <p *ngIf="transaction?.inventory && transaction.inventory?.stock">
+                                            <p *ngIf="transaction?.inventory?.stock">
                                                 ({{ transaction.inventory.stock.name }})
                                             </p>
                                         </ng-container>
@@ -1322,7 +1322,7 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                                 <h3>{{ element?.account?.name }}</h3>
                                                 <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="./assets/images/path.svg" />
+                                                    <img src="{{ imgPath }}path.svg" />
                                                 </span>
                                             </div>
                                             <mat-card-content class="pt-3">
@@ -2733,8 +2733,8 @@
                                     <th mat-header-cell *matHeaderCellDef>Particular</th>
                                     <td mat-cell *matCellDef="let element" class="p-0">
                                         <ng-container *ngFor="let transaction of element?.transactions">
-                                            <p>{{ transaction.particular.name }}</p>
-                                            <p *ngIf="transaction.inventory && transaction.inventory.stock">
+                                            <p>{{ transaction?.particular?.name }}</p>
+                                            <p *ngIf="transaction?.inventory?.stock">
                                                 ({{ transaction.inventory.stock.name }})
                                             </p>
                                         </ng-container>
@@ -2770,7 +2770,7 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                                 <h3>{{ element?.account?.name }}</h3>
                                                 <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="./assets/images/path.svg" />
+                                                     <img src="{{ imgPath }}path.svg" />
                                                 </span>
                                             </div>
                                             <mat-card-content class="pt-3">
