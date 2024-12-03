@@ -96,7 +96,6 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     * @memberof PermissionDetailsComponent
     */
     public ngAfterViewInit(): void {
-        this.pageList = [];
         this.checkExistsDataInPageResponse();
 
         if (this.roleObj?.scopes) {
@@ -136,14 +135,13 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             });
             pageObj.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
             this.roleObj?.scopes?.push(pageObj);
-            this.pageList.splice(this.pageList?.findIndex((list: any) => list.value === page), 1);
+            this.checkExistsDataInPageResponse();
             this.pageName = null;
         }
     }
 
     public removePageFromScope(page: string) {
         this.roleObj.scopes.splice(this.roleObj.scopes?.findIndex((o: Scope) => o.name === page), 1);
-        this.pageList = [];
         this.checkExistsDataInPageResponse();
     }
 
@@ -366,6 +364,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
      * @memberof PermissionDetailsComponent
      */
     public checkExistsDataInPageResponse(): void {
+        this.pageList = [];
         this.originalPageList?.forEach(item => {
             if (!this.checkForAlreadyExistInPageArray(String(item))) {
                 this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
