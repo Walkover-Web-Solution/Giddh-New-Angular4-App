@@ -1301,7 +1301,7 @@
                                             <p>
                                                 <amount-field [amount]="transaction?.amount"
                                                     [currencySymbol]="element.accountCurrencySymbol"
-                                                    [currencyCode]="false"
+                                                    [currencyCode]="element?.accountCurrencyCode"
                                                 >
                                                 </amount-field>
                                             </p>
@@ -1351,7 +1351,7 @@
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
-                                                [currencyCode]="false"
+                                                [currencyCode]="element?.accountCurrencyCode"
                                             >
                                             </amount-field>
                                         </span>
@@ -2749,7 +2749,7 @@
                                             <p>
                                                 <amount-field [amount]="transaction?.amount"
                                                     [currencySymbol]="element.accountCurrencySymbol"
-                                                    [currencyCode]="false"
+                                                    [currencyCode]="element?.accountCurrencyCode"
                                                 >
                                                 </amount-field>
                                             </p>
@@ -2802,7 +2802,7 @@
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
-                                                [currencyCode]="false"
+                                                [currencyCode]="element?.accountCurrencyCode"
                                             >
                                             </amount-field>
                                         </span>
