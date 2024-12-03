@@ -22,7 +22,7 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div class="header-content-sticky">
+                    <div class="header-content-sticky vendor-z-index">
                         <div
                             *ngIf="
                                 (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
@@ -562,7 +562,7 @@
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
-                    class="w-100 position-relative"
+                    class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
@@ -909,7 +909,7 @@
                     *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
-                    class="w-100 position-relative"
+                    class="w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >

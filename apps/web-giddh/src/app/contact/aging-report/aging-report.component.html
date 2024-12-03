@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="header-content-sticky">
+    <div class="header-content-sticky aging-report-z-index">
         <div
             *ngIf="
                 (dueAmountReportData$ | async)?.results?.length ||
@@ -265,7 +265,7 @@
             *ngIf="!(getAgingReportRequestInProcess$ | async)"
             mat-table
             [dataSource]="agingReportDataSource"
-            class="w-100 main-table position-relative"
+            class="w-100 main-table"
         >
             <ng-container matColumnDef="customerName">
                 <th
