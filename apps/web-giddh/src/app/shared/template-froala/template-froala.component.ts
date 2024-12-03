@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { GeneralService } from '../../services/general.service';
+import { EmailType } from './utility/template-froala.const';
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
@@ -124,6 +125,8 @@ export class TemplateFroalaComponent implements OnInit {
     public isHiddenEmails: string = "";
     /** Holds the maximum number of emails to display */
     public noOfMaximumEmailsShow: number = 2;
+    /** Holds type of email */
+    public emailType = EmailType;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
@@ -144,7 +147,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
-        document.querySelector('body').classList.add('template-froala-wrapper');
+        document.querySelector('body').classList.add('hide-chat-widget');
         this.initializeForm();
         this.getEmailContents();
         this.getEmailTemplates();
@@ -320,9 +323,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public onSubmit(): void {
-        this.emailForm.get('to')?.patchValue(this.selectedToEmails);
-        this.emailForm.get('bcc')?.patchValue(this.selectedBccEmails);
-        this.emailForm.get('cc')?.patchValue(this.selectedCcEmails);
+        this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
+        this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
+        this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
         if (this.emailForm.invalid) {
             return;
         }
@@ -340,9 +343,9 @@ export class TemplateFroalaComponent implements OnInit {
     * @memberof TemplateFroalaComponent
     */
     public toggleBccCc(type: string): void {
-        if (type == "bcc") {
+        if (type == EmailType.Bcc) {
             this.showBcc = true;
-        } else if (type === "cc") {
+        } else if (type === EmailType.Cc) {
             this.showCc = true;
         }
     }
@@ -353,7 +356,7 @@ export class TemplateFroalaComponent implements OnInit {
     * @memberof TemplateFroalaComponent
     */
     public ngOnDestroy(): void {
-        document.querySelector('body').classList.remove('template-froala-wrapper');
+        document.querySelector('body').classList.remove('hide-chat-widget');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -422,7 +425,7 @@ export class TemplateFroalaComponent implements OnInit {
         if (this.allStaticEmails.split(',').length < this.noOfMaximumEmailsShow) {
             appendEmails(this.selectedBccEmails, 'Bcc: ');
         }
-        
+
         // Calculate hidden emails
         const totalEmails = this.getTotalEmailsCount();
         const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length;
