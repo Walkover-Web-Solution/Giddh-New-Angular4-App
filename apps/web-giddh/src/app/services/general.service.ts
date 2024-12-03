@@ -2180,12 +2180,13 @@ export class GeneralService {
             }
         );
     }
+
     /**
      * This will be use for sync with tally help documentation
      * 
      * @memberof GeneralService
      */
-    public syncWithTallyLink() : void {
+    public syncWithTally(): void {
         const url = this.router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
         const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
         window.open(cleanedUrl, '_blank');

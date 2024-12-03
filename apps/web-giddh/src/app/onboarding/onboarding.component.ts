@@ -10,6 +10,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OnboardingComponentStore } from './utility/onboarding.store';
 import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
     selector: 'onboarding-component',
@@ -55,26 +56,28 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public isGoCardlessSupportedCountry: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
-    
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+    /** Encoded URL to avoid query params */
+    public safeUrl: SafeUrl;
+
     constructor(
         private router: Router, 
         private generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
-        private componentStore: OnboardingComponentStore
+        private componentStore: OnboardingComponentStore,
+        private sanitizer: DomSanitizer
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
-    /**
-     * This will be use for sync with tally help documentation
-     * 
-     * @memberof OnboardingComponent
-     */
-    public tallyHelpDocLink(): void {
-        this.generalService.syncWithTallyLink();
+    public redirectToTallyHelpDocPage(): void {
+        this.generalService.syncWithTally();
     }
+
     public ngOnInit() {
+        this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.syncWithTallyHelpDocUrl);
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
