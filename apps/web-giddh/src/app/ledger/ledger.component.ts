@@ -329,6 +329,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
+    public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
+    public isNotLinked: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -356,7 +358,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private router: Router,
         private settingsIntegrationService: SettingsIntegrationService,
         private componentStore: BankIntegrationComponentStore,
-        private homeComponentStore: HomeComponentStore
+        private homeComponentStore: HomeComponentStore,
+        private toasty: ToasterService
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -380,7 +383,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         return this.lc.activeAccount?.parentGroups?.some(group => group.uniqueName === 'bankaccounts');
     }
     /** True if active account is bank account */
-    public isBankAccountConnected: boolean;
+    public isBankAccountConnected: boolean = false;
 
     public toggleShow() {
         this.Shown = this.Shown ? false : true;
@@ -495,9 +498,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * @memberof LedgerComponent
    */
     public openInstitutionsDialog(): void {
-        if (this.isBankAccountConnected) {
-            this.router.navigate(["/pages/settings/integration/payment"]);
-        } else {
+        // if (this.isBankAccountConnected) {
+        //     this.router.navigate(["/pages/settings/integration/payment"]);
+        // } else {
             let data = {
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
@@ -516,7 +519,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.setupGocardlessMessageListener();
                 }
             });
-        }
+        // }
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
@@ -1001,6 +1004,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
+        // When refresh bank api getting error then this code works
+        this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.openInstitutionsDialog();
+            }
+        });
+        this.isBankAccountConnected = true;
+        this.isNotLinked =false
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3157,4 +3168,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.homeComponentStore.refreshBank();
     }
 
+    public linkBankAccount(): void {
+        this.isNotLinked = false;
+        let request = { bankAccountUniqueName: this.bankAccount?.accountBankTransactionTotal?.bankResource?.uniqueName };
+            let accountForm = {
+                accountNumber: this.bankAccount?.accountBankTransactionTotal?.bankResource?.accountNumber,
+                accountUniqueName: this.bankAccount?.uniqueName,
+                paymentAlerts: []
+            };
+        this.settingsIntegrationService.updateAccount(accountForm, request)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe({
+                next: (response) => {
+                    if (response?.status === "success") {
+                        if (response?.body?.message) {
+                            this.toasty.clearAllToaster();
+                            this.toasty.successToast(response?.body?.message);
+                            this.isNotLinked = true;
+                        }
+                    }
+                },
+                error: (error) => {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(error?.message || 'Something went wrong');
+                }
+            });
+    }
 }

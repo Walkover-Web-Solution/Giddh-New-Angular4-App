@@ -480,6 +480,30 @@
                                         <i aria-hidden="true" class="icon-refresh lh-0"></i>
                                     </a>
                                     <a
+                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading"
+                                        aria-label="connect-bank"
+                                        id="connect-bank"
+                                        class="icomoon-ico d-flex align-items-center"
+                                        [matTooltip]="localeData?.connect_bank"
+                                        matTooltipClass="tooltip-black"
+                                        [matTooltipPosition]="'above'"
+                                        (click)="openInstitutionsDialog()"
+                                    >
+                                        <i  aria-hidden="true" class="icon-plus"></i>
+                                    </a>
+                                    <a
+                                        *ngIf="isBankAccountConnected && !isNotLinked && hasIntegrationScope"
+                                        aria-label="link-bank"
+                                        id="link-bank"
+                                        class="icomoon-ico d-flex align-items-center"
+                                        [matTooltip]="localeData?.link_bank"
+                                        matTooltipClass="tooltip-black"
+                                        [matTooltipPosition]="'above'"
+                                        (click)="linkBankAccount()"
+                                    >
+                                        <i aria-hidden="true" class="fa-solid fa-link"></i>
+                                    </a>
+                                    <a
                                         aria-label="show"
                                         mat-button
                                         href="javascript:void(0)"
@@ -488,6 +512,7 @@
                                         [matTooltip]="localeData?.import_statement"
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
+                                        [matTooltipPosition]="'above'"
                                         (click)="showUploadBankStatementModal()"
                                     >
                                         <i class="icon-upload lh-0"></i>
@@ -556,7 +581,7 @@
                                             alt="autopaid-icon"
                                         />
                                     </a>
-                                    <span
+                                    <!-- <span
                                         class="bank-menu"
                                         *ngIf="
                                             lc.bankTransactionsDebitData?.length ||
@@ -593,15 +618,15 @@
                                                 <span>{{ localeData?.reload_bank_transactions }}</span>
                                             </button>
                                         </mat-menu>
-                                    </span>
+                                    </span> -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
+                    <!-- <div class="d-flex justify-content-end" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
                         <button type="button" mat-stroked-button color="primary"
                             (click)="openInstitutionsDialog()">{{ isBankAccountConnected ? localeData?.re_connect_bank : localeData?.connect_bank }}</button>  
-                    </div>
+                    </div> -->
 
                     <div
                         *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen"

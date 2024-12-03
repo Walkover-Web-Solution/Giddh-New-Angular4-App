@@ -6,5 +6,6 @@
     "connect_bank": "Connect Bank",
     "no_banks_found": "Yet to add Bank Details",
     "in": "In",
-    "connected_bank": "Connected Bank"
+    "connected_bank": "Connected Bank",
+    "link_bank": "Link bank"
 }

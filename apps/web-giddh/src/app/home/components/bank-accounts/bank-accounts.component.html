@@ -28,12 +28,12 @@
                                         }}</span>
                                     <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
                                         localeData?.dr_heading
-                                        }}</span>
-                                    <span *ngIf="isBankisConnected"><i class="icon-tick"
+                                        }}</span>&nbsp;
+                                    <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary"
                                         [tooltip]="localeData?.connected_bank"></i>
                                     </span>
-                                    <span *ngIf="!isBankisConnected" (click)="openInstitutionsDialog()"><i class="icon-plus"
-                                        [tooltip]="localeData?.connect_bank"></i>
+                                    <span *ngIf="!bankaccount.accountBankTransactionTotal"><i class="icon-plus"
+                                        [tooltip]="localeData?.connect_bank" (click)="openInstitutionsDialog(bankaccount)"></i>
                                     </span>
                                 </span>
                             </p>
