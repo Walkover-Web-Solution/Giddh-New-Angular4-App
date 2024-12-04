@@ -362,7 +362,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
 
-                if (this.isEInvoiceEnabled != undefined && this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
+                if (this.isEInvoiceEnabled !== undefined && this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
                     this.componentStore.getInvoiceSettings();
                 }
                 this.setInitialAdvanceFilter(true);
