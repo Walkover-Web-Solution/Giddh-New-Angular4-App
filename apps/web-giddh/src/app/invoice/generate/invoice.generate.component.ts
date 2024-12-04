@@ -77,7 +77,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public showEditMode: boolean = false;
     /** get voucher details response object*/
     public voucherDetails: any;
-    /** selected pending voucher */
+    /** Selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
     /** is get voucher API call in progress */
     public voucherDetailsInProcess$: Observable<boolean> = of(false);
