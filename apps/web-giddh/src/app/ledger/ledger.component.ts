@@ -53,6 +53,7 @@ import { InstitutionsListComponent } from '../shared/bank-integration/institutio
 import { SettingsIntegrationService } from '../services/settings.integration.service';
 import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
 import { HomeComponentStore } from '../home/home.store';
+import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
 
 @Component({
     selector: 'ledger',
@@ -330,7 +331,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
     public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
-    public isNotLinked: boolean = false;
+    public isNotLinked: boolean;
+     /** List of connected bank accounts */
+     public connectedBankAccounts: any[] = [];
+     public refresh: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -383,7 +387,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         return this.lc.activeAccount?.parentGroups?.some(group => group.uniqueName === 'bankaccounts');
     }
     /** True if active account is bank account */
-    public isBankAccountConnected: boolean = false;
+    public isBankAccountConnected: boolean;
 
     public toggleShow() {
         this.Shown = this.Shown ? false : true;
@@ -1010,8 +1014,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.openInstitutionsDialog();
             }
         });
-        this.isBankAccountConnected = true;
-        this.isNotLinked =false
+        this.isBankAccountConnected = false;
+        this.isNotLinked = false
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3156,6 +3160,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.isBankAccountConnected = true;
                 }
             }
+            this.connectedBankAccounts.forEach(bankAccount => {
+                if (bankAccount?.bankResource?.payor?.length > 0) {
+                    bankAccount?.bankResource?.payor.forEach(payor => {
+                        
+                    });
+                }
+            });
         });
     }
 
@@ -3166,14 +3177,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public refreshBankTransactions(): void {
         this.homeComponentStore.refreshBank();
+        this.refresh = true;
     }
 
-    public linkBankAccount(): void {
-        this.isNotLinked = false;
-        let request = { bankAccountUniqueName: this.bankAccount?.accountBankTransactionTotal?.bankResource?.uniqueName };
+    public linkBankAccount(bankAccount: any): void {
+        this.isNotLinked = true;
+        let request = { bankAccountUniqueName: bankAccount?.accountBankTransactionTotal?.bankResource?.uniqueName };
             let accountForm = {
-                accountNumber: this.bankAccount?.accountBankTransactionTotal?.bankResource?.accountNumber,
-                accountUniqueName: this.bankAccount?.uniqueName,
+                accountNumber: bankAccount?.accountBankTransactionTotal?.bankResource?.accountNumber,
+                accountUniqueName: bankAccount?.uniqueName,
                 paymentAlerts: []
             };
         this.settingsIntegrationService.updateAccount(accountForm, request)
@@ -3184,7 +3196,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         if (response?.body?.message) {
                             this.toasty.clearAllToaster();
                             this.toasty.successToast(response?.body?.message);
-                            this.isNotLinked = true;
+                            // this.isNotLinked = true;
                         }
                     }
                 },
@@ -3194,4 +3206,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             });
     }
+    public openDialog(): void {
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        }
+        const dialogRef = this.dialog.open(BankLinkComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          
+        });
+      }
 }

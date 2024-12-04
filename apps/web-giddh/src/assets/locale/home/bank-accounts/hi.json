@@ -7,5 +7,6 @@
     "no_banks_found": "बैंक विवरण जोड़ना शेष है",
     "in":"में",
     "connected_bank": "जुड़ा हुआ बैंक",
-    "link_bank": "लिंक बैंक"
+    "link_bank": "लिंक बैंक",
+    "transaction_last_fetchAt": "अंतिम बार प्राप्त किया गया:"
 }

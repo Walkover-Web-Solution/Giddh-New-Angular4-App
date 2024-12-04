@@ -70,6 +70,7 @@ import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module'
 import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
 import { MatListModule } from '@angular/material/list';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
 
 @NgModule({
     declarations: [
@@ -95,7 +96,8 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
         OtherSettingsComponent,
         CreateBranchComponent,
         SettingCampaignComponent,
-        InstitutionsListComponent
+        InstitutionsListComponent,
+        BankLinkComponent
     ],
     imports: [
         CommonModule,

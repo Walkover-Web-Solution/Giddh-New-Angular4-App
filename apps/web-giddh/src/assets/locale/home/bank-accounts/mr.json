@@ -7,5 +7,6 @@
     "no_banks_found": "अद्याप बँक तपशील जोडा",
     "in":"मध्ये",
     "connected_bank": "जोडलेली बँक",
-    "link_bank": "लिंक बँक"
+    "link_bank": "लिंक बँक",
+    "transaction_last_fetchAt": "व्यवहार शेवटचे मिळवले येथे:"
 }

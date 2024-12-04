@@ -17,7 +17,10 @@
                 <cdk-virtual-scroll-viewport [itemSize]="61" *ngIf="!isLoading && bankAccounts?.length > 0"
                     class="virtual-group-list overflow-x-hidden" tabindex="0">
                     <div class="wrap-single-bank-detail">
-                        <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts">
+                        <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts"
+                            [tooltip]="getLastFetchTooltip(bankaccount)"
+                            matTooltipPosition="above"
+                            >
                             <p class="bank-name">{{ bankaccount.name }}</p>
                             <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
                                 <span>{{ localeData?.in_giddh }}</span>
@@ -29,7 +32,7 @@
                                     <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
                                         localeData?.dr_heading
                                         }}</span>&nbsp;
-                                    <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary"
+                                    <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary cursor-pointer"
                                         [tooltip]="localeData?.connected_bank"></i>
                                     </span>
                                     <span *ngIf="!bankaccount.accountBankTransactionTotal"><i class="icon-plus"

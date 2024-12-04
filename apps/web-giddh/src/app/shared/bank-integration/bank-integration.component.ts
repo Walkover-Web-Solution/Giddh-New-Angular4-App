@@ -295,6 +295,7 @@ export class BankIntegrationComponent implements OnInit {
             this.isLoading = false;
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
+                console.log(this.connectedBankAccounts)
 
                 this.connectedBankAccounts.forEach(bankAccount => {
                     if (bankAccount?.bankResource?.payor?.length > 0) {

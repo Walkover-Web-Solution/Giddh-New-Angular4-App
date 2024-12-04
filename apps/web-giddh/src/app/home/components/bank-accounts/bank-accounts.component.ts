@@ -229,4 +229,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
     }
+    getLastFetchTooltip(bankaccount: any): string {
+        if (bankaccount.transactionLastFetchedAt) {
+            // Assuming lastFetchAt is a timestamp or date string from your API
+            const lastFetchDate = new Date(bankaccount.transactionLastFetchedAt);
+            return `${this.localeData?.transaction_last_fetchAt}: ${lastFetchDate.toLocaleString()}`;
+        }
+        return this.localeData?.transaction_last_fetchAt || '';
+    }
 }
