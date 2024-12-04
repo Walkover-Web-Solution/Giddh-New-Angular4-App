@@ -111,6 +111,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         if (assignRoleEntryUniqueName) {
             this.store.dispatch(this.accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
             this.waitAndReloadCompany();
+            setTimeout(() => {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+            }, 500);
         }
     }
 
@@ -141,6 +144,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public waitAndReloadCompany() {
         setTimeout(() => {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            setTimeout(() => {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+            }, 500);
         }, 2000);
     }
 

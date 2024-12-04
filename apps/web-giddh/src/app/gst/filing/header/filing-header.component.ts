@@ -18,6 +18,7 @@ import { GstReport } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
+import { RestrictedModules } from '../../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -61,6 +62,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
     public GstAsidePaneState: string = 'out';
     public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
@@ -91,6 +94,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
+    /** Active company details */
+    public activeCompany: any = null;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private store: Store<AppState>,
@@ -106,12 +113,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.activeCompany = response;
+        });
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
             if (this.holdActiveRoute) {
@@ -362,5 +373,14 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to },
                 queryParamsHandling: 'merge'
             });
+    }
+
+    /**
+    * Navigates to the page for buy plan.
+    * @memberof FilingHeaderComponent
+    * @param subscriptionId
+    */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 }
