@@ -725,7 +725,6 @@ export class GeneralService {
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
-        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -733,8 +732,7 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons,
-            actionBtnWrapperCssClass
+            buttons
         };
     }
 
