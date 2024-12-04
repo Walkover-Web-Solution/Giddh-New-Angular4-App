@@ -48,7 +48,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         this.exportForm = this.formBuilder.group({
             copyTypes: [''],
             recipients: [''],
-            mergePdf: new FormControl<boolean>(false)
+            mergePdf: new FormControl<boolean>(false, { nonNullable: true })
         });
 
         this.getRecipientEmail();
@@ -111,16 +111,17 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         }
 
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
-        let postRequest: any;
         getRequest.from = this.inputData?.advanceFilters?.from;
         getRequest.to = this.inputData?.advanceFilters?.to;
         getRequest.type = this.inputData?.voucherType;
         getRequest.mail = sendMail;
         getRequest.q = (this.inputData?.advanceFilters?.q) ? this.inputData?.advanceFilters?.q : "";
 
-        postRequest = cloneDeep(this.inputData?.advanceFilters);
-        postRequest.uniqueNames = this.inputData?.voucherUniqueNames;
-        postRequest.mergePdf = this.exportForm.value?.mergePdf;
+        const postRequest = {
+            ...cloneDeep(this.inputData?.advanceFilters),
+            mergePdf: this.exportForm.get('mergePdf')?.value ?? false,
+            uniqueNames: this.inputData?.voucherUniqueNames ?? []
+        };
 
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             postRequest.copyTypes = this.exportForm.value?.copyTypes;

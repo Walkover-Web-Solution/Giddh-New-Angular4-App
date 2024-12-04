@@ -18,14 +18,15 @@
                 <mat-radio-group name="mergePdf" formControlName="mergePdf">
                     <mat-radio-button
                         color="primary"
-                        value="false"
-                        [checked]="true"
+                        [value]="false"
+                        aria-label="Export as multiple PDFs in single zip file"
                     >
                         {{ localeData?.multiple_pdf }}
                     </mat-radio-button>
                     <mat-radio-button
                         color="primary"
-                        value="true"
+                        [value]="true"
+                        aria-label="Export as single PDF"
                     >
                         {{ localeData?.single_pdf }}
                     </mat-radio-button>
