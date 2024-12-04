@@ -1186,9 +1186,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(item.additional?.variant?.uniqueName);
                         transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(false);
                         transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(item.stock.taxInclusive);
-
+                        transactionFormGroup.get('stock.hasVariants')?.patchValue(item.stock.hasVariants);
                         this.stockUnits[entryIndex] = observableOf(item.stock.unitRates);
-                        this.componentStore.getStockVariants({ q: item.additional.stock.uniqueName, index: entryIndex, autoSelectVariant: false });
                     } else {
                         this.stockVariants[entryIndex] = observableOf([]);
                         this.stockUnits[entryIndex] = observableOf([]);
@@ -2278,7 +2277,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         customField2: this.formBuilder.group({
                             key: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.key : ''],
                             value: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.value : '']
-                        }),
+                        }),      
                         hasVariants: [entryData ? entryData?.transactions[0]?.stock?.hasVariants : false]
                     })
                 })
