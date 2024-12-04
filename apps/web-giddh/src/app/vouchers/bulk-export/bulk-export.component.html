@@ -14,7 +14,7 @@
     <div mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
         <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
-            <div class="pd-b15 mr-b15">
+            <div class="pd-b1 mr-b15">
                 <mat-radio-group name="mergePdf" formControlName="mergePdf">
                     <mat-radio-button
                         color="primary"
