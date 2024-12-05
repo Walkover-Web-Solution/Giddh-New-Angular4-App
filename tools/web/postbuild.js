@@ -24,6 +24,25 @@ for (var i = 0; i < process.argv.length; i++) {
 }
 
 const versionFilePath = path.join(__dirname, rootDirectiory, 'version.json');
+const indexFilePath = path.join(__dirname, rootDirectiory, 'index.html');
+const newIndexFilePath = path.join(__dirname, rootDirectiory, 'index.php');
+
+// Add PHP script to be inserted at the beginning
+const phpScript = `<?php
+    $apiUrl = "https://apitest.giddh.com/white-label";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    if ($response === false) {
+        echo "Error: " . curl_error($ch);
+    } else {
+        $data = json_decode($response, true);
+    }
+    print_r($data);
+    curl_close($ch);
+?>
+`;
 
 let mainHash = '';
 let mainBundleFile = '';
@@ -45,6 +64,7 @@ readDir(path.join(__dirname, rootDirectiory))
         }
 
         console.log(`Writing version and hash to ${versionFilePath}`);
+        console.log(`Index ${indexFilePath}`);
 
         // write current version and hash into the version.json file
         const src = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
@@ -63,6 +83,32 @@ readDir(path.join(__dirname, rootDirectiory))
             .then(mainFileData => {
                 const replacedFile = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
                 return writeFile(mainFilepath, replacedFile);
+            });
+    }).then(() => {
+        // Read index.html and convert to PHP
+        console.log('Converting index.html to index.php...');
+        return readFile(indexFilePath, 'utf8')
+            .then(indexContent => {
+                // Combine PHP script with existing HTML content
+                const newContent = phpScript + indexContent;
+
+                // Write the new index.php file
+                return writeFile(newIndexFilePath, newContent)
+                    .then(() => {
+                        console.log('Successfully created index.php');
+                        // Delete the original index.html
+                        return new Promise((resolve, reject) => {
+                            fs.unlink(indexFilePath, (err) => {
+                                if (err) {
+                                    console.log('Error deleting index.html:', err);
+                                  reject(err);
+                                } else {
+                                    console.log('Successfully deleted index.html');
+                                    resolve();
+                                }
+                            });
+                        });
+                    });
             });
     }).catch(err => {
         console.log('Error with post build:', err);
