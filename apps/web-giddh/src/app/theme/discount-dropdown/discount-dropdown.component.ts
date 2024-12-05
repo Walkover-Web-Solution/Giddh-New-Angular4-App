@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: "discount-dropdown",
@@ -15,6 +16,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public selectedDiscountsList: any[] = [];
     /** Amount for discount */
     @Input() public amount: any;
+    /** Holds active company decimal place 2 or 4 */
+    @Input() public companyDecimalPlaces: number = 2;
     /** Account currency */
     @Input() public currency: any;
     /* This will hold common JSON data */
@@ -35,7 +38,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     public totalDiscountAmount: number = 0;
 
     constructor(
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private generalService: GeneralService
     ) {
         this.discountForm = this.formBuilder.group({
             percentage: [''],
@@ -160,6 +164,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         }
+        this.totalDiscountAmount = this.generalService.roundOffValueByCompanyDecimalPlace(this.totalDiscountAmount, this.companyDecimalPlaces);
 
         this.emitSelectedDiscounts();
     }
