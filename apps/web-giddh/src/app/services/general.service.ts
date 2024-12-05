@@ -2168,15 +2168,17 @@ export class GeneralService {
      *
      * @param {Params} queryParams
      * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @param {boolean} [skipLocationChange=false]
      * @memberof GeneralService
      */
-    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge', skipLocationChange: boolean = false): void {
         this.router.navigate(
             [],
             {
                 relativeTo: this.activatedRoute,
                 queryParams,
-                queryParamsHandling: queryParamsHandling
+                queryParamsHandling: queryParamsHandling, // Merge new parameters with existing ones
+                skipLocationChange: skipLocationChange // If true, the URL won't be added to browser history
             }
         );
     }
