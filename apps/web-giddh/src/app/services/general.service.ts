@@ -2168,7 +2168,7 @@ export class GeneralService {
      *
      * @param {Params} queryParams
      * @param {QueryParamsHandling} [queryParamsHandling='merge']
-     * @param {boolean} [skipLocationChange=false]
+     * @param {boolean} [replaceUrl=true]
      * @memberof GeneralService
      */
     public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge', replaceUrl: boolean = true): void {
