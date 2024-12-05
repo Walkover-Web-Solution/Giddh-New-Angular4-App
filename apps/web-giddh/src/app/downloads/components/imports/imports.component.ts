@@ -356,10 +356,9 @@ export class ImportsComponent implements OnInit, OnDestroy {
      * Downloads Excel file using window.open approach
      * @param blob The blob data
      * @param fileName The name of the file
-     * @param mimeType The mime type of the file
      * @memberof ImportsComponent
      */
-    private downloadExcelFile(blob: Blob, fileName: string, mimeType: string) {
+    private downloadExcelFile(blob: Blob, fileName: string) {
         const win = window.open('', '_blank');
         if (win) {
             const reader = new FileReader();
@@ -402,7 +401,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return this.downloadExcelFile(blob, 'error_sheet.xlsx', 'application/vnd.ms-excel');
+                return this.downloadExcelFile(blob, 'error_sheet.xlsx');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
@@ -422,7 +421,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                this.downloadExcelFile(blob, 'success_sheet.xlsx', 'application/vnd.ms-excel');
+                return this.downloadExcelFile(blob, 'success_sheet.xlsx');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
