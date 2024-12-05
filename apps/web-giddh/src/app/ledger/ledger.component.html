@@ -465,7 +465,7 @@
 
                                 <div class="d-flex">
                                     <a
-                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading && isBankAccountConnected && linkBankAccount"
+                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading && isBankAccountConnected && !linked"
                                         aria-label="refresh-bank-transactions"
                                         mat-button
                                         href="javascript:void(0)"
@@ -480,7 +480,7 @@
                                         <i aria-hidden="true" class="icon-refresh lh-0"></i>
                                     </a>
                                     <a
-                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading && !isBankAccountConnected && !linkBankAccount && !refresh"
+                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading && !isBankAccountConnected"
                                         aria-label="connect-bank"
                                         id="connect-bank"
                                         class="icomoon-ico d-flex align-items-center"
@@ -492,7 +492,7 @@
                                         <i  aria-hidden="true" class="icon-plus"></i>
                                     </a>
                                     <a
-                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading"
+                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading && isBankAccountConnected && !linked"
                                         aria-label="link-bank"
                                         id="link-bank"
                                         class="icomoon-ico d-flex align-items-center"
@@ -502,7 +502,7 @@
                                     >
                                     <!--  !isBankAccountConnected-->
                                         <!-- <i aria-hidden="true" class="fa-solid fa-link"></i> -->
-                                        <button mat-button (click)="openDialog()"><i aria-hidden="true" class="fa-solid fa-link"></i></button>
+                                        <button mat-button (click)="openDialog()"><i aria-hidden="true" class="icon-link"></i></button>
                                     </a>
                                     <a
                                         aria-label="show"

@@ -335,6 +335,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      /** List of connected bank accounts */
      public connectedBankAccounts: any[] = [];
      public refresh: boolean;
+     public linked: boolean;
+     public connectedBankLists: any
+     public updatedData: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1014,8 +1017,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.openInstitutionsDialog();
             }
         });
-        this.isBankAccountConnected = false;
-        this.isNotLinked = false
+        this.isBankAccountConnected = true;
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3155,18 +3157,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isBankAccountConnected = false;
         this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
             if (response?.body) {
+                this.connectedBankLists = response.body
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
                 if (result) {
                     this.isBankAccountConnected = true;
                 }
             }
-            this.connectedBankAccounts.forEach(bankAccount => {
-                if (bankAccount?.bankResource?.payor?.length > 0) {
-                    bankAccount?.bankResource?.payor.forEach(payor => {
-                        
-                    });
-                }
-            });
         });
     }
 
@@ -3180,36 +3176,36 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.refresh = true;
     }
 
-    public linkBankAccount(bankAccount: any): void {
-        this.isNotLinked = true;
-        let request = { bankAccountUniqueName: bankAccount?.accountBankTransactionTotal?.bankResource?.uniqueName };
-            let accountForm = {
-                accountNumber: bankAccount?.accountBankTransactionTotal?.bankResource?.accountNumber,
-                accountUniqueName: bankAccount?.uniqueName,
-                paymentAlerts: []
-            };
-        this.settingsIntegrationService.updateAccount(accountForm, request)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe({
-                next: (response) => {
-                    if (response?.status === "success") {
-                        if (response?.body?.message) {
-                            this.toasty.clearAllToaster();
-                            this.toasty.successToast(response?.body?.message);
-                            // this.isNotLinked = true;
-                        }
-                    }
-                },
-                error: (error) => {
-                    this.toasty.clearAllToaster();
-                    this.toasty.errorToast(error?.message || 'Something went wrong');
-                }
-            });
-    }
+    // public linkBankAccount(bankAccount: any): void {
+    //     this.isNotLinked = true;
+    //     let request = { bankAccountUniqueName: bankAccount?.accountBankTransactionTotal?.bankResource?.uniqueName };
+    //         let accountForm = {
+    //             accountNumber: bankAccount?.accountBankTransactionTotal?.bankResource?.accountNumber,
+    //             accountUniqueName: bankAccount?.uniqueName,
+    //             paymentAlerts: []
+    //         };
+    //     this.settingsIntegrationService.updateAccount(accountForm, request)
+    //         .pipe(takeUntil(this.destroyed$))
+    //         .subscribe({
+    //             next: (response) => {
+    //                 if (response?.status === "success") {
+    //                     if (response?.body?.message) {
+    //                         this.toasty.clearAllToaster();
+    //                         this.toasty.successToast(response?.body?.message);
+    //                         // this.isNotLinked = true;
+    //                     }
+    //                 }
+    //             },
+    //             error: (error) => {
+    //                 this.toasty.clearAllToaster();
+    //                 this.toasty.errorToast(error?.message || 'Something went wrong');
+    //             }
+    //         });
+    // }
     public openDialog(): void {
         let data = {
-            localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData
+            bankList: [this.connectedBankLists, this.updatedData],
+            accountUniqueName: this.lc.accountUnq
         }
         const dialogRef = this.dialog.open(BankLinkComponent, {
             data: data,
@@ -3218,9 +3214,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
+        const updatedData = data.bankList.map((item:any) => ({
+            label: "Sandbox Finance ****4631",
+            value: "303kik5qcpfe6gdzykgwiar8j3tit7",
+            additional: {...item},
+          }));
+          console.log(updatedData, 'done')
     
         dialogRef.afterClosed().subscribe(result => {
-          
+
         });
+        
       }
 }

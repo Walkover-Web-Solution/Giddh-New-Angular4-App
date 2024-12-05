@@ -18,7 +18,7 @@
                     class="virtual-group-list overflow-x-hidden" tabindex="0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts"
-                            [tooltip]="getLastFetchTooltip(bankaccount)"
+                            [matTooltip]="bankaccount.transactionLastFetchedAt"
                             matTooltipPosition="above"
                             >
                             <p class="bank-name">{{ bankaccount.name }}</p>
@@ -32,10 +32,10 @@
                                     <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
                                         localeData?.dr_heading
                                         }}</span>&nbsp;
-                                    <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary cursor-pointer"
+                                    <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary pd-r1"
                                         [tooltip]="localeData?.connected_bank"></i>
                                     </span>
-                                    <span *ngIf="!bankaccount.accountBankTransactionTotal"><i class="icon-plus"
+                                    <span *ngIf="!bankaccount.accountBankTransactionTotal"><i class="icon-plus text-primary cursor-pointer pd-r1"
                                         [tooltip]="localeData?.connect_bank" (click)="openInstitutionsDialog(bankaccount)"></i>
                                     </span>
                                 </span>

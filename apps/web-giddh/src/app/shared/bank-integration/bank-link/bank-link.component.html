@@ -1,28 +1,33 @@
 <ng-container
-
+        appTranslate
+        [file]="'settings/integration'"
+        (localeData)="localeData = $event"
+        (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="modal-header d-flex align-items-center">
-        <h3></h3>
+        <h3>{{ localeData?.payment?.link_bank }}</h3>
         <button class="close" mat-dialog-close>×</button>
     </div>
-    <giddh-page-loader></giddh-page-loader>
+    <!-- <giddh-page-loader></giddh-page-loader> -->
     <mat-dialog-content class="banklink-dialog-body">
-        <!-- class="banklink-dialog-body" *ngIf="!(institutionsListInProgress$ | async)" -->
         <div class="w-100 container pd-t15 pd-b15">
             <div class="row">
                 <div class="col-12 bank-link">
-                    <div class="col-md-4" *ngFor="let bankAccount of connectedBankAccounts;">
+                    <div class="col-8">
                         <span class="width-100 view-only-field inline"></span>
-                        <dropdown-field 
-                            [label]="name"
-                            [defaultValue]="defaultBank" 
-                            [cssClass]="'input-background'" 
-                            [name]="bankDropdown" 
-                            [placeholder]="banks"
-                            [options]="getAllBankAccount()" 
-                            (selectedOption)="getAllBankAccount()"
-                            >
-                        </dropdown-field>
+                        <dropdown-field
+                                    [name]="'banks'"
+                                    [autocomplete]="'disabled'"
+                                    [label]="localeData?.payment?.bank_list"
+                                    [placeholder]="localeData?.payment?.banks"
+                                    [options]="options"
+                                    (selectedOption)="selectedOption($event)"
+                                    [defaultValue]="selectedBanks"
+                                >
+                                </dropdown-field>
+                    </div>
+                    <div>
+                        <button mat-stroked-button class="mr-15" type="submit">Submit</button>
                     </div>
                 </div>
             </div>
