@@ -7,9 +7,8 @@ import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter' // load on demand
 dayjs.extend(isSameOrAfter) // use plugin
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
-import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -361,12 +360,11 @@ export class ImportsComponent implements OnInit, OnDestroy {
      * @memberof ImportsComponent
      */
     private downloadExcelFile(blob: Blob, fileName: string, mimeType: string) {
-        if (Configuration.isElectron) {
-            const win = window.open('', '_blank');
-            if (win) {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    win.document.write(`
+        const win = window.open('', '_blank');
+        if (win) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                win.document.write(`
                         <html>
                             <body>
                                 <script>
@@ -385,12 +383,9 @@ export class ImportsComponent implements OnInit, OnDestroy {
                             </body>
                         </html>
                     `);
-                    win.document.close();
-                };
-                reader.readAsDataURL(blob);
-            }
-        } else {
-            return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                win.document.close();
+            };
+            reader.readAsDataURL(blob);
         }
     }
 
