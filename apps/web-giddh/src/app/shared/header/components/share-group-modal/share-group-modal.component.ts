@@ -59,7 +59,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
                 if (activeCompany?.moduleRestrictionStatus) {
                     let module = activeCompany.moduleRestrictionStatus.find(
-                        (module) => module?.moduleName === 'Users'
+                        (module) => module?.moduleName === this.restrictedModules.Users
                     );
                     this.remainingUsers = module.remainingUsers;
                 }

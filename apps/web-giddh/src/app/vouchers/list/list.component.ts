@@ -31,48 +31,9 @@ import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
-
-// invoice-table
-export interface PeriodicElement {
-    invoice: string;
-    position: number;
-    customer: string;
-    invoicedate: string;
-    amount: string;
-    balance: string;
-    duedate: string;
-    invoicestatus: string;
-    status: string;
-}
-
-// pending-table
-export interface PeriodicElementPending {
-    date: string;
-    position: number;
-    particular: string;
-    amount: string;
-    account: string;
-    total: string;
-    description: string;
-}
-
-// bill-table
-export interface PeriodicElementBill {
-    bill: string;
-    position: number;
-    vendor: string;
-    billdate: string;
-    order: string;
-    amount: string;
-    duedate: string;
-    status: string;
-}
-// bill-table
-const BILL_DATA: PeriodicElementBill[] = [
-    { position: 1, bill: 'Hydrogen', vendor: 'Ashish RANJAN', billdate: 'H', order: 'H', amount: '', duedate: '', status: '' }
-];
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -125,8 +86,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** Holds advance search dailog template reference */
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
-    /** Holds export dailog template reference */
-    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Holds Payment template reference */
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Holds adjust payment dailog template reference */
@@ -299,15 +258,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** Holds current route query parameters */
     public queryParams: any = {};
-    /** True if today selected */
-    public todaySelected: boolean = false;
     /** True if voucher generate in process */
     public generateVoucherInProcess: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
     /** Duplicate copy of entry unique names for bulk action variable */
     public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
-    /** selected pending voucher */
+    /** Selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
     /** Selected account unique name */
     public selectedAccountUniqueName: string = '';
@@ -324,12 +281,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Ledger Data */
     public ledgersData: any[] = [];
     /** Holds voucher type for credit/debit note*/
-    public voucherTypes: any = [
-        { label: 'Credit Note', value: 'credit note' },
-        { label: 'Debit Note', value: 'debit note' }
-    ];
+    public voucherTypes: any[] = [];
     /** Holds voucher type enum */
     public voucherTypeEnum: any = VoucherTypeEnum;
+    /** Returns true if all selected pending vouchers have the same account */
+    public get hasSameVoucherAccount(): boolean {
+        if (!this.selectedPendingVouchers?.length) {
+            return false;
+        }
+        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
+        return this.selectedPendingVouchers.every(voucher =>
+            voucher?.account?.uniqueName === firstAccountUniqueName
+        );
+    }
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -368,6 +334,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -377,7 +344,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.setInitialAdvanceFilter(true);
         this.getInvoiceSettings();
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
@@ -400,6 +367,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
 
                 this.getSelectedTabIndex();
+                this.ledgerSearchRequest.page = 1;
+                this.ledgerSearchRequest.count = PAGINATION_LIMIT;
                 // 'pending', 'settings', 'templates' These tabs are not voucher list
                 let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
                 if (this.universalDate && !tab.includes(this.activeModule)) {
@@ -407,7 +376,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getVoucherBalances();
                 }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
-                    this.ledgersData = [];
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
                 }
@@ -474,6 +442,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
 
                 if (this.queryParams.page) {
+                    if (this.activeModule === 'list') {
+                        this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/' + this.activeModule], {
+                            queryParams: {
+                                page: this.queryParams.page,
+                                from: this.advanceFilters.from,
+                                to: this.advanceFilters.to
+                            }
+                        });
+                    }
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
@@ -659,34 +636,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.universalPendingDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-
-                setTimeout(() => {
-                    this.componentStore.todaySelected$.pipe(take(1)).subscribe(response => {
-                        this.todaySelected = response;
-                        if (this.universalDate && !this.todaySelected) {
-                            this.ledgerSearchRequest.dateRange = this.universalDate;
-                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.isUniversalDateApplicable = true;
-                            this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                        } else {
-                            this.universalDate = [];
-                            this.ledgerSearchRequest.dateRange = this.universalDate;
-                            this.ledgerSearchRequest.from = "";
-                            this.ledgerSearchRequest.to = "";
-                            this.isUniversalDateApplicable = false;
-                        }
-                        this.getLedgersOfInvoice();
-                    });
-                }, 100);
+                if (this.universalDate) {
+                    this.ledgerSearchRequest.dateRange = this.universalDate;
+                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.isUniversalDateApplicable = true;
+                    this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                } else {
+                    this.universalDate = [];
+                    this.ledgerSearchRequest.dateRange = this.universalDate;
+                    this.ledgerSearchRequest.from = "";
+                    this.ledgerSearchRequest.to = "";
+                    this.isUniversalDateApplicable = false;
+                }
+                if (this.activeModule === 'pending') {
+                    this.getLedgersOfInvoice();
+                }
             }
         });
 
         this.componentStore.pendingVoucherList$.pipe(takeUntil(this.destroyed$)).subscribe((res: GetAllLedgersForInvoiceResponse) => {
             if (res && res.results) {
-
                 let response = cloneDeep(res);
+                this.ledgersData = [];
                 this.pendingTotalResults = response?.totalItems;
                 this.selectAllPendingVouchers({ checked: false });
                 response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
@@ -700,27 +673,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     });
                 }
                 this.ledgersData = response?.results;
-                if (this.todaySelected) {
-                    this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
-                    this.ledgerSearchRequest.from = response.fromDate;
-                    this.ledgerSearchRequest.to = response.toDate;
-
-                    this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                }
-
             }
         });
 
         // listen for bulk invoice generate and successfully generate and do the things
         this.componentStore.isBulkInvoiceGenerated$.subscribe(result => {
             if (result) {
-                this.selectAllPendingVouchers(false);
-                this.getLedgersOfInvoice();
-            }
-        });
-        this.componentStore.isBulkInvoiceGeneratedWithoutError$.subscribe(result => {
-            if (result) {
+                this.selectAllPendingVouchers({ checked: false });
                 this.getLedgersOfInvoice();
             }
         });
@@ -933,15 +892,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
-                if (this.voucherType === 'receipt' && this.activeModule === 'list') {
+                if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'receipt' && this.activeModule === 'pending') {
+                } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
                 }
             } else if (this.activeTabGroup === 4) {
-                if (this.voucherType === 'payment' && this.activeModule === 'list') {
+                if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'payment' && this.activeModule === 'pending') {
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
                 }
             }
@@ -1074,18 +1033,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
-                    voucherType = "receipt";
+                    voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "list";
                 } else if (selectedTabIndex === 1) {
-                    voucherType = "receipt";
+                    voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "pending";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
-                    voucherType = "payment";
+                    voucherType = this.voucherTypeEnum.payment;
                     activeModule = "list";
                 } else if (selectedTabIndex === 1) {
-                    voucherType = "payment";
+                    voucherType = this.voucherTypeEnum.payment;
                     activeModule = "pending";
                 }
             }
@@ -1430,7 +1389,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(this.bulkExport, {
+        this.dialog.open(BulkExportComponent, {
             width: '600px',
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
@@ -2254,17 +2213,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
         }
     }
+
     /**
-     *Fetch ledgers for invoices.
+     * Fetch ledgers for invoices.
      *
      * @memberof VoucherListComponent
      */
     public getLedgersOfInvoice(): void {
-        this.dispatchLedgerRequest();
+        this.fetchLedgers();
 
         if (this.isLedgerDataEmpty()) {
             this.decrementPageIfNeeded();
-            this.dispatchLedgerRequest();
+            this.fetchLedgers();
         }
 
         this.selectedPendingVouchers = [];
@@ -2276,7 +2236,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @private
      * @memberof VoucherListComponent
      */
-    private dispatchLedgerRequest(): void {
+    private fetchLedgers(): void {
         this.store.dispatch(
             this.invoiceActions.GetAllLedgersForInvoice(
                 this.prepareQueryParamsForLedgerApi(),
@@ -2349,12 +2309,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public resetDateSearch(): void {
-        if (this.universalDate && !this.todaySelected) {
+        this.customDateSelected = false;
+        if (this.universalDate) {
             this.applyUniversalDate();
         } else {
             this.clearDateFilters();
         }
-
         this.getLedgersOfInvoice();
     }
 
@@ -2382,7 +2342,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private clearDateFilters(): void {
         this.universalDate = [];
         this.isUniversalDateApplicable = false;
-        this.customDateSelected = false;
+    }
+
+    /**
+     * This will be check account of same accouunt on selected pending vouchers
+     *
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    public isSameAccount(): boolean {
+        if (!this.selectedPendingVouchers?.length) {
+            return false;
+        }
+        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
+        return this.selectedPendingVouchers.every(voucher =>
+            voucher?.account?.uniqueName === firstAccountUniqueName
+        );
     }
 
     /**
@@ -2390,12 +2365,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      *
      * @memberof VoucherListComponent
      */
-    public previewInvoice(): void {
+    public invoiceGenerate(): void {
         const voucher = this.selectedPendingVouchers[0];
+        const uniqueNames = this.selectedPendingVouchers.map(voucher => voucher.uniqueName).join(',');
         if (voucher) {
             this.router.navigate(
                 [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
-                { queryParams: { entryUniqueNames: voucher.uniqueName } }
+                { queryParams: { entryUniqueNames: uniqueNames, voucherType: this.voucherType } }
             );
         }
     }
@@ -2408,9 +2384,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @return {*}  {boolean}
      * @memberof VoucherListComponent
      */
-    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean): boolean {
+    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean): void {
         if (this.selectedPendingVouchers?.length === 0 && typeof generateEInvoice !== 'boolean') {
-            return false;
+            return;
         }
 
         const groupedVouchers = this.groupPendingVouchersByAccount();
@@ -2427,7 +2403,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         );
 
         this.selectedPendingVouchers = [];
-        return true;
     }
 
     /**
@@ -2453,9 +2428,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @return {*}  {string[]}
      * @memberof VoucherListComponent
      */
-    private flattenGroupedVouchers(grouped: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
+    private flattenGroupedVouchers(groupedVoucher: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
         const model: string[] = [];
-        forEach(grouped, items => {
+        forEach(groupedVoucher, items => {
             items.forEach(obj => model.push(obj?.uniqueName));
         });
         return model;
@@ -2492,6 +2467,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         item.totalTooltipText = currencyConversion || '';
 
         return item;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof RatioAnalysisChartComponent
+     */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.voucherTypes = [
+                { label: this.localeData.tabs.credit_note, value: VoucherTypeEnum.creditNote },
+                { label: this.localeData.tabs.debit_note, value: VoucherTypeEnum.debitNote }
+            ];
+        }
     }
 
 }

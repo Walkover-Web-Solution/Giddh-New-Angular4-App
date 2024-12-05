@@ -18,7 +18,7 @@ import { EcommerceService } from '../../services/ecommerce.service';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
@@ -30,6 +30,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
 import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { BankIntegrationComponent } from '../../shared/bank-integration/bank-integration.component';
 
 @Component({
     selector: 'setting-integration',
@@ -202,9 +203,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-
+    
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -239,6 +238,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    /**
+    * This will be use for sync with tally help documentation
+    * 
+    * @memberof SettingIntegrationComponent
+    */
+    public redirectToTallyHelpDocPage(): void {
+        this.generalService.syncWithTally();
+    }
+    
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
@@ -1219,7 +1227,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
             }

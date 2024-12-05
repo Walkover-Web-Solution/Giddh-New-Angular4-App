@@ -477,6 +477,21 @@
 
                                 <div class="d-flex">
                                     <a
+                                        *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading"
+                                        aria-label="refresh-bank-transactions"
+                                        mat-button
+                                        href="javascript:void(0)"
+                                        id="refresh"
+                                        class="icomoon-ico d-flex align-items-center"
+                                        [matTooltip]="commonLocaleData?.app_refresh"
+                                        [matTooltipPosition]="'above'"
+                                        matTooltipClass="tooltip-black"
+                                        (click)="refreshBankTransactions()"
+                                        [disabled]="(isBankRefreshing$ | async)"
+                                    >
+                                        <i aria-hidden="true" class="icon-refresh"></i>
+                                    </a>
+                                    <a
                                         aria-label="show"
                                         mat-button
                                         href="javascript:void(0)"
@@ -599,6 +614,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-end" *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
+                        <button type="button" mat-stroked-button color="primary"
+                            (click)="openInstitutionsDialog()">{{ isBankAccountConnected ? localeData?.re_connect_bank : localeData?.connect_bank }}</button>  
+                    </div>
+
                     <div
                         *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen"
                         class="advance-search-block mr-t05"

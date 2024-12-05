@@ -3,17 +3,23 @@ import { Observable, ReplaySubject } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { BROADCAST_CHANNELS } from '../../../app.constant';
 import { CommonActions } from '../../../actions/common.actions';
+import { HomeComponentStore } from '../../home.store';
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
+import { GeneralService } from '../../../services/general.service';
+import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 
 @Component({
     selector: 'bank-accounts',
     templateUrl: 'bank-accounts.component.html',
-    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss']
+    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
+    providers: [BankIntegrationComponentStore, HomeComponentStore]
 })
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
@@ -32,12 +38,28 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** True if relogin required in any bank account */
     public reLoginRequired: boolean = false;
+    /** Holds Store refresh bank success message as observable*/
+    private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
+    /** Holds Store refresh bank loading as observable*/
+    public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
+    /** Holds Create New Account Dialog Ref */
+    public createNewAccountDialogRef: MatDialogRef<any>;
+    /** Hold reference number */
+    public referenceNumber: string = '';
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
+    /** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
         private commonAction: CommonActions,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private homeComponentStore: HomeComponentStore,
+        public dialog: MatDialog,
+        private generalService: GeneralService,
+        private componentStore: BankIntegrationComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -69,6 +91,26 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         };
+
+        this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
+            }
+        });
+
+        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile?.userEntityRoles) {
+                profile.userEntityRoles.forEach(role => {
+                    const scopes = role.role.scopes;
+                    if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
+                        this.hasIntegrationScope = true;
+                    }
+                });
+            }
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+            }
+        })
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -84,11 +126,10 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             this.reLoginRequired = (reLoginRequired?.length) ? true : false;
 
             this.isLoading = false;
-            
+
             this.changeDetectionRef.detectChanges();
         });
     }
-
     /**
      * Initiate request to open plaid popup
      *
@@ -98,8 +139,59 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
     }
 
+    /**
+     * Refresh bank transactions
+     *
+     * @memberof BankAccountsComponent
+     */
+    public refreshBankTransactions(): void {
+        this.homeComponentStore.refreshBank();
+    }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+    /**
+    * This function will use for get institutions details
+    *
+    * @param {*} element
+    * @memberof BankAccountsComponent
+    */
+    public openInstitutionsDialog(): void {
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        }
+        const dialogRef = this.dialog.open(InstitutionsListComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.referenceNumber = response;
+                this.setupGocardlessMessageListener();
+            }
+        });
+    }
+    /**
+     * This will add and Remove the listener immediately after triggering getRequisition
+     * 
+     * @memberof BankIntegrationComponent
+     */
+    public setupGocardlessMessageListener(): void {
+        const messageHandler = (event) => {
+            if (event && event.data === "GOCARDLESS") {
+                if (this.referenceNumber) {
+                    this.componentStore.getRequisition(this.referenceNumber);
+                    window.removeEventListener('message', messageHandler);
+                }
+            }
+        };
+        window.addEventListener('message', messageHandler);
     }
 }
