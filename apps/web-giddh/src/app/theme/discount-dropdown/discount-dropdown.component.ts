@@ -17,7 +17,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** Amount for discount */
     @Input() public amount: any;
     /** Holds active company decimal place 2 or 4 */
-    @Input() private companyDecimalPlaces: number = 2;
+    @Input() public companyDecimalPlaces: number = 2;
     /** Account currency */
     @Input() public currency: any;
     /* This will hold common JSON data */
