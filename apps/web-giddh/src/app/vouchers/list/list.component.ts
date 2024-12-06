@@ -1144,7 +1144,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
+        this.componentStore.globalStoreInvoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (!settings) {
                 this.componentStore.getInvoiceSettings();
             } else {
