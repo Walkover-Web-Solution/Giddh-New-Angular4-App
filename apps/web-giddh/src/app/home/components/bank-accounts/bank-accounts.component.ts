@@ -16,7 +16,6 @@ import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { SettingsIntegrationService } from '../../../services/settings.integration.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'bank-accounts',
@@ -66,8 +65,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private componentStore: BankIntegrationComponentStore,
         private settingsIntegrationService: SettingsIntegrationService,
-        private toasty: ToasterService,
-        private matTooltip : MatTooltipModule
+        private toasty: ToasterService
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }

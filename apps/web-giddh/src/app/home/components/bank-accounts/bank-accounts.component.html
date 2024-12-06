@@ -18,10 +18,11 @@
                     class="virtual-group-list overflow-x-hidden" tabindex="0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts"
-                            [matTooltip]="bankaccount.transactionLastFetchedAt"
-                            matTooltipPosition="above"
                             >
-                            <p class="bank-name">{{ bankaccount.name }}</p>
+                            <p class="bank-name" 
+                            [matTooltip]="bankaccount?.accountBankTransactionTotal?.transactionLastFetchedAt"
+                            matTooltipPosition="below">{{ bankaccount.name }}</p>
+                            {{bankaccount?.transactionLastFetchedAt}}
                             <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
                                 <span>{{ localeData?.in_giddh }}</span>
                                 <span>{{ activeCompany.baseCurrencySymbol }}

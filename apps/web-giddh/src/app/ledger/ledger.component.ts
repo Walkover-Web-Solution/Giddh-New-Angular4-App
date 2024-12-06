@@ -331,14 +331,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
     public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
-    public isNotLinked: boolean;
-     /** List of connected bank accounts */
-     public connectedBankAccounts: any[] = [];
+    /** List of connected bank accounts */
+    public connectedBankAccounts: any[] = [];
+    /** Holds  */
      public refresh: boolean;
      public linked: boolean;
      public connectedBankLists: any
      public updatedData: any;
-
+    public showAddButton: boolean = false;
+    
     constructor(
         private store: Store<AppState>,
         private ledgerActions: LedgerActions,
@@ -1018,6 +1019,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
         this.isBankAccountConnected = true;
+        this.linked = true;
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3161,6 +3163,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
                 if (result) {
                     this.isBankAccountConnected = true;
+                    this.linked = true;
                 }
             }
         });
@@ -3175,55 +3178,52 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.homeComponentStore.refreshBank();
         this.refresh = true;
     }
-
-    // public linkBankAccount(bankAccount: any): void {
-    //     this.isNotLinked = true;
-    //     let request = { bankAccountUniqueName: bankAccount?.accountBankTransactionTotal?.bankResource?.uniqueName };
-    //         let accountForm = {
-    //             accountNumber: bankAccount?.accountBankTransactionTotal?.bankResource?.accountNumber,
-    //             accountUniqueName: bankAccount?.uniqueName,
-    //             paymentAlerts: []
-    //         };
-    //     this.settingsIntegrationService.updateAccount(accountForm, request)
-    //         .pipe(takeUntil(this.destroyed$))
-    //         .subscribe({
-    //             next: (response) => {
-    //                 if (response?.status === "success") {
-    //                     if (response?.body?.message) {
-    //                         this.toasty.clearAllToaster();
-    //                         this.toasty.successToast(response?.body?.message);
-    //                         // this.isNotLinked = true;
-    //                     }
-    //                 }
-    //             },
-    //             error: (error) => {
-    //                 this.toasty.clearAllToaster();
-    //                 this.toasty.errorToast(error?.message || 'Something went wrong');
-    //             }
-    //         });
-    // }
-    public openDialog(): void {
+    /***
+     * This will open the dialog to link a bank
+     * 
+     * @memberof LedgerComponent
+     */
+    public openBankLinkDialog(): void {
         let data = {
-            bankList: [this.connectedBankLists, this.updatedData],
+            bankList: this.connectedBankLists,
             accountUniqueName: this.lc.accountUnq
         }
-        const dialogRef = this.dialog.open(BankLinkComponent, {
+        this.dialog.open(BankLinkComponent, {
             data: data,
             width: 'var(--aside-pane-width)',
             panelClass: 'subscription-sidebar',
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
-        });
-        const updatedData = data.bankList.map((item:any) => ({
-            label: "Sandbox Finance ****4631",
-            value: "303kik5qcpfe6gdzykgwiar8j3tit7",
-            additional: {...item},
-          }));
-          console.log(updatedData, 'done')
-    
-        dialogRef.afterClosed().subscribe(result => {
-
-        });
-        
-      }
+        }); 
+    }
+    /**
+     * This will use for  link the selected bank account only for plaid integration
+     *
+     * @param {*} event
+     * @param {*} bank
+     * @memberof LedgerComponent
+     */
+    public selectBankAccount(event: any, bank: any): void {
+        this.linked = false;
+        if (event?.value) {
+            let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
+            let accountForm = {
+                accountNumber: bank?.bankResource?.accountNumber,
+                accountUniqueName: event?.value,
+                paymentAlerts: []
+            };
+            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    if (response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                        this.linked = true;
+                    }
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
+    }
 }
