@@ -175,9 +175,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isHide: boolean = false;
     public visibleTransactionTypeMobile: string = "all";
     public ledgerTransactions: any;
-
-    /* New Datepicker Variables */
-
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -3176,6 +3173,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public refreshBankTransactions(): void {
         this.homeComponentStore.refreshBank(this.lc.accountUnq);
     }
+
     /***
      * This will open the dialog to link a bank
      * 
@@ -3191,6 +3189,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             panelClass: ['mat-dialog-md']
         }); 
     }
+
     /**
      * This will use for  link the selected bank account only for plaid integration
      *

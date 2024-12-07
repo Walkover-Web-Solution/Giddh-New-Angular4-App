@@ -126,7 +126,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    /**
+     * This will get all account in giddh
+     * 
+     * @memberof BankAccountsComponent
+     */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
         this.isLoading = true;
         pageNumber = pageNumber ? pageNumber : 1;
