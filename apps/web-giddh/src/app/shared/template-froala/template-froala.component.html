@@ -16,7 +16,7 @@
                     <div class="form-group position-relative">
                         <div class="d-flex border-bottom">
                             <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{localeData?.to}}</label>
-                            <div [hidden]="!allStaticEmails.length" class="w-100">
+                            <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
                                 {{allStaticEmails}}
                                 <span class="suffix-emails font-15 d-inline-block" *ngIf="isHiddenEmails.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{isHiddenEmails}}</span>
                             </div>
