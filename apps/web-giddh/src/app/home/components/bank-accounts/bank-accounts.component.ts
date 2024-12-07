@@ -14,8 +14,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
-import { SettingsIntegrationService } from '../../../services/settings.integration.service';
-import { ToasterService } from '../../../services/toaster.service';
+import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
 
 @Component({
     selector: 'bank-accounts',
@@ -44,6 +43,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
+    /** Holds Store ?????? as observable*/
+    public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
     /** Hold reference number */
@@ -52,8 +53,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
+    /** True, if is bank is connected */
     public isBankisConnected : boolean;
-    
+    /** Holds unique of bank account */
+    public bankAccountUniqueName: any[] = []
+    /** Holds unique name of selected bank */
+    private selectedBankUniqueName: string;
 
     constructor(
         private store: Store<AppState>,
@@ -64,8 +69,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private generalService: GeneralService,
         private componentStore: BankIntegrationComponentStore,
-        private settingsIntegrationService: SettingsIntegrationService,
-        private toasty: ToasterService
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -117,6 +120,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         })
+        this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.openBankLinkDialog();
+            }
+        });
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -126,7 +134,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
                 this.bankAccounts = res?.body?.results;
-                console.log(this.bankAccounts)
             }
             const reLoginRequired = this.bankAccounts?.filter(bankaccount => bankaccount.reLoginRequired);
             this.reLoginRequired = (reLoginRequired?.length) ? true : false;
@@ -165,6 +172,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     * @memberof BankAccountsComponent
     */
     public openInstitutionsDialog(bankAccount: any): void {
+        this.selectedBankUniqueName = bankAccount?.uniqueName;
+        
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,
@@ -180,7 +189,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
-                this.setupGocardlessMessageListener(bankAccount);
+                this.setupGocardlessMessageListener();
             }
         });
         
@@ -188,45 +197,37 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
      * 
-     * @memberof BankIntegrationComponent
+     * @memberof BankAccountsComponent
      */
-    public setupGocardlessMessageListener(bankAccount: any): void {
+    public setupGocardlessMessageListener(): void {
         const messageHandler = (event) => {
             if (event && event.data === "GOCARDLESS") {
                 if (this.referenceNumber) {
                     this.componentStore.getRequisition(this.referenceNumber);
-                    this.linkAccount(bankAccount);
                     window.removeEventListener('message', messageHandler);
                 }
             }
         };
         window.addEventListener('message', messageHandler);
     }
-    /**
-     * Update bank account
+
+     /***
+     * This will open the dialog to link a bank
      * 
-     * @param {*} model
-     * @param {*} request
+     * @memberof BankAccountsComponent
      */
-    public linkAccount(bankAccount: any): void {
-        let request = { bankAccountUniqueName: bankAccount?.accountBankTransactionTotal?.bankResource?.uniqueName };
-            let accountForm = {
-                accountNumber: bankAccount?.accountBankTransactionTotal?.bankResource?.accountNumber,
-                accountUniqueName: bankAccount?.uniqueName,
-                paymentAlerts: []
-            };
-        this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                if (response?.body?.message) {
-                    this.toasty.clearAllToaster();
-                    this.toasty.successToast(response?.body?.message);
-                }
-            } else {
-                this.toasty.clearAllToaster();
-                this.toasty.errorToast(response?.message);
-            }
-        });
+     public openBankLinkDialog(): void {
+        let data = {
+            accountUniqueName: this.selectedBankUniqueName
+        }
+        this.dialog.open(BankLinkComponent, {
+            data: data,
+            panelClass: ['mat-dialog-md'],
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        }); 
     }
+    
     getLastFetchTooltip(bankaccount: any): string {
         if (bankaccount.transactionLastFetchedAt) {
             // Assuming lastFetchAt is a timestamp or date string from your API

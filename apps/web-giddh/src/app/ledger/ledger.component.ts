@@ -333,12 +333,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
     /** List of connected bank accounts */
     public connectedBankAccounts: any[] = [];
-    /** Holds  */
-     public refresh: boolean;
-     public linked: boolean;
-     public connectedBankLists: any
-     public updatedData: any;
-    public showAddButton: boolean = false;
+    /** True, if refresh button is to show */
+    public refresh: boolean;
+    /** Holds list of connected bank */
+    public connectedBankLists: any;
+    /** It links the bank account */
+    public updatedData: any;
     
     constructor(
         private store: Store<AppState>,
@@ -1019,7 +1019,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
         this.isBankAccountConnected = true;
-        this.linked = true;
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3163,7 +3162,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
                 if (result) {
                     this.isBankAccountConnected = true;
-                    this.linked = true;
                 }
             }
         });
@@ -3204,7 +3202,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public selectBankAccount(event: any, bank: any): void {
-        this.linked = false;
         if (event?.value) {
             let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
             let accountForm = {
@@ -3217,7 +3214,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (response?.body?.message) {
                         this.toasty.clearAllToaster();
                         this.toasty.successToast(response?.body?.message);
-                        this.linked = true;
                     }
                 } else {
                     this.toasty.clearAllToaster();

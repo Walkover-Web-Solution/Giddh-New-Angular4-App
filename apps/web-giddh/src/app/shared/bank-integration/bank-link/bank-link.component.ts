@@ -1,11 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { SettingsIntegrationService } from '../../../services/settings.integration.service';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../../services/toaster.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import { LedgerVM } from '../../../ledger/ledger.vm';
 
 @Component({
     selector: 'bank-link',
@@ -26,76 +25,63 @@ export class BankLinkComponent implements OnInit {
     /** Hold selectedBank */
     public selectedBanksList: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public options: IOption[] = []
-    public lc: LedgerVM;
+    /** Hold options of dropdown  */
+    public bankLinks: IOption[] = []
+    /** Hold selected bank from dropdown/bankLinks */
     public selectedBank: any;
+    /** Hold all connected bank */
+    public bankAccounts: any[] = [];
+    /** True if relogin required in any bank account */
+    public reLoginRequired: boolean = false;
 
     constructor(
         private settingsIntegrationService: SettingsIntegrationService,
         private toasty: ToasterService,
         public dialog: MatDialog,
         public dialogRef: MatDialogRef<BankLinkComponent>,
-        @Inject(MAT_DIALOG_DATA) public inputData 
-    ) {
-        
-    }
-
-
+        @Inject(MAT_DIALOG_DATA) public inputData
+    ) {}
     /**
      * Initializes the component
      *
      * @memberof BankLinkComponent
      */
     public ngOnInit(): void {
-        if(!this.inputData.bankList){
-            // this.getAccounts()
+        if (!this.inputData.bankList) {
+            this.getAllBankAccounts();
+        } else {
+            this.bankLinks = this.inputData.bankList.map(item => {
+                return {
+                    label: `${item.bankName} ****${item.bankResource.accountNumber.slice(-4)}`,
+                    value: item.bankResource.accountUniqueName,
+                    additional: item
+                }
+            });
         }
-        console.log(this.inputData , 'drop')
-        
-        this.options = this.inputData.bankList.map(item => {
-            return {
-                label: `${item.bankName} ****${item.bankResource.accountNumber.slice(-4)}`, 
-                value: item.bankResource.accountUniqueName, 
-                additional: item 
-            }
-        })
-          console.log('Options:', this.options);
     }
-
-    // private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
-    //     this.isLoading = true;
-    //     pageNumber = pageNumber ? pageNumber : 1;
-    //     refresh = refresh ? refresh : 'false';
-    //     this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-    //         if (res?.status === 'success') {
-    //             this.bankAccounts = res?.body?.results;
-    //             console.log(this.bankAccounts)
-    //         }
-    //         const reLoginRequired = this.bankAccounts?.filter(bankaccount => bankaccount.reLoginRequired);
-    //         this.reLoginRequired = (reLoginRequired?.length) ? true : false;
-
-    //         this.isLoading = false;
-
-    //         this.changeDetectionRef.detectChanges();
-    //     });
-    // }
-    public selectedOption(event: { label: string; value: string; additional: any }){
-
-        console.log('Selected bank:', event);
-
+    /**
+     * This will use for select bank account
+     * 
+     * @param {*} event
+     * @memberof BankLinkComponent
+     */
+    public selectedOption(event: any): void {
         if (event?.additional) {
-            this.selectedBank = event.additional 
-            console.log('Selected bank data:', this.selectedBank);
-          }
+            this.selectedBank = event.additional
+        }
     }
-    
+    /**
+     * This will link all the connected bank accounts
+     * 
+     * @memberof BankLinkComponent
+     */
     public linkBankAccount(): void {
         let request = { bankAccountUniqueName: this.selectedBank?.bankResource?.uniqueName };
-            let accountForm = {
-                accountNumber: this.selectedBank?.bankResource?.accountNumber,
-                accountUniqueName: this.inputData?.accountUniqueName,
-                paymentAlerts: []
-            };
+        let accountForm = {
+            accountNumber: this.selectedBank?.bankResource?.accountNumber,
+            accountUniqueName: this.inputData?.accountUniqueName,
+            paymentAlerts: []
+        };
         this.settingsIntegrationService.updateAccount(accountForm, request)
             .pipe(takeUntil(this.destroyed$))
             .subscribe({
@@ -111,6 +97,28 @@ export class BankLinkComponent implements OnInit {
                     this.toasty.clearAllToaster();
                     this.toasty.errorToast(error?.message || 'Something went wrong');
                 }
+        });
+    }
+   /**
+   * This will get all connected bank accounts
+   *
+   * @memberof BankLinkComponent
+   */
+    public getAllBankAccounts(): void {
+        this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
+            if (response?.body) {
+                console.log(response);
+                
+                this.bankLinks = response.body.filter(bank => Object.keys(bank.account).length === 0).map(item => {
+                    return {
+                        label: `${item.bankName} ****${item.bankResource.accountNumber.slice(-4)}`,
+                        value: item.bankResource.uniqueName,
+                        additional: item
+                    }
+                })
+                console.log(this.bankLinks);
+                
+            }
         });
     }
 }
