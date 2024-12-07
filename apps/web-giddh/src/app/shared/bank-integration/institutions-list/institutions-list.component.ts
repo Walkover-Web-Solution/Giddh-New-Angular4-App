@@ -14,7 +14,6 @@ import { BankIntegrationComponentStore } from '../utility/bank-integration.store
     providers: [BankIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class InstitutionsListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -64,6 +63,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
                 this.filteredBanks = response.results;
                 this.changeDetection.detectChanges();
             }
+            // console.log(response)
         });
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {

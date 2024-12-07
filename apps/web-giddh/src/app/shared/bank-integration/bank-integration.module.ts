@@ -28,9 +28,10 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { SettingIntegrationPaymentModule } from "../../settings/integration/payment/setting.integration.payment.module";
 import { AccountNumberMaskModule } from "../helpers/pipes/accountNumberMaskPipe/accountNumberMask.module";
 import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
+import { BankLinkComponent } from "./bank-link/bank-link.component";
 
 @NgModule({
-    declarations: [BankIntegrationComponent, InstitutionsListComponent ],
+    declarations: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent ],
     imports: [
         CommonModule,
         MatListModule,
@@ -64,6 +65,6 @@ import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.mo
         GiddhPageLoaderModule
 
     ],
-    exports: [BankIntegrationComponent, InstitutionsListComponent]
+    exports: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent]
 })
 export class BankIntegrationModule {}

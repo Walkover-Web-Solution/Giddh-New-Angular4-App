@@ -134,7 +134,9 @@
         "institutions":"Institutions",
         "bank_list":"Bank List",
         "banks": "Banks",
-        "permission_message":"You do not have permission to access this module."
+        "permission_message":"You do not have permission to access this module.",
+        "link_bank": "Link Bank",
+        "link": "Link"  
     },
     "communication": {
         "tab_heading": "Communication"

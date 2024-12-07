@@ -1,24 +1,27 @@
 <div id="live" appTranslate [file]="'home/bank-accounts'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <mat-card>
-        <div class="d-flex justify-content-space-between align-items-center">
-            <div class="panel-heading clearfix">
-                <strong>{{ localeData?.chart_title }}</strong>
+        <div class="panel-heading d-flex justify-content-space-between">
+            <strong>{{ localeData?.chart_title }}</strong>
+        
+            <div class="dashboard-filter" [disabled]="(isBankRefreshing$ | async)" (click)="refreshBankTransactions()"
+                    aria-label="{{ localeData?.refresh_bank_accounts }}"
+                    matTooltip="{{ localeData?.refresh_bank_accounts }}"
+                    *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0">
+                    <i class="icon-refresh"></i>
             </div>
-            <button mat-icon-button class="refresh-pd" [disabled]="(isBankRefreshing$ | async)" (click)="refreshBankTransactions()"
-                aria-label="{{ localeData?.refresh_bank_accounts }}"
-                matTooltip="{{ localeData?.refresh_bank_accounts }}"
-                *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0">
-                <i class="icon-refresh"></i>
-            </button>
         </div>
         <mat-card-content class="banks-scrollbar-wrapper" *ngIf="localeData">
             <div class="bank-details-block">
                 <cdk-virtual-scroll-viewport [itemSize]="61" *ngIf="!isLoading && bankAccounts?.length > 0"
                     class="virtual-group-list overflow-x-hidden" tabindex="0">
                     <div class="wrap-single-bank-detail">
-                        <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts">
-                            <p class="bank-name">{{ bankaccount.name }}</p>
+                        <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts"
+                            >
+                            <p class="bank-name" 
+                            [matTooltip]="bankaccount?.accountBankTransactionTotal?.transactionLastFetchedAt"
+                            matTooltipPosition="right">{{ bankaccount.name }}</p>
+                            {{bankaccount?.transactionLastFetchedAt}}
                             <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
                                 <span>{{ localeData?.in_giddh }}</span>
                                 <span>{{ activeCompany.baseCurrencySymbol }}
@@ -28,7 +31,13 @@
                                         }}</span>
                                     <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
                                         localeData?.dr_heading
-                                        }}</span>
+                                        }}</span>&nbsp;
+                                    <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary pd-r1"
+                                        [tooltip]="localeData?.connected_bank"></i>
+                                    </span>
+                                    <span *ngIf="!bankaccount.accountBankTransactionTotal"><i class="icon-plus text-primary cursor-pointer pd-r1"
+                                        [tooltip]="localeData?.connect_bank" (click)="openInstitutionsDialog(bankaccount)"></i>
+                                    </span>
                                 </span>
                             </p>
                             <ng-container *ngIf="bankaccount?.accountBankTransactionTotal?.bankName">
@@ -70,11 +79,6 @@
                         (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
                 </div>
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-            </div>
-            <div class="d-flex justify-content-center">
-                <button type="button" mat-stroked-button color="primary" class="w-50"
-                    *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"
-                    (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
             </div>
         </mat-card-content>
     </mat-card>
