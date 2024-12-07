@@ -29,6 +29,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public validations: any[] = [];
     /** CSS class name to add on the field */
     @Input() public showError: boolean = false;
+    /** Holds prefix of chip */
+    @Input() public chipPrefix: string = '';
     /** Name of search field */
     @Input() public name: any = "";
     /** Holds appearance of dropdown field */
@@ -99,6 +101,19 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
+     * This function puts the focus in input
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            if (this.selectField) {
+                this.selectField.nativeElement.focus();
+            }
+        },100);
+    }
+    
+    /**
      * Filters the option based on search
      *
      * @private
@@ -126,8 +141,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public selectOption(option: any): void {
         this.allowAddChip = false;
         const selectOptionValue = option?.option?.value?.label;
-        if (selectOptionValue && !this.chipList.includes(selectOptionValue)) {
-            this.chipList.push(selectOptionValue);
+        if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
+            this.chipList.push(this.chipPrefix + selectOptionValue); 
             this.emitList();
         }
 
