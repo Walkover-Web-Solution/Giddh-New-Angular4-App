@@ -106,12 +106,12 @@ export class BankIntegrationComponent implements OnInit {
         private toasty: ToasterService,
         public dialog: MatDialog
     ) { }
-   /**
-   * This function will use for get institutions details
-   *
-   * @param {*} element
-   * @memberof BankIntegrationComponent
-   */
+    /**
+    * This function will use for get institutions details
+    *
+    * @param {*} element
+    * @memberof BankIntegrationComponent
+    */
     public openInstitutionsDialog(): void {
         let data = {
             localeData: this.localeData,
@@ -289,8 +289,6 @@ export class BankIntegrationComponent implements OnInit {
             this.isLoading = false;
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
-                console.log(this.connectedBankAccounts)
-
                 this.connectedBankAccounts.forEach(bankAccount => {
                     if (bankAccount?.bankResource?.payor?.length > 0) {
                         bankAccount?.bankResource?.payor.forEach(payor => {
