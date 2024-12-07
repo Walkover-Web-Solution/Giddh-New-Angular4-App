@@ -29,7 +29,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public validations: any[] = [];
     /** CSS class name to add on the field */
     @Input() public showError: boolean = false;
-    /** Holds prefix of chip */
+    /** Holds prefix of chip text */
     @Input() public chipPrefix: string = '';
     /** Name of search field */
     @Input() public name: any = "";
@@ -110,9 +110,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             if (this.selectField) {
                 this.selectField.nativeElement.focus();
             }
-        },100);
+        }, 100);
     }
-    
+
     /**
      * Filters the option based on search
      *
@@ -142,7 +142,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         this.allowAddChip = false;
         const selectOptionValue = option?.option?.value?.label;
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
-            this.chipList.push(this.chipPrefix + selectOptionValue); 
+            this.chipList.push(this.chipPrefix + selectOptionValue);
             this.emitList();
         }
 
