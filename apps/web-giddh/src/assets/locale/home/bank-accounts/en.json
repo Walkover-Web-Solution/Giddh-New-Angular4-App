@@ -7,6 +7,5 @@
     "no_banks_found": "Yet to add Bank Details",
     "in": "In",
     "connected_bank": "Connected Bank",
-    "link_bank": "Link bank",
-    "transaction_last_fetchAt": "Transaction Last Fetched At:"
+    "link_bank": "Link bank"
 }

@@ -135,7 +135,8 @@
         "bank_list": "बैंक सूची",
 		"banks": "बैंकों",
         "permission_message":"आपको इस मॉड्यूल तक पहुंचने की अनुमति नहीं है.",
-		"link_bank": "लिंक बैंक"
+		"link_bank": "लिंक बैंक",
+		"link": "जोड़ना"
 	},
         "communication": {
         "tab_heading": "संचार"

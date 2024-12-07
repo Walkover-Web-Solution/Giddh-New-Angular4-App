@@ -660,8 +660,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let dateObj = resp[0];
             let params = resp[1];
             this.todaySelected = resp[2];
-            this.showBankLinkButton = false;
-
+            
             // check if params have from and to, this means ledger has been opened from other account-details-component
             if (params['from'] && params['to'] && this.isDefaultLoad) {
                 let from = params['from'];
@@ -3155,6 +3154,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     */
     public getAllBankAccounts(accountUniqueName?: string): void {
         this.isBankAccountConnected = false;
+        this.showBankLinkButton = false;
         this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
             if (response?.body) {
                 this.connectedBankLists = response.body

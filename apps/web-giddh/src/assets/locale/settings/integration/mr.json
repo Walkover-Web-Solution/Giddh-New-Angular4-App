@@ -135,7 +135,8 @@
         "bank_list": "बँक यादी",
 		"banks": "बँका",
         "permission_message":"तुम्हाला या मॉड्यूलमध्ये प्रवेश करण्याची परवानगी नाही.",
-		"link_bank": "लिंक बँक"
+		"link_bank": "लिंक बँक",
+		"link": "दुवा"
 	},
     "communication": {
         "tab_heading": "संवाद"
