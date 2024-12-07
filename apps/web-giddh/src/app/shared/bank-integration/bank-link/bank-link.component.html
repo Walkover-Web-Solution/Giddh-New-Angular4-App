@@ -1,8 +1,8 @@
 <ng-container
-        appTranslate
-        [file]="'settings/integration'"
-        (localeData)="localeData = $event"
-        (commonLocaleData)="commonLocaleData = $event"
+    appTranslate
+    [file]="'settings/integration'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="modal-header d-flex align-items-center">
         <h3>{{ localeData?.payment?.link_bank }}</h3>
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-12 bank-link">
                     <div class="col-8">
-                       <p *ngIf="bankLinks?.length === 0">All bank are Linked</p>
+                        <p *ngIf="bankLinks?.length === 0">All bank are Linked</p>
                         <dropdown-field
                             [name]="'banks'"
                             [autocomplete]="'disabled'"
@@ -27,7 +27,9 @@
                         </dropdown-field>
                     </div>
                     <div>
-                        <button mat-stroked-button class="mr-15" type="submit" (click)="linkBankAccount()">Submit</button>
+                        <button mat-stroked-button class="mr-15" type="submit" (click)="linkBankAccount()">
+                            Link
+                        </button>
                     </div>
                 </div>
             </div>

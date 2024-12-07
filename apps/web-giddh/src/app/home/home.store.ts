@@ -31,11 +31,11 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
     *
     *  @memberof HomeComponentStore
     */
-    readonly refreshBank = this.effect((data: Observable<void>) => {
-        return data.pipe(
-            switchMap(() => {
+    readonly refreshBank = this.effect((accountUniqueName: Observable<string>) => {
+        return accountUniqueName.pipe(
+            switchMap((req: any) => {
                 this.patchState({ bankMessage: null, isBankRefreshing: true, isBankRefreshingError: null });
-                return this.contactService.refreshBank().pipe(
+                return this.contactService.refreshBank(req).pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {

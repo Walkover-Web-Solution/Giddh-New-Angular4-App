@@ -54,7 +54,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
     /** True, if is bank is connected */
-    public isBankisConnected : boolean;
+    public isBankisConnected: boolean;
     /** Holds unique of bank account */
     public bankAccountUniqueName: any[] = []
     /** Holds unique name of selected bank */
@@ -121,7 +121,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         })
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.openBankLinkDialog();
             }
         });
@@ -158,7 +158,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public refreshBankTransactions(): void {
-        this.homeComponentStore.refreshBank();
+        this.homeComponentStore.refreshBank('');
     }
 
     public ngOnDestroy() {
@@ -173,7 +173,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     */
     public openInstitutionsDialog(bankAccount: any): void {
         this.selectedBankUniqueName = bankAccount?.uniqueName;
-        
+
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,
@@ -192,7 +192,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.setupGocardlessMessageListener();
             }
         });
-        
+
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
@@ -211,29 +211,15 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         window.addEventListener('message', messageHandler);
     }
 
-     /***
-     * This will open the dialog to link a bank
-     * 
-     * @memberof BankAccountsComponent
-     */
-     public openBankLinkDialog(): void {
-        let data = {
-            accountUniqueName: this.selectedBankUniqueName
-        }
+    /***
+    * This will open the dialog to link a bank
+    * 
+    * @memberof BankAccountsComponent
+    */
+    public openBankLinkDialog(): void {
         this.dialog.open(BankLinkComponent, {
-            data: data,
-            panelClass: ['mat-dialog-md'],
-            role: 'alertdialog',
-            ariaLabel: 'institutionsListDialog'
-        }); 
-    }
-    
-    getLastFetchTooltip(bankaccount: any): string {
-        if (bankaccount.transactionLastFetchedAt) {
-            // Assuming lastFetchAt is a timestamp or date string from your API
-            const lastFetchDate = new Date(bankaccount.transactionLastFetchedAt);
-            return `${this.localeData?.transaction_last_fetchAt}: ${lastFetchDate.toLocaleString()}`;
-        }
-        return this.localeData?.transaction_last_fetchAt || '';
+            data: { accountUniqueName: this.selectedBankUniqueName },
+            panelClass: ['mat-dialog-md']
+        });
     }
 }

@@ -330,15 +330,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
+     /** Holds Store refresh bank error as observable */
     public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
+    /** True if active account is bank account */
+    public isBankAccountConnected: boolean;
     /** List of connected bank accounts */
     public connectedBankAccounts: any[] = [];
-    /** True, if refresh button is to show */
-    public refresh: boolean;
+    /** True, if show bank link button is to show */
+    public showBankLinkButton: boolean;
     /** Holds list of connected bank */
     public connectedBankLists: any;
-    /** It links the bank account */
-    public updatedData: any;
     
     constructor(
         private store: Store<AppState>,
@@ -390,8 +391,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public get isBankAccount(): boolean {
         return this.lc.activeAccount?.parentGroups?.some(group => group.uniqueName === 'bankaccounts');
     }
-    /** True if active account is bank account */
-    public isBankAccountConnected: boolean;
 
     public toggleShow() {
         this.Shown = this.Shown ? false : true;
@@ -661,6 +660,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let dateObj = resp[0];
             let params = resp[1];
             this.todaySelected = resp[2];
+            this.showBankLinkButton = false;
 
             // check if params have from and to, this means ledger has been opened from other account-details-component
             if (params['from'] && params['to'] && this.isDefaultLoad) {
@@ -1018,7 +1018,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.openInstitutionsDialog();
             }
         });
-        this.isBankAccountConnected = true;
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3162,6 +3161,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
                 if (result) {
                     this.isBankAccountConnected = true;
+                } else {
+                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
                 }
             }
         });
@@ -3173,8 +3174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public refreshBankTransactions(): void {
-        this.homeComponentStore.refreshBank();
-        this.refresh = true;
+        this.homeComponentStore.refreshBank(this.lc.accountUnq);
     }
     /***
      * This will open the dialog to link a bank
@@ -3188,10 +3188,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(BankLinkComponent, {
             data: data,
-            width: 'var(--aside-pane-width)',
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'institutionsListDialog'
+            panelClass: ['mat-dialog-md']
         }); 
     }
     /**

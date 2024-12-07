@@ -40,7 +40,7 @@ export class BankLinkComponent implements OnInit {
         public dialog: MatDialog,
         public dialogRef: MatDialogRef<BankLinkComponent>,
         @Inject(MAT_DIALOG_DATA) public inputData
-    ) {}
+    ) { }
     /**
      * Initializes the component
      *
@@ -50,13 +50,7 @@ export class BankLinkComponent implements OnInit {
         if (!this.inputData.bankList) {
             this.getAllBankAccounts();
         } else {
-            this.bankLinks = this.inputData.bankList.map(item => {
-                return {
-                    label: `${item.bankName} ****${item.bankResource.accountNumber.slice(-4)}`,
-                    value: item.bankResource.accountUniqueName,
-                    additional: item
-                }
-            });
+            this.setTransformBankListData(this.inputData.bankList);
         }
     }
     /**
@@ -89,35 +83,43 @@ export class BankLinkComponent implements OnInit {
                     if (response?.status === "success") {
                         if (response?.body?.message) {
                             this.toasty.clearAllToaster();
-                            this.toasty.successToast(response?.body?.message);
+                            this.toasty.showSnackBar('success', response?.body?.message);
+                            this.dialogRef.close();
                         }
                     }
                 },
                 error: (error) => {
                     this.toasty.clearAllToaster();
-                    this.toasty.errorToast(error?.message || 'Something went wrong');
+                    this.toasty.showSnackBar('error', error?.message || 'Something went wrong');
                 }
-        });
+            });
     }
-   /**
-   * This will get all connected bank accounts
-   *
-   * @memberof BankLinkComponent
-   */
+    /**
+    * This will get all connected bank accounts
+    *
+    * @memberof BankLinkComponent
+    */
     public getAllBankAccounts(): void {
         this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
             if (response?.body) {
-                console.log(response);
-                
-                this.bankLinks = response.body.filter(bank => Object.keys(bank.account).length === 0).map(item => {
-                    return {
-                        label: `${item.bankName} ****${item.bankResource.accountNumber.slice(-4)}`,
-                        value: item.bankResource.uniqueName,
-                        additional: item
-                    }
-                })
-                console.log(this.bankLinks);
-                
+                this.setTransformBankListData(response.body);
+            }
+        });
+    }
+
+    /**
+     * Filter bank which are not linked and transform as label value format
+     *
+     * @private
+     * @param {*} bankList
+     * @memberof BankLinkComponent
+     */
+    private setTransformBankListData(bankList: any): void {
+        this.bankLinks = bankList.filter(bank => Object.keys(bank.account).length === 0).map(item => {
+            return {
+                label: `${item.bankName} ****${item.bankResource.accountNumber.slice(-4)}`,
+                value: item.bankResource.uniqueName,
+                additional: item
             }
         });
     }

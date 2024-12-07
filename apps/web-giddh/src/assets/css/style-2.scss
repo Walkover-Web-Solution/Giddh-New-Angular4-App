@@ -13856,3 +13856,9 @@ import-wizard {
         }
     }
 }
+
+.rotate-icon-130deg {
+    .mdc-button__label {
+        transform: rotate(130deg);
+    }
+}
