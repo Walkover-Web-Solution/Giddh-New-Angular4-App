@@ -14,7 +14,7 @@
             <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
                 <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
                     <div class="form-group position-relative">
-                        <div class="d-flex communication-input">
+                        <div class="d-flex border-bottom">
                             <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{localeData?.to}}</label>
                             <div [hidden]="!allStaticEmails.length" class="w-100">
                                 {{allStaticEmails}}
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="form-group position-relative" *ngIf="showCc && clickedInsideEmailSection">
-                        <div class="d-flex communication-input">
+                        <div class="d-flex border-bottom">
                             <label class="mr-r1">{{localeData?.cc}}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedCcEmails.length}">
                                 <select-multiple-fields
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="form-group position-relative" *ngIf="showBcc && clickedInsideEmailSection">
-                        <div class="d-flex communication-input">
+                        <div class="d-flex border-bottom">
                             <label class="mr-r1">{{localeData?.bcc}}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedBccEmails.length}">
                                 <select-multiple-fields
