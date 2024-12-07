@@ -43,7 +43,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
-    /** Holds Store ?????? as observable*/
+    /** Holds Store requisitionList on account link dialog gets open as observable*/
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
