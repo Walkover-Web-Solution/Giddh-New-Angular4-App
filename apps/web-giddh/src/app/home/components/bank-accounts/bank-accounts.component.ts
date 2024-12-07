@@ -68,7 +68,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         private homeComponentStore: HomeComponentStore,
         public dialog: MatDialog,
         private generalService: GeneralService,
-        private componentStore: BankIntegrationComponentStore,
+        private componentStore: BankIntegrationComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }

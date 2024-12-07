@@ -329,7 +329,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
-     /** Holds Store refresh bank error as observable */
+    /** Holds Store refresh bank error as observable */
     public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
     /** True if active account is bank account */
     public isBankAccountConnected: boolean;
@@ -339,7 +339,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBankLinkButton: boolean;
     /** Holds list of connected bank */
     public connectedBankLists: any;
-    
+
     constructor(
         private store: Store<AppState>,
         private ledgerActions: LedgerActions,
@@ -504,27 +504,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * @memberof LedgerComponent
    */
     public openInstitutionsDialog(): void {
-        // if (this.isBankAccountConnected) {
-        //     this.router.navigate(["/pages/settings/integration/payment"]);
-        // } else {
-            let data = {
-                localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
-            }
-            const dialogRef = this.dialog.open(InstitutionsListComponent, {
-                data: data,
-                width: 'var(--aside-pane-width)',
-                panelClass: 'subscription-sidebar',
-                role: 'alertdialog',
-                ariaLabel: 'institutionsListDialog'
-            });
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        }
+        const dialogRef = this.dialog.open(InstitutionsListComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                if (response) {
-                    this.referenceNumber = response;
-                    this.setupGocardlessMessageListener();
-                }
-            });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.referenceNumber = response;
+                this.setupGocardlessMessageListener();
+            }
+        });
         // }
     }
     /**
@@ -666,7 +663,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let dateObj = resp[0];
             let params = resp[1];
             this.todaySelected = resp[2];
-            
+
             // check if params have from and to, this means ledger has been opened from other account-details-component
             if (params['from'] && params['to'] && this.isDefaultLoad) {
                 let from = params['from'];
@@ -3196,7 +3193,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.dialog.open(BankLinkComponent, {
             data: data,
             panelClass: ['mat-dialog-md']
-        }); 
+        });
     }
 
     /**

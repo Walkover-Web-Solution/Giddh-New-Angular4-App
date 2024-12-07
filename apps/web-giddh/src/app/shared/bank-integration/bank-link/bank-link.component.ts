@@ -24,6 +24,7 @@ export class BankLinkComponent implements OnInit {
     public connectedBankAccounts: any[] = [];
     /** Hold selectedBank */
     public selectedBanksList: string = '';
+    /** A ReplaySubject used to manage and clean up subscriptions in the component.*/
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold options of dropdown  */
     public bankLinks: IOption[] = []
@@ -90,7 +91,7 @@ export class BankLinkComponent implements OnInit {
                 },
                 error: (error) => {
                     this.toasty.clearAllToaster();
-                    this.toasty.showSnackBar('error', error?.message || 'Something went wrong');
+                    this.toasty.showSnackBar('error', error?.message || this.commonLocaleData?.app_validations?.something_went_wrong);
                 }
             });
     }
@@ -117,7 +118,7 @@ export class BankLinkComponent implements OnInit {
     private setTransformBankListData(bankList: any): void {
         this.bankLinks = bankList.filter(bank => Object.keys(bank.account).length === 0).map(item => {
             return {
-                label: `${item.bankName} ****${item.bankResource.accountNumber.slice(-4)}`,
+                label: `${item.bankName} ****${item.bankResource?.accountNumber ? item.bankResource.accountNumber.slice(-4) : 'N/A'}`,
                 value: item.bankResource.uniqueName,
                 additional: item
             }

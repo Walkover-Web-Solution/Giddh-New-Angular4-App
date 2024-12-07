@@ -34,7 +34,7 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
     readonly refreshBank = this.effect((accountUniqueName: Observable<string>) => {
         return accountUniqueName.pipe(
             switchMap((req: any) => {
-                this.patchState({ bankMessage: null, isBankRefreshing: true, isBankRefreshingError: null });
+                this.patchState({ bankMessage: null, isBankRefreshing: true, isBankRefreshingError: false });
                 return this.contactService.refreshBank(req).pipe(
                     tapResponse(
                         (res: any) => {
@@ -43,7 +43,7 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
                                 return this.patchState({ bankMessage: res.body, isBankRefreshing: false, isBankRefreshingError: false });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ bankMessage: null, isBankRefreshingError: true });
+                                return this.patchState({ bankMessage: null, isBankRefreshing: false, isBankRefreshingError: true });
                             }
                         },
                         (error: any) => {

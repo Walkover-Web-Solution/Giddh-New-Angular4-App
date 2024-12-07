@@ -63,7 +63,6 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
                 this.filteredBanks = response.results;
                 this.changeDetection.detectChanges();
             }
-            // console.log(response)
         });
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
