@@ -13,10 +13,10 @@
         <div class="overflow-auto">
             <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
                 <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
-                    <div class="form-group position-relative">
+                    <div class="form-group position-relative" (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)">
                         <div class="d-flex border-bottom">
                             <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{localeData?.to}}</label>
-                            <div [hidden]="!allStaticEmails.length" class="w-100">
+                            <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
                                 {{allStaticEmails}}
                                 <span class="suffix-emails font-15 d-inline-block" *ngIf="isHiddenEmails.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{isHiddenEmails}}</span>
                             </div>
@@ -28,6 +28,7 @@
                                     [selectedValues]="selectedToEmails"
                                     [validations]="['email']"
                                     [chipPrefix]="'@'"
+                                    [autoFocus]="emailFocusStates.To"
                                     [name]="emailType.To"
                                     class="select-multiple-chiplist w-100"
                                 ></select-multiple-fields>
@@ -42,7 +43,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group position-relative" *ngIf="showCc && clickedInsideEmailSection">
+                    <div class="form-group position-relative" *ngIf="showCc && clickedInsideEmailSection" (click)="setEmailFocus(emailType.Cc)">
                         <div class="d-flex border-bottom">
                             <label class="mr-r1">{{localeData?.cc}}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedCcEmails.length}">
@@ -52,10 +53,11 @@
                                     [selectedValues]="selectedCcEmails"
                                     [validations]="['email']"
                                     [chipPrefix]="'@'"
+                                    [autoFocus]="emailFocusStates.Bc"
                                     [name]="emailType.Cc"
                                     class="select-multiple-chiplist w-100"
                                 ></select-multiple-fields>
-                            
+
                                 <div class="d-flex column-gap1 justify-content-end">
                                     <a *ngIf="!showBcc" class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)">{{
                                         localeData?.bcc
@@ -64,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group position-relative" *ngIf="showBcc && clickedInsideEmailSection">
+                    <div class="form-group position-relative" *ngIf="showBcc && clickedInsideEmailSection" (click)="setEmailFocus(emailType.Bcc)">
                         <div class="d-flex border-bottom">
                             <label class="mr-r1">{{localeData?.bcc}}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedBccEmails.length}">
@@ -74,6 +76,7 @@
                                     [selectedValues]="selectedBccEmails"
                                     [validations]="['email']"
                                     [chipPrefix]="'@'"
+                                    [autoFocus]="emailFocusStates.Bcc"
                                     [name]="emailType.Bcc"
                                     class="select-multiple-chiplist w-100"
                                 ></select-multiple-fields>
