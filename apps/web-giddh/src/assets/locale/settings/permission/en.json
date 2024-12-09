@@ -23,5 +23,5 @@
     "create_user_permission": "Create User Permission",
     "past_period_duration": "Past [DURATION] [PERIOD]S",
     "invalid_date": "Invalid date",
-    "add_custom_role": "+ Custom Role"
+    "add_custom_role": "Custom Role"
 }
