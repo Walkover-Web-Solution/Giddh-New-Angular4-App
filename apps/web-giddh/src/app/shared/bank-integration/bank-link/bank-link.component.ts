@@ -1,10 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
-import { SettingsIntegrationService } from '../../../services/settings.integration.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { ToasterService } from '../../../services/toaster.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
 
 @Component({
     selector: 'bank-link',
@@ -36,8 +35,7 @@ export class BankLinkComponent implements OnInit {
     public reLoginRequired: boolean = false;
 
     constructor(
-        private settingsIntegrationService: SettingsIntegrationService,
-        private toasty: ToasterService,
+        private componentStore: SettingIntegrationComponentStore,
         public dialog: MatDialog,
         public dialogRef: MatDialogRef<BankLinkComponent>,
         @Inject(MAT_DIALOG_DATA) public inputData
@@ -54,7 +52,20 @@ export class BankLinkComponent implements OnInit {
         } else {
             this.setTransformBankListData(this.inputData?.bankList);
         }
+
+        this.componentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.dialogRef.close();
+            }
+        })
+
+        this.componentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.body) {
+                this.setTransformBankListData(response.body);
+            }
+        })
     }
+
     /**
      * This will use for select bank account
      * 
@@ -66,6 +77,7 @@ export class BankLinkComponent implements OnInit {
             this.selectedBank = event.additional;
         }
     }
+
     /**
      * This will link all the connected bank accounts
      * 
@@ -78,35 +90,16 @@ export class BankLinkComponent implements OnInit {
             accountUniqueName: this.inputData?.accountUniqueName,
             paymentAlerts: []
         };
-        this.settingsIntegrationService.updateAccount(accountForm, request)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe({
-                next: (response) => {
-                    if (response?.status === "success") {
-                        if (response?.body?.message) {
-                            this.toasty.clearAllToaster();
-                            this.toasty.showSnackBar('success', response?.body?.message);
-                            this.dialogRef.close();
-                        }
-                    }
-                },
-                error: (error) => {
-                    this.toasty.clearAllToaster();
-                    this.toasty.showSnackBar('error', error?.message || this.commonLocaleData?.app_validations?.something_went_wrong);
-                }
-            });
+        this.componentStore.updateAccount({ accountForm, request });
     }
+
     /**
     * This will get all connected bank accounts
     *
     * @memberof BankLinkComponent
     */
     public getAllBankAccounts(): void {
-        this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
-            if (response?.body) {
-                this.setTransformBankListData(response.body);
-            }
-        });
+        this.componentStore.getAllBankAccounts();
     }
 
     /**
