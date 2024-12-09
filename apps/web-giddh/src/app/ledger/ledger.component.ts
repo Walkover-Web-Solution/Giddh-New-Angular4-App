@@ -50,10 +50,10 @@ import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
-import { SettingsIntegrationService } from '../services/settings.integration.service';
 import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
 import { HomeComponentStore } from '../home/home.store';
 import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
+import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 
 @Component({
     selector: 'ledger',
@@ -339,6 +339,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBankLinkButton: boolean;
     /** Holds list of connected bank */
     public connectedBankLists: any[] = [];
+    /** Holds accountUniquename of get all bank-Account  */
+    public selectedAccountUniquename: any;
 
     constructor(
         private store: Store<AppState>,
@@ -364,7 +366,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private router: Router,
-        private settingsIntegrationService: SettingsIntegrationService,
+        private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
         private toasty: ToasterService
@@ -1019,6 +1021,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.openInstitutionsDialog();
+            }
+        });
+
+        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(take(1)).subscribe(response => {
+            if (response?.body) {
+                this.connectedBankLists = response.body;
+                const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename));
+                if (result) {
+                    this.isBankAccountConnected = true;
+                } else {
+                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
+                }
             }
         });
     }
@@ -3159,17 +3173,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getAllBankAccounts(accountUniqueName?: string): void {
         this.isBankAccountConnected = false;
         this.showBankLinkButton = false;
-        this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
-            if (response?.body) {
-                this.connectedBankLists = response.body;
-                const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
-                if (result) {
-                    this.isBankAccountConnected = true;
-                } else {
-                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
-                }
-            }
-        });
+        this.selectedAccountUniquename = accountUniqueName;
+        this.settingIntegrationComponentStore.getAllBankAccounts();
     }
 
     /**
@@ -3197,32 +3202,4 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * This will use for  link the selected bank account only for plaid integration
-     *
-     * @param {*} event
-     * @param {*} bank
-     * @memberof LedgerComponent
-     */
-    public selectBankAccount(event: any, bank: any): void {
-        if (event?.value) {
-            let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
-            let accountForm = {
-                accountNumber: bank?.bankResource?.accountNumber,
-                accountUniqueName: event.value,
-                paymentAlerts: []
-            };
-            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success") {
-                    if (response?.body?.message) {
-                        this.toasty.clearAllToaster();
-                        this.toasty.successToast(response?.body?.message);
-                    }
-                } else {
-                    this.toasty.clearAllToaster();
-                    this.toasty.errorToast(response?.message);
-                }
-            });
-        }
-    }
 }
