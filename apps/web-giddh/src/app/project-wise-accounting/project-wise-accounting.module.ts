@@ -1,0 +1,33 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { MatIconModule } from '@angular/material/icon';
+import { ProjectWiseAccountingRoutingModule } from './project-wise-accounting.routing.module';
+import { ProjectWiseAccountingListComponent } from './list/project-wise-accounting.component';
+import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expense-list.component';
+import { CreateProjectComponent } from './components/create-project/create-project.component';
+import { MainComponent } from './main.component';
+
+
+@NgModule({
+    declarations: [
+        MainComponent,
+        ProjectWiseAccountingListComponent,
+        RevenueExpenseListComponent,
+        CreateProjectComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ProjectWiseAccountingRoutingModule,
+        MatButtonModule,
+        MatTableModule,
+        GiddhDateRangepickerModule,
+        MatIconModule
+    ],
+    exports: [CreateProjectComponent]
+})
+export class ProjectWiseAccountingModule { }
