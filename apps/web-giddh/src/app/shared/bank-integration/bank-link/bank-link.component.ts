@@ -22,9 +22,9 @@ export class BankLinkComponent implements OnInit {
     public isLoading: boolean = false;
     /** List of connected bank accounts */
     public connectedBankAccounts: any[] = [];
-    /** Hold selectedBank */
+    /** Hold selected bank */
     public selectedBanksList: string = '';
-    /** A ReplaySubject used to manage and clean up subscriptions in the component.*/
+    /** Subject to unsubscribe from listeners. */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold options of dropdown  */
     public bankLinks: IOption[] = []
@@ -42,16 +42,17 @@ export class BankLinkComponent implements OnInit {
         public dialogRef: MatDialogRef<BankLinkComponent>,
         @Inject(MAT_DIALOG_DATA) public inputData
     ) { }
+
     /**
      * Initializes the component
      *
      * @memberof BankLinkComponent
      */
     public ngOnInit(): void {
-        if (!this.inputData.bankList) {
+        if (!this.inputData?.bankList) {
             this.getAllBankAccounts();
         } else {
-            this.setTransformBankListData(this.inputData.bankList);
+            this.setTransformBankListData(this.inputData?.bankList);
         }
     }
     /**
@@ -62,7 +63,7 @@ export class BankLinkComponent implements OnInit {
      */
     public selectedOption(event: any): void {
         if (event?.additional) {
-            this.selectedBank = event.additional
+            this.selectedBank = event.additional;
         }
     }
     /**

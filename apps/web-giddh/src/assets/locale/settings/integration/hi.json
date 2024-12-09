@@ -136,7 +136,8 @@
 		"banks": "बैंकों",
         "permission_message":"आपको इस मॉड्यूल तक पहुंचने की अनुमति नहीं है.",
 		"link_bank": "लिंक बैंक",
-		"link": "जोड़ना"
+		"link": "जोड़ना",
+		"all_bank_are_linked" : "सभी बैंक लिंक्ड हैं"
 	},
         "communication": {
         "tab_heading": "संचार"

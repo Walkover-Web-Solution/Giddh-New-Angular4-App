@@ -777,8 +777,8 @@ sh-select:focus {
 .icon-upload {
     font-size: 14px;
 }
-.icon-refresh, .icon-plus, .fa-solid {
-    font-size: 15px;
+.icon-refresh, .icon-plus {
+    font-size: var(--font-size-15);
 }
 .icon-link {
     font-weight: 800;

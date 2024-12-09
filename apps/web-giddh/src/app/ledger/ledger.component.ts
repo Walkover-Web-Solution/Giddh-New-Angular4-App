@@ -336,7 +336,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** True, if show bank link button is to show */
     public showBankLinkButton: boolean;
     /** Holds list of connected bank */
-    public connectedBankLists: any;
+    public connectedBankLists: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -520,7 +520,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.setupGocardlessMessageListener();
             }
         });
-        // }
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
@@ -1005,7 +1004,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        // When refresh bank api getting error then this code works
+        /**
+         * When refresh bank api getting error then this code works
+         */
         this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.openInstitutionsDialog();
@@ -3151,7 +3152,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.showBankLinkButton = false;
         this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
             if (response?.body) {
-                this.connectedBankLists = response.body
+                this.connectedBankLists = response.body;
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
                 if (result) {
                     this.isBankAccountConnected = true;
@@ -3171,7 +3172,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.homeComponentStore.refreshBank(this.lc.accountUnq);
     }
 
-    /***
+    /**
      * This will open the dialog to link a bank
      * 
      * @memberof LedgerComponent
@@ -3199,7 +3200,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
             let accountForm = {
                 accountNumber: bank?.bankResource?.accountNumber,
-                accountUniqueName: event?.value,
+                accountUniqueName: event.value,
                 paymentAlerts: []
             };
             this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
