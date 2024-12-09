@@ -31,6 +31,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showError: boolean = false;
     /** Holds prefix of chip text */
     @Input() public chipPrefix: string = '';
+    /** The parent component can dynamically control the focus of the input field by passing a boolean value. */
+    @Input() public autoFocus: boolean = false;
     /** Name of search field */
     @Input() public name: any = "";
     /** Holds appearance of dropdown field */
@@ -107,7 +109,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
-            if (this.selectField) {
+            if (this.selectField && this.autoFocus) {
                 this.selectField.nativeElement.focus();
             }
         }, 100);

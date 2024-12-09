@@ -127,6 +127,12 @@ export class TemplateFroalaComponent implements OnInit {
     public noOfMaximumEmailsShow: number = 2;
     /** Holds type of email */
     public emailType = EmailType;
+    /** This variable maintains the focus state for email types: "to", "cc", and "bcc". */
+    public emailFocusStates: any = {
+        To: true,
+        Cc: true,
+        Bcc: true
+    }
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
@@ -203,6 +209,18 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private updateFormControl(): void {
         this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
+    }
+
+    /**
+     * Updates the focus state for the email types ('to', 'cc', 'bcc').
+     *
+     * @param emailType
+     * @memberof TemplateFroalaComponent
+     */
+    public setEmailFocus(emailType: string): void {
+        this.emailFocusStates.To = emailType === 'to';
+        this.emailFocusStates.Cc = emailType === 'cc';
+        this.emailFocusStates.Bcc = emailType === 'bcc';
     }
 
     /**
@@ -343,6 +361,7 @@ export class TemplateFroalaComponent implements OnInit {
     * @memberof TemplateFroalaComponent
     */
     public toggleBccCc(type: string): void {
+        this.setEmailFocus(type);
         if (type == EmailType.Bcc) {
             this.showBcc = true;
         } else if (type === EmailType.Cc) {
@@ -362,7 +381,7 @@ export class TemplateFroalaComponent implements OnInit {
     }
     /**
      * Clicked inside Email section
-     * 
+     *
      * @memberof TemplateFroalaComponent
      */
     public clickedInsideEmail(): void {
@@ -373,19 +392,24 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
      * Clicked outside Email section
-     * 
+     *
      * @memberof TemplateFroalaComponent
      */
     public clickedOutsideEmail(): void {
-        this.getAllStaticEmails();
+        if (!this.allStaticEmails.length) {
+            this.getAllStaticEmails();
+        }
         this.clickedInsideEmailSection = false;
+        if ((this.emailFocusStates.Bcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.Cc && this.selectedCcEmails.length === 0)) {
+            this.setEmailFocus(EmailType.To);
+        }
         this.showBcc = this.selectedBccEmails.length > 0;
         this.showCc = this.selectedCcEmails.length > 0;
     }
 
     /**
      * Calculates the total number of email addresses across To, Cc, and Bcc fields.
-     * 
+     *
      * @returns {number} The total count of email addresses
      * @memberof TemplateFroalaComponent
      */
@@ -395,8 +419,8 @@ export class TemplateFroalaComponent implements OnInit {
 
 
     /**
-     * Get all Emails 
-     * 
+     * Get all Emails
+     *
      * @memberof TemplateFroalaComponent
      */
     private getAllStaticEmails(): void {
