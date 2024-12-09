@@ -2171,6 +2171,19 @@ export class GeneralService {
         const url = this.router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
         const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
         window.open(cleanedUrl, '_blank');
+    } 
+    
+    /**
+     * Round a Number to Company Decimal Places
+     *
+     * @param {number} value
+     * @param {number} [companyDecimalPlaces=2]
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
+        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 }
 
