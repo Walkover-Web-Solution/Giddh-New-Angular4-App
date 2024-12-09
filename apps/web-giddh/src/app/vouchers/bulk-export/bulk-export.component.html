@@ -62,12 +62,14 @@
                     </button>
                 </div>
             </div>
+            {{inputData?.voucherType | json}}
             <div
                 *ngIf="
                     inputData?.voucherType === 'receipt' ||
                     inputData?.voucherType === 'payment' ||
                     inputData?.voucherType === 'credit note' ||
-                    inputData?.voucherType === 'debit note'
+                    inputData?.voucherType === 'debit note' ||
+                    inputData?.voucherType === 'purchase'
                 "
                 class="text-right"
             >
