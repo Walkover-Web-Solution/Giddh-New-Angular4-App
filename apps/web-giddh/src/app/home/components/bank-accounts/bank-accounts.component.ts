@@ -43,7 +43,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
-    /** Holds Store requisitionList on account link dialog gets open as observable*/
+   /** Holds Store requisition list on account link dialog gets open as observable*/
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
@@ -53,11 +53,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    /** True, if is bank is connected */
-    public isBankisConnected: boolean;
-    /** Holds unique of bank account */
-    public bankAccountUniqueName: any[] = []
-    /** Holds unique name of selected bank */
+    /** Holds unique name of bank account */
+    public bankAccountUniqueNames: any[] = []
+    /** Holds selected bank unique name */
     private selectedBankUniqueName: string;
 
     constructor(
@@ -126,8 +124,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     /**
-     * This will get all account in giddh
+     * This will get all accounts of giddh
      * 
      * @memberof BankAccountsComponent
      */
@@ -162,7 +161,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public refreshBankTransactions(): void {
-        this.homeComponentStore.refreshBank('');
+        this.homeComponentStore.refreshBank(null);
     }
 
     public ngOnDestroy() {
@@ -215,7 +214,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         window.addEventListener('message', messageHandler);
     }
 
-    /***
+    /**
     * This will open the dialog to link a bank
     * 
     * @memberof BankAccountsComponent

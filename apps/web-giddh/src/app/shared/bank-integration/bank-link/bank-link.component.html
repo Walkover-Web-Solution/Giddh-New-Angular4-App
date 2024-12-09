@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-12 bank-link">
                     <div class="col-8">
-                        <p *ngIf="bankLinks?.length === 0">All bank are Linked</p>
+                        <p *ngIf="bankLinks?.length === 0">{{ localeData?.payment?.all_bank_are_linked }}</p>
                         <dropdown-field
                             [name]="'banks'"
                             [autocomplete]="'disabled'"
