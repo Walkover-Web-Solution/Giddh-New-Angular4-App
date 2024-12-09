@@ -6,7 +6,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
     styleUrls: ['./create-project.component.scss']
 })
 export class CreateProjectComponent implements OnInit, OnDestroy {
-
+    /** Holds true if api is in progress */
+    public isLoading: boolean = true;
+   
 
     constructor(
 
@@ -15,6 +17,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        
     }
 
    
@@ -22,4 +25,5 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
        
     }
+    
 }

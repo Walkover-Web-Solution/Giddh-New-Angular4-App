@@ -1,4 +1,15 @@
-ProjectWiseAccountingListComponent
+<!-- ProjectWiseAccountingListComponent
+Write dialog code here  get all project -->
 
-Write dialog code here  get all project
+<ng-container>
 
+   <div class="project clearfix section-center position-relative overflow-visible">
+      <div *ngIf="isLoading">
+        <giddh-page-loader></giddh-page-loader>
+      </div>
+      <div class="initial-screen position-absolute text-center">
+        <button mat-raised-button color="primary" (click)="openCreateProjectDialog()">+ create project</button>
+      </div>
+   </div>
+
+</ng-container>

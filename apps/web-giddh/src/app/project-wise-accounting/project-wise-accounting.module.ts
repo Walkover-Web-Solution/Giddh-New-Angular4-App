@@ -10,6 +10,8 @@ import { ProjectWiseAccountingListComponent } from './list/project-wise-accounti
 import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expense-list.component';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
 import { MainComponent } from './main.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 
 
 @NgModule({
@@ -22,11 +24,13 @@ import { MainComponent } from './main.component';
     imports: [
         CommonModule,
         FormsModule,
+        FormFieldsModule,
         ProjectWiseAccountingRoutingModule,
         MatButtonModule,
         MatTableModule,
         GiddhDateRangepickerModule,
-        MatIconModule
+        MatIconModule,
+        TranslateDirectiveModule
     ],
     exports: [CreateProjectComponent]
 })
