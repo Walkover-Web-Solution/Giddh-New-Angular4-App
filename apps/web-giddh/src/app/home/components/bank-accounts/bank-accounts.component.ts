@@ -9,11 +9,14 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { BROADCAST_CHANNELS } from '../../../app.constant';
 import { CommonActions } from '../../../actions/common.actions';
+import { HomeComponentStore } from '../../home.store';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'bank-accounts',
     templateUrl: 'bank-accounts.component.html',
-    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss']
+    styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
+    providers: [HomeComponentStore]
 })
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
@@ -32,12 +35,22 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** True if relogin required in any bank account */
     public reLoginRequired: boolean = false;
+    /** Holds Store refresh bank success message as observable*/
+    private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
+    /** Holds Store refresh bank loading as observable*/
+    public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
+    /** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
         private commonAction: CommonActions,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private homeComponentStore: HomeComponentStore,
+        private generalService: GeneralService
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -69,6 +82,27 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         };
+
+        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile?.userEntityRoles) {
+                profile.userEntityRoles.forEach(role => {
+                    const scopes = role.role.scopes;
+                    if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
+                        this.hasIntegrationScope = true;
+                    }
+                });
+            }
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+            }
+        })
+
+        this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
+            }
+        });
+
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -84,7 +118,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             this.reLoginRequired = (reLoginRequired?.length) ? true : false;
 
             this.isLoading = false;
-            
+
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -96,6 +130,15 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      */
     public getPlaidLinkToken(itemId: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
+    }
+
+    /**
+     * Refresh bank transactions
+     *
+     * @memberof BankAccountsComponent
+     */
+    public refreshBankTransactions(): void {
+        this.homeComponentStore.refreshBank(null);
     }
 
     public ngOnDestroy() {
