@@ -59,7 +59,7 @@ import { SettingIntegrationComponentStore } from '../settings/integration/utilit
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
-    providers: [BankIntegrationComponentStore, HomeComponentStore],
+    providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({

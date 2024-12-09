@@ -9,7 +9,8 @@ import { SettingIntegrationComponentStore } from '../../../settings/integration/
     selector: 'bank-link',
     styleUrls: ['./bank-link.component.scss'],
     templateUrl: './bank-link.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [SettingIntegrationComponentStore]
 })
 
 export class BankLinkComponent implements OnInit {
