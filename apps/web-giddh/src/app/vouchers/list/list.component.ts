@@ -454,8 +454,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
 
                 if (this.queryParams.page) {
-                    this.advanceFilters.page = this.queryParams.page;
-                    this.advanceFilters.from = this.queryParams.from;
+                    if (this.activeModule === 'list') {
+                        this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
+                    }
+                    
                     this.advanceFilters.to = this.queryParams.to;
                 }
                 this.getVouchers(true);

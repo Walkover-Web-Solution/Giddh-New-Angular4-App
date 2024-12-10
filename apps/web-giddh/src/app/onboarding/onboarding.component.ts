@@ -59,25 +59,18 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public voucherApiVersion: 1 | 2 = 2;
     /** Holds help documentation url for syncing with Tally */
     public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-    /** Encoded URL to avoid query params */
-    public safeUrl: SafeUrl;
 
     constructor(
         private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
-        private componentStore: OnboardingComponentStore,
-        private sanitizer: DomSanitizer
+        private componentStore: OnboardingComponentStore
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
-    }
-    public redirectToTallyHelpDocPage(): void {
-        this._generalService.syncWithTally();
-    }
+    }  
 
     public ngOnInit() {
-        this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.syncWithTallyHelpDocUrl);
         this.voucherApiVersion = this._generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
@@ -85,12 +78,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
             if (res) {
                 this.companyCountry = res.country;
                 this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
-            }
-        });
-
-        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
-            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
 

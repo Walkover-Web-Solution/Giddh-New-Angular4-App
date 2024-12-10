@@ -218,9 +218,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public setEmailFocus(emailType: string): void {
-        this.emailFocusStates.To = emailType === 'to';
-        this.emailFocusStates.Cc = emailType === 'cc';
-        this.emailFocusStates.Bcc = emailType === 'bcc';
+        this.emailFocusStates.To = emailType === this.emailType.To;
+        this.emailFocusStates.Cc = emailType === this.emailType.Cc;
+        this.emailFocusStates.Bcc = emailType === this.emailType.Bcc;
     }
 
     /**
