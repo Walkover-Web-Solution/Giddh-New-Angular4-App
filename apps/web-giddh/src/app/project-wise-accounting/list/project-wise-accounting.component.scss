@@ -1,15 +1,7 @@
-// .project {
-//     min-height: calc(100vh - 120px);
+.project {
+    max-width: var(--center-content-max-width);
 
-//     .initial-screen {
-//         top: 50%;
-//         left: 50%;
-//         transform: translate(-50%, -50%);
-
-//         button {
-//             width: 260px;
-//             height: 45px;
-//             font-size: var(--font-size-20);
-//         }
-//     }
-// }
+    .giddh-table {
+        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+    }
+}

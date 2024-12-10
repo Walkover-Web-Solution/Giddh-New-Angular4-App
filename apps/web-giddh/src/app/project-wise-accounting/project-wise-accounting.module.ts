@@ -12,7 +12,8 @@ import { CreateProjectComponent } from './components/create-project/create-proje
 import { MainComponent } from './main.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,9 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
         MatTableModule,
         GiddhDateRangepickerModule,
         MatIconModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        MatPaginatorModule,
+        MatTabsModule
     ],
     exports: [CreateProjectComponent]
 })
