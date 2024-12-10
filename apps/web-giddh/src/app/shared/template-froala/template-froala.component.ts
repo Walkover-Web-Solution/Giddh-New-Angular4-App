@@ -396,7 +396,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public clickedOutsideEmail(): void {
-        if (this.clickedInsideEmailSection) {
+        if (!this.allStaticEmails) {
             this.getAllStaticEmails();
             this.clickedInsideEmailSection = false;
             if ((this.emailFocusStates.Bcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.Cc && this.selectedCcEmails.length === 0)) {
