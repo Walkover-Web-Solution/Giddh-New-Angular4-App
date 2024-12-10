@@ -2,7 +2,7 @@
     <mat-card>
         <div class="panel-heading d-flex justify-content-space-between">
             <strong>{{ localeData?.chart_title }}</strong>
-            <div class="dashboard-filter" [disabled]="(isBankRefreshing$ | async)" (click)="refreshBankTransactions()"
+            <div class="dashboard-filter" [ngClass]="{'pointer-event-none cursor-disable': (isBankRefreshing$ | async)}" (click)="refreshBankTransactions()"
                     aria-label="{{ localeData?.refresh_bank_accounts }}"
                     matTooltip="{{ localeData?.refresh_bank_accounts }}"
                     *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0">

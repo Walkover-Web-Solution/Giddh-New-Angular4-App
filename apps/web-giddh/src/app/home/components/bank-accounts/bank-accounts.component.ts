@@ -138,7 +138,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public refreshBankTransactions(): void {
-        this.homeComponentStore.refreshBank(null);
+        this.homeComponentStore.refreshBank();
     }
 
     public ngOnDestroy() {
