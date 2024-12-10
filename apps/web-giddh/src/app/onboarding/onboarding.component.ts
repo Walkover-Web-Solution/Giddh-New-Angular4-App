@@ -10,7 +10,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OnboardingComponentStore } from './utility/onboarding.store';
 import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -81,6 +81,12 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
+        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+            }
+        });
+        
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.accountAsideMenuState === "in") {

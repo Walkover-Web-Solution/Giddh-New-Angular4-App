@@ -218,9 +218,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public setEmailFocus(emailType: string): void {
-        this.emailFocusStates.To = emailType === this.emailType.To;
-        this.emailFocusStates.Cc = emailType === this.emailType.Cc;
-        this.emailFocusStates.Bcc = emailType === this.emailType.Bcc;
+        this.emailFocusStates.To = emailType === EmailType.To;
+        this.emailFocusStates.Cc = emailType === EmailType.Cc;
+        this.emailFocusStates.Bcc = emailType === EmailType.Bcc;
     }
 
     /**
@@ -396,15 +396,15 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public clickedOutsideEmail(): void {
-        if (!this.allStaticEmails.length) {
+        if (this.clickedInsideEmailSection) {
             this.getAllStaticEmails();
+            this.clickedInsideEmailSection = false;
+            if ((this.emailFocusStates.Bcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.Cc && this.selectedCcEmails.length === 0)) {
+                this.setEmailFocus(EmailType.To);
+            }
+            this.showBcc = this.selectedBccEmails.length > 0;
+            this.showCc = this.selectedCcEmails.length > 0;
         }
-        this.clickedInsideEmailSection = false;
-        if ((this.emailFocusStates.Bcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.Cc && this.selectedCcEmails.length === 0)) {
-            this.setEmailFocus(EmailType.To);
-        }
-        this.showBcc = this.selectedBccEmails.length > 0;
-        this.showCc = this.selectedCcEmails.length > 0;
     }
 
     /**
