@@ -6,7 +6,7 @@
     <!-- GET_ALL TEMPLATE A -->
     <!-- *ngSwitchCase="'gst_template_a'"   -->
     <gst-template-a
-        *ngSwitchDefault
+        *ngSwitchCase="'false-condition'"
         [fieldsAndVisibility]="fieldsAndVisibility"
         [isPreviewMode]="isPreviewMode"
         [showLogo]="showLogo"
@@ -23,6 +23,25 @@
         [activeCompany]="activeCompany"
     >
     </gst-template-a>
+
+    <tally-template-a
+        *ngSwitchDefault
+        [fieldsAndVisibility]="fieldsAndVisibility"
+        [isPreviewMode]="isPreviewMode"
+        [showLogo]="showLogo"
+        [imageSignatureSrc]="imageSignatureSrc"
+        [showImageSignature]="showImageSignature"
+        [companyGSTIN]="companyGSTIN"
+        [companyPAN]="companyPAN"
+        [inputTemplate]="inputTemplate"
+        [logoSrc]="logoSrc"
+        [templateUISectionVisibility]="templateUISectionVisibility"
+        (sectionName)="onClickSection($event)"
+        [voucherType]="voucherType"
+        [showGstComposition]="showGstComposition"
+        [activeCompany]="activeCompany"
+    >
+    </tally-template-a>
 
     <!-- GET_ALL TEMPLATE E -->
     <gst-template-e
