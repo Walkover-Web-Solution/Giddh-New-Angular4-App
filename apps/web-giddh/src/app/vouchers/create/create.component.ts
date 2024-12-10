@@ -1330,7 +1330,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+        this.componentStore.voucherSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (!settings) {
                 this.componentStore.getInvoiceSettings();
             } else {
