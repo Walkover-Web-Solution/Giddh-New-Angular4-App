@@ -39,10 +39,19 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** Instance of bootstrap modal */
     public modalRef: BsModalRef;
-    public dataSource: Details[] = [];
+    public dataSource: Details[] = [
+        {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: 'H', action: ''},
+        {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: 'He',action: ''},
+        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+
+        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+
+        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+
+      ];
 
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
-    dataToDisplay = [...ELEMENT_DATA];
 
     public selecteAccount = [
         {
@@ -92,7 +101,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit() {
-        this.dataSource = this.dataToDisplay; 
+       
      }
 
     public ngOnDestroy() {
