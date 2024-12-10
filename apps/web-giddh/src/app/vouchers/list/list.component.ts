@@ -478,7 +478,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     if (this.activeModule === 'list') {
                         this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
                     }
-                    this.advanceFilters.to = this.queryParams.to;
+                    this.advanceFilters.page = this.queryParams.page;
                 }
                 this.getVouchers(true);
                 this.getVoucherBalances();
