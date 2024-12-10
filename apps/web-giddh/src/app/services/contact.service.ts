@@ -10,6 +10,11 @@ import { CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
 
+interface IBankRefreshResponse {
+    success: boolean;
+    message: string;
+}
+
 @Injectable()
 export class ContactService {
     private companyUniqueName: string;
@@ -137,4 +142,22 @@ export class ContactService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
     }
+    
+    /**
+     * Refresh bank accounts
+     * 
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof ContactService
+     */
+    public refreshBank(): Observable<BaseResponse<IBankRefreshResponse, string>> {
+        let url = this.config.apiUrl + CONTACT_API.BANKACCOUNTS_REFRESH;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
+    }
+
 }

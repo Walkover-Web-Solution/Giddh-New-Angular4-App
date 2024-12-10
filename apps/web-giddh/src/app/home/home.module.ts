@@ -28,6 +28,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -68,7 +69,8 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
         MatFormFieldModule,
         MatIconModule,
         MatDialogModule,
-        BankIntegrationModule
+        BankIntegrationModule,
+        MatTooltipModule
     ],
 })
 export class HomeModule {

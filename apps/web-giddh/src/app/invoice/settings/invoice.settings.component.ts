@@ -628,7 +628,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             position: {
                 right: '15px',
                 bottom: '0'
-            }
+            },
+            disableClose: true
         });
     }
 

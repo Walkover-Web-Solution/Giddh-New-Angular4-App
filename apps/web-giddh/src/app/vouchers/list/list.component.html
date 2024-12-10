@@ -1,5 +1,10 @@
-<ng-container appTranslate [file]="'vouchers/preview'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'vouchers/preview'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="position-relative invoice-list overflow-visible">
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex"
@@ -128,7 +133,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.customerName | titlecase }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -349,7 +354,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -617,7 +622,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -880,7 +885,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -1109,7 +1114,7 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.customerName | titlecase }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="./assets/images/path.svg" />
+                                                 <img src="{{ imgPath }}path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
@@ -1222,9 +1227,12 @@
                                     (click)="generateBulkInvoice(true)">
                                     {{ localeData?.generate_compound }}
                                 </button>
-                                <button mat-stroked-button color="primary"
-                                    *ngIf="!isCompany && selectedPendingVouchers?.length === 1"
-                                    (click)="previewInvoice()">
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    *ngIf="!isCompany && selectedPendingVouchers?.length && hasSameVoucherAccount"
+                                    (click)="invoiceGenerate()"
+                                >
                                     {{ localeData?.preview_generate }}
                                 </button>
                             </div>
@@ -1278,7 +1286,7 @@
                                     <td mat-cell *matCellDef="let element" class="p-0">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>{{ transaction?.particular?.name }}</p>
-                                            <p *ngIf="transaction?.inventory && transaction.inventory?.stock">
+                                            <p *ngIf="transaction?.inventory?.stock">
                                                 ({{ transaction.inventory.stock.name }})
                                             </p>
                                         </ng-container>
@@ -1293,7 +1301,8 @@
                                             <p>
                                                 <amount-field [amount]="transaction?.amount"
                                                     [currencySymbol]="element.accountCurrencySymbol"
-                                                    [currencyCode]="activeCompany?.baseCurrency">
+                                                    [currencyCode]="element?.accountCurrencyCode"
+                                                >
                                                 </amount-field>
                                             </p>
                                         </ng-container>
@@ -1313,7 +1322,7 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                                 <h3>{{ element?.account?.name }}</h3>
                                                 <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="./assets/images/path.svg" />
+                                                    <img src="{{ imgPath }}path.svg" />
                                                 </span>
                                             </div>
                                             <mat-card-content class="pt-3">
@@ -1342,7 +1351,8 @@
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
-                                                [currencyCode]="activeCompany?.baseCurrency">
+                                                [currencyCode]="element?.accountCurrencyCode"
+                                            >
                                             </amount-field>
                                         </span>
                                     </td>
@@ -2723,8 +2733,8 @@
                                     <th mat-header-cell *matHeaderCellDef>Particular</th>
                                     <td mat-cell *matCellDef="let element" class="p-0">
                                         <ng-container *ngFor="let transaction of element?.transactions">
-                                            <p>{{ transaction.particular.name }}</p>
-                                            <p *ngIf="transaction.inventory && transaction.inventory.stock">
+                                            <p>{{ transaction?.particular?.name }}</p>
+                                            <p *ngIf="transaction?.inventory?.stock">
                                                 ({{ transaction.inventory.stock.name }})
                                             </p>
                                         </ng-container>
@@ -2739,7 +2749,8 @@
                                             <p>
                                                 <amount-field [amount]="transaction?.amount"
                                                     [currencySymbol]="element.accountCurrencySymbol"
-                                                    [currencyCode]="activeCompany?.baseCurrency">
+                                                    [currencyCode]="element?.accountCurrencyCode"
+                                                >
                                                 </amount-field>
                                             </p>
                                         </ng-container>
@@ -2759,7 +2770,7 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                                 <h3>{{ element?.account?.name }}</h3>
                                                 <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="./assets/images/path.svg" />
+                                                     <img src="{{ imgPath }}path.svg" />
                                                 </span>
                                             </div>
                                             <mat-card-content class="pt-3">
@@ -2791,7 +2802,8 @@
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
-                                                [currencyCode]="activeCompany?.baseCurrency">
+                                                [currencyCode]="element?.accountCurrencyCode"
+                                            >
                                             </amount-field>
                                         </span>
                                     </td>
@@ -2875,11 +2887,6 @@
             [isEInvoiceEnabled]="isEInvoiceEnabled" [advanceFilters]="advanceFilters"
             (applyFilterEvent)="applyAdvanceSearch($event)"
             (closeDialogEvent)="closeAdvanceSearchDialog()"></app-advance-search>
-    </ng-template>
-
-    <!-- export-dialog -->
-    <ng-template #bulkExport>
-        <app-bulk-export></app-bulk-export>
     </ng-template>
 
     <!-- payment-dialog -->

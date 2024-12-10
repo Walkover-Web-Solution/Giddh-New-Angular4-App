@@ -20,7 +20,6 @@ export class HttpWrapperService {
         params?: any,
         options?: any
     ): Observable<any> => {
-        url = this.appendTimestamp(url); // Append timestamp
         options = this.prepareOptions(options);
         options.params = params;
         return this.http.get(url, options).pipe(
@@ -33,7 +32,6 @@ export class HttpWrapperService {
         );
     };
     public post = (url: string, body: any, options?: any): Observable<any> => {
-        url = this.appendTimestamp(url); // Append timestamp
         options = this.prepareOptions(options);
         return this.http.post(url, body, options).pipe(
             tap(res => {
@@ -45,7 +43,6 @@ export class HttpWrapperService {
         );
     };
     public put = (url: string, body: any, options?: any): Observable<any> => {
-        url = this.appendTimestamp(url); // Append timestamp
         options = this.prepareOptions(options);
         return this.http.put(url, body, options).pipe(
             tap(res => {
@@ -61,7 +58,6 @@ export class HttpWrapperService {
         params?: any,
         options?: any
     ): Observable<any> => {
-        url = this.appendTimestamp(url); // Append timestamp
         options = this.prepareOptions(options);
         options.search = this.objectToParams(params);
         return this.http.delete(url, options).pipe(
@@ -75,7 +71,6 @@ export class HttpWrapperService {
     };
 
     public deleteWithBody = (url: string, request: any): Observable<any> => {
-        url = this.appendTimestamp(url); // Append timestamp
         let options = { headers: {}, body: {} };
         options.headers["Session-Id"] = this.generalService.sessionId;
         options.headers["Content-Type"] = "application/json";
@@ -95,7 +90,6 @@ export class HttpWrapperService {
     };
 
     public patch = (url: string, body: any, options?: any): Observable<any> => {
-        url = this.appendTimestamp(url); // Append timestamp
         options = this.prepareOptions(options);
         return this.http.patch(url, body, options).pipe(
             tap(res => {
@@ -169,18 +163,5 @@ export class HttpWrapperService {
 
     private hideLoader(): void {
         this.loaderService.hide();
-    }
-
-    /**
-     * Utility function to append timestamp
-     *
-     * @private
-     * @param {string} url
-     * @return {*}  {string}
-     * @memberof HttpWrapperService
-     */
-    private appendTimestamp(url: string): string {
-        const timestamp = `t=${new Date().getTime()}`;
-        return url.includes("?") ? `${url}&${timestamp}` : `${url}?${timestamp}`;
     }
 }

@@ -52,12 +52,13 @@ import { saveAs } from 'file-saver';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
 import { SettingsIntegrationService } from '../services/settings.integration.service';
 import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
+import { HomeComponentStore } from '../home/home.store';
 
 @Component({
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
-    providers: [BankIntegrationComponentStore],
+    providers: [BankIntegrationComponentStore, HomeComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -326,6 +327,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
     /** Holds Store Requisition API success state as observable*/
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
+    /** Holds Store refresh bank success message as observable*/
+    private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
+    /** Holds Store refresh bank loading as observable*/
+    public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
 
     constructor(
         private store: Store<AppState>,
@@ -352,7 +357,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private router: Router,
         private settingsIntegrationService: SettingsIntegrationService,
-        private componentStore: BankIntegrationComponentStore
+        private componentStore: BankIntegrationComponentStore,
+        private homeComponentStore: HomeComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -997,6 +1003,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.getBankTransactions();
             }
         };
+
+        this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getBankTransactions();
+            }
+        });
+
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -3142,6 +3155,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Refresh bank transactions
+     *
+     * @memberof LedgerComponent
+     */
+    public refreshBankTransactions(): void {
+        this.homeComponentStore.refreshBank();
     }
 
 }
