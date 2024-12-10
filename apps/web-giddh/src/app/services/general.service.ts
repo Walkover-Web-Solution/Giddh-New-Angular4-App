@@ -722,7 +722,6 @@ export class GeneralService {
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
-        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -730,8 +729,7 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons,
-            actionBtnWrapperCssClass
+            buttons
         };
     }
 
@@ -2163,6 +2161,19 @@ export class GeneralService {
                 queryParamsHandling: queryParamsHandling
             }
         );
+    }
+
+    /**
+     * Round a Number to Company Decimal Places
+     *
+     * @param {number} value
+     * @param {number} [companyDecimalPlaces=2]
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
+        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 }
 
