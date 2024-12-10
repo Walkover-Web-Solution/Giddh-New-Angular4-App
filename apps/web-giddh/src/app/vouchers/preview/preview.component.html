@@ -54,7 +54,7 @@
                 </ng-container>
             </div>
             <div class="mat-grid-wrapper">
-                <div class="mat-list-wrap" *ngIf="!(getVouchersInProgress$ | async)" >
+                <div class="mat-list-wrap" *ngIf="(getVouchersInProgress$ | async) === false" >
                     <mat-list>
                         <app-cdk-scroll
                             [scrollTriggerDistance]="30"
@@ -72,7 +72,7 @@
                                             'active': item?.uniqueName === selectedInvoice?.uniqueName,
                                             'border-bottom': !lastItem
                                         }"
-                                        (click)="setSelectedInvoice(item?.uniqueName)"
+                                        (click)="setSelectedInvoice(item?.uniqueName, true)"
                                     >
                                         <div class="d-flex justify-content-between align-items-center column-gap5">
                                             <div>
@@ -135,7 +135,7 @@
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
-                                (click)="editVoucher()"
+                                (click)="editCopyVoucher('edit')"
                             >
                                 <i class="icon-edit-pencil"></i>
                             </button>
@@ -230,7 +230,7 @@
                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                             </button>
                             <ng-container *ngIf="[voucherTypeEnum.purchase, voucherTypeEnum.purchaseOrder].includes(voucherType)">
-                                <button mat-menu-item (click)="copyInvoice()">{{ commonLocaleData?.app_copy }}</button>
+                                <button mat-menu-item (click)="editCopyVoucher('copy')">{{ commonLocaleData?.app_copy }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
@@ -262,7 +262,7 @@
                             </ng-container>
                         </mat-menu>
                         <span *ngIf="isShowInvoiceStatus()" class="invoice-status border-radius-5 text-capitalize">
-                            {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action }}
+                            {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action ?? selectedInvoice?.status  }}
                         </span>
                         <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
@@ -340,7 +340,7 @@
                 *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
             ></giddh-page-loader>
 
-            <ng-container *ngIf="!(isVoucherDownloading$ | async)">
+            <ng-container *ngIf="(isVoucherDownloading$ | async) === false">
                 <div class="pdf-preview" *ngIf="voucherType === voucherTypeEnum.purchase">
                     <div class="position-relative">
                         <h5 class="pd-l15 py-2">

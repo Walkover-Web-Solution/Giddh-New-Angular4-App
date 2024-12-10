@@ -90,6 +90,14 @@ export const INTL_INPUT_OPTION = {
 };
 
 export const APP_DEFAULT_TITLE = '';
+export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
+
+/** Restricted modules */
+export enum RestrictedModules {
+    TaxFilling = 'Tax filing',
+    EInvoice = 'E-invoice',
+    Users = 'Users'
+};
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button

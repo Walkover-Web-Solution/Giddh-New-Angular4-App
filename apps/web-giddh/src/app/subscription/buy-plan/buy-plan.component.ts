@@ -1068,7 +1068,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                this.isUserManualChangePlan = this.selectedPlan.uniqueName !== this.viewSubscriptionData?.planUniqueName;
+                this.isUserManualChangePlan = this.selectedPlan?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
                 this.setFinalAmount();
             }
         });
@@ -1098,7 +1098,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
-                this.selectedPlan = result.find(plan => plan.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
             }
         });
         if (this.firstStepForm?.get('promoCode')?.value) {
