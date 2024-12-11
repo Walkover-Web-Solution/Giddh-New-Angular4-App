@@ -83,7 +83,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         };
 
-        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+        this.homeComponentStore.profile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile?.userEntityRoles) {
                 profile.userEntityRoles.forEach(role => {
                     const scopes = role.role.scopes;

@@ -3,6 +3,8 @@ import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "../services/toaster.service";
 import { ContactService } from "../services/contact.service";
+import { AppState } from "../store";
+import { Store } from "@ngrx/store";
 
 export interface HomeState {
     bankMessage: any;
@@ -19,11 +21,12 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
 
     constructor(
         private toaster: ToasterService,
-        private contactService: ContactService
+        private contactService: ContactService,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_STATE);
     }
-
+    public profile$: Observable<any> = this.select(this.store.select(profileObj => profileObj.settings.profile), (response) => response);
     /**
     *  Refresh bank accounts
     *

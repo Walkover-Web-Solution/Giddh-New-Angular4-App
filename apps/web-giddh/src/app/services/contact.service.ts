@@ -130,10 +130,10 @@ export class ContactService {
      /**
      * Refresh bank accounts
      * 
-     * @returns {Observable<BaseResponse<any, any>>}
+     * @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
      * @memberof ContactService
      */
-     public refreshBank(): Observable<BaseResponse<IBankRefreshResponse, string>> {
+     public refreshBank(): Observable<BaseResponse<IBankRefreshResponse, any>> {
         let url = this.config.apiUrl + CONTACT_API.BANKACCOUNTS_REFRESH;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         return this.http.get(url).pipe(
