@@ -1,10 +1,14 @@
 <!-- Write dialog code here -->
-<ng-container>
+<ng-container
+    appTranslate
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
 
     <div class="dialog-asidepan">
         <div class="dialog-header">
             <span mat-dialog-title class="font-16">Create</span>
-            <button class="close" mat-dialog-close>×</button>
+            <button aria-hidden="true" class="close" mat-dialog-close (click)="closeDialog()">×</button>
         </div>
         <div class="dialog-body pd-3">
             <div *ngIf="isLoading">
@@ -15,13 +19,13 @@
                     <input-field 
                         [type]="'text'"
                         [name]="'discountValue'" 
-                        [placeholder]=""
-                        [label]="">
+                        [placeholder]="'Enter Project Name'"
+                        [label]="'Project'">
                     </input-field>
                 </div>
                 <div class="col-12 d-flex column-gap1 mr-t2">
-                    <button mat-raised-button color="primary">save</button>
-                    <button mat-raised-button color="primary">cencle</button>
+                    <button mat-raised-button color="primary">{{ commonLocaleData?.app_save }}</button>
+                    <button mat-raised-button color="primary">{{ commonLocaleData?.app_cancel }}</button>
                 </div>
             </ng-container>
         </div>

@@ -1,8 +1,10 @@
 
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CreateProjectComponent } from '../components/create-project/create-project.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import {MatPaginator } from '@angular/material/paginator';
+import { takeUntil } from 'rxjs/operators';
+import {  ReplaySubject } from 'rxjs';
 
 export interface projectDetails {
     name: string;
@@ -32,6 +34,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
     public dataSource: projectDetails[] = [];
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
@@ -61,9 +64,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 top: '0'
             }
         })
-        dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
-          });
+        // dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        //     console.log(`Dialog result: ${result}`);
+        //   });
     }
 
 }
