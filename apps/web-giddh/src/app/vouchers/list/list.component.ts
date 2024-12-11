@@ -29,27 +29,11 @@ import { trigger, state, style, transition, animate } from "@angular/animations"
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
-
-// bill-table
-export interface PeriodicElementBill {
-    bill: string;
-    position: number;
-    vendor: string;
-    billdate: string;
-    order: string;
-    amount: string;
-    duedate: string;
-    status: string;
-}
-// bill-table
-const BILL_DATA: PeriodicElementBill[] = [
-    { position: 1, bill: 'Hydrogen', vendor: 'Ashish RANJAN', billdate: 'H', order: 'H', amount: '', duedate: '', status: '' }
-];
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -102,8 +86,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** Holds advance search dailog template reference */
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
-    /** Holds export dailog template reference */
-    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Holds Payment template reference */
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Holds adjust payment dailog template reference */
@@ -326,9 +308,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private salesAction: SalesActions,
-        private settingsProfileActions: SettingsProfileActions,
-        private invoiceActions: InvoiceActions
+        private invoiceActions: InvoiceActions,
+        private salesAction: SalesActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -338,7 +319,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
             }
         });
-        this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
@@ -354,7 +334,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
-        this.getInvoiceSettings();
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
@@ -390,9 +371,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-
+        this.getInvoiceSettings();
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -635,7 +614,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.allVouchersSelected = false;
             }
         });
-
 
         this.componentStore.universalPendingDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -1151,15 +1129,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private getInvoiceSettings(): void {
         this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (!settings) {
-                this.componentStore.getInvoiceSettings();
+                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             } else {
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
 
                     if (!this.isEInvoiceEnabled) {
                         this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
                     }
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
@@ -1275,7 +1254,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(this.bulkExport, {
+        this.dialog.open(BulkExportComponent, {
             width: '600px',
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),

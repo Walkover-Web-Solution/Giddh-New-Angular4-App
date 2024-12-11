@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
@@ -47,7 +47,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.exportForm = this.formBuilder.group({
             copyTypes: [''],
-            recipients: ['']
+            recipients: [''],
+            mergePdf: new FormControl<boolean>(false, { nonNullable: true })
         });
 
         this.getRecipientEmail();
@@ -110,15 +111,17 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         }
 
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
-        let postRequest: any;
         getRequest.from = this.inputData?.advanceFilters?.from;
         getRequest.to = this.inputData?.advanceFilters?.to;
         getRequest.type = this.inputData?.voucherType;
         getRequest.mail = sendMail;
         getRequest.q = (this.inputData?.advanceFilters?.q) ? this.inputData?.advanceFilters?.q : "";
 
-        postRequest = cloneDeep(this.inputData?.advanceFilters);
-        postRequest.uniqueNames = this.inputData?.voucherUniqueNames;
+        const postRequest = {
+            ...cloneDeep(this.inputData?.advanceFilters),
+            mergePdf: this.exportForm.get('mergePdf')?.value ?? false,
+            uniqueNames: this.inputData?.voucherUniqueNames ?? []
+        };
 
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             postRequest.copyTypes = this.exportForm.value?.copyTypes;
