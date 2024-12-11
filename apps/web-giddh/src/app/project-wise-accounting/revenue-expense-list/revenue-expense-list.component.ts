@@ -25,6 +25,10 @@ export interface Details {
     templateUrl: './revenue-expense-list.component.html'
 })
 export class RevenueExpenseListComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** This will store selected date ranges */
