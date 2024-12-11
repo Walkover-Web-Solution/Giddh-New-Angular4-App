@@ -189,6 +189,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** Holds voucher type enum to use Enum in html */
     public voucherTypeEnum: any = VoucherTypeEnum;
+    /** Holds true when need to refresh page */
+    private isRefresh: boolean = null;
 
     constructor(
         private router: Router,
@@ -231,7 +233,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.advanceFilters.page = Number(params.page);
                     this.advanceFilters.from = params.from ?? '';
                     this.advanceFilters.to = params.to ?? '';
-                    this.getAllVouchers();
+                    const searchString = params.search;
+                    if (searchString) {
+                        this.search.setValue(searchString);
+                    } else {
+                        this.getAllVouchers();
+                    }
                 }
             }
         });
@@ -250,9 +257,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     sort: '',
                     sortBy: ''
                 };
-
                 this.isSearching = true;
-
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -275,11 +280,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @param {string} voucherUniqueName
      * @memberof VouchersPreviewComponent
      */
-    public setSelectedInvoice(voucherUniqueName: string): void {
-        if (this.selectedInvoice?.uniqueName === voucherUniqueName) {
+    public setSelectedInvoice(voucherUniqueName: string, isNewInvoiceSelected: boolean = false): void {
+        if (isNewInvoiceSelected && this.selectedInvoice?.uniqueName === voucherUniqueName) {
             return;
         }
-
         this.selectedInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
         if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
             this.getVoucherVersions(this.selectedInvoice);
@@ -421,6 +425,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             if (response) {
                 this.dialog.closeAll();
                 this.toaster.showSnackBar("success", (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
+                this.getAllVouchers();
             }
         });
 
@@ -432,10 +437,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                const defaultThermalTemplate = response?.filter(response => response.templateType === 'thermal_template');
-                if (defaultThermalTemplate?.length > 0) {
-                    this.defaultThermalTemplate = defaultThermalTemplate[0];
-                }
+                this.defaultThermalTemplate = response?.find(response =>  response.isDefault && (response.templateType === 'thermal_template'));
             }
         });
 
@@ -823,7 +825,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public sendEmail(response: any): void {
         if (response) {
-            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice) {
+            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName,
                     payload: {
@@ -914,7 +916,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 currentInvoiceList.push(item);
             });
 
-            if (this.isSearching && (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) {
+            if ((this.isSearching && (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.invoiceList = currentInvoiceList;
             } else {
                 this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
@@ -926,6 +928,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             if (this.invoiceList?.length) {
                 this.setSelectedInvoice(!this.selectedInvoice ? this.params.voucherUniqueName : this.invoiceList[0].uniqueName);
             }
+            this.isRefresh = false;
         }
     }
 
@@ -1054,6 +1057,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             } else {
                 this.openDownloadVoucher();
             }
+        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+            saveAs(this.attachedDocumentBlob, this.localeData?.download_po_filename);
         } else {
             this.openDownloadVoucher();
         }
@@ -1115,23 +1120,28 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Edit voucher redirect to voucher edit page with respective voucher
+     * Handle Edit/Copy voucher redirect to voucher edit/create page with respective voucher
      *
      * @memberof VouchersPreviewComponent
      */
-    public editVoucher(): void {
+    public editCopyVoucher(actionType: 'edit' | 'copy' = 'edit'): void {
         const queryParams = {
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
             page: this.advanceFilters.page
         }
 
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (actionType === 'edit' && searchString?.length) {
+            queryParams['search'] = searchString;
+        }
+
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/estimates/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/proformas/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.voucherNumber}/${actionType}`], { queryParams: queryParams });
         } else {
-            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/edit`], { queryParams: queryParams });
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName}/${this.selectedInvoice?.uniqueName}/${actionType}`], { queryParams: queryParams });
         }
     }
 
@@ -1143,29 +1153,19 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public actionVoucher(action: string, event?: any): void {
+        this.isRefresh = true;
         if (action) {
-            if (action === 'open') {
+            if (this.invoiceType.isPurchaseOrder) {
+                action = action === "cancel" ? "cancelled" : action;
                 this.componentStore.purchaseOrderStatusUpdate({ accountUniqueName: this.selectedInvoice?.vendor?.uniqueName, payload: { action: action, purchaseNumber: this.selectedInvoice?.voucherNumber } });
             } else {
-                this.componentStore.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
+                this.componentStore.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action } });
             }
         } else {
             this.componentStore.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
         }
     }
 
-    /**
-     * Copy Invoice and redirect to respective page
-     *
-     * @memberof VouchersPreviewComponent
-     */
-    public copyInvoice(): void {
-        if (this.voucherType === VoucherTypeEnum.purchase) {
-            this.router.navigate([`/pages/proforma-invoice/invoice/purchase/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.uniqueName}/copy`]);
-        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-            this.router.navigate([`/pages/purchase-management/purchase-order/new/${this.selectedInvoice?.uniqueName}`]);
-        }
-    }
 
     /**
      * Handle Estimate Proforma Actions API Call
@@ -1248,7 +1248,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public isShowInvoiceStatus(): boolean {
-        if (((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) || (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice)) {
+        if (((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && (this.selectedInvoice?.balanceStatus === 'CANCEL')) || (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) || (this.invoiceType.isPurchaseOrder && this.selectedInvoice?.status === 'cancelled')) {
             return true;
         } else {
             return false;

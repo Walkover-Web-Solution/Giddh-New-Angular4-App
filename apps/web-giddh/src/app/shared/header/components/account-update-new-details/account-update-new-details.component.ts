@@ -50,7 +50,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, differenceBy, flattenDeep, isEqual, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
@@ -147,7 +147,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
-    public selectedDiscounts: any[] = [];
+    public selectedDiscounts: string = null;
     public selectedDiscountList: any[] = [];
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
@@ -248,6 +248,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public company: any = {
         branch: null,
     };
+    /** True if update data on temp bulk data  */
+    public isBulkDataUpdated: boolean = false;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -926,9 +928,33 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
+        let branchModeOpeningBalance = [
+            {
+                branch: {
+                    name: this.company?.branch?.name,
+                    uniqueName: this.company?.branch?.uniqueName
+                },
+                openingBalance: this.addAccountForm.get('openingBalance')?.value,
+                foreignOpeningBalance: this.addAccountForm.get('foreignOpeningBalance')?.value,
+                openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
+            }
+        ];
 
         const accountOpeningBalanceValue = this.addAccountForm.get('accountOpeningBalance')?.value;
-        accountRequest.accountOpeningBalance = this.mergeOpeningBalanceData(accountOpeningBalanceValue);
+        const isAccountOpeningBalanceValid = accountOpeningBalanceValue?.some((balance: any) => {
+            return balance.branch || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+        const isBranchModeOpeningBalanceValid = branchModeOpeningBalance.some((balance: any) => {
+            return balance.branch?.name || balance.openingBalance || balance.foreignOpeningBalance || balance.openingBalanceType;
+        });
+
+        accountRequest.accountOpeningBalance = this.company.isActive
+            ? (isAccountOpeningBalanceValid ? accountOpeningBalanceValue : [])
+            : (isBranchModeOpeningBalanceValid ? branchModeOpeningBalance : []);
+        if (this.company.isActive) {
+            accountRequest.accountOpeningBalance = this.isBulkDataUpdated ? this.tempSaveBulkData : !this.tempSaveBulkData?.length ? this.accountOpeningBalance : this.mergeOpeningBalanceData(accountOpeningBalanceValue);
+            accountRequest.accountOpeningBalance = accountRequest.accountOpeningBalance?.filter((res: any) => res?.branch?.uniqueName);
+        }
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -1030,11 +1056,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 updatedOpeningBalance.push(updatedItem);
             }
         });
-
-        if (updatedOpeningBalance.length === 1 && (!updatedOpeningBalance[0].branch || !updatedOpeningBalance[0].openingBalance || !updatedOpeningBalance[0].openingBalanceType)) {
-            return [];
-        }
-
 
         if (!accountOpeningBalanceValue.length) {
             return this.accountOpeningBalance;
@@ -1560,10 +1581,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
         if (this.activeAccountName) {
-            uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.activeAccountName;
-            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.discounts = this.selectedDiscounts?.length ? [this.selectedDiscounts] : [];
             assignDiscountObject.isAccount = true;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
@@ -2046,7 +2066,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         });
                     }
                     this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        this.selectedDiscounts = [];
+                        this.selectedDiscounts = null;
                         this.forceClearDiscount$ = observableOf({ status: true });
                         if (response?.status === 'success') {
                             if (response.body) {
@@ -2054,12 +2074,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                     let list = response.body[accountDetails?.uniqueName];
                                     Object.keys(list)?.forEach(key => {
                                         let UniqueName = list[key]['discount']['uniqueName'];
-                                        this.selectedDiscounts.push(UniqueName);
+                                        this.selectedDiscounts = UniqueName;
                                     });
                                 }
                             }
                         }
-                        uniq(this.selectedDiscounts);
                     });
                     this._accountService
                         .getPortalUsers(accountDetails?.uniqueName)
@@ -2304,6 +2323,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
+                this.isBulkDataUpdated = true;
             }
         });
     }
