@@ -129,9 +129,9 @@ export class TemplateFroalaComponent implements OnInit {
     public emailType = EmailType;
     /** This variable maintains the focus state for email types: "to", "cc", and "bcc". */
     public emailFocusStates: any = {
-        To: true,
-        Cc: true,
-        Bcc: true
+        isTo: true,
+        isCc: true,
+        isBcc: true
     }
 
     constructor(
@@ -218,9 +218,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public setEmailFocus(emailType: string): void {
-        this.emailFocusStates.To = emailType === EmailType.To;
-        this.emailFocusStates.Cc = emailType === EmailType.Cc;
-        this.emailFocusStates.Bcc = emailType === EmailType.Bcc;
+        this.emailFocusStates.isTo = emailType === EmailType.To;
+        this.emailFocusStates.isCc = emailType === EmailType.Cc;
+        this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
     }
 
     /**
@@ -399,7 +399,7 @@ export class TemplateFroalaComponent implements OnInit {
         if (!this.allStaticEmails) {
             this.getAllStaticEmails();
             this.clickedInsideEmailSection = false;
-            if ((this.emailFocusStates.Bcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.Cc && this.selectedCcEmails.length === 0)) {
+            if ((this.emailFocusStates.isBcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.isCc && this.selectedCcEmails.length === 0)) {
                 this.setEmailFocus(EmailType.To);
             }
             this.showBcc = this.selectedBccEmails.length > 0;

@@ -112,7 +112,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
-            if (this.selectField && this.autoFocus) {
+            if (this.autoFocus && this.selectField) {
                 this.selectField.nativeElement.focus();
             }
         }, 100);

@@ -18,7 +18,7 @@
                             <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{localeData?.to}}</label>
                             <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
                                 {{allStaticEmails}}
-                                <span class="suffix-emails font-15 d-inline-block" *ngIf="isHiddenEmails.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{isHiddenEmails}}</span>
+                                <span class="suffix-emails font-15 d-inline-block text-primary" *ngIf="isHiddenEmails.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{isHiddenEmails}}</span>
                             </div>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedToEmails.length}" *ngIf="!(getTotalEmailsCount() || clickedInsideEmailSection) || clickedInsideEmailSection">
                                 <select-multiple-fields
@@ -28,7 +28,7 @@
                                     [selectedValues]="selectedToEmails"
                                     [validations]="['email']"
                                     [chipPrefix]="'@'"
-                                    [autoFocus]="emailFocusStates.To"
+                                    [autoFocus]="emailFocusStates.isTo"
                                     [name]="emailType.To"
                                     class="select-multiple-chiplist w-100"
                                 ></select-multiple-fields>
@@ -53,7 +53,7 @@
                                     [selectedValues]="selectedCcEmails"
                                     [validations]="['email']"
                                     [chipPrefix]="'@'"
-                                    [autoFocus]="emailFocusStates.Cc"
+                                    [autoFocus]="emailFocusStates.isCc"
                                     [name]="emailType.Cc"
                                     class="select-multiple-chiplist w-100"
                                 ></select-multiple-fields>
@@ -76,7 +76,7 @@
                                     [selectedValues]="selectedBccEmails"
                                     [validations]="['email']"
                                     [chipPrefix]="'@'"
-                                    [autoFocus]="emailFocusStates.Bcc"
+                                    [autoFocus]="emailFocusStates.isBcc"
                                     [name]="emailType.Bcc"
                                     class="select-multiple-chiplist w-100"
                                 ></select-multiple-fields>
