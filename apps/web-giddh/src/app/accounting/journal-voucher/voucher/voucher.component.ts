@@ -727,7 +727,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'by',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -756,7 +756,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'to',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -773,15 +773,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.selectAccUnqName = filteredTaxData[0]?.additional?.name;
         } else {
             newTransactionFormGroup.patchValue({
-                amount: null,
-                actualAmount: null,
+                amount: 0,
+                actualAmount: 0,
                 particular: '',
                 currentBalance: '',
                 applyApplicableTaxes: false,
                 isInclusiveTax: false,
                 type: byOrTo,
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -1478,11 +1478,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
-                totalCredit += control.get('amount').value;
+                totalCredit += Number(control.get('amount').value) ?? 0;
             } else {
-                totalDebit += control.get('amount').value;
+                totalDebit += Number(control.get('amount').value) ?? 0;
             }
-        });
+            });
 
         totalCredit = this.generalService.roundOffValueByCompanyDecimalPlace(totalCredit);
         totalDebit = this.generalService.roundOffValueByCompanyDecimalPlace(totalDebit);
