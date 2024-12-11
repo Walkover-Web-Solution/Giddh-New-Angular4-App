@@ -781,8 +781,11 @@ sh-select:focus {
     padding-left: 12px;
     font-size: var(--font-size-15);
     min-height: 49px;
-    display: flex;
     padding-top: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: block;
 }
 .account-placeholder-text {
     color: var(--color-nero) !important;
