@@ -50,6 +50,8 @@ export class TallyTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
+        console.log("Json", this.fieldsAndVisibility);
+        
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);

@@ -1,316 +1,373 @@
 <!DOCTYPE html>
-<!--*ngIf="templateId == 'common_template_a'"-->
 <html id="default" lang="en">
-    <head>
-        <title></title>
-    </head>
 
-    <body
-        *ngIf="inputTemplate.sections && inputTemplate.sections"
-        [ngStyle]="{
+<head>
+  <title></title>
+</head>
+
+<body *ngIf="inputTemplate.sections && inputTemplate.sections" [ngStyle]="{
             'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans',
             'padding-top': inputTemplate.topMargin + 'px',
             'padding-bottom': inputTemplate.bottomMargin + 'px',
             'padding-right': inputTemplate.rightMargin + 'px',
             'padding-left': inputTemplate.leftMargin + 'px',
             'font-size': inputTemplate.fontDefault + 'px'
-        }"
-    >
-        
-    
-    <div id="Template-header" class="content_wrap">
-        <header id="pageHeader">
-          <table>
-            <tbody>
-              <tr>
-                <td class="padding-0 border-none">
-                  <table>
-                    <tr>
-                      <td class="border-none" width="33%"></td>
-                      <td class="border-none" width="33%">
-                          #if($label.formNameInvoice || $label.formNameTaxInvoice)
-                              <h1 class="text-center">
-                                  #if($label.formNameInvoice)
-                                      $label.formNameInvoice
-                                  #elseif($label.formNameTaxInvoice)
-                                      $label.formNameTaxInvoice
-                                  #end
-                              </h1>
-                          #end
-                      </td>
-                      <td class="border-none text-right" width="33%">
-                        <p>(Original for Recipient)</p>
-                      </td>
-                    </tr>
-                  </table>
-                  <table>
-                    <tr>
-                      <td width="50%" class="padding-0">
-                        <table>
-                          <tr>
-                            <td class="border-none border-bottom">
-                              <table>
-                                  <tr>
-                                      #if($showlogo)
-                                          <td class="padding-0 border-none pd-r1" width="$logoSize">
-                                              <figure class="margin-0">
-                                                  <img
-                                                    src="$logopath"
-                                                    width="$logoSize"
-                                                    height="$logoSize"
-                                                    alt="logo"
-                                                  />
-                                              </figure>
-                                          </td>
-                                      #end
-                                      <td class="padding-0 border-none">
-                                          #if($label.headerCompanyName)
-                                             <h2 class="word-break">
-                                                 <strong>
-                                                   $label.headerCompanyName
-                                                 </strong>
-                                             </h2>
-                                          #end
+        }">
+
+  <!-- Header -->
+  <div id="Template-header" [ngClass]="{
+      'disabled-area': templateUISectionVisibility.header, ' ': templateUISectionVisibility.header}"
+    (click)="onClickSection('header')">
+    <header id="pageHeader">
+      <table>
+        <tbody>
+          <tr>
+            <td class="padding-0 border-none">
+              <table>
+                <tr>
+                  <td class="border-none" width="33%"></td>
+                  <td class="border-none" width="33%">
+                    <ng-container *ngIf="
+                      fieldsAndVisibility.header.formNameInvoice?.label
+                      && 
+                      fieldsAndVisibility.header.formNameTaxInvoice?.label
+                    ">
+                      <h1 *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display" class="text-center" style="font-size: 22px !important;">
+                        <strong>
+                          {{ fieldsAndVisibility.header.formNameTaxInvoice?.display
+                          ? fieldsAndVisibility.header.formNameTaxInvoice?.label
+                          : fieldsAndVisibility.header.formNameInvoice?.label
+                          }}
+                      </strong>
+                      </h1>
+                    </ng-container>
+                  </td>
+                  <td class="border-none text-right" width="33%">
+                    <!-- This will show typeOfInvoice (Original	for	Recipient) in PDF -->
+                  </td>
+                </tr>
+                <tr *ngIf="fieldsAndVisibility.footer.displayExportMessage?.display || true">
+                  <td colspan="100%" 
+                    class="border-none text-center" 
+                    [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
+                  >
+                    {{
+                      activeCompany?.withPay
+                                    ? "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITH PAYMENT OF INTEGRATED TAX"
+                                    : "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX"
+                    }}
+                  </td>
+                </tr>
+              </table>
+
+              <!-- <ng-container *ngIf="false">
+                #if(($label.showQrCode && ($isBusinessToCustomerInvoice || $isBusinessToBusinessInvoice)) || ($irnNumber
+                && $ackNo && $ackDate && $label.showEInvoiceDetails))
+                <table>
+                  <tr>
+                    #if (($irnNumber && $ackNo && $ackDate && $label.showEInvoiceDetails))
+                    <td class="border-none vertical-align-bottom">
+                      <table>
+                        <tr>
+                          <td class="border-none padding-0" width="100px">
+                            IRN
+                          </td>
+                          <td class="border-none padding-0">
+                            : $irnNumber
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="border-none padding-0" width="100px">
+                            Ack No
+                          </td>
+                          <td class="border-none padding-0">
+                            : $ackNo
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="border-none padding-0" width="100px">
+                            Ack Date
+                          </td>
+                          <td class="border-none padding-0">
+                            : $ackDate
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    #end
   
-                                          <p class="margin-0">
-                                              #if($companyDefAddress)
-                                                  #foreach($address in $companyDefAddress)
-                                                      #if($address)
-                                                          <p>$address</p>
-                                                      #end
-                                                  #end
-                                              #end
-                                          </p>
+                    #if($label.showQrCode && ($isBusinessToCustomerInvoice || $isBusinessToBusinessInvoice))
+                    <td id="qr-code-section" class="border-none text-center vertical-align-bottom">
+                      #set($qrCodeSrc="data:image/png;base64,${QRCodeBase64String}")
+                      <img id="qr-code" src="$qrCodeSrc" width="100%" />
+                    </td>
+                    #end
+                  </tr>
+                </table>
+                #end
   
-                                          <table>
-                                           #if($label.companyGSTIN && $companyGSTIN)
-                                                <tr>
-                                                  <td class="border-none padding-0" width="100px">
-                                                    $label.companyGSTIN
-                                                  </td>
-                                                  <td class="border-none padding-0">
-                                                    : $companyGSTIN
-                                                  </td>
-                                                </tr>
-                                            #end
-  
-                                             #if($companyEmail)
-                                                  <tr>
-                                                    <td class="border-none padding-0" width="100px">
-                                                      Email
-                                                    </td>
-                                                    <td class="border-none padding-0">
-                                                      : $companyEmail
-                                                    </td>
-                                                  </tr>
-                                             #end
-                                          </table>
-                                      </td>
-                                  </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="border-none border-bottom">
-  
-                              #if($label.shippingAddress)
-                                  <p class="font-11">
-                                      $label.shippingAddress
-                                  </p>
-                              #end
-  
-                              #if($customerName)
-                                  <p><strong>$customerName</strong></p>
-                              #end
-  
-                              #foreach($address in $shippingAddress)
-                                  #if($address)
-                                      <p>$address</p>
-                                  #end
-                              #end
-  
-                              <table>
-                                #if($label.shippingAddress && $label.shippingGstin)
-                                    <tr>
-                                      <td class="border-none padding-0" width="100px">
-                                          $label.shippingGstin
-                                      </td>
-                                      <td class="border-none padding-0">
-                                          : $shippingGstin
-                                      </td>
-                                    </tr>
-                                #end
-  
-                                #if($label.shippingAddress && $label.shippingState)
-                                    <tr>
-                                      <td class="border-none padding-0" width="100px">
-                                        #if($label.shippingState)
-                                          $label.shippingState
-                                        #end
-                                      </td>
-                                      <td class="border-none padding-0">
-                                          #if($shippingState)
-                                              : $shippingState
-                                          #end
-                                      </td>
-                                    </tr>
-                                #end
-  
-                                #if($attentionTo)
-                                  <tr>
-                                    <td class="border-none padding-0" width="100px">
-                                       Contact person
-                                    </td>
-                                    <td class="border-none padding-0">
-                                        $attentionTo
-                                    </td>
-                                  </tr>
-                                #end
-  
-                                #if($customerEmail)
-                                    <tr>
-                                      <td class="border-none padding-0" width="100px">
-                                        E-mail
-                                      </td>
-                                      <td class="border-none padding-0">
-                                         $customerEmail
-                                      </td>
-                                    </tr>
-                                #end
-  
-                                #if($customerMobileNumber)
-                                  <tr>
-                                    <td class="border-none padding-0" width="100px">
-                                      E-mail
-                                    </td>
-                                    <td class="border-none padding-0">
-                                       $customerMobileNumber
-                                    </td>
-                                  </tr>
-                                #end
-  
-                              </table>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="border-none">
-  
-                              #if($label.billingAddress)
-                                  <p class="font-11">
-                                      $label.billingAddress
-                                  </p>
-                              #end
-  
-                              #if($customerName)
-                                  <p><strong>$customerName</strong></p>
-                              #end
-  
-                              #foreach($address in $billingAddress)
-                                  #if($address)
-                                      <p>$address</p>
-                                  #end
-                              #end
-  
-                              <table>
-                                #if($label.billingAddress && $label.billingGstin)
-                                    <tr>
-                                      <td class="border-none padding-0" width="100px">
-                                          $label.billingGstin
-                                      </td>
-                                      <td class="border-none padding-0">
-                                          : billingGstin
-                                      </td>
-                                    </tr>
-                                #end
-  
-                                #if($label.billingAddress && $label.billingState)
-                                    <tr>
-                                      <td class="border-none padding-0" width="100px">
-                                        #if($label.billingState)
-                                          $label.billingState
-                                        #end
-                                      </td>
-                                      <td class="border-none padding-0">
-                                          #if($billingState)
-                                              : $billingState
-                                          #end
-                                      </td>
-                                    </tr>
-                                #end
-  
-                                 #if($attentionTo)
-                                    <tr>
-                                      <td class="border-none padding-0" width="100px">
-                                         Contact person
-                                      </td>
-                                      <td class="border-none padding-0">
-                                          $attentionTo
-                                      </td>
-                                    </tr>
-                                  #end
-  
-                                  #if($customerEmail)
-                                      <tr>
-                                        <td class="border-none padding-0" width="100px">
-                                          E-mail
-                                        </td>
-                                        <td class="border-none padding-0">
-                                           $customerEmail
-                                        </td>
-                                      </tr>
-                                  #end
-  
-                                  #if($customerMobileNumber)
-                                    <tr>
-                                      <td class="border-none padding-0" width="100px">
-                                        E-mail
-                                      </td>
-                                      <td class="border-none padding-0">
-                                         $customerMobileNumber
-                                      </td>
-                                    </tr>
-                                  #end
-  
-                              </table>
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                      <td width="50%" class="padding-0 vertical-align-top">
-                        <table class="table-row-height">
-                          #if($label.invoiceNumber || $label.invoiceDate)
+                <table>
+                  <tr>
+                    <td width="50%" class="padding-0">
+                      <table>
+                        <tr>
+                          <td class="border-none border-bottom">
+                            <table>
                               <tr>
-                                <td
-                                  width="50%"
-                                  class="border-none border-bottom border-right"
-                                >
-                                  #if($label.invoiceNumber)
-                                      <span>$label.invoiceNumber</span>
-                                      <p class="margin-0">
-                                        <strong>$invoiceNumber</strong>
-                                      </p>
+                                #if($showlogo)
+                                <td class="padding-0 border-none pd-r1" width="$logoSize">
+                                  <figure class="margin-0">
+                                    <img src="$logopath" width="$logoSize" height="$logoSize" alt="logo" />
+                                  </figure>
+                                </td>
+                                #end
+                                <td class="padding-0 border-none">
+                                  #if($label.headerCompanyName)
+                                  <h2 class="word-break">
+                                    <strong>
+                                      $label.headerCompanyName
+                                    </strong>
+                                  </h2>
+                                  #end
+  
+                                  <p class="margin-0">
+                                    #if($companyDefAddress)
+                                    #foreach($address in $companyDefAddress)
+                                    #if($address)
+                                  <p>$address</p>
+                                  #end
+                                  #end
+                                  #end
+                                  </p>
+  
+                                  <table>
+                                    #if($label.companyGSTIN && $companyGSTIN)
+                                    <tr>
+                                      <td class="border-none padding-0" width="100px">
+                                        $label.companyGSTIN
+                                      </td>
+                                      <td class="border-none padding-0">
+                                        : $companyGSTIN
+                                      </td>
+                                    </tr>
+                                    #end
+  
+                                    #if($companyEmail)
+                                    <tr>
+                                      <td class="border-none padding-0" width="100px">
+                                        Email
+                                      </td>
+                                      <td class="border-none padding-0">
+                                        : $companyEmail
+                                      </td>
+                                    </tr>
+                                    #end
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="border-none border-bottom">
+  
+                            #if($label.shippingAddress)
+                            <p class="font-11">
+                              $label.shippingAddress
+                            </p>
+                            #end
+  
+                            #if($customerName)
+                            <p><strong>$customerName</strong></p>
+                            #end
+  
+                            #foreach($address in $shippingAddress)
+                            #if($address)
+                            <p>$address</p>
+                            #end
+                            #end
+  
+                            <table>
+                              #if($label.shippingAddress && $label.shippingGstin)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  $label.shippingGstin
+                                </td>
+                                <td class="border-none padding-0">
+                                  : $shippingGstin
+                                </td>
+                              </tr>
+                              #end
+  
+                              #if($label.shippingAddress && $label.shippingState)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  #if($label.shippingState)
+                                  $label.shippingState
                                   #end
                                 </td>
-                                <td width="50%" class="border-none border-bottom">
-                                  #if($label.invoiceDate)
-                                      <span>$label.invoiceDate</span>
-                                      <p class="margin-0">
-                                        <strong>$invoiceDate</strong>
-                                      </p>
+                                <td class="border-none padding-0">
+                                  #if($shippingState)
+                                  : $shippingState
                                   #end
                                 </td>
                               </tr>
-                          #end
+                              #end
   
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </header>
-      </div>
-    </body>
+                              #if($attentionTo)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  Contact person
+                                </td>
+                                <td class="border-none padding-0">
+                                  : $attentionTo
+                                </td>
+                              </tr>
+                              #end
+  
+                              #if($customerEmail)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  E-mail
+                                </td>
+                                <td class="border-none padding-0">
+                                  : $customerEmail
+                                </td>
+                              </tr>
+                              #end
+  
+                              #if($customerMobileNumber)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  Contact
+                                </td>
+                                <td class="border-none padding-0">
+                                  : $customerMobileNumber
+                                </td>
+                              </tr>
+                              #end
+  
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="border-none">
+  
+                            #if($label.billingAddress)
+                            <p class="font-11">
+                              $label.billingAddress
+                            </p>
+                            #end
+  
+                            #if($customerName)
+                            <p><strong>$customerName</strong></p>
+                            #end
+  
+                            #foreach($address in $billingAddress)
+                            #if($address)
+                            <p>$address</p>
+                            #end
+                            #end
+  
+                            <table>
+                              #if($label.billingAddress && $label.billingGstin)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  $label.billingGstin
+                                </td>
+                                <td class="border-none padding-0">
+                                  : billingGstin
+                                </td>
+                              </tr>
+                              #end
+  
+                              #if($label.billingAddress && $label.billingState)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  #if($label.billingState)
+                                  $label.billingState
+                                  #end
+                                </td>
+                                <td class="border-none padding-0">
+                                  #if($billingState)
+                                  : $billingState
+                                  #end
+                                </td>
+                              </tr>
+                              #end
+  
+                              #if($attentionTo)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  Contact person
+                                </td>
+                                <td class="border-none padding-0">
+                                  $attentionTo
+                                </td>
+                              </tr>
+                              #end
+  
+                              #if($customerEmail)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  E-mail
+                                </td>
+                                <td class="border-none padding-0">
+                                  : $customerEmail
+                                </td>
+                              </tr>
+                              #end
+  
+                              #if($customerMobileNumber)
+                              <tr>
+                                <td class="border-none padding-0" width="100px">
+                                  Contact
+                                </td>
+                                <td class="border-none padding-0">
+                                  $customerMobileNumber
+                                </td>
+                              </tr>
+                              #end
+  
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td width="50%" class="padding-0 vertical-align-top">
+                      <table class="table-row-height">
+                        #if($label.invoiceNumber || $label.invoiceDate)
+                        <tr>
+                          <td width="50%" class="border-none border-bottom border-right">
+                            #if($label.invoiceNumber)
+                            <span>$label.invoiceNumber</span>
+                            <p class="margin-0">
+                              <strong>$invoiceNumber</strong>
+                            </p>
+                            #end
+                          </td>
+                          <td width="50%" class="border-none border-bottom">
+                            #if($label.invoiceDate)
+                            <span>$label.invoiceDate</span>
+                            <p class="margin-0">
+                              <strong>$invoiceDate</strong>
+                            </p>
+                            #end
+                          </td>
+                        </tr>
+                        #end
+  
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </ng-container> -->
+           
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </header>
+  </div>
+</body>
 </html>

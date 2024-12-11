@@ -545,3 +545,66 @@ table.tax-table.item {
     justify-content: flex-end;
     align-items: flex-end;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse !important;
+    page-break-inside: auto;
+    page-break-after: auto;
+}
+
+table tr th,
+td {
+  border: 1px solid black;
+  text-align: left;
+  padding: 8px;
+}
+table.table-row-height tr td {
+  height: 50px;
+}
+
+.vertical-align-top {
+  vertical-align: top;
+}
+.vertical-align-middle {
+  vertical-align: middle;
+}
+.vertical-align-bottom {
+  vertical-align: bottom;
+}
+.border-none {
+  border: none;
+}
+.border-top {
+  border-top: 1px solid currentColor;
+}
+.border-bottom {
+  border-bottom: 1px solid currentColor;
+}
+.border-left {
+  border-left: 1px solid currentColor;
+}
+.border-right {
+  border-right: 1px solid currentColor;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.margin-0 {
+  margin: 0;
+}
+.mr-r1 {
+  margin-right: 10px !important;
+}
+.pd-r1 {
+  padding-right: 10px !important;
+}
+.padding-0 {
+  padding: 0;
+}
+table tr.border-top-none th {
+  border-top: none !important;
+}
