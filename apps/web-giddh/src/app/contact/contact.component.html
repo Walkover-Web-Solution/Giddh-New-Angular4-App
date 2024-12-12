@@ -275,6 +275,22 @@
                                             >
                                                 {{ localeData?.bulk_payment }}
                                             </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
+                                                (click)="sendBulkEmail('vendor')"
+                                                aria-label="send bulk email"
+                                            >
+                                               {{ commonLocaleData?.app_send_email }}
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'customer'"
+                                                (click)="sendBulkEmail('customer')"
+                                                aria-label="send bulk email"
+                                            >
+                                               {{ commonLocaleData?.app_send_email }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </div>
@@ -686,6 +702,13 @@
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button> -->
+                                     <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab)"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
                                 </mat-menu>
                             </div>
                         </td>

@@ -1,3 +1,4 @@
 export const CONTACT_API = {
-    ADD_COMMENT: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/report-comment'
+    ADD_COMMENT: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/report-comment',
+    SEND_EMAIL_TEMPLATE: 'v2/company/:companyUniqueName/accounts/send-mail'
 };
