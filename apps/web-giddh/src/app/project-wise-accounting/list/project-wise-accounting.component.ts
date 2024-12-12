@@ -1,10 +1,10 @@
 
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CreateProjectComponent } from '../components/create-project/create-project.component';
-import { MatDialog } from '@angular/material/dialog';
 import {MatPaginator } from '@angular/material/paginator';
 import { takeUntil } from 'rxjs/operators';
 import {  ReplaySubject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface projectDetails {
     name: string;
@@ -64,9 +64,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 top: '0'
             }
         })
-        // dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(result => {
-        //     console.log(`Dialog result: ${result}`);
-        //   });
     }
 
 }

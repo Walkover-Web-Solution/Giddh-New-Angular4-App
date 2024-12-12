@@ -23,10 +23,6 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         
     }
-    closeDialog(): void {
-        this.dialogRef.close();
-      }
-   
 
     public ngOnDestroy() {
        

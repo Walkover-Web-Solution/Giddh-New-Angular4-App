@@ -14,6 +14,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import { MatTabsModule } from '@angular/material/tabs';
         MatIconModule,
         TranslateDirectiveModule,
         MatPaginatorModule,
-        MatTabsModule
+        MatTabsModule,
+        MatDialogModule
     ],
     exports: [CreateProjectComponent]
 })
