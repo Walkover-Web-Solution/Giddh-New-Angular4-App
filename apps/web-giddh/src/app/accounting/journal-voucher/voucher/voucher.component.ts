@@ -316,6 +316,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private searchService: SearchService,
         private changeDetectionRef: ChangeDetectorRef,
         public dialog: MatDialog,
+        private generalService: GeneralService,
         private eleRef: ElementRef) {
         this.initJournalVoucherForm();
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
@@ -726,7 +727,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'by',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -755,7 +756,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'to',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -772,15 +773,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.selectAccUnqName = filteredTaxData[0]?.additional?.name;
         } else {
             newTransactionFormGroup.patchValue({
-                amount: null,
-                actualAmount: null,
+                amount: 0,
+                actualAmount: 0,
                 particular: '',
                 currentBalance: '',
                 applyApplicableTaxes: false,
                 isInclusiveTax: false,
                 type: byOrTo,
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -825,7 +826,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
                 transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
             }
-            const amount = this.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value);
+            const amount = this.generalService.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value);
             transaction.get('amount')?.patchValue(amount);
             transaction.get('actualAmount')?.patchValue(amount);
             transaction.get('total')?.patchValue(amount);
@@ -875,16 +876,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
 
             if (byEntryControl) {
-                byEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
+                byEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
             }
             if (toEntryControl) {
-                toEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newSales));
+                toEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(newSales));
             }
             if (discountEntryControl) {
-                discountEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newDiscount));
+                discountEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(newDiscount));
             }
             if (taxEntryControl) {
-                taxEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newTax));
+                taxEntryControl?.get('amount')?.patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(newTax));
             }
             const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
             this.totalCreditAmount = totalCreditAndDebit.totalCredit;
@@ -892,18 +893,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
-    /**
-     * Round a Number to Company Decimal Places
-     *
-     * @private
-     * @param {*} value
-     * @returns {number}
-     * @memberof AccountAsVoucherComponent
-     */
-    private roundOffValueByCompanyDecimalPlace(value: number): number {
-        const decimalPlaces = this.companyDecimalPlaces === 4 ? 10000 : 100;
-        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
-    }
 
     /**
      * Get Each transaction control
@@ -1489,14 +1478,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
-                totalCredit += control.get('amount').value;
+                totalCredit += Number(control.get('amount').value) ?? 0;
             } else {
-                totalDebit += control.get('amount').value;
+                totalDebit += Number(control.get('amount').value) ?? 0;
             }
-        });
+            });
 
-        totalCredit = this.roundOffValueByCompanyDecimalPlace(totalCredit);
-        totalDebit = this.roundOffValueByCompanyDecimalPlace(totalDebit);
+        totalCredit = this.generalService.roundOffValueByCompanyDecimalPlace(totalCredit);
+        totalDebit = this.generalService.roundOffValueByCompanyDecimalPlace(totalDebit);
 
         return { totalCredit, totalDebit };
     }
