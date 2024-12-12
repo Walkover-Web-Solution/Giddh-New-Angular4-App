@@ -594,7 +594,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get select " (click)="goToSelectPlan()">{{
+                <a *ngIf="subscribedPlan?.planDetails?.duration === 'YEARLY'" href="javascript:void(0);" class="click-here" aria-label="get select " (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
