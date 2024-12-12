@@ -51,3 +51,17 @@ p {
 .refersh-pd {
     padding: 15px 12px;
 }
+.dashboard-filter {
+    display: inline-flex;
+    color: var(--color-abbey);
+    align-items: center;
+}
+
+.dashboard-filter .icon-collapse-icon {
+    margin-left: 8px;
+    font-size: var(--font-size-15);
+}
+
+.icon-tick {
+    font-size: 14px;
+}

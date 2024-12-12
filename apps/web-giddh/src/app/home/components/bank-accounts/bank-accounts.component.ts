@@ -14,6 +14,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InstitutionsListComponent } from '../../../shared/bank-integration/institutions-list/institutions-list.component';
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
+import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
 
 @Component({
     selector: 'bank-accounts',
@@ -42,6 +43,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
+   /** Holds Store requisition list on account link dialog gets open as observable*/
+    public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
     /** Hold reference number */
@@ -50,6 +53,10 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
+    /** Holds unique name of bank account */
+    public bankAccountUniqueNames: any[] = []
+    /** Holds selected bank unique name */
+    private selectedBankUniqueName: string;
 
     constructor(
         private store: Store<AppState>,
@@ -111,8 +118,18 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         })
+        this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.openBankLinkDialog();
+            }
+        });
     }
 
+    /**
+     * This will get all accounts of giddh
+     * 
+     * @memberof BankAccountsComponent
+     */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
         this.isLoading = true;
         pageNumber = pageNumber ? pageNumber : 1;
@@ -121,7 +138,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.bankAccounts = res?.body?.results;
             }
-
             const reLoginRequired = this.bankAccounts?.filter(bankaccount => bankaccount.reLoginRequired);
             this.reLoginRequired = (reLoginRequired?.length) ? true : false;
 
@@ -145,7 +161,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public refreshBankTransactions(): void {
-        this.homeComponentStore.refreshBank();
+        this.homeComponentStore.refreshBank(null);
     }
 
     public ngOnDestroy() {
@@ -158,7 +174,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     * @param {*} element
     * @memberof BankAccountsComponent
     */
-    public openInstitutionsDialog(): void {
+    public openInstitutionsDialog(bankAccount: any): void {
+        this.selectedBankUniqueName = bankAccount?.uniqueName;
+
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData
@@ -177,11 +195,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.setupGocardlessMessageListener();
             }
         });
+
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
      * 
-     * @memberof BankIntegrationComponent
+     * @memberof BankAccountsComponent
      */
     public setupGocardlessMessageListener(): void {
         const messageHandler = (event) => {
@@ -193,5 +212,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         };
         window.addEventListener('message', messageHandler);
+    }
+
+    /**
+    * This will open the dialog to link a bank
+    * 
+    * @memberof BankAccountsComponent
+    */
+    public openBankLinkDialog(): void {
+        this.dialog.open(BankLinkComponent, {
+            data: { accountUniqueName: this.selectedBankUniqueName },
+            panelClass: ['mat-dialog-md']
+        });
     }
 }

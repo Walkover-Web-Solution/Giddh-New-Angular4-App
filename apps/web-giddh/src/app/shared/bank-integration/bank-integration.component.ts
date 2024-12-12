@@ -29,7 +29,6 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BankIntegrationComponent implements OnInit {
-
     public isIciciBankSupportedCountry: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -80,7 +79,6 @@ export class BankIntegrationComponent implements OnInit {
     public activePayorAccount: any;
     /** Hold confirmationModalRef mat dailog reference */
     public confirmationModalRef: any;
-
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     /** Instance of create new account modal */
     @ViewChild('createNewAccountModal', { static: true }) public createNewAccountModal: TemplateRef<any>;
@@ -92,7 +90,6 @@ export class BankIntegrationComponent implements OnInit {
     @ViewChild('editAccountUserModal', { static: true }) public editAccountUserModal: TemplateRef<any>;
     /** Instance of delete account user modal */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
-
 
     /** @ignore */
     constructor(
@@ -109,14 +106,12 @@ export class BankIntegrationComponent implements OnInit {
         private toasty: ToasterService,
         public dialog: MatDialog
     ) { }
-
-
     /**
-   * This function will use for get institutions details
-   *
-   * @param {*} element
-   * @memberof BankIntegrationComponent
-   */
+    * This function will use for get institutions details
+    *
+    * @param {*} element
+    * @memberof BankIntegrationComponent
+    */
     public openInstitutionsDialog(): void {
         let data = {
             localeData: this.localeData,
@@ -294,7 +289,6 @@ export class BankIntegrationComponent implements OnInit {
             this.isLoading = false;
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
-
                 this.connectedBankAccounts.forEach(bankAccount => {
                     if (bankAccount?.bankResource?.payor?.length > 0) {
                         bankAccount?.bankResource?.payor.forEach(payor => {
