@@ -5,24 +5,25 @@ import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CompanyResponse } from '../models/api-models/Company';
-import { AppState } from '../store';
-import { FormGroup } from '@angular/forms';
+import { AppState } from '../../store';
+import { CompanyResponse } from '../../models/api-models/Company';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
-import { GeneralService } from '../services/general.service';
+import { FormGroup } from '@angular/forms';
+import { GeneralService } from '../../services/general.service';
 import * as dayjs from 'dayjs';
-import { GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { FinancialReportsComponentStore } from './financial-reports.store';
+import { GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { FinancialReportsComponentStore } from '../financial-report.store';
 
 @Component({
-    selector: 'financial-reports',
-    templateUrl: './financial-reports.component.html',
-    styleUrls: ['./financial-reports.component.scss'],
+    selector: 'multi-currency',
+    templateUrl: './multi-currency-report.component.html',
+    styleUrls: ['./multi-currency-report.component.scss'],
     providers: [FinancialReportsComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FinancialReportsComponent implements OnInit, OnDestroy {
+
+export class MultiCurrencyReportComponent implements OnInit, OnDestroy {
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

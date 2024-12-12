@@ -615,6 +615,17 @@
                     "label": "Import",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "Multi-currency report",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-tally-import1",
+                    "description": "Multi-currency report",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         }

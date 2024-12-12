@@ -49,6 +49,8 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -102,7 +104,9 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         AmountFieldComponentModule,
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        FormFieldsModule,
+        MatButtonModule
     ],
 })
 export class FinancialReportsModule {
