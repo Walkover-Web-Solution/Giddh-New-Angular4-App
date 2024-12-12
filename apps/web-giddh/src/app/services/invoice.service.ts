@@ -809,6 +809,8 @@ export class InvoiceService {
      * @memberof InvoiceService
      */
     public updateCustomEmailTemplate(templateReq: any): Observable<BaseResponse<any, any>> {
+        console.log(templateReq);
+
         this.companyUniqueName = this.generalService.companyUniqueName;
         let voucherType = templateReq?.voucherType;
         delete templateReq?.voucherType;
@@ -826,12 +828,22 @@ export class InvoiceService {
     /**
      * Get email content suggestions
      *
+     * @param {string} type Type of content suggestions to get ('customer' or 'vendor')
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InvoiceService
      */
-    public getEmailContent(): Observable<BaseResponse<any, any>> {
+    public getEmailContentSuggestions(type: string): Observable<BaseResponse<any, any>> {
+        console.log(type);
+
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONTENT;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        // Add additional query parameter based on type
+        if (type === 'customer') {
+            url += '?isForCustomer=true';
+        } else if (type === 'vendor') {
+            url += '?isForVendor=true';
+        }
+
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

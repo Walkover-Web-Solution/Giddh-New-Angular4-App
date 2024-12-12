@@ -284,6 +284,22 @@
                                             >
                                                 {{ localeData?.bulk_payment }}
                                             </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
+                                                (click)="sendBulkEmail('vendor')"
+                                                aria-label="send bulk email"
+                                            >
+                                               {{ commonLocaleData?.app_send_email }}
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'customer'"
+                                                (click)="sendBulkEmail('customer')"
+                                                aria-label="send bulk email"
+                                            >
+                                               {{ commonLocaleData?.app_send_email }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </div>
@@ -695,11 +711,15 @@
                                     class="menu-table-item"
                                     (click)="performActions(4, account, $event)"
                                     >
-                                    {{ commonLocaleData?.app_send_email }}
-                                </button> -->
-                                <button *ngIf="account?.email" mat-menu-item class="menu-table-item" (click)="performActions(5, account, $event)">
-                                    {{ commonLocaleData?.app_send_email }}
-                                </button>
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button> -->
+                                     <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab)"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
                                 </mat-menu>
                             </div>
                         </td>

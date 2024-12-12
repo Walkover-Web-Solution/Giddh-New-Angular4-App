@@ -135,12 +135,15 @@ export class TemplateFroalaComponent implements OnInit {
     };
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public voucherType,
+        @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog,
         private generalService: GeneralService
-    ) { }
+    ) {
+        console.log(inputData);
+
+    }
 
     /**
      * Initializes the component and performs necessary operations.
@@ -160,7 +163,8 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const tributeSuggestions = response?.voucherSuggestions?.map(item => ({
+                const emailSuggestions = this.inputData.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
+                const tributeSuggestions = emailSuggestions?.map(item => ({
                     value: item,
                     key: item
                 }));
@@ -293,7 +297,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailTemplates(): void {
-        this.componentStore.getAllEmailTemplate(this.voucherType);
+        this.componentStore.getAllEmailTemplate(this.inputData?.activeTab ? this.inputData?.activeTab : this.inputData);
     }
 
     /**
@@ -308,7 +312,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailContents(): void {
-        this.componentStore.getEmailContentSuggestions(null);
+        this.componentStore.getEmailContentSuggestions(this.inputData?.activeTab ? this.inputData?.activeTab : this.inputData);
     }
 
     /**
@@ -322,7 +326,7 @@ export class TemplateFroalaComponent implements OnInit {
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.voucherType]],
+            voucherTypes: [[this.inputData.voucherType]],
             emailSubject: [template?.emailSubject ?? ''],
             html: [template?.html ?? '']
         });
@@ -340,16 +344,31 @@ export class TemplateFroalaComponent implements OnInit {
      *
      * @memberof TemplateFroalaComponent
      */
-    public onSubmit(): void {
+    public onSubmit(type: any): void {
+        console.log(type);
+
         this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
         this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
         this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
         if (this.emailForm.invalid) {
             return;
         }
-        let req = {
-            voucherType: this.voucherType,
-            model: this.emailForm.value
+        let req;
+        if (type === 'save') {
+            req = {
+                voucherType: this.inputData?.voucherType,
+                model: this.emailForm.value
+            }
+            if (this.inputData?.activeTab) {
+                req['customerVendorUniqueNames'] = [this.inputData?.accountUniqueName]
+            }
+        } else if (type === 'send') {
+            req = {
+                voucherType: this.inputData?.activeTab,
+                model: this.emailForm.value,
+                customerVendorUniqueNames: [this.inputData?.accountUniqueName],
+                sendMail: true
+            }
         }
         this.componentStore.updateCustomTemplate(req);
     }
