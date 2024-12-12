@@ -15,6 +15,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DiscountDropdownModule } from '../theme/discount-dropdown/discount-dropdown.module';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         TranslateDirectiveModule,
         MatPaginatorModule,
         MatTabsModule,
-        MatDialogModule
+        MatDialogModule,
+        DiscountDropdownModule
     ],
     exports: [CreateProjectComponent]
 })

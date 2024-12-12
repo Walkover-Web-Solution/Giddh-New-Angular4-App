@@ -15,9 +15,9 @@ export interface projectDetails {
   }
   
   const ELEMENT_DATA: projectDetails[] = [
-    {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: 'H', action: ''},
-    {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: 'He',action: ''},
-    {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+    {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: '', action: ''},
+    {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: '', action: ''},
+    {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: '', action: ''},
   ];
   
 
@@ -34,7 +34,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
     public dataSource: projectDetails[] = [];
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
@@ -56,7 +56,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * 
      */
     public openCreateProjectDialog(){
-        const dialogRef = this.dialog.open(CreateProjectComponent, {
+        this.dialog.open(CreateProjectComponent, {
             width: 'var(--aside-pane-width)',
             height: '100vh',
             position: {

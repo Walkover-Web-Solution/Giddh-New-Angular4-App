@@ -14,7 +14,10 @@ appTranslate
                     class="giddh-datepicker date-range-picker"
                 />
             </div>
-            <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>{{ commonLocaleData?.app_back }}</button>
+            <div>
+                <span>{{commonLocaleData?.app_total}} : 5</span>&nbsp;&nbsp;
+                <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>{{ commonLocaleData?.app_back }}</button>
+            </div>
         </div>
         <div class="pd-15 section-center">
 
@@ -23,7 +26,6 @@ appTranslate
                     <ng-container matColumnDef="position">
                         <th mat-header-cell *matHeaderCellDef>Select Account</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
                                 <select-field
                                     [cssClass]="'form-control borderless-select'"
                                     [name]="'country'"
@@ -33,13 +35,11 @@ appTranslate
                                     (selectedOption)="selectProject($event)"
                                 >
                                 </select-field>
-                            </div>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>Select</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
                                 <select-field
                                     [cssClass]="'form-control mat-field-border'"
                                     [name]="'country'"
@@ -49,40 +49,33 @@ appTranslate
                                     (selectedOption)="selectProject($event)"
                                 >
                                 </select-field>
-                            </div>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="weight">
                         <th mat-header-cell *matHeaderCellDef>Select Method</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border'"
-                                    [name]="'country'"
-                                    [autocomplete]="'disabled'"
-                                    [placeholder]="'Select Account'"
-                                    [options]="selecteAccount"
-                                    (selectedOption)="selectProject($event)"
-                                >
-                                </select-field>
-                            </div>
+                                <discount-dropdown
+                                    [style.display]="'block'"
+                                    [amount]="10"
+                                    [discountsList]="[]"
+                                    [commonLocaleData]="commonLocaleData"
+                                    [placeholder]="'Amount'" 
+                                ></discount-dropdown>
                         </td>
                     </ng-container>
                     
                     <ng-container matColumnDef="symbol">
                         <th mat-header-cell *matHeaderCellDef>Amt.</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
-                                <input-field 
+                                <text-field 
                                 [type]="'text'" 
                                 [name]="'discountValue'" 
                                 [placeholder]="'Amount'" 
                                 [label]=""
-                                class="input-height"
+                                [cssClass]="'form-control'"
                                 >
-                                </input-field>
-                            </div>
+                                </text-field>
                         </td>
                     </ng-container>
                     
@@ -108,7 +101,6 @@ appTranslate
                     <ng-container matColumnDef="position">
                         <th mat-header-cell *matHeaderCellDef>Select Account</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
                                 <select-field
                                     [cssClass]="'form-control mat-field-border'"
                                     [name]="'country'"
@@ -118,14 +110,11 @@ appTranslate
                                     (selectedOption)="selectProject($event)"
                                 >
                                 </select-field>
-                            </div>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef> {{ commonLocaleData?.app_total }} </td>
                     </ng-container>
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>Select</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
                                 <select-field
                                     [cssClass]="'form-control mat-field-border'"
                                     [name]="'country'"
@@ -135,15 +124,12 @@ appTranslate
                                     (selectedOption)="selectProject($event)"
                                 >
                                 </select-field>
-                            </div>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>1</td>
                     </ng-container>
 
                     <ng-container matColumnDef="weight">
                         <th mat-header-cell *matHeaderCellDef>Select Method</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
                                 <select-field
                                     [cssClass]="'form-control borderless-select'"
                                     [name]="'country'"
@@ -153,25 +139,21 @@ appTranslate
                                     (selectedOption)="selectProject($event)"
                                 >
                                 </select-field>
-                            </div>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>1</td>
                     </ng-container>
                    
                     <ng-container matColumnDef="symbol">
                         <th mat-header-cell *matHeaderCellDef>Amt.</th>
                         <td mat-cell *matCellDef="let element">
-                            <div>
-                                <input-field 
+                                <text-field
                                 [type]="'text'" 
                                 [name]="'discountValue'" 
                                 [placeholder]="'Amount'" 
                                 [label]=""
-                                class="input-height">
-                                </input-field>
-                            </div>
+                                [cssClass]="'form-control'"
+                               >
+                                </text-field>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>1</td>
                     </ng-container>
                     
                     <ng-container matColumnDef="action">
@@ -182,12 +164,10 @@ appTranslate
                                 <span><i class="icon-trash mr-l1 font-20"></i></span>
                             </div>
                         </td>
-                        <td mat-footer-cell *matFooterCellDef>1</td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
                 </table>
             </div>
 
