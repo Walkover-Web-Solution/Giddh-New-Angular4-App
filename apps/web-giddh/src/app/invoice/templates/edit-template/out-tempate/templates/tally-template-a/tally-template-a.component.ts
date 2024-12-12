@@ -7,6 +7,8 @@ import { takeUntil } from 'rxjs/operators';
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
+import * as dayjs from 'dayjs';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'tally-template-a',
@@ -40,7 +42,7 @@ export class TallyTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     public isBaseCurrencyRupee = true;
     public rupeeSymbol = '&#8377';
     /* This will hold active company*/
-    @Input() public activeCompany : any;
+    @Input() public activeCompany: any;
 
 
     constructor(
@@ -50,8 +52,6 @@ export class TallyTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-        console.log("Json", this.fieldsAndVisibility);
-        
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);
@@ -60,6 +60,10 @@ export class TallyTemplateAComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
     }
+
+    public getTodayDate(isDefaultGiddhDate: boolean = true, dateInNumber: boolean = false): string {
+        return dayjs().format(dateInNumber ? "DDMMYYYY" : (isDefaultGiddhDate ? GIDDH_DATE_FORMAT : GIDDH_DATE_FORMAT_DD_MM_YYYY));
+    } 
 
     public onClickSection(sectionName: string) {
         if (!this.isPreviewMode) {

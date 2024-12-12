@@ -1,5 +1,4 @@
 * {
-    border: 0;
     box-sizing: content-box;
     color: var(--color-nero);
     font-style: inherit;
@@ -97,15 +96,8 @@ p {
     /* margin-bottom: 10px; */
 }
 
-#default .meta tbody tr td,
-#default .meta tbody tr th {
-    border: 0;
-    padding: 5px 0;
-}
-
 #default .meta tbody tr th {
     background: none;
-    border: 0;
     padding: 0;
     text-align: left;
     color: var(--color-nero);
@@ -132,29 +124,9 @@ p {
     margin: 0 0 0.25em;
 }
 
-#default header span,
-header img {
-    display: block;
-    float: right;
-}
-
-#default header span {
-    margin: 0 0 1em 1em;
-    max-height: 25%;
-    max-width: 60%;
-    position: relative;
-}
-
 #default header img {
     max-height: 100%;
     max-width: 180px;
-    float: left;
-    margin-bottom: 10px;
-}
-
-#default header table tr td {
-    border: 0;
-    /* padding: 4px 0; */
 }
 
 /* article */
@@ -551,57 +523,57 @@ table {
     border-collapse: collapse !important;
     page-break-inside: auto;
     page-break-after: auto;
-}
 
-table tr th,
-td {
-  border: 1px solid black;
-  text-align: left;
-  padding: 8px;
-}
-table.table-row-height tr td {
-  height: 50px;
+    tr {
+        th,
+        td {
+            border: 1px solid black;
+            text-align: left;
+            padding: 8px;
+            word-break: break-all;
+        }
+        &.border-top-none {
+            th {
+                border-top: none !important;
+            }
+        }
+    }
+    &.table-row-height {
+        tr {
+            th, td {
+                height: 50px;
+            }
+        }
+    }
 }
 
 .vertical-align-top {
-  vertical-align: top;
+    vertical-align: top !important;
 }
 .vertical-align-middle {
-  vertical-align: middle;
+    vertical-align: middle !important;
 }
 .vertical-align-bottom {
-  vertical-align: bottom;
-}
-.border-none {
-  border: none;
+    vertical-align: bottom !important;
 }
 .border-top {
-  border-top: 1px solid currentColor;
+    border-top: 1px solid currentColor !important;
 }
 .border-bottom {
-  border-bottom: 1px solid currentColor;
+    border-bottom: 1px solid currentColor !important;
 }
 .border-left {
-  border-left: 1px solid currentColor;
+    border-left: 1px solid currentColor !important;
 }
 .border-right {
-  border-right: 1px solid currentColor;
-}
-.text-center {
-  text-align: center;
-}
-.text-right {
-  text-align: right;
+    border-right: 1px solid currentColor !important;
 }
 .margin-0 {
-  margin: 0;
-}
-.mr-r1 {
-  margin-right: 10px !important;
-}
-.pd-r1 {
-  padding-right: 10px !important;
+    margin: 0 !important;
 }
 .padding-0 {
-  padding: 0;
+    padding: 0 !important;
+}
+.no-wrap {
+    white-space: no-wrap;
 }
