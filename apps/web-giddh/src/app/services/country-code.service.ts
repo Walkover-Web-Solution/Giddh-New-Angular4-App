@@ -12,17 +12,17 @@ export class CountryCodeService {
     /** Stores the cached country code value */
     private countryCode: string | null = null;
     /** BehaviorSubject to handle async state management of country code */
-    private countryCodeSubject = new BehaviorSubject<string | null>(null);
+    private countryCodeSubject: any = new BehaviorSubject<string | null>(null);
     /** Flag to track if an API request is in progress */
-    private isLoading = false;
+    private isLoading: boolean = false;
     /** Default country code to use when API calls fail */
-    private readonly DEFAULT_COUNTRY_CODE = 'in';
+    private readonly DEFAULT_COUNTRY_CODE: string = 'in';
     /** API endpoint to get client's IP address */
-    private readonly MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
+    private readonly MOBILE_NUMBER_SELF_URL: string = 'https://api.db-ip.com/v2/free/self';
     /** Primary API endpoint to get country code from IP address */
-    private readonly MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
+    private readonly MOBILE_NUMBER_IP_ADDRESS_URL: string = 'http://ip-api.com/json/';
     /** Fallback API endpoint to get country code from IP address */
-    private readonly MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
+    private readonly MOBILE_NUMBER_ADDRESS_JSON_URL: string = 'https://ipinfo.io/';
 
     constructor() {
         if (CountryCodeService.instance) {
