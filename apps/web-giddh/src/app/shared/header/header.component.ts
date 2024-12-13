@@ -1789,7 +1789,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getSubscriptionEndedNote(): string {
         let text = "";
         if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration)) {
-            text = this.localeData?.subscription_expire_renewed_message;
+            text = this.localeData?.subscription_expire_renewal_message;
         } else {
             text = this.localeData?.subscription_ended_note
                 ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
