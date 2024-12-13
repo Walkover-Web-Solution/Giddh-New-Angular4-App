@@ -465,13 +465,13 @@
                                     <mat-radio-group name="ownerPermission" formControlName="creatorSuperAdmin">
                                         <mat-radio-button
                                             color="primary"
-                                            value="true"
+                                            [value]="true"
                                             (change)="setOwnerPermission($event)"
                                             >{{ commonLocaleData?.app_yes }}
                                         </mat-radio-button>
                                         <mat-radio-button
                                             color="primary"
-                                            value="false"
+                                            [value]="false"
                                             (change)="setOwnerPermission($event)"
                                         >
                                             {{ commonLocaleData?.app_no }}
