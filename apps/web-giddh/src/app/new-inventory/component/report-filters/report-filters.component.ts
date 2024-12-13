@@ -518,7 +518,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
 
-            if (!this.isCompany || !this.isConsolidatedBranch) {
+            if (!this.isCompany && !this.isConsolidatedBranch) {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             }
@@ -555,7 +555,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-                if (!this.isCompany || !this.isConsolidatedBranch) {
+                if (!this.isCompany && !this.isConsolidatedBranch) {
                     this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                     this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                     this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
@@ -574,7 +574,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getBranches(apiCall: boolean = true): void {
         this.allWarehouses = [];
-        if (!this.isCompany || !this.isConsolidatedBranch) {
+        if (!this.isCompany && !this.isConsolidatedBranch) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
             this.allWarehouses = currentBranch[0]?.warehouses;
         } else {
@@ -596,7 +596,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequestExport.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
-        if (!this.isCompany || !this.isConsolidatedBranch) {
+        if (!this.isCompany && !this.isConsolidatedBranch) {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];

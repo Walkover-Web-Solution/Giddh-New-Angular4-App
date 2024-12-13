@@ -342,7 +342,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
         this.setInitialAdvanceFilter(true);
-        this.getInvoiceSettings();
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {

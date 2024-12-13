@@ -1800,21 +1800,32 @@
             </mat-tab>
             <!-- bill-content-end -->
 
-            <!-- setting-content-start --> <!-- ===== HIDE THIS TAB FOR NOW ===== -->
-            <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
-                <mat-tab [label]="localeData?.tabs?.settings" class="setting-svg"
-                    *ngIf="activeTabGroup !== 3 && activeTabGroup !== 4">
-                    <ng-container *ngIf="activeModule === 'settings'">
-                        <div class="pd-t15" *ngIf="voucherType !== 'purchase'">
-                            <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
-                        </div>
-                        <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting>
-                    </ng-container>
-                    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4"
-                        *ngIf="false">
-                        <mat-tab *ngIf="activeTabGroup === 0">
-                            <ng-template mat-tab-label>
-                                <i class="icon-chat2"></i>
+            <!-- setting-content-start -->
+            <!-- ===== HIDE THIS TAB FOR NOW ===== -->
+            <mat-tab
+                [label]="localeData?.tabs?.settings"
+                class="setting-svg"
+                *ngIf="activeTabGroup !== 3 && activeTabGroup !== 4 && !isCompany && !isConsolidatedBranch"
+            >
+                <ng-container *ngIf="activeModule === 'settings'">
+                    <div class="pd-t15" *ngIf="voucherType !== 'purchase'">
+                        <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
+                    </div>
+                    <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting>
+                </ng-container>
+                <mat-tab-group
+                    mat-stretch-tabs="false"
+                    mat-align-tabs="start"
+                    class="tabs-box-wrap pt-3 px-4"
+                    *ngIf="false"
+                >
+                    <mat-tab *ngIf="activeTabGroup === 0">
+                        <ng-template mat-tab-label>
+                            <i class="icon-chat2"></i>
+                            General
+                        </ng-template>
+                        <div class="tabs-box-content py-3">
+                            <h4 class="font-16 border-bottom pb-2 mb-3">
                                 General
                             </ng-template>
                             <div class="tabs-box-content py-3">

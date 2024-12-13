@@ -137,6 +137,8 @@ export class ListBranchTransferComponent implements OnInit {
     public showReceiver = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         return (
@@ -150,8 +152,6 @@ export class ListBranchTransferComponent implements OnInit {
             !this.branchTransferForm?.controls['amount']?.value)
         );
     }
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(
         public dialog: MatDialog,
