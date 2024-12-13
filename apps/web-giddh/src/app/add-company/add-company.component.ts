@@ -644,7 +644,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.thirdStepForm = this.formBuilder.group({
-            creatorSuperAdmin: [''],
+            creatorSuperAdmin: ['true'],
             permissionRoles: this.formBuilder.array([
                 this.formBuilder.group({
                     emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)],
@@ -1294,7 +1294,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.isLoading = false;
                 this.toaster.showSnackBar("error", response?.message);
-
+                this.selectedStep = 0;
                 if (this.showMobileField) {
                     let mobileNo = this.intl?.getNumber();
 
