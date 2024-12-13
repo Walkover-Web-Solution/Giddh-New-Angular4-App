@@ -2423,11 +2423,10 @@
 
             <!-- setting-content-start -->
             <!-- ===== HIDE THIS TAB FOR NOW ===== -->
-            <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
             <mat-tab
                 [label]="localeData?.tabs?.settings"
                 class="setting-svg"
-                *ngIf="activeTabGroup !== 3 && activeTabGroup !== 4"
+                *ngIf="activeTabGroup !== 3 && activeTabGroup !== 4 && !isCompany && !isConsolidatedBranch"
             >
                 <ng-container *ngIf="activeModule === 'settings'">
                     <div class="pd-t15" *ngIf="voucherType !== 'purchase'">
@@ -2890,7 +2889,6 @@
                     </mat-tab>
                 </mat-tab-group>
             </mat-tab>
-            </ng-container>
             <!-- setting-content-end -->
 
             <!-- template-content-start -->
