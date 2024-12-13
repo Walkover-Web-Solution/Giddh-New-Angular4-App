@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
-import { CountryCodeService } from './services/country-code.service.ts.service';
 dayjs.extend(quarterOfYear) // use plugin
+import { CountryCodeService } from './services/country-code.service';
 
 export const Configuration = {
     'AppUrl': AppUrl,
