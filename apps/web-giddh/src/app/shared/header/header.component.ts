@@ -1787,15 +1787,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        let text = this.localeData?.subscription_ended_note;
-        text = text
-            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+        let text = "";
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration)) {
+            text = this.localeData?.subscription_expire_renewal_message;
+        } else {
+            text = this.localeData?.subscription_ended_note
+                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+        }
         return text;
     }
-
     /**
      * This will return plan transactions ended note
      *
