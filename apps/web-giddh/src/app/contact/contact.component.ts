@@ -284,6 +284,22 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if (response?.integratedBankList?.length > 0) {
+                let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if (!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+            this.cdRef.detectChanges();
+        });
+
         combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
@@ -320,22 +336,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     if (res) {
                         this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
                     }
-                });
-
-                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isIciciAccountPendingForApproval = false;
-                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-                    if (response?.integratedBankList?.length > 0) {
-                        let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
-                        if (!approvalPendingAccounts?.length) {
-                            this.isIciciAccountPendingForApproval = true;
-                        }
-
-                        this.isICICIIntegrated = true;
-                    } else {
-                        this.isICICIIntegrated = false;
-                    }
-                    this.cdRef.detectChanges();
                 });
 
                 if (this.activeTab === ContactsTab.customer.toLowerCase()) {
