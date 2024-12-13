@@ -234,10 +234,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
                 this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
+                    if (response) {
+                        this.isConsolidatedBranch = response.isBranchConsolidated;
+                    }
+                });
             }
         });
 
