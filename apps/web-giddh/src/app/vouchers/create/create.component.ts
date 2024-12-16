@@ -2339,7 +2339,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getStockMaxQuantity(entryData: any): number | undefined {
         let maxQuantity = undefined;
-        if (this.invoiceType.isPurchaseInvoice && entryData.purchaseOrderLinkSummaries?.length > 0) {
+        if (this.invoiceType.isPurchaseInvoice && entryData?.purchaseOrderLinkSummaries?.length > 0) {
             entryData.purchaseOrderLinkSummaries.forEach(summary => {
                 if (!isNaN(Number(summary.unUsedQuantity))) {
                     if (entryData?.transactions[0]?.stock) {
