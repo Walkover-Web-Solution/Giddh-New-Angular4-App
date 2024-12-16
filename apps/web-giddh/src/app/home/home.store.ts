@@ -13,7 +13,7 @@ export interface HomeState {
 
 const DEFAULT_STATE: HomeState = {
     bankMessage: null,
-    isBankRefreshing: false,
+    isBankRefreshing: false
 };
 
 @Injectable()
