@@ -826,18 +826,19 @@
                                                                         txn.showAccountDropdown = true
                                                                     "
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
+                                                                        class="text-ellipsis"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                 </div>
                                                                 <div
@@ -848,19 +849,20 @@
                                                                         showBankLedgerPopup(txn, item)
                                                                     "
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text':
                                                                                 txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
+                                                                        class="text-ellipsis"
                                                                         *ngIf="!txn.showDropdown"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
@@ -1187,18 +1189,19 @@
                                                                         txn.showAccountDropdown = true
                                                                     "
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
+                                                                        class="text-ellipsis"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                 </div>
                                                                 <div
@@ -1206,19 +1209,20 @@
                                                                     class="w-100"
                                                                     (click)="txn.showDropdown = true"
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
-                                                                                txn.selectedAccount.name
+                                                                                txn.selectedAccount.name 
                                                                         }"
+                                                                        class="text-ellipsis"
                                                                         *ngIf="!txn.showDropdown"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
