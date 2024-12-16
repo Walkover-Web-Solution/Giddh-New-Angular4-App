@@ -9,6 +9,7 @@ import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { GeneralService } from '../../services/general.service';
 import { EmailType } from './utility/template-froala.const';
+import { cloneDeep } from '../../lodash-optimized';
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
@@ -142,8 +143,6 @@ export class TemplateFroalaComponent implements OnInit {
         private dialog: MatDialog,
         private generalService: GeneralService
     ) {
-        console.log(inputData);
-
     }
 
     /**
@@ -327,7 +326,7 @@ export class TemplateFroalaComponent implements OnInit {
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.inputData.voucherType]],
+            voucherTypes: [[this.inputData]],
             emailSubject: [template?.emailSubject ?? ''],
             html: [template?.html ?? '']
         });
@@ -345,33 +344,49 @@ export class TemplateFroalaComponent implements OnInit {
      *
      * @memberof TemplateFroalaComponent
      */
-    public onSubmit(type: any): void {
-        console.log(type);
-
-        this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
-        this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
-        this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
+    public onSubmit(type: string): void {
         if (this.emailForm.invalid) {
             return;
         }
-        let req;
-        if (type === 'save') {
-            req = {
-                voucherType: this.inputData?.voucherType,
-                model: this.emailForm.value
-            }
-            if (this.inputData?.activeTab) {
-                req['customerVendorUniqueNames'] = [this.inputData?.accountUniqueName]
-            }
-        } else if (type === 'send') {
-            req = {
-                voucherType: this.inputData?.activeTab,
-                model: this.emailForm.value,
-                customerVendorUniqueNames: [this.inputData?.accountUniqueName],
-                sendMail: true
-            }
-        }
+
+        const formValue = cloneDeep(this.emailForm.value);
+        delete formValue?.voucherTypes;
+
+        // Prepare request based on type
+        const req = this.prepareRequest(type, formValue);
         this.componentStore.updateCustomTemplate(req);
+    }
+
+    /**
+     * Prepares the request object based on the submission type
+     * @param type - Type of submission ('save' or 'send')
+     * @param formValue - Form values to be included in request
+     * @returns Prepared request object
+     */
+    private prepareRequest(type: string, formValue: any): any {
+        const isActiveTab = this.inputData?.activeTab;
+
+        if (!isActiveTab) {
+            return {
+                voucherType: this.inputData,
+                model: this.emailForm.value
+            };
+        }
+
+        const model = {
+            ...formValue,
+            customerVendorUniqueNames: [this.inputData?.accountUniqueName]
+        };
+
+        // Only add sendMail flag when type is 'send'
+        if (type === 'send') {
+            model.sendMail = true;
+        }
+
+        return {
+            voucherType: isActiveTab,
+            model
+        };
     }
 
     /**

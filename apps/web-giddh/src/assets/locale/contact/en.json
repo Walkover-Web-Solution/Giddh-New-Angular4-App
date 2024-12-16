@@ -84,5 +84,6 @@
     "show_bank_balance": "Show Bank Balance",
     "hide_bank_balance": "Hide Bank Balance",
     "unpaid_invoices": "Unpaid Invoices",
-    "connect_bank": "Connect Bank"
+    "connect_bank": "Connect Bank",
+    "send_bulk_email": "Send Bulk Email"
 }
