@@ -7,6 +7,7 @@ import { takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
 import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
+import { EmailType } from "../../../shared/template-froala/utility/template-froala.const";
 
 @Component({
     selector: "select-multiple-fields",
@@ -55,6 +56,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to allow adding of new chips */
     private allowAddChip: boolean = true;
+    /** Holds type of email */
+    public emailType = EmailType;
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -109,7 +112,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
-            if (this.selectField && this.autoFocus) {
+            if (this.autoFocus && this.selectField) {
                 this.selectField.nativeElement.focus();
             }
         }, 100);
