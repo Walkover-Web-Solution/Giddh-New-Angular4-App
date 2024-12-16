@@ -132,7 +132,7 @@ export class TemplateFroalaComponent implements OnInit {
         isTo: true,
         isCc: true,
         isBcc: true
-    }
+    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
@@ -186,7 +186,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.showCc = true;
                     this.selectedCcEmails = response.cc;
                 }
-                if (response?.to?.length) {
+                if (response.to?.length) {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
@@ -213,8 +213,8 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
      * Updates the focus state for the email types ('to', 'cc', 'bcc').
-     *
-     * @param emailType
+     * @returns {void}
+     * @param {string} emailType
      * @memberof TemplateFroalaComponent
      */
     public setEmailFocus(emailType: string): void {
@@ -356,17 +356,14 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
     * Show/Hide bcc/cc field
-    *
-    * @param {string} type
+    * @returns {void}
+    * @param {string} emailType
     * @memberof TemplateFroalaComponent
     */
-    public toggleBccCc(type: string): void {
-        this.setEmailFocus(type);
-        if (type == EmailType.Bcc) {
-            this.showBcc = true;
-        } else if (type === EmailType.Cc) {
-            this.showCc = true;
-        }
+    public toggleBccCc(emailType: string): void {
+        this.setEmailFocus(emailType);
+        this.showBcc = emailType === EmailType.Bcc;
+        this.showCc = emailType === EmailType.Cc;
     }
 
     /**
