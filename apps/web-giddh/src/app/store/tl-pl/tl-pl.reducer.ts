@@ -64,7 +64,10 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
         }
-        case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:
+        case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:{
+            console.log("GET_TRIAL_BALANCE_RESPONSE");
+            
+        }
         case TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE: {
             // no payload means error from server
             if (action.payload) {
@@ -120,7 +123,7 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         }
 
         case TBPlBsActions.GET_BALANCE_SHEET_RESPONSE: {
-            let data: BalanceSheetData = prepareBalanceSheetData(cloneDeep(action.payload));
+            let data: BalanceSheetData = prepareBalanceSheetData(cloneDeep(action.payload.response));
             if (data) {
                 if (state?.bs?.data) {
                     data.dates = cloneDeep(state.bs.data.dates);

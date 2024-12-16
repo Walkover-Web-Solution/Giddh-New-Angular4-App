@@ -22,7 +22,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     public showLoader: Observable<boolean>;
-    public data$: Observable<AccountDetails>;
+    public data$: Observable<any>;
     public request: TrialBalanceRequest;
     public expandAll: boolean;
     public search: string;
@@ -60,8 +60,10 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
-            let d = cloneDeep(p) as AccountDetails;
+        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p) => {
+            console.log("p",p);
+            
+            let d = cloneDeep(p);
             if (d) {
                 if (d.message) {
                     setTimeout(() => {
@@ -106,8 +108,9 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
+        console.log("this.isV2",this.isV2);
         if (this.isV2) {
-            this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
+            this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         } else {
             this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         }

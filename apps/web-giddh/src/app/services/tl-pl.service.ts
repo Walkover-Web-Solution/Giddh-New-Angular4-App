@@ -32,8 +32,9 @@ export class TlPlService {
         } else {
             params.branchUniqueName = '';
         }
-        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', ("trial-balance")) ).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
                     data.request = request;
@@ -119,8 +120,9 @@ export class TlPlService {
             ?.filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
-        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', ("balance-sheet"))).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res;
                     data.request = request;
@@ -179,4 +181,43 @@ export class TlPlService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+    /**
+     * Get V2 Trial Balance
+     */
+    public getMultiCurrencyReport(reportType: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', (reportType)) ).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    console.log("data",data);
+                    
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+
+    /**
+     * Get V2 Trial Balance
+     */
+        public creatMultiCurrencyReport(reportType: string, payload: any): Observable<BaseResponse<any, any>> {
+            this.companyUniqueName = this.generalService.companyUniqueName;
+            return this.http.post(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                ?.replace(':reportType', (reportType)), payload ).pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, any> = res;
+                        data.request = '';
+                        console.log("data",data);
+                        
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+        }
+
+
 }

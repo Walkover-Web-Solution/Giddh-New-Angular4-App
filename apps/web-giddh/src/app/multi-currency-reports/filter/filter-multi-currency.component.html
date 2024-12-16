@@ -1,0 +1,111 @@
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="clearfix">
+        <div class="row">
+            <div class="col-xl-9 col-lg-12 col-md-12">
+                <form
+                    [formGroup]="filterForm"
+                    (submit)="onSubmit()"
+                    class="form-inline financial-select-year"
+                    name="fromToDateForm"
+                    novalidate
+                >
+                    <div class="d-flex">
+                        <div
+                            class="form-group relative mr-r15 datepicker-field"
+                        >
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="form-group mr-r15 linked-entities"
+                            
+                        >
+                            <div class="form-group">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Company List</mat-label>
+                                        <mat-select
+                                            name="company"
+                                            formControlName="shareCompanyList"
+                                            multiple
+                                        >
+                                            <mat-option
+                                                *ngFor="let company of companyList"
+                                                [value]="company?.uniqueName"
+                                                (onSelectionChange)="selectModule(company?.name)"
+                                                >{{ company?.name }}</mat-option
+                                            >
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="form-group mr-r15" >
+                            <div class="form-group">
+                                <reactive-dropdown-field
+                                    [label]="'CurrencyList'"
+                                    [placeholder]="'currency'"
+                                    [labelValue]="getForm('selectCurrency')?.value"
+                                    [options]="currencyList"
+                                    formControlName="selectCurrency"
+                                    (onClear)="getForm('selectCurrency')?.patchValue(null)"
+                                    [required]="true"
+                                >
+                                </reactive-dropdown-field>
+                            </div>
+                        </div>
+                        <div class="form-group mr-r15" >
+                            <div class="form-group">
+                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {{initdata | json}}
+        </div>
+    </div>
+    <!-- for mobile view only -->
+
+    <!-- for mobile view only -->
+
+    <!-- end box  -->
+    <!-- create tag modal -->
+
+    <!-- create tag modal -->
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
