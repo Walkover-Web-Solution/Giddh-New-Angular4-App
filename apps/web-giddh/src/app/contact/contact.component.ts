@@ -293,6 +293,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
+
+
         combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
@@ -323,7 +325,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 } else {
                     this.setActiveTab("aging-report");
                 }
-                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
 
                 this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
                     if (res) {
@@ -347,79 +348,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.cdRef.detectChanges();
                 });
 
-                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "customer_name",
-                            "label": "Customer Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "sales",
-                            "label": "Sales",
-                            "checked": true
-                        },
-                        {
-                            "value": "receipt",
-                            "label": "Receipt",
-                            "checked": true
-                        }
-                    );
-                    this.moduleType = ContactsTab.customer;
-                    this.displayedColumns = [];
-                }
-                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "vendor_name",
-                            "label": "Vendor Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "purchase",
-                            "label": "Purchase",
-                            "checked": true
-                        },
-                        {
-                            "value": "payment",
-                            "label": "Payment",
-                            "checked": true
-                        }
-                    );
-                    if (this.isICICIIntegrated || this.isPlaidSupportedCountry) {
-                        this.customiseColumns.push(
-                            {
-                                value: "action",
-                                label: "Action",
-                                checked: true
-                            })
+                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response) {
+                        // First handle the bank integration status
+                        this.handleBankIntegrationStatus(response);
+                        // Then handle the columns setup
+                        this.setupCustomColumns(lastTabType);
                     }
-                    this.moduleType = ContactsTab.vendor;
-                    this.displayedColumns = [];
-                }
-                if (lastTabType) {
-                    this.translationComplete(true);
-                }
+                });
             }
 
         });
@@ -1720,12 +1656,112 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for send customer information
+     * Handles the bank integration status check
      *
-     * @param {*} account
+     * @private
+     * @param {*} response Company state response
      * @memberof ContactComponent
      */
-    public sendCustomerInformation(account: any): void {
-        this.contactComponentStore.sendCustomerInformation(account?.uniqueName);
+    private handleBankIntegrationStatus(response: any): void {
+        this.isIciciAccountPendingForApproval = false;
+        this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+
+        if (response?.integratedBankList?.length) {
+            let approvalPendingAccounts = response.integratedBankList.filter(account => !account.errorMessage);
+            if (!approvalPendingAccounts?.length) {
+                this.isIciciAccountPendingForApproval = true;
+            }
+            this.isICICIIntegrated = true;
+        } else {
+            this.isICICIIntegrated = false;
+        }
+    }
+
+    /**
+     * Sets up the custom columns based on active tab
+     *
+     * @private
+     * @param {string} lastTabType Previous tab type
+     * @memberof ContactComponent
+     */
+    private setupCustomColumns(lastTabType: string): void {
+        this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+
+        if (this.activeTab === ContactsTab.customer.toLowerCase()) {
+            this.customiseColumns.splice(0, 0,
+                {
+                    "value": "customer_name",
+                    "label": "Customer Name",
+                    "checked": true
+                },
+                {
+                    "value": "parent_group",
+                    "label": "Parent Group",
+                    "checked": true
+                },
+                {
+                    "value": "opening",
+                    "label": "Opening",
+                    "checked": true
+                },
+                {
+                    "value": "sales",
+                    "label": "Sales",
+                    "checked": true
+                },
+                {
+                    "value": "receipt",
+                    "label": "Receipt",
+                    "checked": true
+                }
+            );
+            this.moduleType = ContactsTab.customer;
+            this.displayedColumns = [];
+        }
+
+        if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+            this.customiseColumns.splice(0, 0,
+                {
+                    "value": "vendor_name",
+                    "label": "Vendor Name",
+                    "checked": true
+                },
+                {
+                    "value": "parent_group",
+                    "label": "Parent Group",
+                    "checked": true
+                },
+                {
+                    "value": "opening",
+                    "label": "Opening",
+                    "checked": true
+                },
+                {
+                    "value": "purchase",
+                    "label": "Purchase",
+                    "checked": true
+                },
+                {
+                    "value": "payment",
+                    "label": "Payment",
+                    "checked": true
+                }
+            );
+
+            if (this.isICICIIntegrated || this.isPlaidSupportedCountry) {
+                this.customiseColumns.push({
+                    value: "action",
+                    label: "Action",
+                    checked: true
+                });
+            }
+            this.moduleType = ContactsTab.vendor;
+            this.displayedColumns = [];
+        }
+
+        if (lastTabType) {
+            this.translationComplete(true);
+        }
+        this.cdRef.detectChanges();
     }
 }
