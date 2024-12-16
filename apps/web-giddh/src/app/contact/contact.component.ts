@@ -1692,12 +1692,10 @@ export class ContactComponent implements OnInit, OnDestroy {
    * @param {any} account
    * @memberof ContactComponent
    */
-    public openCustomEmailDialog(accountUniqueName: string, activeTab: string): void {
-        console.log(accountUniqueName, activeTab);
+    public openCustomEmailDialog(account: any, activeTab: string): void {
         let data = {
-            voucherType: 'sales',
             activeTab: activeTab,
-            accountUniqueName: accountUniqueName
+            accountUniqueName: account?.uniqueName
         }
         this.dialog.open(TemplateFroalaComponent, {
             data: data,

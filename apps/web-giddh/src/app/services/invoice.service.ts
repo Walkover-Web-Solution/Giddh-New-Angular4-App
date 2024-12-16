@@ -809,8 +809,6 @@ export class InvoiceService {
      * @memberof InvoiceService
      */
     public updateCustomEmailTemplate(templateReq: any): Observable<BaseResponse<any, any>> {
-        console.log(templateReq);
-
         this.companyUniqueName = this.generalService.companyUniqueName;
         let voucherType = templateReq?.voucherType;
         delete templateReq?.voucherType;

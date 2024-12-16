@@ -290,7 +290,7 @@
                                                 (click)="sendBulkEmail('vendor')"
                                                 aria-label="send bulk email"
                                             >
-                                               {{ commonLocaleData?.app_send_email }}
+                                          {{ localeData?.send_bulk_email }}
                                             </button>
                                             <button
                                                 mat-menu-item
@@ -298,7 +298,7 @@
                                                 (click)="sendBulkEmail('customer')"
                                                 aria-label="send bulk email"
                                             >
-                                               {{ commonLocaleData?.app_send_email }}
+                                            {{ localeData?.send_bulk_email }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1059,6 +1059,13 @@
                                         aria-label="record bill"
                                     >
                                         {{ commonLocaleData?.app_record_bill }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab)"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
                                     </button>
                                     <!-- <button
                                     mat-menu-item
