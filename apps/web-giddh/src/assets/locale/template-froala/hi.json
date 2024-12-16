@@ -1,7 +1,7 @@
 {
-    "to": "किसे",
-    "cc": "सीसी",
-    "bcc": "बीसीसी",
+    "to": "To",
+    "cc": "Cc",
+    "bcc": "Bcc",
     "email_content_suggestions": "सुझाव देखने के लिए '@' टाइप करें",
     "recipients": "प्राप्तकर्ता",
     "subject": "विषय"
