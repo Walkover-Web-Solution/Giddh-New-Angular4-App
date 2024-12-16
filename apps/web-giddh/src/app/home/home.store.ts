@@ -28,15 +28,15 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
     }
     public profile$: Observable<any> = this.select(this.store.select(profileObj => profileObj.settings.profile), (response) => response);
     /**
-    *  Refresh bank accounts
+    *  Refresh go-cardless bank transactions
     *
     *  @memberof HomeComponentStore
     */
-    readonly refreshBank = this.effect((data: Observable<void>) => {
+    readonly refreshGoCardlessBankTransactions = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {
                 this.patchState({ bankMessage: null, isBankRefreshing: true});
-                return this.contactService.refreshBank().pipe(
+                return this.contactService.refreshGoCardlessBankTransactions().pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
