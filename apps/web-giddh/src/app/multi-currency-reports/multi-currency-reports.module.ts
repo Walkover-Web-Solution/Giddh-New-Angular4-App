@@ -47,10 +47,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 // import { TrialBalanceComponent } from './components/trial-balance/trial-balance.component';
 // import { FinancialAccordionDirective } from './directives/financial-accordion.directive';
 // import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
-import { MultiCurrencyReportsComponent } from './multi-currency-reports.component';
-import { MultiCurrencyReportsRoutingModule } from './multi-currency-reports.routing.module';
-import { ProfitLossReportsComponent } from './profit-loss-multi-currency/profit-loss-reports.component';
-import { FilterMultiCurrencyComponent } from './filter/filter-multi-currency.component';
+
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -58,13 +55,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { BalanceSheetReportComponent } from './balance-sheet-multi-currency/balance-sheet-report.component';
+import { MultiCurrencyReportsComponent } from './multi-currency-reports.component';
+import { BalanceSheetReportGridComponent } from './balance-sheet/components/balance-sheet-grid/balance-sheet-report-grid.component';
+import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
+import { MultiCurrencyReportsRoutingModule } from './multi-currency-reports.routing.module';
+import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
+import { AccountsFilterPipe } from '../financial-reports/pipes/accounts-filter.pipe';
+import { FinancialAccordionDirective } from '../financial-reports/directives/financial-accordion.directive';
 
 @NgModule({
     declarations: [
-        MultiCurrencyReportsComponent,
-        ProfitLossReportsComponent,
-        FilterMultiCurrencyComponent,
-        BalanceSheetReportComponent
+        BalanceSheetReportComponent,
+        BalanceSheetReportGridComponent,
+        BalanceSheetReportGridRowComponent,
         // GridRowComponent,
         // TrialBalanceComponent,
         // ProfitLossComponent,
@@ -77,9 +80,9 @@ import { BalanceSheetReportComponent } from './balance-sheet-multi-currency/bala
         // BalanceSheetComponent,
         // BalanceSheetGridComponent,
         // BalanceSheetGridRowComponent,
-        // FinancialAccordionDirective,
-        // FinancialSearchPipe,
-        // AccountsFilterPipe
+        FinancialAccordionDirective,
+        FinancialSearchPipe,
+        AccountsFilterPipe
     ],
     exports: [
         MultiCurrencyReportsComponent, CurrencyModule

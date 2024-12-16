@@ -11,10 +11,13 @@ import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial-balance-grid.component';
+import { MultiCurrencyReportsComponentStore } from '../../../multi-currency-reports/multi-currency-reports.store';
+import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
 
 @Component({
     selector: 'trial-balance',
-    templateUrl: './trial-balance.component.html'
+    templateUrl: './trial-balance.component.html',
+    providers: [MultiCurrencyReportsComponentStore]
 })
 export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -38,7 +41,8 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         private store: Store<AppState>,
         private cd: ChangeDetectorRef,
         public tlPlActions: TBPlBsActions,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        private componentStore: MultiCurrencyReportsComponentStore) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -110,10 +114,16 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isDateSelected = request && request.selectedDateOption === '1';
         console.log("this.isV2",this.isV2);
         if (this.isV2) {
-            this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
+            this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
         } else {
             this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         }
+        //this.getTrialBalanceReport();
+    }
+    public getTrialBalanceReport(){
+        console.log("getMultiCurrencyReport");
+        
+        this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
     }
 
     public ngOnDestroy(): void {

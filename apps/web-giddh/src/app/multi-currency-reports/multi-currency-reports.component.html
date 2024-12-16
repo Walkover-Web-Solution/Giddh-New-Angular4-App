@@ -19,8 +19,7 @@
             [id]="CanTBLoad ? 'giddh-page-heading' : ''"
         >
             <div class="container-fluid tb-pl-bs-header-tab">
-                -----------__________----------________
-                <trial-balance-report *ngIf="CanTBLoad"></trial-balance-report> 
+                <!-- <trial-balance [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></trial-balance> -->
             </div>
         </tab>
         <tab
@@ -35,8 +34,7 @@
             [id]="CanPLLoad ? 'giddh-page-heading' : ''"
         >
             <div class="container-fluid tb-pl-bs-header-tab">
-                ________--------_______
-                <profit-loss-reports *ngIf="CanPLLoad"></profit-loss-reports>
+                <!-- <profit-loss [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></profit-loss> -->
             </div>
         </tab>
         <tab
@@ -51,7 +49,7 @@
             [id]="CanBSLoad ? 'giddh-page-heading' : ''"
         >
             <div class="container-fluid tb-pl-bs-header-tab">
-                <balance-sheet-report *ngIf="CanBSLoad"></balance-sheet-report> 
+                <balance-sheet-report [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></balance-sheet-report>
             </div>
         </tab>
     </tabset>

@@ -32,9 +32,8 @@ export class TlPlService {
         } else {
             params.branchUniqueName = '';
         }
-        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':reportType', ("trial-balance")) ).pipe(
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
                     data.request = request;
