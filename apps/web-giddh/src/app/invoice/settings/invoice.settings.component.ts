@@ -615,7 +615,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Open custom email dialog
+     * Open custom email dialog
      *
      * @param {string} voucherType
      * @memberof InvoiceSettingComponent

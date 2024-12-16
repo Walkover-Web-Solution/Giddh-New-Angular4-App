@@ -12,7 +12,6 @@ export interface ContactState {
 
 export const DEFAULT_CONTACT_STATE: ContactState = {
     sendBulkEmailISuccess: null
-
 };
 
 @Injectable()
