@@ -6,7 +6,7 @@
     <!-- GET_ALL TEMPLATE A -->
     <!-- *ngSwitchCase="'gst_template_a'"   -->
     <gst-template-a
-        *ngSwitchCase="'false-condition'"
+        *ngSwitchDefault
         [fieldsAndVisibility]="fieldsAndVisibility"
         [isPreviewMode]="isPreviewMode"
         [showLogo]="showLogo"
@@ -25,7 +25,7 @@
     </gst-template-a>
 
     <tally-template-a
-        *ngSwitchDefault
+        *ngSwitchCase="'tally_template_a'"
         [fieldsAndVisibility]="fieldsAndVisibility"
         [isPreviewMode]="isPreviewMode"
         [showLogo]="showLogo"
