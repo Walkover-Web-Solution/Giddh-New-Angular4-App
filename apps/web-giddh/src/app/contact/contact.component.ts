@@ -1687,7 +1687,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-   *Open custom email dialog
+   * Open custom email dialog
    *
    * @param {any} account
    * @memberof ContactComponent

@@ -831,10 +831,9 @@ export class InvoiceService {
      * @memberof InvoiceService
      */
     public getEmailContentSuggestions(type: string): Observable<BaseResponse<any, any>> {
-        console.log(type);
-
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONTENT;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+
         // Add additional query parameter based on type
         if (type === 'customer') {
             url += '?isForCustomer=true';
