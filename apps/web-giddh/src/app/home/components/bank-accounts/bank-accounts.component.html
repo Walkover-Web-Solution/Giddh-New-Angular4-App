@@ -32,7 +32,7 @@
                             </p>
                             <ng-container *ngIf="bankaccount?.accountBankTransactionTotal?.bankName">
                                 <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
-                                    <span>{{ getBankTranslateName(bankaccount.accountBankTransactionTotal.bankName)
+                                    <span>{{ bankaccount?.accountBankTransactionTotal?.translatedBankName
                                         }}</span>
                                     <span>
                                         <amount-field
