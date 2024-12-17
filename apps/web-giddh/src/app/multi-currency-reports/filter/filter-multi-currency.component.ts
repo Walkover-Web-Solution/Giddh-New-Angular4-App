@@ -218,7 +218,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.onPropertyChanged.emit();
+                this.onPropertyChanged.emit({from:this.fromDate,to:this.toDate});
             }
         });
         // this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {

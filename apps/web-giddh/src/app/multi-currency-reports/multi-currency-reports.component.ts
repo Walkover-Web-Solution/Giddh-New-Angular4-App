@@ -253,7 +253,7 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
      */
     public tabChanged(tab: string, tabIndex: number): void {
         if (!this.preventTabChangeWithRoute) {
-            this.router.navigate(['/pages/trial-balance-and-profit-loss'], { queryParams: { tab, tabIndex } });
+            this.router.navigate(['/pages/multi-currency-report'], { queryParams: { tab, tabIndex } });
         }
     }
 }

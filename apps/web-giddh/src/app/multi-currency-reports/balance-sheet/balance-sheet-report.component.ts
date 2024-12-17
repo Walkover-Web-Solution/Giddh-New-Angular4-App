@@ -18,6 +18,9 @@ import { TBPlBsActions } from '../../actions/tl-pl.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep, each } from '../../lodash-optimized';
 import { Account, ChildGroup } from '../../models/api-models/Search';
+import { ReportType } from '../multi-currency.const';
+import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
+import { prepareBalanceSheetData } from '../../store/tl-pl/tl-pl.reducer';
 // import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 // import { cloneDeep, each } from '../../../lodash-optimized';
 // import { CompanyResponse } from '../../../models/api-models/Company';
@@ -31,7 +34,8 @@ import { Account, ChildGroup } from '../../models/api-models/Search';
 @Component({
     selector: 'balance-sheet-report',
     templateUrl: './balance-sheet-report.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [MultiCurrencyReportsComponentStore]
 })
 export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -42,7 +46,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     public get selectedCompany(): CompanyResponse {
         return this._selectedCompany;
     }
-
+    
     /**
      * set company and fetch data
      *
@@ -74,11 +78,16 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService) {
+
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: MultiCurrencyReportsComponentStore) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));
-        this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
+        this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((p) => {
             if (p) {
-                let data = cloneDeep(p) as BalanceSheetData;
+                
+                
+                let data = prepareBalanceSheetData(cloneDeep(p));
+                console.log('prepareBalanceSheetData',data);
+                
                 if (data && data.message) {
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
@@ -132,9 +141,12 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
-        this.store.dispatch(this.tlPlActions.GetBalanceSheet(cloneDeep(request)));
+        this.componentStore.getMultiCurrencyReport(ReportType.BalanceSheet);
     }
-
+    public searchData(event: any) {
+        console.log('creatMultiCurrencyReport', event);
+        this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.BalanceSheet, payload: event });
+    }
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -167,4 +179,5 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
         }
         this.cd.detectChanges();
     }
+
 }

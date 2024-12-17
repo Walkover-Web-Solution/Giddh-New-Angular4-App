@@ -25,13 +25,13 @@ import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.st
 import { ReportType } from '../multi-currency.const';
 
 @Component({
-    selector: 'balance-sheet-report',
+    selector: 'balance-sheet-reportsdfghfds',
     templateUrl: './balance-sheet-report.component.html',
     styleUrls: [`./balance-sheet-report.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MultiCurrencyReportsComponentStore]
 })
-export class BalanceSheetReportComponent implements OnInit, OnChanges, OnDestroy {
+export class BalanceSheetReportdfgfdComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean = false;
     public showClearSearch: boolean = false;
     @Input() public search: string = '';

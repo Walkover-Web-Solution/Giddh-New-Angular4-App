@@ -1,6 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'trial-profit-balance/balance-sheet'"
+    [file]="'trial-profit-balance/trial-balance'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -9,17 +9,20 @@
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <div >
-        <balance-sheet-report-grid
-            #bsGrid
+        <trial-balance-grid
+            #tbGrid
             [search]="search"
             [from]="from"
             [to]="to"
             (searchChange)="searchChanged($event)"
             [expandAll]="expandAll"
-            [bsData]="data"
-        ></balance-sheet-report-grid>
+            [data$]="data$ | async"
+        ></trial-balance-grid>
     </div>
-    <div  class="d-flex align-items-center justify-content-center tb-pl-bs-data">
+    <div
+        *ngIf="!(showLoader | async) && !(data$ | async)"
+        class="d-flex align-items-center justify-content-center tb-pl-bs-data"
+    >
         <div class="d-flex">
             <h2>{{ localeData?.no_data_found }}</h2>
         </div>

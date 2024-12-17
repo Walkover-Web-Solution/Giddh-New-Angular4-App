@@ -186,6 +186,8 @@ export class TlPlService {
      */
     public getMultiCurrencyReport(reportType: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        console.log("getMultiCurrencyReport");
+        
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':reportType', (reportType)) ).pipe(

@@ -10,19 +10,6 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
-import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
-import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
-import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
-import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-// import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
-import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
-import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 // import { BalanceSheetComponent } from './components/balance-sheet/balance-sheet.component';
 // import {
 //     BalanceSheetGridComponent,
@@ -53,21 +40,39 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
-import { BalanceSheetReportComponent } from './balance-sheet-multi-currency/balance-sheet-report.component';
-import { MultiCurrencyReportsComponent } from './multi-currency-reports.component';
+import { BalanceSheetReportComponent } from './balance-sheet/balance-sheet-report.component';
 import { BalanceSheetReportGridComponent } from './balance-sheet/components/balance-sheet-grid/balance-sheet-report-grid.component';
 import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
+import { MultiCurrencyReportsComponent } from './multi-currency-reports.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { MultiCurrencyReportsRoutingModule } from './multi-currency-reports.routing.module';
+import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
+import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
-import { AccountsFilterPipe } from '../financial-reports/pipes/accounts-filter.pipe';
-import { FinancialAccordionDirective } from '../financial-reports/directives/financial-accordion.directive';
+import { FilterMultiCurrencyComponent } from './filter/filter-multi-currency.component';
+import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
+import { TrialBalanceReportComponent } from './trial-balance-multi-currency/trial-balance-report.component';
+
 
 @NgModule({
     declarations: [
+        MultiCurrencyReportsComponent,
         BalanceSheetReportComponent,
         BalanceSheetReportGridComponent,
         BalanceSheetReportGridRowComponent,
+        FilterMultiCurrencyComponent,
+        AccountsFilterPipe,
+        TrialBalanceReportComponent
         // GridRowComponent,
         // TrialBalanceComponent,
         // ProfitLossComponent,
@@ -80,9 +85,6 @@ import { FinancialAccordionDirective } from '../financial-reports/directives/fin
         // BalanceSheetComponent,
         // BalanceSheetGridComponent,
         // BalanceSheetGridRowComponent,
-        FinancialAccordionDirective,
-        FinancialSearchPipe,
-        AccountsFilterPipe
     ],
     exports: [
         MultiCurrencyReportsComponent, CurrencyModule
@@ -121,7 +123,10 @@ import { FinancialAccordionDirective } from '../financial-reports/directives/fin
         MatTableModule,
         MatFormFieldModule,
         MatSelectModule,
-        FormFieldsModule 
+        FormFieldsModule,
+        FinancialSearchPipe
+        
+        
     ],
 })
 export class MultiCurrencyReportsModule {

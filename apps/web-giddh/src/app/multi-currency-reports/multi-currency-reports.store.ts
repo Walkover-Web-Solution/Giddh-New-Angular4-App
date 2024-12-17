@@ -47,7 +47,7 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
                         tapResponse(
                             (res: any) => {
                                 if (res?.status === "success" && res.body) {
-                                    return this.patchState({ reportDataList: res.body, inProgressReport: false });
+                                    return this.patchState({ reportDataList: res.body.response, inProgressReport: false });
                                 } else {
                                     res?.message && this.toaster.showSnackBar("error", res.message);
                                     return this.patchState({ reportDataList: null, inProgressReport: false });
