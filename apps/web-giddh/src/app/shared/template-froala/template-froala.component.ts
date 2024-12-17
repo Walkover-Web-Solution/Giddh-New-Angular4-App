@@ -382,6 +382,8 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public clickedInsideEmail(): void {
+        console.log("clickedInsideEmail");
+        
         this.allStaticEmails = '';
         this.isHiddenEmails = '';
         this.clickedInsideEmailSection = true;
@@ -393,6 +395,8 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public clickedOutsideEmail(): void {
+        console.log("out");
+        
         if (!this.allStaticEmails) {
             this.getAllStaticEmails();
             this.clickedInsideEmailSection = false;
@@ -410,7 +414,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @returns {number} The total count of email addresses
      * @memberof TemplateFroalaComponent
      */
-    public getTotalEmailsCount(): number {
+    public get getTotalEmailsCount(): number {
         return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
     }
 
@@ -448,7 +452,7 @@ export class TemplateFroalaComponent implements OnInit {
         }
 
         // Calculate hidden emails
-        const totalEmails = this.getTotalEmailsCount();
+        const totalEmails = this.getTotalEmailsCount;
         const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length;
         const hiddenEmailsCount = totalEmails - this.noOfMaximumEmailsShow;
 
@@ -457,7 +461,7 @@ export class TemplateFroalaComponent implements OnInit {
                 this.isHiddenEmails += ` ${hiddenEmailsCount} Bcc`;
             } else {
                 const bccInfo = this.selectedBccEmails.length ? ` (${this.selectedBccEmails.length} Bcc)` : '';
-                this.isHiddenEmails += ` ${hiddenEmailsCount} more${bccInfo}`;
+                this.isHiddenEmails += ` ${hiddenEmailsCount} ${this.commonLocaleData.app_more}${bccInfo}`;
             }
         }
     }

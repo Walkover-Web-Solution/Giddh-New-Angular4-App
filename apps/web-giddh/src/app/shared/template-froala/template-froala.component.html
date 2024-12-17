@@ -15,14 +15,14 @@
                 <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
                     <div class="form-group position-relative" (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)">
                         <div class="d-flex border-bottom">
-                            <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{localeData?.to}}</label>
+                            <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{ localeData?.to }}</label>
                             <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
-                                {{allStaticEmails}}
-                                <span class="suffix-emails font-15 d-inline-block text-primary" *ngIf="isHiddenEmails.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{isHiddenEmails}}</span>
+                                {{ allStaticEmails }}
+                                <span class="suffix-emails font-15 d-inline-block text-primary" *ngIf="isHiddenEmails.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{ isHiddenEmails }}</span>
                             </div>
-                            <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedToEmails.length}" *ngIf="!(getTotalEmailsCount() || clickedInsideEmailSection) || clickedInsideEmailSection">
+                            <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedToEmails.length}" *ngIf="!(getTotalEmailsCount || clickedInsideEmailSection) || clickedInsideEmailSection">
                                 <select-multiple-fields
-                                    [placeholder]="!(getTotalEmailsCount() || clickedInsideEmailSection) ? localeData.recipients : '' "
+                                    [placeholder]="!(getTotalEmailsCount || clickedInsideEmailSection) ? localeData?.recipients : '' "
                                     [options]="toEmails"
                                     (selectedOption)="selectedToEmails = $event"
                                     [selectedValues]="selectedToEmails"
@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group position-relative" *ngIf="showCc && clickedInsideEmailSection" (click)="setEmailFocus(emailType.Cc)">
                         <div class="d-flex border-bottom">
-                            <label class="mr-r1">{{localeData?.cc}}</label>
+                            <label class="mr-r1">{{ localeData?.cc }}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedCcEmails.length}">
                                 <select-multiple-fields
                                     [options]="ccEmails"
@@ -68,7 +68,7 @@
                     </div>
                     <div class="form-group position-relative" *ngIf="showBcc && clickedInsideEmailSection" (click)="setEmailFocus(emailType.Bcc)">
                         <div class="d-flex border-bottom">
-                            <label class="mr-r1">{{localeData?.bcc}}</label>
+                            <label class="mr-r1">{{ localeData?.bcc }}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedBccEmails.length}">
                                 <select-multiple-fields
                                     [options]="bccEmails"
