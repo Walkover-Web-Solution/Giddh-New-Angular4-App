@@ -137,8 +137,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      *
      * @memberof BankAccountsComponent
      */
-    public getBankTranslateName(bankName: string): string{
-        return this.localeData?.in?.replace("[TAX_NAME]", bankName);
+    public getBankTranslateName(bankName: string): string {
+        return this.localeData?.in?.replace("[BANK_NAME]", bankName);
     }
 
     /**
