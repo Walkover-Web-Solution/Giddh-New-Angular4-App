@@ -261,7 +261,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dueAmountReportData$ = observableOf(data);
         });
 
-
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -295,8 +294,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
 
-
-        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(10), takeUntil(this.destroyed$)).subscribe(result => {
+        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50),takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
