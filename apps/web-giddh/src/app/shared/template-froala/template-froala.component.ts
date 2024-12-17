@@ -133,6 +133,16 @@ export class TemplateFroalaComponent implements OnInit {
         isCc: true,
         isBcc: true
     };
+    /**
+     * Calculates the total number of email addresses across To, Cc, and Bcc fields.
+     *
+     * @returns {number} The total count of email addresses
+     * @readonly
+     * @memberof TemplateFroalaComponent
+     */
+    public get getTotalEmailsCount(): number {
+        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
+    }
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
@@ -383,7 +393,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public clickedInsideEmail(): void {
         console.log("clickedInsideEmail");
-        
+
         this.allStaticEmails = '';
         this.isHiddenEmails = '';
         this.clickedInsideEmailSection = true;
@@ -396,7 +406,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public clickedOutsideEmail(): void {
         console.log("out");
-        
+
         if (!this.allStaticEmails) {
             this.getAllStaticEmails();
             this.clickedInsideEmailSection = false;
@@ -407,17 +417,6 @@ export class TemplateFroalaComponent implements OnInit {
             this.showCc = this.selectedCcEmails.length > 0;
         }
     }
-
-    /**
-     * Calculates the total number of email addresses across To, Cc, and Bcc fields.
-     *
-     * @returns {number} The total count of email addresses
-     * @memberof TemplateFroalaComponent
-     */
-    public get getTotalEmailsCount(): number {
-        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
-    }
-
 
     /**
      * Get all Emails
