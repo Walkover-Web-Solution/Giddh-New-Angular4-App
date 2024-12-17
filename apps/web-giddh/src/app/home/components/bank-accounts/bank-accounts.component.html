@@ -34,9 +34,13 @@
                                 <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
                                     <span>{{ localeData?.in }}&nbsp;{{ bankaccount.accountBankTransactionTotal.bankName
                                         }}</span>
-                                    <span>{{ activeCompany?.baseCurrencySymbol }}
-                                        {{ bankaccount.accountBankTransactionTotal?.closingBalance?.amount |
-                                        giddhCurrency }}
+                                    <span>
+                                        <amount-field
+                                            [amount]="(bankaccount.accountBankTransactionTotal?.closingBalance?.amount | giddhCurrency)"
+                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
                                         <span
                                             *ngIf="bankaccount.accountBankTransactionTotal.closingBalance.type == 'CREDIT'">{{
                                             localeData?.cr_heading
