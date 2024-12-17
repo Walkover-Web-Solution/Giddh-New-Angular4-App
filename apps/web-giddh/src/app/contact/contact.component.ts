@@ -257,6 +257,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dueAmountReportData$ = observableOf(data);
         });
 
+
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -286,7 +287,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
 
 
-        combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(10),takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
@@ -317,18 +318,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.setActiveTab("aging-report");
                 }
 
-                this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+                this.store.pipe(select(s => s.session.currentCompanyCurrency), filter(Boolean), take(1)).subscribe(res => {
                     if (res) {
                         this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
                     }
                 });
 
-                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+                this.store.pipe(select(state => state.company), filter(Boolean),take(1)).subscribe(response => {
                     if (response) {
                         // First handle the bank integration status
                         this.handleBankIntegrationStatus(response);
                         // Then handle the columns setup
-                        this.setupCustomColumns(lastTabType);
+                        this.setCustomColumns(lastTabType);
                     }
                 });
             }
@@ -1632,16 +1633,18 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     private handleBankIntegrationStatus(response: any): void {
         this.isIciciAccountPendingForApproval = false;
-        this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+        this.isGetAllIntegratedBankInProgress = true;
 
-        if (response?.integratedBankList?.length) {
+        if (response.integratedBankList?.length > 0) {
             let approvalPendingAccounts = response.integratedBankList.filter(account => !account.errorMessage);
             if (!approvalPendingAccounts?.length) {
                 this.isIciciAccountPendingForApproval = true;
             }
             this.isICICIIntegrated = true;
+            this.isGetAllIntegratedBankInProgress = false;
         } else {
             this.isICICIIntegrated = false;
+            this.isGetAllIntegratedBankInProgress = false;
         }
     }
 
@@ -1652,7 +1655,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {string} lastTabType Previous tab type
      * @memberof ContactComponent
      */
-    private setupCustomColumns(lastTabType: string): void {
+    private setCustomColumns(lastTabType: string): void {
         this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
 
         if (this.activeTab === ContactsTab.customer.toLowerCase()) {
@@ -1715,7 +1718,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     "checked": true
                 }
             );
-
             if (this.isICICIIntegrated || this.isPlaidSupportedCountry) {
                 this.customiseColumns.push({
                     value: "action",

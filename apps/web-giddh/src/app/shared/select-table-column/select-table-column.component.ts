@@ -71,7 +71,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue || changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue || changes?.customiseColumns?.currentValue !== changes?.customiseColumns?.previousValue) {
+        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue) {
             this.getSelectedColumns();
         }
     }
