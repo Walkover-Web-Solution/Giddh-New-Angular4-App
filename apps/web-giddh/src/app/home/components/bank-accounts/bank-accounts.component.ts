@@ -133,6 +133,15 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Retrieves the translated bank name by replacing a placeholder in the localized string.
+     *
+     * @memberof BankAccountsComponent
+     */
+    public getBankTranslateName(bankName: string): string{
+        return this.localeData?.in?.replace("[TAX_NAME]", bankName);
+    }
+
+    /**
      * Refresh bank transactions
      *
      * @memberof BankAccountsComponent
