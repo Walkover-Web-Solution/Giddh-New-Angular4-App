@@ -296,7 +296,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
 
 
-        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(10),takeUntil(this.destroyed$)).subscribe(result => {
+        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(10), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
@@ -349,7 +349,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.cdRef.detectChanges();
                 });
 
-                this.store.pipe(select(state => state.company), filter(Boolean),take(1)).subscribe(response => {
+                this.store.pipe(select(state => state.company), filter(Boolean), take(1)).subscribe(response => {
                     if (response) {
                         // First handle the bank integration status
                         this.handleBankIntegrationStatus(response);
@@ -1678,6 +1678,16 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isICICIIntegrated = false;
             this.isGetAllIntegratedBankInProgress = false;
         }
+    }
+
+    /**
+     * This will be use for send customer information
+     *
+     * @param {*} account
+     * @memberof ContactComponent
+     */
+    public sendCustomerInformation(account: any): void {
+        this.contactComponentStore.sendCustomerInformation(account?.uniqueName);
     }
 
     /**
