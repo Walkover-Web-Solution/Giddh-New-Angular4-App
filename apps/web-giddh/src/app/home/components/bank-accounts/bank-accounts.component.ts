@@ -111,7 +111,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         refresh = refresh ? refresh : 'false';
         this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.bankAccounts = res?.body?.results;
+                this.bankAccounts = res?.body?.results?.map(bank => {
+                    if (bank?.accountBankTransactionTotal?.bankName) {
+                        bank.accountBankTransactionTotal['translatedBankName'] = this.getBankTranslateName(bank.accountBankTransactionTotal.bankName);
+                    }
+                    return bank;
+                });
             }
 
             const reLoginRequired = this.bankAccounts?.filter(bankaccount => bankaccount.reLoginRequired);
@@ -130,6 +135,16 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      */
     public getPlaidLinkToken(itemId: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
+    }
+
+    /**
+     * Retrieves the translated bank name by replacing a placeholder in the localized string
+     * 
+     * @param bankName 
+     * @returns 
+     */
+    private getBankTranslateName(bankName: string): string {
+        return this.localeData?.in_bank?.replace("[BANK_NAME]", bankName);
     }
 
     /**
