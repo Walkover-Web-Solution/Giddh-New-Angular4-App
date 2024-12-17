@@ -20,7 +20,7 @@
                                 {{ allStaticEmails }}
                                 <span class="suffix-emails font-15 d-inline-block text-primary" *ngIf="hiddenEmailList.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{ hiddenEmailList }}</span>
                             </div>
-                            <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedToEmails.length}" *ngIf="!(getTotalEmailsCount || clickedInsideEmailSection) || clickedInsideEmailSection">
+                            <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedToEmails.length}" *ngIf="!getTotalEmailsCount || clickedInsideEmailSection">
                                 <select-multiple-fields
                                     [placeholder]="!(getTotalEmailsCount || clickedInsideEmailSection) ? localeData?.recipients : '' "
                                     [options]="toEmails"
