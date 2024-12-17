@@ -392,8 +392,6 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public clickedInsideEmail(): void {
-        console.log("clickedInsideEmail");
-
         this.allStaticEmails = '';
         this.isHiddenEmails = '';
         this.clickedInsideEmailSection = true;
@@ -405,8 +403,6 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public clickedOutsideEmail(): void {
-        console.log("out");
-
         if (!this.allStaticEmails) {
             this.getAllStaticEmails();
             this.clickedInsideEmailSection = false;
