@@ -202,6 +202,7 @@ export class BulkUpdateInvoiceCustomfields {
     customField2: string = '';
     customField3: string = '';
 }
+
 /**
  * Send Bulk Email Template request model
  *

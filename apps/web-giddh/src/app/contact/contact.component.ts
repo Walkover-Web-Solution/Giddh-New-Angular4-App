@@ -246,7 +246,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the send email bulk request  */
     public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
     /** Observable for bulk email success response */
-    public bulkEmailSuccess$ = this.componentStore.select(state => state.sendBulkEmailISuccess);
+    public bulkEmailSuccess$ : any = this.componentStore.select(state => state.sendBulkEmailISuccess);
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -1663,10 +1663,10 @@ export class ContactComponent implements OnInit, OnDestroy {
    * @memberof ContactComponent
    */
     public openCustomEmailDialog(account: any, activeTab: string): void {
-        let data = {
+        const data = {
             activeTab: activeTab,
             accountUniqueName: account?.uniqueName
-        }
+        };
         this.dialog.open(TemplateFroalaComponent, {
             data: data,
             width: 'var(--aside-pane-width)',

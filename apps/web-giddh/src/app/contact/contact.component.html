@@ -277,19 +277,11 @@
                                             </button>
                                             <button
                                                 mat-menu-item
-                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
-                                                (click)="sendBulkEmail('vendor')"
+                                                *ngIf="selectedAccountsList?.length > 0"
+                                                (click)="sendBulkEmail(activeTab === 'vendor'  ? 'vendor' : 'customer')"
                                                 aria-label="send bulk email"
                                             >
-                                          {{ localeData?.send_bulk_email }}
-                                            </button>
-                                            <button
-                                                mat-menu-item
-                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'customer'"
-                                                (click)="sendBulkEmail('customer')"
-                                                aria-label="send bulk email"
-                                            >
-                                            {{ localeData?.send_bulk_email }}
+                                              {{ localeData?.send_bulk_email }}
                                             </button>
                                         </mat-menu>
                                     </div>
