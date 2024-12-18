@@ -135,8 +135,8 @@ export class ContactService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof ContactService
      */
-    public refreshBank(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, string>> {
-        let url = this.config.apiUrl + CONTACT_API.BANKACCOUNTS_REFRESH;
+    public refreshGoCardlessBankTransactions(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, any>> {
+        let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         url = url.replace(':accountUniqueName', encodeURIComponent(accountUniqueName ?? ''));
         return this.http.get(url).pipe(

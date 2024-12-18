@@ -3183,7 +3183,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public refreshBankTransactions(): void {
-        this.homeComponentStore.refreshBank(this.lc.accountUnq);
+        this.homeComponentStore.refreshGoCardlessBankTransactions(this.lc.accountUnq);
     }
 
     /**
