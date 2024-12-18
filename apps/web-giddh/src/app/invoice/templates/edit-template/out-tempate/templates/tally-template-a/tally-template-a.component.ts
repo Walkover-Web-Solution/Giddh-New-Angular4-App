@@ -64,7 +64,7 @@ export class TallyTemplateAComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions
     ) {
-        this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
+        this.companySetting$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
     }
 
     /**
@@ -73,10 +73,10 @@ export class TallyTemplateAComponent implements OnInit, OnDestroy {
      * @memberof TallyTemplateAComponent
      */
     public ngOnInit(): void {
-        this.companySetting$.subscribe(a => {
-            if (a && a.address) {
-                this.companyAddress = cloneDeep(a.address);
-            } else if (!a) {
+        this.companySetting$.subscribe(address => {
+            if (address && address.address) {
+                this.companyAddress = cloneDeep(address.address);
+            } else if (!address) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
