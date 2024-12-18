@@ -826,7 +826,7 @@ export class InvoiceService {
     /**
      * Get email content suggestions
      *
-     * @param {string} type Type of content suggestions to get ('customer' or 'vendor')
+     * @param {string} type Content suggestions type to get ('customer' or 'vendor')
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InvoiceService
      */

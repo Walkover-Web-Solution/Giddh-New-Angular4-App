@@ -311,7 +311,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailContents(): void {
-        this.componentStore.getEmailContentSuggestions(this.inputData?.activeTab ? this.inputData?.activeTab : this.inputData);
+        this.componentStore.getEmailContentSuggestions(this.inputData?.activeTab ? this.inputData.activeTab : this.inputData);
     }
 
     /**
