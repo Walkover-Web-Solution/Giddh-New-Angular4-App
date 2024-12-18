@@ -1,3 +1,4 @@
+import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import {
@@ -58,6 +59,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
+import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 
 @Component({
     selector: "contact-detail",
@@ -243,11 +245,15 @@ export class ContactComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2 = 2;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Stores the send email bulk request  */
+    public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
+    /** Observable for bulk email success response */
+    public bulkEmailSuccess$ : any = this.componentStore.select(state => state.sendBulkEmailISuccess);
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private contactComponentStore: ContactComponentStore) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore,) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -293,6 +299,18 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
+        this.bulkEmailSuccess$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(success => {
+            if (success) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1,
+                };
+            }
+        });
 
 
         combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
@@ -604,12 +622,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     event.stopPropagation();
                 }
                 this.openEmailDialog();
-                break;
-            case 5: // send email for customer information
-                if (event) {
-                    event.stopPropagation();
-                }
-                this.sendCustomerInformation(account);
                 break;
             default:
                 break;
@@ -1726,12 +1738,39 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will be use for send customer information
-    *
-    * @param {*} account
-    * @memberof ContactComponent
-    */
-    public sendCustomerInformation(account: any): void {
-        this.contactComponentStore.sendCustomerInformation(account?.uniqueName);
+     * This function will use for send email for template
+     *
+     * @memberof ContactComponent
+     */
+    public sendBulkEmail(type: string): void {
+        const accountUniqueNames = this.selectedAccountsList.map(account => account.uniqueName);
+        this.sendBulkEmailRequest = {
+            customerVendorUniqueNames: accountUniqueNames,
+            templateOf: type
+        };
+        this.componentStore.sendBulkEmailTemplate(this.sendBulkEmailRequest);
+    }
+
+    /**
+   *Open custom email dialog
+   *
+   * @param {any} account
+   * @memberof ContactComponent
+   */
+    public openCustomEmailDialog(account: any, activeTab: string): void {
+        const data = {
+            activeTab: activeTab,
+            accountUniqueName: account?.uniqueName
+        };
+        this.dialog.open(TemplateFroalaComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            height: '70vh',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
     }
 }

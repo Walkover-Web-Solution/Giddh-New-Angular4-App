@@ -13,7 +13,10 @@
         <div class="overflow-auto">
             <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
                 <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
-                    <div class="form-group position-relative" (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)">
+                    <div
+                        class="form-group position-relative"
+                        (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)"
+                    >
                         <div class="d-flex border-bottom">
                             <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{ localeData?.to }}</label>
                             <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
@@ -43,7 +46,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group position-relative" *ngIf="showCc && clickedInsideEmailSection" (click)="setEmailFocus(emailType.Cc)">
+                    <div
+                        class="form-group position-relative"
+                        *ngIf="showCc && clickedInsideEmailSection"
+                        (click)="setEmailFocus(emailType.Cc)"
+                    >
                         <div class="d-flex border-bottom">
                             <label class="mr-r1">{{ localeData?.cc }}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedCcEmails.length}">
@@ -59,14 +66,22 @@
                                 ></select-multiple-fields>
 
                                 <div class="d-flex column-gap1 justify-content-end">
-                                    <a *ngIf="!showBcc" class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)">{{
-                                        localeData?.bcc
-                                    }}</a>
+                                    <a
+                                        *ngIf="!showBcc"
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
+                                        >{{ localeData?.bcc }}</a
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group position-relative" *ngIf="showBcc && clickedInsideEmailSection" (click)="setEmailFocus(emailType.Bcc)">
+                    <div
+                        class="form-group position-relative"
+                        *ngIf="showBcc && clickedInsideEmailSection"
+                        (click)="setEmailFocus(emailType.Bcc)"
+                    >
                         <div class="d-flex border-bottom">
                             <label class="mr-r1">{{ localeData?.bcc }}</label>
                             <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedBccEmails.length}">
@@ -107,9 +122,19 @@
             </form>
         </div>
         <div class="row position-sticky mt-1">
-            <div class="col-sm-4 pr-0">
-                <button aria-label="save" mat-stroked-button color="primary" type="button" (click)="onSubmit()">
+            <div class="col-sm-4 pr-0" [ngClass]="{ 'd-flex column-gap15': inputData?.activeTab }">
+                <button aria-label="save" mat-stroked-button color="primary" type="button" (click)="onSubmit('save')">
                     {{ commonLocaleData?.app_save }}
+                </button>
+                <button
+                    *ngIf="inputData?.activeTab"
+                    aria-label="save and send email"
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="onSubmit('send')"
+                >
+                  {{ localeData?.save_and_send }}
                 </button>
             </div>
         </div>

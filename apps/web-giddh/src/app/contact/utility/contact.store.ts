@@ -1,42 +1,60 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { switchMap, catchError, EMPTY, Observable } from "rxjs";
-import { ToasterService } from "../../services/toaster.service";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
+import { ToasterService } from "../../services/toaster.service";
 import { ContactService } from "../../services/contact.service";
 
-@Injectable()
-export class ContactComponentStore extends ComponentStore<any> implements OnDestroy {
+export interface ContactState {
+    sendBulkEmailISuccess: boolean;
+}
 
-    constructor(
-        private toasterService: ToasterService,
+export const DEFAULT_CONTACT_STATE: ContactState = {
+    sendBulkEmailISuccess: null
+};
+
+@Injectable()
+export class ContactComponentStore extends ComponentStore<ContactState> implements OnDestroy {
+
+    constructor(private toasterService: ToasterService,
         private contactService: ContactService
     ) {
-        super();
+        super(DEFAULT_CONTACT_STATE);
     }
 
     /**
-     * This will be use for send customer information
+     * Send email template
      *
      * @memberof ContactComponentStore
      */
-    readonly sendCustomerInformation = this.effect((data: Observable<string>) => {
+    readonly sendBulkEmailTemplate = this.effect((data: Observable<any>) => {
         return data.pipe(
-            switchMap((account: string) => {
-                return this.contactService.sendCustomerInformation(account).pipe(
+            switchMap((req) => {
+                this.patchState({ sendBulkEmailISuccess: false });
+                return this.contactService.sendBulkEmailTemplate(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar("success", res.body);
+                                this.toasterService.showSnackBar('success', res?.body);
+                                return this.patchState({
+                                    sendBulkEmailISuccess: true
+                                });
                             } else {
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
+                                return this.patchState({
+                                    sendBulkEmailISuccess: false,
+                                });
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toasterService.showSnackBar("error", error);
+
+                            return this.patchState({
+                                sendBulkEmailISuccess: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -44,7 +62,6 @@ export class ContactComponentStore extends ComponentStore<any> implements OnDest
             })
         );
     });
-
 
     /**
      * Lifecycle hook for component destroy

@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
+import { cloneDeep } from '../../lodash-optimized';
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
@@ -138,7 +139,7 @@ export class TemplateFroalaComponent implements OnInit {
     };
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public voucherType,
+        @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog
@@ -162,7 +163,8 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const tributeSuggestions = response?.voucherSuggestions?.map(item => ({
+                const emailSuggestions = this.inputData.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
+                const tributeSuggestions = emailSuggestions?.map(item => ({
                     value: item,
                     key: item
                 }));
@@ -295,7 +297,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailTemplates(): void {
-        this.componentStore.getAllEmailTemplate(this.voucherType);
+        this.componentStore.getAllEmailTemplate(this.inputData?.activeTab ? this.inputData?.activeTab : this.inputData);
     }
 
     /**
@@ -310,7 +312,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailContents(): void {
-        this.componentStore.getEmailContentSuggestions(null);
+        this.componentStore.getEmailContentSuggestions(this.inputData?.activeTab ? this.inputData.activeTab : this.inputData);
     }
 
     /**
@@ -324,7 +326,7 @@ export class TemplateFroalaComponent implements OnInit {
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.voucherType]],
+            voucherTypes: [[this.inputData]],
             emailSubject: [template?.emailSubject ?? ''],
             html: [template?.html ?? '']
         });
@@ -342,18 +344,53 @@ export class TemplateFroalaComponent implements OnInit {
      *
      * @memberof TemplateFroalaComponent
      */
-    public onSubmit(): void {
+    public onSubmit(type: string): void {
         this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
         this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
         this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
+
         if (this.emailForm.invalid) {
             return;
         }
-        let req = {
-            voucherType: this.voucherType,
-            model: this.emailForm.value
-        }
+
+        const formValue = cloneDeep(this.emailForm.value);
+        delete formValue?.voucherTypes;
+
+        // Prepare request based on type
+        const req = this.prepareRequest(type, formValue);
         this.componentStore.updateCustomTemplate(req);
+    }
+
+    /**
+     * Prepares the request object based on the submission type
+     * @param type - Type of submission ('save' or 'send')
+     * @param formValue - Form values to be included in request
+     * @returns Prepared request object
+     */
+    private prepareRequest(type: string, formValue: any): any {
+        const isActiveTab = this.inputData?.activeTab;
+
+        if (!isActiveTab) {
+            return {
+                voucherType: this.inputData,
+                model: this.emailForm.value
+            };
+        }
+
+        const model = {
+            ...formValue,
+            customerVendorUniqueNames: [this.inputData?.accountUniqueName]
+        };
+
+        // Only add sendMail flag when type is 'send'
+        if (type === 'send') {
+            model.sendMail = true;
+        }
+
+        return {
+            voucherType: isActiveTab,
+            model
+        };
     }
 
     /**
@@ -364,8 +401,8 @@ export class TemplateFroalaComponent implements OnInit {
     */
     public toggleBccCc(emailType: string): void {
         this.setEmailFocus(emailType);
-        this.showBcc = emailType === EmailType.Bcc;
-        this.showCc = emailType === EmailType.Cc;
+        this.showBcc = emailType === EmailType.Bcc ? true : this.showBcc;
+        this.showCc = emailType === EmailType.Cc ? true : this.showCc;
     }
 
     /**
