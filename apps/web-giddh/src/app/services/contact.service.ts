@@ -128,13 +128,13 @@ export class ContactService {
     }
 
     /**
-     * Refresh bank accounts
+     * Refresh go-cardless bank transactions
      * 
-     * @returns {Observable<BaseResponse<any, any>>}
+     * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
      * @memberof ContactService
      */
-    public refreshBank(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, string>> {
-        let url = this.config.apiUrl + CONTACT_API.BANKACCOUNTS_REFRESH;
+    public refreshGoCardlessBankTransactions(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, string>> {
+        let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         url = url.replace(':accountUniqueName', encodeURIComponent(accountUniqueName ?? ''));
         return this.http.get(url).pipe(
@@ -144,5 +144,4 @@ export class ContactService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
     }
-
 }
