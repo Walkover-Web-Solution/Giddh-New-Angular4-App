@@ -31,24 +31,9 @@ import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
-
-// bill-table
-export interface PeriodicElementBill {
-    bill: string;
-    position: number;
-    vendor: string;
-    billdate: string;
-    order: string;
-    amount: string;
-    duedate: string;
-    status: string;
-}
-// bill-table
-const BILL_DATA: PeriodicElementBill[] = [
-    { position: 1, bill: 'Hydrogen', vendor: 'Ashish RANJAN', billdate: 'H', order: 'H', amount: '', duedate: '', status: '' }
-];
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -101,8 +86,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** Holds advance search dailog template reference */
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
-    /** Holds export dailog template reference */
-    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Holds Payment template reference */
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Holds adjust payment dailog template reference */
@@ -450,8 +433,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
 
                 if (this.queryParams.page) {
-                    this.advanceFilters.page = this.queryParams.page;
-                    this.advanceFilters.from = this.queryParams.from;
+                    if (this.activeModule === 'list') {
+                        this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
+                    }
                     this.advanceFilters.to = this.queryParams.to;
                 }
                 this.getVouchers(true);
@@ -1271,7 +1255,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(this.bulkExport, {
+        this.dialog.open(BulkExportComponent, {
             width: '600px',
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
