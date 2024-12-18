@@ -82,7 +82,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 };
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
             }
         })), takeUntil(this.destroyed$)).subscribe();
 
@@ -95,13 +95,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
         broadcast.onmessage = (event) => {
             if (event?.data) {
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
             }
         };
 
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
             }
         });
 
@@ -130,7 +130,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * 
      * @memberof BankAccountsComponent
      */
-    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
+    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 200, query?: string, sortBy: string = '', order: string = 'asc') {
         this.isLoading = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
@@ -237,7 +237,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public openBankLinkDialog(): void {
         this.dialog.open(BankLinkComponent, {
             data: { accountUniqueName: this.selectedBankUniqueName },
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
-    }
+    }   
 }

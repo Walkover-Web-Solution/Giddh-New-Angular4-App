@@ -1018,10 +1018,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(take(1)).subscribe(response => {
             if (response?.body) {
                 this.connectedBankLists = response.body;
+                console.log(this.connectedBankLists);
+
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename));
+                this.isBankAccountConnected = response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename));
+
                 if (result) {
                     this.isBankAccountConnected = true;
-                } else {
+                } 
+                else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
                 }
             }
@@ -2749,6 +2754,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
+                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response) {
+                            this.openBankLinkDialog();
+                        }
+                    });
                 }
             });
         }
@@ -3189,7 +3199,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(BankLinkComponent, {
             data: data,
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 
