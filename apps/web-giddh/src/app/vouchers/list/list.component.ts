@@ -310,8 +310,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private salesAction: SalesActions,
-        private invoiceActions: InvoiceActions
+        private invoiceActions: InvoiceActions,
+        private salesAction: SalesActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -342,7 +342,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
         this.setInitialAdvanceFilter(true);
-        this.getInvoiceSettings();
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
@@ -381,6 +380,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
+        this.getInvoiceSettings();
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1254,7 +1254,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.componentStore.globalStoreInvoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (!settings) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             } else {

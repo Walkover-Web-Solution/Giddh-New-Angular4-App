@@ -331,23 +331,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isIciciAccountPendingForApproval = false;
-                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-                    if (response?.integratedBankList?.length > 0) {
-                        let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
-                        if (!approvalPendingAccounts?.length) {
-                            this.isIciciAccountPendingForApproval = true;
-                        }
-
-                        this.isICICIIntegrated = true;
-                    } else {
-                        this.isICICIIntegrated = false;
-                    }
-                    this.cdRef.detectChanges();
-                });
-
-                this.store.pipe(select(state => state.company), filter(Boolean), take(1)).subscribe(response => {
+                this.store.pipe(select(state => state.company), filter(Boolean),take(1)).subscribe(response => {
                     if (response) {
                         // First handle the bank integration status
                         this.handleBankIntegrationStatus(response);

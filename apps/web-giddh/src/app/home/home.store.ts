@@ -3,6 +3,8 @@ import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "../services/toaster.service";
 import { ContactService } from "../services/contact.service";
+import { AppState } from "../store";
+import { Store } from "@ngrx/store";
 
 export interface HomeState {
     bankMessage: any;
@@ -21,21 +23,24 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
 
     constructor(
         private toaster: ToasterService,
-        private contactService: ContactService
+        private contactService: ContactService,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_STATE);
     }
 
+    public profile$: Observable<any> = this.select(this.store.select(profileObj => profileObj.settings.profile), (response) => response);
+
     /**
-    *  Refresh bank accounts
+    *  Refresh go-cardless bank transactions
     *
     *  @memberof HomeComponentStore
     */
-    readonly refreshBank = this.effect((accountUniqueName: Observable<string>) => {
+    readonly refreshGoCardlessBankTransactions = this.effect((accountUniqueName: Observable<string>) => {
         return accountUniqueName.pipe(
             switchMap((req: any) => {
                 this.patchState({ bankMessage: null, isBankRefreshing: true, isBankRefreshingError: false });
-                return this.contactService.refreshBank(req).pipe(
+                return this.contactService.refreshGoCardlessBankTransactions(req).pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
@@ -57,4 +62,3 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
         );
     });
 }
-
