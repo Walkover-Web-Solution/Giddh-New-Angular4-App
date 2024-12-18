@@ -31,7 +31,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
     @Input() public voucherType: string;
-
     @Output() public sectionName: EventEmitter<string> = new EventEmitter();
     public companySetting$: Observable<any> = observableOf(null);
     public companyAddress: string = '';
