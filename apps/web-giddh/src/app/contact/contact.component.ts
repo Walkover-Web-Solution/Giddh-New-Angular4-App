@@ -324,6 +324,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 });
 
                 this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isIciciAccountPendingForApproval = false;
+                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
                     if (response?.integratedBankList?.length > 0) {
                         const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
                         if (!approvalPendingAccounts?.length) {
@@ -333,8 +335,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     } else {
                         this.isICICIIntegrated = false;
                     }
-                    this.isIciciAccountPendingForApproval = false;
-                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
                     if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
                         let customiseColumns = cloneDeep(this.customiseColumns);
                         if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
