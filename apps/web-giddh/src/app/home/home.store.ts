@@ -40,7 +40,7 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
         return accountUniqueName.pipe(
             switchMap((req: any) => {
                 this.patchState({ bankMessage: null, isBankRefreshing: true, isBankRefreshingError: false });
-                return this.contactService.refreshBank(req).pipe(
+                return this.contactService.refreshGoCardlessBankTransactions(req).pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
