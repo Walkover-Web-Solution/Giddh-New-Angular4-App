@@ -5,6 +5,7 @@
     </head>
 
     <body
+        class="pd-l1 pd-r1"
         *ngIf="inputTemplate.sections && inputTemplate.sections"
         [ngStyle]="{
             'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans',
@@ -448,7 +449,7 @@
             >
                 <i class="icon-edit-pencil"></i>
             </a>
-            <main id="Template-table" class="pd-l1 pd-r1">
+            <main id="Template-table">
                 <table>
                     <tbody>
                         <tr>
@@ -457,7 +458,7 @@
                                     <thead>
                                         <tr class="border-top-none">
                                             <th
-                                                width="3%"
+                                                width="30px"
                                                 class="text-center"
                                                 *ngIf="fieldsAndVisibility.table.sNo?.display"
                                             >
@@ -879,7 +880,7 @@
             >
                 <i class="icon-edit-pencil"></i>
             </a>
-            <footer id="Template-footer" class="pd-l1 pd-r1 mr-b1">
+            <footer id="Template-footer">
                 <table>
                     <tr>
                         <td class="border-none border-left border-right border-bottom padding-0">
@@ -910,7 +911,7 @@
                                                 <tr *ngIf="showImageSignature || fieldsAndVisibility.footer.textUnderSlogan?.display">
                                                     <td class="border-none text-right">
                                                         <ng-container *ngIf="showImageSignature && imageSignatureSrc?.length">
-                                                            <div class="text-right">
+                                                            <div>
                                                                 <img
                                                                     [src]="imageSignatureSrc"
                                                                     class="inner-img-signature"

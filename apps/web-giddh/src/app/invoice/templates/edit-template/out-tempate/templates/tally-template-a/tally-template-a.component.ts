@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -16,42 +16,63 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from 'apps/web-giddh/
     styleUrls: ['./tally-template-a.component.scss']
 })
 
-export class TallyTemplateAComponent implements OnInit, OnDestroy, OnChanges {
-
+export class TallyTemplateAComponent implements OnInit, OnDestroy {
+    /** Holds fields and visibility object */
     @Input() public fieldsAndVisibility: any = null;
+    /** Holds true if preview mode */
     @Input() public isPreviewMode: boolean = false;
+    /** Holds true if show company logo */
     @Input() public showLogo: boolean = true;
+    /** Holds true if show company name */
     @Input() public showCompanyName: boolean;
+    /** Holds company GSTIN  number as string */
     @Input() public companyGSTIN: string;
+    /** Holds true if company PAN number as string */
     @Input() public companyPAN: string;
+    /** Holds template input data */
     @Input() public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+    /** Holds uploaded company logo source */
     @Input() public logoSrc: string;
+    /** Holds uploaded image signature source */
     @Input() public imageSignatureSrc: string;
+    /** Holds true show image signature */
     @Input() public showImageSignature: boolean;
+    /* This will hold active company*/
+    @Input() public activeCompany: any;
+    /** Holds template UI Section Visibility  status and label name */
     @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
     /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
+    /** Holds voucher type */
     @Input() public voucherType: string;
-
+    /** Emits selected section name to edit and show respective options */
     @Output() public sectionName: EventEmitter<string> = new EventEmitter();
+    /** Holds company setting */
     public companySetting$: Observable<any> = observableOf(null);
+    /** Holds company address */
     public companyAddress: string = '';
-    public columnsVisibled: number;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds dollar symbol */
     public dollarSymbol = '$';
+    /** Holds true if company Base Currency is Rupee */
     public isBaseCurrencyRupee = true;
+    /** Holds rupee symbol */
     public rupeeSymbol = '&#8377';
-    /* This will hold active company*/
-    @Input() public activeCompany: any;
-
 
     constructor(
         private store: Store<AppState>,
-        private settingsProfileActions: SettingsProfileActions) {
+        private settingsProfileActions: SettingsProfileActions
+    ) {
         this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @memberof TallyTemplateAComponent
+     */
+    public ngOnInit(): void {
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);
@@ -61,59 +82,37 @@ export class TallyTemplateAComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
+    /**
+     * Current date in different format
+     *
+     * @param {boolean} [isDefaultGiddhDate=true]
+     * @param {boolean} [dateInNumber=false]
+     * @return {*}  {string}
+     * @memberof TallyTemplateAComponent
+     */
     public getTodayDate(isDefaultGiddhDate: boolean = true, dateInNumber: boolean = false): string {
         return dayjs().format(dateInNumber ? "DDMMYYYY" : (isDefaultGiddhDate ? GIDDH_DATE_FORMAT : GIDDH_DATE_FORMAT_DD_MM_YYYY));
-    } 
+    }
 
-    public onClickSection(sectionName: string) {
+    /**
+     * Handle template edit section click
+     *
+     * @param {string} sectionName
+     * @memberof TallyTemplateAComponent
+     */
+    public onClickSection(sectionName: string): void {
         if (!this.isPreviewMode) {
             this.sectionName.emit(sectionName);
         }
     }
 
-    public ngOnDestroy() {
+    /**
+     * Life cycle hook runs when the component is destroyed
+     *
+     * @memberof TallyTemplateAComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
-            this.columnsVisibled = 0;
-            if (changes.fieldsAndVisibility.currentValue.table) {
-                if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo?.display) {
-                    this.columnsVisibled++;
-                }
-                if ((changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item?.display) || (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date?.display)) {
-                    this.columnsVisibled++;
-                }
-                if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac?.display) {
-                    this.columnsVisibled++;
-                }
-                if (changes.fieldsAndVisibility.currentValue.table.quantity && changes.fieldsAndVisibility.currentValue.table.quantity?.display) {
-                    this.columnsVisibled++;
-                }
-                if (changes.fieldsAndVisibility.currentValue.table.rate && changes.fieldsAndVisibility.currentValue.table.rate?.display) {
-                    this.columnsVisibled++;
-                }
-                if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount?.display) {
-                    this.columnsVisibled++;
-                }
-                if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue?.display) {
-                    this.columnsVisibled++;
-                }
-                if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes?.display) {
-                    this.columnsVisibled++;
-                }
-                if (changes?.fieldsAndVisibility?.currentValue?.table?.displayBaseCurrency && changes.fieldsAndVisibility.currentValue.table.displayBaseCurrency?.display) {
-                    this.columnsVisibled++;
-                }
-                if (this.columnsVisibled) {
-                    this.columnsVisibled++;
-                    this.columnsVisibled++;
-                    this.columnsVisibled++;
-                    this.columnsVisibled++;
-                }
-            }
-        }
     }
 }
