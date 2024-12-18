@@ -722,7 +722,6 @@ export class GeneralService {
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
-        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -730,8 +729,7 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons,
-            actionBtnWrapperCssClass
+            buttons
         };
     }
 
@@ -2152,15 +2150,17 @@ export class GeneralService {
      *
      * @param {Params} queryParams
      * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @param {boolean} [replaceUrl=true]
      * @memberof GeneralService
      */
-    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge', replaceUrl: boolean = true): void {
         this.router.navigate(
             [],
             {
                 relativeTo: this.activatedRoute,
                 queryParams,
-                queryParamsHandling: queryParamsHandling
+                queryParamsHandling,  // Merge new parameters with existing ones
+                replaceUrl  // Replace current history entry with new URL
             }
         );
     }

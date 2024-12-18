@@ -1330,7 +1330,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+        this.componentStore.voucherSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (!settings) {
                 this.componentStore.getInvoiceSettings();
             } else {
@@ -2250,7 +2250,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     stock: this.formBuilder.group({
                         name: [entryData ? entryData?.transactions[0]?.stock?.name : ''],
                         quantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : 1],
-                        maxQuantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : undefined], //temp (for PO linking in PB)
+                        maxQuantity: [this.getStockMaxQuantity(entryData)], //temp (for PO linking in PB)
                         rate: this.formBuilder.group({
                             rateForAccount: [entryData ? entryData?.transactions[0]?.stock?.rate?.rateForAccount ?? entryData?.transactions[0]?.stock?.rate?.amountForAccount : 1]
                         }),
@@ -2328,6 +2328,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             taxType: [tax?.taxType], //temp
             taxDetail: [tax?.taxDetail] //temp
         });
+    }
+
+    /**
+     * Calculate max quantity for PO linking in PB 
+     * 
+     * @param entryData 
+     * @returns 
+     */
+    private getStockMaxQuantity(entryData: any): number | undefined {
+        let maxQuantity = undefined;
+        if (this.invoiceType.isPurchaseInvoice && entryData?.purchaseOrderLinkSummaries?.length > 0) {
+            entryData.purchaseOrderLinkSummaries.forEach(summary => {
+                if (!isNaN(Number(summary.unUsedQuantity))) {
+                    if (entryData?.transactions[0]?.stock) {
+                        maxQuantity = summary.unUsedQuantity + entryData?.transactions[0]?.stock?.quantity;
+                    } else {
+                        maxQuantity = summary.usedQuantity;
+                    }
+                }
+            });
+        }
+        return maxQuantity;
     }
 
     /**
@@ -4750,7 +4772,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleQuantityBlur(transaction: any): void {
-        if (transaction.get("stock.quantity")?.value !== undefined && this.invoiceType.isPurchaseInvoice && transaction.get("stock.maxQuantity")?.value !== undefined && transaction.get("stock.maxQuantity")?.value !== null) {
+        if (this.invoiceType.isPurchaseInvoice && transaction.get("stock.quantity")?.value !== undefined && transaction.get("stock.maxQuantity")?.value !== undefined && transaction.get("stock.maxQuantity")?.value !== null) {
             if (transaction.get("stock.quantity")?.value > transaction.get("stock.maxQuantity")?.value) {
                 transaction.get("stock.quantity")?.patchValue(transaction.get("stock.maxQuantity")?.value);
                 this.toasterService.showSnackBar("error", this.localeData?.quantity_error + " (" + transaction.get("stock.maxQuantity")?.value + ")");

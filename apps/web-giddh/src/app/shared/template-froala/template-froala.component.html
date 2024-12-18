@@ -21,26 +21,11 @@
                             <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{ localeData?.to }}</label>
                             <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
                                 {{ allStaticEmails }}
-                                <span
-                                    class="suffix-emails font-15 d-inline-block text-primary"
-                                    *ngIf="isHiddenEmails.length"
-                                    (click)="$event.stopPropagation(); clickedInsideEmail()"
-                                    >{{ isHiddenEmails }}</span
-                                >
+                                <span class="suffix-emails font-15 d-inline-block text-primary" *ngIf="hiddenEmailList.length" (click)="$event.stopPropagation(); clickedInsideEmail()">{{ hiddenEmailList }}</span>
                             </div>
-                            <div
-                                class="d-flex w-100"
-                                [ngClass]="{ 'flex-column': selectedToEmails.length }"
-                                *ngIf="
-                                    !(getTotalEmailsCount() || clickedInsideEmailSection) || clickedInsideEmailSection
-                                "
-                            >
+                            <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedToEmails.length}" *ngIf="!getTotalEmailsCount || clickedInsideEmailSection">
                                 <select-multiple-fields
-                                    [placeholder]="
-                                        !(getTotalEmailsCount() || clickedInsideEmailSection)
-                                            ? localeData.recipients
-                                            : ''
-                                    "
+                                    [placeholder]="!(getTotalEmailsCount || clickedInsideEmailSection) ? localeData?.recipients : '' "
                                     [options]="toEmails"
                                     (selectedOption)="selectedToEmails = $event"
                                     [selectedValues]="selectedToEmails"
@@ -50,22 +35,13 @@
                                     [name]="emailType.To"
                                     class="select-multiple-chiplist w-100"
                                 ></select-multiple-fields>
-                                <div
-                                    *ngIf="clickedInsideEmailSection && !showCc && !showBcc"
-                                    class="d-flex column-gap1 justify-content-end"
-                                >
-                                    <a
-                                        class="btn-link under"
-                                        href="javascript:;"
-                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
-                                        >{{ localeData?.cc }}</a
-                                    >
-                                    <a
-                                        class="btn-link"
-                                        href="javascript:;"
-                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
-                                        >{{ localeData?.bcc }}</a
-                                    >
+                                <div *ngIf="clickedInsideEmailSection && !showCc && !showBcc" class="d-flex column-gap1 justify-content-end">
+                                    <a class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)">{{
+                                        localeData?.cc
+                                    }}</a>
+                                    <a class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)">{{
+                                        localeData?.bcc
+                                    }}</a>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +53,7 @@
                     >
                         <div class="d-flex border-bottom">
                             <label class="mr-r1">{{ localeData?.cc }}</label>
-                            <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedCcEmails.length }">
+                            <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedCcEmails.length}">
                                 <select-multiple-fields
                                     [options]="ccEmails"
                                     (selectedOption)="selectedCcEmails = $event"
@@ -108,7 +84,7 @@
                     >
                         <div class="d-flex border-bottom">
                             <label class="mr-r1">{{ localeData?.bcc }}</label>
-                            <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedBccEmails.length }">
+                            <div class="d-flex w-100" [ngClass]="{'flex-column' : selectedBccEmails.length}">
                                 <select-multiple-fields
                                     [options]="bccEmails"
                                     (selectedOption)="selectedBccEmails = $event"
@@ -121,13 +97,9 @@
                                 ></select-multiple-fields>
 
                                 <div class="d-flex column-gap1 justify-content-end">
-                                    <a
-                                        *ngIf="!showCc"
-                                        class="btn-link under"
-                                        href="javascript:;"
-                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
-                                        >{{ localeData?.cc }}</a
-                                    >
+                                    <a *ngIf="!showCc" class="btn-link" href="javascript:;" (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)">{{
+                                        localeData?.cc
+                                    }}</a>
                                 </div>
                             </div>
                         </div>

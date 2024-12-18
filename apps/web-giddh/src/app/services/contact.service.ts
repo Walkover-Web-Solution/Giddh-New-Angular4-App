@@ -10,6 +10,11 @@ import { CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
 
+interface IBankRefreshResponse {
+    success: boolean;
+    message: string;
+}
+
 @Injectable()
 export class ContactService {
     private companyUniqueName: string;
@@ -139,5 +144,22 @@ export class ContactService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
         );
+    }
+
+     /**
+     * Refresh go-cardless bank transactions
+     *
+     * @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
+     * @memberof ContactService
+     */
+     public refreshGoCardlessBankTransactions(): Observable<BaseResponse<IBankRefreshResponse, any>> {
+        let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
     }
 }
