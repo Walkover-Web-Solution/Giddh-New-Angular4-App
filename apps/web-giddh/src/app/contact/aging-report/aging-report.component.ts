@@ -734,12 +734,14 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @returns 
      */
     public getInvoicePreviewUrl(invoice: any): string {
-        let url: string = '';
-        if (invoice && invoice.voucherNumber !== 'OPENING BALANCE' && invoice.uniqueName && invoice.voucherDate) {
-            url = `/pages/vouchers/view/sales/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
-        } else {
-            url = 'javascript:;';
+        if (invoice) {
+            let url: string = '';
+            if (invoice.voucherNumber !== 'OPENING BALANCE' && invoice.uniqueName && invoice.voucherDate) {
+                url = `/pages/vouchers/view/sales/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
+            } else {
+                url = 'javascript:;';
+            }
+            return this.domSantizer(url);
         }
-        return this.domSantizer(url);
     }
 }
