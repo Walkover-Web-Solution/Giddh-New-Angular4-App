@@ -11,12 +11,12 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
-    selector: 'tally-template-a',
-    templateUrl: './tally-template-a.component.html',
-    styleUrls: ['./tally-template-a.component.scss']
+    selector: 'tally-template',
+    templateUrl: './tally-template.component.html',
+    styleUrls: ['./tally-template.component.scss']
 })
 
-export class TallyTemplateAComponent implements OnInit, OnDestroy {
+export class TallyTemplateComponent implements OnInit, OnDestroy {
     /** Holds fields and visibility object */
     @Input() public fieldsAndVisibility: any = null;
     /** Holds true if preview mode */

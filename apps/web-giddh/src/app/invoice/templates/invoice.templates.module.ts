@@ -19,7 +19,7 @@ import { InvoiceTemplatePreviewModelComponent } from './edit-template/modals/tem
 import { DesignFiltersContainerComponent } from './edit-template/filters-container/design-filters/design.filters.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { TallyTemplateAComponent } from './edit-template/out-tempate/templates/tally-template-a/tally-template-a.component';
+import { TallyTemplateComponent } from './edit-template/out-tempate/templates/tally-template/tally-template.component';
 
 @NgModule({
     imports: [
@@ -46,7 +46,7 @@ import { TallyTemplateAComponent } from './edit-template/out-tempate/templates/t
         EditInvoiceComponent,
         InvoiceTemplateModalComponent,
         EditFiltersContainersComponent,
-        TallyTemplateAComponent
+        TallyTemplateComponent
     ],
     exports: [
         OutTemplateComponent,
