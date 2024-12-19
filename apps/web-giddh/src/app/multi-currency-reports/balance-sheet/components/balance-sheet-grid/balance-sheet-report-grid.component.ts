@@ -17,10 +17,6 @@ import { UntypedFormControl } from '@angular/forms';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-// import { each } from 'apps/web-giddh/src/app/lodash-optimized';
-// import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
-// import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
-// import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ReplaySubject } from 'rxjs';
@@ -33,36 +29,57 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDestroy {
+    /** Indicates if there is no data available */
     public noData: boolean;
+    /** Determines if the clear search button should be shown */
     public showClearSearch: boolean = false;
+    /** Holds the search query */
     @Input() public search: string = '';
+    /** Holds the balance sheet data */
     @Input() public bsData: BalanceSheetData;
+    /** Padding for the report grid */
     @Input() public padding: string;
+    /** Day.js instance for date formatting */
     public dayjs = dayjs;
+    /** Determines if all items should be expanded */
     @Input() public expandAll: boolean;
+    /** Holds the search input text */
     @Input() public searchInput: string = '';
+    /** Holds the start date */
     @Input() public from: string = '';
+    /** Holds the end date */
     @Input() public to: string = '';
+    /** Stores the last synchronization date */
+    @Input() public lastSyncDate: string = '';
+    /** Emits an event when the search input changes */
     @Output() public searchChange = new EventEmitter<string>();
+    /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
+    /** Form control for the search input */
     public bsSearchControl: UntypedFormControl = new UntypedFormControl();
-    /** This holds giddh date format */
+    /** Stores the Giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /** Observable to manage memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
+    /** Stores local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** Stores common JSON data */
     public commonLocaleData: any = {};
-    /** Hides the data while a new search is made to refresh the virtual list */
+    /** Indicates whether data should be hidden during search */
     public hideData: boolean;
-    /** True, when expand all button is toggled while search is enabled */
+    /** Indicates if expand all was toggled during search */
     public isExpandToggledDuringSearch: boolean;
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
-
+        
     }
 
+    /**
+     * Handles changes to the component's input properties
+     *
+     * @param {SimpleChanges} changes The changes object
+     * @memberof BalanceSheetReportGridComponent
+     */
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
@@ -104,7 +121,13 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
         }
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof BalanceSheetReportGridComponent
+     */
     public ngOnInit() {
+        this.lastSyncDate = dayjs(this.lastSyncDate, 'DD-MM-YYYY').format('DD MMMM YYYY');
         this.bsSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -122,6 +145,11 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
             });
     }
 
+    /**
+     * Toggles the visibility of the search bar
+     *
+     * @memberof BalanceSheetReportGridComponent
+     */
     public toggleSearch() {
         this.showClearSearch = true;
 
@@ -132,6 +160,13 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
         }, 200);
     }
 
+    /**
+     * Handles click events outside the search input
+     *
+     * @param {*} event The click event
+     * @param {*} el The element to check
+     * @memberof BalanceSheetReportGridComponent
+     */
     public clickedOutside(event, el) {
         if (this.bsSearchControl?.value !== null && this.bsSearchControl?.value !== '') {
             return;
@@ -144,13 +179,27 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
         }
     }
 
-    /* tslint:disable */
+    /**
+     * Checks if an element is a child of another
+     *
+     * @param {*} c The child element
+     * @param {*} p The parent element
+     * @returns {boolean} True if the element is a child, false otherwise
+     * @memberof BalanceSheetReportGridComponent
+     */
     public childOf(c, p) {
         while ((c = c.parentNode) && c !== p) {
         }
         return !!c;
     }
 
+    /**
+     * Toggles the visibility of child groups and accounts
+     *
+     * @param {ChildGroup[]} data The data to toggle visibility for
+     * @param {boolean} isVisible Indicates whether the items should be visible
+     * @memberof BalanceSheetReportGridComponent
+     */
     private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
         each(data, (grp: ChildGroup) => {
             if (grp.isIncludedInSearch) {
@@ -169,9 +218,9 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
-     * This will destroy all the memory used by this component
+     * Cleans up resources used by the component
      *
-     * @memberof BalanceSheetGridComponent
+     * @memberof BalanceSheetReportGridComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

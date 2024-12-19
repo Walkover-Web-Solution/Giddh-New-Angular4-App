@@ -4,11 +4,27 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-<filter-multi-currency (filterData)="searchData($event)" (onPropertyChanged)="filterData($event)"></filter-multi-currency>
+<!-- <filter-multi-currency (filterData)="searchData($event)" (onPropertyChanged)="filterData($event)" (expandAllChange)="expandAllEvent()"
+[(expandAll)]="expandAll"></filter-multi-currency> -->
+    <filter-multi-currency
+        #filter
+        [selectedCompany]="selectedCompany"
+        (filterValue)="searchData($event)"
+        (onPropertyChanged)="filterData($event)"
+        [showLoader]="showLoader"
+        (lastSyncDate)="lastDate($event)"
+        (seachChange)="searchChanged($event)"
+        (expandAllChange)="expandAllEvent()"
+        [(expandAll)]="expandAll"
+        [tbExportCsv]="false"
+        [tbExportXLS]="false"
+        [plBsExportXLS]="true"
+        [showLabels]="true"
+    ></filter-multi-currency>
     <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
-    <div >
+    <div *ngIf="!(showLoader | async) && data">
         <balance-sheet-report-grid
             #bsGrid
             [search]="search"
@@ -17,9 +33,10 @@
             (searchChange)="searchChanged($event)"
             [expandAll]="expandAll"
             [bsData]="data"
+            [lastSyncDate]="lastSyncDate"
         ></balance-sheet-report-grid>
     </div>
-    <div  class="d-flex align-items-center justify-content-center tb-pl-bs-data">
+    <div *ngIf="!(showLoader | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
         <div class="d-flex">
             <h2>{{ localeData?.no_data_found }}</h2>
         </div>

@@ -40,20 +40,32 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
     ],
 })
 export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDestroy {
-
+    /** Indicates if there is no data available */
     public noData: boolean;
+    /** Controls the search input field for account search */
     public accountSearchControl: UntypedFormControl = new UntypedFormControl();
+    /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
+    /** Indicates whether the clear search button should be shown */
     public showClearSearch: boolean = false;
+    /** The search query for filtering data */
     @Input() public search: string = '';
+    /** The start date for the data range */
     @Input() public from: string = '';
+    /** The end date for the data range */
     @Input() public to: string = '';
+    /** The input search value for custom search */
     @Input() public searchInput: string = '';
+    /** Padding left value for layout */
     @Input() public padLeft: number = 30;
+    /** Controls the loading state for displaying loader */
     @Input() public showLoader: boolean;
+    /** The data for account details */
     @Input() public data$: AccountDetails;
+    /** Flag to control expand/collapse state for all groups */
     @Input() public expandAll: boolean;
-    @Output() public searchChange = new EventEmitter<string>();
+    /** Emits the search value when it changes */
+    @Output() public searchChange = new EventEmitter<string>()
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -130,14 +142,32 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
         this.destroyed$.complete();
     }
 
+    /**
+     * Triggers change detection for the component.
+     * 
+     * @memberof TrialBalanceReportComponent
+     */ 
     public markForCheck() {
         this.cd.markForCheck();
     }
 
+    /**
+     * Provides a unique identifier for each item in a list for efficient rendering in Angular.
+     * 
+     * @param {number} index - The index of the current item
+     * @param {ChildGroup} item - The current item in the list
+     * @returns {string} The unique identifier of the item
+     * @memberof TrialBalanceReportComponent
+     */
     public trackByFn(index, item: ChildGroup) {
         return item?.uniqueName;
     }
 
+    /**
+     * Toggles the search input visibility and focuses on the search input field.
+     * 
+     * @memberof TrialBalanceReportComponent
+     */
     public toggleSearch() {
         this.showClearSearch = true;
 
@@ -148,6 +178,13 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
         }, 200);
     }
 
+    /**
+     * Handles clicks outside the search input and clears the search input if it's empty.
+     * 
+     * @param {Event} event - The event triggered by the click action
+     * @param {HTMLElement} el - The reference element to check if the click occurred inside it
+     * @memberof TrialBalanceReportComponent
+     */
     public clickedOutside(event, el) {
         if (this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') {
             return;
@@ -160,7 +197,14 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
         }
     }
 
-    /* tslint:disable */
+    /**
+     * Checks if an element is a child of a specific parent element.
+     * 
+     * @param {EventTarget} c - The current element being checked
+     * @param {HTMLElement} p - The parent element to check against
+     * @returns {boolean} True if the current element is a child of the parent, otherwise false
+     * @memberof TrialBalanceReportComponent
+     */
     public childOf(c, p) {
         while ((c = c.parentNode) && c !== p) {
         }

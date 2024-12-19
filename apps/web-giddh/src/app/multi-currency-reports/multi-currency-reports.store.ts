@@ -9,11 +9,13 @@ import { TlPlService } from "../services/tl-pl.service";
 export interface MultiCurrencyReportsState {
     reportDataList: any;
     inProgressReport: boolean;
+    filterRequestData: any;
 }
 
 const DEFAULT_STATE: MultiCurrencyReportsState = {
     reportDataList: null,
-    inProgressReport: false
+    inProgressReport: false,
+    filterRequestData: null
 };
 
 @Injectable()
@@ -27,63 +29,74 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
         super(DEFAULT_STATE);
     }
     public reportDataList$: Observable<any> = this.select(state => state.reportDataList);
+    public filterRequestData$: Observable<any> = this.select(state => state.filterRequestData);
+    public inProgressReport$: Observable<any> = this.select(state => state.inProgressReport);
+    
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public companyList$: Observable<any> = this.select(this.store.select((state) => state.session.companies), (response) => response);
     public currencyList$: Observable<any> = this.select(this.store.select(state => state.session.currencies), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
 
-        /**
-    *   Save list of Payment Liability
-    *
-    * @memberof VatReportComponentStore
-    */
-        readonly getMultiCurrencyReport = this.effect((data: Observable<any>) => {
-            return data.pipe(
-                switchMap((req) => {
-                    console.log("req------",req);
-                    
-                    this.patchState({ reportDataList: null, inProgressReport: true });
-                    return this.TlPlService.getMultiCurrencyReport(req).pipe(
-                        tapResponse(
-                            (res: any) => {
-                                if (res?.status === "success" && res.body) {
-                                    return this.patchState({ reportDataList: res.body.response, inProgressReport: false });
-                                } else {
-                                    res?.message && this.toaster.showSnackBar("error", res.message);
-                                    return this.patchState({ reportDataList: null, inProgressReport: false });
-                                }
-                            },
-                            (error: any) => {
-                                this.toaster.showSnackBar("error", error);
-                                return this.patchState({ reportDataList: null, inProgressReport: false });
+    /**
+     * Fetches the multi-currency report data.
+     * 
+     * It calls the `getMultiCurrencyReport` method from the `TlPlService`, handles the response, updates the state, and shows appropriate toasts.
+     * 
+     * @readonly
+     * @memberof MultiCurrencyReportsComponentStore
+     */
+    readonly getMultiCurrencyReport = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ reportDataList: null, filterRequestData: null, inProgressReport: true });
+                return this.TlPlService.getMultiCurrencyReport(req).pipe(
+                    tapResponse(
+                        (res: any) => {
+                            if (res?.status === "success" && res.body) {
+                                return this.patchState({ reportDataList: res.body.response, filterRequestData: { request: res.body.request, lastFetchedAt: res.body.lastFetchedAt }, inProgressReport: false });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ reportDataList: null, filterRequestData: null, inProgressReport: false });
                             }
-                        ),
-                        catchError((err) => EMPTY)
-                    );
-                })
-            );
-        });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ reportDataList: null,filterRequestData: null, inProgressReport: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
-        readonly creatMultiCurrencyReport = this.effect((data: Observable<any>) => {
-            return data.pipe(
-                switchMap((req) => {
-                    console.log("req------",req);
-                    return this.TlPlService.creatMultiCurrencyReport(req.reportType, req.payload).pipe(
-                        tapResponse(
-                            (res: any) => {
-                                if (res?.status === "success" && res.body?.file) {
-                                    this.toaster.showSnackBar("success", res.body.file);
-                                } else {
-                                    res?.message && this.toaster.showSnackBar("error", res.message);
-                                }
-                            },
-                            (error: any) => {
-                                this.toaster.showSnackBar("error", error);
+    /**
+     * Creates the multi-currency report.
+     * 
+     * It triggers the `creatMultiCurrencyReport` method from the `TlPlService`, handles the response, and shows appropriate toasts.
+     * 
+     * @readonly
+     * @memberof MultiCurrencyReportsComponentStore
+     */
+    readonly creatMultiCurrencyReport = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.TlPlService.creatMultiCurrencyReport(req.reportType, req.payload).pipe(
+                    tapResponse(
+                        (res: any) => {
+                            if (res?.status === "success" && res.body?.file) {
+                                this.toaster.showSnackBar("success", res.body.file);
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
                             }
-                        ),
-                        catchError((err) => EMPTY)
-                    );
-                })
-            );
-        });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 }

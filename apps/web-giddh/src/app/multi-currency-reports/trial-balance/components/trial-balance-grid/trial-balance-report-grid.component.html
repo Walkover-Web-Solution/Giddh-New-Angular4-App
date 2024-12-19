@@ -79,7 +79,7 @@
                     </div>
                 </section>
                 <!--Start Grid-->
-                <div *ngIf="data$.groupDetails && !hideData">
+                <div *ngIf="data$?.groupDetails">
                     <ng-template #groupDetails let-list let-padding="padding" let-isSubGroup="isSubGroup">
                         <ng-container *ngIf="!expandAll || isSubGroup || (expandAll && search)">
                             <ng-container *ngFor="let grp of list; trackBy: trackByFn">
@@ -87,7 +87,7 @@
                                     class="row-1"
                                     *ngIf="grp.isVisible"
                                     [ngClass]="!isSubGroup ? grp.category : ''"
-                                    grid-row
+                                    grid-report-row
                                     [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                     [groupDetail]="grp"
                                     [padding]="padding"
@@ -121,7 +121,7 @@
                                     class="row-1"
                                     *ngIf="grp.isVisible"
                                     [ngClass]="!isSubGroup ? grp.category : ''"
-                                    grid-row
+                                    grid-report-row
                                     [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                     [groupDetail]="grp"
                                     [padding]="padding"
@@ -170,7 +170,7 @@
                                     <th width="16.6%;" class="text-right">
                                         <span class="d-inline-flex">
                                             <amount-field
-                                                [amount]="data$.forwardedBalance?.amount"
+                                                [amount]="data$?.forwardedBalance?.amount"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
                                             >

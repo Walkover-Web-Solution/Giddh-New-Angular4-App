@@ -207,8 +207,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                console.log("selectedDateRangeUi",this.selectedDateRangeUi);
-                
                 this.filterData();
             }
         });
@@ -313,7 +311,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public filterData() {
-        console.log("1");
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
         this.onPropertyChanged.emit(this.filterForm?.value);
         // this will clear the search and reset it after we click apply --G0-2745
@@ -322,7 +319,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public refreshData() {
-        console.log("2");
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
         let data = cloneDeep(this.filterForm?.value);
         data.refresh = true;
@@ -371,7 +367,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public onTagSelected(ev) {
-        console.log("3");
         this.selectedTag = ev?.value;
         this.filterForm.get('tagName')?.patchValue(ev?.value);
         this.filterForm.get('refresh')?.patchValue(true);
@@ -397,7 +392,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        console.log("4");
         this.currentBranch.name = selectedEntity?.label;
         setTimeout(() => {
             this.expandAllChange.emit(false);

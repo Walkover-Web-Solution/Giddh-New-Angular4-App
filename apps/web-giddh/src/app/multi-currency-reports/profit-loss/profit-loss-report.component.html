@@ -1,6 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'trial-profit-balance/trial-balance'"
+    [file]="'trial-profit-balance/profit-loss'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -11,6 +11,7 @@
         (onPropertyChanged)="filterData($event)"
         [showLoader]="showLoader"
         (seachChange)="searchChanged($event)"
+        (lastSyncDate)="lastDate($event)"
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
         [tbExportCsv]="false"
@@ -21,21 +22,20 @@
     <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
-    <div *ngIf="(data$ | async) && !(showLoader | async)">
-        <trial-balance-report-grid
-            #tbGrid
+    <div *ngIf="data && !(showLoader | async)">
+        <profit-loss-report-grid
+            #plGrid
             [search]="search"
             [from]="from"
             [to]="to"
             (searchChange)="searchChanged($event)"
             [expandAll]="expandAll"
-            [data$]="data$ | async"
-        ></trial-balance-report-grid>
+            [plData]="data"
+            [cogsData]="cogsData"
+            [lastSyncDate]="lastSyncDate"
+        ></profit-loss-report-grid>
     </div>
-    <div
-        *ngIf="!(showLoader | async) && !(data$ | async)"
-        class="d-flex align-items-center justify-content-center tb-pl-bs-data"
-    >
+    <div *ngIf="!(showLoader | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
         <div class="d-flex">
             <h2>{{ localeData?.no_data_found }}</h2>
         </div>

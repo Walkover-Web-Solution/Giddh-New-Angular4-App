@@ -20,22 +20,36 @@ import { TrialBalanceReportGridComponent } from './components/trial-balance-grid
     providers: [MultiCurrencyReportsComponentStore]
 })
 export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDestroy {
-    /** This will hold local JSON data */
+    /** Holds local JSON data */
     public localeData: any = {};
-    /** This will hold common JSON data */
+    /** Holds common JSON data */
     public commonLocaleData: any = {};
+    /** Observable for controlling loader state */
     public showLoader: Observable<boolean>;
-    public data$: Observable<any>;
+    /** Observable for report data */
+    public data$: Observable<any> = this.componentStore.reportDataList$;
+    /** Holds the request data for the trial balance */
     public request: TrialBalanceRequest;
+    /** Flag to control expand/collapse state for all groups */
     public expandAll: boolean;
+    /** Search query string for filtering data */
     public search: string;
+    /** Start date of the selected financial year */
     public from: string;
-    public to: string;
+    /** End date of the selected financial year */
+    public to: string
+    /** Reference to the TrialBalanceReportGridComponent */
     @ViewChild('tbGrid', { static: true }) public tbGrid: TrialBalanceReportGridComponent;
+    /** Indicates whether version 2 is used */
     @Input() public isV2: boolean = false;
+    /** Indicates whether a date has been selected */
     @Input() public isDateSelected: boolean = false;
+    /** Subject used to track component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds the selected company data */
     private _selectedCompany: CompanyResponse;
+    /** Holds filter request data */
+    public filterRequestData: any;
 
     constructor(
         private store: Store<AppState>,
@@ -43,14 +57,25 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
         public tlPlActions: TBPlBsActions,
         private toaster: ToasterService,
         private componentStore: MultiCurrencyReportsComponentStore) {
-        this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
+        this.showLoader = this.componentStore.inProgressReport$;
     }
 
+    /**
+     * Getter for the selected company.
+     * 
+     * @returns {CompanyResponse} The currently selected company
+     * @memberof TrialBalanceReportComponent
+     */
     public get selectedCompany(): CompanyResponse {
         return this._selectedCompany;
     }
 
-    // set company and fetch data...
+    /**
+     * Setter for the selected company. Updates the request object based on the company's financial year.
+     * 
+     * @param {CompanyResponse} value - The selected company
+     * @memberof TrialBalanceReportComponent
+     */
     @Input()
     public set selectedCompany(value: CompanyResponse) {
         this._selectedCompany = value;
@@ -63,40 +88,55 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
         }
     }
 
+    /**
+     * Initializes the component by subscribing to necessary data and handling received reports.
+     * 
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public ngOnInit() {
-        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p) => {
-            console.log("p",p);
-            
-            let d = cloneDeep(p);
-            if (d) {
-                if (d.message) {
+        this.data$.pipe(takeUntil(this.destroyed$)).subscribe((p) => {
+            if (p) {
+                if (p.message) {
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
-                        this.toaster.infoToast(d.message);
+                        this.toaster.infoToast(p.message);
                     }, 100);
                 }
-                this.InitData(d.groupDetails);
-                d.groupDetails.forEach(g => {
-                    g.isVisible = true;
-                    g.isCreated = true;
+                this.InitData(p?.groupDetails);
+                p?.groupDetails.forEach(g => {
+                    g['isVisible'] = true;
+                    g['isCreated'] = true;
                 });
             }
-            return d;
-        })), takeUntil(this.destroyed$));
-        this.data$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.cd.markForCheck();
         });
+
+        this.componentStore.filterRequestData$.pipe(takeUntil(this.destroyed$)).subscribe((p) => {
+            if (p?.request && p.lastFetchedAt) {
+                this.filterRequestData = p
+            }
+            this.cd.markForCheck();
+        });
+        
     }
 
+    /**
+     * Initializes the data for the report, setting visibility and inclusion flags for each group and account.
+     * 
+     * @param {ChildGroup[]} d - The group details to initialize
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public InitData(d: ChildGroup[]) {
         each(d, (grp: ChildGroup) => {
-            grp.isVisible = false;
-            grp.isCreated = false;
-            grp.isIncludedInSearch = true;
+            grp['isVisible'] = false;
+            grp['isCreated'] = false;
+            grp['isIncludedInSearch'] = true;
             each(grp.accounts, (acc: Account) => {
-                acc.isIncludedInSearch = true;
-                acc.isCreated = false;
-                acc.isVisible = false;
+                acc['isIncludedInSearch'] = true;
+                acc['isCreated'] = false;
+                acc['isVisible'] = false;
             });
             if (grp.childGroups) {
                 this.InitData(grp.childGroups);
@@ -104,39 +144,94 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
         });
     }
 
+    /**
+     * Lifecycle hook to detect changes after the view initialization.
+     * 
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public ngAfterViewInit() {
         this.cd.detectChanges();
     }
 
+    /**
+     * Filters the data based on the selected date range and triggers report generation.
+     * 
+     * @param {TrialBalanceRequest} request - The filter request data
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public filterData(request: TrialBalanceRequest) {
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
-        console.log("this.isV2",this.isV2);
-        if (this.isV2) {
-            this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
-        } else {
-            this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
-        }
+        this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
         //this.getTrialBalanceReport();
     }
+
+    /**
+     * Fetches the trial balance report by triggering the component store's action.
+     * 
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public getTrialBalanceReport(){
-        console.log("getMultiCurrencyReport");
-        
         this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
     }
 
+
+    /**
+     * Handles the event when search data is changed.
+     * 
+     * @param {any} event - The event triggered by the search action
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
+    public searchData(event: any) {
+        this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.TrialBalance, payload: event });
+    }
+
+    /**
+     * Lifecycle hook to clean up resources when the component is destroyed.
+     * 
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Event handler for the expand all button, triggering change detection.
+     * 
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public expandAllEvent() {
         setTimeout(() => {
             this.cd.detectChanges();
         }, 1);
     }
 
+    /**
+     * Sets the last synchronization date when triggered.
+     * 
+     * @param {any} event - The event containing the synchronization date
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
+    public lastSyncDate (event: any){
+        this.lastSyncDate = event;
+    }
+    
+    /**
+     * Handles changes in the search input and toggles the expandAll state.
+     * 
+     * @param {string} event - The new search query
+     * @returns {void}
+     * @memberof TrialBalanceReportComponent
+     */
     public searchChanged(event: string) {
         this.search = event;
         if (!this.search) {

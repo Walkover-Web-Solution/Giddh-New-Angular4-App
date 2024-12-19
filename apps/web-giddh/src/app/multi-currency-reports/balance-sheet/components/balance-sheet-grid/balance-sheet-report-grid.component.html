@@ -50,32 +50,12 @@
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
                                                 *ngIf="
-                                                    bsData &&
-                                                    bsData.dates &&
-                                                    bsData.dates.to &&
-                                                    bsData.dates.to !== 'Invalid date'
+                                                lastSyncDate.length && (lastSyncDate !== 'Invalid Date')
                                                 "
                                             >
                                                 {{
-                                                    dayjs(bsData?.dates?.to, giddhDateFormat)?.toString()
-                                                        | date: "dd MMMM yyyy"
-                                                }}</span
-                                            >
-                                        </th>
-                                        <th class="text-right font-16" width="33.33%">
-                                            {{ commonLocaleData?.app_as_of }}
-                                            <span
-                                                *ngIf="
-                                                    bsData &&
-                                                    bsData.dates &&
-                                                    bsData.dates.from &&
-                                                    bsData.dates.from !== 'Invalid date'
-                                                "
-                                            >
-                                                {{
-                                                    dayjs(bsData?.dates?.from, giddhDateFormat)
-                                                        .add(-1, "day")
-                                                        ?.toString() | date: "dd MMMM yyyy"
+                                                    lastSyncDate
+                                                     
                                                 }}</span
                                             >
                                         </th>

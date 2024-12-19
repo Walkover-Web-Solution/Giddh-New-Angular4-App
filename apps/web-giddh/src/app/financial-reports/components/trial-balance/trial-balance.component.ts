@@ -65,8 +65,6 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p) => {
-            console.log("p",p);
-            
             let d = cloneDeep(p);
             if (d) {
                 if (d.message) {
@@ -112,17 +110,13 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
-        console.log("this.isV2",this.isV2);
         if (this.isV2) {
             this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
         } else {
             this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         }
-        //this.getTrialBalanceReport();
     }
     public getTrialBalanceReport(){
-        console.log("getMultiCurrencyReport");
-        
         this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
     }
 

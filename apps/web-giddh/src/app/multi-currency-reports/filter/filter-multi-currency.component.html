@@ -43,7 +43,6 @@
                                             <mat-option
                                                 *ngFor="let company of companyList"
                                                 [value]="company?.uniqueName"
-                                                (onSelectionChange)="selectModule(company?.name)"
                                                 >{{ company?.name }}</mat-option
                                             >
                                     </mat-select>
@@ -62,6 +61,29 @@
                                     [required]="true"
                                 >
                                 </reactive-dropdown-field>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mr-r15" >
+                            <div class="form-group">
+                                <a
+                                    class="cp expand-icon"
+                                    (click)="emitExpand(true)"
+                                    data-placement="top"
+                                    tooltip="{{ commonLocaleData?.app_expand_all }}"
+                                    *ngIf="!expandAll"
+                                >
+                                    <span class="icon-expandIcon"></span>
+                                </a>
+                                <a
+                                    class="cp expand-icon"
+                                    (click)="emitExpand(false)"
+                                    data-placement="top"
+                                    tooltip="{{ commonLocaleData?.app_collapse_all }}"
+                                    *ngIf="expandAll"
+                                >
+                                    <span class="icon-collapse"></span>
+                                </a>
                             </div>
                         </div>
                         <div class="form-group mr-r15" >

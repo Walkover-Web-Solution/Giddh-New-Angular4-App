@@ -146,28 +146,33 @@ import { AppState } from '../store';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
+    /** Stores the selected company information */
     public selectedCompany: CompanyResponse;
+    /** Flag to determine if the Trial Balance (TB) can be loaded */
     public CanTBLoad: boolean = true;
+    /** Flag to determine if the Profit Loss (PL) can be loaded */
     public CanPLLoad: boolean = false;
+    /** Flag to determine if the Balance Sheet (BS) can be loaded */
     public CanBSLoad: boolean = false;
+    /** Flag to determine if a new Trial Balance (TB) can be loaded in the current environment */
     public CanNewTBLoadOnThisEnv: boolean = false;
+    /** Flag to determine if the company is a walkover company */
     public isWalkoverCompany: boolean = false;
-    /** This will hold active tab */
+    /** Stores the name of the currently active tab */
     public activeTab: string = 'trial-balance';
-    /** This will hold active tab index */
+    /** Stores the index of the currently active tab */
     public activeTabIndex: number = 0;
-    /** True, when tabs are navigated with the help of routing, done to prevent redundant routing as
-     * tab changed event is triggered on setting any tab as active which leads to a second navigation to the
-     * same route which cancels the previous route with route ID and doesn't highlight the menu item
-     */
+    /** Prevents redundant routing when navigating tabs through routing */
     public preventTabChangeWithRoute: boolean;
-    /** This will store screen size */
+    /** Determines if the screen size is mobile */
     public isMobileScreen: boolean = false;
+    /** Reference to the static tabs component */
     @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
+    /** Observable subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will hold local JSON data */
+    /** Holds the local JSON data for the component */
     public localeData: any = {};
-    /** This will hold common JSON data */
+    /** Holds the common JSON data for the component */
     public commonLocaleData: any = {};
 
     constructor(
@@ -227,7 +232,13 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    
+    /**
+     * Selects a tab by its index.
+     * 
+     * @param {number} id - The index of the tab to be selected.
+     * @memberof YourComponent
+     */
     public selectTab(id: number) {
         if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
             this.staticTabs.tabs[id].active = true;

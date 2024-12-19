@@ -9,21 +9,33 @@ import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Se
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BalanceSheetReportGridRowComponent implements OnChanges {
+    /** Holds the details of the group */
     @Input() public groupDetail: ChildGroup;
+    /** Holds the search query */
     @Input() public search: string;
+    /** Holds the padding value for the row */
     @Input() public padding: string;
+    /** Start date for the data range */
     @Input() public from: string = '';
+    /** End date for the data range */
     @Input() public to: string = '';
-    /** True, if all items are expanded  */
+    /** Indicates if all items should be expanded */
     @Input() public expandAll: boolean;
-    /** Minimum limit on which Trial balance viewport enables */
+    /** Minimum limit at which the Trial Balance viewport is enabled */
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
-    /** True, when expand all button is toggled while search is enabled */
+    /** Indicates if expand-all is toggled during a search */
     @Input() public isExpandToggledDuringSearch: boolean;
+
 
     constructor(private cd: ChangeDetectorRef) {
     }
 
+    /**
+     * Lifecycle hook called when input properties change
+     *
+     * @param {SimpleChanges} changes Changes detected in input properties
+     * @memberof BalanceSheetReportGridRowComponent
+     */
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
             this.cd.detectChanges();
@@ -33,6 +45,12 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
         }
     }
 
+    /**
+     * Handles the click event on an entry and navigates to the corresponding ledger page
+     *
+     * @param {Account} acc The account object clicked
+     * @memberof BalanceSheetReportGridRowComponent
+     */
     public entryClicked(acc) {
         let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
@@ -45,13 +63,14 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
 
     }
 
+
     /**
-     * Track by function for balance sheet item
+     * Track by function for balance sheet item to optimize DOM rendering
      *
-     * @param {*} index Index of the item
-     * @param {Account} item Current item
-     * @return {string} Item uniquename
-     * @memberof BalanceSheetGridRowComponent
+     * @param {number} index The index of the current item
+     * @param {Account} item The account item
+     * @return {string} The unique name of the item
+     * @memberof BalanceSheetReportGridRowComponent
      */
     public trackByFn(index, item: Account): string {
         return item?.uniqueName;

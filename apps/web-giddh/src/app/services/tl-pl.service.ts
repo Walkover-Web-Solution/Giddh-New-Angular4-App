@@ -119,7 +119,7 @@ export class TlPlService {
             ?.filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
-        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':reportType', ("balance-sheet"))).pipe(
                 map((res) => {
@@ -186,16 +186,12 @@ export class TlPlService {
      */
     public getMultiCurrencyReport(reportType: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        console.log("getMultiCurrencyReport");
-        
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':reportType', (reportType)) ).pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
-                    console.log("data",data);
-                    
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
@@ -213,8 +209,6 @@ export class TlPlService {
                     map((res) => {
                         let data: BaseResponse<any, any> = res;
                         data.request = '';
-                        console.log("data",data);
-                        
                         return data;
                     }),
                     catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));

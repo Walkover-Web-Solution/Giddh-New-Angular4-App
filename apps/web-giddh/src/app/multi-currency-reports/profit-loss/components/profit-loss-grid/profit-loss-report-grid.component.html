@@ -49,18 +49,13 @@
                                         <th class="text-right font-16" width="40%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
-                                                *ngIf="
-                                                    plData &&
-                                                    plData.dates &&
-                                                    plData.dates.to &&
-                                                    plData.dates.to !== 'Invalid date'
-                                                "
+                                            *ngIf="
+                                            lastSyncDate.length && (lastSyncDate !== 'Invalid Date')
+                                            "
                                             >
-                                                {{
-                                                    dayjs(plData?.dates?.to, giddhDateFormat)?.toString()
-                                                        | date: "dd MMMM yyyy"
-                                                }}</span
-                                            >
+                                            {{
+                                                lastSyncDate
+                                            }}</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -71,8 +66,7 @@
                                     <ng-container *ngFor="let grp of list">
                                         <section
                                             class="row-1"
-                                            *ngIf="grp.isVisible"
-                                            profit-loss-grid-row
+                                            profit-loss-report-grid-row
                                             [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                             [expandAll]="expandAll"
                                             [groupDetail]="grp"
@@ -145,16 +139,19 @@
                         </div>
                     </div>
                     <div class="expenses">
-                        {{plData | json}}
                         <div class="clearfix profit-loss table-responsive overflow-hidden">
-                            <div *ngIf="plData && plData.expArr && !hideData">
+                           
+                            <div >
+                               
+                                
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
+                                        
                                     <ng-container *ngFor="let grp of list">
+                                       
                                         <section
                                             class="row-1"
-                                            *ngIf="grp.isVisible"
-                                            profit-loss-grid-row
+                                            profit-loss-report-grid-row
                                             [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                             [groupDetail]="grp"
                                             [padding]="padding"

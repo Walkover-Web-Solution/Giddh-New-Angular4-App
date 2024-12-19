@@ -64,10 +64,7 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
         }
-        case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:{
-            console.log("GET_TRIAL_BALANCE_RESPONSE");
-            
-        }
+        case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE:
         case TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE: {
             // no payload means error from server
             if (action.payload) {
@@ -240,7 +237,7 @@ const filterProfitLossData = (data, statement) => {
     return filterPlData;
 };
 
-const prepareProfitLossData = (data) => {
+export const prepareProfitLossData = (data) => {
     if (data && data.groupInfo && data.groupInfo.groupDetails && data.incomeStatment) {
         let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
         plData.expenseTotal = calculateTotalExpense(plData.expArr);

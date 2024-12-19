@@ -61,7 +61,12 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
 import { FilterMultiCurrencyComponent } from './filter/filter-multi-currency.component';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
-import { TrialBalanceReportComponent } from './trial-balance-multi-currency/trial-balance-report.component';
+import { TrialBalanceReportComponent } from './trial-balance/trial-balance-report.component';
+import { TrialBalanceReportGridComponent } from './trial-balance/components/trial-balance-grid/trial-balance-report-grid.component';
+import { GridReportRowComponent } from './grid-row/grid-report-row.component';
+import { ProfitLossReportComponent } from './profit-loss/profit-loss-report.component';
+import { ProfitLossReportGridComponent } from './profit-loss/components/profit-loss-grid/profit-loss-report-grid.component';
+import { ProfitLossReportGridRowComponent } from './profit-loss/components/profit-loss-grid/components/profit-loss-grid-row/profit-loss-report-grid-row.component';
 
 
 @NgModule({
@@ -72,7 +77,13 @@ import { TrialBalanceReportComponent } from './trial-balance-multi-currency/tria
         BalanceSheetReportGridRowComponent,
         FilterMultiCurrencyComponent,
         AccountsFilterPipe,
-        TrialBalanceReportComponent
+        TrialBalanceReportComponent,
+        TrialBalanceReportGridComponent,
+        GridReportRowComponent,
+        ProfitLossReportComponent,
+        ProfitLossReportGridComponent,
+        ProfitLossReportGridRowComponent
+       
         // GridRowComponent,
         // TrialBalanceComponent,
         // ProfitLossComponent,
@@ -125,7 +136,6 @@ import { TrialBalanceReportComponent } from './trial-balance-multi-currency/tria
         MatSelectModule,
         FormFieldsModule,
         FinancialSearchPipe
-        
         
     ],
 })
