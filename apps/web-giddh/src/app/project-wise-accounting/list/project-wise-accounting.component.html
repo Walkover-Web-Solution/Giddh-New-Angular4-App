@@ -8,10 +8,10 @@
           <giddh-page-loader></giddh-page-loader>
       </div>
       <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!dataSource?.length && !isLoading">
-        <button mat-raised-button color="primary" (click)="openCreateProjectDialog()">+ create project</button>
+        <button mat-raised-button color="primary" (click)="openCreateProjectDialog()">+ Create project</button>
       </div>
       <div class="pull-right" *ngIf="dataSource?.length && !isLoading">
-          <button mat-raised-button color="primary" (click)="openCreateProjectDialog()">+ create project</button>
+          <button mat-raised-button color="primary" (click)="openCreateProjectDialog()">+ Create project</button>
       </div>
 
       <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="dataSource?.length && !isLoading">
@@ -26,7 +26,7 @@
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Project&nbsp;<i class="icon-search"></i></th>
             <td mat-cell *matCellDef="let element">
-              <a [routerLink]="['/pages/project-wise-accounting/expense/list']">{{element.name}}</a></td>
+              <a [routerLink]="['/pages/project-wise-accounting/revenue/list']">{{element.name}}</a></td>
           </ng-container>
         
           <!-- Weight Column -->

@@ -1,0 +1,11 @@
+.project-wise-accounting {
+    table {
+        tr {
+            &:not(.active-row) {
+                .form-control {
+                    border: none !important;
+                }
+            }
+        }
+    }
+}

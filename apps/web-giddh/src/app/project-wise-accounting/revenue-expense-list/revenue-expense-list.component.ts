@@ -5,20 +5,6 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 
-export interface Details {
-    name: string;
-    position: number;
-    status: string;
-    symbol: string;
-    action: string;
-  }
-  
-  const ELEMENT_DATA: Details[] = [
-    {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: 'H', action: ''},
-    {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: 'He',action: ''},
-    {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
-  ];
-
 @Component({
     selector: 'revenue-expense-list.',
     styleUrls: ['./revenue-expense-list.component.scss'],
@@ -43,15 +29,16 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** Instance of bootstrap modal */
     public modalRef: BsModalRef;
-    public dataSource: Details[] = [
-        {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: 'H', action: ''},
-        {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: 'He',action: ''},
-        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
-        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+    public activeTableRowIndex: number = null;
+    public dataSource: any = [
+        {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: 100 , action: ''},
+        {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: 200,action: ''},
+        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
+        {position: 4, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
 
-        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+        {position: 5, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
 
-        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 'Li', action: ''},
+        {position: 6, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
 
       ];
 
@@ -104,8 +91,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         private modalService: BsModalService
     ) { }
 
-    public ngOnInit() {
-       
+    public ngOnInit() { 
+        this.dataSource = [{}, ...this.dataSource];
      }
 
     public ngOnDestroy() {
