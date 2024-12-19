@@ -733,4 +733,18 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public domSantizer(str: string): any {
         return this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
+
+    /**
+     * Redirect to invoice preview by unique name
+     * 
+     * @param voucherUniqueName 
+     * @param voucherDate 
+     * @returns 
+     */
+    public getInvoicePreviewUrl(voucherUniqueName: string, voucherDate: string): string {
+        if (voucherUniqueName && voucherDate) {
+            return `/pages/vouchers/view/sales/${voucherUniqueName}?page=1&from=${voucherDate}&to=${voucherDate}`;
+        }
+        return null;
+    }
 }
