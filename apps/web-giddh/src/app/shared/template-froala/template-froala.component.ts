@@ -364,8 +364,8 @@ export class TemplateFroalaComponent implements OnInit {
     */
     public toggleBccCc(emailType: string): void {
         this.setEmailFocus(emailType);
-        this.showBcc = emailType === EmailType.Bcc;
-        this.showCc = emailType === EmailType.Cc;
+        this.showBcc = emailType === EmailType.Bcc ? true : this.showBcc;
+        this.showCc = emailType === EmailType.Cc ? true : this.showCc;
     }
 
     /**
