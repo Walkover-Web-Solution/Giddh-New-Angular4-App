@@ -730,7 +730,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @return {*}  {*}
      * @memberof AgingReportComponent
      */
-    public domSantizer(str: string): any {
+    private domSantizer(str: string): any {
         return this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
 
@@ -741,10 +741,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @param voucherDate 
      * @returns 
      */
-    public getInvoicePreviewUrl(voucherUniqueName: string, voucherDate: string): string {
-        if (voucherUniqueName && voucherDate) {
-            return `/pages/vouchers/view/sales/${voucherUniqueName}?page=1&from=${voucherDate}&to=${voucherDate}`;
+    public getInvoicePreviewUrl(invoice: any): string {
+        let url: string = '';
+        if (invoice && invoice.voucherNumber !== 'OPENING BALANCE' && invoice.uniqueName && invoice.voucherDate) {
+            url = `/pages/vouchers/view/sales/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
+        } else {
+            url = 'javascript:;';
         }
-        return null;
+        return this.domSantizer(url);
     }
 }
