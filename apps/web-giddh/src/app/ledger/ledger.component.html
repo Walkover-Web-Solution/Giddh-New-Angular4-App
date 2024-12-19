@@ -481,7 +481,7 @@
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
                                         </a>
                                         <a
-                                            *ngIf="connectedBankLists?.length === 0"
+                                            *ngIf="isBankAccountConnected === false && !showBankLinkButton"
                                             mat-button
                                             aria-label="connect-bank"
                                             id="connect-bank"
@@ -502,8 +502,9 @@
                                             [matTooltip]="localeData?.link_bank"
                                             matTooltipClass="tooltip-black"
                                             [matTooltipPosition]="'above'"
+                                            (click)="openBankLinkDialog()"
                                         >
-                                            <i aria-hidden="true" class="icon-link font-16"(click)="openBankLinkDialog()"></i>
+                                            <i aria-hidden="true" class="icon-link font-16"></i>
                                         </a>
                                     </ng-conatiner>
                                     <a
