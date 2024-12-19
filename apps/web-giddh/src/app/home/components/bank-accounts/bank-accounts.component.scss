@@ -26,6 +26,11 @@ a.connect-bank {
     cdk-virtual-scroll-viewport {
         height: 270px;
     }
+    &.conditional-height {
+        cdk-virtual-scroll-viewport {
+           height: 325px;
+        }
+    }
 }
 .add-bank-details {
     display: flex;

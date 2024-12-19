@@ -339,6 +339,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public connectedBankLists: any[] = [];
     /** Holds accountUniquename of get all bank-Account  */
     public selectedAccountUniquename: any;
+    /** Holds selected bank unique name */
+    private selectedBankUniqueName: string;
 
     constructor(
         private store: Store<AppState>,
@@ -503,7 +505,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * @param {*} element
    * @memberof LedgerComponent
    */
-    public openInstitutionsDialog(): void {
+    public openInstitutionsDialog(bankAccount): void {
+        this.selectedBankUniqueName = bankAccount?.uniqueName;
+
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData
@@ -1011,18 +1015,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
          */
         this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.openInstitutionsDialog();
+                this.openInstitutionsDialog(this.bankAccount);
             }
         });
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(take(1)).subscribe(response => {
             if (response?.body) {
                 this.connectedBankLists = response.body;
-                console.log(this.connectedBankLists);
 
                 const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename));
                 this.isBankAccountConnected = response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename));
-
+                
                 if (result) {
                     this.isBankAccountConnected = true;
                 } 
@@ -3194,8 +3197,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public openBankLinkDialog(): void {
         let data = {
-            bankList: this.connectedBankLists,
-            accountUniqueName: this.lc.accountUnq
+            bankList: this.selectedBankUniqueName,
+            accountUniqueName: this.lc.accountUnq,
         }
         this.dialog.open(BankLinkComponent, {
             data: data,
