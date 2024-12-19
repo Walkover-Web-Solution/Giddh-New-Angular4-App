@@ -388,7 +388,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         });
 
-        this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
