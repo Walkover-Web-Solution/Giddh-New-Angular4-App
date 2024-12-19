@@ -634,18 +634,11 @@
         <div class="list-wrapper pd-15">
             <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
                 <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
-                    <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
-                        <a
-                            [href]="
-                                item?.voucherNumber !== 'OPENING BALANCE'
-                                    ? '/pages/invoice/preview/sales?voucherUniqueName=' +
-                                      item?.uniqueName +
-                                      '&accountUniqueName=' +
-                                      item?.account?.uniqueName
-                                    : domSantizer('javascript:;')
-                            "
-                            [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined"
-                            [ngClass]="{ 'cursor-default': item?.voucherNumber === 'OPENING BALANCE' }"
+                    <mat-list-item class="list-item px-2"  *cdkVirtualFor="let item of unpaidInvoiceData">
+                        <a 
+                            [href]="getInvoicePreviewUrl(item)" 
+                            [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined" 
+                            [ngClass]="{ 'cursor-default' : item?.voucherNumber === 'OPENING BALANCE'}"
                         >
                             <div class="d-flex justify-content-space-between align-items-center">
                                 <div>
