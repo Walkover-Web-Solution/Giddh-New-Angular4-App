@@ -76,7 +76,6 @@ export interface AccountDetails {
     openingBalance: OpeningBalance;
     groupDetails: ChildGroup[];
     message?: string;
-    response?:any
 }
 
 export interface BalanceSheetRequest extends TrialBalanceRequest {

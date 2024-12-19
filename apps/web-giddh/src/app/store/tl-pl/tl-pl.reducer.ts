@@ -120,7 +120,7 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         }
 
         case TBPlBsActions.GET_BALANCE_SHEET_RESPONSE: {
-            let data: BalanceSheetData = prepareBalanceSheetData(cloneDeep(action.payload.response));
+            let data: BalanceSheetData = prepareBalanceSheetData(cloneDeep(action.payload));
             if (data) {
                 if (state?.bs?.data) {
                     data.dates = cloneDeep(state.bs.data.dates);

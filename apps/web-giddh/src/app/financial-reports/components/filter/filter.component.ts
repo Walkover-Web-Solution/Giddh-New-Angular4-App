@@ -128,7 +128,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             description: []
         });
 
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate),distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public get selectedCompany() {

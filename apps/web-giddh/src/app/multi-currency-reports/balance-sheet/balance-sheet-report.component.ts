@@ -159,13 +159,10 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Filters data based on the given request
      *
-     * @param {ProfitLossRequest} request The request parameters
+     * 
      * @memberof BalanceSheetReportComponent
      */
-    public filterData(request: ProfitLossRequest) {
-        this.from = request.from;
-        this.to = request.to;
-        this.isDateSelected = request && request.selectedDateOption === '1';
+    public filterData() {
         this.componentStore.getMultiCurrencyReport(ReportType.BalanceSheet);
     }
     /**

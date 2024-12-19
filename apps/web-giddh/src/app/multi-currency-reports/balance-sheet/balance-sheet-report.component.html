@@ -4,13 +4,11 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-<!-- <filter-multi-currency (filterData)="searchData($event)" (onPropertyChanged)="filterData($event)" (expandAllChange)="expandAllEvent()"
-[(expandAll)]="expandAll"></filter-multi-currency> -->
     <filter-multi-currency
         #filter
         [selectedCompany]="selectedCompany"
         (filterValue)="searchData($event)"
-        (onPropertyChanged)="filterData($event)"
+        (onPropertyChanged)="filterData()"
         [showLoader]="showLoader"
         (lastSyncDate)="lastDate($event)"
         (seachChange)="searchChanged($event)"

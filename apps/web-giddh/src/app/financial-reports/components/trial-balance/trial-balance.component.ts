@@ -11,13 +11,11 @@ import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial-balance-grid.component';
-import { MultiCurrencyReportsComponentStore } from '../../../multi-currency-reports/multi-currency-reports.store';
-import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
+
 
 @Component({
     selector: 'trial-balance',
-    templateUrl: './trial-balance.component.html',
-    providers: [MultiCurrencyReportsComponentStore]
+    templateUrl: './trial-balance.component.html'
 })
 export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -25,7 +23,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     public showLoader: Observable<boolean>;
-    public data$: Observable<any>;
+    public data$: Observable<AccountDetails>;
     public request: TrialBalanceRequest;
     public expandAll: boolean;
     public search: string;
@@ -41,8 +39,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         private store: Store<AppState>,
         private cd: ChangeDetectorRef,
         public tlPlActions: TBPlBsActions,
-        private toaster: ToasterService,
-        private componentStore: MultiCurrencyReportsComponentStore) {
+        private toaster: ToasterService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -64,8 +61,8 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p) => {
-            let d = cloneDeep(p);
+        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
+            let d = cloneDeep(p) as AccountDetails;
             if (d) {
                 if (d.message) {
                     setTimeout(() => {
@@ -115,9 +112,6 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         }
-    }
-    public getTrialBalanceReport(){
-        this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
     }
 
     public ngOnDestroy(): void {

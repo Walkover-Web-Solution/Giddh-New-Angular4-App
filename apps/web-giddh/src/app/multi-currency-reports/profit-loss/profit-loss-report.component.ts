@@ -241,19 +241,9 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     /**
      * Filters the profit-loss data based on the provided request object.
      *
-     * @param {ProfitLossRequest} request - The request object containing filter criteria.
      * @memberof ProfitLossReportComponent
      */
-    public filterData(request: ProfitLossRequest) {
-        this.from = request.from;
-        this.to = request.to;
-        this.isDateSelected = request && request.selectedDateOption === '1';
-        if (this.isDateSelected) {
-            delete request['selectedFinancialYearOption'];
-        }
-        if (!request.tagName) {
-            delete request.tagName;
-        }
+    public filterData() {
         this.componentStore.getMultiCurrencyReport(ReportType.ProfitLoss);
     }
 

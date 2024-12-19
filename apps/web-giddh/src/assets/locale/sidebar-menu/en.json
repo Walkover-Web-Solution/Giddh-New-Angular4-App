@@ -619,11 +619,12 @@
                 {
                     "label": "Multi-currency Report",
                     "link": "/pages/multi-currency-report",
-                    "icon": "icon-tally-import1",
+                    "icon": "icon-multi-currency",
                     "description": "Multi-currency report",
                     "additional": {
                         "queryParams": {
-                            "voucherVersion": 2
+                            "voucherVersion": 2,
+                            "tabIndex": 0
                         }
                     }
                 }

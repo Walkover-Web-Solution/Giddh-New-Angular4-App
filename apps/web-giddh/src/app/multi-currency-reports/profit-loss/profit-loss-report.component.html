@@ -8,7 +8,7 @@
         #filter
         [selectedCompany]="selectedCompany"
         (filterValue)="searchData($event)"
-        (onPropertyChanged)="filterData($event)"
+        (onPropertyChanged)="filterData()"
         [showLoader]="showLoader"
         (seachChange)="searchChanged($event)"
         (lastSyncDate)="lastDate($event)"

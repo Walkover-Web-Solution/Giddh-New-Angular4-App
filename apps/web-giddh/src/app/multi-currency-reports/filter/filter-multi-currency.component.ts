@@ -67,7 +67,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     @Input() public showLoader: Observable<boolean>;
     @Output() public lastSyncDate = new EventEmitter<string>(); ;
     @Input() public showLabels: boolean = false;
-    @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
+    @Output() public onPropertyChanged = new EventEmitter<any>();
     @Output() public filterValue = new EventEmitter<any>();
     @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
     public universalDate$: Observable<any>;
@@ -136,7 +136,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             description: []
         });
 
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate),distinctUntilChanged(), takeUntil(this.destroyed$));
         
     }
 
@@ -332,48 +332,24 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public selectedDate(value: any) {
         this.filterForm.controls['from'].setValue(dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT));
         this.filterForm.controls['to'].setValue(dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT));
-        this.filterData();
     }
 
     public ngAfterViewInit() {
         this.cd.detectChanges();
     }
 
-    public selectFinancialYearOption(v: IOption) {
-        if (v.value) {
-            let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
-            let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
-            if (financialYear) {
-                this.filterForm?.patchValue({
-                    to: financialYear.financialYearEnds,
-                    from: financialYear.financialYearStarts,
-                    fy: index === 0 ? 0 : index * -1
-                });
-            }
-        } else {
-            this.filterForm?.patchValue({
-                to: '',
-                from: '',
-                fy: ''
-            });
-        }
-        this.filterData();
-    }
-
     public filterData() {
-        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
-        this.onPropertyChanged.emit(this.filterForm?.value);
+        this.onPropertyChanged.emit();
         let a = this.search = '';
         this.seachChange.emit(a);
     }
 
-    public refreshData() {
-        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
-        let data = cloneDeep(this.filterForm?.value);
-        data.refresh = true;
-        this.onPropertyChanged.emit(data);
-        this.emitExpand(false);
-    }
+    // public refreshData() {
+    //     let data = cloneDeep(this.filterForm?.value);
+    //     data.refresh = true;
+    //     this.onPropertyChanged.emit(data);
+    //     this.emitExpand(false);
+    // }
 
     public onSubmit() {
         let data = {
@@ -429,38 +405,25 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
         }, 10);
     }
 
-    public onTagSelected(ev) {
-        this.selectedTag = ev?.value;
-        this.filterForm.get('tagName')?.patchValue(ev?.value);
-        this.filterForm.get('refresh')?.patchValue(true);
-        this.onPropertyChanged.emit(this.filterForm?.value);
-    }
-
-    public dateOptionIsSelected(ev) {
-        if (ev) {
-            if (ev.value === '0') {
-                this.selectFinancialYearOption(this.financialOptions[0]);
-            } else {
-                this.filterForm?.patchValue({
-                    from: dayjs(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
-                    to: dayjs(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
-                });
-            }
-        }
-    }
+    // public onTagSelected(ev) {
+    //     this.selectedTag = ev?.value;
+    //     this.filterForm.get('tagName')?.patchValue(ev?.value);
+    //     this.filterForm.get('refresh')?.patchValue(true);
+    //     this.onPropertyChanged.emit();
+    // }
 
     /**
      * Branch change handler
      *
      * @memberof FinancialReportsFilterComponent
      */
-    public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity?.label;
-        setTimeout(() => {
-            this.expandAllChange.emit(false);
-        }, 10);
-        this.onPropertyChanged.emit(this.filterForm?.value);
-    }
+    // public handleBranchChange(selectedEntity: any): void {
+    //     this.currentBranch.name = selectedEntity?.label;
+    //     setTimeout(() => {
+    //         this.expandAllChange.emit(false);
+    //     }, 10);
+    //     this.onPropertyChanged.emit(this.filterForm?.value);
+    // }
 
     /**
      * To show the datepicker
@@ -511,7 +474,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
-            this.filterData();
         }
     }
 

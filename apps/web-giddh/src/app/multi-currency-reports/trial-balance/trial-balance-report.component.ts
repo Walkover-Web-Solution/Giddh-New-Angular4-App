@@ -161,12 +161,8 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
-    public filterData(request: TrialBalanceRequest) {
-        this.from = request.from;
-        this.to = request.to;
-        this.isDateSelected = request && request.selectedDateOption === '1';
+    public filterData() {
         this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
-        //this.getTrialBalanceReport();
     }
 
     /**
