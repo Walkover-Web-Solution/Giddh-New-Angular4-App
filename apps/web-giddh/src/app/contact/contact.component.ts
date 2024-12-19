@@ -239,6 +239,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -269,6 +271,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -501,7 +508,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

@@ -29,7 +29,7 @@
                         [placeholder]="localeData?.select_status"
                         [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
                 </div>
-                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
+                <div class="col flex-grow-0" *ngIf="(isCompanyMode || isConsolidatedBranch) && isMultipleBranch">
                     <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
                         (selectedOption)="branchSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
@@ -105,7 +105,7 @@
                                 </a>
                             </div>
                             <div class="no-data"  *ngIf="!connectToHMRCUrl">
-                                <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
+                                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                             </div>
                         </div>
                         <div class="no-data" *ngIf="!getFormControl('taxNumber').value">
