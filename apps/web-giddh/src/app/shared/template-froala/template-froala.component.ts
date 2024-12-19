@@ -7,7 +7,7 @@ import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
-import { GeneralService } from '../../services/general.service';
+import { EmailType } from './utility/template-froala.const';
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
@@ -116,13 +116,32 @@ export class TemplateFroalaComponent implements OnInit {
     public bccEmails: any[] = [];
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
+    /** Hold if user click outside of email section */
+    public clickedInsideEmailSection: boolean = false;
+    /** Holds all static emails (To, Cc, Bcc) combined in a single string */
+    public allStaticEmails: string = "";
+    /** This variable is used to store the count of hidden emails, formatted as a string */
+    public hiddenEmailList: string = "";
+    /** Holds the maximum number of emails to display */
+    public noOfMaximumEmailsShow: number = 2;
+    /** Holds email type */
+    public emailType : any = EmailType;
+    /** This variable maintains the focus state for email types: "to", "cc", and "bcc". */
+    public emailFocusStates: any = {
+        isTo: true,
+        isCc: true,
+        isBcc: true
+    };
+    /** Calculates the total number of email addresses across To, Cc, and Bcc fields. */
+    public get getTotalEmailsCount(): number {
+        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
+    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public voucherType,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
-        private dialog: MatDialog,
-        private generalService: GeneralService
+        private dialog: MatDialog
     ) { }
 
     /**
@@ -136,6 +155,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('hide-chat-widget');
         this.initializeForm();
         this.getEmailContents();
         this.getEmailTemplates();
@@ -162,13 +182,16 @@ export class TemplateFroalaComponent implements OnInit {
             if (response) {
                 if (response?.bcc?.length) {
                     this.showBcc = true;
+                    this.selectedBccEmails = response.bcc;
                 }
                 if (response?.cc?.length) {
                     this.showCc = true;
+                    this.selectedCcEmails = response.cc;
                 }
-                this.selectedToEmails = response.to;
-                this.selectedBccEmails = response.bcc;
-                this.selectedCcEmails = response.cc;
+                if (response.to?.length) {
+                    this.selectedToEmails = response.to;
+                }
+                this.clickedOutsideEmail();
                 this.initializeForm(response);
             }
         });
@@ -188,6 +211,18 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private updateFormControl(): void {
         this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
+    }
+
+    /**
+     * Updates the focus state for the email types ('to', 'cc', 'bcc').
+     * @returns {void}
+     * @param {string} emailType
+     * @memberof TemplateFroalaComponent
+     */
+    public setEmailFocus(emailType: string): void {
+        this.emailFocusStates.isTo = emailType === EmailType.To;
+        this.emailFocusStates.isCc = emailType === EmailType.Cc;
+        this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
     }
 
     /**
@@ -308,9 +343,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public onSubmit(): void {
-        this.emailForm.get('to')?.patchValue(this.selectedToEmails);
-        this.emailForm.get('bcc')?.patchValue(this.selectedBccEmails);
-        this.emailForm.get('cc')?.patchValue(this.selectedCcEmails);
+        this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
+        this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
+        this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
         if (this.emailForm.invalid) {
             return;
         }
@@ -323,16 +358,14 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
     * Show/Hide bcc/cc field
-    *
-    * @param {string} type
+    * @returns {void}
+    * @param {string} emailType
     * @memberof TemplateFroalaComponent
     */
-    public toggleBccCc(type: string): void {
-        if (type == "bcc") {
-            this.showBcc = !this.showBcc;
-        } else {
-            this.showCc = !this.showCc;
-        }
+    public toggleBccCc(emailType: string): void {
+        this.setEmailFocus(emailType);
+        this.showBcc = emailType === EmailType.Bcc ? true : this.showBcc;
+        this.showCc = emailType === EmailType.Cc ? true : this.showCc;
     }
 
     /**
@@ -341,7 +374,83 @@ export class TemplateFroalaComponent implements OnInit {
     * @memberof TemplateFroalaComponent
     */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('hide-chat-widget');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+    /**
+     * Clicked inside Email section
+     *
+     * @memberof TemplateFroalaComponent
+     */
+    public clickedInsideEmail(): void {
+        this.allStaticEmails = '';
+        this.hiddenEmailList = '';
+        this.clickedInsideEmailSection = true;
+    }
+
+    /**
+     * Clicked outside Email section
+     *
+     * @memberof TemplateFroalaComponent
+     */
+    public clickedOutsideEmail(): void {
+        if (!this.allStaticEmails) {
+            this.getAllStaticEmails();
+            this.clickedInsideEmailSection = false;
+            if ((this.emailFocusStates.isBcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.isCc && this.selectedCcEmails.length === 0)) {
+                this.setEmailFocus(EmailType.To);
+            }
+            this.showBcc = this.selectedBccEmails.length > 0;
+            this.showCc = this.selectedCcEmails.length > 0;
+        }
+    }
+
+    /**
+     * Get all Emails
+     *
+     * @memberof TemplateFroalaComponent
+     */
+    private getAllStaticEmails(): void {
+        this.allStaticEmails = '';
+        this.hiddenEmailList = '';
+
+        // Helper function to append emails
+        const appendEmails = (emails: string[], prefix = '', limit = this.noOfMaximumEmailsShow - (this.allStaticEmails.trim() === "" ? 0 : this.allStaticEmails.split(',').length)) => {
+            for (let i = 0; i < Math.min(emails.length, limit); i++) {
+                if (this.allStaticEmails) {
+                    this.allStaticEmails += `, `;
+                }
+                this.allStaticEmails += `${i === 0 ? prefix : ""}${emails[i]}`;
+            }
+        };
+
+        // Add To emails
+        appendEmails(this.selectedToEmails);
+
+        // Add Cc emails if there is space
+        if (this.selectedToEmails.length < this.noOfMaximumEmailsShow) {
+            appendEmails(this.selectedCcEmails);
+        }
+
+        // Add Bcc emails if there is space
+        if (this.allStaticEmails.split(',').length < this.noOfMaximumEmailsShow) {
+            appendEmails(this.selectedBccEmails, 'Bcc: ');
+        }
+
+        // Calculate hidden emails
+        const totalEmails = this.getTotalEmailsCount;
+        const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length;
+        const hiddenEmailsCount = totalEmails - this.noOfMaximumEmailsShow;
+
+        if (hiddenEmailsCount > 0) {
+            if (visibleEmails <= this.noOfMaximumEmailsShow) {
+                this.hiddenEmailList += ` ${hiddenEmailsCount} Bcc`;
+            } else {
+                const bccInfo = this.selectedBccEmails.length ? ` (${this.selectedBccEmails.length} Bcc)` : '';
+                this.hiddenEmailList += ` ${hiddenEmailsCount} ${this.commonLocaleData.app_more}${bccInfo}`;
+            }
+        }
+    }
+
 }
