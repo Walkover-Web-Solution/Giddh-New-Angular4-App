@@ -284,7 +284,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
-        combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+
+
+        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
@@ -314,30 +316,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 } else {
                     this.setActiveTab("aging-report");
                 }
+
                 this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
-
-                this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-                    if (res) {
-                        this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
-                    }
-                });
-
-                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isIciciAccountPendingForApproval = false;
-                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-                    if (response?.integratedBankList?.length > 0) {
-                        let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
-                        if (!approvalPendingAccounts?.length) {
-                            this.isIciciAccountPendingForApproval = true;
-                        }
-
-                        this.isICICIIntegrated = true;
-                    } else {
-                        this.isICICIIntegrated = false;
-                    }
-                    this.cdRef.detectChanges();
-                });
-
                 if (this.activeTab === ContactsTab.customer.toLowerCase()) {
                     this.customiseColumns.splice(0, 0,
                         {
@@ -397,14 +377,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             "checked": true
                         }
                     );
-                    if (this.isICICIIntegrated || this.isPlaidSupportedCountry) {
-                        this.customiseColumns.push(
-                            {
-                                value: "action",
-                                label: "Action",
-                                checked: true
-                            })
-                    }
+
                     this.moduleType = ContactsTab.vendor;
                     this.displayedColumns = [];
                 }
@@ -413,6 +386,40 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             }
 
+        });
+
+        this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
+
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if (response?.integratedBankList?.length > 0) {
+                const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if (!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+            if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                let customiseColumns = cloneDeep(this.customiseColumns);
+                if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
+                    let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
+                    if (!filteredCustomisColumns.length) {
+                        this.customiseColumns.push({ value: "action", label: "Action", checked: true });
+                    }
+                } else {
+                    this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
+                }
+                const values = this.customiseColumns.map(item => item.value);
+                this.showSelectedHeaderColumns(values);
+            }
+            this.cdRef.detectChanges();
         });
 
 

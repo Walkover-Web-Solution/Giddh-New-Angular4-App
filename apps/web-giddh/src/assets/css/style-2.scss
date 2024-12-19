@@ -11175,6 +11175,15 @@ inventory-master {
     }
 }
 
+/* template froala */
+body {
+    &.hide-chat-widget {
+        chat-widget {
+            display: none !important;
+        }
+    }
+}
+
 /* responsive  starts here*/
 @media (max-width: 1440px) {
     .font-xxlarge {
