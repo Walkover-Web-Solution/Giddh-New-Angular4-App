@@ -575,7 +575,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="go to plan" (click)="goToSelectPlan()">{{
+                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="go to plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
@@ -590,7 +590,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
-                <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="click-here" aria-label="get select " (click)="goToSelectPlan()">
+                <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToSelectPlan()">
                     {{ localeData?.click_here }}
                 </a>
             </p>
@@ -605,7 +605,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionTransactionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get plan" (click)="goToSelectPlan()">{{
+                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="get plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
