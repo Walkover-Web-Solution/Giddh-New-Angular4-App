@@ -1,0 +1,946 @@
+{
+    "status": "success",
+    "body": {
+        "response": {
+            "message": null,
+            "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+            },
+            "groupDetails": [
+                {
+                    "forwardedBalance": {
+                        "amount": 44025.18,
+                        "type": "CREDIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 44025.18,
+                        "type": "CREDIT"
+                    },
+                    "childGroups": [
+                        {
+                            "forwardedBalance": {
+                                "amount": 44025.18,
+                                "type": "CREDIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 44025.18,
+                                "type": "CREDIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 44025.18,
+                                        "type": "CREDIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 44025.18,
+                                        "type": "CREDIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "General Reserves",
+                                    "uniqueName": "generalreserves",
+                                    "groupName": "Reserves & Surplus"
+                                }
+                            ],
+                            "uniqueName": "reservessurplus",
+                            "groupName": "Reserves & Surplus",
+                            "category": null
+                        }
+                    ],
+                    "accounts": [],
+                    "uniqueName": "shareholdersfunds",
+                    "groupName": "Shareholders’ Funds",
+                    "category": "liabilities"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [],
+                    "accounts": [],
+                    "uniqueName": "noncurrentliabilities",
+                    "groupName": "Non Current Liabilities",
+                    "category": "liabilities"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 730.05,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 730.05,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "loanandoverdraft",
+                            "groupName": "Loan and Overdraft",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 1554.88,
+                                "type": "CREDIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 1554.88,
+                                "type": "CREDIT"
+                            },
+                            "childGroups": [
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "gstcess",
+                                    "groupName": "GST CESS",
+                                    "category": null
+                                },
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "tcspayable",
+                                    "groupName": "TCS payable",
+                                    "category": null
+                                },
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "tdspayable",
+                                    "groupName": "TDS payable",
+                                    "category": null
+                                },
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "utgst",
+                                    "groupName": "UTGST",
+                                    "category": null
+                                },
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "igst",
+                                    "groupName": "IGST",
+                                    "category": null
+                                },
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "cgst",
+                                    "groupName": "CGST",
+                                    "category": null
+                                },
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "sgst",
+                                    "groupName": "SGST",
+                                    "category": null
+                                },
+                                {
+                                    "forwardedBalance": {
+                                        "amount": 1554.88,
+                                        "type": "CREDIT"
+                                    },
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 1554.88,
+                                        "type": "CREDIT"
+                                    },
+                                    "childGroups": [],
+                                    "accounts": [],
+                                    "uniqueName": "salestax",
+                                    "groupName": "Sales Tax",
+                                    "category": null
+                                }
+                            ],
+                            "accounts": [],
+                            "uniqueName": "dutiestaxes",
+                            "groupName": "Duties & Taxes",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 2284.94,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 2284.94,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "sundrycreditors",
+                            "groupName": "Sundry Creditors",
+                            "category": null
+                        }
+                    ],
+                    "accounts": [],
+                    "uniqueName": "currentliabilities",
+                    "groupName": "Current Liabilities",
+                    "category": "liabilities"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [],
+                    "accounts": [],
+                    "uniqueName": "fixedassets",
+                    "groupName": "Fixed Assets",
+                    "category": "assets"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [],
+                    "accounts": [],
+                    "uniqueName": "noncurrentassets",
+                    "groupName": "Non Current Assets",
+                    "category": "assets"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 43295.13,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 43295.13,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Tax On Export",
+                                    "uniqueName": "taxonexport",
+                                    "groupName": "Tax On Export"
+                                }
+                            ],
+                            "uniqueName": "taxonexport",
+                            "groupName": "Tax On Export",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Tax On Advance",
+                                    "uniqueName": "taxonadvance",
+                                    "groupName": "Tax On Advance"
+                                }
+                            ],
+                            "uniqueName": "taxonadvance",
+                            "groupName": "Tax On Advance",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "tcsreceivable",
+                            "groupName": "TCS receivable",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "tdsreceivable",
+                            "groupName": "TDS receivable",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Reverse Charge",
+                                    "uniqueName": "reversecharge",
+                                    "groupName": "Reverse Charge"
+                                }
+                            ],
+                            "uniqueName": "reversecharge",
+                            "groupName": "Reverse Charge",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "bankaccounts",
+                            "groupName": "Bank Accounts",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 55.14,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 55.14,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 55.14,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 55.14,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Cash",
+                                    "uniqueName": "cash",
+                                    "groupName": "Cash"
+                                }
+                            ],
+                            "uniqueName": "cash",
+                            "groupName": "Cash",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 43239.98,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 43239.98,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "sundrydebtors",
+                            "groupName": "Sundry Debtors",
+                            "category": null
+                        }
+                    ],
+                    "accounts": [],
+                    "uniqueName": "currentassets",
+                    "groupName": "Current Assets",
+                    "category": "assets"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Sales",
+                                    "uniqueName": "sales",
+                                    "groupName": "Sales"
+                                }
+                            ],
+                            "uniqueName": "sales",
+                            "groupName": "Sales",
+                            "category": null
+                        }
+                    ],
+                    "accounts": [],
+                    "uniqueName": "revenuefromoperations",
+                    "groupName": "Revenue From Operations",
+                    "category": "income"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "dividendincome",
+                            "groupName": "Dividend Income",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "interestincome",
+                            "groupName": "Interest Income",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Exchange Gain",
+                                    "uniqueName": "exchangegain",
+                                    "groupName": "Exchange Gain"
+                                }
+                            ],
+                            "uniqueName": "exchangegain",
+                            "groupName": "Exchange Gain",
+                            "category": null
+                        }
+                    ],
+                    "accounts": [],
+                    "uniqueName": "otherincome",
+                    "groupName": "Other Income",
+                    "category": "income"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Purchases",
+                                    "uniqueName": "purchases",
+                                    "groupName": "Purchases"
+                                }
+                            ],
+                            "uniqueName": "purchases",
+                            "groupName": "Purchases",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Discount",
+                                    "uniqueName": "discount",
+                                    "groupName": "Discount"
+                                }
+                            ],
+                            "uniqueName": "discount",
+                            "groupName": "Discount",
+                            "category": null
+                        }
+                    ],
+                    "accounts": [],
+                    "uniqueName": "operatingcost",
+                    "groupName": "Operating Cost",
+                    "category": "expenses"
+                },
+                {
+                    "forwardedBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "creditTotal": 0.0,
+                    "debitTotal": 0.0,
+                    "closingBalance": {
+                        "amount": 0.0,
+                        "type": "DEBIT"
+                    },
+                    "childGroups": [
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "dividendexpense",
+                            "groupName": "Dividend Expense",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [],
+                            "uniqueName": "interestexpense",
+                            "groupName": "Interest Expense",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Exchange Loss",
+                                    "uniqueName": "exchangeloss",
+                                    "groupName": "Exchange Loss"
+                                }
+                            ],
+                            "uniqueName": "exchangeloss",
+                            "groupName": "Exchange Loss",
+                            "category": null
+                        },
+                        {
+                            "forwardedBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "creditTotal": 0.0,
+                            "debitTotal": 0.0,
+                            "closingBalance": {
+                                "amount": 0.0,
+                                "type": "DEBIT"
+                            },
+                            "childGroups": [],
+                            "accounts": [
+                                {
+                                    "creditTotal": 0.0,
+                                    "debitTotal": 0.0,
+                                    "closingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "openingBalance": {
+                                        "amount": 0.0,
+                                        "type": "DEBIT"
+                                    },
+                                    "currency": {
+                                        "code": "INR",
+                                        "symbol": null
+                                    },
+                                    "name": "Round Off",
+                                    "uniqueName": "roundoff",
+                                    "groupName": "Other Indirect Expenses"
+                                }
+                            ],
+                            "uniqueName": "otherindirectexpenses",
+                            "groupName": "Other Indirect Expenses",
+                            "category": null
+                        }
+                    ],
+                    "accounts": [],
+                    "uniqueName": "indirectexpenses",
+                    "groupName": "Indirect Expenses",
+                    "category": "expenses"
+                }
+            ]
+        },
+        "date": "14-12-2024",
+        "request": {
+            "reportCurrency": "LTL",
+            "companiesList": [
+                {
+                    "name": null,
+                    "uniqueName": "ankit1in1726484360480050fed",
+                    "from": "14-11-2024",
+                    "to": "14-12-2024"
+                },
+                {
+                    "name": null,
+                    "uniqueName": "anshiuus17195562098160dxttu",
+                    "from": "14-11-2024",
+                    "to": "14-12-2024"
+                }
+            ]
+        }
+    }
+}
