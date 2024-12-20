@@ -260,7 +260,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isProdMode: boolean = PRODUCTION_ENV;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** Hold the message of subscription plane get expire and remains day wise*/
+    /** Holds true if plan is either trail or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: Boolean = null;
 
     /**
