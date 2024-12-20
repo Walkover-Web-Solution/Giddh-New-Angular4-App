@@ -260,6 +260,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isProdMode: boolean = PRODUCTION_ENV;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Hold the message of subscription plane get expire and remains day wise*/
+    public isCurrentSubscriptionTrialOrCancelled: Boolean = null;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -771,6 +773,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
+                    this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
                 }
                 this.activeCompany = res;
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
@@ -1788,7 +1791,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionEndedNote(): string {
         let text = "";
-        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration)) {
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && !this.isCurrentSubscriptionTrialOrCancelled) {
             text = this.localeData?.subscription_expire_renewal_message;
         } else {
             text = this.localeData?.subscription_ended_note
