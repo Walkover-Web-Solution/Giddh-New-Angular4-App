@@ -2,7 +2,7 @@
 <div class="upload-and-map-content">
     <h2 class="text-center">{{ localeData?.import }} {{ title | titlecase }}</h2>
     <div
-        *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && currentOrganizationType === 'COMPANY'"
+        *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
         class="form-group max-width-500 center-block"
     >
         <!-- Currently only import entries is only visible for branch as API doesn't support permission.
@@ -27,7 +27,11 @@
                             <a href="javascript:void(0)" class="list-item d-flex">
                                 <span class="entity-icon">
                                     <i
-                                        class="icon-branch-icon pull-right"
+                                        [ngClass]="{
+                                            'icon-company-profile': option.consolidatedBranch,
+                                            'icon-branch-icon': !option.consolidatedBranch
+                                        }"
+                                        class="pull-right"
                                         *ngIf="!option.isCompany"
                                         tooltip="{{ commonLocaleData?.app_branch }}"
                                     ></i>

@@ -105,6 +105,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public branchTransferMode: string = "";
     /** This will use for bootstrap modal refrence */
     public modalRef: BsModalRef;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -138,6 +140,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.add("inventory-v2");

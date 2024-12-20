@@ -1108,14 +1108,6 @@ textarea {
         max-width: 350px;
     }
 
-    .branch-mat-salect {
-        border: 1px solid var(--color-secondary-input-bar-border);
-        border-radius: 5px !important;
-        padding: 12px;
-        font-size: var(--font-size-15);
-        min-width: 350px;
-    }
-
     .branch-options {
         height: auto !important;
         padding-bottom: 5px !important;
@@ -1154,6 +1146,24 @@ textarea {
         color: var(--color-common-primary-text) !important;
     }
 }
+
+.setting-branch-body {
+    .mat-mdc-tab-body-content {
+        overflow: visible !important;
+    }
+}
+
+.pending-table {
+    .mat-mdc-table {
+        .mdc-data-table__row {
+            height: 70px !important;
+            &:hover {
+                background-color: var(--color-body-background) !important;
+            }
+        }
+    }
+}
+
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
@@ -10711,7 +10721,7 @@ body {
     }
 }
 
-.group-create-update {  
+.group-create-update {
     .cdk-overlay-connected-position-bounding-box {
         .mat-select-panel {
             .mat-option-disabled {
@@ -11177,6 +11187,15 @@ inventory-master {
 
     .ps-content {
         height: 100% !important;
+    }
+}
+
+/* template froala */
+body {
+    &.hide-chat-widget {
+        chat-widget {
+            display: none !important;
+        }
     }
 }
 

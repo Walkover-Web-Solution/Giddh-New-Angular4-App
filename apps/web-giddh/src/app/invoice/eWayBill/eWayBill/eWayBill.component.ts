@@ -147,6 +147,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['index', 'invoiceDate', 'docNumber', 'customerName', 'customerGstin', 'ewbNo', 'ewayBillDate', 'totalValue', 'actions'];
     /** Stores the cancel dialog reference */
     public cancelDialogRef: MatDialogRef<any>;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -201,6 +203,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.updateEwayVehicleform.transDocDate = dayjs().toDate();
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
@@ -301,7 +309,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
@@ -738,7 +747,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.EwayBillfilterRequest.gstin = event.value;
         }
 
-        if ((this.currentCompanyBranches?.length > 2 && this.currentOrganizationType === 'COMPANY') || this.EwayBillfilterRequest.gstin) {
+        if ((this.currentCompanyBranches?.length > 2 && (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch)) || this.EwayBillfilterRequest.gstin) {
             this.EwayBillfilterRequest.page = 0;
             this.getAllFilteredInvoice();
         }

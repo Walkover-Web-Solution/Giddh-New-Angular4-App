@@ -40,7 +40,7 @@
                     </button>
                 </li>
 
-                <li class="d-flex column-gap1 align-items-center" *ngIf="isCompany && showGstFiling">
+                <li class="d-flex column-gap1 align-items-center" *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling">
                     <button
                         mat-stroked-button
                         color="primary"
@@ -109,7 +109,7 @@
                     </button>
                 </mat-menu>
             </div>
-            <div *ngIf="isCompany && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
+            <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
                 <button
                     mat-stroked-button
                     color="primary"

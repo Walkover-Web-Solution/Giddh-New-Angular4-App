@@ -23,7 +23,7 @@
                     <div class="input-group flex-nowrap mr-b15">
                         <div
                             class="form-group linked-entities mr-r15 mb-0"
-                            *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                            *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                         >
                             <dropdown-field
                                 [label]="commonLocaleData?.app_entity"

@@ -76,6 +76,8 @@ export class GstComponent implements OnInit, OnDestroy {
     public isTaxApiInProgress: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
@@ -127,6 +129,12 @@ export class GstComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.loadTaxDetails();
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.getCurrentPeriod$.subscribe(a => {
             if (a && a.from) {
                 let date = {

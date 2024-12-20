@@ -87,7 +87,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** True if today selected */
     public todaySelected: boolean = false;
-    displayedColumns: string[] = [
+    /** Holds display columns for mat table */
+    public displayedColumns: string[] = [
         'index', 
         'entryDate', 
         'suppliersName', 
@@ -101,8 +102,12 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
       ];
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
-        /** Stores the searched name value for the Name filter */
-        public searchedName: UntypedFormControl = new UntypedFormControl();
+    /** Stores the searched name value for the Name filter */
+    public searchedName: UntypedFormControl = new UntypedFormControl();
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    
+    public hero: string;
 
     constructor(
         private store: Store<AppState>,
@@ -122,6 +127,12 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -165,7 +176,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
