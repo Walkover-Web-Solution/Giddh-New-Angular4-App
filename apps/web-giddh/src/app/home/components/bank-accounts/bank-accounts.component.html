@@ -23,8 +23,8 @@
                                 <!-- <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary"
                                     [tooltip]="localeData?.connected_bank"></i>
                                 </span> -->
-                                <span *ngIf="!bankaccount.accountBankTransactionTotal"><i class="icon-plus text-primary cursor-pointer"
-                                    [tooltip]="localeData?.connect_bank" (click)="openInstitutionsDialog(bankaccount)"></i>
+                                <span *ngIf="!bankaccount.accountBankTransactionTotal && isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"><i class="icon-plus text-primary cursor-pointer"
+                                    [matTooltip]="localeData?.connect_bank" matTooltipPosition="below" (click)="openInstitutionsDialog(bankaccount)"></i>
                                 </span>
                             </p>
                             <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
