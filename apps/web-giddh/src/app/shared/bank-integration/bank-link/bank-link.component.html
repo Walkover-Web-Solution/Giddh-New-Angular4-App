@@ -22,7 +22,7 @@
                             [placeholder]="localeData?.payment?.banks"
                             [options]="bankLinks"
                             (selectedOption)="selectedOption($event)"
-                            [defaultValue]="selectedBanksList"
+                            [defaultValue]="defaultSelectedBank$ | async"
                         >
                         </dropdown-field>
                     </div>

@@ -18,7 +18,12 @@
                         <div [matTooltip]="bankaccount?.accountBankTransactionTotal?.transactionLastFetchedAt"
                             matTooltipPosition="right" class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts"
                             >
-                            <p class="bank-name">{{ bankaccount.name }}</p>
+                            <p class="bank-name">{{ bankaccount.name }}&nbsp;
+                                <span *ngIf="!bankaccount.accountBankTransactionTotal && isGocardlessSupportedCountry && hasIntegrationScope">
+                                    <i class="icon-plus text-primary cursor-pointer font-12"
+                                    [matTooltip]="localeData?.connect_bank" matTooltipPosition="below" (click)="openInstitutionsDialog(bankaccount)"></i>
+                                </span>
+                            </p>
                             <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
                                 <span>{{ localeData?.in_giddh }}</span>
                                 <span>{{ activeCompany.baseCurrencySymbol }}
@@ -28,13 +33,7 @@
                                         }}</span>
                                     <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
                                         localeData?.dr_heading
-                                        }}</span>&nbsp;
-                                    <span *ngIf="bankaccount.accountBankTransactionTotal"><i class="icon-tick text-primary pd-r1"
-                                        [tooltip]="localeData?.connected_bank"></i>
-                                    </span>
-                                    <span *ngIf="!bankaccount.accountBankTransactionTotal"><i class="icon-plus text-primary cursor-pointer pd-r1"
-                                        [tooltip]="localeData?.connect_bank" (click)="openInstitutionsDialog(bankaccount)"></i>
-                                    </span>
+                                        }}</span>
                                 </span>
                             </p>
                             <ng-container *ngIf="bankaccount?.accountBankTransactionTotal?.bankName">

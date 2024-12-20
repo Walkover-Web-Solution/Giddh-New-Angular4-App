@@ -10,7 +10,7 @@ import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -333,14 +333,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
     /** True if active account is bank account */
     public isBankAccountConnected: boolean;
-    /** List of connected bank accounts */
-    public connectedBankAccounts: any[] = [];
     /** True, if show bank link button is to show */
     public showBankLinkButton: boolean;
-    /** Holds list of connected bank */
-    public connectedBankLists: any[] = [];
     /** Holds accountUniquename of get all bank-Account  */
     public selectedAccountUniquename: any;
+    /** Holds selected bank unique name */
+    private selectedBankUniqueName: string;
 
     constructor(
         private store: Store<AppState>,
@@ -505,7 +503,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * @param {*} element
    * @memberof LedgerComponent
    */
-    public openInstitutionsDialog(): void {
+    public openInstitutionsDialog(bankAccount): void {
+        this.selectedBankUniqueName = bankAccount?.uniqueName;
+
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData
@@ -1020,15 +1020,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
          */
         this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.openInstitutionsDialog();
+                this.openInstitutionsDialog(this.bankAccount);
             }
         });
 
-        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(take(1)).subscribe(response => {
+        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
-                this.connectedBankLists = response.body;
-                const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename));
-                if (result) {
+                if (response.body?.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
                     this.isBankAccountConnected = true;
                 } else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
@@ -2758,6 +2756,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
+                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response) {
+                            this.openBankLinkDialog();
+                        }
+                    });
                 }
             });
         }
@@ -3192,14 +3195,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public openBankLinkDialog(): void {
-        let data = {
-            bankList: this.connectedBankLists,
-            accountUniqueName: this.lc.accountUnq
+        const data = {
+            bankList: this.selectedBankUniqueName,
+            accountUniqueName: this.lc.accountUnq,
         }
-        this.dialog.open(BankLinkComponent, {
+        const dialogRef = this.dialog.open(BankLinkComponent, {
             data: data,
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
-    }
 
+        dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; })).subscribe();
+    }
 }
