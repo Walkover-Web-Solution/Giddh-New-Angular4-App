@@ -183,7 +183,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         giddhBalanceDecimalPlaces: 0
     };
     /** True, if user has enable GST E-invoice */
-    public isEInvoiceEnabled: boolean;
+    public isEInvoiceEnabled: boolean = null;
     /** Holds page Size Options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
@@ -353,6 +353,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
+                if (this.isEInvoiceEnabled === null) {
+                    this.getInvoiceSettings();
+                }
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.from = this.queryParams.from;
@@ -380,7 +383,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.getInvoiceSettings();
+        
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
