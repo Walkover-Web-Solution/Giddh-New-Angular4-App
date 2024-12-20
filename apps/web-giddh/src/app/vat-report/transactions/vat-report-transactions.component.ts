@@ -16,7 +16,6 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { InvoiceService } from '../../services/invoice.service';
 import { GeneralService } from '../../services/general.service';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ReceiptService } from '../../services/receipt.service';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -56,8 +55,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /* this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /*-- mat-table --*/
@@ -75,7 +72,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceService: InvoiceService,
         private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver,
         private receiptService: ReceiptService,
         public dialog: MatDialog
     ) {
@@ -89,16 +85,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
-
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.vatReportTransactionsRequest.from = params['from'];
             this.vatReportTransactionsRequest.to = params['to'];

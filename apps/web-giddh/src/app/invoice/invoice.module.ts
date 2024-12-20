@@ -75,6 +75,14 @@ import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { InvoiceGenerateModule } from './generate/invoice-generate.module';
 import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -157,10 +165,18 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatTabsModule,
         BulkExportVoucherModule,
         FroalaTemplateEditorModule,
+        MatTableModule,
+        MatFormFieldModule,
+        FormFieldsModule,
+        MatInputModule,
+        MatRadioModule,
+        MatButtonModule,
         GenerateEWayBillModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        MatMenuModule,
+        MatTooltipModule
     ],
     exports: [
         InvoiceRoutingModule,

@@ -500,7 +500,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedAddress = address;
         this.deleteAddressConfirmationModalRef = this.dialog.open(this.deleteAddressConfirmationModal, {
             panelClass: 'modal-dialog',
-            width: '1000px'
+            width: '800px'
         });
     }
 

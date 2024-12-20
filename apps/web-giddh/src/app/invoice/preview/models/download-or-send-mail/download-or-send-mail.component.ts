@@ -9,7 +9,6 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { Router } from '@angular/router';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
@@ -27,6 +26,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     @Input() public selectedVoucher: any;
     @Input() public base64Data: any;
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
+    /** Hold current voucher filter */
+    @Input()public currentVoucherFilter: string;
     @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
     @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
     @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
@@ -59,10 +60,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** this will store screen size */
-    public isMobileScreen : boolean = false;
-    /** Stores the current voucher filter applied */
-    public currentVoucherFilter: string;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** Holds voucher unique name */
@@ -79,17 +76,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         private _invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _router: Router,
-        private breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonService: CommonService
     ) {
-        this.breakpointObserver
-        .observe(['(max-width: 768px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-        });
-
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
@@ -213,7 +202,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      */
     public onSendInvoiceOnMail(email: string) {
         if (isEmpty(email)) {
-            this._toasty.warningToast(this.localeData?.enter_valid_email_error);
+            this._toasty.showSnackBar('warning', this.localeData?.enter_valid_email_error);
             return;
         }
         let emailList = email.split(',');
@@ -221,7 +210,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
             this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType });
             this.showEmailTextarea = false;
         } else {
-            this._toasty.errorToast(this.localeData?.invalid_emails);
+            this._toasty.showSnackBar('error', this.localeData?.invalid_emails);
         }
     }
 
@@ -297,10 +286,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'pdf');
                     }
                 } else {
-                    this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    this._toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
             }, (error => {
-                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                this._toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
             }));
         } else {
             this.downloadInvoiceEvent.emit(this.invoiceType);

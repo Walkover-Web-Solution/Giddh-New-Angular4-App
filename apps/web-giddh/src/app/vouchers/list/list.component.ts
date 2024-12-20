@@ -379,6 +379,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getLedgersOfInvoice();
                 }
             }
+            this.getInvoiceSettings();
         });
         this.getInvoiceSettings();
         /** Universal date */
