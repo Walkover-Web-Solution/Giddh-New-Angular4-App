@@ -3205,6 +3205,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; })).subscribe();
+        dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false })).subscribe();
     }
 }
