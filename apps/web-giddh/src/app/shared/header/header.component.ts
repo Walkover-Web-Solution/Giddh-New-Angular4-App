@@ -256,8 +256,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
-    /** Holds true if plan is either trail or cancelled */
-    public isCurrentSubscriptionTrialOrCancelled: Boolean = null;
+    /** Holds true if plan is either trial or cancelled */
+    public isCurrentSubscriptionTrialOrCancelled: boolean = null;
 
     /**
      * Returns whether the back button in header should be displayed or not
