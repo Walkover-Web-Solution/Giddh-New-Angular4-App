@@ -112,14 +112,14 @@ export class BankLinkComponent implements OnInit, OnDestroy {
     private setTransformBankListData(bankList: any): void {
         this.bankLinks = bankList.filter(bank => Object.keys(bank.account).length === 0).map(item => {
             return {
-                label: `${item.bankName} ****${item.bankResource?.accountNumber ? item.bankResource.accountNumber.slice(-4) : 'N/A'}`,
+                label: `${item.bankName} ****${item.bankResource?.accountNumber ? item.bankResource?.accountNumber.slice(-4) : 'N/A'}`,
                 value: item.bankResource.uniqueName,
                 additional: item
             }
         });
 
         if (this.bankLinks.length === 1) {
-            this.defaultSelectedBank$.next(`${bankList[0].bankName} ****${bankList[0].bankResource?.accountNumber ? bankList[0].bankResource.accountNumber.slice(-4) : 'N/A'}`);
+            this.defaultSelectedBank$.next(`${bankList[0]?.bankName} ****${bankList[0]?.bankResource?.accountNumber ? bankList[0]?.bankResource?.accountNumber?.slice(-4) : 'N/A'}`);
             this.selectedOption(this.bankLinks[0]);
         }
     }
