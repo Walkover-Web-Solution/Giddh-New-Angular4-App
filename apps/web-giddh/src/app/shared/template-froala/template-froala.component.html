@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
 >
     <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
-        <h3 mat-dialog-title>{{ commonLocaleData?.app_custom_email_template }}</h3>
+        <h3 mat-dialog-title >{{ commonLocaleData?.app_custom_email_template }}</h3>
         <span mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></span>
     </div>
 
@@ -143,7 +143,7 @@
                 <textarea [froalaEditor]="froalaOptions" formControlName="html"></textarea>
             </div>
         </form>
-        <div mat-dialog-actions class="modal-footer justify-content-start">
+        <div mat-dialog-actions class="justify-content-start">
             <button aria-label="save" mat-stroked-button color="primary" type="button" (click)="onSubmit('save')">
                 {{ commonLocaleData?.app_save }}
             </button>

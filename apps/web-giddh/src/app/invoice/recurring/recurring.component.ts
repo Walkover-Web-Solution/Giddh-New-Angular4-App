@@ -75,6 +75,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public selectedInvoices: any[] = [];
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
     /** True if api call to get recurring invoices in progress */
@@ -110,6 +112,13 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
             }
         });
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
