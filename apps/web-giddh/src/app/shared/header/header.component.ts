@@ -256,7 +256,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
-    /** Hold the message of subscription plane get expire and remains day wise*/
+    /** Holds true if plan is either trail or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: Boolean = null;
 
     /**
