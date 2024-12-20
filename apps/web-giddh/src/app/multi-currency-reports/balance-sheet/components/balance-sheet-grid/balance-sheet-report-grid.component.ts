@@ -90,24 +90,24 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
                         this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
                         // always make first level visible ....
                         if (this.bsData.liabilities) {
-                            each(this.bsData.liabilities, (grp: any) => {
-                                if (grp.isIncludedInSearch) {
-                                    grp.isVisible = true;
-                                    each(grp.accounts, (acc: any) => {
-                                        if (acc.isIncludedInSearch) {
-                                            acc.isVisible = true;
+                            each(this.bsData.liabilities, (childGroup: any) => {
+                                if (childGroup.isIncludedInSearch) {
+                                    childGroup.isVisible = true;
+                                    each(childGroup.accounts, (account: any) => {
+                                        if (account.isIncludedInSearch) {
+                                            account.isVisible = true;
                                         }
                                     });
                                 }
                             });
                         }
                         if (this.bsData.assets) {
-                            each(this.bsData.assets, (grp: any) => {
-                                if (grp.isIncludedInSearch) {
-                                    grp.isVisible = true;
-                                    each(grp.accounts, (acc: any) => {
-                                        if (acc.isIncludedInSearch) {
-                                            acc.isVisible = true;
+                            each(this.bsData.assets, (childGroup: any) => {
+                                if (childGroup.isIncludedInSearch) {
+                                    childGroup.isVisible = true;
+                                    each(childGroup.accounts, (account: any) => {
+                                        if (account.isIncludedInSearch) {
+                                            account.isVisible = true;
                                         }
                                     });
                                 }
@@ -150,7 +150,7 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      *
      * @memberof BalanceSheetReportGridComponent
      */
-    public toggleSearch() {
+    public toggleSearch() : void {
         this.showClearSearch = true;
 
         setTimeout(() => {
@@ -165,9 +165,10 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      *
      * @param {*} event The click event
      * @param {*} el The element to check
+     * @returns {void} 
      * @memberof BalanceSheetReportGridComponent
      */
-    public clickedOutside(event, el) {
+    public clickedOutside(event, el) : void {
         if (this.bsSearchControl?.value !== null && this.bsSearchControl?.value !== '') {
             return;
         }
@@ -182,15 +183,15 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     /**
      * Checks if an element is a child of another
      *
-     * @param {*} c The child element
-     * @param {*} p The parent element
+     * @param {*} child The child element
+     * @param {*} parent The parent element
      * @returns {boolean} True if the element is a child, false otherwise
      * @memberof BalanceSheetReportGridComponent
      */
-    public childOf(c, p) {
-        while ((c = c.parentNode) && c !== p) {
+    public childOf(child, parent): boolean {
+        while ((child = child.parentNode) && child !== parent) {
         }
-        return !!c;
+        return !!child;
     }
 
     /**
@@ -201,18 +202,18 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof BalanceSheetReportGridComponent
      */
     private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-        each(data, (grp: ChildGroup) => {
-            if (grp.isIncludedInSearch) {
-                grp.isCreated = true;
-                grp.isVisible = isVisible;
-                grp.isOpen = isVisible;
-                each(grp.accounts, (acc: Account) => {
-                    if (acc.isIncludedInSearch) {
-                        acc.isCreated = true;
-                        acc.isVisible = isVisible;
+        each(data, (childGroup: ChildGroup) => {
+            if (childGroup.isIncludedInSearch) {
+                childGroup.isCreated = true;
+                childGroup.isVisible = isVisible;
+                childGroup.isOpen = isVisible;
+                each(childGroup.accounts, (account: Account) => {
+                    if (account.isIncludedInSearch) {
+                        account.isCreated = true;
+                        account.isVisible = isVisible;
                     }
                 });
-                this.toggleVisibility(grp.childGroups, isVisible);
+                this.toggleVisibility(childGroup.childGroups, isVisible);
             }
         });
     }

@@ -174,6 +174,8 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Holds the common JSON data for the component */
     public commonLocaleData: any = {};
+    /** Holds active selected Tab Index  */
+    public selectedTabIndex: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -262,10 +264,10 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
      * @param {number} tabIndex
      * @memberof FinancialReportsComponent
      */
-    public tabChanged(tab: string, tabIndex: number): void {
-        if (!this.preventTabChangeWithRoute) {
-            this.router.navigate(['/pages/multi-currency-report'], { queryParams: { tab, tabIndex } });
-        }
+    public tabChanged(selectedTabIndex: any): void {
+        this.selectedTabIndex = selectedTabIndex;
+            //this.router.navigate(['/pages/multi-currency-report'], { queryParams: { tab, tabIndex } });
+        
     }
 }
 

@@ -14,6 +14,19 @@
     max-width: 760px;
     width: 100%;
 }
+::ng-deep .custom-placeholder .mat-form-field-label {
+    color: red !important;
+}
+
+::ng-deep .custom-placeholder.mat-focused .mat-form-field-label {
+    color: red !important;
+}
+
+::ng-deep .custom-placeholder .mat-form-field-label.mat-error {
+    color: red !important;
+}
+
+
 .input-wrapper:before {
     position: absolute;
     content: "";

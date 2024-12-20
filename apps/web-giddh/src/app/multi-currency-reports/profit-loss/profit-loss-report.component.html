@@ -6,18 +6,12 @@
 >
     <filter-multi-currency
         #filter
-        [selectedCompany]="selectedCompany"
         (filterValue)="searchData($event)"
         (onPropertyChanged)="filterData()"
-        [showLoader]="showLoader"
         (seachChange)="searchChanged($event)"
         (lastSyncDate)="lastDate($event)"
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
-        [tbExportCsv]="false"
-        [tbExportXLS]="false"
-        [plBsExportXLS]="true"
-        [showLabels]="true"
     ></filter-multi-currency>
     <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>

@@ -67,6 +67,7 @@ import { GridReportRowComponent } from './grid-row/grid-report-row.component';
 import { ProfitLossReportComponent } from './profit-loss/profit-loss-report.component';
 import { ProfitLossReportGridComponent } from './profit-loss/components/profit-loss-grid/profit-loss-report-grid.component';
 import { ProfitLossReportGridRowComponent } from './profit-loss/components/profit-loss-grid/components/profit-loss-grid-row/profit-loss-report-grid-row.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 @NgModule({
@@ -135,7 +136,8 @@ import { ProfitLossReportGridRowComponent } from './profit-loss/components/profi
         MatFormFieldModule,
         MatSelectModule,
         FormFieldsModule,
-        FinancialSearchPipe
+        FinancialSearchPipe,
+        MatTabsModule
         
     ],
 })

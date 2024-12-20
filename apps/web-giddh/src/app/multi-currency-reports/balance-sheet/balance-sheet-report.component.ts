@@ -90,11 +90,11 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /** Stores the selected company data */
     private _selectedCompany: CompanyResponse;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: MultiCurrencyReportsComponentStore) {
+    constructor(public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: MultiCurrencyReportsComponentStore) {
         this.showLoader = this.componentStore.inProgressReport$;
-        this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((p) => {
-            if (p) {
-                let data = prepareBalanceSheetData(cloneDeep(p));
+        this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                let data = prepareBalanceSheetData(cloneDeep(response)); 
                 if (data && data.message) {
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
@@ -103,18 +103,18 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                 }
                 if (data && data.liabilities) {
                     this.InitData(data.liabilities);
-                    data.liabilities.forEach(g => {
-                        g['isVisible'] = true;
-                        g['isCreated'] = true;
-                        g['isIncludedInSearch'] = true;
+                    data.liabilities.forEach(childGroup => {
+                        childGroup['isVisible'] = true;
+                        childGroup['isCreated'] = true;
+                        childGroup['isIncludedInSearch'] = true;
                     });
                 }
                 if (data && data.assets) {
                     this.InitData(data.assets);
-                    data.assets.forEach(g => {
-                        g['isVisible'] = true;
-                        g['isCreated'] = true;
-                        g['isIncludedInSearch'] = true;
+                    data.assets.forEach(childGroup => {
+                        childGroup['isVisible'] = true;
+                        childGroup['isCreated'] = true;
+                        childGroup['isIncludedInSearch'] = true;
                     });
                 }
                 this.data = data;
@@ -128,21 +128,21 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Initializes data for the balance sheet groups
      *
-     * @param {ChildGroup[]} d The list of child groups
+     * @param {ChildGroup[]} groupList The list of child groups
      * @memberof BalanceSheetReportComponent
      */
-    public InitData(d: ChildGroup[]) {
-        each(d, (grp: ChildGroup) => {
-            grp['isVisible'] = false;
-            grp['isCreated'] = false;
-            grp['isIncludedInSearch'] = true;
-            each(grp.accounts, (acc: Account) => {
-                acc['isIncludedInSearch'] = true;
-                acc['isCreated'] = false;
-                acc['isVisible'] = false;
+    public InitData(groupList: ChildGroup[]) {
+        each(groupList, (childGroup: ChildGroup) => {
+            childGroup['isVisible'] = false;
+            childGroup['isCreated'] = false;
+            childGroup['isIncludedInSearch'] = true;
+            each(childGroup.accounts, (account: Account) => {
+                account['isIncludedInSearch'] = true;
+                account['isCreated'] = false;
+                account['isVisible'] = false;
             });
-            if (grp.childGroups) {
-                this.InitData(grp.childGroups);
+            if (childGroup.childGroups) {
+                this.InitData(childGroup.childGroups);
             }
         });
     }

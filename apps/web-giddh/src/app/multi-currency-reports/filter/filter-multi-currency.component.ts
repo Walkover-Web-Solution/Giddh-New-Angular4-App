@@ -29,93 +29,78 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
+    /** The current date object representing today's date */
     public today: Date = new Date();
+    /** The selected date option, initialized to '0' */
     public selectedDateOption: string = '0';
+    /** The reactive form group for managing filter inputs */
     public filterForm: UntypedFormGroup;
+    /** The string used for searching items */
     public search: string = '';
+    /** The list of financial options available for selection */
     public financialOptions: IOption[] = [];
+    /** The form control for managing account search input */
     public accountSearchControl: UntypedFormControl = new UntypedFormControl();
+    /** The list of tags associated with the component */
     public tags: TagRequest[] = [];
+    /** The currently selected tag */
     public selectedTag: string;
-    @Input() public tbExportXLS: boolean = false;
-    @Input() public tbExportCsv: boolean = false;
-    @Input() public plBsExportXLS: boolean = false;
-    @Input() public BsExportXLS: boolean = false;
-    @Output() public seachChange = new EventEmitter<string>();
-    @Output() public tbExportXLSEvent = new EventEmitter<string>();
-    @Output() public tbExportCsvEvent = new EventEmitter<string>();
-    @Output() public plBsExportXLSEvent = new EventEmitter<string>();
-    /** True, when expand all operation is performed */
-    @Input() public expandAll: boolean;
-    @Output()
-    public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-    public showClearSearch: boolean;
-    public request: TrialBalanceRequest = {};
-    public dateOptions: IOption[] = [];
-    public imgPath: string;
+    /** A boolean indicating the current state of the universal date picker */
     public universalDateICurrent: boolean = false;
-    /** Observable to store the branches of current company */
-    public currentCompanyBranches$: Observable<any>;
-    /** Stores the branch list of a company */
-    public currentCompanyBranches: Array<any>;
-    /** Stores the current branch */
-    public currentBranch: any = { name: '', uniqueName: '' };
-    /** Stores the current company */
+    /** Stores the currently active company information */
     public activeCompany: any;
-    /** True, if mobile screen size is detected */
-    public isMobileScreen: boolean = true;
-    @Input() public showLoader: Observable<boolean>;
-    @Output() public lastSyncDate = new EventEmitter<string>(); ;
-    @Input() public showLabels: boolean = false;
+    /** Event emitter for sending the last synchronization date */
+    @Output() public lastSyncDate = new EventEmitter<string>();
+    /** Event emitter for notifying property changes */
     @Output() public onPropertyChanged = new EventEmitter<any>();
+    /** Event emitter for sending the filter value */
     @Output() public filterValue = new EventEmitter<any>();
+    /** Event emitter for notifying search changes */
+    @Output() public seachChange = new EventEmitter<string>();
+    /** A boolean indicating whether all elements are expanded */
+    @Input() public expandAll: boolean;
+    /** Event emitter for toggling the expand/collapse state of all elements */
+    @Output() public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Reference to the modal used for creating tags */
     @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
-    public universalDate$: Observable<any>;
-    public newTagForm: UntypedFormGroup;
-    /** Date format type */
-    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
+    /** Template reference for the date picker directive */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /** This will store modal reference */
+    /** Reference to the modal for managing its state */
     public modalRef: BsModalRef;
-    /** This will store selected date range to use in api */
+    /** The selected date range used in API requests */
     public selectedDateRange: any;
-    /** This will store selected date range to show on UI */
+    /** The selected date range displayed on the user interface */
     public selectedDateRangeUi: any;
+    /** Instance of the dayjs library for date manipulation */
+    public dayjs = dayjs;
+    /** The selected "from" date in string format */
+    public fromDate: string;
+    /** The selected "to" date in string format */
+    public toDate: string;
+    /** The label for the selected date range */
+    public selectedRangeLabel: any = "";
+    /** The x and y position of the date field used to position the date picker */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** ReplaySubject used to handle cleanup and prevent memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the local JSON data for the component */
+    public localeData: any = {};
+    /** Stores the common JSON data for the application */
+    public commonLocaleData: any = {};
+    /** List of companies available for selection */
+    public companyList: any;
+    /** List of currencies available for selection */
+    public currencyList: any;
+    public dateOptions: IOption[] = [];
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** dayjs object */
-    public dayjs = dayjs;
-    /** Selected from date */
-    public fromDate: string;
-    /** Selected to date */
-    public toDate: string;
-    /** Selected range label */
-    public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private _selectedCompany: CompanyResponse;
-    /** This will hold local JSON data */
-    public localeData: any = {};
-    /** This will hold common JSON data */
-    public commonLocaleData: any = {};
-    public companyList: any;
-    public currencyList: any;
-    /* This will clear the select value in sh-select */
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+
 
     constructor(private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
         private store: Store<AppState>,
-        private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
         private modalService: BsModalService,
-        private breakPointObservar: BreakpointObserver,
-        private settingsBranchAction: SettingsBranchActions,
-        private toaster: ToasterService,
         private componentStore: MultiCurrencyReportsComponentStore
     ) {
         this.filterForm = this.fb.group({
@@ -131,57 +116,9 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             selectCurrency: [null]
         });
 
-        this.newTagForm = this.fb.group({
-            name: ['', Validators.required],
-            description: []
-        });
-
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate),distinctUntilChanged(), takeUntil(this.destroyed$));
-        
-    }
-
-    public get selectedCompany() {
-        return this._selectedCompany;
-    }
-
-    /**
-     * init form and other properties from input company
-     *
-     * @memberof FinancialReportsFilterComponent
-     */
-    @Input()
-    public set selectedCompany(value: CompanyResponse) {
-        if (!value) {
-            return;
-        }
-        this._selectedCompany = value;
-        this.financialOptions = value.financialYears.map(q => {
-            return { label: q?.uniqueName, value: q?.uniqueName };
-        });
-
-        if (this.filterForm.get('selectedDateOption')?.value === '0' && value.activeFinancialYear) {
-            this.filterForm?.patchValue({
-                to: value.activeFinancialYear.financialYearEnds,
-                from: value.activeFinancialYear.financialYearStarts,
-                selectedFinancialYearOption: value.activeFinancialYear?.uniqueName
-            });
-        }
     }
 
     public ngOnInit() {
-        this.getTags();
-
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
-
-        this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
-        if (!this.showLabels) {
-            this.filterForm?.patchValue({ selectedDateOption: '0' });
-        }
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -190,7 +127,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
                 this.cd.detectChanges();
             });
 
-        this.universalDate$.subscribe((a) => {
+        this.componentStore.universalDate$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((a) => {
             if (a) {
                 this.universalDateICurrent = false;
                 // assign dates
@@ -216,58 +153,8 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                
+
                 this.filterData();
-            }
-        });
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
-                this.activeCompany = activeCompany;
-            }
-        });
-        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
-            if (response?.length) {
-                this.filterForm.get('branchUniqueName').setValue("");
-                this.forceClear$ = observableOf({ status: true });
-                this.currentCompanyBranches = [];
-                this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.name,
-                    value: branch?.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
-                }));
-                this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.name : '',
-                    name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
-                    isCompany: true
-                });
-                let currentBranchUniqueName;
-                if (!this.currentBranch?.uniqueName) {
-                    // Assign the current branch only when it is not selected. This check is necessary as
-                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
-                    // branches are loaded
-                    if (this.currentOrganizationType === OrganizationType.Branch) {
-                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
-                    } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
-                        this.currentBranch = {
-                            name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
-                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
-                        };
-                    }
-                }
-                this.filterForm.get('branchUniqueName').setValue(this.currentBranch?.uniqueName);
-                this.filterForm.updateValueAndValidity();
-                this.cd.detectChanges();
-            } else {
-                if (this.generalService.companyUniqueName) {
-                    // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
-                }
             }
         });
 
@@ -279,43 +166,24 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
                 })
                 this.currencyList = currencyList;
             }
-
         });
+
         this.componentStore.companyList$.pipe(takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies || companies?.length === 0) {
-                return;
+            if (companies) {
+                let orderedCompanies = _.orderBy(companies, 'name');
+                this.companyList = orderedCompanies;
             }
-            let orderedCompanies = _.orderBy(companies, 'name');
-            this.companyList = orderedCompanies;
         });
         this.componentStore.filterRequestData$.pipe(takeUntil(this.destroyed$)).subscribe(filterRequestData => {
-            if(filterRequestData){
-               this.getForm('selectCurrency').patchValue(filterRequestData.request.reportCurrency);
-               let selectCompany = [];
-               filterRequestData.request.companiesList.forEach((company)=>{
+            if (filterRequestData) {
+                this.getForm('selectCurrency').patchValue(filterRequestData.request.reportCurrency);
+                let selectCompany = [];
+                filterRequestData.request.companiesList.forEach((company) => {
                     selectCompany.push(company.uniqueName)
-               });
-               this.getForm('shareCompanyList').patchValue(selectCompany);
-               this.lastSyncDate.emit(filterRequestData.lastFetchedAt);
-               this.cd.detectChanges();
-            }
-        });
-    }
-
-
-
-    public setCurrentFY() {
-        // set financial years based on company financial year
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && this.universalDateICurrent) {
-                let activeFinancialYear = activeCompany.activeFinancialYear;
-                if (activeFinancialYear) {
-                    // assign dates
-                    this.filterForm?.patchValue({
-                        from: dayjs(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
-                        to: dayjs().format(GIDDH_DATE_FORMAT)
-                    });
-                }
+                });
+                this.getForm('shareCompanyList').patchValue(selectCompany);
+                this.lastSyncDate.emit(filterRequestData.lastFetchedAt);
+                this.cd.detectChanges();
             }
         });
     }
@@ -344,53 +212,23 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
         this.seachChange.emit(a);
     }
 
-    // public refreshData() {
-    //     let data = cloneDeep(this.filterForm?.value);
-    //     data.refresh = true;
-    //     this.onPropertyChanged.emit(data);
-    //     this.emitExpand(false);
-    // }
-
     public onSubmit() {
         let data = {
-            companiesList:[],
-            reportCurrency:''
+            companiesList: [],
+            reportCurrency: ''
         };
         this.getForm('shareCompanyList').value?.forEach(control => {
             if (control) {
-                data.companiesList.push({from: this.getForm('from').value, to: this.getForm('to').value,  uniqueName: control });
+                data.companiesList.push({ from: this.getForm('from').value, to: this.getForm('to').value, uniqueName: control });
             }
         });
         data.reportCurrency = this.getForm('selectCurrency').value || this.activeCompany?.baseCurrency;
         this.filterValue.emit(data);
     }
 
-    public setFYFirstTime(selectedFY: string) {
-        if (selectedFY) {
-            let inx = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === selectedFY);
-            if (inx !== -1) {
-                this.filterForm?.patchValue({
-                    fy: inx === 0 ? 0 : inx * -1
-                });
-            }
-        }
-    }
 
     public toggleTagsModal() {
         this.createTagModal.toggle();
-    }
-
-    public createTag() {
-        this.settingsTagService.CreateTag(this.newTagForm.getRawValue()).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.toaster.clearAllToaster();
-            if (response?.status === "success") {
-                this.getTags();
-                this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
-            } else {
-                this.toaster.errorToast(response?.message, response?.code);
-            }
-        });
-        this.toggleTagsModal();
     }
 
     /**
@@ -404,26 +242,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             this.expandAllChange.emit(event);
         }, 10);
     }
-
-    // public onTagSelected(ev) {
-    //     this.selectedTag = ev?.value;
-    //     this.filterForm.get('tagName')?.patchValue(ev?.value);
-    //     this.filterForm.get('refresh')?.patchValue(true);
-    //     this.onPropertyChanged.emit();
-    // }
-
-    /**
-     * Branch change handler
-     *
-     * @memberof FinancialReportsFilterComponent
-     */
-    // public handleBranchChange(selectedEntity: any): void {
-    //     this.currentBranch.name = selectedEntity?.label;
-    //     setTimeout(() => {
-    //         this.expandAllChange.emit(false);
-    //     }, 10);
-    //     this.onPropertyChanged.emit(this.filterForm?.value);
-    // }
 
     /**
      * To show the datepicker
@@ -475,37 +293,5 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
         }
-    }
-
-    /**
-     * Callback for translation response complete
-     *
-     * @param {boolean} event
-     * @memberof FinancialReportsFilterComponent
-     */
-    public translationComplete(event: boolean): void {
-        if (event) {
-            this.dateOptions = [
-                { label: this.commonLocaleData?.app_date_range, value: '1' },
-                { label: this.commonLocaleData?.app_financial_year, value: '0' }
-            ];
-        }
-    }
-
-    /**
-     * Fetching list of tags
-     *
-     * @memberof FinancialReportsFilterComponent
-     */
-    public getTags(): void {
-        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.length > 0) {
-                map(response?.body, (tag) => {
-                    tag.value = tag.name;
-                    tag.label = tag.name;
-                });
-                this.tags = orderBy(response?.body, 'name');
-            }
-        });
     }
 }
