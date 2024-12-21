@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
@@ -9,6 +9,7 @@ import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
 import { cloneDeep } from '../../lodash-optimized';
+import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
@@ -16,6 +17,8 @@ import { cloneDeep } from '../../lodash-optimized';
     providers: [CustomEmailComponentStore]
 })
 export class TemplateFroalaComponent implements OnInit {
+    /** Instance of select multiple fields*/
+    @ViewChildren(SelectMultipleFieldsComponent) childComponents!: QueryList<SelectMultipleFieldsComponent>;
     /** Instance of subject input field */
     @ViewChild('subjectInputField', { static: false }) subjectInputField: ElementRef;
     /** Aside pane state*/
@@ -401,6 +404,11 @@ export class TemplateFroalaComponent implements OnInit {
     */
     public toggleBccCc(emailType: string): void {
         this.setEmailFocus(emailType);
+        if (this.childComponents.length > 0) {
+            this.childComponents.forEach(result => {
+                result?.trigger?.closePanel();
+            });
+        }
         this.showBcc = emailType === EmailType.Bcc ? true : this.showBcc;
         this.showCc = emailType === EmailType.Cc ? true : this.showCc;
     }
