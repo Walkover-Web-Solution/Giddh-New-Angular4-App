@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
-import { cloneDeep, isArray } from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 
 @Component({
