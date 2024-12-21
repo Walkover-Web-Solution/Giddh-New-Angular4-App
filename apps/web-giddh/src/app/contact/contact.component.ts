@@ -1757,12 +1757,13 @@ export class ContactComponent implements OnInit, OnDestroy {
    * @param {any} account
    * @memberof ContactComponent
    */
-    public openCustomEmailDialog(account: any, activeTab: string): void {
+    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
+        const selectedAccounts = this.selectedAccountsList?.map((account) => account.uniqueName);
         const data = {
             activeTab: activeTab,
-            accountUniqueName: account?.uniqueName
+            accountUniqueName: sendBulk ? selectedAccounts : account?.uniqueName
         };
-        this.dialog.open(TemplateFroalaComponent, {
+        const dialogRef =  this.dialog.open(TemplateFroalaComponent, {
             data: data,
             width: 'var(--aside-pane-width)',
             height: '70vh',
@@ -1771,6 +1772,16 @@ export class ContactComponent implements OnInit, OnDestroy {
                 bottom: '0'
             },
             disableClose: true
+      });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1,
+                };
+            }
         });
     }
 }
