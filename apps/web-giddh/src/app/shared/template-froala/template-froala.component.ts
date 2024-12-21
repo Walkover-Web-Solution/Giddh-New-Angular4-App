@@ -10,6 +10,7 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
 import { cloneDeep } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
