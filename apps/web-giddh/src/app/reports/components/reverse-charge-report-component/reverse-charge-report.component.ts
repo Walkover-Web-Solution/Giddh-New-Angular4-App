@@ -4,7 +4,7 @@ import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT }
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -15,7 +15,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { Router } from '@angular/router';
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl, UntypedFormControl } from "@angular/forms";
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -23,11 +23,6 @@ import { UntypedFormControl } from "@angular/forms";
 })
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
-    public inlineSearch: any = '';
-    @ViewChild('suppliersNameField', { static: true }) public suppliersNameField;
-    @ViewChild('invoiceNumberField', { static: true }) public invoiceNumberField;
-    @ViewChild('supplierCountryField', { static: true }) public supplierCountryField;
-
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
@@ -102,12 +97,22 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
       ];
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
-    /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    /** Holds searched name form control */
+    public searchedName: FormControl = new FormControl(null);
+    /** True, if Invoice No search field is to be shown in the filters */
+    public showInvoiceNoSearch: boolean;
+    /** Holds searched Invoice No form control */
+    public searchedInvoiceNo: FormControl = new FormControl(null);
+    /** True, if Country search field is to be shown in the filters */
+    public showCountrySearch: boolean;
+    /** Holds searched Country form control */
+    public searchedCountry: FormControl = new FormControl(null);
+    /** Holds Id of active search input field */
+    public activeSearchField: any = null;
+    /** Holds true if searching is in progress */
+    public isSearching: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    
-    public hero: string;
 
     constructor(
         private store: Store<AppState>,
@@ -211,27 +216,53 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             }
         });
 
-    }
-
-    /**
-     * This will put focus on selected search field
-     *
-     * @param {*} inlineSearch
-     * @memberof ReverseChargeReport
-     */
-    public focusOnColumnSearch(inlineSearch) {
-        this.inlineSearch = inlineSearch;
-
-        setTimeout(() => {
-            if (this.inlineSearch === 'suppliersName') {
-                this.suppliersNameField?.nativeElement.focus();
-            } else if (this.inlineSearch === 'invoiceNumber') {
-                this.invoiceNumberField?.nativeElement.focus();
-            } else if (this.inlineSearch === 'supplierCountry') {
-                this.supplierCountryField?.nativeElement.focus();
+        this.searchedName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.reverseChargeReportPostRequest.supplierName = search;
+                this.isSearching = true;
+                this.checkIfFiltersApplied();
+                this.getReverseChargeReport(true);
             }
-        }, 200);
+        });
+
+        this.searchedInvoiceNo.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.reverseChargeReportPostRequest.invoiceNumber = search;
+                this.isSearching = true;
+                this.checkIfFiltersApplied();
+                this.getReverseChargeReport(true);
+            }
+        });
+
+        this.searchedCountry.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.reverseChargeReportPostRequest.supplierCountry = search;
+                this.isSearching = true;
+                this.checkIfFiltersApplied();
+                this.getReverseChargeReport(true);
+            }
+        });
     }
+
+    // /**
+    //  * This will put focus on selected search field
+    //  *
+    //  * @param {*} inlineSearch
+    //  * @memberof ReverseChargeReport
+    //  */
+    // public focusOnColumnSearch(inlineSearch) {
+    //     this.inlineSearch = inlineSearch;
+
+    //     setTimeout(() => {
+    //         if (this.inlineSearch === 'suppliersName') {
+    //             this.suppliersNameField?.nativeElement.focus();
+    //         } else if (this.inlineSearch === 'invoiceNumber') {
+    //             this.invoiceNumberField?.nativeElement.focus();
+    //         } else if (this.inlineSearch === 'supplierCountry') {
+    //             this.supplierCountryField?.nativeElement.focus();
+    //         }
+    //     }, 200);
+    // }
 
     /**
      * This function will destroy the subscribers
@@ -356,8 +387,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public checkIfFiltersApplied(): boolean {
         if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || (this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT)) || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) {
+            this.isSearching = true;
             return true;
         } else {
+            this.isSearching = false;
             return false;
         }
     }
@@ -468,6 +501,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public toggleSearch(fieldName: string): void {
         if (fieldName === "name") {
             this.showNameSearch = true;
+        } else if (fieldName === "name"){
+            this.showNameSearch = true;
+
         }
     }
 
@@ -496,13 +532,28 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === "name") {
-            if (this.searchedName?.value) {
+            if (this.searchedName.value !== null && this.searchedName.value !== '') {
                 return;
             }
-            if (this.generalService.childOf(event.target, element)) {
+        } else if (searchedFieldName === 'invoiceNo') {
+            if (this.searchedInvoiceNo.value !== null && this.searchedInvoiceNo.value !== '') {
                 return;
-            } else {
+            }
+        } else if (searchedFieldName === 'country') {
+            if (this.searchedCountry.value !== null && this.searchedCountry.value !== '') {
+                return;
+            }
+        }
+
+        if (this.generalService.childOf(event?.target, element)) {
+            return;
+        } else {
+            if (searchedFieldName === "name") {
                 this.showNameSearch = false;
+            } else if (searchedFieldName === 'invoiceNo') {
+                this.showInvoiceNoSearch = false;
+            } else if (searchedFieldName === 'country') {
+                this.showCountrySearch = false;
             }
         }
     }

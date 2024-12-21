@@ -47,6 +47,8 @@ import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 
 @NgModule({
     declarations: [
@@ -108,7 +110,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         SelectTableColumnModule,
         BulkExportVoucherModule,
         MatTableModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatInputModule,
+        SerialNumberPipe
     ]
 })
 

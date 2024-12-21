@@ -36,6 +36,7 @@ import { LiabilityReportComponent } from './liability-report/liability-report.co
 import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
 import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filters.component';
 import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabilities-payments.component';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [
@@ -77,7 +78,8 @@ import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabiliti
         GiddhDateRangepickerModule,
         DatepickerWrapperModule,
         GiddhPageLoaderModule,
-        NewConfirmationModalModule
+        NewConfirmationModalModule,
+        MatInputModule
     ],
     exports: [
         VatReportRoutingModule,
