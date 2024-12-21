@@ -1758,13 +1758,11 @@ export class ContactComponent implements OnInit, OnDestroy {
    * @memberof ContactComponent
    */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
-        const selectedAccounts = this.selectedAccountsList?.map((account) => account.uniqueName);
-        const data = {
-            activeTab: activeTab,
-            accountUniqueName: sendBulk ? selectedAccounts : account?.uniqueName
-        };
         const dialogRef =  this.dialog.open(TemplateFroalaComponent, {
-            data: data,
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
             width: 'var(--aside-pane-width)',
             height: '70vh',
             position: {
@@ -1779,7 +1777,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.selectedAccountsList = [];
                 this.allSelectionModel = false;
                 this.checkboxInfo = {
-                    selectedPage: 1,
+                    selectedPage: 1
                 };
             }
         });
