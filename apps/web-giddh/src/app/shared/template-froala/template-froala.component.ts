@@ -4,11 +4,11 @@ import FroalaEditor from 'froala-editor';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, isArray } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 
 @Component({
@@ -146,7 +146,8 @@ export class TemplateFroalaComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public dialogRef: MatDialogRef<any>
     ) { }
 
     /**
@@ -205,6 +206,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.updateCustomEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.dialog.closeAll();
+                this.dialogRef.close(response);
             }
         });
     }
@@ -383,7 +385,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         const model = {
             ...formValue,
-            customerVendorUniqueNames: [this.inputData?.accountUniqueName]
+            customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName)  ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
         };
 
         // Only add sendMail flag when type is 'send'
