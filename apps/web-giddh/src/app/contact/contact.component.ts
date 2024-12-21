@@ -1779,7 +1779,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.selectedAccountsList = [];
                 this.allSelectionModel = false;
                 this.checkboxInfo = {
-                    selectedPage: 1,
+                    selectedPage: 1
                 };
             }
         });
