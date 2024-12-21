@@ -1764,7 +1764,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
             },
             width: 'var(--aside-pane-width)',
-            height: '70vh',
             position: {
                 right: '15px',
                 bottom: '0'
