@@ -287,7 +287,7 @@
                                             <button
                                                 mat-menu-item
                                                 *ngIf="selectedAccountsList?.length > 0"
-                                                (click)="sendBulkEmail(activeTab === 'vendor'  ? 'vendor' : 'customer')"
+                                                 (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
                                                 aria-label="send bulk email"
                                             >
                                               {{ localeData?.send_bulk_email }}
@@ -708,7 +708,7 @@
                                      <button
                                         mat-menu-item
                                         class="menu-table-item"
-                                        (click)="openCustomEmailDialog(account, activeTab)"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button>
@@ -1055,7 +1055,7 @@
                                     <button
                                         mat-menu-item
                                         class="menu-table-item"
-                                        (click)="openCustomEmailDialog(account, activeTab)"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button>
