@@ -768,7 +768,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
-                    document.getElementById(this.activeSearchField).focus();
+                    document.getElementById(this.activeSearchField)?.focus();
                 }, 200);
             }
         }
