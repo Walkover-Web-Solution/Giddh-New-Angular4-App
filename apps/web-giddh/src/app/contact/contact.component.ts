@@ -246,7 +246,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the send email bulk request  */
     public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
     /** Observable for bulk email success response */
-    public bulkEmailSuccess$: Observable<any> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
+    public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
