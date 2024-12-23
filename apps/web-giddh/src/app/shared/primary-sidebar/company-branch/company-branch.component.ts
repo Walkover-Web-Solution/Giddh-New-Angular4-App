@@ -227,8 +227,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
-
         this.store.dispatch(this.loginAction.ChangeCompany(company?.uniqueName, fetchLastState));
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -430,6 +430,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                 }
             });
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
