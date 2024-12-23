@@ -27,7 +27,7 @@
                         </dropdown-field>
                     </div>
                     <div>
-                        <button mat-stroked-button class="mr-15" type="submit" (click)="linkBankAccount()">
+                        <button mat-stroked-button class="mr-15" type="submit" (click)="linkBankAccount()" [disabled]="!selectedBank">
                             {{ localeData?.payment?.link }}
                         </button>
                     </div>
