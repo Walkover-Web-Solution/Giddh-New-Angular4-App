@@ -213,4 +213,3 @@ export interface SendBulkEmailTemplateRequest {
     customerVendorUniqueNames: string[];
     templateOf: string;
 }
-

@@ -135,8 +135,7 @@ export class ContactService {
      * @returns Observable<BaseResponse<any, string>> API response
      */
     public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';

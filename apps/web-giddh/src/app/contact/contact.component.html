@@ -709,6 +709,7 @@
                                         mat-menu-item
                                         class="menu-table-item"
                                         (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button>
@@ -1054,7 +1055,8 @@
                                     </button>
                                     <button
                                         mat-menu-item
-                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
                                         (click)="openCustomEmailDialog(account, activeTab, false)"
                                     >
                                         {{ commonLocaleData?.app_send_email }}
