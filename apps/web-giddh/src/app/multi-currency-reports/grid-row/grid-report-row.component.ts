@@ -30,31 +30,33 @@ import { SearchService } from '../../services/search.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridReportRowComponent implements OnChanges, OnDestroy {
+    /** Child group details */
     @Input() public groupDetail: ChildGroup;
+    /** Search term for filtering results */
     @Input() public search: string;
+    /** Start date for filtering data (e.g., financial period) */
     @Input() public from: string;
+    /** End date for filtering data (e.g., financial period) */
     @Input() public to: string;
+    /** Padding applied to the component view */
     @Input() public padding: string;
-    /** True, if all items are expanded  */
+    /** True, if all items are expanded */
     @Input() public expandAll: boolean;
+    /** True, when expand all button is toggled while search is enabled */
+    @Input() public isExpandToggledDuringSearch: boolean;
+    /** Emits an event to open the account modal with the selected account details */
+    @Output() public openAccountModal: EventEmitter<any> = new EventEmitter();
+    /** Unique name for the modal */
     public modalUniqueName: string = null;
+    /** Details of the selected account */
     public accountDetails: IFlattenAccountsResultItem;
     /** Minimum limit on which Trial balance viewport enables */
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
-    /** True, when expand all button is toggled while search is enabled */
-    @Input() public isExpandToggledDuringSearch: boolean;
-    /**
-     * Emits open account modal with account details
-     *
-     * @type {EventEmitter<any>}
-     * @memberof GridRowComponent
-     */
-    @Output() public openAccountModal: EventEmitter<any> = new EventEmitter();
-    /** Subject to release subscription memory */
+    /** Subject to release memory when destroying subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private cd: ChangeDetectorRef,
+        private changeDetectionRef: ChangeDetectorRef,
         private searchService: SearchService,
         private renderer: Renderer2,
         @Inject(DOCUMENT) private document: Document
@@ -62,27 +64,41 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-            this.cd.detectChanges();
+        if (changes?.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+            this.changeDetectionRef.detectChanges();
         }
-        if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
-            this.cd.detectChanges();
+        if (changes?.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
+            this.changeDetectionRef.detectChanges();
         }
     }
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+    /**
+     * Open the account ledger in a new tab or in Electron.
+     *
+     * @param {*} account - Selected account details
+     * @returns {void}
+     */
+    public entryClicked(account): void {
+        let url = location.href + '?returnUrl=ledger/' + account?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+            url = location.origin + location.pathname + '#./pages/ledger/' + account?.uniqueName + '/' + this.from + '/' + this.to;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
         }
     }
 
-    public accountInfo(acc, e: Event) {
-        this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+    /**
+     * Load detailed account information and update the modal state.
+     *
+     * @param {*} account - Selected account details
+     * @param {Event} event - Triggering event
+     * @returns {void}
+     * @memberof GridRowComponent
+     */
+    public accountInfo(account, event: Event): void {
+        this.searchService.loadDetails(account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.accountDetails = response.body;
                 const parentGroups = response.body?.parentGroups?.join(', ');
@@ -92,24 +108,39 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
                     this.modalUniqueName = response.body?.uniqueName;
                 } else {
                     this.modalUniqueName = '';
-                    this.entryClicked(acc);
+                    this.entryClicked(account);
                 }
-                this.cd.detectChanges();
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
 
-    public hideModal() {
+    /**
+     * Hide the currently open modal.
+     *
+     * @returns {void}
+     * @memberof GridRowComponent
+     */
+    public hideModal(): void {
         this.modalUniqueName = null;
     }
 
-    public trackByFn(index, item: Account) {
+    /**
+     * Custom track-by function for rendering lists efficiently.
+     *
+     * @param {number} index - Index of the item
+     * @param {Account} item - Current item in the list
+     * @returns {string} - Unique identifier for the item
+     * @memberof GridRowComponent
+     */
+    public trackByFn(index: number, item: Account): string {
         return item?.uniqueName;
     }
 
     /**
      * Releases memory
      *
+     * @returns {void}
      * @memberof GridRowComponent
      */
     public ngOnDestroy(): void {

@@ -8,14 +8,12 @@
         #filter
         (filterValue)="searchData($event)"
         (onPropertyChanged)="filterData()"
-        (seachChange)="searchChanged($event)"
+        (searchChange)="searchChanged($event)"
         (lastSyncDate)="lastDate($event)"
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
     ></filter-multi-currency>
-    <div *ngIf="showLoader | async">
-        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-    </div>
+    <giddh-page-loader  *ngIf="showLoader | async" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     <div *ngIf="data && !(showLoader | async)">
         <profit-loss-report-grid
             #plGrid
@@ -29,9 +27,7 @@
             [lastSyncDate]="lastSyncDate"
         ></profit-loss-report-grid>
     </div>
-    <div *ngIf="!(showLoader | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
-        <div class="d-flex">
-            <h2>{{ localeData?.no_data_found }}</h2>
-        </div>
+    <div *ngIf="!(showLoader | async) && !data" class="text-center tb-pl-bs-data">
+        <h2>{{ localeData?.no_data_found }}</h2>
     </div>
 </ng-container>

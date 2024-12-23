@@ -9,7 +9,6 @@
             <div class="col-xl-9 col-lg-12 col-md-12">
                 <form
                     [formGroup]="filterForm"
-                    (submit)="onSubmit()"
                     class="form-inline financial-select-year"
                     name="fromToDateForm"
                     novalidate
@@ -20,6 +19,7 @@
                         >
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <input
+                                    matInput
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
@@ -29,70 +29,61 @@
                         </div>
                         <div
                             class="form-group mr-r15 linked-entities"
-                            
                         >
-                            <div class="form-group">
-                                <mat-form-field appearance="outline" class="custom-placeholder">
-                                    <mat-label>{{ localeData?.company_list }}</mat-label>
-                                    <mat-select
-                                        name="company"
-                                        formControlName="shareCompanyList"
-                                        multiple
-                                        placeholder="{{ commonLocaleData?.app_select }}"
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ localeData?.company_list }}</mat-label>
+                                <mat-select
+                                    name="company"
+                                    formControlName="shareCompanyList"
+                                    multiple
+                                    placeholder="{{ commonLocaleData?.app_select }}"
+                                >
+                                    <mat-option
+                                        *ngFor="let company of companyList"
+                                        [value]="company?.uniqueName"
                                     >
-                                        <mat-option
-                                            *ngFor="let company of companyList"
-                                            [value]="company?.uniqueName"
-                                        >
-                                            {{ company?.name }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
+                                        {{ company?.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
                         <div class="form-group mr-r15" >
-                            <div class="form-group">
-                                <reactive-dropdown-field
-                                    [label]="localeData?.company_list"
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    [labelValue]="getForm('selectCurrency')?.value"
-                                    [options]="currencyList"
-                                    formControlName="selectCurrency"
-                                    (onClear)="getForm('selectCurrency')?.patchValue(null)"
-                                    [required]="true"
-                                >
-                                </reactive-dropdown-field>
-                            </div>
+                            <reactive-dropdown-field
+                                [label]="localeData?.company_list"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [labelValue]="getForm('selectCurrency')?.value"
+                                [options]="currencyList"
+                                formControlName="selectCurrency"
+                                (onClear)="getForm('selectCurrency')?.patchValue(this.activeCompany?.baseCurrency)"
+                                [required]="true"
+                            >
+                            </reactive-dropdown-field>
                         </div>
                         
-                        <div class="form-group mr-r15" >
-                            <div class="form-group">
-                                <a
-                                    class="cp expand-icon"
-                                    (click)="emitExpand(true)"
-                                    data-placement="top"
-                                    tooltip="{{ commonLocaleData?.app_expand_all }}"
-                                    *ngIf="!expandAll"
-                                >
-                                    <span class="icon-expandIcon"></span>
-                                </a>
-                                <a
-                                    class="cp expand-icon"
-                                    (click)="emitExpand(false)"
-                                    data-placement="top"
-                                    tooltip="{{ commonLocaleData?.app_collapse_all }}"
-                                    *ngIf="expandAll"
-                                >
-                                    <span class="icon-collapse"></span>
-                                </a>
-                            </div>
+                        <div class="mr-r15 mr-t1" >
+                            <a
+                                class="cursor-pointer expand-icon"
+                                (click)="emitExpand(true)"
+                                data-placement="top"
+                                [matTooltip]="commonLocaleData?.app_expand_all"
+                                *ngIf="!expandAll"
+                            >
+                                <span  class="icon-expandIcon"></span>
+                            </a>
+                            <a
+                                class="cursor-pointer expand-icon"
+                                (click)="emitExpand(false)"
+                                data-placement="top"
+                                [matTooltip]="commonLocaleData?.app_collapse_all"
+                                *ngIf="expandAll"
+                            >
+                                <span class="icon-collapse"></span>
+                            </a>
                         </div>
                         <div class="form-group mr-r15" >
-                            <div class="form-group">
-                                <button mat-stroked-button color="primary">
-                                    {{ commonLocaleData?.app_view }}
-                                </button>
-                            </div>
+                            <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                {{ commonLocaleData?.app_view }}
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -100,14 +91,6 @@
             
         </div>
     </div>
-    <!-- for mobile view only -->
-
-    <!-- for mobile view only -->
-
-    <!-- end box  -->
-    <!-- create tag modal -->
-
-    <!-- create tag modal -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">

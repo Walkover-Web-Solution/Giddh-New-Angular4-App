@@ -3,27 +3,19 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    EventEmitter,
     Input,
     OnDestroy,
-    Output,
     ViewChild,
 } from '@angular/core';
-import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CompanyResponse } from '../../models/api-models/Company';
 import { BalanceSheetData, ProfitLossRequest } from '../../models/api-models/tb-pl-bs';
 import { BalanceSheetReportGridComponent } from './components/balance-sheet-grid/balance-sheet-report-grid.component';
-import { AppState } from '../../store';
-import { TBPlBsActions } from '../../actions/tl-pl.actions';
-import { ToasterService } from '../../services/toaster.service';
-import { cloneDeep, each } from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ReportType } from '../multi-currency.const';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 import { prepareBalanceSheetData } from '../../store/tl-pl/tl-pl.reducer';
-
 
 @Component({
     selector: 'balance-sheet-report',
@@ -32,41 +24,16 @@ import { prepareBalanceSheetData } from '../../store/tl-pl/tl-pl.reducer';
     providers: [MultiCurrencyReportsComponentStore]
 })
 export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
-    /**
-     * Retrieves the selected company
-     *
-     * @returns {CompanyResponse} The currently selected company
-     * @memberof BalanceSheetReportComponent
-    */
-    public get selectedCompany(): CompanyResponse {
-        return this._selectedCompany;
-    }
-        
-    /**
-     * Sets the selected company and fetches its data
-     *
-     * @param {CompanyResponse} value The company to set
-     * @memberof BalanceSheetReportComponent
-     */
-    @Input()
-    public set selectedCompany(value: CompanyResponse) {
-        this._selectedCompany = value;
-        if (value && value.activeFinancialYear && value.financialYears && !this.isDateSelected) {
-            let index = this.findIndex(value.activeFinancialYear, value.financialYears);
-            this.request = {
-                refresh: false,
-                fy: index,
-                from: value.activeFinancialYear.financialYearStarts,
-                to: value.activeFinancialYear.financialYearEnds
-            };
-        }
-    }
+    /** Reference to the balance sheet grid component */
+    @ViewChild('bsGrid', { static: true }) public bsGrid: BalanceSheetReportGridComponent;
+    /** Indicates whether a date has been selected */
+    @Input() public isDateSelected: boolean = false;
     /** Holds the local JSON data */
     public localeData: any = {};
     /** Holds the common JSON data */
     public commonLocaleData: any = {};
     /** Observable to indicate if the loader is visible */
-    public showLoader: Observable<boolean>;
+    public showLoader: Observable<boolean> = this.componentStore.inProgressReport$;;
     /** Stores the balance sheet data */
     public data: BalanceSheetData;
     /** Stores the profit and loss request parameters */
@@ -81,28 +48,15 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     public to: string;
     /** Stores the last sync date */
     public lastSyncDate: string = "";
-    /** Indicates whether a date has been selected */
-    @Input() public isDateSelected: boolean = false;
-    /** Reference to the balance sheet grid component */
-    @ViewChild('bsGrid', { static: true }) public bsGrid: BalanceSheetReportGridComponent;
     /** Subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Stores the selected company data */
-    private _selectedCompany: CompanyResponse;
 
-    constructor(public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: MultiCurrencyReportsComponentStore) {
-        this.showLoader = this.componentStore.inProgressReport$;
+    constructor(private changeDetectionRef: ChangeDetectorRef, private componentStore: MultiCurrencyReportsComponentStore) {
         this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                let data = prepareBalanceSheetData(cloneDeep(response)); 
-                if (data && data.message) {
-                    setTimeout(() => {
-                        this.toaster.clearAllToaster();
-                        this.toaster.infoToast(data.message);
-                    }, 100);
-                }
+                let data = prepareBalanceSheetData(cloneDeep(response));
                 if (data && data.liabilities) {
-                    this.InitData(data.liabilities);
+                    this.initData(data.liabilities);
                     data.liabilities.forEach(childGroup => {
                         childGroup['isVisible'] = true;
                         childGroup['isCreated'] = true;
@@ -110,7 +64,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                     });
                 }
                 if (data && data.assets) {
-                    this.InitData(data.assets);
+                    this.initData(data.assets);
                     data.assets.forEach(childGroup => {
                         childGroup['isVisible'] = true;
                         childGroup['isCreated'] = true;
@@ -118,7 +72,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                     });
                 }
                 this.data = data;
-                this.cd.detectChanges();
+                this.changeDetectionRef.detectChanges();
             } else {
                 this.data = null;
             }
@@ -127,22 +81,22 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
 
     /**
      * Initializes data for the balance sheet groups
-     *
+     * @returns {void}
      * @param {ChildGroup[]} groupList The list of child groups
      * @memberof BalanceSheetReportComponent
      */
-    public InitData(groupList: ChildGroup[]) {
-        each(groupList, (childGroup: ChildGroup) => {
+    public initData(groupList: ChildGroup[]): void {
+        groupList.forEach((childGroup: ChildGroup) => {
             childGroup['isVisible'] = false;
             childGroup['isCreated'] = false;
             childGroup['isIncludedInSearch'] = true;
-            each(childGroup.accounts, (account: Account) => {
+            childGroup.accounts.forEach((account: Account) => {
                 account['isIncludedInSearch'] = true;
                 account['isCreated'] = false;
                 account['isVisible'] = false;
             });
             if (childGroup.childGroups) {
-                this.InitData(childGroup.childGroups);
+                this.initData(childGroup.childGroups);
             }
         });
     }
@@ -150,44 +104,47 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Detects changes after the view is initialized
      *
+     * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
-    public ngAfterViewInit() {
-        this.cd.detectChanges();
+    public ngAfterViewInit(): void {
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
      * Filters data based on the given request
      *
-     * 
+     * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
-    public filterData() {
+    public filterData(): void {
         this.componentStore.getMultiCurrencyReport(ReportType.BalanceSheet);
     }
     /**
      * Updates the last sync date
      *
      * @param {*} event The event containing the sync date
+     * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
-    public lastDate(event: any){
-        this.lastSyncDate = event ;
+    public lastDate(event: any): void {
+        this.lastSyncDate = event;
     }
 
     /**
      * Searches and updates data based on the provided criteria
      *
+     * @returns {void}
      * @param {*} event The event containing search criteria
      * @memberof BalanceSheetReportComponent
      */
-    public searchData(event: any) {
+    public searchData(event: any): void {
         this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.BalanceSheet, payload: event });
     }
 
     /**
      * Cleans up resources when the component is destroyed
-     *
+     * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
     public ngOnDestroy(): void {
@@ -198,14 +155,14 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Finds the index of the active financial year in the list of financial years
      *
-     * @param {*} activeFY The active financial year
-     * @param {*} financialYears The list of financial years
+     * @param {any} activeFY The active financial year
+     * @param {any} financialYears The list of financial years
      * @returns {number} The index of the active financial year
      * @memberof BalanceSheetReportComponent
      */
-    public findIndex(activeFY, financialYears) {
+    public findIndex(activeFY: any, financialYears: any): number {
         let tempFYIndex = 0;
-        each(financialYears, (fy: any, index: number) => {
+        financialYears.forEach((fy: any, index: number) => {
             if (fy?.uniqueName === activeFY?.uniqueName) {
                 if (index === 0) {
                     tempFYIndex = index;
@@ -220,26 +177,28 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Expands all items in the balance sheet
      *
+     * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
-    public expandAllEvent() {
+    public expandAllEvent(): void {
         setTimeout(() => {
-            this.cd.detectChanges();
+            this.changeDetectionRef.detectChanges();
         }, 1);
     }
 
     /**
      * Updates the search text and handles search functionality
      *
+     * @returns {void}
      * @param {string} event The new search text
      * @memberof BalanceSheetReportComponent
      */
-    public searchChanged(event: string) {
+    public searchChanged(event: string): void {
         this.search = event;
         if (!this.search) {
             this.expandAll = false;
         }
-        this.cd.detectChanges();
+        this.changeDetectionRef.detectChanges();
     }
 
 }

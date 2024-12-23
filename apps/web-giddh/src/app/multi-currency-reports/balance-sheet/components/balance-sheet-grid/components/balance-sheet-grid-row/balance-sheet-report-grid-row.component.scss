@@ -7,14 +7,6 @@
     white-space: nowrap;
     min-width: 150px;
 }
-.account {
-    div {
-        -webkit-line-clamp: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
 .trial-balance-viewport {
     background-color: var(--color-common-quinary-background-for-all-components);
 }
