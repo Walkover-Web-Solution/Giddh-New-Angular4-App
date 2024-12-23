@@ -168,7 +168,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const emailSuggestions = this.inputData.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
+                const emailSuggestions = this.inputData?.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
                 const tributeSuggestions = emailSuggestions?.map(item => ({
                     value: item,
                     key: item
