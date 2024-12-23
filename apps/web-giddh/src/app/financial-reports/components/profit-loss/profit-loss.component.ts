@@ -65,11 +65,13 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
+            console.log(p);
+
             if (p) {
                 let data = cloneDeep(p) as ProfitLossData;
                 let cogs;
-                if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
-                    cogs = cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
+                if (data && data.incomeStatement && data.incomeStatement.costOfGoodsSold) {
+                    cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as GetCogsResponse;
                 } else {
                     cogs = null;
                 }
@@ -156,12 +158,12 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                 }
 
-                if (data?.incomeStatment?.grossProfit?.type === "DEBIT" && data.incomeStatment.grossProfit.amount) {
-                    data.incomeStatment.grossProfit.amount = "-" + data.incomeStatment.grossProfit.amount;
+                if (data?.incomeStatement?.grossProfit?.type === "DEBIT" && data.incomeStatement.grossProfit.amount) {
+                    data.incomeStatement.grossProfit.amount = "-" + data.incomeStatement.grossProfit.amount;
                 }
 
-                if (data?.incomeStatment?.operatingProfit?.type === "DEBIT" && data.incomeStatment.operatingProfit.amount) {
-                    data.incomeStatment.operatingProfit.amount = "-" + data.incomeStatment.operatingProfit.amount;
+                if (data?.incomeStatement?.operatingProfit?.type === "DEBIT" && data.incomeStatement.operatingProfit.amount) {
+                    data.incomeStatement.operatingProfit.amount = "-" + data.incomeStatement.operatingProfit.amount;
                 }
 
                 this.data = data;
