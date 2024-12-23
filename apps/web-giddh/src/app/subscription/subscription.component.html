@@ -4,7 +4,11 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="setting-page user-detail-page relative overflow-visible" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+    <div
+        class="setting-page user-detail-page relative overflow-visible"
+        id="setting-tab"
+        *ngIf="!isCreateAndSwitchCompanyInProcess"
+    >
         <div class="video-link position-absolute mr-r15" *ngIf="activeTabIndex === 1">
             <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'TWO_FACTOR_AUTHENTICATION'"></watch-video>
         </div>
@@ -357,7 +361,7 @@
                 </div>
             </mat-tab>
             <mat-tab [label]="localeData?.subscription?.tab_heading">
-                    <subscription-list></subscription-list>
+                <subscription-list></subscription-list>
             </mat-tab>
         </mat-tab-group>
 

@@ -25,25 +25,33 @@
             >
             </mat-datepicker-toggle>
         </ng-container>
-        <mat-datepicker [opened]="isOpened" (closed)="isDatepickerOpen = false; emitDatepickerState(false)" #picker></mat-datepicker>
+        <mat-datepicker
+            [opened]="isOpened"
+            (closed)="isDatepickerOpen = false; emitDatepickerState(false)"
+            #picker
+        ></mat-datepicker>
     </mat-form-field>
 </ng-container>
 
 <ng-container *ngIf="hideLabel">
-        <input
-            matInput
-            [matDatepicker]="picker"
-            [placeholder]="placeholder"
-            [value]="calendarDate"
-            [min]="minDate"
-            autocomplete="off"
-            (focus)="emitDatepickerState(true); picker.open()"
-            (click)="emitDatepickerState(true); picker.open()"
-            (dateChange)="dateChange($event)"
-            [class]="cssClass"
-            [disabled]="disabled"
-            [ngClass]="{ 'error-box': showError }"
-            [required]="required"
-        />
-        <mat-datepicker [opened]="isOpened" (closed)="isDatepickerOpen = false; emitDatepickerState(false)" #picker></mat-datepicker>
+    <input
+        matInput
+        [matDatepicker]="picker"
+        [placeholder]="placeholder"
+        [value]="calendarDate"
+        [min]="minDate"
+        autocomplete="off"
+        (focus)="emitDatepickerState(true); picker.open()"
+        (click)="emitDatepickerState(true); picker.open()"
+        (dateChange)="dateChange($event)"
+        [class]="cssClass"
+        [disabled]="disabled"
+        [ngClass]="{ 'error-box': showError }"
+        [required]="required"
+    />
+    <mat-datepicker
+        [opened]="isOpened"
+        (closed)="isDatepickerOpen = false; emitDatepickerState(false)"
+        #picker
+    ></mat-datepicker>
 </ng-container>

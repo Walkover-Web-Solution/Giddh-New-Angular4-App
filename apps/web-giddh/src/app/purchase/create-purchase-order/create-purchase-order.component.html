@@ -16,7 +16,7 @@
         [ngClass]="{
             'create-purchase-order-form': true,
             'customer-purchase-order': !purchaseOrder.voucherDetails.customerName,
-            'for-multi-currency': isMulticurrencyAccount
+            'for-multi-currency': isMulticurrencyAccount,
         }"
         [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }"
     >
@@ -52,7 +52,8 @@
                                                     [doNotReset]="true"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('vendor')"
-                                                    (dynamicSearchedQuery)="  isAccountSearchData = true;
+                                                    (dynamicSearchedQuery)="
+                                                        isAccountSearchData = true;
                                                         onSearchQueryChanged($event, 1, 'vendor')
                                                     "
                                                     [notFoundMsg]="noResultsFoundLabel"
@@ -97,9 +98,12 @@
                                                     *ngIf="purchaseOrder.voucherDetails.customerName"
                                                 >
                                                     <span class="cp aqua-color" *ngIf="!isUpdateMode">
-                                                        <a href="javascript:void(0)" aria-label="vendor details" (click)="getVendorDetails()">{{
-                                                            localeData?.vendor_details
-                                                        }}</a>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            aria-label="vendor details"
+                                                            (click)="getVendorDetails()"
+                                                            >{{ localeData?.vendor_details }}</a
+                                                        >
                                                     </span>
                                                 </div>
                                                 <!-- endregion -->
@@ -291,7 +295,10 @@
                                                                         class="col-sm-12 col-md-6"
                                                                         *ngIf="
                                                                             shouldShowTrnGstVatField &&
-                                                                            (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
+                                                                            (showGSTINNo ||
+                                                                                showTRNNo ||
+                                                                                showVATNo ||
+                                                                                showSalesTaxNo)
                                                                         "
                                                                     >
                                                                         <input
@@ -317,12 +324,12 @@
                                                                                 showGSTINNo
                                                                                     ? commonLocaleData?.app_gstin
                                                                                     : showTRNNo
-                                                                                    ? commonLocaleData?.app_trn
-                                                                                    : showVATNo
-                                                                                    ? commonLocaleData?.app_enter_vat
-                                                                                    : showSalesTaxNo 
-                                                                                    ? commonLocaleData?.app_enter_sales_tax
-                                                                                    : ''
+                                                                                      ? commonLocaleData?.app_trn
+                                                                                      : showVATNo
+                                                                                        ? commonLocaleData?.app_enter_vat
+                                                                                        : showSalesTaxNo
+                                                                                          ? commonLocaleData?.app_enter_sales_tax
+                                                                                          : ''
                                                                             "
                                                                         />
                                                                     </div>
@@ -330,13 +337,16 @@
                                                                     <div
                                                                         [ngClass]="{
                                                                             'col-sm-12 col-md-6':
-                                                                                showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo,
+                                                                                showGSTINNo ||
+                                                                                showTRNNo ||
+                                                                                showVATNo ||
+                                                                                showSalesTaxNo,
                                                                             'col-sm-12 col-md-12': !(
                                                                                 showGSTINNo ||
                                                                                 showTRNNo ||
                                                                                 showVATNo ||
                                                                                 showSalesTaxNo
-                                                                            )
+                                                                            ),
                                                                         }"
                                                                     >
                                                                         <div class="form-group mr-b05">
@@ -455,7 +465,7 @@
                                                             <div
                                                                 [ngClass]="{
                                                                     'billing-address': true,
-                                                                    'disabled': autoFillVendorShipping
+                                                                    'disabled': autoFillVendorShipping,
                                                                 }"
                                                             >
                                                                 <textarea
@@ -540,7 +550,10 @@
                                                                             class="col-sm-12 col-md-6"
                                                                             *ngIf="
                                                                                 shouldShowTrnGstVatField &&
-                                                                                (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
+                                                                                (showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo ||
+                                                                                    showSalesTaxNo)
                                                                             "
                                                                         >
                                                                             <input
@@ -565,12 +578,12 @@
                                                                                     showGSTINNo
                                                                                         ? commonLocaleData?.app_gstin
                                                                                         : showTRNNo
-                                                                                        ? commonLocaleData?.app_trn
-                                                                                        : showVATNo
-                                                                                        ? commonLocaleData?.app_enter_vat
-                                                                                        : showSalesTaxNo
-                                                                                        ? commonLocaleData?.app_enter_sales_tax
-                                                                                        : ''
+                                                                                          ? commonLocaleData?.app_trn
+                                                                                          : showVATNo
+                                                                                            ? commonLocaleData?.app_enter_vat
+                                                                                            : showSalesTaxNo
+                                                                                              ? commonLocaleData?.app_enter_sales_tax
+                                                                                              : ''
                                                                                 "
                                                                             />
                                                                         </div>
@@ -587,7 +600,7 @@
                                                                                     showTRNNo ||
                                                                                     showVATNo ||
                                                                                     showSalesTaxNo
-                                                                                )
+                                                                                ),
                                                                             }"
                                                                         >
                                                                             <div class="form-group mr-b05">
@@ -714,15 +727,19 @@
                                                                             {{
                                                                                 address.taxNumber
                                                                                     ? (showGSTINNo
-                                                                                          ? commonLocaleData?.app_gstin + ":"
+                                                                                          ? commonLocaleData?.app_gstin +
+                                                                                            ":"
                                                                                           : showTRNNo
-                                                                                          ? commonLocaleData?.app_trn + ":"
-                                                                                          : showVATNo
-                                                                                          ? commonLocaleData?.app_enter_vat + ":"
-                                                                                          : showSalesTaxNo
-                                                                                          ? commonLocaleData?.app_enter_sales_tax + ":"
-                                                                                          : ""
-                                                                                        ) + address.gstNumber
+                                                                                            ? commonLocaleData?.app_trn +
+                                                                                              ":"
+                                                                                            : showVATNo
+                                                                                              ? commonLocaleData?.app_enter_vat +
+                                                                                                ":"
+                                                                                              : showSalesTaxNo
+                                                                                                ? commonLocaleData?.app_enter_sales_tax +
+                                                                                                  ":"
+                                                                                                : "") +
+                                                                                      address.gstNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
@@ -830,7 +847,10 @@
                                                                 class="col-sm-12 col-md-6"
                                                                 *ngIf="
                                                                     shouldShowTrnGstVatField &&
-                                                                    (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
+                                                                    (showGSTINNo ||
+                                                                        showTRNNo ||
+                                                                        showVATNo ||
+                                                                        showSalesTaxNo)
                                                                 "
                                                             >
                                                                 <input
@@ -852,12 +872,12 @@
                                                                         showGSTINNo
                                                                             ? commonLocaleData?.app_gstin
                                                                             : showTRNNo
-                                                                            ? commonLocaleData?.app_trn
-                                                                            : showVATNo
-                                                                            ? commonLocaleData?.app_enter_vat
-                                                                            : showSalesTaxNo
-                                                                            ? commonLocaleData?.app_enter_sales_tax
-                                                                            : ''
+                                                                              ? commonLocaleData?.app_trn
+                                                                              : showVATNo
+                                                                                ? commonLocaleData?.app_enter_vat
+                                                                                : showSalesTaxNo
+                                                                                  ? commonLocaleData?.app_enter_sales_tax
+                                                                                  : ''
                                                                     "
                                                                 />
                                                             </div>
@@ -865,13 +885,16 @@
                                                             <div
                                                                 [ngClass]="{
                                                                     'col-sm-12 col-md-6':
-                                                                        showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo,
+                                                                        showGSTINNo ||
+                                                                        showTRNNo ||
+                                                                        showVATNo ||
+                                                                        showSalesTaxNo,
                                                                     'col-sm-12 col-md-12': !(
                                                                         showGSTINNo ||
                                                                         showTRNNo ||
                                                                         showVATNo ||
                                                                         showSalesTaxNo
-                                                                    )
+                                                                    ),
                                                                 }"
                                                             >
                                                                 <div class="form-group mr-b05">
@@ -967,16 +990,20 @@
                                                                             }}
                                                                             {{
                                                                                 address.taxNumber
-                                                                                    ?   (showGSTINNo
-                                                                                            ? commonLocaleData?.app_gstin + ":"
-                                                                                            : showTRNNo
-                                                                                            ? commonLocaleData?.app_trn + ":"
+                                                                                    ? (showGSTINNo
+                                                                                          ? commonLocaleData?.app_gstin +
+                                                                                            ":"
+                                                                                          : showTRNNo
+                                                                                            ? commonLocaleData?.app_trn +
+                                                                                              ":"
                                                                                             : showVATNo
-                                                                                            ? commonLocaleData?.app_enter_vat + ":"
-                                                                                            : showSalesTaxNo
-                                                                                            ? commonLocaleData?.app_enter_sales_tax + ":"
-                                                                                            : ""
-                                                                                        ) + address.gstNumber
+                                                                                              ? commonLocaleData?.app_enter_vat +
+                                                                                                ":"
+                                                                                              : showSalesTaxNo
+                                                                                                ? commonLocaleData?.app_enter_sales_tax +
+                                                                                                  ":"
+                                                                                                : "") +
+                                                                                      address.gstNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
@@ -988,7 +1015,7 @@
                                                     <div
                                                         [ngClass]="{
                                                             'billing-address': true,
-                                                            'disabled': autoFillCompanyShipping
+                                                            'disabled': autoFillCompanyShipping,
                                                         }"
                                                     >
                                                         <textarea
@@ -1089,7 +1116,10 @@
                                                                     class="col-sm-12 col-md-6"
                                                                     *ngIf="
                                                                         shouldShowTrnGstVatField &&
-                                                                        (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
+                                                                        (showGSTINNo ||
+                                                                            showTRNNo ||
+                                                                            showVATNo ||
+                                                                            showSalesTaxNo)
                                                                     "
                                                                 >
                                                                     <input
@@ -1114,12 +1144,12 @@
                                                                             showGSTINNo
                                                                                 ? commonLocaleData?.app_gstin
                                                                                 : showTRNNo
-                                                                                ? commonLocaleData?.app_trn
-                                                                                : showVATNo
-                                                                                ? commonLocaleData?.app_enter_vat
-                                                                                : showSalesTaxNo
-                                                                                ? commonLocaleData?.app_enter_sales_tax
-                                                                                : ''
+                                                                                  ? commonLocaleData?.app_trn
+                                                                                  : showVATNo
+                                                                                    ? commonLocaleData?.app_enter_vat
+                                                                                    : showSalesTaxNo
+                                                                                      ? commonLocaleData?.app_enter_sales_tax
+                                                                                      : ''
                                                                         "
                                                                     />
                                                                 </div>
@@ -1127,13 +1157,16 @@
                                                                 <div
                                                                     [ngClass]="{
                                                                         'col-sm-12 col-md-6':
-                                                                            showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo,
+                                                                            showGSTINNo ||
+                                                                            showTRNNo ||
+                                                                            showVATNo ||
+                                                                            showSalesTaxNo,
                                                                         'col-sm-12 col-md-12': !(
                                                                             showGSTINNo ||
                                                                             showTRNNo ||
                                                                             showVATNo ||
                                                                             showSalesTaxNo
-                                                                        )
+                                                                        ),
                                                                     }"
                                                                 >
                                                                     <div class="form-group mr-b05">
@@ -1273,7 +1306,11 @@
             </div>
         </div>
         <ng-container *ngIf="!purchaseOrder.account?.uniqueName">
-            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" alt="search vendor" />
+            <img
+                src="assets/images/new/search-vendor.svg"
+                class="img-responsive search-arrow-image"
+                alt="search vendor"
+            />
         </ng-container>
         <section
             *ngIf="!isMobileScreen"
@@ -1716,8 +1753,8 @@
                                         [notFoundLink]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="handleScrollEnd('item')"
-                                        (dynamicSearchedQuery)="isAccountSearchData = true;
-                                            onSearchQueryChanged($event, 1, 'item')
+                                        (dynamicSearchedQuery)="
+                                            isAccountSearchData = true; onSearchQueryChanged($event, 1, 'item')
                                         "
                                         (onHide)="noResultsFoundLabel = localeData?.search_acc"
                                         [notFoundMsg]="noResultsFoundLabel"
@@ -1736,7 +1773,11 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    aria-label="uniqueName"
+                                                    class="list-item flex-column"
+                                                >
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
@@ -1744,7 +1785,11 @@
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    aria-label="uniqueName"
+                                                    class="list-item flex-column"
+                                                >
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
@@ -2189,7 +2234,9 @@
                 <div class="p-1 aqua-color add-line-bulk-item">
                     <a href="javascript:void 0" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
                     <span class="font-15"> | </span>
-                    <a (click)="addBulkItems()" href="javascript:;" aria-label="bulk entries">{{ localeData?.add_bulk_entries }}</a>
+                    <a (click)="addBulkItems()" href="javascript:;" aria-label="bulk entries">{{
+                        localeData?.add_bulk_entries
+                    }}</a>
                 </div>
                 <!-- endregion -->
                 <tfoot>
@@ -2827,7 +2874,11 @@
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
+                                                            <a
+                                                                href="javascript:void(0)"
+                                                                aria-label="uniqueName"
+                                                                class="list-item flex-column"
+                                                            >
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
@@ -2835,7 +2886,11 @@
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
+                                                            <a
+                                                                href="javascript:void(0)"
+                                                                aria-label="uniqueName"
+                                                                class="list-item flex-column"
+                                                            >
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
@@ -2906,7 +2961,10 @@
                                                                         >{{ commonLocaleData?.app_update }}
                                                                     </span>
                                                                     <span class="edit-icon cp">
-                                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit" />
+                                                                        <img
+                                                                            src="assets/images/edit-pencilicon.svg"
+                                                                            alt="edit"
+                                                                        />
                                                                     </span>
                                                                 </span>
                                                             </div>
@@ -3240,7 +3298,10 @@
                                                                 aria-label="image"
                                                                 (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                             >
-                                                                <img src="assets/images/edit-pencilicon.svg" alt="edit icon" />
+                                                                <img
+                                                                    src="assets/images/edit-pencilicon.svg"
+                                                                    alt="edit icon"
+                                                                />
                                                             </a>
                                                         </span>
 

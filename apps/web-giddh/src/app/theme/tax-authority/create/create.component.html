@@ -1,9 +1,13 @@
-<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'settings/tax-authority'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="tax-authority h-100">
         <div class="dialog-header">
             <span mat-dialog-title class="font-16">
-                {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}  
+                {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_tax_authority }}
             </span>
             <i mat-dialog-close class="icon-cross"></i>
         </div>
@@ -42,7 +46,7 @@
                 </div>
                 <div class="mr-t3">
                     <button mat-stroked-button color="primary" (click)="createUpdateTaxAuthority()">
-                        {{taxAuthorityInfo?.uniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create}}
+                        {{ taxAuthorityInfo?.uniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create }}
                     </button>
                 </div>
             </form>

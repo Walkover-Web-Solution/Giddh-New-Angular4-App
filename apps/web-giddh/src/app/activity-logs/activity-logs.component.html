@@ -109,7 +109,11 @@
                     </select-field>
                 </div>
                 <span class="delete-row" *ngIf="selectedFields?.length > 1">
-                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" class="remove-filter" aria-label="delete icon"
+                    <a
+                        href="javascript:;"
+                        (click)="removeFilter(selectedField, i)"
+                        class="remove-filter"
+                        aria-label="delete icon"
                         ><i class="icon-trash"></i
                     ></a>
                 </span>

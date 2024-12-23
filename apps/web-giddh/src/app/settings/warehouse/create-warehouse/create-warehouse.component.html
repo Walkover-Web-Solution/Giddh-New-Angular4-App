@@ -39,7 +39,12 @@
                     </div>
                     <div class="col-lg-2 col-sm-2">
                         <div class="warehouse-image">
-                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image" alt="warehouse image" />
+                            <img
+                                class="warehouse-image m-15"
+                                src="{{ imgPath }}"
+                                [alt]="localeData?.warehouse_image"
+                                alt="warehouse image"
+                            />
                         </div>
                     </div>
                 </div>
@@ -50,7 +55,11 @@
                         <div class="form-group mb-0">
                             <input-field
                                 [label]="localeData?.warehouse_name"
-                                [cssClass]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid ? 'error-box' : ''"
+                                [cssClass]="
+                                    warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid
+                                        ? 'error-box'
+                                        : ''
+                                "
                                 [type]="'text'"
                                 [maxlength]="100"
                                 [required]="true"
@@ -59,7 +68,7 @@
                         </div>
                     </div>
                     <div class="warehouse-form-field">
-                        <div class="form-group mb-0"> 
+                        <div class="form-group mb-0">
                             <reactive-dropdown-field
                                 #address
                                 [options]="addresses.addressToShow"
@@ -79,7 +88,13 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button mat-stroked-button type="button" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
+                        <button
+                            mat-stroked-button
+                            type="button"
+                            aria-label="clear"
+                            (click)="handleFormClear()"
+                            class="btn custom-btn"
+                        >
                             {{ commonLocaleData?.app_clear }}
                         </button>
                         <button

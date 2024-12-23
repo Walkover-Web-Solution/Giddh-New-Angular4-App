@@ -135,11 +135,7 @@
                             <div class="col-sm-7 col-xs-12">
                                 <div class="row">
                                     <div class="col-6 col-sm-6">
-                                        <mat-slide-toggle
-                                            color="primary"
-                                            id="includeTag"
-                                            formControlName="includeTag"
-                                        >
+                                        <mat-slide-toggle color="primary" id="includeTag" formControlName="includeTag">
                                             <span
                                                 class="pull-left"
                                                 *ngIf="advanceSearchForm.get('includeTag')?.value"
@@ -237,14 +233,16 @@
                                                         <span
                                                             class="pull-left"
                                                             *ngIf="
-                                                                advanceSearchForm.get('inventory.includeInventory')?.value
+                                                                advanceSearchForm.get('inventory.includeInventory')
+                                                                    ?.value
                                                             "
                                                             >{{ commonLocaleData?.app_include }}</span
                                                         >
                                                         <span
                                                             class="pull-right"
                                                             *ngIf="
-                                                                !advanceSearchForm.get('inventory.includeInventory')?.value
+                                                                !advanceSearchForm.get('inventory.includeInventory')
+                                                                    ?.value
                                                             "
                                                             >{{ commonLocaleData?.app_exclude }}</span
                                                         >

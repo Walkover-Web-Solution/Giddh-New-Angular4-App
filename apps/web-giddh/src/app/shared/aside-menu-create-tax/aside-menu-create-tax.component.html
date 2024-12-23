@@ -1,12 +1,21 @@
-<ng-container 
+<ng-container
     appTranslate
     [file]="'settings/taxes'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)">
-    <div class="aside-pane" role="dialog" aria-labelledby="modal-title" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
+    (translationComplete)="translationComplete($event)"
+>
+    <div
+        class="aside-pane"
+        role="dialog"
+        aria-labelledby="modal-title"
+        [keyboardShortcut]="'esc'"
+        (onShortcutPress)="closeEvent.emit()"
+    >
         <div class="form-header">
-            <h2 class="aside-title" tabindex="0">{{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h2>
+            <h2 class="aside-title" tabindex="0">
+                {{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}
+            </h2>
         </div>
         <button id="closedialog" (click)="closeEvent.emit()" aria-label="cross"><i class="icon-cross"></i></button>
         <div class="aside-body aside-create-tax-component">
@@ -16,22 +25,25 @@
                         <giddh-page-loader></giddh-page-loader>
                     </div>
                     <form #taxForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="!(isTaxAuthoritiesLoading$ | async)">
-
                         <div class="row" *ngIf="isUSCompany">
                             <div class="form-group col-sm-6 col-xs-12">
-                                <label>{{ commonLocaleData?.app_tax_authority }} <span class="text-danger">*</span> </label
-                                    ><br />
-                                    <sh-select
-                                        [options]="taxAuthorityList"
-                                        name="taxAuthority"
-                                        [(ngModel)]="newTaxObj.taxAuthorityRequest.uniqueName"
-                                        [defaultValue]="selectedTaxAuthority"
-                                        [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
-                                        [ngClass]="{ 'placeholder-black': selectedTaxAuthority }"
-                                        [ItemHeight]="33"
-                                        required
-                                        [isRequired]="true"
-                                    ></sh-select>
+                                <label
+                                    >{{ commonLocaleData?.app_tax_authority }}
+                                    <span class="text-danger">*</span> </label
+                                ><br />
+                                <sh-select
+                                    [options]="taxAuthorityList"
+                                    name="taxAuthority"
+                                    [(ngModel)]="newTaxObj.taxAuthorityRequest.uniqueName"
+                                    [defaultValue]="selectedTaxAuthority"
+                                    [placeholder]="
+                                        commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority
+                                    "
+                                    [ngClass]="{ 'placeholder-black': selectedTaxAuthority }"
+                                    [ItemHeight]="33"
+                                    required
+                                    [isRequired]="true"
+                                ></sh-select>
                             </div>
                         </div>
 
@@ -67,7 +79,8 @@
 
                         <div class="row">
                             <div class="form-group col-sm-6 col-xs-12">
-                                <label>{{ commonLocaleData?.app_name }} <span class="text-danger">*</span> </label><br />
+                                <label>{{ commonLocaleData?.app_name }} <span class="text-danger">*</span> </label
+                                ><br />
                                 <input
                                     type="text"
                                     [placeholder]="commonLocaleData?.app_name"
@@ -96,7 +109,8 @@
                                 class="form-group col-sm-6 col-xs-12"
                                 *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'"
                             >
-                                <label>{{ commonLocaleData?.app_select_type }} <span class="text-danger">*</span> </label
+                                <label
+                                    >{{ commonLocaleData?.app_select_type }} <span class="text-danger">*</span> </label
                                 ><br />
                                 <sh-select
                                     [options]="taxNameTypesMapping[newTaxObj.taxType]"
@@ -206,7 +220,7 @@
                         <div class="row">
                             <div class="col-sm-12 mt-5">
                                 <button
-                                aria-label="create"
+                                    aria-label="create"
                                     type="submit"
                                     class="btn btn-success"
                                     *ngIf="!tax"
@@ -217,7 +231,7 @@
                                 </button>
 
                                 <button
-                                aria-label="cancel"
+                                    aria-label="cancel"
                                     type="submit"
                                     class="btn btn-success"
                                     *ngIf="tax && tax?.uniqueName"

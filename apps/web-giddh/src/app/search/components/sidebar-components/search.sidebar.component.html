@@ -4,7 +4,10 @@
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
                 <div
                     class="form-group select-entity mr-r15 select-entity-height"
-                    *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                    *ngIf="
+                        currentCompanyBranches?.length > 2 &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                    "
                 >
                     <div class="linked-entities">
                         <div class="form-group">
@@ -28,7 +31,7 @@
                                                 <i
                                                     [ngClass]="{
                                                         'icon-company-profile': option?.consolidatedBranch,
-                                                        'icon-branch-icon': !option?.consolidatedBranch
+                                                        'icon-branch-icon': !option?.consolidatedBranch,
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"

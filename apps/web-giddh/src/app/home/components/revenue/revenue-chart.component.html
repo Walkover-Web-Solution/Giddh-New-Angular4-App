@@ -12,7 +12,12 @@
                         <div class="panel-heading pl-0 pt-0 clearfix">
                             <div class="panel-heading-inner-content w-100">
                                 <div class="cursor-pointer">
-                                    <span [matMenuTriggerFor]="revenueChartMenu" class="menu-trigger-btn" role="button" aria-label="income-select">
+                                    <span
+                                        [matMenuTriggerFor]="revenueChartMenu"
+                                        class="menu-trigger-btn"
+                                        role="button"
+                                        aria-label="income-select"
+                                    >
                                         <span *ngIf="activeGraphType !== undefined">
                                             <strong>{{ activeGraphType["uniqueName"] | titlecase }}</strong>
                                         </span>
@@ -54,7 +59,10 @@
                                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </div>
                             <div class="chart-div">
-                                <cdk-virtual-scroll-viewport [itemSize]="300" class="virtual-group-list overflow-x-hidden">
+                                <cdk-virtual-scroll-viewport
+                                    [itemSize]="300"
+                                    class="virtual-group-list overflow-x-hidden"
+                                >
                                     <div class="dashboard-line-chart-container">
                                         <canvas
                                             id="revenueChartCanvas"

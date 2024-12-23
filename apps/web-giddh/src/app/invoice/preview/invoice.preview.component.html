@@ -16,11 +16,11 @@
                             <div
                                 class="btn-group desktop-view-btn"
                                 dropdown
-                                *ngIf="(!isCompany && !isConsolidatedBranch) && selectedVoucher === 'sales'"
+                                *ngIf="!isCompany && !isConsolidatedBranch && selectedVoucher === 'sales'"
                                 [autoClose]="true"
                             >
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                    *ngIf="!isCompany && !isConsolidatedBranch"
                                     id="ddl-newinv"
                                     dropdownToggle
                                     type="button"
@@ -52,7 +52,8 @@
                                             aria-label="invoice"
                                             [routerLink]="['/pages/vouchers/cash/create']"
                                             *ngIf="voucherApiVersion === 2"
-                                            >{{ localeData?.cash_invoice }}</a>
+                                            >{{ localeData?.cash_invoice }}</a
+                                        >
                                     </li>
                                     <li role="menuitem">
                                         <a
@@ -76,14 +77,14 @@
                             </div>
                             <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                                    *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('purchase')"
                                 >
                                     {{ localeData?.new_bill }}
                                 </button>
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                                    *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/purchase/create']"
                                 >
@@ -92,14 +93,14 @@
                             </div>
                             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                                    *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('credit note')"
                                 >
                                     {{ localeData?.new_cr_note }}
                                 </button>
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                                    *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/credit-note/create']"
                                 >
@@ -108,14 +109,14 @@
                             </div>
                             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                                    *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('debit note')"
                                 >
                                     {{ localeData?.new_dr_note }}
                                 </button>
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                                    *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/debit-note/create']"
                                 >
@@ -178,7 +179,12 @@
                             >
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
-                            <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group visible-center d-none" dropdown #dp="bs-dropdown">
+                            <div
+                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                class="btn-group visible-center d-none"
+                                dropdown
+                                #dp="bs-dropdown"
+                            >
                                 <button
                                     dropdownToggle
                                     type="button"
@@ -253,7 +259,11 @@
                             </div>
                             <button
                                 class="btn btn-default desktop-view-btn"
-                                *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
+                                *ngIf="
+                                    csvSupportVoucherType.includes(selectedVoucher) &&
+                                    selectedInvoicesList?.length &&
+                                    isExported
+                                "
                                 [tooltip]="commonLocaleData?.app_export"
                                 (click)="exportCsvDownload(selectedVoucher)"
                                 [ladda]="exportInvoiceRequestInProcess$ | async"
@@ -274,7 +284,12 @@
                                     (voucherApiVersion === 2 && selectedItems?.length > 0)
                                 "
                             >
-                                <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group" dropdown #dp="bs-dropdown">
+                                <div
+                                    *ngIf="!isCompany && !isConsolidatedBranch"
+                                    class="btn-group"
+                                    dropdown
+                                    #dp="bs-dropdown"
+                                >
                                     <button
                                         dropdownToggle
                                         type="button"
@@ -351,10 +366,7 @@
                                 <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
                             </div>
-                            <div
-                                class="export-button-wrap"
-                                *ngIf="voucherData?.items?.length"
-                            >
+                            <div class="export-button-wrap" *ngIf="voucherData?.items?.length">
                                 <button
                                     class="btn btn-primary mr-0"
                                     [disabled]="
@@ -377,15 +389,7 @@
                         New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                     <div class="row">
                         <div
-                            class="
-                                col-12
-                                d-flex
-                                w-100
-                                align-items-center
-                                pb-2
-                                justify-content-between
-                                export-new-invoice
-                            "
+                            class="col-12 d-flex w-100 align-items-center pb-2 justify-content-between export-new-invoice"
                         >
                             <div class="d-flex">
                                 <div class="export-button-wrap">
@@ -401,11 +405,11 @@
                                     <div
                                         class="btn-group"
                                         dropdown
-                                        *ngIf="(!isCompany && !isConsolidatedBranch) && selectedVoucher === 'sales'"
+                                        *ngIf="!isCompany && !isConsolidatedBranch && selectedVoucher === 'sales'"
                                         [autoClose]="true"
                                     >
                                         <button
-                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                            *ngIf="!isCompany && !isConsolidatedBranch"
                                             id="ddl-newinv-invoice"
                                             dropdownToggle
                                             type="button"
@@ -462,14 +466,14 @@
                                     </div>
                                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                         <button
-                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                                            *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('credit note')"
                                         >
                                             {{ localeData?.new_cr_note }}
                                         </button>
                                         <button
-                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                                            *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                             class="btn btn-sky-blue m-0"
                                             [routerLink]="['/pages/vouchers/credit-note/create']"
                                         >
@@ -478,14 +482,14 @@
                                     </div>
                                     <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                         <button
-                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                                            *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('debit note')"
                                         >
                                             {{ localeData?.new_dr_note }}
                                         </button>
                                         <button
-                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                                            *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                             class="btn btn-sky-blue m-0"
                                             [routerLink]="['/pages/vouchers/debit-note/create']"
                                         >
@@ -524,7 +528,7 @@
                                     </button>
                                     <div *ngIf="selectedItems?.length === 1">
                                         <div
-                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                            *ngIf="!isCompany && !isConsolidatedBranch"
                                             class="btn-group"
                                             dropdown
                                             triggers="mouseover"
@@ -572,7 +576,11 @@
                                 </div>
                                 <button
                                     class="btn btn-default mr-r15"
-                                    *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
+                                    *ngIf="
+                                        csvSupportVoucherType.includes(selectedVoucher) &&
+                                        selectedInvoicesList?.length &&
+                                        isExported
+                                    "
                                     [tooltip]="commonLocaleData?.app_export"
                                     (click)="exportCsvDownload(selectedVoucher)"
                                     [ladda]="exportInvoiceRequestInProcess$ | async"
@@ -604,7 +612,7 @@
                                 </button>
                                 <div *ngIf="selectedItems?.length === 1">
                                     <div
-                                        *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                        *ngIf="!isCompany && !isConsolidatedBranch"
                                         class="btn-group"
                                         dropdown
                                         triggers="mouseover"
@@ -798,7 +806,7 @@
                                                         ? localeData?.bill_no
                                                         : commonLocaleData?.app_invoice_no,
                                                 fieldName: 'invoiceNumber',
-                                                formControl: voucherNumberInput
+                                                formControl: voucherNumberInput,
                                             }
                                         "
                                     >
@@ -823,7 +831,7 @@
                                                 title:
                                                     selectedVoucher === 'purchase'
                                                         ? commonLocaleData?.app_vendor
-                                                        : commonLocaleData?.app_customer
+                                                        : commonLocaleData?.app_customer,
                                             }
                                         "
                                     >
@@ -863,7 +871,7 @@
                                                 $implicit: showPurchaseOrderSearch,
                                                 fieldName: 'purchaseOrderNumbers',
                                                 formControl: purchaseOrderNumbersInput,
-                                                title: localeData?.po_number
+                                                title: localeData?.po_number,
                                             }
                                         "
                                     >
@@ -897,7 +905,7 @@
                                 </th>
                                 <th [attr.data-title]="localeData?.due_date" width="10%">
                                     <div class="d-flex">
-                                        <div >{{ localeData?.due_date }}</div>
+                                        <div>{{ localeData?.due_date }}</div>
                                         <div class="icon-pointer">
                                             <ng-container
                                                 *ngTemplateOutlet="sortTemplate; context: { column: 'dueDate' }"
@@ -967,7 +975,7 @@
                                                 title:
                                                     selectedVoucher === 'credit note'
                                                         ? localeData?.cr_note_no
-                                                        : localeData?.dr_note_no
+                                                        : localeData?.dr_note_no,
                                             }
                                         "
                                     >
@@ -989,7 +997,7 @@
                                                 $implicit: showCustomerSearch,
                                                 fieldName: 'accountUniqueName',
                                                 formControl: accountUniqueNameInput,
-                                                title: commonLocaleData?.app_customer
+                                                title: commonLocaleData?.app_customer,
                                             }
                                         "
                                     ></ng-container>
@@ -997,7 +1005,7 @@
 
                                 <th width="10%">
                                     <div class="d-flex">
-                                        <div >{{ commonLocaleData?.app_date }}</div>
+                                        <div>{{ commonLocaleData?.app_date }}</div>
                                         <div class="icon-pointer">
                                             <ng-container
                                                 *ngTemplateOutlet="sortTemplate; context: { column: 'voucherDate' }"
@@ -1106,7 +1114,7 @@
                                     <div
                                         (click)="onSelectInvoice(item)"
                                         [ngClass]="{
-                                            'cursor-pointer': selectedVoucher === 'purchase' && !item.voucherNumber
+                                            'cursor-pointer': selectedVoucher === 'purchase' && !item.voucherNumber,
                                         }"
                                         class="d-flex position-relative remove-capitalize"
                                     >
@@ -1235,7 +1243,11 @@
 
                                         <div>
                                             <div
-                                                *ngIf="(!isCompany && !isConsolidatedBranch) && item.balanceStatus !== 'cancel'"
+                                                *ngIf="
+                                                    !isCompany &&
+                                                    !isConsolidatedBranch &&
+                                                    item.balanceStatus !== 'cancel'
+                                                "
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1260,32 +1272,49 @@
                                                     <!-- add "dropup-menu" with above div on line 1166 -->
                                                     <ul class="select-action-dropdown">
                                                         <li (click)="onPerformAction(item, 'paid')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="payment paid">{{
-                                                                commonLocaleData?.app_payment_status?.paid
-                                                            }}</a>
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="payment paid"
+                                                                >{{ commonLocaleData?.app_payment_status?.paid }}</a
+                                                            >
                                                         </li>
                                                         <li
                                                             *ngIf="selectedVoucher === 'sales'"
                                                             (click)="onPerformAdjustPaymentAction(item)"
                                                         >
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="adjust amount">{{
-                                                                commonLocaleData?.app_payment_status?.adjust_amount
-                                                            }}</a>
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="adjust amount"
+                                                                >{{
+                                                                    commonLocaleData?.app_payment_status?.adjust_amount
+                                                                }}</a
+                                                            >
                                                         </li>
                                                         <li (click)="onPerformAction(item, 'unpaid')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="unpaid">{{
-                                                                commonLocaleData?.app_payment_status?.unpaid
-                                                            }}</a>
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="unpaid"
+                                                                >{{ commonLocaleData?.app_payment_status?.unpaid }}</a
+                                                            >
                                                         </li>
                                                         <li (click)="onPerformAction(item, 'hold')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="hold">{{
-                                                                commonLocaleData?.app_payment_status?.hold
-                                                            }}</a>
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="hold"
+                                                                >{{ commonLocaleData?.app_payment_status?.hold }}</a
+                                                            >
                                                         </li>
                                                         <li (click)="onPerformAction(item, 'cancel')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="cancel">{{
-                                                                commonLocaleData?.app_payment_status?.cancel
-                                                            }}</a>
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="cancel"
+                                                                >{{ commonLocaleData?.app_payment_status?.cancel }}</a
+                                                            >
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -1312,11 +1341,7 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <div
-                                                dropdown
-                                                container="body"
-                                                class="icon-ellipse select-action"
-                                            >
+                                            <div dropdown container="body" class="icon-ellipse select-action">
                                                 <a
                                                     href="javascript:;"
                                                     aria-label="menu"
@@ -1335,24 +1360,54 @@
                                                     [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
-                                                        <li *ngIf="item?.balanceStatus !== 'cancel'" (click)="onPerformAction(item, 'paid')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="payment paid">
+                                                        <li
+                                                            *ngIf="item?.balanceStatus !== 'cancel'"
+                                                            (click)="onPerformAction(item, 'paid')"
+                                                        >
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="payment paid"
+                                                            >
                                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                                             </a>
                                                         </li>
                                                         <li (click)="openSendMailModal(sendEmailModal, item)">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="envelope">
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="envelope"
+                                                            >
                                                                 {{ commonLocaleData?.app_send_email }}
                                                             </a>
                                                         </li>
-                                                        <li *ngIf="(!isCompany && !isConsolidatedBranch)" [routerLink]="['/pages/proforma-invoice/invoice/purchase/' +
-                                                            item?.account?.uniqueName + '/' + item?.uniqueName + '/copy']">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="copy">
+                                                        <li
+                                                            *ngIf="!isCompany && !isConsolidatedBranch"
+                                                            [routerLink]="[
+                                                                '/pages/proforma-invoice/invoice/purchase/' +
+                                                                    item?.account?.uniqueName +
+                                                                    '/' +
+                                                                    item?.uniqueName +
+                                                                    '/copy',
+                                                            ]"
+                                                        >
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="copy"
+                                                            >
                                                                 {{ commonLocaleData?.app_copy }}
                                                             </a>
                                                         </li>
-                                                        <li *ngIf="(!isCompany && !isConsolidatedBranch)" (click)="deletePurchaseBill(item?.uniqueName)">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="trash">
+                                                        <li
+                                                            *ngIf="!isCompany && !isConsolidatedBranch"
+                                                            (click)="deletePurchaseBill(item?.uniqueName)"
+                                                        >
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="trash"
+                                                            >
                                                                 {{ commonLocaleData?.app_delete }}
                                                             </a>
                                                         </li>
@@ -1425,7 +1480,12 @@
                                     "
                                     class="remove-capitalize"
                                 >
-                                    <a class="cursor-pointer" href="javascript:;" aria-label="available" (click)="onSelectInvoice(item)">
+                                    <a
+                                        class="cursor-pointer"
+                                        href="javascript:;"
+                                        aria-label="available"
+                                        (click)="onSelectInvoice(item)"
+                                    >
                                         {{ item.voucherNumber || commonLocaleData?.app_not_available }}</a
                                     >
                                 </td>
@@ -1464,9 +1524,9 @@
                                                 ? item.referenceVoucher?.number || commonLocaleData?.app_not_available
                                                 : ""
                                             : item.invoiceLinkingRequest?.linkedInvoices?.length
-                                            ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber ||
-                                              commonLocaleData?.app_not_available
-                                            : ""
+                                              ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber ||
+                                                commonLocaleData?.app_not_available
+                                              : ""
                                     }}
                                 </td>
 
@@ -1540,7 +1600,11 @@
 
                                         <div>
                                             <div
-                                                *ngIf="(!isCompany && !isConsolidatedBranch) && item.balanceStatus !== 'cancel'"
+                                                *ngIf="
+                                                    !isCompany &&
+                                                    !isConsolidatedBranch &&
+                                                    item.balanceStatus !== 'cancel'
+                                                "
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1562,15 +1626,27 @@
                                                     [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
-                                                        <li (click)="onPerformAction(item, 'paid')" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="payment paid">{{
-                                                                commonLocaleData?.app_payment_status?.paid
-                                                            }}</a>
+                                                        <li
+                                                            (click)="onPerformAction(item, 'paid')"
+                                                            *ngIf="
+                                                                selectedVoucher === 'debit note' ||
+                                                                selectedVoucher === 'credit note'
+                                                            "
+                                                        >
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="payment paid"
+                                                                >{{ commonLocaleData?.app_payment_status?.paid }}</a
+                                                            >
                                                         </li>
                                                         <li (click)="onPerformAction(item, 'cancel')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="cancel">{{
-                                                                commonLocaleData?.app_payment_status?.cancel
-                                                            }}</a>
+                                                            <a
+                                                                class="cursor-pointer"
+                                                                href="javascript:;"
+                                                                aria-label="cancel"
+                                                                >{{ commonLocaleData?.app_payment_status?.cancel }}</a
+                                                            >
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -1658,7 +1734,12 @@
                                         </div>
                                         <div class="col-6 p-0">
                                             <div class="invoice-name-download">
-                                                <a href="javascript:;" aria-label="voucher number" class="invoice-number-a" (click)="onSelectInvoice(item)">
+                                                <a
+                                                    href="javascript:;"
+                                                    aria-label="voucher number"
+                                                    class="invoice-number-a"
+                                                    (click)="onSelectInvoice(item)"
+                                                >
                                                     {{
                                                         item.voucherNumber
                                                             ? item.voucherNumber
@@ -1758,24 +1839,40 @@
                                                             "
                                                         >
                                                             <li (click)="onPerformAction(item, 'paid')">
-                                                                <a class="cursor-pointer" href="javascript:;" aria-label="paid">{{
-                                                                    commonLocaleData?.app_payment_status?.paid
-                                                                }}</a>
+                                                                <a
+                                                                    class="cursor-pointer"
+                                                                    href="javascript:;"
+                                                                    aria-label="paid"
+                                                                    >{{ commonLocaleData?.app_payment_status?.paid }}</a
+                                                                >
                                                             </li>
                                                             <li (click)="onPerformAction(item, 'unpaid')">
-                                                                <a class="cursor-pointer" href="javascript:;" aria-label="unpaid">{{
-                                                                    commonLocaleData?.app_payment_status?.unpaid
-                                                                }}</a>
+                                                                <a
+                                                                    class="cursor-pointer"
+                                                                    href="javascript:;"
+                                                                    aria-label="unpaid"
+                                                                    >{{
+                                                                        commonLocaleData?.app_payment_status?.unpaid
+                                                                    }}</a
+                                                                >
                                                             </li>
                                                             <li (click)="onPerformAction(item, 'hold')">
-                                                                <a class="cursor-pointer" href="javascript:;" aria-label="hold">{{
-                                                                    commonLocaleData?.app_payment_status?.hold
-                                                                }}</a>
+                                                                <a
+                                                                    class="cursor-pointer"
+                                                                    href="javascript:;"
+                                                                    aria-label="hold"
+                                                                    >{{ commonLocaleData?.app_payment_status?.hold }}</a
+                                                                >
                                                             </li>
                                                             <li (click)="onPerformAction(item, 'cancel')">
-                                                                <a class="cursor-pointer" href="javascript:;" aria-label="cancel">{{
-                                                                    commonLocaleData?.app_payment_status?.cancel
-                                                                }}</a>
+                                                                <a
+                                                                    class="cursor-pointer"
+                                                                    href="javascript:;"
+                                                                    aria-label="cancel"
+                                                                    >{{
+                                                                        commonLocaleData?.app_payment_status?.cancel
+                                                                    }}</a
+                                                                >
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -1923,8 +2020,8 @@
                                     selectedVoucher === 'debit note' || selectedVoucher === 'credit note'
                                         ? 'drcr'
                                         : selectedVoucher === 'purchase'
-                                        ? selectedVoucher
-                                        : 'invoice'
+                                          ? selectedVoucher
+                                          : 'invoice'
                                 "
                                 [request]="advanceSearchFilter"
                                 [localeData]="localeData"
@@ -2029,7 +2126,7 @@
                 *ngIf="sortRequestForUi.sortBy !== column"
                 (click)="sortButtonClicked('asc', column)"
                 [ngClass]="{
-                    'active-text-color': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'
+                    'active-text-color': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc',
                 }"
             ></div>
             <div
@@ -2037,7 +2134,7 @@
                 *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'"
                 (click)="sortButtonClicked('desc', column)"
                 [ngClass]="{
-                    'active-text-color': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'
+                    'active-text-color': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc',
                 }"
             ></div>
             <div
@@ -2045,7 +2142,7 @@
                 *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'"
                 (click)="sortButtonClicked('asc', column)"
                 [ngClass]="{
-                    'active-text-color': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'
+                    'active-text-color': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc',
                 }"
             ></div>
         </ng-template>
@@ -2061,24 +2158,24 @@
             role="dialog"
             (onHidden)="closeAdvanceReceiptModal()"
         >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <advance-receipt-adjustment-component
-                    *ngIf="showAdvanceReceiptAdjust"
-                    #advanceReceiptComponent
-                    [isUpdateMode]="isUpdateMode"
-                    [depositAmount]="depositAmount"
-                    [invoiceFormDetails]="invFormData"
-                    [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                    (closeModelEvent)="closeAdvanceReceiptModal()"
-                    (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                    [isVoucherModule]="true && voucherApiVersion !== 2"
-                    [voucherForAdjustment]="voucherForAdjustment"
-                    [adjustedVoucherType]="selectedVoucher"
-                >
-                </advance-receipt-adjustment-component>
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <advance-receipt-adjustment-component
+                        *ngIf="showAdvanceReceiptAdjust"
+                        #advanceReceiptComponent
+                        [isUpdateMode]="isUpdateMode"
+                        [depositAmount]="depositAmount"
+                        [invoiceFormDetails]="invFormData"
+                        [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+                        (closeModelEvent)="closeAdvanceReceiptModal()"
+                        (submitClicked)="getAdvanceReceiptAdjustData($event)"
+                        [isVoucherModule]="true && voucherApiVersion !== 2"
+                        [voucherForAdjustment]="voucherForAdjustment"
+                        [adjustedVoucherType]="selectedVoucher"
+                    >
+                    </advance-receipt-adjustment-component>
+                </div>
             </div>
-        </div>
         </div>
         <!-- end -->
         <ng-template #sendEmailModal>

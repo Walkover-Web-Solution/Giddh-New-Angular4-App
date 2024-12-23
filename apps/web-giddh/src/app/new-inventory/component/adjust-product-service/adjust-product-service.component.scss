@@ -58,7 +58,7 @@
             th {
                 border: 1px solid var(--color-iron);
                 vertical-align: top !important;
-                &:not(&.small-width){
+                &:not(&.small-width) {
                     min-width: 160px;
                 }
             }
@@ -92,7 +92,6 @@
 @media (max-width: 767px) {
     .adjust-group-page {
         .adjust-field-wrapper {
-
             .giddh-table td,
             .giddh-table th {
                 min-width: 160px;

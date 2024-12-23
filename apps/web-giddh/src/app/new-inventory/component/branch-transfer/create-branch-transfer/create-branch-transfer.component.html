@@ -54,7 +54,7 @@
                                         <div
                                             class="direct-mat-datepicker"
                                             [ngClass]="{
-                                                'readonly-field': editBranchTransferUniqueName
+                                                'readonly-field': editBranchTransferUniqueName,
                                             }"
                                         >
                                             <giddh-datepicker
@@ -245,7 +245,8 @@
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
                                                         [defaultValue]="
-                                                            isUpdateMode && branchTransferCreateEditForm.get('sources.0.name')?.value
+                                                            isUpdateMode &&
+                                                            branchTransferCreateEditForm.get('sources.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get('sources.0.name')
                                                                       ?.value
                                                                 : ''
@@ -303,7 +304,7 @@
                                                                     )?.value
                                                                 ]?.length === 1
                                                                     ? branchTransferCreateEditForm.get(
-                                                                        'sources.0.warehouse.name'
+                                                                          'sources.0.warehouse.name'
                                                                       ).value
                                                                     : ''
                                                             "
@@ -351,7 +352,7 @@
                                                             [ngClass]="{
                                                                 'readonly-field': branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.uniqueName'
-                                                                )?.value
+                                                                )?.value,
                                                             }"
                                                         >
                                                             <mat-form-field appearance="outline" class="w-100">
@@ -427,7 +428,9 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            isUpdateMode && branchTransferCreateEditForm.get('destinations.0.name')?.value
+                                                            isUpdateMode &&
+                                                            branchTransferCreateEditForm.get('destinations.0.name')
+                                                                ?.value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.name'
                                                                   )?.value
@@ -479,7 +482,10 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            isUpdateMode && branchTransferCreateEditForm.get('destinations.0.warehouse.name').value
+                                                            isUpdateMode &&
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.name'
+                                                            ).value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
                                                                   ).value
@@ -525,7 +531,7 @@
                                                         [ngClass]="{
                                                             'readonly-field': branchTransferCreateEditForm.get(
                                                                 'destinations.0.warehouse.uniqueName'
-                                                            )?.value
+                                                            )?.value,
                                                         }"
                                                     >
                                                         <mat-form-field appearance="outline" class="w-100">
@@ -569,7 +575,7 @@
                                         <div
                                             class="direct-mat-datepicker"
                                             [ngClass]="{
-                                                'readonly-field': editBranchTransferUniqueName
+                                                'readonly-field': editBranchTransferUniqueName,
                                             }"
                                         >
                                             <giddh-datepicker
@@ -625,7 +631,8 @@
                                                     )
                                                 "
                                                 [defaultValue]="
-                                                    isUpdateMode && branchTransferCreateEditForm.get('products.0.name').value
+                                                    isUpdateMode &&
+                                                    branchTransferCreateEditForm.get('products.0.name').value
                                                         ? branchTransferCreateEditForm.get('products.0.name').value
                                                         : ''
                                                 "
@@ -825,7 +832,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
                                             <div [formGroupName]="0">
                                                 <div class="mr-b15 one">
@@ -840,9 +847,14 @@
                                                                     ?.value
                                                             ]
                                                         "
-                                                        [defaultValue]=" isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
-                                                            ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
-                                                            : ''
+                                                        [defaultValue]="
+                                                            isUpdateMode &&
+                                                            branchTransferCreateEditForm.get('sources.0.warehouse.name')
+                                                                .value
+                                                                ? branchTransferCreateEditForm.get(
+                                                                      'sources.0.warehouse.name'
+                                                                  ).value
+                                                                : ''
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"
@@ -894,7 +906,7 @@
                                                         [ngClass]="{
                                                             'readonly-field': branchTransferCreateEditForm.get(
                                                                 'sources.0.warehouse.uniqueName'
-                                                            )?.value
+                                                            )?.value,
                                                         }"
                                                     >
                                                         <mat-form-field appearance="outline" class="w-100">
@@ -1038,7 +1050,7 @@
                                                         [ngClass]="{
                                                             'readonly-field': branchTransferCreateEditForm.get(
                                                                 'destinations.0.warehouse.uniqueName'
-                                                            )?.value
+                                                            )?.value,
                                                         }"
                                                     >
                                                         <mat-form-field appearance="outline" class="w-100">
@@ -1195,7 +1207,7 @@
                                                             [ngClass]="{
                                                                 'readonly-field': branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.uniqueName'
-                                                                )?.value
+                                                                )?.value,
                                                             }"
                                                         >
                                                             <mat-form-field appearance="outline" class="w-100">
@@ -1298,8 +1310,7 @@
                                                                     [options]="
                                                                         senderWarehouses[source.get('uniqueName').value]
                                                                     "
-                                                                    [defaultValue]="source.get('warehouse.name').value
-                                                                    "
+                                                                    [defaultValue]="source.get('warehouse.name').value"
                                                                     *ngIf="source.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('sources', i)"
@@ -1336,7 +1347,8 @@
                                                                         class="pb-3"
                                                                         [ngClass]="{
                                                                             'readonly-field':
-                                                                                source.get('warehouse.uniqueName').value
+                                                                                source.get('warehouse.uniqueName')
+                                                                                    .value,
                                                                         }"
                                                                     >
                                                                         <textarea
@@ -1662,7 +1674,10 @@
                                                                             : product.get("sacNumber")?.value
                                                                     }}
                                                                     <span class="edit-icon cp">
-                                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit img" />
+                                                                        <img
+                                                                            src="assets/images/edit-pencilicon.svg"
+                                                                            alt="edit img"
+                                                                        />
                                                                     </span>
                                                                 </span>
                                                             </div>
@@ -1681,13 +1696,13 @@
                                                                                 color="primary"
                                                                                 value="hsn"
                                                                                 (change)="
-                                                                                    handleTableCodeTypeChange($event,i)
+                                                                                    handleTableCodeTypeChange($event, i)
                                                                                 "
                                                                                 >HSN Code</mat-radio-button
                                                                             >
                                                                             <mat-radio-button
                                                                                 color="primary"
-                                                                                     (change)="
+                                                                                (change)="
                                                                                     handleTableCodeTypeChange($event, i)
                                                                                 "
                                                                                 value="sac"
@@ -1988,7 +2003,9 @@
                                                                             destination.get('uniqueName').value
                                                                         ]
                                                                     "
-                                                                    [defaultValue]="destination.get('warehouse.name').value"
+                                                                    [defaultValue]="
+                                                                        destination.get('warehouse.name').value
+                                                                    "
                                                                     *ngIf="destination.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('destinations', i)"
@@ -2028,7 +2045,7 @@
                                                                         [ngClass]="{
                                                                             'readonly-field':
                                                                                 destination.get('warehouse.uniqueName')
-                                                                                    .value
+                                                                                    .value,
                                                                         }"
                                                                     >
                                                                         <textarea
@@ -2328,13 +2345,23 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button aria-label="clear" mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">
+                                <button
+                                    aria-label="clear"
+                                    mat-stroked-button
+                                    (click)="resetForm()"
+                                    *ngIf="!isUpdateMode"
+                                >
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
-                                <button aria-label="cancel" *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
+                                <button
+                                    aria-label="cancel"
+                                    *ngIf="isUpdateMode"
+                                    mat-stroked-button
+                                    (click)="navigateToList()"
+                                >
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
-                                <button 
+                                <button
                                     aria-label="uniqueName"
                                     mat-stroked-button
                                     color="primary"

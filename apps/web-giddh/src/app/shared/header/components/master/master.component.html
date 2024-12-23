@@ -21,7 +21,7 @@
                 <div class="new-btn" role="listitem">
                     <a
                         href="javascript:void(0)"
-                        class="btn-link d-block "
+                        class="btn-link d-block"
                         nav-vr-item
                         *ngIf="showCreateNewButton"
                         (click)="showAddNewForm(items, i)"
@@ -40,16 +40,17 @@
                     >
                         <div
                             *cdkVirtualFor="let item of items?.results; let j = index; trackBy: trackByFn"
-                            class="list-item master-list sidebarTooltip text-overflow-ellipsis" role="listitem"
+                            class="list-item master-list sidebarTooltip text-overflow-ellipsis"
+                            role="listitem"
                         >
                             <ng-container *ngIf="item.type === 'GROUP'">
                                 <a
                                     href="javascript:void(0);"
                                     id="subGrp_{{ item.name }}"
                                     nav-vr-item
-                                    class="list-item d-block "
+                                    class="list-item d-block"
                                     (click)="onGroupClick(item, i)"
-                                    [matTooltip]="(item.synonyms || item.name)"
+                                    [matTooltip]="item.synonyms || item.name"
                                     [matTooltipPosition]="'below'"
                                     [ngClass]="{
                                         'isActive':
@@ -71,7 +72,7 @@
                                                     j === 0 &&
                                                     !(activeAccount$ | async)?.uniqueName)
                                             ),
-                                        'isParent': item?.isOpen
+                                        'isParent': item?.isOpen,
                                     }"
                                 >
                                     {{ item?.name }}
@@ -92,7 +93,7 @@
                                             (searchString &&
                                                 i === masterColumnsData?.length - 1 &&
                                                 j === 0 &&
-                                                !(activeAccount$ | async)?.uniqueName)
+                                                !(activeAccount$ | async)?.uniqueName),
                                     }"
                                 >
                                     {{ item?.name }} {{ commonLocaleData?.app_ac }}

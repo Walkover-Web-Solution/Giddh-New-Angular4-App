@@ -280,7 +280,7 @@
                                 name="vehicleNo"
                                 [ngClass]="{
                                     'has-error': name.invalid && name.touched && name.dirty,
-                                    'has-success': name.valid
+                                    'has-success': name.valid,
                                 }"
                                 [placeholder]="localeData?.vehicle_no_placeholder"
                                 pattern="[a-zA-Z0-9]{7,11}"
@@ -434,7 +434,7 @@
                             [ngClass]="{
                                 'has-error':
                                     Transportersname.invalid && Transportersname.touched && Transportersname.dirty,
-                                'has-success': Transportersname.valid
+                                'has-success': Transportersname.valid,
                             }"
                             required
                             [placeholder]="commonLocaleData?.app_transporter_name_placeholder"
@@ -468,7 +468,7 @@
                             class="form-control"
                             [ngClass]="{
                                 'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty,
-                                'has-success': TransportersID.valid
+                                'has-success': TransportersID.valid,
                             }"
                             name="transporterId"
                             [(ngModel)]="generateNewTransporter.transporterId"
@@ -533,7 +533,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 transporterFilterRequest.sortBy === 'transporterName' &&
-                                                transporterFilterRequest.sort === 'asc'
+                                                transporterFilterRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <div
@@ -542,7 +542,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 transporterFilterRequest.sortBy === 'transporterName' &&
-                                                transporterFilterRequest.sort === 'desc'
+                                                transporterFilterRequest.sort === 'desc',
                                         }"
                                     ></div>
                                 </div>
@@ -556,7 +556,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 transporterFilterRequest.sortBy === 'transporterId' &&
-                                                transporterFilterRequest.sort === 'asc'
+                                                transporterFilterRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <div
@@ -565,7 +565,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 transporterFilterRequest.sortBy === 'transporterId' &&
-                                                transporterFilterRequest.sort === 'desc'
+                                                transporterFilterRequest.sort === 'desc',
                                         }"
                                     ></div>
                                 </div>

@@ -80,7 +80,7 @@
                                                 aria-hidden="true"
                                                 [ngClass]="{
                                                     'icon-minus': showOtherDetails,
-                                                    'icon-plus': !showOtherDetails
+                                                    'icon-plus': !showOtherDetails,
                                                 }"
                                             ></i
                                             >Other Details
@@ -449,7 +449,7 @@
                                     >
                                 </div>
                                 <div class="form-group">
-                                    <label >Account Name</label>
+                                    <label>Account Name</label>
                                     <sh-select
                                         [options]="salesAccountsDropDown$ | async"
                                         #salesAccountUniqueName

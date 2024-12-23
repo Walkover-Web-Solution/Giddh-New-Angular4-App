@@ -14,10 +14,10 @@
                 }
             }
             mat-select {
-                 visibility: hidden;
-                 width: 0;
-                 height: 0;
-                 transform: translateY(-10px);
+                visibility: hidden;
+                width: 0;
+                height: 0;
+                transform: translateY(-10px);
             }
         }
     }
@@ -160,7 +160,6 @@
     .summary-wrapper {
         width: 320px;
         flex-shrink: 0;
-
     }
 
     .plan-summary-heading {
@@ -174,7 +173,7 @@
 
         .plan-width {
             min-width: 500px;
-            .plan-header{
+            .plan-header {
                 height: 50px;
             }
         }

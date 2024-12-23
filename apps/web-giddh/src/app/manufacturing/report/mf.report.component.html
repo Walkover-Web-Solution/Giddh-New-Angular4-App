@@ -7,7 +7,12 @@
         </div>
         <div>
             <label class="d-none">&nbsp;</label>
-            <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">
+            <button
+                *ngIf="!isCompany && !isConsolidatedBranch"
+                class="btn isActive pull-right mr-0"
+                (click)="goToCreateNewPage()"
+                type="button"
+            >
                 Create Manufacture
             </button>
         </div>
@@ -21,7 +26,10 @@
                 <div class="row">
                     <div
                         class="col-xl-3 col-lg-4 col-md-6 mr-b15"
-                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                        *ngIf="
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                        "
                     >
                         <div class="link-entity-dropdown">
                             <label class="d-block pb-1 font-15">Entity</label>
@@ -45,7 +53,7 @@
                                                 <i
                                                     [ngClass]="{
                                                         'icon-company-profile': option?.consolidatedBranch,
-                                                        'icon-branch-icon': !option?.consolidatedBranch
+                                                        'icon-branch-icon': !option?.consolidatedBranch,
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"
@@ -74,7 +82,8 @@
                     <div
                         class="col-md-6 mr-b15 datepicker-flex"
                         [ngClass]="
-                            currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                 ? 'col-xl-3 col-lg-4 '
                                 : 'col-xl-3 col-lg-4'
                         "
@@ -92,7 +101,8 @@
                     <div
                         class="col-md-6"
                         [ngClass]="
-                            currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                 ? 'col-xl-6 col-lg-4'
                                 : 'col-xl-9 col-lg-8'
                         "
@@ -111,7 +121,7 @@
                             <div>
                                 <label class="d-block">&nbsp;</label>
                                 <button
-                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                    *ngIf="!isCompany && !isConsolidatedBranch"
                                     class="btn isActive pull-right mr-0 mobile-none"
                                     (click)="goToCreateNewPage()"
                                     type="button"
@@ -242,7 +252,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
-                            <td data-title="Date">{{ dayjs(item.date, "DD-MM-YYYY") | date : "d MMM y" }}</td>
+                            <td data-title="Date">{{ dayjs(item.date, "DD-MM-YYYY") | date: "d MMM y" }}</td>
                             <td data-title="Voucher No." class="cursor-pointer">{{ item.voucherNumber }}</td>
                             <td data-title="Product Name">{{ item.stockName }}</td>
                             <td data-title="Qty Outwards">{{ item.manufacturingQuantity }}</td>

@@ -155,7 +155,7 @@
                                             'default-width-input':
                                                 (searchText || isAdvanceSearchImplemented) && isMobileScreen,
                                             'full-width-input':
-                                                (searchText || !isAdvanceSearchImplemented) && isMobileScreen
+                                                (searchText || !isAdvanceSearchImplemented) && isMobileScreen,
                                         }"
                                     >
                                         <mat-form-field appearance="fill">
@@ -339,7 +339,7 @@
                                                         <i
                                                             [ngClass]="{
                                                                 'icon-company-profile': option.consolidatedBranch,
-                                                                'icon-branch-icon': !option.consolidatedBranch
+                                                                'icon-branch-icon': !option.consolidatedBranch,
                                                             }"
                                                             class="pull-right"
                                                             *ngIf="!option.isCompany"
@@ -432,7 +432,7 @@
                                                             <i
                                                                 [ngClass]="{
                                                                     'icon-company-profile': option.consolidatedBranch,
-                                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                                    'icon-branch-icon': !option.consolidatedBranch,
                                                                 }"
                                                                 class="pull-right"
                                                                 *ngIf="!option.isCompany"
@@ -756,7 +756,7 @@
                                                             [ngClass]="{
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName,
-                                                                'highlighted-transaction': txn?.selectedAccount?.name
+                                                                'highlighted-transaction': txn?.selectedAccount?.name,
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
@@ -781,7 +781,7 @@
                                                                                         txn.id &&
                                                                                     !selectedDebitTransactionIds.has(
                                                                                         txn?.id
-                                                                                    )
+                                                                                    ),
                                                                             }"
                                                                             (change)="
                                                                                 selectEntryForBulkAction(
@@ -826,7 +826,7 @@
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
-                                                                                txn.selectedAccount.name
+                                                                                txn.selectedAccount.name,
                                                                         }"
                                                                         >{{
                                                                             txn?.selectedAccount
@@ -848,7 +848,7 @@
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text':
                                                                                 txn?.selectedAccount &&
-                                                                                txn.selectedAccount.name
+                                                                                txn.selectedAccount.name,
                                                                         }"
                                                                         *ngIf="!txn.showDropdown"
                                                                         >{{
@@ -1117,7 +1117,7 @@
                                                             [ngClass]="{
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName,
-                                                                'highlighted-transaction': txn?.selectedAccount?.name
+                                                                'highlighted-transaction': txn?.selectedAccount?.name,
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
@@ -1142,7 +1142,7 @@
                                                                                         txn.id &&
                                                                                     !selectedCreditTransactionIds?.has(
                                                                                         txn?.id
-                                                                                    )
+                                                                                    ),
                                                                             }"
                                                                             (change)="
                                                                                 selectEntryForBulkAction(
@@ -1187,7 +1187,7 @@
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
-                                                                                txn.selectedAccount.name
+                                                                                txn.selectedAccount.name,
                                                                         }"
                                                                         >{{
                                                                             txn?.selectedAccount
@@ -1206,7 +1206,7 @@
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
-                                                                                txn.selectedAccount.name
+                                                                                txn.selectedAccount.name,
                                                                         }"
                                                                         *ngIf="!txn.showDropdown"
                                                                         >{{
@@ -1537,7 +1537,7 @@
                                                     [ngClass]="{
                                                         'compound-entry':
                                                             transactions.entryUniqueName === lc.selectedTxnUniqueName ||
-                                                            transactions.isChecked
+                                                            transactions.isChecked,
                                                     }"
                                                     [matTooltip]="transactions.description"
                                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
@@ -1552,7 +1552,7 @@
                                                                     selectedTrxWhileHovering !==
                                                                         transactions.entryUniqueName &&
                                                                     !transactions.isChecked &&
-                                                                    checkedTrxWhileHovering?.length === 0
+                                                                    checkedTrxWhileHovering?.length === 0,
                                                             }"
                                                             class="d-none"
                                                             [(ngModel)]="transactions.isChecked"
@@ -1697,7 +1697,7 @@
                             [ngClass]="{
                                 'bd-rr':
                                     (lc.transactionData$ | async)?.debitTransactions?.length >=
-                                    (lc.transactionData$ | async)?.creditTransactions?.length
+                                    (lc.transactionData$ | async)?.creditTransactions?.length,
                             }"
                         >
                             <!-- region debit transaction header-->
@@ -1808,7 +1808,7 @@
                                 (dblclick)="showUpdateLedgerModal(txn, 'dr')"
                                 (keydown.enter)="showUpdateLedgerModal(txn, 'dr')"
                                 [ngClass]="{
-                                    'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
+                                    'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked,
                                 }"
                                 [matTooltip]="txn.description"
                                 [matTooltipPosition]="'above'"
@@ -1826,7 +1826,7 @@
                                                     'd-none':
                                                         selectedTrxWhileHovering !== txn.entryUniqueName &&
                                                         !txn.isChecked &&
-                                                        checkedTrxWhileHovering?.length === 0
+                                                        checkedTrxWhileHovering?.length === 0,
                                                 }"
                                                 [(ngModel)]="txn.isChecked"
                                                 (change)="entrySelected($event, txn.entryUniqueName, 'debit')"
@@ -1895,8 +1895,8 @@
                                                       ', ' +
                                                       txn.attachedFileName
                                                     : txn.attachedFileUniqueName
-                                                    ? txn.attachedFileName
-                                                    : txn.voucherNumber || commonLocaleData?.app_not_available
+                                                      ? txn.attachedFileName
+                                                      : txn.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -1955,7 +1955,7 @@
                                                             (dateSelected)="
                                                                 getInvoiceListsForCreditNote([
                                                                     {},
-                                                                    lc.blankLedger.voucherType
+                                                                    lc.blankLedger.voucherType,
                                                                 ])
                                                             "
                                                             (datepickerState)="datepickerState($event)"
@@ -2176,7 +2176,7 @@
                             [ngClass]="{
                                 'bd-rl':
                                     (lc.transactionData$ | async)?.debitTransactions?.length <
-                                    (lc.transactionData$ | async)?.creditTransactions?.length
+                                    (lc.transactionData$ | async)?.creditTransactions?.length,
                             }"
                         >
                             <!-- region credit transaction header-->
@@ -2290,7 +2290,7 @@
                                 tabindex="-1"
                                 (keydown.enter)="showUpdateLedgerModal(txn, 'cr')"
                                 [ngClass]="{
-                                    'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
+                                    'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked,
                                 }"
                                 [matTooltip]="txn.description"
                                 [matTooltipPosition]="'above'"
@@ -2308,7 +2308,7 @@
                                                     'd-none':
                                                         selectedTrxWhileHovering !== txn.entryUniqueName &&
                                                         !txn.isChecked &&
-                                                        checkedTrxWhileHovering?.length === 0
+                                                        checkedTrxWhileHovering?.length === 0,
                                                 }"
                                                 class="d-none"
                                                 [(ngModel)]="txn.isChecked"
@@ -2376,8 +2376,8 @@
                                                       ', ' +
                                                       txn.attachedFileName
                                                     : txn.attachedFileUniqueName
-                                                    ? txn.attachedFileName
-                                                    : txn.voucherNumber || commonLocaleData?.app_not_available
+                                                      ? txn.attachedFileName
+                                                      : txn.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"

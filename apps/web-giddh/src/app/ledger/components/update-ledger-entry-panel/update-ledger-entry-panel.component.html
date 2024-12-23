@@ -158,7 +158,7 @@
                                             [id]="'debit-id-' + i"
                                             [ngClass]="{
                                                 'other-account-entry':
-                                                    isPettyCash && txn?.particular?.uniqueName === 'others'
+                                                    isPettyCash && txn?.particular?.uniqueName === 'others',
                                             }"
                                             class="col-5 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                         >
@@ -334,9 +334,9 @@
                                                           ', ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.attachedFile?.length > 0
-                                                        ? vm.selectedLedger.attachedFileName
-                                                        : vm.selectedLedger.voucherNumber ||
-                                                          commonLocaleData?.app_not_available
+                                                          ? vm.selectedLedger.attachedFileName
+                                                          : vm.selectedLedger.voucherNumber ||
+                                                            commonLocaleData?.app_not_available
                                                 "
                                                 matTooltipClass="tooltip-black"
                                             >
@@ -436,7 +436,7 @@
                                                             vm.convertedEntryTotal.drTotal >
                                                             vm.convertedEntryTotal.crTotal
                                                                 ? vm.convertedEntryTotal.drTotal
-                                                                : vm.convertedEntryTotal.crTotal
+                                                                : vm.convertedEntryTotal.crTotal,
                                                     }
                                                 "
                                             ></ng-container>
@@ -495,7 +495,7 @@
                                             class="position-relative col-5 select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                             [ngClass]="{
                                                 'other-account-entry':
-                                                    isPettyCash && txn?.particular?.uniqueName === 'others'
+                                                    isPettyCash && txn?.particular?.uniqueName === 'others',
                                             }"
                                         >
                                             <ng-template [ngIf]="!txn?.isDiscount">
@@ -677,9 +677,9 @@
                                                           ', ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.attachedFile?.length > 0
-                                                        ? vm.selectedLedger.attachedFileName
-                                                        : vm.selectedLedger.voucherNumber ||
-                                                          commonLocaleData?.app_not_available
+                                                          ? vm.selectedLedger.attachedFileName
+                                                          : vm.selectedLedger.voucherNumber ||
+                                                            commonLocaleData?.app_not_available
                                                 "
                                                 matTooltipClass="tooltip-black"
                                             >
@@ -775,7 +775,7 @@
                                                             vm.convertedEntryTotal.crTotal >
                                                             vm.convertedEntryTotal.drTotal
                                                                 ? vm.convertedEntryTotal.crTotal
-                                                                : vm.convertedEntryTotal.drTotal
+                                                                : vm.convertedEntryTotal.drTotal,
                                                     }
                                                 "
                                             ></ng-container>
@@ -1161,8 +1161,8 @@
                                             shouldShowAdvanceReceiptMandatoryFields
                                                 ? localeData?.tax_on_advance
                                                 : isRcmEntry
-                                                ? localeData?.tax_rcm
-                                                : ''
+                                                  ? localeData?.tax_rcm
+                                                  : ''
                                         "
                                         [isMandatory]="isRcmEntry"
                                         [date]="vm.selectedLedger.entryDate"
@@ -1426,7 +1426,7 @@
                                         <p class="info-text">
                                             {{
                                                 localeData?.adjustment_notes
-                                                    | replace : "[VOUCHER_NUMBER]" : vm.selectedLedger?.voucherNumber
+                                                    | replace: "[VOUCHER_NUMBER]" : vm.selectedLedger?.voucherNumber
                                             }}
                                         </p>
                                     </div>
@@ -1882,7 +1882,7 @@
                                                     (change)="handleVoucherAdjustment()"
                                                     >{{
                                                         localeData?.adjust_voucher
-                                                            | replace : "[VOUCHER_TYPE]" : currentVoucherLabel
+                                                            | replace: "[VOUCHER_TYPE]" : currentVoucherLabel
                                                     }}</mat-checkbox
                                                 >
                                             </td>
@@ -2020,7 +2020,7 @@
                                             <span class="primary-color">
                                                 {{
                                                     localeData?.total_in_currency
-                                                        | replace : "[CURRENCY]" : vm.baseCurrencyDetails?.code
+                                                        | replace: "[CURRENCY]" : vm.baseCurrencyDetails?.code
                                                 }}:
                                                 <span class="d-inline-flex">
                                                     <amount-field
@@ -2089,7 +2089,7 @@
                                         <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-color">
                                             {{
                                                 localeData?.total_in_currency
-                                                    | replace : "[CURRENCY]" : vm.foreignCurrencyDetails?.code
+                                                    | replace: "[CURRENCY]" : vm.foreignCurrencyDetails?.code
                                             }}:
 
                                             <span class="d-inline-flex">

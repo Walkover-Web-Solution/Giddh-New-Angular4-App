@@ -60,18 +60,18 @@
                     // }
                     &.min-width-140 {
                         min-width: 140px !important;
-                        input{
+                        input {
                             min-width: 140px !important;
                         }
                     }
                     &.min-width-240 {
                         min-width: 240px !important;
-                        input{
+                        input {
                             min-width: 240px !important;
                         }
                     }
                 }
-                .no-data{
+                .no-data {
                     height: calc(100vh - 420px);
                     width: calc(100vw - 240px);
                 }

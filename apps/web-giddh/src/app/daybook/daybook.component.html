@@ -15,7 +15,10 @@
                         <div class="d-flex company-date-picker">
                             <div
                                 class="form-group mb-0 mr-r15 linked-entities"
-                                *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY'|| isConsolidatedBranch)"
+                                *ngIf="
+                                    currentCompanyBranches?.length > 2 &&
+                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                "
                             >
                                 <div class="form-group mb-0">
                                     <sh-select
@@ -41,7 +44,7 @@
                                                             class="pull-right"
                                                             [ngClass]="{
                                                                 'icon-company-profile': option.consolidatedBranch,
-                                                                'icon-branch-icon': !option.consolidatedBranch
+                                                                'icon-branch-icon': !option.consolidatedBranch,
                                                             }"
                                                             *ngIf="!option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_branch"
@@ -234,8 +237,8 @@
                                     entry.voucherNo
                                         ? entry.voucherNo
                                         : entry.voucherName === "purchase"
-                                        ? commonLocaleData?.app_not_available
-                                        : ""
+                                          ? commonLocaleData?.app_not_available
+                                          : ""
                                 }}
                             </td>
                         </ng-container>
@@ -691,7 +694,7 @@
                             [ngClass]="{
                                 'daybook-other-transactions': true,
                                 'border-none':
-                                    !entry.isExpanded || (entry.isExpanded && entry.otherTransactions?.length === 1)
+                                    !entry.isExpanded || (entry.isExpanded && entry.otherTransactions?.length === 1),
                             }"
                             [hidden]="!entry.isExpanded"
                         ></tr>

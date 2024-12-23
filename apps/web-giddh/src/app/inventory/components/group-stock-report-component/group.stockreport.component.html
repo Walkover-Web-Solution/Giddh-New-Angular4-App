@@ -32,10 +32,7 @@
                                                 <div *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'">
                                                     Transaction Count
                                                 </div>
-                                                <div
-                                                    
-                                                    *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'"
-                                                >
+                                                <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
                                                     Product Count
                                                 </div>
                                                 <div class="mt-1">Profit/Loss</div>
@@ -48,10 +45,7 @@
                                                         >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                                     >
                                                 </div>
-                                                <div
-                                                    
-                                                    *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'"
-                                                >
+                                                <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
                                                     <span class="text-purple" *ngIf="groupStockReport.totalItems"
                                                         >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                                     >
@@ -228,7 +222,7 @@
                 class="table basic table-border inventory-stock-table on-mobile-view table-responsive"
                 [ngClass]="{
                     'mr-b100':
-                        groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length > 6
+                        groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length > 6,
                 }"
             >
                 <thead>
@@ -323,7 +317,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
 
@@ -337,7 +331,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -350,7 +344,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -369,7 +363,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -383,7 +377,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -396,7 +390,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -414,7 +408,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -428,7 +422,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -441,7 +435,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -460,7 +454,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -474,7 +468,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -487,7 +481,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -505,7 +499,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -519,7 +513,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -532,7 +526,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -551,7 +545,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -565,7 +559,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -578,7 +572,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -596,7 +590,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -610,7 +604,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -623,7 +617,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -642,7 +636,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -656,7 +650,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'desc'
+                                                GroupStockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -669,7 +663,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
+                                                GroupStockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>

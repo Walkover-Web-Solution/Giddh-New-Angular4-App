@@ -25,7 +25,10 @@
                     </button> -->
                     <div
                         class="input-group linked-entities mr-r15"
-                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                        *ngIf="
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                        "
                     >
                         <sh-select
                             [options]="currentCompanyBranches"
@@ -44,7 +47,11 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
+                                                [ngClass]="
+                                                    option?.consolidatedBranch
+                                                        ? 'icon-company-profile'
+                                                        : 'icon-branch-icon'
+                                                "
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"
                                                 tooltip="{{ commonLocaleData?.app_branch }}"
@@ -95,7 +102,7 @@
                     >
                         <span class="icon-export-icon"></span>
                     </button>
-                    <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
+                    <ng-container *ngIf="!isCompany && !isConsolidatedBranch">
                         <button
                             dropdownToggle
                             type="button"
@@ -255,7 +262,7 @@
                                             *ngTemplateOutlet="
                                                 sortTemplate;
                                                 context: {
-                                                    column: voucherApiVersion === 2 ? 'voucherDate' : 'RECEIPT_DATE'
+                                                    column: voucherApiVersion === 2 ? 'voucherDate' : 'RECEIPT_DATE',
                                                 }
                                             "
                                         >
@@ -306,7 +313,7 @@
                                             *ngTemplateOutlet="
                                                 sortTemplate;
                                                 context: {
-                                                    column: voucherApiVersion === 2 ? 'grandTotal' : 'TOTAL_AMOUNT'
+                                                    column: voucherApiVersion === 2 ? 'grandTotal' : 'TOTAL_AMOUNT',
                                                 }
                                             "
                                         >
@@ -323,7 +330,7 @@
                                             *ngTemplateOutlet="
                                                 sortTemplate;
                                                 context: {
-                                                    column: voucherApiVersion === 2 ? 'balanceDue' : 'UNUSED_AMOUNT'
+                                                    column: voucherApiVersion === 2 ? 'balanceDue' : 'UNUSED_AMOUNT',
                                                 }
                                             "
                                         >
@@ -544,7 +551,7 @@
             *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
             (click)="handleSorting('asc', column)"
             [ngClass]="{
-                'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'
+                'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc',
             }"
         ></div>
     </ng-template>

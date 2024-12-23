@@ -127,7 +127,10 @@
                     </h5>
                 </div>
                 <ng-container>
-                    <div class="total-details-box mr-r05 border-none opening-box" *ngIf="displayedColumns?.includes('purchase')">
+                    <div
+                        class="total-details-box mr-r05 border-none opening-box"
+                        *ngIf="displayedColumns?.includes('purchase')"
+                    >
                         <h5>
                             {{ commonLocaleData?.app_purchase }}
                             <div>
@@ -142,7 +145,10 @@
                             </div>
                         </h5>
                     </div>
-                    <div class="total-details-box mr-r05 border-none sales-purchase" *ngIf="displayedColumns?.includes('return')">
+                    <div
+                        class="total-details-box mr-r05 border-none sales-purchase"
+                        *ngIf="displayedColumns?.includes('return')"
+                    >
                         <h5>
                             {{ commonLocaleData?.app_return }}
                             <div>
@@ -157,7 +163,10 @@
                             </div>
                         </h5>
                     </div>
-                    <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="displayedColumns?.includes('discount')">
+                    <div
+                        class="total-details-box mr-r05 border-none payment-receipt"
+                        *ngIf="displayedColumns?.includes('discount')"
+                    >
                         <h5>
                             {{ localeData?.net_discount }}
                             <div>
@@ -223,7 +232,10 @@
                             </div>
                         </h5>
                     </div>
-                    <div class="total-details-box border-none closing-box" *ngIf="displayedColumns?.includes('net_purchase')">
+                    <div
+                        class="total-details-box border-none closing-box"
+                        *ngIf="displayedColumns?.includes('net_purchase')"
+                    >
                         <h5>
                             {{ commonLocaleData?.app_net_purchase }}
                             <div>
@@ -254,17 +266,25 @@
                                 <div class="d-flex align-items-center">
                                     <div>{{ commonLocaleData?.app_date }}</div>
                                     <div class="icon-pointer">
-                                      <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'date' }"></ng-container>
+                                        <ng-container
+                                            *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'date' }"
+                                        ></ng-container>
                                     </div>
                                 </div>
                             </th>
-                            <td mat-cell *matCellDef="let item"> {{ item.date }} </td>
+                            <td mat-cell *matCellDef="let item">{{ item.date }}</td>
                         </ng-container>
 
                         <!-- Account Column -->
                         <ng-container matColumnDef="account">
-                            <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_account }} </th>
-                            <td mat-cell *matCellDef="let item" (dblclick)="modalUniqueName = item?.uniqueName" class="cp no-dbl-click-select"> {{ item.account.name }}
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_account }}</th>
+                            <td
+                                mat-cell
+                                *matCellDef="let item"
+                                (dblclick)="modalUniqueName = item?.uniqueName"
+                                class="cp no-dbl-click-select"
+                            >
+                                {{ item.account.name }}
                                 <div
                                     *ngIf="modalUniqueName === item?.uniqueName"
                                     account-detail-modal-component
@@ -285,48 +305,52 @@
 
                         <!-- Parent Group Column -->
                         <ng-container matColumnDef="parent_group">
-                            <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_parent_group }} </th>
-                            <td mat-cell *matCellDef="let item"> {{ item?.group?.name ? item?.group?.name : "-" }} </td>
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_parent_group }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.group?.name ? item?.group?.name : "-" }}</td>
                         </ng-container>
 
                         <!-- Tax No Column -->
                         <ng-container matColumnDef="tax_no">
-                            <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_tax_number_short }} </th>
-                            <td mat-cell *matCellDef="let item"> {{ item?.gstin ? item?.gstin : "-" }} </td>
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_tax_number_short }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.gstin ? item?.gstin : "-" }}</td>
                         </ng-container>
 
                         <!-- Address Column -->
                         <ng-container matColumnDef="address">
-                            <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_address }} </th>
-                            <td mat-cell *matCellDef="let item"> {{ item?.address ? item?.address : "-" }} </td>
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_address }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.address ? item?.address : "-" }}</td>
                         </ng-container>
 
                         <!-- Pincode Column -->
                         <ng-container matColumnDef="pincode">
-                            <th mat-header-cell *matHeaderCellDef> {{
-                                zipCodeSupportedCountryList.includes(activeCompanyCountryCode)
-                                ? commonLocaleData?.app_zip_code
-                                : commonLocaleData?.app_pin_code
-                            }} </th>
-                            <td mat-cell *matCellDef="let item"> {{ item?.pincode ? item?.pincode : "-" }} </td>
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{
+                                    zipCodeSupportedCountryList.includes(activeCompanyCountryCode)
+                                        ? commonLocaleData?.app_zip_code
+                                        : commonLocaleData?.app_pin_code
+                                }}
+                            </th>
+                            <td mat-cell *matCellDef="let item">{{ item?.pincode ? item?.pincode : "-" }}</td>
                         </ng-container>
 
                         <!-- Email Column -->
                         <ng-container matColumnDef="email">
-                            <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_email }} </th>
-                            <td mat-cell *matCellDef="let item"> {{ item?.email ? item?.email : "-" }} </td>
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_email }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.email ? item?.email : "-" }}</td>
                         </ng-container>
 
                         <!-- Mobile No Column -->
                         <ng-container matColumnDef="mobile_no">
-                            <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_mobile_no }} </th>
-                            <td mat-cell *matCellDef="let item"> {{ item?.mobileNo ? item?.mobileNo : "-" }} </td>
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_mobile_no }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.mobileNo ? item?.mobileNo : "-" }}</td>
                         </ng-container>
 
                         <!-- Purchase Account Column -->
                         <ng-container matColumnDef="purchase_account">
-                            <th mat-header-cell *matHeaderCellDef> {{ localeData?.purchase_account }} </th>
-                            <td mat-cell *matCellDef="let item"> {{ item?.salesPurchaseAccount?.name ? item?.salesPurchaseAccount?.name : "-" }} </td>
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.purchase_account }}</th>
+                            <td mat-cell *matCellDef="let item">
+                                {{ item?.salesPurchaseAccount?.name ? item?.salesPurchaseAccount?.name : "-" }}
+                            </td>
                         </ng-container>
 
                         <!-- Voucher Type Column -->
@@ -339,7 +363,7 @@
                                             *ngTemplateOutlet="
                                                 sortingTemplate;
                                                 context: {
-                                                    $implicit: 'voucherType'
+                                                    $implicit: 'voucherType',
                                                 }
                                             "
                                         >
@@ -347,7 +371,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <td mat-cell *matCellDef="let item">  {{ item.voucherType }} </td>
+                            <td mat-cell *matCellDef="let item">{{ item.voucherType }}</td>
                         </ng-container>
 
                         <!-- Voucher No Column -->
@@ -376,7 +400,7 @@
                                     />
                                 </div>
                             </th>
-                            <td mat-cell *matCellDef="let item"> {{ item.voucherNumber ? item.voucherNumber : "-" }} </td>
+                            <td mat-cell *matCellDef="let item">{{ item.voucherNumber ? item.voucherNumber : "-" }}</td>
                         </ng-container>
 
                         <!-- Purchase Column -->
@@ -389,7 +413,7 @@
                                             *ngTemplateOutlet="
                                                 sortingTemplate;
                                                 context: {
-                                                    $implicit: 'debitTotal'
+                                                    $implicit: 'debitTotal',
                                                 }
                                             "
                                         >
@@ -422,7 +446,7 @@
                                     </div>
                                 </div>
                             </th>
-                         <td mat-cell *matCellDef="let item" class="text-right">
+                            <td mat-cell *matCellDef="let item" class="text-right">
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item.creditTotal"
@@ -482,7 +506,7 @@
                                             *ngTemplateOutlet="
                                                 sortingTemplate;
                                                 context: {
-                                                    $implicit: 'discountTotal'
+                                                    $implicit: 'discountTotal',
                                                 }
                                             "
                                         >
@@ -553,13 +577,16 @@
                             </td>
                         </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </ng-container>
             </div>
         </div>
-        <div class="text-center mt-4 mb-5 position-sticky position-left" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+        <div
+            class="text-center mt-4 mb-5 position-sticky position-left"
+            *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit"
+        >
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="(purchaseRegisteDetailedResponse$ | async).totalItems"
@@ -592,7 +619,7 @@
             (click)="sortbyApi('asc', col)"
             [ngClass]="{
                 'active-text-color':
-                    getDetailedPurchaseRequestFilter.sortBy === col && getDetailedPurchaseRequestFilter.sort === 'asc'
+                    getDetailedPurchaseRequestFilter.sortBy === col && getDetailedPurchaseRequestFilter.sort === 'asc',
             }"
         ></div>
 
@@ -602,7 +629,7 @@
             (click)="sortbyApi('desc', col)"
             [ngClass]="{
                 'active-text-color':
-                    getDetailedPurchaseRequestFilter.sortBy === col && getDetailedPurchaseRequestFilter.sort === 'asc'
+                    getDetailedPurchaseRequestFilter.sortBy === col && getDetailedPurchaseRequestFilter.sort === 'asc',
             }"
         ></div>
 
@@ -612,7 +639,7 @@
             (click)="sortbyApi('asc', col)"
             [ngClass]="{
                 'active-text-color':
-                    getDetailedPurchaseRequestFilter.sortBy === col && getDetailedPurchaseRequestFilter.sort === 'desc'
+                    getDetailedPurchaseRequestFilter.sortBy === col && getDetailedPurchaseRequestFilter.sort === 'desc',
             }"
         ></div>
     </ng-template>

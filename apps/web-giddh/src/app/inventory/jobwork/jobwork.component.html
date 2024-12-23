@@ -40,7 +40,7 @@
                         <div class="clear-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
                             <button class="btn btn-filter"><span class="icon-cross"></span> Clear Filter</button>
                         </div>
-                        <div >
+                        <div>
                             <div class="pull-right">
                                 <div class="btn-group" dropdown placement="bottom right">
                                     <button
@@ -88,7 +88,7 @@
                                 <tr>
                                     <th class="bd-rr" width="120">
                                         <div class="d-flex">
-                                            <div >Date</div>
+                                            <div>Date</div>
                                             <div class="icon-pointer">
                                                 <!-- default -->
                                                 <div
@@ -97,7 +97,7 @@
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
                                                     [ngClass]="{
                                                         'active-text-color':
-                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc'
+                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc',
                                                     }"
                                                 ></div>
                                                 <!-- after sort click -->
@@ -107,7 +107,7 @@
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
                                                     [ngClass]="{
                                                         'active-text-color':
-                                                            filter.sortBy === 'entry_date' && filter.sort === 'desc'
+                                                            filter.sortBy === 'entry_date' && filter.sort === 'desc',
                                                     }"
                                                 ></div>
                                                 <div
@@ -116,7 +116,7 @@
                                                     (click)="sortButtonClicked('desc', 'entry_date')"
                                                     [ngClass]="{
                                                         'active-text-color':
-                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc'
+                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc',
                                                     }"
                                                 ></div>
                                             </div>
@@ -217,7 +217,7 @@
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
                                                     [ngClass]="{
                                                         'active-text-color':
-                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
+                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc',
                                                     }"
                                                 ></div>
                                                 <!-- after sort click -->
@@ -227,7 +227,7 @@
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
                                                     [ngClass]="{
                                                         'active-text-color':
-                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'desc'
+                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'desc',
                                                     }"
                                                 ></div>
                                                 <div
@@ -236,7 +236,7 @@
                                                     (click)="sortButtonClicked('desc', 'QUANTITY')"
                                                     [ngClass]="{
                                                         'active-text-color':
-                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
+                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc',
                                                     }"
                                                 ></div>
                                             </div>

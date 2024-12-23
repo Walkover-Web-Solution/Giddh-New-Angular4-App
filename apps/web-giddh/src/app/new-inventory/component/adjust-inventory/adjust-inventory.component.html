@@ -168,8 +168,8 @@
                                                     adjustInventoryCreateEditForm.get("entityName")?.value
                                                         ? adjustInventoryCreateEditForm.get("entityName")?.value
                                                         : entity.entityName
-                                                        ? entity.entityName
-                                                        : localeData?.search_bar
+                                                          ? entity.entityName
+                                                          : localeData?.search_bar
                                                 }}
                                             </td>
                                             <td (click)="$event.preventDefault(); $event.stopPropagation()">
@@ -246,13 +246,13 @@
                                                               ?.value === "QUANTITY_WISE"
                                                             ? referenceNumber
                                                                 ? stockGroupClosingBalance?.closing
-                                                                : stockGroupClosingBalance?.closing?.closing
-                                                                      ?.quantity ?? 0
+                                                                : (stockGroupClosingBalance?.closing?.closing
+                                                                      ?.quantity ?? 0)
                                                             : giddhRoundOff(
                                                                   referenceNumber
                                                                       ? stockGroupClosingBalance?.closing
-                                                                      : stockGroupClosingBalance?.closing.closing
-                                                                            ?.amount ?? 0,
+                                                                      : (stockGroupClosingBalance?.closing.closing
+                                                                            ?.amount ?? 0),
                                                                   this.giddhBalanceDecimalPlaces
                                                               )
                                                         : 0
@@ -340,11 +340,11 @@
                                             {{
                                                 adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
                                                 "QUANTITY_WISE"
-                                                    ? element?.closingBeforeAdjustment ?? element?.closing?.quantity
+                                                    ? (element?.closingBeforeAdjustment ?? element?.closing?.quantity)
                                                     : giddhRoundOff(
                                                           element?.closingBeforeAdjustment
-                                                              ? element?.closingBeforeAdjustment ?? 0
-                                                              : element?.closing?.amount ?? 0,
+                                                              ? (element?.closingBeforeAdjustment ?? 0)
+                                                              : (element?.closing?.amount ?? 0),
                                                           this.giddhBalanceDecimalPlaces
                                                       )
                                             }}

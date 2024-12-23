@@ -87,7 +87,7 @@
                                                 [forceClearReactive]="forceClear$ | async"
                                                 class="select-unit-x"
                                                 [ngClass]="{
-                                                    'error-box': !mappingField.stockUnitX.code && !isValidForm
+                                                    'error-box': !mappingField.stockUnitX.code && !isValidForm,
                                                 }"
                                             >
                                                 <ng-template #optionTemplate let-option="option">
@@ -134,7 +134,7 @@
                                                 [forceClearReactive]="forceClear$ | async"
                                                 class="select-unit"
                                                 [ngClass]="{
-                                                    'error-box': !mappingField.stockUnitY.code && !isValidForm
+                                                    'error-box': !mappingField.stockUnitY.code && !isValidForm,
                                                 }"
                                             >
                                                 <ng-template #optionTemplate let-option="option">

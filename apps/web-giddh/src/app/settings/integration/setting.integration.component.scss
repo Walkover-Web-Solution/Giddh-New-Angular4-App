@@ -118,7 +118,7 @@
         text-decoration: underline;
     }
 }
-.mat-tab-bottom-spacing{
+.mat-tab-bottom-spacing {
     padding-bottom: 140px;
 }
 ::ng-deep {
@@ -183,9 +183,9 @@
 
     .mat-mdc-table {
         tbody {
-            .mat-mdc-row{
-                &:hover{
-                    .mat-mdc-cell{
+            .mat-mdc-row {
+                &:hover {
+                    .mat-mdc-cell {
                         .icon-visibility {
                             visibility: visible !important;
                         }

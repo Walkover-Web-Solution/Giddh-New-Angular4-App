@@ -30,7 +30,7 @@
                         </button>
                     </div>
                     <button
-                        *ngIf="(!isCompany && !isConsolidatedBranch)"
+                        *ngIf="!isCompany && !isConsolidatedBranch"
                         aria-label="create warehouse"
                         mat-stroked-button
                         color="primary"
@@ -60,7 +60,7 @@
                                     class="warehouse-status font-15"
                                     [ngClass]="{
                                         'warehouse-archived': warehouse.isArchived,
-                                        'warehouse-active': !warehouse.isArchived
+                                        'warehouse-active': !warehouse.isArchived,
                                     }"
                                     ><span>&nbsp;</span>
                                     {{

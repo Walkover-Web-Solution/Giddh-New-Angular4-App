@@ -446,7 +446,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="!hasIntegrationScope">
-                        <h3 class="mb-1">{{localeData?.payment?.permission_message}}</h3>
+                        <h3 class="mb-1">{{ localeData?.payment?.permission_message }}</h3>
                     </ng-container>
                     <div class="connected-accounts">
                         <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
@@ -700,12 +700,9 @@
                                 >
                             </li>
                             <li>
-                                <a
-                                    target="_blank"
-                                    class="btn link-color"
-                                    [href]="syncWithTallyHelpDocUrl"
-                                    >{{ localeData?.tally?.help_documentation }}</a
-                                >
+                                <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">{{
+                                    localeData?.tally?.help_documentation
+                                }}</a>
                             </li>
                         </ul>
                     </div>
@@ -788,7 +785,7 @@
         <div class="modal-md">
             <div class="modal-content">
                 <confirm-modal
-                    [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
+                    [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]' : activeBankAccount?.loginId"
                     (cancelCallBack)="confirmationModalRef?.close()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >

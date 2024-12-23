@@ -50,7 +50,7 @@
                             [ngClass]="{
                                 'error-box':
                                     accountForm?.get('accountNumber')?.dirty &&
-                                    accountForm?.get('accountNumber')?.errors
+                                    accountForm?.get('accountNumber')?.errors,
                             }"
                             [placeholder]="localeData?.payment?.account_number_placeholder"
                             [maxlength]="18"
@@ -79,9 +79,16 @@
                     <div class="mr-t1 custom-mat-form-field">
                         <mat-form-field class="w-100" appearance="outline">
                             <mat-label>{{ localeData?.payment?.payment_updates }}</mat-label>
-                            <mat-select formControlName="paymentAlerts" name="paymentAlerts" [multiple]="paymentAlertsUsersList?.length === 0">
+                            <mat-select
+                                formControlName="paymentAlerts"
+                                name="paymentAlerts"
+                                [multiple]="paymentAlertsUsersList?.length === 0"
+                            >
                                 <ng-container *ngFor="let item of paymentAlertsUsersList">
-                                    <mat-option (onSelectionChange)="selectPaymentAlertUsers(item)" [value]="item?.value">
+                                    <mat-option
+                                        (onSelectionChange)="selectPaymentAlertUsers(item)"
+                                        [value]="item?.value"
+                                    >
                                         {{ item?.label }}
                                     </mat-option>
                                 </ng-container>

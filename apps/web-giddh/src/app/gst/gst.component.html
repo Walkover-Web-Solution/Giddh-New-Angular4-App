@@ -39,16 +39,16 @@
             </div>
             <div class="tax-dropdown col-xl-3 col-lg-6 col-md-3 col-sm-9 col-9">
                 <sh-select
-                [options]="taxes"
-                [(ngModel)]="activeCompanyGstNumber"
-                (selected)="selectTax($event)"
-                [defaultValue]="activeCompanyGstNumber"
+                    [options]="taxes"
+                    [(ngModel)]="activeCompanyGstNumber"
+                    (selected)="selectTax($event)"
+                    [defaultValue]="activeCompanyGstNumber"
                     [placeholder]="localeData?.select_gstin"
                     [showClear]="false"
                     [multiple]="false"
                     [ItemHeight]="67"
                     [isRequired]="true"
-                    >
+                >
                 </sh-select>
             </div>
             <span class="ml-auto">
@@ -61,7 +61,7 @@
                 'content-disabled':
                     (gstr1OverviewDataInProgress$ | async) ||
                     (gstr2OverviewDataInProgress$ | async) ||
-                    !activeCompanyGstNumber
+                    !activeCompanyGstNumber,
             }"
         >
             <div class="header-band filings-header clearfix">
@@ -89,16 +89,7 @@
                                     id="button-nested"
                                     dropdownToggle
                                     type="button"
-                                    class="
-                                        dropdown
-                                        clearfix
-                                        list-title
-                                        filter-by
-                                        return-sel
-                                        font-large
-                                        dropdown-toggle
-                                        pull-left
-                                    "
+                                    class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
                                     aria-controls="dropdown-nested"
                                 >
                                     <ng-container *ngIf="isMonthSelected">
@@ -117,8 +108,13 @@
                                                 name="fromDate"
                                                 (click)="$event.stopPropagation()"
                                                 (bsValueChange)="periodChanged($event); monthWise.hide()"
-                                                [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
-                                                [ngModelOptions]="{standalone: true}"
+                                                [bsConfig]="{
+                                                    startView: 'month',
+                                                    dateInputFormat: 'MM/YYYY',
+                                                    adaptivePosition: true,
+                                                    minMode: 'month',
+                                                }"
+                                                [ngModelOptions]="{ standalone: true }"
                                             >
                                             </bs-datepicker-inline>
                                         </a>
@@ -197,7 +193,7 @@
                     <div
                         class="return-content"
                         [ngClass]="{
-                            'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)
+                            'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async),
                         }"
                     >
                         <div>
@@ -240,7 +236,10 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr1)" href="javascript:void(0);" aria-label="transaction"
+                                    <a
+                                        (click)="navigateToOverview(GstReport.Gstr1)"
+                                        href="javascript:void(0);"
+                                        aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b> {{ gstr1TransactionCounts }} </b></span
                                         >
@@ -255,7 +254,11 @@
                                 <div class="row empty-return-row">
                                     <div
                                         class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                        [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']"
+                                        [routerLink]="[
+                                            voucherApiVersion === 2
+                                                ? '/pages/vouchers/sales/create'
+                                                : '/pages/proforma-invoice/invoice/sales',
+                                        ]"
                                     >
                                         <svg
                                             id="Layer_1"
@@ -341,7 +344,7 @@
                         class="return-content"
                         [ngClass]="{
                             'content-disabled':
-                                !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async)
+                                !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async),
                         }"
                     >
                         <span class="btn-toolbar pull-right mr-t1" *ngIf="gstr2TransactionCounts">
@@ -357,7 +360,7 @@
 
                         <div>
                             <div class="return-top text-middle gstr-2-label">
-                                <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle"  alt="bag img"  />
+                                <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="bag img" />
                                 <div>
                                     <div class="font-xlarge">
                                         <b
@@ -385,7 +388,10 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr2)"  href="javascript:void(0);"  aria-label="transaction"
+                                    <a
+                                        (click)="navigateToOverview(GstReport.Gstr2)"
+                                        href="javascript:void(0);"
+                                        aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b> {{ gstr2TransactionCounts }} </b></span
                                         >
@@ -400,8 +406,7 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a
-                                        href="javascript:void(0);"  aria-label="transaction"
+                                    <a href="javascript:void(0);" aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b>{{ commonLocaleData?.app_numbers?.zero }}</b></span
                                         >
@@ -430,7 +435,11 @@
                                 <div class="row empty-return-row">
                                     <div
                                         class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                        [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/purchase/create' : '/pages/proforma-invoice/invoice/purchase']"
+                                        [routerLink]="[
+                                            voucherApiVersion === 2
+                                                ? '/pages/vouchers/purchase/create'
+                                                : '/pages/proforma-invoice/invoice/purchase',
+                                        ]"
                                     >
                                         <svg
                                             id="Layer_1"

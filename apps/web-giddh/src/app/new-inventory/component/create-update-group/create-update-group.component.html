@@ -10,7 +10,7 @@
         <hamburger-menu *ngIf="!addGroup"></hamburger-menu>
 
         <ng-container *ngIf="!showLoader">
-            <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">          
+            <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-9">
@@ -42,12 +42,7 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
                                         <div
-                                            class="
-                                                inline-multiple-input-width
-                                                d-flex
-                                                align-items-center
-                                                justify-content-space-between
-                                            "
+                                            class="inline-multiple-input-width d-flex align-items-center justify-content-space-between"
                                         >
                                             <div>
                                                 <mat-radio-group
@@ -126,27 +121,22 @@
                                     </div>
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
                                         <reactive-dropdown-field
-                                                class="input-width"
-                                                [name]="'discounts'"
-                                                [placeholder]="localeData?.select_discounts"
-                                                [label]="commonLocaleData?.app_discount"
-                                                [labelValue]="groupForm?.get('discountLabel')?.value ?? ''"
-                                                (onClear)="groupForm.get('discounts')?.patchValue(null)"
-                                                [options]="discountsList$ | async"
-                                                formControlName="discounts"
-                                            >
-                                            </reactive-dropdown-field>
+                                            class="input-width"
+                                            [name]="'discounts'"
+                                            [placeholder]="localeData?.select_discounts"
+                                            [label]="commonLocaleData?.app_discount"
+                                            [labelValue]="groupForm?.get('discountLabel')?.value ?? ''"
+                                            (onClear)="groupForm.get('discounts')?.patchValue(null)"
+                                            [options]="discountsList$ | async"
+                                            formControlName="discounts"
+                                        >
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row mr-t15">
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
                                         <div
-                                            class="
-                                                inline-multiple-input-width
-                                                d-flex
-                                                align-items-center
-                                                justify-content-space-between
-                                            "
+                                            class="inline-multiple-input-width d-flex align-items-center justify-content-space-between"
                                         >
                                             <div>
                                                 <div class="d-flex toggle-childgroup">
@@ -234,8 +224,11 @@
                                     {{ commonLocaleData?.app_back }}
                                 </button>
                             </span>
-                            <span  class="float-right mt-3">
-                                <watch-video [cssClass]="'text-primary pd-t05 pd-r15'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
+                            <span class="float-right mt-3">
+                                <watch-video
+                                    [cssClass]="'text-primary pd-t05 pd-r15'"
+                                    [moduleName]="'INVENTORY_MASTER_GROUP'"
+                                ></watch-video>
                             </span>
                         </div>
                     </div>

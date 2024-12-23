@@ -39,7 +39,6 @@
         .vouchers-form-fields {
             max-width: 415px;
             min-width: 230px;
-
         }
 
         .vouchers-form-fields-detail {
@@ -67,7 +66,6 @@
                 opacity: 0.7;
             }
         }
-
 
         .vouchers-small-container {
             max-width: 860px;
@@ -104,7 +102,6 @@
                     }
                 }
             }
-
         }
 
         .vouchers-large-container {
@@ -119,7 +116,6 @@
             .vouchers-entry-table {
                 table {
                     tr {
-
                         th,
                         td {
                             padding: 16px 8px;
@@ -297,6 +293,7 @@
     color: var(--color-common-primary-text);
 }
 
-.option-value, .option-value-stock {
+.option-value,
+.option-value-stock {
     color: var(--color-gray);
 }

@@ -7,7 +7,13 @@
 >
     <div class="msg91-container" *ngIf="!showTriggerForm && !(editCommunicationPlatform === 'MSG91')">
         <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-            <button mat-icon-button disableRipple id="edit-model-basic" [matMenuTriggerFor]="beforeMenu" aria-label="vertical dot img">
+            <button
+                mat-icon-button
+                disableRipple
+                id="edit-model-basic"
+                [matMenuTriggerFor]="beforeMenu"
+                aria-label="vertical dot img"
+            >
                 <span class="icon-dots-three-vertical"></span>
             </button>
             <mat-menu #beforeMenu="matMenu" xPosition="before">
@@ -316,7 +322,9 @@
                 <div class="compose-trigger-dropdowns">
                     <div class="chiplist-wrapper">
                         <div class="pd-l2 pd-r2 border-bottom">
-                            <span class="dropdown-heading pd-b15 d-block">{{ localeData?.communication?.receiver }}</span>
+                            <span class="dropdown-heading pd-b15 d-block">{{
+                                localeData?.communication?.receiver
+                            }}</span>
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_mobile"
                                 [options]="triggerMobileDropdown"

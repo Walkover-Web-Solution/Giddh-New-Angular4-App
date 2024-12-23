@@ -14,7 +14,10 @@
                     </button>
                     <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
                         <div
-                            *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                            *ngIf="
+                                currentCompanyBranches?.length > 2 &&
+                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                            "
                             class="input-group form-group linked-entities mb-0 mr-r1"
                         >
                             <sh-select
@@ -36,7 +39,7 @@
                                                 <i
                                                     [ngClass]="{
                                                         'icon-company-profile': option?.consolidatedBranch,
-                                                        'icon-branch-icon': !option?.consolidatedBranch
+                                                        'icon-branch-icon': !option?.consolidatedBranch,
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"
@@ -121,7 +124,7 @@
                                             branchTransferGetRequestParams.sort === 'asc'),
                                     'icon-arrow-down':
                                         branchTransferGetRequestParams.sortBy === 'dateOfSupply' &&
-                                        branchTransferGetRequestParams.sort === 'desc'
+                                        branchTransferGetRequestParams.sort === 'desc',
                                 }"
                             ></span>
                         </th>
@@ -233,7 +236,7 @@
                                             branchTransferGetRequestParams.sort === 'asc'),
                                     'icon-arrow-down':
                                         branchTransferGetRequestParams.sortBy === 'totalAmount' &&
-                                        branchTransferGetRequestParams.sort === 'desc'
+                                        branchTransferGetRequestParams.sort === 'desc',
                                 }"
                             ></span>
                         </th>

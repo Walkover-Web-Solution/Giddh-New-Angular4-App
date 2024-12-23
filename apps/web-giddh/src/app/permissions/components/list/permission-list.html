@@ -33,12 +33,7 @@
                             >
                                 {{commonLocaleData?.app_edit}}
                             </button>
-                            <button
-                                mat-stroked-button
-                                color="warn"
-                                *ngIf="!role.isFixed"
-                                (click)="deleteRole(role);"
-                            >
+                            <button mat-stroked-button color="warn" *ngIf="!role.isFixed" (click)="deleteRole(role);">
                                 {{commonLocaleData?.app_delete}}
                             </button>
                             <button mat-stroked-button color="primary" (click)="updateRole(role)">

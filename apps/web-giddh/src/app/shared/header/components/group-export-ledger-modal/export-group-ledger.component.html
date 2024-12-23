@@ -20,7 +20,9 @@
         <div class="modal-body mr-b4" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
                 <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mr-b15">
-                    <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
+                    <mat-radio-button id="ledger-entries" [value]="'ledger'">{{
+                        localeData?.ledger_entries
+                    }}</mat-radio-button>
                     <mat-radio-button id="account" [value]="'account'">{{ localeData?.account }}</mat-radio-button>
                 </mat-radio-group>
 
@@ -28,7 +30,9 @@
                     <div class="pd-b3">
                         <div class="form-inline">
                             <div class="form-group">
-                                <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
+                                <label class="w100 justify-content-start"
+                                    >{{ commonLocaleData?.app_date_range }}:
+                                </label>
                                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <input
                                         type="text"
@@ -46,7 +50,9 @@
                     >
                         <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
                         <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
-                            <mat-radio-button id="csv" [value]="'CSV'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
+                            <mat-radio-button id="csv" [value]="'CSV'">{{
+                                commonLocaleData?.app_csv
+                            }}</mat-radio-button>
                             <mat-radio-button id="excel" [value]="'XLSX'">{{
                                 commonLocaleData?.app_excel
                             }}</mat-radio-button>
@@ -57,7 +63,9 @@
                         <label class="radio-inline p-0">
                             <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
                                 <span class="pull-left">{{
-                                    exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending
+                                    exportRequest.sort
+                                        ? commonLocaleData?.app_ascending
+                                        : commonLocaleData?.app_descending
                                 }}</span>
                             </mat-slide-toggle>
                         </label>
@@ -71,7 +79,9 @@
                                 [(ngModel)]="exportRequest.showEntryVoucherNo"
                             >
                                 <span class="pull-left">{{
-                                    exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                    exportRequest.showEntryVoucherNo
+                                        ? commonLocaleData?.app_yes
+                                        : commonLocaleData?.app_no
                                 }}</span>
                             </mat-slide-toggle>
                         </label>
@@ -85,7 +95,9 @@
                                 [(ngModel)]="exportRequest.showVoucherNumber"
                             >
                                 <span class="pull-left">{{
-                                    exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                    exportRequest.showVoucherNumber
+                                        ? commonLocaleData?.app_yes
+                                        : commonLocaleData?.app_no
                                 }}</span>
                             </mat-slide-toggle>
                         </label>
@@ -99,7 +111,9 @@
                                 [(ngModel)]="exportRequest.showVoucherTotal"
                             >
                                 <span class="pull-left">{{
-                                    exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                    exportRequest.showVoucherTotal
+                                        ? commonLocaleData?.app_yes
+                                        : commonLocaleData?.app_no
                                 }}</span>
                             </mat-slide-toggle>
                         </label>
@@ -113,7 +127,9 @@
                                 [(ngModel)]="exportRequest.showEntryVoucher"
                             >
                                 <span class="pull-left">{{
-                                    exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                    exportRequest.showEntryVoucher
+                                        ? commonLocaleData?.app_yes
+                                        : commonLocaleData?.app_no
                                 }}</span>
                             </mat-slide-toggle>
                         </label>
@@ -138,12 +154,10 @@
                         <p class="pb-3">
                             {{ commonLocaleData?.app_note }} :
                             <span [innerHTML]="commonLocaleData.app_export_note">
-                              {{ localeData?.export_note }}
+                                {{ localeData?.export_note }}
                             </span>
-                          </p>
-                          <master-export-option
-                            (exportFormMaster) = "exportFormValue = $event"
-                          ></master-export-option>
+                        </p>
+                        <master-export-option (exportFormMaster)="exportFormValue = $event"></master-export-option>
                     </div>
                 </ng-container>
                 <button class="btn-success btn min-width-100" (click)="exportLedger()">

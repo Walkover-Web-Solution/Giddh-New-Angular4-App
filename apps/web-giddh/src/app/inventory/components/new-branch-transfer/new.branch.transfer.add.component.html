@@ -691,7 +691,7 @@
                                                     (click)="focusSkuNumber()"
                                                     *ngIf="activeRow == i && product?.uniqueName"
                                                 >
-                                                    <label >SKU Code: </label>
+                                                    <label>SKU Code: </label>
                                                     <span
                                                         >{{ product.skuCode }}
                                                         <span class="edit-icon cp">
@@ -1070,7 +1070,7 @@
                                             <i
                                                 class="icon-info"
                                                 [ngClass]="{
-                                                    'change-position': branchTransfer.destinations?.length > 1
+                                                    'change-position': branchTransfer.destinations?.length > 1,
                                                 }"
                                                 *ngIf="
                                                     destinationWarehouses[destination?.uniqueName]?.length !==
@@ -1424,7 +1424,7 @@
                         class="form-control"
                         [ngClass]="{
                             'has-error': Transportersname.invalid && Transportersname.touched && Transportersname.dirty,
-                            'has-success': Transportersname.valid
+                            'has-success': Transportersname.valid,
                         }"
                         required
                         placeholder="Mention name"
@@ -1455,7 +1455,7 @@
                         class="form-control"
                         [ngClass]="{
                             'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty,
-                            'has-success': TransportersID.valid
+                            'has-success': TransportersID.valid,
                         }"
                         name="transporterId"
                         [(ngModel)]="generateNewTransporter.transporterId"
@@ -1516,7 +1516,7 @@
                                     [ngClass]="{
                                         'active-text-color':
                                             transporterFilterRequest.sortBy === 'transporterName' &&
-                                            transporterFilterRequest.sort === 'asc'
+                                            transporterFilterRequest.sort === 'asc',
                                     }"
                                 ></div>
                                 <div
@@ -1525,7 +1525,7 @@
                                     [ngClass]="{
                                         'active-text-color':
                                             transporterFilterRequest.sortBy === 'transporterName' &&
-                                            transporterFilterRequest.sort === 'desc'
+                                            transporterFilterRequest.sort === 'desc',
                                     }"
                                 ></div>
                             </div>
@@ -1539,7 +1539,7 @@
                                     [ngClass]="{
                                         'active-text-color':
                                             transporterFilterRequest.sortBy === 'transporterId' &&
-                                            transporterFilterRequest.sort === 'asc'
+                                            transporterFilterRequest.sort === 'asc',
                                     }"
                                 ></div>
                                 <div
@@ -1548,7 +1548,7 @@
                                     [ngClass]="{
                                         'active-text-color':
                                             transporterFilterRequest.sortBy === 'transporterId' &&
-                                            transporterFilterRequest.sort === 'desc'
+                                            transporterFilterRequest.sort === 'desc',
                                     }"
                                 ></div>
                             </div>

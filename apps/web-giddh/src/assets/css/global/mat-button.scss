@@ -92,33 +92,33 @@ button {
 
 /*==========  Material Icon Button Default hover =============*/
 .mat-mdc-icon-button {
-    &:hover{
-        .mat-mdc-button-persistent-ripple{
-            &::before{
+    &:hover {
+        .mat-mdc-button-persistent-ripple {
+            &::before {
                 opacity: 0;
             }
         }
     }
-    &:active{
-        .mat-mdc-button-persistent-ripple{
-            &::before{
+    &:active {
+        .mat-mdc-button-persistent-ripple {
+            &::before {
                 opacity: 0;
             }
-        }       
+        }
     }
     &.cdk-keyboard-focused {
-        .mat-mdc-button-persistent-ripple{
-            &::before{
+        .mat-mdc-button-persistent-ripple {
+            &::before {
                 opacity: 0;
             }
         }
     }
 }
- /*Material Button Disabled Cursor*/
+/*Material Button Disabled Cursor*/
 .mat-mdc-button[disabled],
-.mat-mdc-outlined-button[disabled]{        
-            cursor: not-allowed !important;
-            pointer-events: all !important;
+.mat-mdc-outlined-button[disabled] {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
 }
 button.button-no-background .mdc-button__ripple {
     display: none;

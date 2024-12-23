@@ -1,5 +1,9 @@
-<ng-container appTranslate [file]="'inventory/adjustment'" (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event">
+<ng-container
+    appTranslate
+    [file]="'inventory/adjustment'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
     <div class="relative adjust-group-page pd-l15 pd-r15 pd-t1 mt-1">
         <hamburger-menu [pageHeading]="'Adjust Product/Service - Dummy Product Name Furniture'"></hamburger-menu>
 
@@ -7,8 +11,11 @@
             <h2>Inventory Adjustment</h2>
         </div>
 
-        <button mat-stroked-button class="pull-right pd cursor-pointer back-to-page mr-t05 mr-r1"
-            [routerLink]="['/pages/inventory/v2/adjust-inventory']">
+        <button
+            mat-stroked-button
+            class="pull-right pd cursor-pointer back-to-page mr-t05 mr-r1"
+            [routerLink]="['/pages/inventory/v2/adjust-inventory']"
+        >
             Back
         </button>
         <div class="adjust-field-wrapper">
@@ -23,7 +30,12 @@
                             <div>
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>Quantity Wise*</mat-label>
-                                    <mat-select class="px-0" name="mode" [(ngModel)]="mode" placeholder="Select Quantity">
+                                    <mat-select
+                                        class="px-0"
+                                        name="mode"
+                                        [(ngModel)]="mode"
+                                        placeholder="Select Quantity"
+                                    >
                                         <mat-option value="true">Quantity</mat-option>
                                         <mat-option value="false">Value</mat-option>
                                     </mat-select>
@@ -32,34 +44,64 @@
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
                             <div class="direct-mat-datepicker">
-                                <giddh-datepicker [minDate]="''" name="date"
-                                    [cssClass]="'w-100'" [showToggleIcon]="false" [appearance]="'outline'"
-                                    [placeholder]="'Date'" [required]="true">
+                                <giddh-datepicker
+                                    [minDate]="''"
+                                    name="date"
+                                    [cssClass]="'w-100'"
+                                    [showToggleIcon]="false"
+                                    [appearance]="'outline'"
+                                    [placeholder]="'Date'"
+                                    [required]="true"
+                                >
                                 </giddh-datepicker>
                             </div>
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
-                            <input-field [name]="'reference-no'" [label]="'Reference Number'"
-                                [placeholder]="'Enter Reference Number'" [type]="'text'" [required]="true">
+                            <input-field
+                                [name]="'reference-no'"
+                                [label]="'Reference Number'"
+                                [placeholder]="'Enter Reference Number'"
+                                [type]="'text'"
+                                [required]="true"
+                            >
                             </input-field>
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
-                            <dropdown-field [name]="'account'" [label]="'Expense Account'"
-                                [placeholder]="'Select Expense Account'" [options]="dummyOptions"
-                                (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true">
+                            <dropdown-field
+                                [name]="'account'"
+                                [label]="'Expense Account'"
+                                [placeholder]="'Select Expense Account'"
+                                [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)"
+                                [defaultValue]="''"
+                                [required]="true"
+                            >
                             </dropdown-field>
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
-                            <dropdown-field [name]="'reason'" [label]="'Reason'" [placeholder]="'Select Reason'"
-                                (createOption)="openCreateReasonAsidepan()" [options]="dummyOptions"
-                                (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true"
-                                [showCreateNew]="true">
+                            <dropdown-field
+                                [name]="'reason'"
+                                [label]="'Reason'"
+                                [placeholder]="'Select Reason'"
+                                (createOption)="openCreateReasonAsidepan()"
+                                [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)"
+                                [defaultValue]="''"
+                                [required]="true"
+                                [showCreateNew]="true"
+                            >
                             </dropdown-field>
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
-                            <dropdown-field [name]="'warehouse'" [label]="'Warehouse'"
-                                [placeholder]="'Select Warehouse'" [options]="dummyOptions"
-                                (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true">
+                            <dropdown-field
+                                [name]="'warehouse'"
+                                [label]="'Warehouse'"
+                                [placeholder]="'Select Warehouse'"
+                                [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)"
+                                [defaultValue]="''"
+                                [required]="true"
+                            >
                             </dropdown-field>
                         </div>
                         <div class="col-md-12 col-12">
@@ -139,9 +181,15 @@
                             <tr>
                                 <td>
                                     <div class="d-flex mb-2 w-100">
-                                        <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
-                                            [name]="'fields'" [placeholder]="'Select Stock'" [options]="dummyOptions"
-                                            (selectedOption)="selectAccount($event)" [defaultValue]="''">
+                                        <select-field
+                                            class="w-100"
+                                            [cssClass]="'form-control mat-field-border'"
+                                            [name]="'fields'"
+                                            [placeholder]="'Select Stock'"
+                                            [options]="dummyOptions"
+                                            (selectedOption)="selectAccount($event)"
+                                            [defaultValue]="''"
+                                        >
                                         </select-field>
                                     </div>
                                     <!-- <textarea placeholder="Add Description" matInput class="form-control"></textarea> -->
@@ -159,25 +207,45 @@
                                             </div>
                                         </mat-select>
                                     </div>
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Enter value'"
+                                    >
                                     </text-field>
                                 </td>
                                 <td class="small-width" *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control text-right'"
+                                        [(ngModel)]="closingQty"
+                                        [readonly]="true"
+                                    >
                                     </text-field>
                                 </td>
                                 <td class="small-width" *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control text-right'"
+                                        [(ngModel)]="closingQty"
+                                        [readonly]="true"
+                                    >
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Qty'">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Qty'"
+                                    >
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Value'">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Value'"
+                                    >
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
@@ -210,9 +278,15 @@
                             <tr>
                                 <td>
                                     <div class="d-flex mb-2">
-                                        <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
-                                            [name]="'fields'" [placeholder]="'Select Group'" [options]="dummyOptions"
-                                            (selectedOption)="selectAccount($event)" [defaultValue]="''">
+                                        <select-field
+                                            class="w-100"
+                                            [cssClass]="'form-control mat-field-border'"
+                                            [name]="'fields'"
+                                            [placeholder]="'Select Group'"
+                                            [options]="dummyOptions"
+                                            (selectedOption)="selectAccount($event)"
+                                            [defaultValue]="''"
+                                        >
                                         </select-field>
                                     </div>
                                     <!-- <textarea placeholder="Add Description" matInput class="form-control"></textarea> -->
@@ -230,25 +304,45 @@
                                             </div>
                                         </mat-select>
                                     </div>
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
-                                    </text-field>                  
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Enter value'"
+                                    >
+                                    </text-field>
                                 </td>
                                 <td class="small-width" *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control text-right'"
+                                        [(ngModel)]="closingQty"
+                                        [readonly]="true"
+                                    >
                                     </text-field>
                                 </td>
                                 <td class="small-width" *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control text-right'"
+                                        [(ngModel)]="closingQty"
+                                        [readonly]="true"
+                                    >
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Qty'">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Qty'"
+                                    >
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Value'">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Value'"
+                                    >
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
@@ -278,13 +372,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

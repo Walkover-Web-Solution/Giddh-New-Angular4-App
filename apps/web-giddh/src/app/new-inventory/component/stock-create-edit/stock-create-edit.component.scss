@@ -285,11 +285,11 @@
     }
 
     .select-physical-product {
-        .top-right-spacing{
+        .top-right-spacing {
             top: 5px;
             right: 95px;
         }
-        .z-index-1{
+        .z-index-1 {
             z-index: 1;
         }
         .product-detail-content {
@@ -761,7 +761,6 @@ table.stock-table {
 }
 
 @media (max-width: 991px) {
-
     .addon-form,
     .variant-form {
         input {
@@ -915,7 +914,6 @@ table.stock-table {
         }
 
         .sales-purchase-details {
-
             .purchase-information,
             .sales-information {
                 .pl-0 {
@@ -1037,7 +1035,7 @@ table.stock-table {
 }
 
 .word-wrap-dots {
-   max-width: 230px;
+    max-width: 230px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

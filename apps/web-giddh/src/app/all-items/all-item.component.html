@@ -100,7 +100,11 @@
         </div>
         <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
             <ng-container *ngFor="let item of subMenuItems">
-                <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
+                <mat-card
+                    class="single-item"
+                    (click)="redirectSubItemLink(item)"
+                    [queryParams]="item?.additional?.queryParams"
+                >
                     <mat-card-title>
                         <h4><i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}</h4>
                     </mat-card-title>

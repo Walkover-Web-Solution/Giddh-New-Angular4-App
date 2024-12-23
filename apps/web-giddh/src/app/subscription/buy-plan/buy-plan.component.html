@@ -125,7 +125,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title font-15"
                                                     [ngClass]="{
-                                                        'active-plan': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <div class="plan-content d-flex flex-column h-100">
@@ -149,7 +149,7 @@
                                                                 <p
                                                                     *ngIf="plan?.yearlyDiscountAmount > 0"
                                                                     [ngClass]="{
-                                                                        'feature-txt': !plan?.yearlyDiscountAmount > 0
+                                                                        'feature-txt': !plan?.yearlyDiscountAmount > 0,
                                                                     }"
                                                                 >
                                                                     <s class="strong">
@@ -256,7 +256,7 @@
                                                                 <p
                                                                     *ngIf="plan?.monthlyDiscountAmount > 0"
                                                                     [ngClass]="{
-                                                                        'feature-txt': !plan?.monthlyDiscountAmount > 0
+                                                                        'feature-txt': !plan?.monthlyDiscountAmount > 0,
                                                                     }"
                                                                 >
                                                                     <s class="strong">
@@ -362,7 +362,7 @@
                                                             [ngClass]="{
                                                                 'selected-plan':
                                                                     firstStepForm.get('planUniqueName').value ===
-                                                                    plan?.uniqueName
+                                                                    plan?.uniqueName,
                                                             }"
                                                             (click)="selectPlan(plan)"
                                                         >
@@ -395,7 +395,7 @@
                                                 <div
                                                     class="grid-title-list font-15 plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span class="sub-plan-name">
@@ -425,7 +425,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span>
@@ -454,7 +454,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span>
@@ -483,7 +483,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -505,7 +505,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <i class="icon-tick"></i>
@@ -522,7 +522,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0"
@@ -544,7 +544,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <i class="icon-tick"></i>
@@ -561,7 +561,7 @@
                                                 <div
                                                     class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <i class="icon-tick"></i>
@@ -578,7 +578,7 @@
                                                 <div
                                                     class="grid-title-list bottom-buy-button plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">{{
@@ -603,7 +603,7 @@
                                                 <div
                                                     class="grid-title-list bottom-buy-button plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -630,7 +630,7 @@
                                                     [ngClass]="{
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                         'active-plan-td-bottom':
-                                                            selectedPlan?.uniqueName === plan?.uniqueName
+                                                            selectedPlan?.uniqueName === plan?.uniqueName,
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
@@ -735,7 +735,7 @@
                                                             'invalid-input':
                                                                 isFormSubmitted ||
                                                                 (secondStepForm.get('mobileNumber')?.touched &&
-                                                                    !intlClass?.isRequiredValidNumber)
+                                                                    !intlClass?.isRequiredValidNumber),
                                                         }"
                                                         (blur)="
                                                             secondStepForm.controls['mobileNumber']?.markAsTouched();
@@ -1024,7 +1024,7 @@
                                             <span
                                                 *ngIf="!selectedPlan?.promoCode"
                                                 [ngClass]="{
-                                                    'promocode-button': selectedPlan?.promoCode
+                                                    'promocode-button': selectedPlan?.promoCode,
                                                 }"
                                                 aria-label="promocode"
                                                 class="text-primary cursor-pointer d-block px-1 py-3"

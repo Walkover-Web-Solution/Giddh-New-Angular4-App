@@ -22,14 +22,7 @@
     <div class="column content-column gst-filing-container navs-list">
         <div class="tax-engine">
             <div
-                class="
-                    hidden-print
-                    gstr-summary-head gstr-summary-head
-                    d-flex
-                    w-100
-                    justify-content-sm-between
-                    flex-sm-row flex-column
-                "
+                class="hidden-print gstr-summary-head gstr-summary-head d-flex w-100 justify-content-sm-between flex-sm-row flex-column"
             >
                 <div class="wrap-gst-date w-100 d-flex align-items-center">
                     <span class="font-xlarge d-inline-block pd-r15">
@@ -66,16 +59,7 @@
                             id="button-nested"
                             dropdownToggle
                             type="button"
-                            class="
-                                dropdown
-                                clearfix
-                                list-title
-                                filter-by
-                                return-sel
-                                font-large
-                                dropdown-toggle
-                                pull-left
-                            "
+                            class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
                             aria-controls="dropdown-nested"
                         >
                             <ng-container>
@@ -90,8 +74,13 @@
                                         name="fromDate"
                                         (click)="$event.stopPropagation()"
                                         (bsValueChange)="periodChanged($event); monthWise.hide()"
-                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
-                                        [ngModelOptions]="{standalone: true}"
+                                        [bsConfig]="{
+                                            startView: 'month',
+                                            dateInputFormat: 'MM/YYYY',
+                                            adaptivePosition: true,
+                                            minMode: 'month',
+                                        }"
+                                        [ngModelOptions]="{ standalone: true }"
                                     >
                                     </bs-datepicker-inline>
                                 </a>

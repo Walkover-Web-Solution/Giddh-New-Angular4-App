@@ -20,7 +20,7 @@
                             #grpSrch
                             id="grpSrch"
                             [(ngModel)]="searchString"
-                            (ngModelChange)="searchString === '' ? resetGroupSearchString(): null"
+                            (ngModelChange)="searchString === '' ? resetGroupSearchString() : null"
                             (keyup)="searchGroups(grpSrch?.value)"
                             class="form-control"
                             [placeholder]="localeData?.search_accounts"
@@ -52,7 +52,7 @@
             <div
                 class="grp-col p-0"
                 [ngStyle]="{
-                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px'
+                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px',
                 }"
             >
                 <div class="search-loading" *ngIf="searchLoad | async">
@@ -66,10 +66,7 @@
                     </div>
                 </div>
                 <div>
-                    <div
-                        id="horizontal-master-scroll"
-                        class="scroll-container"
-                    >
+                    <div id="horizontal-master-scroll" class="scroll-container">
                         <div
                             *ngIf="!(searchLoad | async)"
                             [ngStyle]="{ 'width': master?.masterColumnsData?.length * 255 + 'px' }"
@@ -83,7 +80,7 @@
                                     'height':
                                         (myModelRect ? myModelRect.height : 0) -
                                         (headerRect ? headerRect.height : 0) +
-                                        'px'
+                                        'px',
                                 }"
                                 [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
                                 [isSearchingGroups]="!(grpSrch?.value === '')"
@@ -101,19 +98,19 @@
             </div>
             <!-- middle body -->
             <div class="form-box form-bg height-in-vh">
-                    <account-operations
-                        [topSharedGroups]="topSharedGroups"
-                        [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
-                        [breadcrumbPath]="breadcrumbPath"
-                        [breadcrumbUniquePath]="breadcrumbUniquePath"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                        [isMasterOpen]="true"
-                        [activeGroupUniqueName]="activeGroupUniqueName"
-                        #form
-                        *ngIf="localeData?.page_heading"
-                    >
-                    </account-operations>
+                <account-operations
+                    [topSharedGroups]="topSharedGroups"
+                    [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                    [breadcrumbPath]="breadcrumbPath"
+                    [breadcrumbUniquePath]="breadcrumbUniquePath"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [isMasterOpen]="true"
+                    [activeGroupUniqueName]="activeGroupUniqueName"
+                    #form
+                    *ngIf="localeData?.page_heading"
+                >
+                </account-operations>
             </div>
         </div>
     </div>

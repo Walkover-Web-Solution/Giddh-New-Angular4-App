@@ -32,7 +32,7 @@ $text-overflow-ellipsis-width: 255px;
 }
 
 .hilighted {
-    &>a {
+    & > a {
         color: $hilighted-color;
     }
 }

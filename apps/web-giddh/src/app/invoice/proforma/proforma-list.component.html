@@ -10,19 +10,35 @@
                 <div class="d-flex more-filter">
                     <div class="d-flex btn-wrapper">
                         <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-r15">
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">
+                            <button
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
+                                class="btn btn-sky-blue m-0"
+                                (click)="goToInvoice('proformas')"
+                            >
                                 {{ localeData?.new_proforma }}
                             </button>
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/proformas/create']">
+                            <button
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                class="btn btn-sky-blue m-0"
+                                [routerLink]="['/pages/vouchers/proformas/create']"
+                            >
                                 {{ localeData?.new_proforma }}
                             </button>
                         </div>
 
                         <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
+                            <button
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
+                                class="btn btn-sky-blue m-0"
+                                (click)="goToInvoice('estimates')"
+                            >
                                 {{ localeData?.new_estimate }}
                             </button>
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/estimates/create']">
+                            <button
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                class="btn btn-sky-blue m-0"
+                                [routerLink]="['/pages/vouchers/estimates/create']"
+                            >
                                 {{ localeData?.new_estimate }}
                             </button>
                         </div>
@@ -52,14 +68,7 @@
                         <div class="d-flex">
                             <!-- endregion -->
                             <div
-                                class="
-                                    advance-icon
-                                    cursor-pointer
-                                    align-items-center
-                                    btn btn-primary
-                                    mr-0
-                                    advance-search-mobile
-                                "
+                                class="advance-icon cursor-pointer align-items-center btn btn-primary mr-0 advance-search-mobile"
                                 (click)="toggleAdvanceSearchPopup()"
                                 [tooltip]="commonLocaleData?.app_advance_search"
                             >
@@ -98,7 +107,12 @@
                 <div class="d-md-flex d-sm-none">
                     <!-- region more items -->
                     <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
-                        <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
+                        <div
+                            *ngIf="!isCompany && !isConsolidatedBranch"
+                            class="btn-group d-inline-block"
+                            dropdown
+                            #dp="bs-dropdown"
+                        >
                             <button
                                 dropdownToggle
                                 type="button"
@@ -165,18 +179,31 @@
                 </div>
                 <div class="d-flex mt-1">
                     <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-r15">
-                        <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">
+                        <button
+                            *ngIf="!isCompany && !isConsolidatedBranch"
+                            class="btn btn-sky-blue m-0"
+                            (click)="goToInvoice('proformas')"
+                        >
                             {{ localeData?.new_proforma }}
                         </button>
                     </div>
 
                     <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
-                        <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
+                        <button
+                            *ngIf="!isCompany && !isConsolidatedBranch"
+                            class="btn btn-sky-blue m-0"
+                            (click)="goToInvoice('estimates')"
+                        >
                             {{ localeData?.new_estimate }}
                         </button>
                     </div>
                     <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
-                        <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
+                        <div
+                            *ngIf="!isCompany && !isConsolidatedBranch"
+                            class="btn-group d-inline-block mr-b1"
+                            dropdown
+                            #dp="bs-dropdown"
+                        >
                             <button
                                 dropdownToggle
                                 type="button"
@@ -289,7 +316,7 @@
                                                         ? localeData?.proforma_no
                                                         : localeData?.estimate_no,
                                                 fieldName: 'voucherNumber',
-                                                formControl: voucherNumberInput
+                                                formControl: voucherNumberInput,
                                             }
                                         "
                                     ></ng-container>
@@ -308,7 +335,7 @@
                                                 $implicit: showCustomerSearch,
                                                 title: commonLocaleData?.app_customer,
                                                 fieldName: 'customerName',
-                                                formControl: customerNameInput
+                                                formControl: customerNameInput,
                                             }
                                         "
                                     ></ng-container>
@@ -512,7 +539,7 @@
                                         <!-- dropdown -->
 
                                         <div
-                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                            *ngIf="!isCompany && !isConsolidatedBranch"
                                             class="btn-group icon-ellipse select-action"
                                             dropdown
                                             #dropdown="bs-dropdown"
@@ -656,7 +683,8 @@
                     *ngIf="advanceSearchFilter.sortBy !== column"
                     (click)="sortButtonClicked('asc', column)"
                     [ngClass]="{
-                        'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'
+                        'active-text-color':
+                            advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc',
                     }"
                 ></div>
 
@@ -665,7 +693,8 @@
                     *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
                     (click)="sortButtonClicked('desc', column)"
                     [ngClass]="{
-                        'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'
+                        'active-text-color':
+                            advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc',
                     }"
                 ></div>
 
@@ -675,7 +704,7 @@
                     (click)="sortButtonClicked('asc', column)"
                     [ngClass]="{
                         'active-text-color':
-                            advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'
+                            advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc',
                     }"
                 ></div>
             </ng-template>

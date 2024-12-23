@@ -22,17 +22,25 @@
                 <div class="feature-block">
                     <mat-list role="list">
                         <mat-list-item role="listitem">
-                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank" aria-label="upcoming">{{
-                                localeData?.upcoming
-                            }}</a>
+                            <a
+                                href="https://trello.com/b/1cPr6Mkc/giddh-roadmap"
+                                target="_blank"
+                                aria-label="upcoming"
+                                >{{ localeData?.upcoming }}</a
+                            >
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                            <a href="https://giddh.canny.io/feature-requests" target="_blank" aria-label="feaure request">{{
-                                localeData?.feature_request
-                            }}</a>
+                            <a
+                                href="https://giddh.canny.io/feature-requests"
+                                target="_blank"
+                                aria-label="feaure request"
+                                >{{ localeData?.feature_request }}</a
+                            >
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                            <a href="https://changelog.giddh.com" target="_blank" aria-label="changelog">{{ localeData?.changelog }}</a>
+                            <a href="https://changelog.giddh.com" target="_blank" aria-label="changelog">{{
+                                localeData?.changelog
+                            }}</a>
                         </mat-list-item>
                     </mat-list>
                 </div>
@@ -93,19 +101,25 @@
                     <div class="file-image">
                         <img src="{{ imgPath }}request-demo.svg" alt="request img" />
                         <p class="text-gray">{{ localeData?.request_demo }}:</p>
-                        <button mat-stroked-button color="primary" (click)="scheduleNow($event)" aria-label="schedule img">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            (click)="scheduleNow($event)"
+                            aria-label="schedule img"
+                        >
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />
                         <p class="text-gray">{{ localeData?.contact }}:</p>
                     </div>
                     <div class="contact-block">
-                        <p class="d-flex  align-items-center mb-1  support-mail-tel">
+                        <p class="d-flex align-items-center mb-1 support-mail-tel">
                             <i class="icon-mail mr-2"></i
                             ><a href="mailto:support@giddh.com" aria-label="mail">{{ localeData?.contact1 }}</a>
                         </p>
-                        <p class="d-flex  align-items-center support-mail-tel">
-                            <i class="icon-mobile mr-2"></i><a href="tel:9188188 88768" aria-label="contact">+91-88188 88768</a>
+                        <p class="d-flex align-items-center support-mail-tel">
+                            <i class="icon-mobile mr-2"></i
+                            ><a href="tel:9188188 88768" aria-label="contact">+91-88188 88768</a>
                         </p>
                         <br />
                     </div>

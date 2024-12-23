@@ -8,9 +8,9 @@
     .remove-invoice-icon {
         position: absolute;
         right: -15px;
-        top: 14px
+        top: 14px;
     }
-    
+
     .container-lg {
         max-width: 1540px !important;
 
@@ -70,7 +70,6 @@
         .vouchers-form-fields {
             max-width: 415px;
             min-width: 230px;
-
         }
 
         .vouchers-form-fields-detail {
@@ -99,7 +98,6 @@
             }
         }
 
-
         .vouchers-small-container {
             max-width: 860px;
             margin-top: 15px;
@@ -118,9 +116,9 @@
             .vouchers-address-form {
                 display: grid;
                 grid-template-areas:
-                    'address address'
-                    'country state'
-                    'gstin pincode';
+                    "address address"
+                    "country state"
+                    "gstin pincode";
                 grid-template-columns: 48% 48%;
                 gap: 15px;
                 padding: 15px;
@@ -130,9 +128,9 @@
 
                 &.without-gstin {
                     grid-template-areas:
-                        'address address'
-                        'country state'
-                        'pincode pincode' !important;
+                        "address address"
+                        "country state"
+                        "pincode pincode" !important;
                 }
 
                 .address-field {
@@ -179,7 +177,6 @@
                     }
                 }
             }
-
         }
 
         .vouchers-large-container {
@@ -194,7 +191,6 @@
             .vouchers-entry-table {
                 table {
                     tr {
-
                         th,
                         td {
                             padding: 16px 8px;
@@ -283,7 +279,6 @@
                         }
                     }
                 }
-
 
                 @media screen and (max-width: 1140px) {
                     overflow-x: auto;

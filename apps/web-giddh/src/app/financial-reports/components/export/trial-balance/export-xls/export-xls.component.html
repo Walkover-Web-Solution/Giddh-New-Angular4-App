@@ -1,6 +1,8 @@
 <ng-container appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event">
     <div class="btn-group" dropdown>
-        <a href="javascript:void(0);" aria-label="download" dropdownToggle class="cp new-icon-img"><img src="{{ imgPath }}" alt="download img"  /></a>
+        <a href="javascript:void(0);" aria-label="download" dropdownToggle class="cp new-icon-img"
+            ><img src="{{ imgPath }}" alt="download img"
+        /></a>
         <ul
             id="dropdown-xls"
             *dropdownMenu
@@ -10,16 +12,24 @@
         >
             <span class="caret"></span>
             <li>
-                <a href="javascript:void(0);" aria-label="report" (click)="downloadTbXls('main-group')">{{ localeData?.xls?.main_group_report }}</a>
+                <a href="javascript:void(0);" aria-label="report" (click)="downloadTbXls('main-group')">{{
+                    localeData?.xls?.main_group_report
+                }}</a>
             </li>
             <li>
-                <a href="javascript:void(0);" aria-label="downloadreport" (click)="downloadTbXls('group')">{{ localeData?.xls?.all_group_report }}</a>
+                <a href="javascript:void(0);" aria-label="downloadreport" (click)="downloadTbXls('group')">{{
+                    localeData?.xls?.all_group_report
+                }}</a>
             </li>
             <li>
-                <a href="javascript:void(0);" aria-label="account" (click)="downloadTbXls('account')">{{ localeData?.xls?.all_account_report }}</a>
+                <a href="javascript:void(0);" aria-label="account" (click)="downloadTbXls('account')">{{
+                    localeData?.xls?.all_account_report
+                }}</a>
             </li>
             <li>
-                <a href="javascript:void(0);" aria-label="report" (click)="downloadTbXls('all')">{{ localeData?.xls?.complete_report }}</a>
+                <a href="javascript:void(0);" aria-label="report" (click)="downloadTbXls('all')">{{
+                    localeData?.xls?.complete_report
+                }}</a>
             </li>
         </ul>
     </div>

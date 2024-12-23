@@ -24,7 +24,7 @@
 
 div {
     display: block;
-    &:not(:has(.bg-transparent)){
+    &:not(:has(.bg-transparent)) {
         background-color: var(--color-common-primary-background-for-all-components) !important;
     }
 }

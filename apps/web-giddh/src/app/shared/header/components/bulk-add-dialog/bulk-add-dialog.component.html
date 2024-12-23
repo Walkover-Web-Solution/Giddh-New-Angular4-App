@@ -12,7 +12,10 @@
         <div class="p-3">
             <form class="create-acc-form d-flex flex-column row-gap15" [formGroup]="bulkAddAccountForm">
                 <ng-container formArrayName="customFields">
-                    <div class="d-grid column-gap1 pd-b1" [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'">
+                    <div
+                        class="d-grid column-gap1 pd-b1"
+                        [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'"
+                    >
                         <h4 class="fw-bold w100">{{ commonLocaleData?.app_branch_name }}</h4>
                         <h4 class="fw-bold text-left" *ngIf="data?.foreignCurrency">
                             {{ localeData?.foreign_opening_balance }}
@@ -24,7 +27,10 @@
                         *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index"
                         [formGroupName]="bulkIndex"
                     >
-                        <div class="d-grid column-gap1" [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'">
+                        <div
+                            class="d-grid column-gap1"
+                            [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'"
+                        >
                             <p tooltip="{{ branches[bulkIndex]?.name }}" class="word-wrap-dots text-ellipsis w100">
                                 {{ branches[bulkIndex]?.name }}
                             </p>
@@ -59,7 +65,7 @@
                                                 item.get('foreignOpeningBalance')?.value > 0),
                                         'cursor-pointer':
                                             item.get('openingBalance')?.value > 0 ||
-                                            item.get('foreignOpeningBalance')?.value > 0
+                                            item.get('foreignOpeningBalance')?.value > 0,
                                     }"
                                 >
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
@@ -74,7 +80,7 @@
                                                 item.get('foreignOpeningBalance')?.value > 0),
                                         'cursor-pointer':
                                             item.get('openingBalance')?.value > 0 ||
-                                            item.get('foreignOpeningBalance')?.value > 0
+                                            item.get('foreignOpeningBalance')?.value > 0,
                                     }"
                                 >
                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}

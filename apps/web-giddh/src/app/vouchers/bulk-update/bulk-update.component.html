@@ -11,7 +11,7 @@
                 [placeholder]="commonLocaleData?.app_select"
                 [options]="fieldOptions"
                 formControlName="selectedField"
-                (selectedOption)="resetFormData(); handleSelectedFieldSelect();"
+                (selectedOption)="resetFormData(); handleSelectedFieldSelect()"
                 class="w-100"
             >
             </reactive-dropdown-field>

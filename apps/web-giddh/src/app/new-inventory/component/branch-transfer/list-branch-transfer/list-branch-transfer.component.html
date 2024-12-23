@@ -15,7 +15,10 @@
                     <div class="row">
                         <div class="d-flex flex-wrap align-items-center w-100 mb-3 column-gap15">
                             <div
-                                *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                                *ngIf="
+                                    currentCompanyBranches?.length > 2 &&
+                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                "
                                 class="branch-width"
                             >
                                 <dropdown-field
@@ -125,7 +128,7 @@
                                         $implicit: showSender,
                                         fieldName: localeData?.sender,
                                         formControl: branchTransferForm.controls['sender'],
-                                        title: localeData?.sender
+                                        title: localeData?.sender,
                                     }
                                 "
                             ></ng-container>
@@ -147,7 +150,7 @@
                                         $implicit: showReceiver,
                                         fieldName: localeData?.receiver,
                                         formControl: branchTransferForm.controls['receiver'],
-                                        title: localeData?.receiver
+                                        title: localeData?.receiver,
                                     }
                                 "
                             ></ng-container>
@@ -161,7 +164,9 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchSenderRecieverContainer
-                            (clickOutside)="handleClickOutside($event, searchSenderRecieverContainer, 'Sender/Reciever')"
+                            (clickOutside)="
+                                handleClickOutside($event, searchSenderRecieverContainer, 'Sender/Reciever')
+                            "
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -170,7 +175,7 @@
                                         $implicit: showSenderReciever,
                                         fieldName: 'Sender/Reciever',
                                         formControl: branchTransferForm.controls['senderReceiver'],
-                                        title: localeData?.sender + ' / ' + localeData?.receiver
+                                        title: localeData?.sender + ' / ' + localeData?.receiver,
                                     }
                                 "
                             ></ng-container>
@@ -193,7 +198,7 @@
                                         $implicit: showFromWarehouse,
                                         fieldName: localeData?.from_warehouse,
                                         formControl: branchTransferForm.controls['fromWarehouse'],
-                                        title: localeData?.from_warehouse
+                                        title: localeData?.from_warehouse,
                                     }
                                 "
                             ></ng-container>
@@ -216,7 +221,7 @@
                                         $implicit: showToWarehouse,
                                         fieldName: localeData?.to_warehouse,
                                         formControl: branchTransferForm.controls['toWarehouse'],
-                                        title: localeData?.to_warehouse
+                                        title: localeData?.to_warehouse,
                                     }
                                 "
                             ></ng-container>

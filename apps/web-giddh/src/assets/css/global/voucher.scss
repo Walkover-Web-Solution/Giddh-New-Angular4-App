@@ -2,7 +2,6 @@
     background-color: var(--color-common-quinary-background-for-all-components);
 
     .vouchers-address-form {
-
         input,
         textarea {
             background: var(--color-transparent-background);
@@ -24,7 +23,7 @@
             }
         }
     }
-    
+
     .po-mat-select {
         padding: 10px 0;
         height: 48px;
@@ -72,15 +71,12 @@
         .mat-option-text {
             line-height: 1.8 !important;
         }
-
     }
 
     input,
     textarea,
     mat-select {
-
         &.form-control {
-
             &:hover,
             &:focus {
                 border-color: var(--color-common-tertiary-text) !important;
@@ -106,28 +102,29 @@
         .vouchers-entry-table {
             table {
                 tr {
-                    td { 
+                    td {
                         input,
                         textarea,
                         mat-select {
-                            &:not(.hsn-sac-code){
+                            &:not(.hsn-sac-code) {
                                 border: none !important;
                                 background-color: var(--color-transparent-background) !important;
                                 &.form-control {
-                                    &:disabled, &:read-only {
+                                    &:disabled,
+                                    &:read-only {
                                         cursor: not-allowed;
                                     }
                                 }
-                                
+
                                 &.mat-mdc-select-disabled {
-                                    .mat-mdc-select-trigger{
+                                    .mat-mdc-select-trigger {
                                         cursor: not-allowed;
                                     }
                                 }
                             }
                         }
-                    } 
-                } 
+                    }
+                }
             }
         }
     }
@@ -141,14 +138,14 @@
     }
 
     .custom-date-entries {
-            giddh-datepicker {
+        giddh-datepicker {
+            width: 80px;
+            padding-top: 2px;
+            input {
                 width: 80px;
-                padding-top: 2px;
-                input {
-                    width: 80px;
             }
-         }
-     }
+        }
+    }
 }
 
 .mat-menu-width-large {

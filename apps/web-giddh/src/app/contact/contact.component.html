@@ -93,7 +93,7 @@
                                                                             'icon-company-profile':
                                                                                 option?.consolidatedBranch,
                                                                             'icon-branch-icon':
-                                                                                !option?.consolidatedBranch
+                                                                                !option?.consolidatedBranch,
                                                                         }"
                                                                         *ngIf="!option.isCompany"
                                                                         tooltip="{{ commonLocaleData?.app_branch }}"
@@ -287,10 +287,10 @@
                                             <button
                                                 mat-menu-item
                                                 *ngIf="selectedAccountsList?.length > 0"
-                                                 (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
+                                                (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
                                                 aria-label="send bulk email"
                                             >
-                                              {{ localeData?.send_bulk_email }}
+                                                {{ localeData?.send_bulk_email }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -610,7 +610,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_customer_name
+                                                    title: commonLocaleData?.app_customer_name,
                                                 }
                                             "
                                         ></ng-container>
@@ -705,7 +705,7 @@
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button> -->
-                                     <button
+                                    <button
                                         mat-menu-item
                                         class="menu-table-item"
                                         (click)="openCustomEmailDialog(account, activeTab, false)"
@@ -748,7 +748,7 @@
                                 'word-wrap text-right': true,
                                 'negative-balance':
                                     account.openingBalance?.type === 'CREDIT' &&
-                                    formatAmountInCurrency(account.openingBalance?.amount) > 0
+                                    formatAmountInCurrency(account.openingBalance?.amount) > 0,
                             }"
                             [attr.data-title]="localeData?.opening"
                         >
@@ -830,7 +830,7 @@
                             [ngClass]="{
                                 'negative-balance':
                                     account.closingBalance?.type === 'CREDIT' &&
-                                    formatAmountInCurrency(account.closingBalance?.amount) > 0
+                                    formatAmountInCurrency(account.closingBalance?.amount) > 0,
                             }"
                         >
                             <div class="d-flex justify-content-end">
@@ -965,7 +965,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_vendor_name
+                                                    title: commonLocaleData?.app_vendor_name,
                                                 }
                                             "
                                         ></ng-container>
@@ -1196,7 +1196,7 @@
                             [ngClass]="{
                                 'negative-balance':
                                     account.openingBalance?.type === 'DEBIT' &&
-                                    formatAmountInCurrency(account.openingBalance?.amount) > 0
+                                    formatAmountInCurrency(account.openingBalance?.amount) > 0,
                             }"
                         >
                             <div class="d-flex justify-content-end">
@@ -1277,7 +1277,7 @@
                                 'word-wrap text-right': true,
                                 'negative-balance':
                                     account.closingBalance?.type === 'DEBIT' &&
-                                    formatAmountInCurrency(account.closingBalance?.amount) > 0
+                                    formatAmountInCurrency(account.closingBalance?.amount) > 0,
                             }"
                         >
                             <div class="d-flex justify-content-end">
@@ -1424,7 +1424,9 @@
                                     >
                                         {{ commonLocaleData?.app_pay_now }}
                                     </button>
-                                    <span *ngIf="account?.bankPaymentDetails && account?.country?.code !== 'IN'">-</span>
+                                    <span *ngIf="account?.bankPaymentDetails && account?.country?.code !== 'IN'"
+                                        >-</span
+                                    >
                                     <button
                                         mat-stroked-button
                                         *ngIf="!account?.bankPaymentDetails"

@@ -1,5 +1,9 @@
-<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="closeTaxesModal($event)"
-    [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal($event)">
+<div
+    class="aside-pane aside-pane-other-tax text-left"
+    (clickOutside)="closeTaxesModal($event)"
+    [keyboardShortcut]="'esc'"
+    (onShortcutPress)="closeTaxesModal($event)"
+>
     <button id="closedialog" aria-label="close" type="button" (click)="closeTaxesModal($event)">
         <i class="icon-cross"></i>
     </button>
@@ -14,29 +18,45 @@
                 <div class="col-sm-6">
                     <div class="select-tax-dropdown d-flex flex-column">
                         <div class="mr-b2">
-                            <dropdown-field [name]="'selectTax'" [cssClass]="'form-control mat-field-border'"
+                            <dropdown-field
+                                [name]="'selectTax'"
+                                [cssClass]="'form-control mat-field-border'"
                                 [label]="commonLocaleData?.app_select_tax"
-                                [placeholder]="commonLocaleData?.app_select_tax" [options]="taxesOptions"
-                                (selectedOption)="applyTax($event);" [required]="true"
-                                [defaultValue]="selectedTaxUniqueName" (onClear)="onClear()" [allowValueReset]="true">
+                                [placeholder]="commonLocaleData?.app_select_tax"
+                                [options]="taxesOptions"
+                                (selectedOption)="applyTax($event);"
+                                [required]="true"
+                                [defaultValue]="selectedTaxUniqueName"
+                                (onClear)="onClear()"
+                                [allowValueReset]="true"
+                            >
                             </dropdown-field>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="mb-2">
-                        <dropdown-field [label]="commonLocaleData?.app_calculation_method"
+                        <dropdown-field
+                            [label]="commonLocaleData?.app_calculation_method"
                             [cssClass]="'form-control mat-field-border'"
-                            [placeholder]="commonLocaleData?.app_select_method" [options]="calculationMethodOptions"
+                            [placeholder]="commonLocaleData?.app_select_method"
+                            [options]="calculationMethodOptions"
                             [defaultValue]="selectedCalculationMethod ? selectedCalculationMethod[0]?.label : calculationMethodOptions[0]?.label"
-                            [name]="'tcsCalculationMethod'" (selectedOption)="onCalculateTax($event);">
+                            [name]="'tcsCalculationMethod'"
+                            (selectedOption)="onCalculateTax($event);"
+                        >
                         </dropdown-field>
                     </div>
                 </div>
             </div>
             <div>
-                <button mat-stroked-button color="primary" type="button" [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
-                    (click)="saveTaxes()">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
+                    (click)="saveTaxes()"
+                >
                     {{commonLocaleData?.app_apply}}
                 </button>
             </div>

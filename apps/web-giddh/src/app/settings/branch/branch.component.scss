@@ -136,7 +136,7 @@
     overflow: hidden;
 }
 
-.card-basic-details .dropdown-menu>li>a {
+.card-basic-details .dropdown-menu > li > a {
     padding: 5px 10px;
     cursor: pointer;
 }
@@ -290,7 +290,7 @@
 
 .btn-primary.active,
 .btn-primary:active,
-.open>.dropdown-toggle.btn-primary {
+.open > .dropdown-toggle.btn-primary {
     color: var(--color-nero);
     background-color: var(--color-dark-fog);
     border-color: var(--color-dark-fog);

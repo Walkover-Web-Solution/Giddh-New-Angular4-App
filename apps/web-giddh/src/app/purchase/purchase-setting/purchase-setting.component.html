@@ -86,7 +86,7 @@
                                                             'cursor-pointer': !(
                                                                 !invoiceSettings.purchaseBillSettings.email ||
                                                                 invoiceSettings.purchaseBillSettings.email?.length < 4
-                                                            )
+                                                            ),
                                                         }"
                                                         (click)="
                                                             !(
@@ -209,9 +209,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
-                                                [(ngModel)]="
-                                                    invoiceSettings.purchaseBillSettings.poAutoWhatsApp
-                                                "
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.poAutoWhatsApp"
                                                 class="show-on-mobile"
                                                 name="poAutoWhatsApp"
                                                 color="primary"
@@ -222,9 +220,7 @@
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
-                                                [(ngModel)]="
-                                                    invoiceSettings.purchaseBillSettings.poAutoWhatsApp
-                                                "
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.poAutoWhatsApp"
                                                 class="hide-on-mobile"
                                                 name="poAutoWhatsApp"
                                                 color="primary"
@@ -355,7 +351,7 @@
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate"
                                                     [bsConfig]="{
                                                         adaptivePosition: true,
-                                                        dateInputFormat: giddhDateFormat
+                                                        dateInputFormat: giddhDateFormat,
                                                     }"
                                                 />
                                             </div>
@@ -389,7 +385,7 @@
                                     </div>
                                 </div>
                                 <ng-container *ngIf="voucherApiVersion === 2">
-                                    <div class="clearfix pd-t1 row" >
+                                    <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
@@ -412,7 +408,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clearfix pd-t1 row"> 
+                                    <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
@@ -435,7 +431,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clearfix pd-t1 row"> 
+                                    <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
@@ -503,7 +499,6 @@
                                             >
                                             </mat-slide-toggle>
                                         </div>
-                                        
                                     </div>
                                     <div class="clearfix pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">

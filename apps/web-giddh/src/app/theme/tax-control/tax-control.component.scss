@@ -37,17 +37,16 @@ sup.mandatory-asterisk {
 .dropdown-menu {
     left: unset !important;
     top: 0px;
-    li{
+    li {
         padding: 0 10px;
         height: 40px;
-        &:hover{
+        &:hover {
             background-color: var(--color-dark-fog) !important;
         }
     }
 }
 
-
 .tax-dropdown {
     max-height: 102px;
-    min-height: 134px
+    min-height: 134px;
 }

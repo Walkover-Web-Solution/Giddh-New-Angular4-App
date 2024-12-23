@@ -16,10 +16,18 @@
                         <span class="caret"></span>
                     </button>
                     <mat-menu #newStock="matMenu">
-                        <button aria-label="product" mat-menu-item [routerLink]="'/pages/inventory/v2/stock/product/create'">
+                        <button
+                            aria-label="product"
+                            mat-menu-item
+                            [routerLink]="'/pages/inventory/v2/stock/product/create'"
+                        >
                             {{ commonLocaleData?.app_product }}
                         </button>
-                        <button aria-label="service" mat-menu-item [routerLink]="'/pages/inventory/v2/stock/service/create'">
+                        <button
+                            aria-label="service"
+                            mat-menu-item
+                            [routerLink]="'/pages/inventory/v2/stock/service/create'"
+                        >
                             {{ commonLocaleData?.app_service }}
                         </button>
                     </mat-menu>
@@ -255,7 +263,11 @@
                                                     class="unit-value bg-color-hover"
                                                     (click)="warehouseVariant.display = true; setInputFocus(3)"
                                                     >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
-                                                    <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" alt="stock unit" />
+                                                    <img
+                                                        src="{{ imgPath }}caret-light.svg"
+                                                        class="dropdown-icon"
+                                                        alt="stock unit"
+                                                    />
                                                 </span>
                                             </p>
                                         </div>
@@ -301,7 +313,11 @@
                                                     [openDropdown]="isOpen"
                                                 >
                                                 </select-field>
-                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" alt="dropdown" />
+                                                <img
+                                                    src="{{ imgPath }}caret-light.svg"
+                                                    class="dropdown-icon"
+                                                    alt="dropdown"
+                                                />
                                             </span>
                                         </div>
                                     </div>

@@ -88,7 +88,7 @@
                                         'invalid-input':
                                             isFormSubmitted ||
                                             (changeBillingForm.get('mobileNumber')?.touched &&
-                                                !intlClass?.isRequiredValidNumber)
+                                                !intlClass?.isRequiredValidNumber),
                                     }"
                                     (blur)="
                                         changeBillingForm.controls['mobileNumber']?.markAsTouched();

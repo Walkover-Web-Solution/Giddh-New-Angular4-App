@@ -5,7 +5,14 @@
     (localeData)="localeData = $event"
 >
     <div class="btn-group" dropdown>
-        <a href="javascript:void(0);" aria-label="download" dropdownToggle *ngIf="enableDownload" class="cp new-icon-img"><img src="{{ imgPath }}" alt="xsl img" /></a>
+        <a
+            href="javascript:void(0);"
+            aria-label="download"
+            dropdownToggle
+            *ngIf="enableDownload"
+            class="cp new-icon-img"
+            ><img src="{{ imgPath }}" alt="xsl img"
+        /></a>
         <ul
             id="dropdown-xls"
             *dropdownMenu
@@ -15,10 +22,14 @@
         >
             <span class="caret"></span>
             <li>
-                <a href="javascript:void(0);" aria-label="group report"  (click)="downloadBsXls(false)">{{ localeData?.xls?.main_group_report }}</a>
+                <a href="javascript:void(0);" aria-label="group report" (click)="downloadBsXls(false)">{{
+                    localeData?.xls?.main_group_report
+                }}</a>
             </li>
             <li>
-                <a  href="javascript:void(0);" aria-label="complete report" (click)="downloadBsXls(true)">{{ localeData?.xls?.complete_report }}</a>
+                <a href="javascript:void(0);" aria-label="complete report" (click)="downloadBsXls(true)">{{
+                    localeData?.xls?.complete_report
+                }}</a>
             </li>
         </ul>
     </div>

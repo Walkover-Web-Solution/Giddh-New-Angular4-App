@@ -85,7 +85,7 @@
             <table
                 class="table basic on-mobile-view table-responsive"
                 [ngClass]="{
-                    'mr-b100': stockReport && stockReport.transactions && stockReport.transactions.length > 6
+                    'mr-b100': stockReport && stockReport.transactions && stockReport.transactions.length > 6,
                 }"
             >
                 <thead>
@@ -137,7 +137,7 @@
                     >
                         <th width="100">
                             <div class="d-flex">
-                                <div >Date</div>
+                                <div>Date</div>
                                 <div class="icon-pointer">
                                     <!-- default -->
                                     <div
@@ -147,7 +147,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'entry_date' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -161,7 +161,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'entry_date' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -174,7 +174,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'entry_date' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -246,7 +246,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'inward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -260,7 +260,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'inward_quantity' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -273,7 +273,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'inward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -292,7 +292,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'outward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -306,7 +306,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'outward_quantity' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -319,7 +319,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'outward_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -338,7 +338,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'rate' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -351,7 +351,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'rate' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -363,7 +363,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'rate' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -382,7 +382,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'transaction_val' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -396,7 +396,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'transaction_val' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -409,7 +409,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'transaction_val' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>
@@ -428,7 +428,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'closing_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                     <!-- after sort click -->
@@ -442,7 +442,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'closing_quantity' &&
-                                                stockReportRequest.sort === 'desc'
+                                                stockReportRequest.sort === 'desc',
                                         }"
                                     ></div>
                                     <div
@@ -455,7 +455,7 @@
                                         [ngClass]="{
                                             'active-text-color':
                                                 stockReportRequest.sortBy === 'closing_quantity' &&
-                                                stockReportRequest.sort === 'asc'
+                                                stockReportRequest.sort === 'asc',
                                         }"
                                     ></div>
                                 </div>

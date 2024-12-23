@@ -39,7 +39,9 @@
                                                 [label]="localeData?.financial_year_period"
                                                 [name]="'selectedFYPeriod'"
                                                 [placeholder]="localeData?.financial_year_period"
-                                                (selectedOption)="selectedFYPeriod = $event.value; selectFYPeriod($event)"
+                                                (selectedOption)="
+                                                    selectedFYPeriod = $event.value; selectFYPeriod($event)
+                                                "
                                                 [options]="FYPeriodOptions"
                                             >
                                             </dropdown-field>
@@ -52,8 +54,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-responsive overflow-visible table-header-sticky" *ngIf="financialYearObj && financialYearObj.financialYears">
-                               <table
+                            <div
+                                class="table-responsive overflow-visible table-header-sticky"
+                                *ngIf="financialYearObj && financialYearObj.financialYears"
+                            >
+                                <table
                                     mat-table
                                     [dataSource]="financialYearObj.financialYears"
                                     class="table-bordered basic table financial-year on-mobile-view"
@@ -78,7 +83,7 @@
                                         <th mat-header-cell *matHeaderCellDef width="25%">
                                             {{ localeData?.lock_status }}
                                         </th>
-                                        <td mat-cell *matCellDef="let element"  class="status">
+                                        <td mat-cell *matCellDef="let element" class="status">
                                             <mat-slide-toggle
                                                 color="primary"
                                                 name="lockedUnlockedFinancial"

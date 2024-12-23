@@ -88,7 +88,7 @@
                                     </button>
                                     <button
                                         type="button"
-                                        *ngIf="(!isCompany && !isConsolidatedBranch) && !isMobileView"
+                                        *ngIf="!isCompany && !isConsolidatedBranch && !isMobileView"
                                         placement="top"
                                         [tooltip]="localeData?.works_for_single_entry"
                                         [hidden]="selectedLedgerItems?.length === 0 || !togglePrevGenBtn"

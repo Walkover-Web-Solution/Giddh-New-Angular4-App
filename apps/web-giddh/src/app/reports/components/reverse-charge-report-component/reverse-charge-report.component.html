@@ -22,7 +22,10 @@
                 <div class="input-group flex-nowrap mr-b15">
                     <div
                         class="form-group linked-entities mr-r15 mb-0"
-                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                        *ngIf="
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                        "
                     >
                         <sh-select
                             [options]="currentCompanyBranches"
@@ -41,7 +44,11 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
+                                                [ngClass]="
+                                                    option?.consolidatedBranch
+                                                        ? 'icon-company-profile'
+                                                        : 'icon-branch-icon'
+                                                "
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"
                                                 [tooltip]="commonLocaleData?.app_branch"
@@ -152,7 +159,7 @@
                                                 reverseChargeReportGetRequest.sortBy === 'entryDate'),
                                         'icon-arrow-down':
                                             reverseChargeReportGetRequest.sort === 'desc' &&
-                                            reverseChargeReportGetRequest.sortBy === 'entryDate'
+                                            reverseChargeReportGetRequest.sortBy === 'entryDate',
                                     }"
                                 ></span>
                             </th>
@@ -259,7 +266,7 @@
                                                 reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate'),
                                         'icon-arrow-down':
                                             reverseChargeReportGetRequest.sort === 'desc' &&
-                                            reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate'
+                                            reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate',
                                     }"
                                 ></span>
                             </th>
@@ -294,7 +301,7 @@
                                                 reverseChargeReportGetRequest.sortBy === 'taxableValue'),
                                         'icon-arrow-down':
                                             reverseChargeReportGetRequest.sort === 'desc' &&
-                                            reverseChargeReportGetRequest.sortBy === 'taxableValue'
+                                            reverseChargeReportGetRequest.sortBy === 'taxableValue',
                                     }"
                                 ></span>
                             </th>
@@ -312,7 +319,7 @@
                                                 reverseChargeReportGetRequest.sortBy === 'taxAmount'),
                                         'icon-arrow-down':
                                             reverseChargeReportGetRequest.sort === 'desc' &&
-                                            reverseChargeReportGetRequest.sortBy === 'taxAmount'
+                                            reverseChargeReportGetRequest.sortBy === 'taxAmount',
                                     }"
                                 ></span>
                             </th>
@@ -338,8 +345,8 @@
                                     reverseCharge.invoiceNumber
                                         ? reverseCharge.invoiceNumber
                                         : reverseCharge.voucherType === "purchase"
-                                        ? commonLocaleData?.app_not_available
-                                        : "-"
+                                          ? commonLocaleData?.app_not_available
+                                          : "-"
                                 }}
                             </td>
                             <td [attr.data-title]="localeData?.suppliers_invoice_date">

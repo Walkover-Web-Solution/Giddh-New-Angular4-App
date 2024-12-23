@@ -6,14 +6,14 @@
                     <div class="invoice-search-box">
                         <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement />
                         <button
-                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                            *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
                             class="btn btn-sky-blue"
                             [routerLink]="['/pages/purchase-management/purchase-order/new']"
                         >
                             {{ localeData?.new_order }}
                         </button>
                         <button
-                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                            *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             class="btn btn-sky-blue"
                             [routerLink]="['/pages/vouchers/purchase-order/create']"
                         >
@@ -80,7 +80,7 @@
                                         /></span>
 
                                         <div
-                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                            *ngIf="!isCompany && !isConsolidatedBranch"
                                             class="btn-group change-status-dropdown pull-right"
                                             dropdown
                                         >
@@ -118,7 +118,7 @@
                                                         class="dropdown-item"
                                                         [routerLink]="[
                                                             '/pages/purchase-management/purchase-order/new/' +
-                                                                purchaseOrderUniqueName
+                                                                purchaseOrderUniqueName,
                                                         ]"
                                                         >{{ commonLocaleData?.app_copy }}</a
                                                     >
@@ -153,14 +153,14 @@
 
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
-                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
+                                                <span *ngIf="!isCompany && !isConsolidatedBranch">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_edit"
                                                         placement="top"
                                                         [routerLink]="[
                                                             '/pages/purchase-management/purchase-order/edit/' +
-                                                                purchaseOrderUniqueName
+                                                                purchaseOrderUniqueName,
                                                         ]"
                                                         *ngIf="voucherApiVersion === 1"
                                                         ><i class="icon-edit-pencil"></i
@@ -170,7 +170,12 @@
                                                         [tooltip]="commonLocaleData?.app_edit"
                                                         placement="top"
                                                         [routerLink]="[
-                                                            '/pages/vouchers/purchase-order/' + purchaseOrder?.account?.uniqueName + '/' + purchaseOrderUniqueName + '/edit']"
+                                                            '/pages/vouchers/purchase-order/' +
+                                                                purchaseOrder?.account?.uniqueName +
+                                                                '/' +
+                                                                purchaseOrderUniqueName +
+                                                                '/edit',
+                                                        ]"
                                                         *ngIf="voucherApiVersion === 2"
                                                         ><i class="icon-edit-pencil"></i
                                                     ></a>
@@ -206,7 +211,7 @@
                                                     ></a>
                                                 </span>
 
-                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
+                                                <span *ngIf="!isCompany && !isConsolidatedBranch">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_delete"

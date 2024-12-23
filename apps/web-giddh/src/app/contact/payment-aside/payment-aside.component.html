@@ -83,7 +83,7 @@
                                         }}</span>
                                     </mat-slide-toggle>
                                 </p>
-                                  <p *ngIf="totalAvailableBalance && showBankBalance" class="mr-t05">
+                                <p *ngIf="totalAvailableBalance && showBankBalance" class="mr-t05">
                                     <small class="text-gray"
                                         >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
                                         {{ commonLocaleData?.app_dr }}</small
@@ -122,15 +122,22 @@
                                         [(ngModel)]="showBankBalance"
                                         name="showSingleBankBalance"
                                     >
-                                    <span *ngIf="showBankBalance" class="pull-left">{{
-                                        localeData?.hide_bank_balance
-                                    }}</span>
-                                    <span *ngIf="!showBankBalance" class="pull-right">{{
-                                        localeData?.show_bank_balance
-                                    }}</span>
+                                        <span *ngIf="showBankBalance" class="pull-left">{{
+                                            localeData?.hide_bank_balance
+                                        }}</span>
+                                        <span *ngIf="!showBankBalance" class="pull-right">{{
+                                            localeData?.show_bank_balance
+                                        }}</span>
                                     </mat-slide-toggle>
                                 </p>
-                                <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance && showBankBalance" class="mr-t05">
+                                <p
+                                    *ngIf="
+                                        selectIntegratedBankList?.length === 1 &&
+                                        totalAvailableBalance &&
+                                        showBankBalance
+                                    "
+                                    class="mr-t05"
+                                >
                                     <small class="text-gray"
                                         >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
                                         {{ commonLocaleData?.app_dr }}</small
@@ -179,7 +186,7 @@
                                 type="button"
                                 [ngClass]="{
                                     'disabled-ladda-btn':
-                                        !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData
+                                        !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData,
                                 }"
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData"
                                 [ladda]="isRequestInProcess"
@@ -201,13 +208,10 @@
                                         !isBankSelectedForBulkPayment ||
                                         !selectedBankUserId ||
                                         !isValidData ||
-                                        !receivedOtp
+                                        !receivedOtp,
                                 }"
                                 [disabled]="
-                                    !isBankSelectedForBulkPayment ||
-                                    !selectedBankUserId ||
-                                    !isValidData ||
-                                    !receivedOtp
+                                    !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData || !receivedOtp
                                 "
                                 [ladda]="isRequestInProcess"
                                 (click)="confirmOTP()"

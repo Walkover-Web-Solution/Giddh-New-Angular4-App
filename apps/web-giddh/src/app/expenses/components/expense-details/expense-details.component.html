@@ -35,7 +35,7 @@
                         <ng-container *ngFor="let item of imageURL; let i = index">
                             <li>
                                 <div class="upload-img">
-                                    <img [src]="item.src" (click)="openZoomImageView(i)" [id]="'signatureImage_'+i" />
+                                    <img [src]="item.src" (click)="openZoomImageView(i)" [id]="'signatureImage_' + i" />
                                 </div>
                             </li>
                         </ng-container>
@@ -168,14 +168,16 @@
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->
-<ng-template #asideMenuStateForOtherTaxes>    
+<ng-template #asideMenuStateForOtherTaxes>
     <app-aside-menu-sales-other-taxes
         [class]="asideMenuStateForOtherTaxes"
         [taxes]="companyTaxesList"
         [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
         [commonLocaleData]="commonLocaleData"
         (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
-        (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="
+            updateLedgerComponentInstance.vm.calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()
+        "
     >
     </app-aside-menu-sales-other-taxes>
 </ng-template>

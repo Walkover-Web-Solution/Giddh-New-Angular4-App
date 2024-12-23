@@ -1,11 +1,10 @@
 .adjustment {
-    .breadcrumb-item+.breadcrumb-item {
+    .breadcrumb-item + .breadcrumb-item {
         &::before {
             content: "\ea01" !important;
             font-family: "icomoon" !important;
             font-size: var(--font-size-20);
         }
-
     }
 
     .mat-expansion-panel {
@@ -40,12 +39,10 @@
 
                     td {
                         border-bottom-style: unset !important;
-
                     }
                 }
             }
         }
-
     }
 
     .no-data-found {

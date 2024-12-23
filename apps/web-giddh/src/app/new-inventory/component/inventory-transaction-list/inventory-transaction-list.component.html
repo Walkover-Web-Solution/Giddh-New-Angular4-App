@@ -331,7 +331,10 @@
                 "
             >
                 <div class="col-12 horizontal-padding">
-                    <div class="table-responsive inventory-report-table table-header-sticky overflow-visible" *ngIf="displayedColumns?.length">
+                    <div
+                        class="table-responsive inventory-report-table table-header-sticky overflow-visible"
+                        *ngIf="displayedColumns?.length"
+                    >
                         <table
                             mat-table
                             [dataSource]="dataSource"
@@ -401,7 +404,7 @@
                                                 $implicit: showAccountSearchInput,
                                                 fieldName: 'name',
                                                 formControl: searchAccountName,
-                                                title: localeData?.reports?.account_name
+                                                title: localeData?.reports?.account_name,
                                             }
                                         "
                                     ></ng-container>

@@ -11,7 +11,7 @@
             'rtl': locale.direction === 'rtl',
             'inline': inline,
             'double': !singleDatePicker && showCalInRanges,
-            'show-ranges': ranges?.length
+            'show-ranges': ranges?.length,
         }"
         [class]="'drops-' + drops + '-' + opens"
     >
@@ -36,7 +36,7 @@
                                     'active':
                                         range.isSelected ||
                                         (selectedRangeLabel && selectedRangeLabel === range.name) ||
-                                        checkIfSubRangeSelected(range)
+                                        checkIfSubRangeSelected(range),
                                 }"
                             >
                                 {{ range.name }}
@@ -56,7 +56,7 @@
                                         [ngClass]="{
                                             'active':
                                                 subRange.isSelected ||
-                                                (selectedRangeLabel && selectedRangeLabel === subRange.name)
+                                                (selectedRangeLabel && selectedRangeLabel === subRange.name),
                                         }"
                                     >
                                         {{ subRange.name }}
@@ -83,7 +83,7 @@
                                         type="button"
                                         (click)="clickFinancialYear(financialYear)"
                                         [ngClass]="{
-                                            'active': selectedRangeLabel && selectedRangeLabel === financialYear.label
+                                            'active': selectedRangeLabel && selectedRangeLabel === financialYear.label,
                                         }"
                                     >
                                         {{ financialYear.label }}
@@ -263,7 +263,12 @@
                         <!-- start date/ end date inputs container -->
                         <!-- month name -->
                         <div class="month-field">
-                            <button mat-button class="prev available" (click)="onScroll('top')" aria-label="prev"></button>
+                            <button
+                                mat-button
+                                class="prev available"
+                                (click)="onScroll('top')"
+                                aria-label="prev"
+                            ></button>
                             <!-- month name and month dropdown -->
                             <div class="month-dropdown">
                                 <span class="month-name">
@@ -281,7 +286,12 @@
                             <!-- month name and month dropdown -->
                             <!-- navigate to previous and next month buttons -->
                             <div class="prev-next-btn">
-                                <button mat-button class="next available" (click)="onScroll('bottom')" aria-label="next"></button>
+                                <button
+                                    mat-button
+                                    class="next available"
+                                    (click)="onScroll('bottom')"
+                                    aria-label="next"
+                                ></button>
                             </div>
                             <!-- navigate to previous and next month buttons -->
                         </div>
@@ -453,7 +463,7 @@
                                                             'in-range-end':
                                                                 calendarMonth.start.calendar[row][col].format(
                                                                     giddhDateFormat
-                                                                ) == endDate.format(giddhDateFormat)
+                                                                ) == endDate.format(giddhDateFormat),
                                                         }"
                                                         id="{{ hoveredDate ? hoveredDate.format('YYYY-MM-DD') : '' }}"
                                                         (click)="
@@ -740,7 +750,7 @@
                                                         'in-range-end':
                                                             calendarMonth.end.calendar[row][col].format(
                                                                 giddhDateFormat
-                                                            ) == endDate.format(giddhDateFormat)
+                                                            ) == endDate.format(giddhDateFormat),
                                                     }"
                                                     (click)="clickDate($event, calendarMonth.end.calendar[row][col])"
                                                 >

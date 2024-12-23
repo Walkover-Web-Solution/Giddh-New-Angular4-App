@@ -10,7 +10,10 @@
     <div class="container-fluid mr-t15 adjust-inventory-list-page">
         <div class="d-flex align-items-center column-gap1 adjust-inventory-header">
             <div
-                *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                *ngIf="
+                    currentCompanyBranches?.length > 2 &&
+                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                "
                 class="branch-width mr-0"
             >
                 <dropdown-field
@@ -51,7 +54,7 @@
                 {{ commonLocaleData?.app_clear }}
             </button>
             <button
-              *ngIf="(!isCompany && !isConsolidatedBranch)"
+                *ngIf="!isCompany && !isConsolidatedBranch"
                 id="add-adjustment-btn"
                 mat-stroked-button
                 color="primary"
@@ -101,7 +104,7 @@
                                             $implicit: showReferenceNo,
                                             fieldName: localeData?.reference_no,
                                             formControl: adjustInventoryListForm.controls['referenceNo'],
-                                            title: localeData?.reference_no
+                                            title: localeData?.reference_no,
                                         }
                                     "
                                 ></ng-container>
@@ -128,7 +131,7 @@
                                             $implicit: showName,
                                             fieldName: localeData?.stock_name,
                                             title: localeData?.stock_name,
-                                            formControl: adjustInventoryListForm.controls['name']
+                                            formControl: adjustInventoryListForm.controls['name'],
                                         }
                                     "
                                 ></ng-container>
@@ -153,7 +156,7 @@
                                             $implicit: showReason,
                                             fieldName: localeData?.reason,
                                             title: localeData?.reason,
-                                            formControl: adjustInventoryListForm.controls['reason']
+                                            formControl: adjustInventoryListForm.controls['reason'],
                                         }
                                     "
                                 ></ng-container>
@@ -180,7 +183,7 @@
                                             $implicit: showStatus,
                                             fieldName: localeData?.request_status,
                                             title: localeData?.request_status,
-                                            formControl: adjustInventoryListForm.controls['status']
+                                            formControl: adjustInventoryListForm.controls['status'],
                                         }
                                     "
                                 ></ng-container>
@@ -207,7 +210,7 @@
                                             $implicit: showAdjustedBy,
                                             fieldName: localeData?.adjusted_by,
                                             title: localeData?.adjusted_by,
-                                            formControl: adjustInventoryListForm.controls['adjustedBy']
+                                            formControl: adjustInventoryListForm.controls['adjustedBy'],
                                         }
                                     "
                                 ></ng-container>
@@ -238,7 +241,7 @@
                                             $implicit: showAdjustmentMethod,
                                             fieldName: localeData?.adjustment_method,
                                             title: localeData?.adjustment_method,
-                                            formControl: adjustInventoryListForm.controls['adjustmentMethod']
+                                            formControl: adjustInventoryListForm.controls['adjustmentMethod'],
                                         }
                                     "
                                 ></ng-container>
@@ -263,7 +266,7 @@
                                             $implicit: showType,
                                             fieldName: localeData?.type,
                                             title: localeData?.type,
-                                            formControl: adjustInventoryListForm.controls['entity']
+                                            formControl: adjustInventoryListForm.controls['entity'],
                                         }
                                     "
                                 ></ng-container>
@@ -289,7 +292,7 @@
                                     </span>
                                 </button>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                    <button   class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
+                                    <button class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
                                         {{ commonLocaleData?.app_edit }}
                                     </button>
                                     <button

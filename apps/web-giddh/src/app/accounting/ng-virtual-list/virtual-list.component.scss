@@ -32,7 +32,7 @@ $text-overflow-ellipsis-width: 255px;
 }
 
 .hilighted {
-    >a {
+    > a {
         color: $hilighted-color;
     }
 }
@@ -45,7 +45,7 @@ $text-overflow-ellipsis-width: 255px;
 }
 
 .no-result-link {
-    >a {
+    > a {
         color: $hilighted-color;
     }
 }
@@ -200,10 +200,10 @@ i.close.icon.clear:hover::after {
     background: var(--color-white) !important;
 }
 
-.header.open>input[type="text"] {
+.header.open > input[type="text"] {
     border-color: var(--color-iron);
 }
 
-.header .bdr>input[type="text"] {
+.header .bdr > input[type="text"] {
     border: 0;
 }

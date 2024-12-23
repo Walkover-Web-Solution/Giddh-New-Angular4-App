@@ -48,7 +48,9 @@
             </mat-form-field>
             <ng-container *ngIf="eInvoiceCancelForm.get('cancellationRemarks')?.value">
                 <span class="max-character-label">{{ commonLocaleData?.app_characters_left }}:&nbsp;</span>
-                <span class="max-character-value">{{ 100 - eInvoiceCancelForm.get("cancellationRemarks")?.value?.length }}</span>
+                <span class="max-character-value">{{
+                    100 - eInvoiceCancelForm.get("cancellationRemarks")?.value?.length
+                }}</span>
             </ng-container>
         </div>
     </div>

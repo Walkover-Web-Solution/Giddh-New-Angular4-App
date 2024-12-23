@@ -25,7 +25,6 @@
             }
         }
     }
-
 }
 
 /*--- menu-button-color ---*/
@@ -81,7 +80,7 @@ aging-report {
 }
 
 // This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
-$listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors here, separated by commas (,)
+$listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors here, separated by commas (,)
 
 .table-header-sticky {
     &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {

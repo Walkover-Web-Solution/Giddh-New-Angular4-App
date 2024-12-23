@@ -36,17 +36,19 @@
                             color="primary"
                             [(ngModel)]="voucherPdf.isChecked"
                             (change)="selectAttachment($event, voucherPdf)"
-                            ></mat-checkbox
-                        >
+                        ></mat-checkbox>
                         <span
                             class="cursor-pointer font-15"
                             [ngClass]="{
-                                'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName
+                                'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName,
                             }"
                             (click)="showVoucherPreview()"
                             >{{ voucherPdf?.name || commonLocaleData?.app_not_available }}</span
                         >
-                        <a class="cursor-pointer" *ngIf="(!isCompany && !isConsolidatedBranch)" (click)="showDeleteVoucherModal(i)"
+                        <a
+                            class="cursor-pointer"
+                            *ngIf="!isCompany && !isConsolidatedBranch"
+                            (click)="showDeleteVoucherModal(i)"
                             ><i class="icon-trash"></i
                         ></a>
                     </div>
@@ -65,13 +67,15 @@
                                 <span
                                     class="file-name cursor-pointer font-15"
                                     [ngClass]="{
-                                        'active-file':
-                                            attachment?.uniqueName === previewedFile?.uniqueName
+                                        'active-file': attachment?.uniqueName === previewedFile?.uniqueName,
                                     }"
                                     (click)="showFilePreview(attachment)"
                                     >{{ attachment?.name }}</span
                                 >
-                                <a class="cursor-pointer" *ngIf="(!isCompany && !isConsolidatedBranch)" (click)="showDeleteAttachedFileModal(i)"
+                                <a
+                                    class="cursor-pointer"
+                                    *ngIf="!isCompany && !isConsolidatedBranch"
+                                    (click)="showDeleteAttachedFileModal(i)"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </mat-list-item>

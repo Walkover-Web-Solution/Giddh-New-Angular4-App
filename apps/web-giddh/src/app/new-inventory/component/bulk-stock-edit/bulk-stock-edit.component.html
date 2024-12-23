@@ -70,8 +70,8 @@
                     <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
-                                <table class="table table-bordered" >
-                                    <thead >
+                                <table class="table table-bordered">
+                                    <thead>
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
                                             <th class="cursor-pointer" *ngIf="tableHeaderShowHide.variantName">
@@ -1105,7 +1105,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        </ng-container>                                
+                                        </ng-container>
                                         <tr *ngIf="noDataFound && !isLoading">
                                             <td colspan="100%">
                                                 <div class="no-data mb-5">
@@ -1113,8 +1113,8 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    </tbody>                                   
-                                </table>  
+                                    </tbody>
+                                </table>
                             </form>
                         </div>
 

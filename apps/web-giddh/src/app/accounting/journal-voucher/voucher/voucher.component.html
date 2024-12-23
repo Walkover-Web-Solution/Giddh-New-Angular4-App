@@ -63,7 +63,7 @@
                                             [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                                    (!selectedIdx && !isSelectedRow && i == 0),
                                             }"
                                         >
                                             <text-field
@@ -91,7 +91,7 @@
                                             [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                                    (!selectedIdx && !isSelectedRow && i == 0),
                                             }"
                                             formGroupName="selectedAccount"
                                         >
@@ -139,7 +139,7 @@
                                             [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                                    (!selectedIdx && !isSelectedRow && i == 0),
                                             }"
                                         >
                                             <text-field
@@ -148,8 +148,14 @@
                                                     transaction?.get('isTaxApplied')?.value
                                                 "
                                                 [id]="'transactionAmount_' + i"
-                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount');"
-                                                (keydown.Shift.Tab)="updateTransactionActualAmount(transaction); changeTab('shift', 'amount');"
+                                                (keydown.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('tab', 'amount')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('shift', 'amount')
+                                                "
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
@@ -162,7 +168,7 @@
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('enter', 'amount');
+                                                    changeTab('enter', 'amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -173,7 +179,7 @@
                                             [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                                    (!selectedIdx && !isSelectedRow && i == 0),
                                             }"
                                         >
                                             <text-field
@@ -194,10 +200,16 @@
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('enter', 'amount');
+                                                    changeTab('enter', 'amount')
                                                 "
-                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount');"
-                                                (keydown.Shift.Tab)="updateTransactionActualAmount(transaction); changeTab('shift', 'amount');"
+                                                (keydown.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('tab', 'amount')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('shift', 'amount')
+                                                "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                             ></text-field>
@@ -209,7 +221,7 @@
                                                 [ngClass]="{
                                                     'active-row-transparent':
                                                         (isSelectedRow && selectedIdx === i) ||
-                                                        (!selectedIdx && !isSelectedRow && i == 0)
+                                                        (!selectedIdx && !isSelectedRow && i == 0),
                                                 }"
                                                 *ngIf="
                                                     journalVoucherForm
@@ -261,7 +273,7 @@
                                     <button
                                         mat-stroked-button
                                         color="primary"
-                                        [hidden]="(isCompany || isConsolidatedBranch)"
+                                        [hidden]="isCompany || isConsolidatedBranch"
                                         #submitButton
                                         (keyup)="keyUpOnSubmitButton($event)"
                                         (click)="saveEntry()"

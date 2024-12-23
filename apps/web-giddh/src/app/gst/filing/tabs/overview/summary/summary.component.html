@@ -41,7 +41,7 @@
                             (click)="viewTransactions(item)"
                             class="row-hover"
                             [ngClass]="{
-                                'cp-none': item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'
+                                'cp-none': item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers',
                             }"
                         >
                             <td [ngSwitch]="true" [attr.data-title]="localeData?.filing?.description">
@@ -97,7 +97,9 @@
                                 [attr.data-title]="localeData?.filing?.total_transactions"
                                 *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'"
                             >
-                                <a href="javascript:void(0);" aria-label="transaction"> {{ item?.totalTransactions }} </a>
+                                <a href="javascript:void(0);" aria-label="transaction">
+                                    {{ item?.totalTransactions }}
+                                </a>
                             </td>
                             <td
                                 class="text-center"
@@ -169,7 +171,9 @@
                                     <div class="secondary-row">{{ item?.name }}</div>
                                 </td>
                                 <td class="text-center" [attr.data-title]="localeData?.filing?.total_transactions">
-                                    <a href="javascript:void(0);" aria-label="transaction"> {{ item?.totalTransactions }} </a>
+                                    <a href="javascript:void(0);" aria-label="transaction">
+                                        {{ item?.totalTransactions }}
+                                    </a>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.taxable_amount">
                                     <i class="icon-rupees icon-font-11"></i>

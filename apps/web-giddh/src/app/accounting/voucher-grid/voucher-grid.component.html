@@ -38,7 +38,7 @@
                                 [ngClass]="{
                                     'active-row':
                                         (isSelectedRow && selectedIdx === i) ||
-                                        (!selectedIdx && !isSelectedRow && i == 0)
+                                        (!selectedIdx && !isSelectedRow && i == 0),
                                 }"
                             >
                                 <td [style.width.px]="40">
@@ -92,7 +92,7 @@
                                                         'active-row':
                                                             isSelectedRow &&
                                                             selectedStockIdx === idx &&
-                                                            selectedIdx === i
+                                                            selectedIdx === i,
                                                     }"
                                                 >
                                                     <td [style.width.px]="250">
@@ -110,7 +110,7 @@
                                                             class="form-control stock-field"
                                                             [(ngModel)]="inventory.stock.name"
                                                             [ngClass]="{
-                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                                'focus': isSelectedRow && selectedStockIdx === idx,
                                                             }"
                                                             (focus)="onStockFocus($event, idx, i)"
                                                             (blur)="onStockBlur(qty)"
@@ -127,7 +127,7 @@
                                                             [(ngModel)]="inventory.quantity"
                                                             (ngModelChange)="changeQuantity(idx, inventory.quantity)"
                                                             [ngClass]="{
-                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                                'focus': isSelectedRow && selectedStockIdx === idx,
                                                             }"
                                                             decimalDigitsDirective
                                                             [DecimalPlaces]="2"
@@ -145,7 +145,7 @@
                                                             (ngModelChange)="changePrice(idx, inventory.unit.rate)"
                                                             (focus)="selectedStockIdx = idx; selectedIdx = i"
                                                             [ngClass]="{
-                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                                'focus': isSelectedRow && selectedStockIdx === idx,
                                                             }"
                                                             decimalDigitsDirective
                                                             [DecimalPlaces]="2"
@@ -173,7 +173,7 @@
                                                             [(ngModel)]="inventory.amount"
                                                             (focus)="selectedStockIdx = idx; selectedIdx = i"
                                                             [ngClass]="{
-                                                                'focus': isSelectedRow && selectedStockIdx === idx
+                                                                'focus': isSelectedRow && selectedStockIdx === idx,
                                                             }"
                                                             (ngModelChange)="amountChanged(idx)"
                                                             (keydown.Tab)="validateAndAddNewStock(idx)"
@@ -257,7 +257,7 @@
                 </div>
 
                 <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
-                    <div >
+                    <div>
                         <h1>Accept?</h1>
                         <div class="pd-t2">
                             <button

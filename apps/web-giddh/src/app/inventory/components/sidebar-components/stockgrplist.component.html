@@ -13,7 +13,7 @@
                             grp.isOpen &&
                             activeGroup &&
                             activeGroup?.uniqueName === grp?.uniqueName &&
-                            !(activeStockUniqueName$ | async)
+                            !(activeStockUniqueName$ | async),
                     }"
                 >
                     <a (click)="OpenGroup(grp, $event)" class="d-flex">

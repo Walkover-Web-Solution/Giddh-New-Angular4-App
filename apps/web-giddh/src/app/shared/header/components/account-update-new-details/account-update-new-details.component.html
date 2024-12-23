@@ -95,7 +95,7 @@
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
                                         'cp':
                                             addAccountForm.get('openingBalance')?.value > 0 ||
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0,
                                     }"
                                     *ngIf="addAccountForm.get('openingBalance')?.value > 0"
                                 >
@@ -109,7 +109,7 @@
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
                                         'cp':
                                             addAccountForm.get('openingBalance')?.value > 0 ||
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0,
                                     }"
                                     *ngIf="addAccountForm.get('openingBalance')?.value > 0"
                                 >
@@ -117,10 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            *ngIf="company?.isActive"
-                            class="d-flex justify-content-end"
-                        >
+                        <div *ngIf="company?.isActive" class="d-flex justify-content-end">
                             <span
                                 href="javascript:;"
                                 (click)="openBulkAddDialog()"
@@ -151,7 +148,7 @@
                                 (click)="openingBalanceTypeChanged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0,
                                 }"
                                 *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                             >
@@ -162,17 +159,14 @@
                                 (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0,
                                 }"
                                 *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                             >
                                 {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
                         </div>
-                        <div
-                            *ngIf="company?.isActive"
-                            class="d-flex justify-content-end"
-                        >
+                        <div *ngIf="company?.isActive" class="d-flex justify-content-end">
                             <span
                                 href="javascript:;"
                                 (click)="openBulkAddDialog()"
@@ -252,7 +246,7 @@
                             <ng-container
                                 *ngFor="
                                     let gst of addAccountForm.get('addresses')['controls']
-                                        | slice : 0 : gstDetailsLength;
+                                        | slice: 0 : gstDetailsLength;
                                     let i = index;
                                     let f = first;
                                     let l = last
@@ -655,7 +649,7 @@
                                 class="form-group col-sm-6"
                                 [ngClass]="{
                                     'col-sm-5': selectedCountryCode !== 'AE',
-                                    'col-sm-6': selectedCountryCode === 'AE'
+                                    'col-sm-6': selectedCountryCode === 'AE',
                                 }"
                                 *ngIf="selectedCountryCode === 'AE'"
                             >
@@ -672,7 +666,7 @@
                                 class="form-group col-sm-6"
                                 [ngClass]="{
                                     'col-sm-5': selectedCountryCode !== 'AE',
-                                    'col-sm-6': selectedCountryCode === 'AE'
+                                    'col-sm-6': selectedCountryCode === 'AE',
                                 }"
                             >
                                 <label>{{ localeData?.bank_name_label }}</label>
@@ -768,7 +762,7 @@
                             <div
                                 class="input-group"
                                 [ngClass]="{
-                                    'input-group': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                    'input-group': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0,
                                 }"
                             >
                                 <input
@@ -792,7 +786,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0,
                                     }"
                                     *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                 >
@@ -804,7 +798,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0,
                                     }"
                                     *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                 >

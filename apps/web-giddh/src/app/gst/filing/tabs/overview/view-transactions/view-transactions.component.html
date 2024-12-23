@@ -22,7 +22,12 @@
                         {{ commonLocaleData?.app_back }}
                     </a>
                 </div>
-                <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
+                <div
+                    class="filter-row"
+                    *ngIf="
+                        selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')
+                    "
+                >
                     <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
                     <div class="btn-group filter d-inline-block" dropdown>
                         <button
@@ -45,9 +50,9 @@
                             </li>
                         </ul>
                     </div>
-                    </div>
-                    <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
-                        <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+                </div>
+                <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
+                    <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
                     <div class="btn-group filter d-inline-block" dropdown>
                         <button
                             id="button-basic2"

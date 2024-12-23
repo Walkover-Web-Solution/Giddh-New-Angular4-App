@@ -269,18 +269,18 @@ inventory-master {
     }
 }
 
-    /*---- create-menufacturing ----*/
-    .consumption-details-wrapper {
-        .mat-expansion-panel {
-            .mat-expansion-panel-header {
-                height: 45px;
+/*---- create-menufacturing ----*/
+.consumption-details-wrapper {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            height: 45px;
 
-                &.mat-expanded {
-                    height: 45px;
-                }
+            &.mat-expanded {
+                height: 45px;
             }
         }
     }
+}
 
 // Mat-Select search input
 .mat-mdc-option {

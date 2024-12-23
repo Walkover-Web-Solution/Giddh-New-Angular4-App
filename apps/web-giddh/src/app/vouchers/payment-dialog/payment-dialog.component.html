@@ -59,13 +59,16 @@
                         formControlName="amount"
                     >
                     </input-field>
-                    <i class="icon-trash font-16 cursor-pointer mr-l2 mr-r1" (click)="deleteDepositRow(depositIndex)"></i>
+                    <i
+                        class="icon-trash font-16 cursor-pointer mr-l2 mr-r1"
+                        (click)="deleteDepositRow(depositIndex)"
+                    ></i>
                 </div>
             </div>
         </ng-container>
     </div>
     <div class="text-blue mt-2 align-items-center">
-         <span class="cursor-pointer" (click)="addNewDepositRow()">+ {{commonLocaleData?.app_add_new_line}}</span>
+        <span class="cursor-pointer" (click)="addNewDepositRow()">+ {{ commonLocaleData?.app_add_new_line }}</span>
     </div>
 
     <div class="d-flex column-gap1 mr-b15" *ngIf="isBankSelected">

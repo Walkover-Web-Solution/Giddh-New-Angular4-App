@@ -21,7 +21,7 @@
                                 #searchElement
                             ></text-field>
                             <button
-                                *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                *ngIf="!isCompany && !isConsolidatedBranch"
                                 class="mr-l1"
                                 mat-stroked-button
                                 color="primary"
@@ -31,7 +31,10 @@
                             </button>
                         </div>
                         <ul class="voucher-sidebar">
-                            <cdk-virtual-scroll-viewport [itemSize]="62" *ngIf="filteredData && filteredData.length > 0">
+                            <cdk-virtual-scroll-viewport
+                                [itemSize]="62"
+                                *ngIf="filteredData && filteredData.length > 0"
+                            >
                                 <li
                                     class="single-voucher-details cp"
                                     *ngFor="let row of filteredData; let i = index"
@@ -169,7 +172,7 @@
                                                         </button>
                                                     </span>
 
-                                                    <span *ngIf="(!isCompany && !isConsolidatedBranch)">
+                                                    <span *ngIf="!isCompany && !isConsolidatedBranch">
                                                         <a
                                                             href="javascript:;"
                                                             [matTooltip]="commonLocaleData?.app_delete"

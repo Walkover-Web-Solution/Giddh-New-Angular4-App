@@ -32,7 +32,7 @@
         [ngClass]="{
             'open': isSidebarExpanded,
             'unvisible': companyList?.length === 0 && !isSubscriptionModule,
-            'hide-sidebar': isSubscriptionModule
+            'hide-sidebar': isSubscriptionModule,
         }"
         (clickOutside)="closeSidebarMobile($event)"
     >
@@ -748,7 +748,7 @@
         <aside-setting
             [ngClass]="{
                 'setting-sidebar': isMobileSidebar,
-                'sidebar-slide-right': asideSettingMenuState === 'in'
+                'sidebar-slide-right': asideSettingMenuState === 'in',
             }"
             (closeAsideEvent)="toggleSidebarPane(false, false)"
         ></aside-setting>

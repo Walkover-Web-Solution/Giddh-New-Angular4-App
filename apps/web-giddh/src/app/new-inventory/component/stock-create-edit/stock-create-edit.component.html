@@ -10,8 +10,14 @@
         <div class="relative create-new-inventory-page static-tabs-on-page">
             <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
-                <span class="pull-right position-relative z-index-1" [ngClass]="{ 'top-right-spacing': queryParams?.stockUniqueName && !addStock }">
-                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_CREATE_STOCK'"></watch-video>
+                <span
+                    class="pull-right position-relative z-index-1"
+                    [ngClass]="{ 'top-right-spacing': queryParams?.stockUniqueName && !addStock }"
+                >
+                    <watch-video
+                        [cssClass]="'text-primary pd-r15'"
+                        [moduleName]="'INVENTORY_CREATE_STOCK'"
+                    ></watch-video>
                 </span>
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
                     <span class="back-btn-align">
@@ -49,8 +55,8 @@
                                                     stockForm.type === 'PRODUCT'
                                                         ? localeData?.enter_stock
                                                         : stockForm.type === 'SERVICE'
-                                                        ? localeData?.enter_service
-                                                        : localeData?.enter_fixed
+                                                          ? localeData?.enter_service
+                                                          : localeData?.enter_fixed
                                                 "
                                                 [type]="'text'"
                                                 [(ngModel)]="stockForm.name"
@@ -184,9 +190,7 @@
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
                                                 [options]="discountsList"
-                                                (selectedOption)="
-                                                    stockForm.discounts = [$event?.value];
-                                                "
+                                                (selectedOption)="stockForm.discounts = [$event?.value]"
                                                 [allowValueReset]="true"
                                                 (onClear)="stockForm.discounts = []"
                                                 [defaultValue]="stockForm.discountLabel ?? ''"
@@ -286,7 +290,7 @@
                                                                                     'col-sm-5 col-xs-5 pr-0':
                                                                                         stockForm.variants[0]
                                                                                             ?.fixedAssetsInformation
-                                                                                            ?.length > 1
+                                                                                            ?.length > 1,
                                                                                 }"
                                                                             >
                                                                                 <input-field
@@ -316,7 +320,7 @@
                                                                                     'col-sm-5 col-xs-5 pr-0':
                                                                                         stockForm.variants[0]
                                                                                             ?.fixedAssetsInformation
-                                                                                            ?.length > 1
+                                                                                            ?.length > 1,
                                                                                 }"
                                                                             >
                                                                                 <dropdown-field
@@ -486,7 +490,7 @@
                                                                                         'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.purchaseInformation
-                                                                                                ?.length > 1
+                                                                                                ?.length > 1,
                                                                                     }"
                                                                                 >
                                                                                     <input-field
@@ -517,7 +521,7 @@
                                                                                         'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.purchaseInformation
-                                                                                                ?.length > 1
+                                                                                                ?.length > 1,
                                                                                     }"
                                                                                 >
                                                                                     <dropdown-field
@@ -691,7 +695,7 @@
                                                                                         'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
-                                                                                                ?.length > 1
+                                                                                                ?.length > 1,
                                                                                     }"
                                                                                 >
                                                                                     <input-field
@@ -718,7 +722,7 @@
                                                                                         'col-sm-5 col-xs-5 pr-0':
                                                                                             stockForm.variants[0]
                                                                                                 ?.salesInformation
-                                                                                                ?.length > 1
+                                                                                                ?.length > 1,
                                                                                     }"
                                                                                 >
                                                                                     <dropdown-field
@@ -1104,7 +1108,7 @@
                                                             <ng-container
                                                                 *ngFor="
                                                                     let variant of stockForm.variants
-                                                                        | sortBy : ['archive'];
+                                                                        | sortBy: ['archive'];
                                                                     let i = index
                                                                 "
                                                             >
@@ -1689,7 +1693,12 @@
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
                                     <div class="pd-l15 pt-3 mr-b5" *ngIf="!queryParams?.stockUniqueName">
-                                        <button aria-label="recipe btn" mat-stroked-button color="primary" (click)="createStock(true)">
+                                        <button
+                                            aria-label="recipe btn"
+                                            mat-stroked-button
+                                            color="primary"
+                                            (click)="createStock(true)"
+                                        >
                                             {{ localeData?.save_stock_for_recipe }}
                                         </button>
                                     </div>
@@ -2292,7 +2301,12 @@
                                                         <div
                                                             class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
-                                                            <button aria-label="add icon" mat-icon-button role="button" type="button">
+                                                            <button
+                                                                aria-label="add icon"
+                                                                mat-icon-button
+                                                                role="button"
+                                                                type="button"
+                                                            >
                                                                 <span class="icon-font-22 text-primary pd-l05 pd-r05"
                                                                     >+</span
                                                                 >
@@ -2429,7 +2443,12 @@
                                     <tbody>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
+                                                <img
+                                                    src="{{ imgPath }}add-image.svg"
+                                                    width="60"
+                                                    height="60"
+                                                    alt="add img"
+                                                />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2471,7 +2490,12 @@
                                         </tr>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
+                                                <img
+                                                    src="{{ imgPath }}add-image.svg"
+                                                    width="60"
+                                                    height="60"
+                                                    alt="add img"
+                                                />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2918,7 +2942,12 @@
                                                                     [placeholder]="localeData?.select_unit"
                                                                 >
                                                                 </sh-select>
-                                                                <button aria-label="add icon" mat-icon-button role="button" type="button">
+                                                                <button
+                                                                    aria-label="add icon"
+                                                                    mat-icon-button
+                                                                    role="button"
+                                                                    type="button"
+                                                                >
                                                                     <i class="icon-plus pd cp"></i>
                                                                 </button>
                                                             </div>
@@ -3710,7 +3739,11 @@
                                                         <div
                                                             class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
-                                                            <button aria-label="add icon" mat-icon-button class="icon-font-22 text-primary">
+                                                            <button
+                                                                aria-label="add icon"
+                                                                mat-icon-button
+                                                                class="icon-font-22 text-primary"
+                                                            >
                                                                 +
                                                             </button>
                                                         </div>

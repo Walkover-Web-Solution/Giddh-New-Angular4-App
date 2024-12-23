@@ -35,7 +35,9 @@
                                             profileData.balanceDecimalPlaces = $event.value;
                                             profileUpdated('balanceDecimalPlaces')
                                         "
-                                        [defaultValue]="getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)"
+                                        [defaultValue]="
+                                            getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)
+                                        "
                                         [isFilterEnabled]="true"
                                         [name]="'balanceDecimalPlaces'"
                                     ></dropdown-field>
@@ -51,7 +53,9 @@
                                             profileData.balanceDisplayFormat = $event.value;
                                             profileUpdated('balanceDisplayFormat')
                                         "
-                                        [defaultValue]="getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)"
+                                        [defaultValue]="
+                                            getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)
+                                        "
                                         [isFilterEnabled]="true"
                                         [name]="'balanceDisplayFormat'"
                                     ></dropdown-field>
@@ -89,7 +93,7 @@
                                         [options]="translationLocales"
                                         [placeholder]="localeData?.select_language"
                                         (selectedOption)="activeLocale = $event.value; selectLocale($event)"
-                                        [defaultValue]="getDropdownLabel(translationLocales ,activeLocale)"
+                                        [defaultValue]="getDropdownLabel(translationLocales, activeLocale)"
                                         [isFilterEnabled]="true"
                                         [name]="'activeLocale'"
                                     ></dropdown-field>

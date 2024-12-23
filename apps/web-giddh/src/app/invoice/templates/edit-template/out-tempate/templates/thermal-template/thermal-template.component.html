@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--*ngIf="templateId == 'thermal_template'"-->
 <html id="thermal_template" lang="en">
     <head>
@@ -13,7 +13,7 @@
             'padding-bottom': inputTemplate.bottomMargin + 'px',
             'padding-right': inputTemplate.rightMargin + 'px',
             'padding-left': inputTemplate.leftMargin + 'px',
-            'font-size': inputTemplate.fontDefault + 'px'
+            'font-size': inputTemplate.fontDefault + 'px',
         }"
     >
         <!--class="disabled-area"-->
@@ -22,7 +22,7 @@
                 id="Template-header"
                 [ngClass]="{
                     'disabled-area': !templateUISectionVisibility.header,
-                    ' ': templateUISectionVisibility.header
+                    ' ': templateUISectionVisibility.header,
                 }"
                 (click)="onClickSection('header')"
             >
@@ -34,7 +34,7 @@
                         <h2
                             [ngStyle]="{
                                 'color': 'black',
-                                'font-size': inputTemplate.fontDefault + 'px'
+                                'font-size': inputTemplate.fontDefault + 'px',
                             }"
                             [title]="fieldsAndVisibility.header.formNameTaxInvoice?.label"
                         ></h2>
@@ -43,7 +43,7 @@
                         <h2
                             [ngStyle]="{
                                 'color': 'black',
-                                'font-size': '20px'
+                                'font-size': '20px',
                             }"
                         >
                             {{ fieldsAndVisibility.header.companyName?.label }}
@@ -134,7 +134,7 @@
                 id="template-table "
                 [ngClass]="{
                     'disabled-area': !templateUISectionVisibility.table,
-                    ' ': templateUISectionVisibility.table
+                    ' ': templateUISectionVisibility.table,
                 }"
                 (click)="onClickSection('table')"
             >
@@ -178,7 +178,9 @@
                         <tbody>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 1 - Variant 1</span>
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
+                                        >Stock Name Edition 1 - Variant 1</span
+                                    >
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.quantity?.display">2,000</td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display">
@@ -190,7 +192,9 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 2 - Variant 1</span>
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
+                                        >Stock Name Edition 2 - Variant 1</span
+                                    >
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.quantity?.display">10</td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display">
@@ -208,7 +212,7 @@
                 id="template-footer"
                 [ngClass]="{
                     'disabled-area': !templateUISectionVisibility.footer,
-                    ' ': templateUISectionVisibility.footer
+                    ' ': templateUISectionVisibility.footer,
                 }"
                 (click)="onClickSection('footer')"
             >
@@ -256,16 +260,10 @@
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
                                 <td></td>
                                 <td></td>
-                                <td class="text-right tax-gst">
-                                    GST12% 
-                                </td>
+                                <td class="text-right tax-gst">GST12%</td>
                                 <td>45,000.00</td>
                             </tr>
-                            <tr
-                                *ngIf="
-                                   fieldsAndVisibility.footer.totalInWords?.display
-                                "
-                            >
+                            <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
                                 <td></td>
                                 <td></td>
                                 <td>Invoice Total(INR)</td>
@@ -277,11 +275,7 @@
                             class="totalInWords"
                             style="text-align: center"
                         >
-                            <p
-                                *ngIf="
-                                    fieldsAndVisibility.footer.totalInWords?.display 
-                                "
-                            >
+                            <p *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
                                 Five Lakh Ninty Thousand Two Hundred Fifty Only
                             </p>
                         </div>

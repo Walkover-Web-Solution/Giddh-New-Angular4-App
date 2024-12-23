@@ -23,11 +23,7 @@
                     >
                         {{ localeData?.multiple_pdf }}
                     </mat-radio-button>
-                    <mat-radio-button
-                        color="primary"
-                        [value]="true"
-                        aria-label="Export as single PDF"
-                    >
+                    <mat-radio-button color="primary" [value]="true" aria-label="Export as single PDF">
                         {{ localeData?.single_pdf }}
                     </mat-radio-button>
                 </mat-radio-group>
@@ -39,7 +35,7 @@
                         inputData?.voucherType === 'receipt' ||
                         inputData?.voucherType === 'payment' ||
                         inputData?.voucherType === 'credit note' ||
-                        inputData?.voucherType === 'debit note'
+                        inputData?.voucherType === 'debit note',
                 }"
                 *ngIf="inputData?.voucherType === 'sales'"
             >

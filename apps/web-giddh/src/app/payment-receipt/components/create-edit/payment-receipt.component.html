@@ -61,7 +61,8 @@
                                                 <sales-sh-select
                                                     [ngClass]="{
                                                         'error-box':
-                                                            !isValidForm && !voucherFormData.account?.uniqueName?.trim()
+                                                            !isValidForm &&
+                                                            !voucherFormData.account?.uniqueName?.trim(),
                                                     }"
                                                     class="float-left sales-select w-100"
                                                     name="customer-uniquename"
@@ -71,7 +72,10 @@
                                                     [customFilter]="customMoveGroupFilter"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('customer')"
-                                                    (dynamicSearchedQuery)="isAccountSearchData = true ; onSearchQueryChanged($event, 1, 'customer')"
+                                                    (dynamicSearchedQuery)="
+                                                        isAccountSearchData = true;
+                                                        onSearchQueryChanged($event, 1, 'customer')
+                                                    "
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
                                                     (onHide)="resetPreviousSearchResults(true, 'customer')"
@@ -102,14 +106,7 @@
                                                     <ng-template #notFoundLinkTemplate>
                                                         <a
                                                             href="javascript:void(0)"
-                                                            class="
-                                                                list-item
-                                                                pd-l05 pd-r05
-                                                                border-none
-                                                                d-flex
-                                                                justify-content-between
-                                                                w-100
-                                                            "
+                                                            class="list-item pd-l05 pd-r05 border-none d-flex justify-content-between w-100"
                                                             [keyboardShortcut]="'alt+c'"
                                                         >
                                                             <div class="item">
@@ -190,7 +187,7 @@
                                         <ng-container>
                                             <section
                                                 [ngClass]="{
-                                                    'billing-address-wrap': !voucherFormData.account?.uniqueName
+                                                    'billing-address-wrap': !voucherFormData.account?.uniqueName,
                                                 }"
                                             >
                                                 <div class="row">

@@ -5,64 +5,62 @@
 <div mat-dialog-content class="dialog-body">
     <giddh-page-loader class="unset-loader-margin" *ngIf="isVoucherFileDownloading$ | async"></giddh-page-loader>
     <div [formGroup]="downloadForm" *ngIf="!(isVoucherFileDownloading$ | async)">
-
-            <ng-container *ngIf="voucherType === 'sales'">
-                <h3 class="font-16 mr-b1">{{ localeData?.invoice_copy }}</h3>
-                <hr />
-            </ng-container>
-            <div class="mr-t1">
+        <ng-container *ngIf="voucherType === 'sales'">
+            <h3 class="font-16 mr-b1">{{ localeData?.invoice_copy }}</h3>
+            <hr />
+        </ng-container>
+        <div class="mr-t1">
+            <mat-checkbox
+                name="originalCopy"
+                formControlName="isOriginal"
+                type="checkbox"
+                color="primary"
+                value="Original"
+                [checked]="true"
+            >
+                {{
+                    voucherType === "purchase"
+                        ? commonLocaleData?.app_purchase_bill
+                        : localeData?.invoice_copy_options?.original
+                }}
+            </mat-checkbox>
+        </div>
+        <ng-container *ngIf="voucherType === 'sales'">
+            <div>
                 <mat-checkbox
-                    name="originalCopy"
-                    formControlName="isOriginal"
-                    type="checkbox"
-                    color="primary"
-                    value="Original"
-                    [checked]="true"
-                >
-                    {{
-                        voucherType === "purchase"
-                            ? commonLocaleData?.app_purchase_bill
-                            : localeData?.invoice_copy_options?.original
-                    }}
-                </mat-checkbox>
-            </div>
-            <ng-container *ngIf="voucherType === 'sales'">
-                <div>
-                    <mat-checkbox
-                        (change)="invoiceTypeChanged($event)"
-                        formControlName="isTransport"
-                        type="checkbox"
-                        color="primary"
-                        value="Transport"
-                    >
-                        {{ localeData?.transport }}
-                    </mat-checkbox>
-                </div>
-                <div>
-                    <mat-checkbox
-                        (change)="invoiceTypeChanged($event)"
-                        formControlName="isCustomer"
-                        type="checkbox"
-                        color="primary"
-                        value="Customer"
-                    >
-                        {{ commonLocaleData?.app_customer }}
-                    </mat-checkbox>
-                </div>
-            </ng-container>
-            <div *ngIf="selectedItem?.hasAttachment">
-                <mat-checkbox
-                    name="attachment"
                     (change)="invoiceTypeChanged($event)"
-                    formControlName="isAttachment"
+                    formControlName="isTransport"
                     type="checkbox"
                     color="primary"
-                    value="Attachment"
+                    value="Transport"
                 >
-                    {{ localeData?.invoice_copy_options?.attachment }}
+                    {{ localeData?.transport }}
                 </mat-checkbox>
             </div>
-
+            <div>
+                <mat-checkbox
+                    (change)="invoiceTypeChanged($event)"
+                    formControlName="isCustomer"
+                    type="checkbox"
+                    color="primary"
+                    value="Customer"
+                >
+                    {{ commonLocaleData?.app_customer }}
+                </mat-checkbox>
+            </div>
+        </ng-container>
+        <div *ngIf="selectedItem?.hasAttachment">
+            <mat-checkbox
+                name="attachment"
+                (change)="invoiceTypeChanged($event)"
+                formControlName="isAttachment"
+                type="checkbox"
+                color="primary"
+                value="Attachment"
+            >
+                {{ localeData?.invoice_copy_options?.attachment }}
+            </mat-checkbox>
+        </div>
 
         <div class="pd-t15">
             <button

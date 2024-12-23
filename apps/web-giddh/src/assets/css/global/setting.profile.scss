@@ -22,7 +22,6 @@
 }
 
 body {
-
     &.on-setting-page,
     &.aside-menu-product-service-page {
         .cdk-overlay-pane {
@@ -58,7 +57,7 @@ body {
                     padding-bottom: 4px;
                 }
             }
-    
+
             .mdc-list-item__primary-text {
                 width: 100%;
             }

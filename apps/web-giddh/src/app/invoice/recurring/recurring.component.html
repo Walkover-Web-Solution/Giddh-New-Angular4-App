@@ -351,7 +351,7 @@
                                             $implicit: showCustomerNameSearch,
                                             title: commonLocaleData?.app_customer_name,
                                             fieldName: 'customerName',
-                                            formControl: customerNameInput
+                                            formControl: customerNameInput,
                                         }
                                     "
                                 ></ng-container>
@@ -359,7 +359,7 @@
 
                             <th>
                                 <div class="d-flex">
-                                    <div >{{ localeData?.interval }}</div>
+                                    <div>{{ localeData?.interval }}</div>
 
                                     <div class="icon-pointer">
                                         <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'duration' }">

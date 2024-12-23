@@ -28,9 +28,7 @@
     >
         <div class="value-wrapper">
             <div class="d-flex align-items-center mr-b1">
-                <label>{{
-                    commonLocaleData?.app_percent
-                }}</label>
+                <label>{{ commonLocaleData?.app_percent }}</label>
                 <div class="position-relative percent-wrapper">
                     <input
                         matInput
@@ -78,8 +76,7 @@
                                 (change)="change()"
                                 (click)="$event.stopPropagation()"
                                 >{{ discount.name }}
-                                </mat-checkbox
-                            >
+                            </mat-checkbox>
                         </label>
                     </li>
                 </ng-container>

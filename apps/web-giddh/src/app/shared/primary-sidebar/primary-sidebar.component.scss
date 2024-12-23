@@ -351,7 +351,8 @@
                                 }
                             }
                             &:hover {
-                                a,div {
+                                a,
+                                div {
                                     @include highlight-color(
                                         var(--color-giddh-common-background),
                                         var(--color-white-tertiary)
@@ -365,7 +366,6 @@
                                             var(--color-white-tertiary)
                                         );
                                     }
-
                                 }
                             }
                         }
@@ -501,7 +501,7 @@
                 }
             }
         }
-        
+
         .wrap-menus {
             overflow: initial !important;
             .menu-block {
@@ -541,10 +541,7 @@
                             align-items: center;
                             &:hover,
                             &.active {
-                                @include highlight-color(
-                                    var(--color-giddh-blue),
-                                    var(--color-white)
-                                );
+                                @include highlight-color(var(--color-giddh-blue), var(--color-white));
                             }
                             a.dropdown-toggle {
                                 padding: 0 10px;

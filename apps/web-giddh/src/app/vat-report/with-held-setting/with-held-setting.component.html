@@ -1,11 +1,20 @@
-<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'vat-report'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu></hamburger-menu>
     <div class="relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideTaxSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()"
-            [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+        <div
+            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideTaxSidebarMenuState === 'in'"
+        >
+            <tax-sidebar
+                (navigateEvent)="handleNavigation()"
+                [exclude]="'#primary-new-header'"
+                class="gst-sidebar"
+            ></tax-sidebar>
         </div>
     </div>
     <div class="obligations pd-15">
@@ -14,7 +23,7 @@
         </div>
         <form (ngSubmit)="handleFormSubmit()" *ngIf="!isLoading">
             <div class="container-fluid ml-0">
-                    <div class="row align-items-center row-gap">
+                <div class="row align-items-center row-gap">
                     <input-field
                         class="tax-percentage-width"
                         [name]="'tax-percentage'"
@@ -27,13 +36,14 @@
                         [matSuffix]="'%'"
                     >
                     </input-field>
-                    
+
                     <div class="col flex-grow-0">
-                        <button mat-stroked-button color="primary" type="submit" [disabled]="taxPercentage.invalid">{{
-                            commonLocaleData?.app_submit }}</button>
+                        <button mat-stroked-button color="primary" type="submit" [disabled]="taxPercentage.invalid">
+                            {{ commonLocaleData?.app_submit }}
+                        </button>
                     </div>
                 </div>
             </div>
-         </form>
+        </form>
     </div>
 </ng-container>
