@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header theme-bg d-flex justify-content-between">
-        <h3 class="modal-title bg" id="modal-title" mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</h3>
-        <button aria-hidden="true" class="close" mat-dialog-close id="closedialog" (click)="onCancel">×</button>
+        <h3 class="modal-title" mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</h3>
+        <button aria-hidden="true" class="close" id="closedialog" (click)="onCancel()">×</button>
     </div>
     <mat-dialog-content>
         <div class="p-3">
@@ -18,23 +18,4 @@
             </div>
         </div>
     </mat-dialog-content>
-
-
-    <!-- <div class="modal-header">
-        <h2 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h2>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
-    </div>
-    <div class="modal-body clearfix" id="export-body">
-        <form name="newRole" novalidate autocomplete="off">
-            <div class="modal-wrap">
-                <h3>{{ message }}</h3>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation()">
-            {{ commonLocaleData?.app_yes }}
-        </button>
-        <button type="submit" class="btn btn-md btn-danger" (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
-    </div> -->
 </div>

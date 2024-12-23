@@ -37,6 +37,7 @@ import { LiabilityDetailedReportComponent } from './liability-detailed-report/li
 import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filters.component';
 import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabilities-payments.component';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -79,7 +80,8 @@ import { MatInputModule } from '@angular/material/input';
         DatepickerWrapperModule,
         GiddhPageLoaderModule,
         NewConfirmationModalModule,
-        MatInputModule
+        MatInputModule,
+        MatPaginatorModule
     ],
     exports: [
         VatReportRoutingModule,

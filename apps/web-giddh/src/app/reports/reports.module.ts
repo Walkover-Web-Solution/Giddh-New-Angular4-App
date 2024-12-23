@@ -49,6 +49,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
     declarations: [
@@ -112,7 +113,8 @@ import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
         MatTableModule,
         MatPaginatorModule,
         MatInputModule,
-        SerialNumberPipe
+        SerialNumberPipe,
+        MatSortModule
     ]
 })
 

@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="pd-t15 pd-b15 clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null; toggleTaxAsidePane()">
+    <div class="pd-t15 pd-b15 clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="openCreateUpdateDialog()">
         <div class="d-flex justify-content-between">
             <h1 class="section-head m-0 p-0">{{ localeData?.added_taxes }}</h1>
             <div>
@@ -25,7 +25,7 @@
                     color="primary"
                     [matTooltip]="localeData?.create_new_tax"
                     [matTooltipPosition]="'above'"
-                    (click)="addTaxDialogOpen()"
+                    (click)="openCreateUpdateDialog()"
                     aria-label="create new tax"
                 >
                     <i class="icon icon-plus font-12 mr-1"></i> {{ localeData?.new_tax }}
@@ -112,7 +112,7 @@
                                 <button 
                                     mat-stroked-button 
                                     color="primary"
-                                    (click)="selectedTax = element; toggleTaxAsidePane()">
+                                    (click)="openCreateUpdateDialog(element)">
                                     <i
                                         class="icon-edit-pencil"
                                         aria-hidden="true"
@@ -367,29 +367,15 @@
         </div>
     </div>
 
-    <!-- region open tax aside -->
-    <!-- <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
-    <aside-menu-create-tax-component
-        [class]="taxAsideMenuState"
-        [tax]="selectedTax"
-        *ngIf="taxAsideMenuState === 'in'"
-        [@slideInOut]="taxAsideMenuState"
-        [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData"
-        (closeEvent)="toggleTaxAsidePane()"
-    ></aside-menu-create-tax-component> -->
-
-    <ng-template #newTaxDialogAside>
+    <!-- Template Create/Update Dialog -->
+    <ng-template #createUpdateDialog>
         <aside-menu-create-tax-component
-            [class]="taxAsideMenuState"
             [tax]="selectedTax"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
-            (closeEvent)="toggleTaxAsidePane()"
+            (closeEvent)="createUpdateDialogRef?.close()"
         ></aside-menu-create-tax-component>
     </ng-template>
-    
-    <!-- endregion -->
 
     <!-- region delete Tax confirmation model -->
      <ng-template #taxConfirmationModel>
@@ -400,18 +386,5 @@
         >
         </delete-tax-confirmation-model>
      </ng-template>
-     
-    <!-- <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-tax-confirmation-model
-                    [message]="confirmationMessage"
-                    [commonLocaleData]="commonLocaleData"
-                    (userConfirmationEvent)="userConfirmation($event)"
-                >
-                </delete-tax-confirmation-model>
-            </div>
-        </div>
-    </div> -->
     <!-- endregion -->
 </ng-container>

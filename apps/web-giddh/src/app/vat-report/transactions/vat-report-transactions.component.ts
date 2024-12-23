@@ -8,7 +8,7 @@ import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -32,12 +32,14 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public vatReportTransactions: any = {};
+    /** Holds page Size Options for pagination */
+    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     public vatReportTransactionsRequest: VatReportTransactionsRequest = {
         from: '',
         to: '',
         taxNumber: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[0],
         section: ''
     };
     public isLoading: boolean = false;
@@ -156,9 +158,10 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        if (this.vatReportTransactionsRequest.page !== event.page) {
+        if (this.vatReportTransactionsRequest.page !== (event.pageIndex + 1)) {
+            this.vatReportTransactionsRequest.page = event.pageIndex + 1;
+            this.vatReportTransactionsRequest.count = event.pageSize;
             this.vatReportTransactions.results = [];
-            this.vatReportTransactionsRequest.page = event.page;
             this.getVatReportTransactions(false);
         }
     }

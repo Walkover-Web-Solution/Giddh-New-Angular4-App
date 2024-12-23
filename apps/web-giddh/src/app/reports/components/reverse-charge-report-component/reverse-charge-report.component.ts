@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -30,13 +30,15 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public showEntryDate = true;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds page Size Options for pagination */
+    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     public reverseChargeReportGetRequest: ReverseChargeReportGetRequest = {
         from: '',
         to: '',
         sort: '',
         sortBy: '',
         page: 1,
-        count: PAGINATION_LIMIT
+        count: this.pageSizeOptions[0]
     };
     public reverseChargeReportPostRequest: ReverseChargeReportPostRequest = {
         supplierName: '',
@@ -46,7 +48,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     };
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
-    public paginationLimit: number = PAGINATION_LIMIT;
     public timeout: any;
     public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public universalDate: any[] = [];
@@ -84,17 +85,17 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public todaySelected: boolean = false;
     /** Holds display columns for mat table */
     public displayedColumns: string[] = [
-        'index', 
-        'entryDate', 
-        'suppliersName', 
-        'voucherType', 
-        'invoiceNumber', 
-        'supplierInvoiceDate', 
-        'supplierCountry', 
-        'taxableValue', 
-        'taxRate', 
+        'index',
+        'entryDate',
+        'suppliersName',
+        'voucherType',
+        'invoiceNumber',
+        'supplierInvoiceDate',
+        'supplierCountry',
+        'taxableValue',
+        'taxRate',
         'taxAmount'
-      ];
+    ];
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Holds searched name form control */
@@ -244,26 +245,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         });
     }
 
-    // /**
-    //  * This will put focus on selected search field
-    //  *
-    //  * @param {*} inlineSearch
-    //  * @memberof ReverseChargeReport
-    //  */
-    // public focusOnColumnSearch(inlineSearch) {
-    //     this.inlineSearch = inlineSearch;
-
-    //     setTimeout(() => {
-    //         if (this.inlineSearch === 'suppliersName') {
-    //             this.suppliersNameField?.nativeElement.focus();
-    //         } else if (this.inlineSearch === 'invoiceNumber') {
-    //             this.invoiceNumberField?.nativeElement.focus();
-    //         } else if (this.inlineSearch === 'supplierCountry') {
-    //             this.supplierCountryField?.nativeElement.focus();
-    //         }
-    //     }, 200);
-    // }
-
     /**
      * This function will destroy the subscribers
      *
@@ -276,20 +257,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.asideGstSidebarMenuState === 'out';
     }
 
-    /**
-     * This function will change the page of vat report
-     *
-     * @param {*} event
-     * @memberof ReverseChargeReport
-     */
-    // public pageChanged(event: any): void {
-    //     if (this.reverseChargeReportGetRequest.page != event.page) {
-    //         this.reverseChargeReportResults.results = [];
-    //         this.reverseChargeReportGetRequest.page = event.page;
-    //         this.getReverseChargeReport(false);
-    //     }
-    // }
-
     public pageChanged(event: any): void {
         const pageIndex = event.pageIndex + 1;
         if (this.reverseChargeReportGetRequest.page !== pageIndex) {
@@ -297,7 +264,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeReportGetRequest.page = pageIndex;
             this.getReverseChargeReport(false);
         }
-      }
+    }
 
     /**
      * This function will get the data of vat detailed report
@@ -319,7 +286,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
 
-                    if(this.todaySelected) {
+                    if (this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
                         this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
@@ -346,26 +313,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.timeout = setTimeout(() => {
             this.getReverseChargeReport(true);
         }, 700);
-    }
-
-    /**
-     * This will sort the report
-     *
-     * @param {*} sortBy
-     * @memberof ReverseChargeReport
-     */
-    public sortReverseChargeList(sortBy): void {
-        let sort = "asc";
-
-        if (this.reverseChargeReportGetRequest.sortBy === sortBy) {
-            sort = (this.reverseChargeReportGetRequest.sort === "asc") ? "desc" : "asc";
-        } else {
-            sort = "asc";
-        }
-
-        this.reverseChargeReportGetRequest.sort = sort;
-        this.reverseChargeReportGetRequest.sortBy = sortBy;
-        this.getReverseChargeReport(true);
     }
 
     /**
@@ -412,7 +359,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.reverseChargeReportGetRequest.sortBy = "";
         this.reverseChargeReportGetRequest.from = "";
         this.reverseChargeReportGetRequest.to = "";
-        if(!this.todaySelected) {
+        this.isSearching = false;
+        if (!this.todaySelected) {
             this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
             this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.reverseChargeReportGetRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -492,33 +440,20 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.router.navigate(['pages', 'gstfiling']);
     }
 
-        /**
+    /**
      * Toogles the search field
      *
      * @param {string} fieldName Field name to toggle
-     * @memberof ContactComponent
+     * @memberof ReverseChargeReport
      */
     public toggleSearch(fieldName: string): void {
         if (fieldName === "name") {
             this.showNameSearch = true;
-        } else if (fieldName === "name"){
-            this.showNameSearch = true;
-
+        } else if (fieldName === "invoiceNo") {
+            this.showInvoiceNoSearch = true;
+        } else if (fieldName === "country") {
+            this.showCountrySearch = true;
         }
-    }
-
-    /**
-     * Returns the placeholder for the current searched field
-     *
-     * @param {string} fieldName Field name for which placeholder is required
-     * @return {*}  {string} Placeholder text
-     * @memberof ReverseChargeReport
-     */
-    public getSearchFieldText(fieldName: string): string {
-        if (fieldName === "name") {
-            return this.localeData?.search_name;
-        }
-        return "";
     }
 
     /**
@@ -555,6 +490,20 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             } else if (searchedFieldName === 'country') {
                 this.showCountrySearch = false;
             }
+        }
+    }
+
+    /**
+     *  Handle Mat table sort event
+     *
+     * @param {*} event
+     * @memberof ReverseChargeReport
+     */
+    public sortChange(event: any): void {
+        if (event) {
+            this.reverseChargeReportGetRequest.sort = event?.direction ? event?.direction : 'asc';
+            this.reverseChargeReportGetRequest.sortBy = event?.active;
+            this.getReverseChargeReport(true);
         }
     }
 }
