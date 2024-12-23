@@ -8,14 +8,12 @@
         #filter
         (filterValue)="searchData($event)"
         (onPropertyChanged)="filterData()"
-        (seachChange)="searchChanged($event)"
+        (searchChange)="searchChanged($event)"
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
     ></filter-multi-currency>
-    <div *ngIf="showLoader | async">
-        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-    </div>
-    <div *ngIf="(data$ | async) && !(showLoader | async)">
+    <giddh-page-loader *ngIf="showLoader | async" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    <div *ngIf="(reportDataList$ | async) && !(showLoader | async)">
         <trial-balance-report-grid
             #tbGrid
             [search]="search"
@@ -23,15 +21,13 @@
             [to]="to"
             (searchChange)="searchChanged($event)"
             [expandAll]="expandAll"
-            [data$]="data$ | async"
+            [data$]="reportDataList$ | async"
         ></trial-balance-report-grid>
     </div>
     <div
-        *ngIf="!(showLoader | async) && !(data$ | async)"
-        class="d-flex align-items-center justify-content-center tb-pl-bs-data"
+        *ngIf="!(showLoader | async) && !(reportDataList$ | async)"
+        class="text-center tb-pl-bs-data"
     >
-        <div class="d-flex">
-            <h2>{{ localeData?.no_data_found }}</h2>
-        </div>
+        <h2>{{ localeData?.no_data_found }}</h2>
     </div>
 </ng-container>

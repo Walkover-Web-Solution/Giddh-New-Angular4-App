@@ -31,7 +31,7 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
     public reportDataList$: Observable<any> = this.select(state => state.reportDataList);
     public filterRequestData$: Observable<any> = this.select(state => state.filterRequestData);
     public inProgressReport$: Observable<any> = this.select(state => state.inProgressReport);
-    
+
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public companyList$: Observable<any> = this.select(this.store.select((state) => state.session.companies), (response) => response);
     public currencyList$: Observable<any> = this.select(this.store.select(state => state.session.currencies), (response) => response);
@@ -53,6 +53,7 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res.body) {
+                                res.body.response.message && this.toaster.showSnackBar("error", res.body.response.message);
                                 return this.patchState({ reportDataList: res.body.response, filterRequestData: { request: res.body.request, lastFetchedAt: res.body.lastFetchedAt }, inProgressReport: false });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
@@ -61,7 +62,7 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
-                            return this.patchState({ reportDataList: null,filterRequestData: null, inProgressReport: false });
+                            return this.patchState({ reportDataList: null, filterRequestData: null, inProgressReport: false });
                         }
                     ),
                     catchError((err) => EMPTY)

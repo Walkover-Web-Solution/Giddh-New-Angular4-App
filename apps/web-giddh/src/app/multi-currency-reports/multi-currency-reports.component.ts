@@ -1,143 +1,9 @@
-// import { BreakpointObserver } from '@angular/cdk/layout';
-// import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-// import { ActivatedRoute, Router } from '@angular/router';
-// import { select, Store } from '@ngrx/store';
-// import { TabsetComponent } from 'ngx-bootstrap/tabs';
-// import { ReplaySubject } from 'rxjs';
-// import { takeUntil } from 'rxjs/operators';
-// import { CompanyResponse } from '../models/api-models/Company';
-// import { AppState } from '../store';
-
-// @Component({
-//     selector: 'multi-currency-report',
-//     templateUrl: './multi-currency-reports.component.html',
-//     styleUrls: ['./multi-currency-reports.component.scss'],
-//     changeDetection: ChangeDetectionStrategy.OnPush
-// })
-// export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
-//     public selectedCompany: CompanyResponse;
-//     public CanTBLoad: boolean = true;
-//     public CanPLLoad: boolean = false;
-//     public CanBSLoad: boolean = false;
-//     public CanNewTBLoadOnThisEnv: boolean = false;
-//     public isWalkoverCompany: boolean = false;
-//     /** This will hold active tab */
-//     public activeTab: string = 'trial-balance';
-//     /** This will hold active tab index */
-//     public activeTabIndex: number = 0;
-//     /** True, when tabs are navigated with the help of routing, done to prevent redundant routing as
-//      * tab changed event is triggered on setting any tab as active which leads to a second navigation to the
-//      * same route which cancels the previous route with route ID and doesn't highlight the menu item
-//      */
-//     public preventTabChangeWithRoute: boolean;
-//     /** This will store screen size */
-//     public isMobileScreen: boolean = false;
-//     @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
-//     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-//     /** This will hold local JSON data */
-//     public localeData: any = {};
-//     /** This will hold common JSON data */
-//     public commonLocaleData: any = {};
-
-//     constructor(
-//         private store: Store<AppState>,
-//         private route: ActivatedRoute,
-//         private router: Router,
-//         private breakPointObservar: BreakpointObserver) {
-//         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-//             if (activeCompany) {
-//                 this.selectedCompany = activeCompany;
-//             }
-//         });
-//     }
-
-//     /**
-//      * This will return page heading based on active tab
-//      *
-//      * @param {boolean} event
-//      * @memberof InvoiceComponent
-//      */
-//      public getPageHeading(): string {
-//         if(this.isMobileScreen){
-//             if(this.CanTBLoad) {
-//                 return this.localeData?.tabs?.trial_balance;
-//             }
-//             else if(this.CanPLLoad) {
-//                 return this.localeData?.tabs?.profit_loss;
-//             }
-//             else if(this.CanBSLoad) {
-//                 return this.localeData?.tabs?.balance_sheet;
-//             }
-//         }
-//         else {
-//             return " ";
-//         }
-//     }
-
-//     public ngOnInit() {
-//         this.breakPointObservar.observe([
-//             '(max-width: 767px)'
-//         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-//             this.isMobileScreen = result.matches;
-//         });
-
-//         if (TEST_ENV) {
-//             this.CanNewTBLoadOnThisEnv = true;
-//         } else {
-//             this.CanNewTBLoadOnThisEnv = false;
-//         }
-
-//         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-//             if (val && val.tab && val.tabIndex) {
-//                 this.activeTab = val.tab;
-//                 this.activeTabIndex = val.tabIndex;
-//                 this.preventTabChangeWithRoute = true;
-//                 this.selectTab(val.tabIndex);
-//             }
-//         });
-//     }
-
-//     public selectTab(id: number) {
-//         if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
-//             this.staticTabs.tabs[id].active = true;
-//         }
-//     }
-
-//     /**
-//      * This will destroy all the memory used by this component
-//      *
-//      * @memberof FinancialReportsComponent
-//      */
-//     public ngOnDestroy(): void {
-//         this.destroyed$.next(true);
-//         this.destroyed$.complete();
-//     }
-
-//     /**
-//      * This will navigate to selected tab
-//      *
-//      * @param {string} tab
-//      * @param {number} tabIndex
-//      * @memberof FinancialReportsComponent
-//      */
-//     public tabChanged(tab: string, tabIndex: number): void {
-//         if (!this.preventTabChangeWithRoute) {
-//             this.router.navigate(['/pages/multi-currency-report'], { queryParams: { tab, tabIndex } });
-//         }
-//     }
-// }
-
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { CompanyResponse } from '../models/api-models/Company';
-import { AppState } from '../store';
-
-
+import { ReplaySubject, takeUntil } from 'rxjs';
+import { GeneralService } from '../services/general.service';
+import { ReportType } from './multi-currency.const';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'multi-currency-report',
@@ -146,28 +12,16 @@ import { AppState } from '../store';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
-    /** Stores the selected company information */
-    public selectedCompany: CompanyResponse;
     /** Flag to determine if the Trial Balance (TB) can be loaded */
     public CanTBLoad: boolean = true;
     /** Flag to determine if the Profit Loss (PL) can be loaded */
     public CanPLLoad: boolean = false;
     /** Flag to determine if the Balance Sheet (BS) can be loaded */
     public CanBSLoad: boolean = false;
-    /** Flag to determine if a new Trial Balance (TB) can be loaded in the current environment */
-    public CanNewTBLoadOnThisEnv: boolean = false;
     /** Flag to determine if the company is a walkover company */
     public isWalkoverCompany: boolean = false;
-    /** Stores the name of the currently active tab */
-    public activeTab: string = 'trial-balance';
-    /** Stores the index of the currently active tab */
-    public activeTabIndex: number = 0;
     /** Prevents redundant routing when navigating tabs through routing */
     public preventTabChangeWithRoute: boolean;
-    /** Determines if the screen size is mobile */
-    public isMobileScreen: boolean = false;
-    /** Reference to the static tabs component */
-    @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
     /** Observable subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds the local JSON data for the component */
@@ -175,81 +29,28 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
     /** Holds the common JSON data for the component */
     public commonLocaleData: any = {};
     /** Holds active selected Tab Index  */
-    public selectedTabIndex: number = 2;
+    public selectedTabIndex: number = 0;
 
     constructor(
-        private store: Store<AppState>,
-        private route: ActivatedRoute,
-        private router: Router,
-        private breakPointObservar: BreakpointObserver) {
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.selectedCompany = activeCompany;
-            }
-        });
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof InvoiceComponent
-     */
-     public getPageHeading(): string {
-        if(this.isMobileScreen){
-            if(this.CanTBLoad) {
-                return this.localeData?.tabs?.trial_balance;
-            }
-            else if(this.CanPLLoad) {
-                return this.localeData?.tabs?.profit_loss;
-            }
-            else if(this.CanBSLoad) {
-                return this.localeData?.tabs?.balance_sheet;
-            }
-        }
-        else {
-            return " ";
-        }
+        private generalService: GeneralService,
+        private activatedRoute: ActivatedRoute,
+        private router: Router) {
     }
 
     public ngOnInit() {
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
 
-        if (TEST_ENV) {
-            this.CanNewTBLoadOnThisEnv = true;
-        } else {
-            this.CanNewTBLoadOnThisEnv = false;
-        }
-
-        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-            if (val && val.tab && val.tabIndex) {
-                this.activeTab = val.tab;
-                this.activeTabIndex = val.tabIndex;
-                this.preventTabChangeWithRoute = true;
-                this.selectTab(val.tabIndex);
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if (val.tabIndex) {
+                this.selectedTabIndex = Number(val.tabIndex);
+                this.tabChanged(this.selectedTabIndex)
             }
         });
-    }
-    
-    /**
-     * Selects a tab by its index.
-     * 
-     * @param {number} id - The index of the tab to be selected.
-     * @memberof YourComponent
-     */
-    public selectTab(id: number) {
-        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
-            this.staticTabs.tabs[id].active = true;
-        }
     }
 
     /**
      * This will destroy all the memory used by this component
-     *
+     * 
+     * @returns {void}
      * @memberof FinancialReportsComponent
      */
     public ngOnDestroy(): void {
@@ -259,15 +60,14 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
 
     /**
      * This will navigate to selected tab
-     *
-     * @param {string} tab
-     * @param {number} tabIndex
+     * 
+     * @returns {void}
+     * @param {number} selectedTabIndex
      * @memberof FinancialReportsComponent
      */
     public tabChanged(selectedTabIndex: any): void {
         this.selectedTabIndex = selectedTabIndex;
-            //this.router.navigate(['/pages/multi-currency-report'], { queryParams: { tab, tabIndex } });
-        
+        this.generalService.updateActivatedRouteQueryParams({ val: selectedTabIndex === 0 ? ReportType.TrialBalance : selectedTabIndex === 1 ? ReportType.ProfitLoss : ReportType.BalanceSheet, tabIndex: selectedTabIndex });
     }
 }
 

@@ -13,11 +13,10 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { each } from 'apps/web-giddh/src/app/lodash-optimized';
+import { FormControl } from '@angular/forms';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ProfitLossData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MMMM_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -29,16 +28,12 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestroy {
-    /** Flag indicating if there is no data available */
-    public noData: boolean;
-    /** Flag to control the visibility of the clear search button */
-    public showClearSearch: boolean = false;
+    /** Reference to the search input element */
+    @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
     /** Input value for the search term */
     @Input() public search: string = '';
     /** Input value for the search input field */
     @Input() public searchInput: string = '';
-    /** Event emitter to emit changes in the search term */
-    @Output() public searchChange = new EventEmitter<string>();
     /** Input value for the profit and loss data */
     @Input() public plData: ProfitLossData;
     /** Input value for the cost of goods sold data */
@@ -53,12 +48,16 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     @Input() public to: string = '';
     /** Last synchronization date */
     @Input() public lastSyncDate: string = '';
-    /** Reference to the search input element */
-    @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
+    /** Event emitter to emit changes in the search term */
+    @Output() public searchChange: EventEmitter<string> = new EventEmitter();
+    /** Flag indicating if there is no data available */
+    public noData: boolean;
+    /** Flag to control the visibility of the clear search button */
+    public showClearSearch: boolean = false;
     /** Dayjs instance for date handling */
     public dayjs = dayjs
     /** Form control for managing the search input */
-    public plSearchControl: UntypedFormControl = new UntypedFormControl();
+    public plSearchControl: FormControl = new FormControl();
     /** Holds the Giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Subject used to track component destruction and unsubscribe from listeners */
@@ -72,7 +71,7 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     /** Flag to indicate if the expand all button was toggled during a search */
     public isExpandToggledDuringSearch: boolean;
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
+    constructor(private changeDetectionRef: ChangeDetectorRef, private zone: NgZone) {
 
     }
 
@@ -83,23 +82,25 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * @memberof ProfitLossReportGridComponent
      */
     public ngOnInit() {
-        this.lastSyncDate = dayjs(this.lastSyncDate, 'DD-MM-YYYY').format('DD MMMM YYYY');
+        this.lastSyncDate = dayjs(this.lastSyncDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_DD_MMMM_YYYY);
         this.plSearchControl.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$))
             .subscribe((newValue) => {
-                this.searchInput = newValue;
-                this.hideData = true;
-                this.searchChange.emit(this.searchInput);
-                this.isExpandToggledDuringSearch = false;
-                if (newValue === '') {
-                    this.showClearSearch = false;
+                if (newValue) {
+                    this.searchInput = newValue;
+                    this.hideData = true;
+                    this.searchChange.emit(this.searchInput);
+                    this.isExpandToggledDuringSearch = false;
+                    if (newValue === '') {
+                        this.showClearSearch = false;
+                    }
+                    setTimeout(() => {
+                        this.hideData = false;
+                        this.changeDetectionRef.detectChanges();
+                    }, 10);
                 }
-                setTimeout(() => {
-                    this.hideData = false;
-                    this.cd.detectChanges();
-                }, 10);
             });
     }
 
@@ -111,7 +112,7 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * @memberof ProfitLossReportGridComponent
      */
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
+        if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
             if (this.plData && this.cogsData) {
                 this.zone.run(() => {
@@ -119,24 +120,24 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                         this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
                         this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
                         if (this.plData.incArr) {
-                            each(this.plData.incArr, (grp: any) => {
-                                if (grp.isIncludedInSearch) {
-                                    grp.isVisible = true;
-                                    each(grp.accounts, (acc: any) => {
-                                        if (acc.isIncludedInSearch) {
-                                            acc.isVisible = true;
+                            this.plData.incArr.forEach((group: any) => {
+                                if (group.isIncludedInSearch) {
+                                    group.isVisible = true;
+                                    group.accounts.forEach((account: any) => {
+                                        if (account.isIncludedInSearch) {
+                                            account.isVisible = true;
                                         }
                                     });
                                 }
                             });
                         }
                         if (this.plData.expArr) {
-                            each(this.plData.expArr, (grp: any) => {
-                                if (grp.isIncludedInSearch) {
-                                    grp.isVisible = true;
-                                    each(grp.accounts, (acc: any) => {
-                                        if (acc.isIncludedInSearch) {
-                                            acc.isVisible = true;
+                            this.plData.expArr.forEach((group: any) => {
+                                if (group.isIncludedInSearch) {
+                                    group.isVisible = true;
+                                    group.accounts.forEach((account: any) => {
+                                        if (account.isIncludedInSearch) {
+                                            account.isVisible = true;
                                         }
                                     });
                                 }
@@ -155,7 +156,7 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
                         }
                     }
 
-                    this.cd.detectChanges();
+                    this.changeDetectionRef.detectChanges();
 
                 });
             }
@@ -165,24 +166,25 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     /**
      * Toggles the search input focus and shows the clear search button.
      * 
+     * @returns {void}
      * @memberof ProfitLossReportGridComponent
      */
-    public toggleSearch() {
+    public toggleSearch(): void {
         this.showClearSearch = true;
-
-        setTimeout(() => {
-            if (this.searchInputEl && this.searchInputEl.nativeElement) {
+        if (this.searchInputEl && this.searchInputEl.nativeElement) {
+            setTimeout(() => {
                 this.searchInputEl.nativeElement.focus();
-            }
-        }, 200);
+            }, 200);
+        }
     }
 
     /**
      * Cleans up by unsubscribing from the store listeners and completing the destroyed$ subject.
      * 
+     * @returns {void}
      * @memberof ProfitLossReportGridComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -192,15 +194,12 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * unless the search input has a value.
      * 
      * @param {Event} event - The click event
-     * @param {HTMLElement} el - The search input element
+     * @param {ElementRef} element - The search input element
+     * @returns {void}
      * @memberof ProfitLossReportGridComponent
      */
-    public clickedOutside(event, el) {
-        if (this.plSearchControl?.value !== null && this.plSearchControl?.value !== '') {
-            return;
-        }
-
-        if (this.childOf(event.target, el)) {
+    public clickedOutside(event: any, element: ElementRef): void {
+        if ((this.plSearchControl?.value !== null && this.plSearchControl?.value !== '') || this.childOf(event.target, element)) {
             return;
         } else {
             this.showClearSearch = false;
@@ -210,15 +209,15 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     /**
      * Checks if an element is a child of the given parent element.
      * 
-     * @param {HTMLElement} c - The child element
-     * @param {HTMLElement} p - The parent element
+     * @param {HTMLElement} child - The child element
+     * @param {HTMLElement} parent - The parent element
      * @returns {boolean} - Returns true if the element is a child of the parent
      * @memberof ProfitLossReportGridComponent
      */
-    public childOf(c, p) {
-        while ((c = c.parentNode) && c !== p) {
+    public childOf(child, parent): boolean {
+        while ((child = child.parentNode) && child !== parent) {
         }
-        return !!c;
+        return !!child;
     }
 
     /**
@@ -230,28 +229,28 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * @param {boolean} isVisible - The desired visibility state
      * @memberof ProfitLossReportGridComponent
      */
-    private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    private toggleVisibility(data: ChildGroup[], isVisible: boolean): void {
         let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
-        each(data, (grp: ChildGroup) => {
-            if (grp.isIncludedInSearch) {
-                if (!grp.level1) {
-                    if (parentGroups?.indexOf(grp?.uniqueName) === -1) {
-                        grp.isCreated = false;
-                        grp.isVisible = isVisible;
-                        grp.isOpen = isVisible;
+        data.forEach((group: ChildGroup) => {
+            if (group.isIncludedInSearch) {
+                if (!group.level1) {
+                    if (parentGroups?.indexOf(group?.uniqueName) === -1) {
+                        group.isCreated = false;
+                        group.isVisible = isVisible;
+                        group.isOpen = isVisible;
                     } else {
-                        grp.isOpen = isVisible;
+                        group.isOpen = isVisible;
                     }
                 } else {
-                    grp.isOpen = true;
+                    group.isOpen = true;
                 }
-                each(grp.accounts, (acc: Account) => {
-                    if (acc.isIncludedInSearch) {
-                        acc.isCreated = true;
-                        acc.isVisible = isVisible;
+                group.accounts.forEach((account: Account) => {
+                    if (account.isIncludedInSearch) {
+                        account.isCreated = true;
+                        account.isVisible = isVisible;
                     }
                 });
-                this.toggleVisibility(grp.childGroups, isVisible);
+                this.toggleVisibility(group.childGroups, isVisible);
             }
         });
     }

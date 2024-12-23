@@ -12,10 +12,11 @@ import {
     OnInit,
     Output,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { each } from 'apps/web-giddh/src/app/lodash-optimized';
+import { FormControl } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ReplaySubject } from 'rxjs';
@@ -25,29 +26,15 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
     selector: 'trial-balance-report-grid',
     templateUrl: './trial-balance-report-grid.component.html',
     styleUrls: [`./trial-balance-report-grid.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDestroy {
-    /** Indicates if there is no data available */
-    public noData: boolean;
-    /** Controls the search input field for account search */
-    public accountSearchControl: UntypedFormControl = new UntypedFormControl();
     /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
-    /** Indicates whether the clear search button should be shown */
-    public showClearSearch: boolean = false;
+    /** Holds Create New Account Dialog Template Ref */
+    @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
+    /** Holds Create New Account Dialog Ref */
+    public createNewAccountDialogRef: MatDialogRef<any>;
     /** The search query for filtering data */
     @Input() public search: string = '';
     /** The start date for the data range */
@@ -65,9 +52,13 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     /** Flag to control expand/collapse state for all groups */
     @Input() public expandAll: boolean;
     /** Emits the search value when it changes */
-    @Output() public searchChange = new EventEmitter<string>()
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    @Output() public searchChange: EventEmitter<string> = new EventEmitter();
+    /** Indicates if there is no data available */
+    public noData: boolean;
+    /** Controls the search input field for account search */
+    public accountSearchControl: FormControl = new FormControl();
+    /** Indicates whether the clear search button should be shown */
+    public showClearSearch: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -76,14 +67,14 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     public hideData: boolean;
     /** True, when expand all button is toggled while search is enabled */
     public isExpandToggledDuringSearch: boolean;
-    /** Account update modal state */
-    public accountAsideMenuState: string = "out";
     /** Account group unique name */
     public activeGroupUniqueName: string = "";
     /** Holds account details */
     public accountDetails: any;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
+    constructor(private changeDetectionRef: ChangeDetectorRef, private zone: NgZone, public dialog: MatDialog) {
 
     }
 
@@ -91,37 +82,39 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
-                this.searchInput = newValue;
-                this.hideData = true;
-                this.searchChange.emit(this.searchInput);
-                this.isExpandToggledDuringSearch = false;
-                if (newValue === '') {
-                    this.showClearSearch = false;
+                if (newValue) {
+                    this.searchInput = newValue;
+                    this.hideData = true;
+                    this.searchChange.emit(this.searchInput);
+                    this.isExpandToggledDuringSearch = false;
+                    if (newValue === '') {
+                        this.showClearSearch = false;
+                    }
+                    setTimeout(() => {
+                        this.hideData = false;
+                        this.changeDetectionRef.detectChanges();
+                    }, 10);
                 }
-                setTimeout(() => {
-                    this.hideData = false;
-                    this.cd.detectChanges();
-                }, 10);
             });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
+        if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
             if (this.data$) {
                 this.zone.runOutsideAngular(() => {
                     this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
                     if (this.data$) {
                         // always make first level visible ....
-                        each(this.data$.groupDetails, (grp: ChildGroup) => {
-                            if (grp.isIncludedInSearch) {
-                                grp.isVisible = true;
-                                grp.isCreated = true;
-                                grp.isOpen = false;
-                                each(grp.accounts, (acc: Account) => {
-                                    if (acc.isIncludedInSearch) {
-                                        acc.isVisible = false;
-                                        acc.isCreated = false;
+                        this.data$.groupDetails.forEach((group: ChildGroup) => {
+                            if (group.isIncludedInSearch) {
+                                group.isVisible = true;
+                                group.isCreated = true;
+                                group.isOpen = false;
+                                group.accounts.forEach((account: Account) => {
+                                    if (account.isIncludedInSearch) {
+                                        account.isVisible = false;
+                                        account.isCreated = false;
                                     }
                                 });
                             }
@@ -134,7 +127,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * This will destroy all the memory used by this component
-     *
+     * @returns {void}
      * @memberof TrialBalanceGridComponent
      */
     public ngOnDestroy(): void {
@@ -144,11 +137,11 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Triggers change detection for the component.
-     * 
+     * @returns {void}
      * @memberof TrialBalanceReportComponent
-     */ 
+     */
     public markForCheck() {
-        this.cd.markForCheck();
+        this.changeDetectionRef.markForCheck();
     }
 
     /**
@@ -159,38 +152,34 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      * @returns {string} The unique identifier of the item
      * @memberof TrialBalanceReportComponent
      */
-    public trackByFn(index, item: ChildGroup) {
+    public trackByFn(index: number, item: ChildGroup): string {
         return item?.uniqueName;
     }
 
     /**
      * Toggles the search input visibility and focuses on the search input field.
-     * 
+     * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
-    public toggleSearch() {
+    public toggleSearch(): void {
         this.showClearSearch = true;
-
-        setTimeout(() => {
-            if (this.searchInputEl && this.searchInputEl.nativeElement) {
+        if (this.searchInputEl && this.searchInputEl.nativeElement) {
+            setTimeout(() => {
                 this.searchInputEl.nativeElement.focus();
-            }
-        }, 200);
+            }, 200);
+        }
     }
 
     /**
      * Handles clicks outside the search input and clears the search input if it's empty.
      * 
      * @param {Event} event - The event triggered by the click action
-     * @param {HTMLElement} el - The reference element to check if the click occurred inside it
+     * @param {ElementRef} element - The reference element to check if the click occurred inside it
+     * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
-    public clickedOutside(event, el) {
-        if (this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') {
-            return;
-        }
-
-        if (this.childOf(event.target, el)) {
+    public clickedOutside(event: any, element: ElementRef): void {
+        if ((this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') || this.childOf(event.target, element)) {
             return;
         } else {
             this.showClearSearch = false;
@@ -200,15 +189,15 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     /**
      * Checks if an element is a child of a specific parent element.
      * 
-     * @param {EventTarget} c - The current element being checked
-     * @param {HTMLElement} p - The parent element to check against
+     * @param {EventTarget} child - The current element being checked
+     * @param {HTMLElement} parent - The parent element to check against
      * @returns {boolean} True if the current element is a child of the parent, otherwise false
      * @memberof TrialBalanceReportComponent
      */
-    public childOf(c, p) {
-        while ((c = c.parentNode) && c !== p) {
+    public childOf(child, parent): boolean {
+        while ((child = child.parentNode) && child !== parent) {
         }
-        return !!c;
+        return !!child;
     }
 
     /**
@@ -216,6 +205,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      *
      * @param {Array<ChildGroup>} group Groups received
      * @param {boolean} isVisible Current visibility status
+     * @returns {void}
      * @memberof TrialBalanceGridComponent
      */
     public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
@@ -243,44 +233,18 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      * Shows the account update modal
      *
      * @param {*} account
+     * @returns {void}
      * @memberof TrialBalanceGridComponent
      */
     public openAccountModal(account: any): void {
         this.accountDetails = account;
         this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
-        this.toggleAccountAsidePane();
-    }
-
-    /**
-     * Toggle's account update modal
-     *
-     * @memberof TrialBalanceGridComponent
-     */
-     public toggleAccountAsidePane(): void {
-        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Toggle's fixed class in body
-     *
-     * @memberof TrialBalanceGridComponent
-     */
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === "in") {
-            document.querySelector("body").classList.add("fixed");
-        } else {
-            document.querySelector("body").classList.remove("fixed");
-        }
-    }
-
-    /**
-     * Callback function on account modal close
-     *
-     * @param {*} event
-     * @memberof TrialBalanceGridComponent
-     */
-    public getUpdatedList(event: any): void {
-        this.toggleAccountAsidePane();
+        this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
 }

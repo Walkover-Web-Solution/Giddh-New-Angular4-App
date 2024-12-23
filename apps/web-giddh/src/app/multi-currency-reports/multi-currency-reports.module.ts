@@ -9,32 +9,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-
-// import { BalanceSheetComponent } from './components/balance-sheet/balance-sheet.component';
-// import {
-//     BalanceSheetGridComponent,
-// } from './components/balance-sheet/components/balance-sheet-grid/balance-sheet-grid.component';
-// import {
-//     BalanceSheetGridRowComponent,
-// } from './components/balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-grid-row.component';
-// import { BalanceSheetExportXlsComponent } from './components/export/balance-sheet/export-xls/export-xls.component';
-// import { ProfitLossExportXlsComponent } from './components/export/profit-loss/export-xls/export-xls.component';
-// import { TrialBalanceExportCsvComponent } from './components/export/trial-balance/export-csv/export-csv.component';
-// import { TrialBalanceExportXlsComponent } from './components/export/trial-balance/export-xls/export-xls.component';
-// import { FinancialReportsFilterComponent } from './components/filter/filter.component';
-// import { GridRowComponent } from './components/grid-row/grid-row.component';
-// import {
-//     ProfitLossGridRowComponent,
-// } from './components/profit-loss/components/profit-loss-grid/components/profit-loss-grid-row/profit-loss-grid-row.component';
-// import { ProfitLossGridComponent } from './components/profit-loss/components/profit-loss-grid/profit-loss-grid.component';
-// import { ProfitLossComponent } from './components/profit-loss/profit-loss.component';
-// import {
-//     TrialBalanceGridComponent,
-// } from './components/trial-balance/components/trial-balance-grid/trial-balance-grid.component';
-// import { TrialBalanceComponent } from './components/trial-balance/trial-balance.component';
-// import { FinancialAccordionDirective } from './directives/financial-accordion.directive';
-// import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
-
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -68,6 +42,7 @@ import { ProfitLossReportComponent } from './profit-loss/profit-loss-report.comp
 import { ProfitLossReportGridComponent } from './profit-loss/components/profit-loss-grid/profit-loss-report-grid.component';
 import { ProfitLossReportGridRowComponent } from './profit-loss/components/profit-loss-grid/components/profit-loss-grid-row/profit-loss-report-grid-row.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -84,19 +59,6 @@ import { MatTabsModule } from '@angular/material/tabs';
         ProfitLossReportComponent,
         ProfitLossReportGridComponent,
         ProfitLossReportGridRowComponent
-       
-        // GridRowComponent,
-        // TrialBalanceComponent,
-        // ProfitLossComponent,
-        // ProfitLossGridComponent,
-        // ProfitLossGridRowComponent,
-        // ProfitLossExportXlsComponent,
-        // TrialBalanceExportCsvComponent,
-        // TrialBalanceExportXlsComponent,
-        // BalanceSheetExportXlsComponent,
-        // BalanceSheetComponent,
-        // BalanceSheetGridComponent,
-        // BalanceSheetGridRowComponent,
     ],
     exports: [
         MultiCurrencyReportsComponent, CurrencyModule
@@ -109,18 +71,14 @@ import { MatTabsModule } from '@angular/material/tabs';
         ReactiveFormsModule,
         Daterangepicker,
         MultiCurrencyReportsRoutingModule,
-        TabsModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
         HighlightModule,
         RecTypeModule,
-        ShSelectModule,
         ClickOutsideModule,
-        BsDropdownModule.forRoot(),
         CurrencyModule,
-        TooltipModule.forRoot(),
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
@@ -137,8 +95,10 @@ import { MatTabsModule } from '@angular/material/tabs';
         MatSelectModule,
         FormFieldsModule,
         FinancialSearchPipe,
+        MatInputModule,
+        MatTableModule,
+        TooltipModule,
         MatTabsModule
-        
     ],
 })
 export class MultiCurrencyReportsModule {

@@ -1,26 +1,16 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../models/api-models/settingsTags';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
-import { OrganizationType } from '../../models/user-login-state';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { cloneDeep, map, orderBy } from '../../lodash-optimized';
-import { SettingsTagService } from '../../services/settings.tag.service';
+import { cloneDeep } from '../../lodash-optimized';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
-import { ToasterService } from '../../services/toaster.service';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { TrialBalanceRequest } from '../../models/api-models/tb-pl-bs';
-import { CompanyResponse } from '../../models/api-models/Company';
-import { IForceClear } from '../../models/api-models/Sales';
-import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 
 @Component({
     selector: 'filter-multi-currency',
@@ -29,6 +19,22 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
+    /** Reference to the modal used for creating tags */
+    @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
+    /** Template reference for the date picker directive */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** A boolean indicating whether all elements are expanded */
+    @Input() public expandAll: boolean;
+    /** Event emitter for sending the last synchronization date */
+    @Output() public lastSyncDate: EventEmitter<string> = new EventEmitter();
+    /** Event emitter for notifying property changes */
+    @Output() public onPropertyChanged: EventEmitter<any> = new EventEmitter();
+    /** Event emitter for sending the filter value */
+    @Output() public filterValue: EventEmitter<any> = new EventEmitter();
+    /** Event emitter for notifying search changes */
+    @Output() public searchChange: EventEmitter<string> = new EventEmitter();
+    /** Event emitter for toggling the expand/collapse state of all elements */
+    @Output() public expandAllChange: EventEmitter<boolean> = new EventEmitter();
     /** The current date object representing today's date */
     public today: Date = new Date();
     /** The selected date option, initialized to '0' */
@@ -40,7 +46,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /** The list of financial options available for selection */
     public financialOptions: IOption[] = [];
     /** The form control for managing account search input */
-    public accountSearchControl: UntypedFormControl = new UntypedFormControl();
+    public accountSearchControl: FormControl = new FormControl();
     /** The list of tags associated with the component */
     public tags: TagRequest[] = [];
     /** The currently selected tag */
@@ -49,22 +55,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public universalDateICurrent: boolean = false;
     /** Stores the currently active company information */
     public activeCompany: any;
-    /** Event emitter for sending the last synchronization date */
-    @Output() public lastSyncDate = new EventEmitter<string>();
-    /** Event emitter for notifying property changes */
-    @Output() public onPropertyChanged = new EventEmitter<any>();
-    /** Event emitter for sending the filter value */
-    @Output() public filterValue = new EventEmitter<any>();
-    /** Event emitter for notifying search changes */
-    @Output() public seachChange = new EventEmitter<string>();
-    /** A boolean indicating whether all elements are expanded */
-    @Input() public expandAll: boolean;
-    /** Event emitter for toggling the expand/collapse state of all elements */
-    @Output() public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /** Reference to the modal used for creating tags */
-    @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
-    /** Template reference for the date picker directive */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Reference to the modal for managing its state */
     public modalRef: BsModalRef;
     /** The selected date range used in API requests */
@@ -72,7 +62,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /** The selected date range displayed on the user interface */
     public selectedDateRangeUi: any;
     /** Instance of the dayjs library for date manipulation */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** The selected "from" date in string format */
     public fromDate: string;
     /** The selected "to" date in string format */
@@ -81,8 +71,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** The x and y position of the date field used to position the date picker */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    /** ReplaySubject used to handle cleanup and prevent memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the local JSON data for the component */
     public localeData: any = {};
     /** Stores the common JSON data for the application */
@@ -91,27 +79,21 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public companyList: any;
     /** List of currencies available for selection */
     public currencyList: any;
-    public dateOptions: IOption[] = [];
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** ReplaySubject used to handle cleanup and prevent memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 
-    constructor(private fb: UntypedFormBuilder,
-        private cd: ChangeDetectorRef,
-        private store: Store<AppState>,
+    constructor(private formBuilder: FormBuilder,
+        private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private modalService: BsModalService,
         private componentStore: MultiCurrencyReportsComponentStore
     ) {
-        this.filterForm = this.fb.group({
+        this.filterForm = this.formBuilder.group({
             from: [''],
             to: [''],
-            fy: [''],
-            selectedDateOption: ['1'],
-            branchUniqueName: [this.generalService.currentBranchUniqueName ?? ''],
-            selectedFinancialYearOption: [''],
-            refresh: [false],
-            tagName: [''],
             shareCompanyList: [null],
             selectCurrency: [null]
         });
@@ -122,32 +104,23 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
-                this.search = newValue;
-                this.seachChange.emit(this.search);
-                this.cd.detectChanges();
+                if (newValue) {
+                    this.search = newValue;
+                    this.searchChange.emit(this.search);
+                    this.changeDetectionRef.detectChanges();
+                }
             });
 
         this.componentStore.universalDate$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((a) => {
             if (a) {
                 this.universalDateICurrent = false;
-                // assign dates
-
                 this.filterForm?.patchValue({
                     from: dayjs(a[0]).format(GIDDH_DATE_FORMAT),
                     to: dayjs(a[1]).format(GIDDH_DATE_FORMAT)
                 });
-
-                // if filter type is not date picker then set filter as datepicker
-                if (this.filterForm.get('selectedDateOption')?.value === '0') {
-                    this.filterForm?.patchValue({
-                        selectedDateOption: '1'
-                    });
+                if (!this.changeDetectionRef['destroyed']) {
+                    this.changeDetectionRef.detectChanges();
                 }
-
-                if (!this.cd['destroyed']) {
-                    this.cd.detectChanges();
-                }
-                /** To set local datepicker */
                 let universalDate = cloneDeep(a);
                 this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
                 this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -183,71 +156,110 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
                 });
                 this.getForm('shareCompanyList').patchValue(selectCompany);
                 this.lastSyncDate.emit(filterRequestData.lastFetchedAt);
-                this.cd.detectChanges();
+                this.changeDetectionRef.detectChanges();
             }
         });
     }
 
+    /**
+     * Get a FormControl from the filter form
+     *
+     * @param {string} controlName - Name of the form control
+     * @returns {FormControl} The requested form control
+     */
     public getForm(controlName: string): FormControl {
         return this.filterForm.get(controlName) as FormControl;
     }
-
-    public ngOnDestroy() {
+    /**
+     * Cleanup resources on component destruction
+     *
+     * @returns {void}
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    public selectedDate(value: any) {
+    /**
+     * Handle selected date and update the form values
+     *
+     * @param {*} value - Selected date value
+     * @returns {void}
+     */
+    public selectedDate(value: any): void {
         this.filterForm.controls['from'].setValue(dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT));
         this.filterForm.controls['to'].setValue(dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT));
     }
 
-    public ngAfterViewInit() {
-        this.cd.detectChanges();
+    /**
+     * Perform actions after the view is initialized
+     *
+     * @returns {void}
+     */
+    public ngAfterViewInit(): void {
+        this.changeDetectionRef.detectChanges();
     }
 
-    public filterData() {
+    /**
+     * Emit events to filter data
+     *
+     * @returns {void}
+     */
+    public filterData(): void {
         this.onPropertyChanged.emit();
-        let a = this.search = '';
-        this.seachChange.emit(a);
+        const a = this.search = '';
+        this.searchChange.emit(a);
     }
 
-    public onSubmit() {
-        let data = {
+    /**
+     * Handle form submission and emit filter values
+     *
+     * @returns {void}
+     */
+    public onSubmit(): void {
+        const data = {
             companiesList: [],
             reportCurrency: ''
         };
-        this.getForm('shareCompanyList').value?.forEach(control => {
+        this.getForm('shareCompanyList').value?.forEach((control: any) => {
             if (control) {
-                data.companiesList.push({ from: this.getForm('from').value, to: this.getForm('to').value, uniqueName: control });
+                data.companiesList.push({
+                    from: this.getForm('from').value,
+                    to: this.getForm('to').value,
+                    uniqueName: control
+                });
             }
         });
         data.reportCurrency = this.getForm('selectCurrency').value || this.activeCompany?.baseCurrency;
         this.filterValue.emit(data);
     }
 
-
-    public toggleTagsModal() {
+    /**
+     * Toggle the tags modal visibility
+     *
+     * @returns {void}
+     */
+    public toggleTagsModal(): void {
         this.createTagModal.toggle();
     }
 
     /**
-     * Emit Expand
+     * Emit expand event
      *
-     * @param {boolean} event
-     * @memberof FinancialReportsFilterComponent
+     * @param {boolean} event - Event value
+     * @returns {void}
      */
-    public emitExpand(event: boolean) {
+    public emitExpand(event: boolean): void {
         setTimeout(() => {
             this.expandAllChange.emit(event);
         }, 10);
     }
 
     /**
-     * To show the datepicker
+     * Show the datepicker
      *
-     * @param {*} element
-     * @memberof FinancialReportsFilterComponent
+     * @param {*} element - The target element for the datepicker
+     * @returns {void}
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -260,19 +272,19 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will hide the datepicker
+     * Hide the datepicker modal
      *
-     * @memberof FinancialReportsFilterComponent
+     * @returns {void}
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
 
     /**
-     * Call back function for date/range selection in datepicker
+     * Callback function for date/range selection in the datepicker
      *
-     * @param {*} value
-     * @memberof FinancialReportsFilterComponent
+     * @param {*} [value] - Selected date/range value
+     * @returns {void}
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -285,6 +297,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
         this.hideGiddhDatepicker();
+
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

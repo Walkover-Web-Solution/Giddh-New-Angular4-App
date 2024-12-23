@@ -27,7 +27,7 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
     @Input() public isExpandToggledDuringSearch: boolean;
 
 
-    constructor(private cd: ChangeDetectorRef) {
+    constructor(private changeDetectionRef: ChangeDetectorRef) {
     }
 
     /**
@@ -37,11 +37,11 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
      * @memberof BalanceSheetReportGridRowComponent
      */
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-            this.cd.detectChanges();
+        if (changes?.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+            this.changeDetectionRef.detectChanges();
         }
-        if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
-            this.cd.detectChanges();
+        if (changes?.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
+            this.changeDetectionRef.detectChanges();
         }
     }
 
@@ -55,8 +55,8 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
         let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
-            console.log(ipcRenderer.send('open-url', url));
+            url = `${location.origin}${location.pathname}#./pages/ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
+            ipcRenderer.send('open-url', url)
         } else {
             (window as any).open(url);
         }
@@ -72,7 +72,7 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
      * @return {string} The unique name of the item
      * @memberof BalanceSheetReportGridRowComponent
      */
-    public trackByFn(index, item: Account): string {
+    public trackByFn(index: number, item: Account): string {
         return item?.uniqueName;
     }
 }
