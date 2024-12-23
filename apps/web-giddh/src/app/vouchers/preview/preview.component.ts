@@ -1098,9 +1098,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
             printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
+            printWindow.document?.close();
+            printWindow?.focus();
+            printWindow?.print();
         }
     }
 
