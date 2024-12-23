@@ -237,7 +237,7 @@ const filterProfitLossData = (data, statement) => {
     return filterPlData;
 };
 
-const prepareProfitLossData = (data) => {
+export const prepareProfitLossData = (data) => {
     if (data && data.groupInfo && data.groupInfo.groupDetails && data.incomeStatement) {
         let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatement);
         plData.expenseTotal = calculateTotalExpense(plData.expArr);
