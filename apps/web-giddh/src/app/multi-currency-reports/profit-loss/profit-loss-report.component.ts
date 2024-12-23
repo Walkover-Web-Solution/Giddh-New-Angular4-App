@@ -90,8 +90,8 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
             if (p) {
                 let data = cloneDeep(prepareProfitLossData(p)) as ProfitLossData;
                 let cogs;
-                if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
-                    cogs = cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
+                if (data && data.incomeStatement && data.incomeStatement.costOfGoodsSold) {
+                    cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as GetCogsResponse;
                 } else {
                     cogs = null;
                 }
@@ -178,12 +178,12 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                     });
                 }
 
-                if (data?.incomeStatment?.grossProfit?.type === "DEBIT" && data.incomeStatment.grossProfit.amount) {
-                    data.incomeStatment.grossProfit.amount = "-" + data.incomeStatment.grossProfit.amount;
+                if (data?.incomeStatement?.grossProfit?.type === "DEBIT" && data.incomeStatement.grossProfit.amount) {
+                    data.incomeStatement.grossProfit.amount = "-" + data.incomeStatement.grossProfit.amount;
                 }
 
-                if (data?.incomeStatment?.operatingProfit?.type === "DEBIT" && data.incomeStatment.operatingProfit.amount) {
-                    data.incomeStatment.operatingProfit.amount = "-" + data.incomeStatment.operatingProfit.amount;
+                if (data?.incomeStatement?.operatingProfit?.type === "DEBIT" && data.incomeStatement.operatingProfit.amount) {
+                    data.incomeStatement.operatingProfit.amount = "-" + data.incomeStatement.operatingProfit.amount;
                 }
 
                 this.data = data;

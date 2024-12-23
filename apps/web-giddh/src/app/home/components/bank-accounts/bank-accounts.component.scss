@@ -24,7 +24,7 @@ a.connect-bank {
 }
 .bank-details-block {
     cdk-virtual-scroll-viewport {
-        height: 270px;
+        height: 334px;
     }
 }
 .add-bank-details {
@@ -62,8 +62,4 @@ p {
         margin-left: 8px;
         font-size: var(--font-size-15);
     }
-}
-
-.icon-tick {
-    font-size: 14px;
 }

@@ -476,6 +476,24 @@
                                 </div>
 
                                 <div class="d-flex">
+                                    <ng-container *ngIf="!isGocardlessSupportedCountry && isBankAccount && !isBankTransactionLoading">
+                                        <a
+                                            *ngIf="
+                                                lc.bankTransactionsDebitData?.length ||
+                                                lc.bankTransactionsCreditData?.length"
+                                            aria-label="refresh-bank-transactions"
+                                            mat-button
+                                            href="javascript:void(0)"
+                                            id="refresh"
+                                            class="icomoon-ico d-flex align-items-center"
+                                            [matTooltip]="commonLocaleData?.app_refresh"
+                                            [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
+                                            (click)="getBankTransactions()"
+                                        >
+                                            <i aria-hidden="true" class="icon-refresh lh-0"></i>
+                                        </a>
+                                    </ng-container>
                                     <ng-conatiner *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
                                         <a
                                             *ngIf="isBankAccountConnected"
@@ -493,7 +511,7 @@
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
                                         </a>
                                         <a
-                                            *ngIf="connectedBankLists?.length === 0"
+                                            *ngIf="isBankAccountConnected === false && !showBankLinkButton"
                                             mat-button
                                             aria-label="connect-bank"
                                             id="connect-bank"
@@ -501,7 +519,7 @@
                                             [matTooltip]="localeData?.connect_bank"
                                             matTooltipClass="tooltip-black"
                                             [matTooltipPosition]="'above'"
-                                            (click)="openInstitutionsDialog()"
+                                            (click)="openInstitutionsDialog(bankAccount)"
                                         >
                                             <i  aria-hidden="true" class="icon-plus"></i>
                                         </a>
@@ -514,8 +532,9 @@
                                             [matTooltip]="localeData?.link_bank"
                                             matTooltipClass="tooltip-black"
                                             [matTooltipPosition]="'above'"
+                                            (click)="openBankLinkDialog()"
                                         >
-                                            <i aria-hidden="true" class="icon-link font-16"(click)="openBankLinkDialog()"></i>
+                                            <i aria-hidden="true" class="icon-link font-16"></i>
                                         </a>
                                     </ng-conatiner>
                                     <a

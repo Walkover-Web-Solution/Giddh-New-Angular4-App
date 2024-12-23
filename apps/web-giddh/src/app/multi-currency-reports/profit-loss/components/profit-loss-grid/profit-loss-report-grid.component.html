@@ -74,7 +74,7 @@
                                             [search]="search"
                                             [from]="from"
                                             [to]="to"
-                                            [incomeStatement]="plData?.incomeStatment"
+                                            [incomeStatement]="plData?.incomeStatement"
                                         >
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -119,7 +119,7 @@
                                 </section>
                                 <!--/Grid-->
                             </div>
-                            <div class="account clearfix row" *ngIf="plData && plData.incomeStatment && !hideData">
+                            <div class="account clearfix row" *ngIf="plData && plData.incomeStatement && !hideData">
                                 <div class="col-8 group pd-1">
                                     <strong class="font-15">{{ localeData?.gross_profit }}</strong>
                                 </div>
@@ -127,7 +127,7 @@
                                     <strong class="font-15">
                                         <span class="d-inline-flex">
                                             <amount-field
-                                                [amount]="plData?.incomeStatment.grossProfit.amount"
+                                                [amount]="plData?.incomeStatement.grossProfit.amount"
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
                                             >
@@ -176,7 +176,7 @@
                                                             *ngTemplateOutlet="
                                                                 operatorSign;
                                                                 context: {
-                                                                    $implicit: plData?.incomeStatment?.revenue,
+                                                                    $implicit: plData?.incomeStatement?.revenue,
                                                                     category: grp.category
                                                                 }
                                                             "
@@ -184,7 +184,7 @@
                                                         </ng-container>
                                                         <span class="d-inline-flex">
                                                             <amount-field
-                                                                [amount]="plData?.incomeStatment.revenue.amount"
+                                                                [amount]="plData?.incomeStatement.revenue.amount"
                                                                 [currencySymbol]="false"
                                                                 [currencyCode]="false"
                                                             >
@@ -206,7 +206,7 @@
                                                     *ngTemplateOutlet="
                                                         operatorSign;
                                                         context: {
-                                                            $implicit: plData?.incomeStatment?.operatingExpenses,
+                                                            $implicit: plData?.incomeStatement?.operatingExpenses,
                                                             category: grp.category
                                                         }
                                                     "
@@ -214,7 +214,7 @@
                                                 </ng-container>
                                                 <span class="d-inline-flex">
                                                     <amount-field
-                                                        [amount]="plData?.incomeStatment.operatingExpenses.amount"
+                                                        [amount]="plData?.incomeStatement.operatingExpenses.amount"
                                                         [currencySymbol]="false"
                                                         [currencyCode]="false"
                                                     >
@@ -233,7 +233,7 @@
                                                 <strong class="font-15">
                                                     <span class="d-inline-flex">
                                                         <amount-field
-                                                            [amount]="plData?.incomeStatment.operatingProfit.amount"
+                                                            [amount]="plData?.incomeStatement.operatingProfit.amount"
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         >
@@ -256,7 +256,7 @@
                                                             *ngTemplateOutlet="
                                                                 operatorSign;
                                                                 context: {
-                                                                    $implicit: plData?.incomeStatment?.otherExpenses,
+                                                                    $implicit: plData?.incomeStatement?.otherExpenses,
                                                                     category: grp.category
                                                                 }
                                                             "
@@ -264,7 +264,7 @@
                                                         </ng-container>
                                                         <span class="d-inline-flex">
                                                             <amount-field
-                                                                [amount]="plData?.incomeStatment.otherExpenses.amount"
+                                                                [amount]="plData?.incomeStatement.otherExpenses.amount"
                                                                 [currencySymbol]="false"
                                                                 [currencyCode]="false"
                                                             >
@@ -287,7 +287,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="account clearfix row" *ngIf="plData && plData?.incomeStatment && !hideData">
+                    <div class="account clearfix row" *ngIf="plData && plData?.incomeStatement && !hideData">
                         <div class="col-8 group pd-1">
                             <strong class="font-15">{{ localeData?.income_before_taxes }}</strong>
                         </div>
@@ -295,14 +295,14 @@
                             <strong class="font-15">
                                 <span
                                     *ngIf="
-                                        plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' &&
-                                        plData?.incomeStatment.incomeBeforeTaxes.amount !== 0
+                                        plData?.incomeStatement.incomeBeforeTaxes.type === 'DEBIT' &&
+                                        plData?.incomeStatement.incomeBeforeTaxes.amount !== 0
                                     "
                                     >-</span
                                 >
                                 <span class="d-inline-flex">
                                     <amount-field
-                                        [amount]="plData?.incomeStatment.incomeBeforeTaxes.amount"
+                                        [amount]="plData?.incomeStatement.incomeBeforeTaxes.amount"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
                                     >
@@ -314,8 +314,8 @@
                     <ng-template
                         *ngIf="
                             plData &&
-                            plData?.incomeStatment &&
-                            plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'
+                            plData?.incomeStatement &&
+                            plData?.incomeStatement.incomeBeforeTaxes.type === 'CREDIT'
                         "
                     >
                         <div class="group clearfix font-15 row">
@@ -325,7 +325,7 @@
                             <div class="col-4 group text-right pull-right bd-rl pd-l1">
                                 <span class="d-inline-flex">
                                     <amount-field
-                                        [amount]="plData?.incomeStatment.appliedTax"
+                                        [amount]="plData?.incomeStatement.appliedTax"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
                                     >

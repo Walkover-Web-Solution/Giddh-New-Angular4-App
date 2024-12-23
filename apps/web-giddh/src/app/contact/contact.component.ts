@@ -1757,20 +1757,28 @@ export class ContactComponent implements OnInit, OnDestroy {
    * @param {any} account
    * @memberof ContactComponent
    */
-    public openCustomEmailDialog(account: any, activeTab: string): void {
-        const data = {
-            activeTab: activeTab,
-            accountUniqueName: account?.uniqueName
-        };
-        this.dialog.open(TemplateFroalaComponent, {
-            data: data,
+    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
+        const dialogRef =  this.dialog.open(TemplateFroalaComponent, {
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
             width: 'var(--aside-pane-width)',
-            height: '70vh',
             position: {
                 right: '15px',
                 bottom: '0'
             },
             disableClose: true
+      });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
         });
     }
 }
