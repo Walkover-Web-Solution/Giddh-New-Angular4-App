@@ -65,8 +65,6 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
-            console.log(p);
-
             if (p) {
                 let data = cloneDeep(p) as ProfitLossData;
                 let cogs;
