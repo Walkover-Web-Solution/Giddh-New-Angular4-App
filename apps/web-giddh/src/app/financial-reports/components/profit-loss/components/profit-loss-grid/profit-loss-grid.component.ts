@@ -61,6 +61,8 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        console.log(this.plData);
+
         this.plSearchControl.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
