@@ -7,16 +7,19 @@
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="position-relative invoice-list overflow-visible">
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex"
-            (selectedIndexChange)="tabChanged($event)" class="table-header-sticky">
+        <mat-tab-group
+            mat-stretch-tabs="false"
+            mat-align-tabs="start"
+            [selectedIndex]="selectedTabIndex"
+            (selectedIndexChange)="tabChanged($event)"
+            class="table-header-sticky"
+        >
             <!-- estimate-content-start -->
             <mat-tab [label]="localeData?.tabs?.estimates" *ngIf="activeTabGroup === 0">
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary"
-                                [routerLink]="['/pages/vouchers/estimates/create']"
-                                *ngIf="(!isCompany && !isConsolidatedBranch)">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']" *ngIf="(!isCompany && !isConsolidatedBranch)">
                                 <span>{{ localeData?.new_estimate }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -35,8 +38,7 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate"
-                                *ngIf="selectedVouchers?.length === 1 && (!isCompany && !isConsolidatedBranch)">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1 && (!isCompany && !isConsolidatedBranch)">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -107,9 +109,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -162,9 +168,15 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ localeData?.total_amt }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right"
-                                    [matTooltip]="element?.grandTotalTooltipText" matTooltipPosition="above">
-                                    <amount-field [amount]="element?.amount?.amountForAccount"
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    class="text-right"
+                                    [matTooltip]="element?.grandTotalTooltipText"
+                                    matTooltipPosition="above"
+                                >
+                                    <amount-field
+                                        [amount]="element?.amount?.amountForAccount"
                                         [currencySymbol]="element?.amount?.currencyForAccount?.symbol"
                                         [currencyCode]="element?.amount?.currencyForAccount?.code">
                                     </amount-field>
@@ -228,7 +240,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -239,9 +252,7 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary"
-                                [routerLink]="['/pages/vouchers/proformas/create']"
-                                *ngIf="(!isCompany && !isConsolidatedBranch)">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/proformas/create']" *ngIf="(!isCompany && !isConsolidatedBranch)">
                                 <span>{{ localeData?.new_proforma }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -260,8 +271,7 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma"
-                                *ngIf="selectedVouchers?.length === 1 && (!isCompany && !isConsolidatedBranch)">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length === 1 && (!isCompany && !isConsolidatedBranch)">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -328,9 +338,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -383,9 +397,15 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ localeData?.total_amt }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right"
-                                    [matTooltip]="element?.grandTotalTooltipText" matTooltipPosition="above">
-                                    <amount-field [amount]="element?.grandTotal"
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    class="text-right"
+                                    [matTooltip]="element?.grandTotalTooltipText"
+                                    matTooltipPosition="above"
+                                >
+                                    <amount-field
+                                        [amount]="element?.grandTotal"
                                         [currencySymbol]="element?.amount?.currencyForAccount?.symbol"
                                         [currencyCode]="element?.amount?.currencyForAccount?.code">
                                     </amount-field>
@@ -447,7 +467,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -459,8 +480,7 @@
                     <div
                         class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [matMenuTriggerFor]="createNewVoucher"
-                                *ngIf="(!isCompany && !isConsolidatedBranch)" class="width-150">
+                            <button mat-raised-button color="primary" [matMenuTriggerFor]="createNewVoucher" *ngIf="(!isCompany && !isConsolidatedBranch)" class="width-150">
                                 <span>{{ localeData?.new_invoice }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -500,8 +520,7 @@
                                 [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice"
-                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice" *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -596,9 +615,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -652,9 +675,15 @@
                                     class="text-right invoice-column-width">
                                     {{ commonLocaleData?.app_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right"
-                                    [matTooltip]="element?.grandTotalTooltipText" matTooltipPosition="above">
-                                    <amount-field [amount]="element?.grandTotal?.amountForAccount"
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    class="text-right"
+                                    [matTooltip]="element?.grandTotalTooltipText"
+                                    matTooltipPosition="above"
+                                >
+                                    <amount-field
+                                        [amount]="element?.grandTotal?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
                                         [currencyCode]="element?.account?.currency?.code">
                                     </amount-field>
@@ -665,9 +694,15 @@
                                     class="text-right invoice-column-width">
                                     {{ localeData?.balance_due }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right"
-                                    [matTooltip]="element?.balanceDueTooltipText" matTooltipPosition="above">
-                                    <amount-field [amount]="element?.totalBalance?.amountForAccount"
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    class="text-right"
+                                    [matTooltip]="element?.balanceDueTooltipText"
+                                    matTooltipPosition="above"
+                                >
+                                    <amount-field
+                                        [amount]="element?.totalBalance?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
                                         [currencyCode]="element?.account?.currency?.code">
                                     </amount-field>
@@ -699,8 +734,7 @@
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer"
-                                            *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -730,7 +764,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -741,9 +776,7 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary"
-                                [routerLink]="['/pages/vouchers/debit-note/create']"
-                                *ngIf="(!isCompany && !isConsolidatedBranch)">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/debit-note/create']" *ngIf="(!isCompany && !isConsolidatedBranch)">
                                 <span>{{ localeData?.new_dr_note }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -776,8 +809,7 @@
                                 [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"
-                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -922,9 +954,15 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ commonLocaleData?.app_total_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right"
-                                    [matTooltip]="element?.balanceDueTooltipText" matTooltipPosition="above">
-                                    <amount-field [amount]="element?.totalBalance?.amountForAccount"
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    class="text-right"
+                                    [matTooltip]="element?.balanceDueTooltipText"
+                                    matTooltipPosition="above"
+                                >
+                                    <amount-field
+                                        [amount]="element?.grandTotal?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
                                         [currencyCode]="element?.account?.currency?.code">
                                     </amount-field>
@@ -937,8 +975,7 @@
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer"
-                                            *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -952,8 +989,11 @@
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit; sticky: true"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsCredit" class="checkbox-show">
-                            </tr>
+                            <tr
+                                mat-row
+                                *matRowDef="let row; columns: displayedColumnsCredit"
+                                class="checkbox-show"
+                            ></tr>
                         </table>
                         <mat-paginator *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
                             class="mt-3" (page)="handlePageChange($event)" [length]="totalResults"
@@ -961,7 +1001,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -972,9 +1013,7 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" class="w-100"
-                                [routerLink]="['/pages/vouchers/credit-note/create']"
-                                *ngIf="(!isCompany && !isConsolidatedBranch)">
+                            <button mat-raised-button color="primary" class="w-100" [routerLink]="['/pages/vouchers/credit-note/create']" *ngIf="(!isCompany && !isConsolidatedBranch)">
                                 <span>{{ localeData?.new_cr_note }}</span>
                             </button>
                             <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -1005,8 +1044,7 @@
                                 [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"
-                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -1088,9 +1126,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -1151,9 +1193,15 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ commonLocaleData?.app_total_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right"
-                                    [matTooltip]="element?.balanceDueTooltipText" matTooltipPosition="above">
-                                    <amount-field [amount]="element?.grandTotal?.amountForAccount"
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    class="text-right"
+                                    [matTooltip]="element?.balanceDueTooltipText"
+                                    matTooltipPosition="above"
+                                >
+                                    <amount-field
+                                        [amount]="element?.grandTotal?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
                                         [currencyCode]="element?.account?.currency?.code">
                                     </amount-field>
@@ -1166,8 +1214,7 @@
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer"
-                                            *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -1181,8 +1228,11 @@
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit; sticky: true"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsCredit" class="checkbox-show">
-                            </tr>
+                            <tr
+                                mat-row
+                                *matRowDef="let row; columns: displayedColumnsCredit"
+                                class="checkbox-show"
+                            ></tr>
                         </table>
                         <mat-paginator *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
                             class="mt-3" (page)="handlePageChange($event)" [length]="totalResults"
@@ -1190,7 +1240,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -1254,7 +1305,9 @@
                                     <th mat-header-cell *matHeaderCellDef>
                                         <ng-container *ngIf="!selectedPendingVouchers?.length">#</ng-container>
                                         <span *ngIf="selectedPendingVouchers?.length">
-                                            <mat-checkbox color="primary" [value]="true"
+                                            <mat-checkbox
+                                                color="primary"
+                                                [value]="true"
                                                 [checked]="allPendingVouchersSelected"
                                                 (change)="selectAllPendingVouchers($event)"></mat-checkbox>
                                         </span>
@@ -1386,9 +1439,7 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary"
-                                [routerLink]="['/pages/vouchers/purchase-order/create']"
-                                *ngIf="(!isCompany && !isConsolidatedBranch)">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase-order/create']" *ngIf="(!isCompany && !isConsolidatedBranch)">
                                 <span>{{ localeData?.new_order }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -1407,8 +1458,7 @@
                             </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"
-                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase" *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -1489,9 +1539,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendorname">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -1527,10 +1581,13 @@
                                     {{ localeData?.expected_delivery }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-center">
-                                    <span [ngClass]="{
+                                    <span
+                                        [ngClass]="{
                                             'ontime-delivery': element?.dueDays > 0,
                                             'text-danger': element?.dueDays < 0
-                                        }" *ngIf="element?.dueDays && element?.dueDays <= 7">
+                                        }"
+                                        *ngIf="element?.dueDays && element?.dueDays <= 7"
+                                    >
                                         {{ getDeliveryDaysText(element.dueDays) }}
                                     </span>
                                     <span *ngIf="element?.dueDays && element?.dueDays > 7">{{ element?.dueDate }}</span>
@@ -1546,10 +1603,7 @@
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.status | titlecase }}</p>
                                         <div class="d-flex action-btn column-gap5">
-                                            <button
-                                                *ngIf="element?.status === 'open' && (!isCompany && !isConsolidatedBranch)"
-                                                mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11"
-                                                [matTooltip]="localeData?.convert_to_bill"
+                                            <button *ngIf="element?.status === 'open' && (!isCompany && !isConsolidatedBranch)" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="localeData?.convert_to_bill"
                                                 [matTooltipPosition]="'above'" (click)="convertBillDialog(element)">
                                                 <i class="icon-tick"></i>
                                             </button>
@@ -1559,14 +1613,11 @@
                                                 [matTooltipPosition]="'above'" (click)="openEmailSendDialog(element)">
                                                 <i class="icon-envelope"></i>
                                             </button>
-                                            <button *ngIf="!isCompany" mat-stroked-button color="primary"
-                                                class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy"
-                                                [matTooltipPosition]="'above'" (click)="copyVoucher(element)">
+                                            <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'"
+                                                [routerLink]="['/pages/purchase-management/purchase-order/new/' + element.uniqueName]">
                                                 <i class="icon-copy-small"></i>
                                             </button>
-                                            <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-stroked-button
-                                                color="primary" class="mat-icon-sm-btn"
-                                                [matTooltip]="commonLocaleData?.app_delete"
+                                            <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
                                                 [matTooltipPosition]="'above'" (click)="deleteVoucherDialog(element)">
                                                 <i class="icon-trash"></i>
                                             </button>
@@ -1584,7 +1635,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -1595,8 +1647,7 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']"
-                                *ngIf="(!isCompany && !isConsolidatedBranch)">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']" *ngIf="(!isCompany && !isConsolidatedBranch)">
                                 <span>{{ localeData?.new_bill }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -1685,9 +1736,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendor">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -1739,9 +1794,15 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ commonLocaleData?.app_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right"
-                                    [matTooltip]="element?.balanceDueTooltipText" matTooltipPosition="above">
-                                    <amount-field [amount]="element?.grandTotal?.amountForAccount"
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    class="text-right"
+                                    [matTooltip]="element?.balanceDueTooltipText"
+                                    matTooltipPosition="above"
+                                >
+                                    <amount-field
+                                        [amount]="element?.grandTotal?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
                                         [currencyCode]="element?.account?.currency?.code">
                                     </amount-field>
@@ -1763,20 +1824,18 @@
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.balanceStatus | titlecase }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer"
-                                            *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel' && (!isCompany && !isConsolidatedBranch)">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">
-                                                {{ commonLocaleData?.app_payment_status?.paid }}
-                                            </button>
-                                            <button mat-menu-item (click)="openEmailSendDialog(element)">
-                                                {{ commonLocaleData?.app_send_email }}
-                                            </button>
-                                            <button mat-menu-item aria-label="copy icon"
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{ commonLocaleData?.app_payment_status?.paid }}</button>
+                                            <button mat-menu-item (click)="openEmailSendDialog(element)">{{ commonLocaleData?.app_send_email }}</button>
+                                            <button mat-menu-item
+                                                aria-label="copy icon"
                                                 *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                                (click)="copyVoucher(element)">
+                                                [routerLink]="['/pages/proforma-invoice/invoice/purchase/' + element.account?.uniqueName + '/'
+                                                + element?.uniqueName + '/copy']"
+                                            >
                                                 {{ commonLocaleData?.app_copy }}
                                             </button>
                                             <button mat-menu-item (click)="deleteVoucherDialog(element)">{{
@@ -1794,7 +1853,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -2263,8 +2323,12 @@
                                 [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma"
-                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                [matMenuTriggerFor]="moreProforma"
+                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)"
+                            >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -2363,8 +2427,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    class="sortable-header-justify-center">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                    class="sortable-header-justify-center"
+                                >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-center">
@@ -2390,9 +2458,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -2467,7 +2539,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -2500,8 +2573,12 @@
                                 [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma"
-                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                [matMenuTriggerFor]="moreProforma"
+                                *ngIf="selectedVouchers?.length && (!isCompany && !isConsolidatedBranch)"
+                            >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -2585,8 +2662,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    class="sortable-header-justify-center">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                    class="sortable-header-justify-center"
+                                >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-center">
@@ -2594,9 +2675,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendor">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    #accountUniqueName
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
-                                    width="15%">
+                                    width="15%"
+                                >
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container *ngTemplateOutlet="
                                                 searchTemplate;
@@ -2671,7 +2756,8 @@
                             [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false"
                             [pageIndex]="advanceFilters.page - 1"></mat-paginator>
                         <ng-container
-                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"></ng-container>
+                            *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
+                        ></ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -2888,7 +2974,8 @@
 
     <!-- advance-search-dialog -->
     <ng-template #advanceSearch>
-        <app-advance-search [type]="
+        <app-advance-search
+            [type]="
                 voucherType === 'debit note' || voucherType === 'credit note'
                     ? 'drcr'
                     : voucherType === 'purchase'
@@ -2900,8 +2987,12 @@
                     : voucherType === 'receipt' || voucherType === 'payment'
                     ? voucherType
                     : 'invoice'
-            " [request]="advanceFilters" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
-            [isEInvoiceEnabled]="isEInvoiceEnabled" [advanceFilters]="advanceFilters"
+            "
+            [request]="advanceFilters"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [isEInvoiceEnabled]="isEInvoiceEnabled"
+            [advanceFilters]="advanceFilters"
             (applyFilterEvent)="applyAdvanceSearch($event)"
             (closeDialogEvent)="closeAdvanceSearchDialog()"></app-advance-search>
     </ng-template>
@@ -2954,12 +3045,16 @@
 
 <!-- No Date Found Message Template -->
 <ng-template #noDataFoundMessage let-show>
-    <no-data *ngIf="
+    <no-data
+        *ngIf="
             activeModule === 'pending'
                 ? !(isGetAllRequestInProcess$ | async) && !ledgersData?.length
                 : !(getVouchersInProgress$ | async) && !dataSource?.length
-        " [primaryMessage]="commonLocaleData?.app_no_data_found" [primaryMessageClass]="'font-24 text-center mr-t100'"
-        [secondaryMessage]="' '"></no-data>
+        "
+        [primaryMessage]="commonLocaleData?.app_no_data_found"
+        [primaryMessageClass]="'font-24 text-center mr-t100'"
+        [secondaryMessage]="' '"
+    ></no-data>
 </ng-template>
 
 <!-- Send Email Template -->
