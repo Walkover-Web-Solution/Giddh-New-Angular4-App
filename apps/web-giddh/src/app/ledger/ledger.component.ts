@@ -339,6 +339,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectedAccountUniquename: any;
     /** Holds selected bank unique name */
     private selectedBankUniqueName: string;
+    /** Holds the bank account which is not linked */
+    public singleBank: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -1026,10 +1028,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
+                console.log('Response Body:', response.body);
                 if (response.body?.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
                     this.isBankAccountConnected = true;
                 } else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
+                    this.singleBank = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 }
             }
         });
@@ -3195,16 +3199,36 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public openBankLinkDialog(): void {
-        const data = {
-            bankList: this.selectedBankUniqueName,
-            accountUniqueName: this.lc.accountUnq,
-        }
-        const dialogRef = this.dialog.open(BankLinkComponent, {
-            data: data,
-            panelClass: ['mat-dialog-md'],
-            disableClose: true
-        });
+        if (this.singleBank.length === 1) {
+            this.linkBankAccount()
+        } else {
+            const data = {
+                bankList: this.selectedBankUniqueName,
+                accountUniqueName: this.lc.accountUnq,
+            }
+            const dialogRef = this.dialog.open(BankLinkComponent, {
+                data: data,
+                panelClass: ['mat-dialog-md'],
+                disableClose: true
+            });
 
-        dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); })).subscribe();
+            dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); })).subscribe();
+        }
+    }
+
+    public linkBankAccount(): void {
+        let request = { bankAccountUniqueName: this.singleBank[0]?.bankResource?.uniqueName };
+        let accountForm = {
+            accountNumber: this.singleBank[0]?.bankResource?.accountNumber,
+            accountUniqueName: this.lc.accountUnq,
+            paymentAlerts: []
+        };
+        this.settingIntegrationComponentStore.updateAccount$.pipe(take(1)).subscribe((response) => {
+            if (response) {
+                this.isBankAccountConnected = true;
+                this.showBankLinkButton = false;
+            }
+        })
+        this.settingIntegrationComponentStore.updateAccount({ accountForm, request });
     }
 }
