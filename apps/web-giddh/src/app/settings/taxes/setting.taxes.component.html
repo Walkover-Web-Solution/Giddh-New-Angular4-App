@@ -10,16 +10,6 @@
             <h1 class="section-head m-0 p-0">{{ localeData?.added_taxes }}</h1>
             <div>
                 <watch-video [cssClass]="'text-primary mr-r15'" [moduleName]="'TAX_CREATION'"></watch-video>
-                <!-- <button
-                    mat-stroked-button
-                    color="primary"
-                    [matTooltip]="localeData?.create_new_tax"
-                    [matTooltipPosition]="'above'"
-                    (click)="selectedTax = null; toggleTaxAsidePane($event)"
-                    aria-label="create new tax"
-                >
-                    <i class="icon icon-plus font-12 mr-1"></i> {{ localeData?.new_tax }}
-                </button> -->
                 <button
                     mat-stroked-button
                     color="primary"
@@ -35,7 +25,7 @@
 
         <div class="pd-t15 tax-table-wrapper">
             <div class="table-responsive">
-                <table mat-table [dataSource]="dataSource" *ngIf="availableTaxes?.length">
+                <table mat-table [dataSource]="dataSource" *ngIf="availableTaxes?.length && !isLoading">
                     <!-- Index Column -->
                     <ng-container matColumnDef="index">
                         <th mat-header-cell *matHeaderCellDef>#</th>
@@ -57,24 +47,34 @@
                     </ng-container>
 
                     <!-- Tax Authority Column -->
-                    <!-- <ng-container matColumnDef="taxAuthority" *ngIf="availableTaxes[0]?.taxAuthority">
-                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
-                        <td mat-cell *matCellDef="let acc of element.accounts">{{ acc.name }}</td>
-                    </ng-container> -->
+                    <ng-container matColumnDef="taxAuthority">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_tax_authority }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element?.taxAuthority?.name }}
+                        </td>
+                    </ng-container>
 
                     <!-- Linked Account Column -->
-                    <!-- <ng-container matColumnDef="linkedAccount">
+                    <ng-container matColumnDef="linkedAccount">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
                         <td mat-cell *matCellDef="let element">
-                        <p *ngFor="let acc of element.accounts">{{ acc.name }}</p>
+                            <ng-container *ngIf="element?.accounts?.length; else showDash">
+                                <p *ngFor="let acc of element.accounts">
+                                    {{ acc.name }}
+                                </p>
+                            </ng-container>
                         </td>
-                    </ng-container> -->
+                    </ng-container>
 
                     <!-- Applied From Column -->
                     <ng-container matColumnDef="appliedFrom">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.applied_from }}</th>
                         <td mat-cell *matCellDef="let element">
-                        <div *ngFor="let t of element.taxDetail">{{ dayjs(t.date).format(giddhDateFormat) }}</div>
+                            <ng-container *ngIf="element?.taxDetail?.length;else showDash">
+                                <div *ngFor="let tax of element.taxDetail">
+                                    {{ dayjs(tax.date).format(giddhDateFormat) }}
+                                </div>
+                            </ng-container>
                         </td>
                     </ng-container>
 
@@ -82,7 +82,11 @@
                     <ng-container matColumnDef="taxPercentage">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax_percentage }}</th>
                         <td mat-cell *matCellDef="let element">
-                        <div *ngFor="let t of element.taxDetail">{{ t.taxValue }}</div>
+                            <ng-container *ngIf="element?.taxDetail?.length;else showDash">
+                                <div *ngFor="let t of element.taxDetail">
+                                    {{ t.taxValue }}
+                                </div>
+                            </ng-container>
                         </td>
                     </ng-container>
 
@@ -106,28 +110,31 @@
 
                     <!-- Action Column -->
                     <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">{{ commonLocaleData?.app_action }}</th>
                         <td mat-cell *matCellDef="let element">
-                            <div class="d-flex column-gap1">
+                            <div class="d-flex column-gap1 justify-content-center">
                                 <button 
                                     mat-stroked-button 
+                                    [matTooltip]="commonLocaleData?.app_edit"
+                                    [matTooltipPosition]="'above'"
+                                    class="min-width-unset"
                                     color="primary"
                                     (click)="openCreateUpdateDialog(element)">
                                     <i
                                         class="icon-edit-pencil"
                                         aria-hidden="true"
-                                        [matTooltip]="commonLocaleData?.app_edit"
-                                        [matTooltipPosition]="'above'"
                                     ></i>
                                 </button>
                                 <button 
                                     mat-stroked-button 
+                                    [matTooltip]="commonLocaleData?.app_delete"
+                                    [matTooltipPosition]="'above'"
+                                    class="min-width-unset"
                                     (click)="deleteTax(element)">
                                     <i
                                         class="fa fa-trash"
                                         aria-hidden="true"
-                                        [matTooltip]="commonLocaleData?.app_delete"
-                                        [matTooltipPosition]="'above'"
+                                        
                                     ></i>
                                 </button>
                             </div>
@@ -355,6 +362,7 @@
                         </tr>
                     </tbody>
                 </table> -->
+                <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="no-data" *ngIf="!isLoading && !availableTaxes?.length">
                 <no-data
@@ -367,6 +375,11 @@
         </div>
     </div>
 
+    <!-- Show dash when no data present -->
+    <ng-template #showDash>
+        <span>-</span>
+     </ng-template>
+
     <!-- Template Create/Update Dialog -->
     <ng-template #createUpdateDialog>
         <aside-menu-create-tax-component
@@ -376,15 +389,4 @@
             (closeEvent)="createUpdateDialogRef?.close()"
         ></aside-menu-create-tax-component>
     </ng-template>
-
-    <!-- region delete Tax confirmation model -->
-     <ng-template #taxConfirmationModel>
-        <delete-tax-confirmation-model
-            [message]="confirmationMessage"
-            [commonLocaleData]="commonLocaleData"
-            (userConfirmationEvent)="userConfirmation($event)"
-        >
-        </delete-tax-confirmation-model>
-     </ng-template>
-    <!-- endregion -->
 </ng-container>
