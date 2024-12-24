@@ -334,15 +334,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.setInitialAdvanceFilter(true);
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.setInitialAdvanceFilter(true);
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -382,8 +384,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getLedgersOfInvoice();
                 }
             }
+            this.getInvoiceSettings();
         });
-        
+
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

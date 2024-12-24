@@ -344,39 +344,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.setActiveTab("aging-report");
                 }
 
-                this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-                    if (res) {
-                        this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
-                    }
-                });
-
-                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isIciciAccountPendingForApproval = false;
-                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-                    if (response?.integratedBankList?.length > 0) {
-                        const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
-                        if (!approvalPendingAccounts?.length) {
-                            this.isIciciAccountPendingForApproval = true;
-                        }
-                        this.isICICIIntegrated = true;
-                    } else {
-                        this.isICICIIntegrated = false;
-                    }
-                    if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                        let customiseColumns = cloneDeep(this.customiseColumns);
-                        if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
-                            let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
-                            if (!filteredCustomisColumns.length) {
-                                this.customiseColumns.push({ value: "action", label: "Action", checked: true });
-                            }
-                        } else {
-                            this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
-                        }
-                        const values = this.customiseColumns.map(item => item.value);
-                        this.showSelectedHeaderColumns(values);
-                    }
-                    this.cdRef.detectChanges();
-                });
                 this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
                 if (this.activeTab === ContactsTab.customer.toLowerCase()) {
                     this.customiseColumns.splice(0, 0,
@@ -446,6 +413,40 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             }
 
+        });
+
+        this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
+
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if (response?.integratedBankList?.length > 0) {
+                const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if (!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+            if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                let customiseColumns = cloneDeep(this.customiseColumns);
+                if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
+                    let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
+                    if (!filteredCustomisColumns.length) {
+                        this.customiseColumns.push({ value: "action", label: "Action", checked: true });
+                    }
+                } else {
+                    this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
+                }
+                const values = this.customiseColumns.map(item => item.value);
+                this.showSelectedHeaderColumns(values);
+            }
+            this.cdRef.detectChanges();
         });
 
 
@@ -1736,6 +1737,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private resetColumns(): void {
         this.translationComplete(true);
     }
+<<<<<<< HEAD
 
     /**
      * This function will use for send email for template
@@ -1781,4 +1783,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
     }
+=======
+>>>>>>> be6a6a0a178a6c93c4d2c54d0970acfae4084ef9
 }
