@@ -1737,7 +1737,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     private resetColumns(): void {
         this.translationComplete(true);
     }
-<<<<<<< HEAD
 
     /**
      * This function will use for send email for template
@@ -1783,6 +1782,4 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
     }
-=======
->>>>>>> be6a6a0a178a6c93c4d2c54d0970acfae4084ef9
 }
