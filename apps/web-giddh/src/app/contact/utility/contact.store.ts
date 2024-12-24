@@ -7,11 +7,11 @@ import { ToasterService } from "../../services/toaster.service";
 import { ContactService } from "../../services/contact.service";
 
 export interface ContactState {
-    sendBulkEmailISuccess: boolean;
+    sendBulkEmailIsSuccess: boolean;
 }
 
 export const DEFAULT_CONTACT_STATE: ContactState = {
-    sendBulkEmailISuccess: null
+    sendBulkEmailIsSuccess: null
 };
 
 @Injectable()
@@ -31,21 +31,21 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     readonly sendBulkEmailTemplate = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ sendBulkEmailISuccess: false });
+                this.patchState({ sendBulkEmailIsSuccess: false });
                 return this.contactService.sendBulkEmailTemplate(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', res?.body);
+                                res?.body && this.toasterService.showSnackBar('success', res?.body);
                                 return this.patchState({
-                                    sendBulkEmailISuccess: true
+                                    sendBulkEmailIsSuccess: true
                                 });
                             } else {
-                                if (res.message) {
+                                if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    sendBulkEmailISuccess: false,
+                                    sendBulkEmailIsSuccess: false,
                                 });
                             }
                         },
@@ -53,7 +53,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                             this.toasterService.showSnackBar("error", error);
 
                             return this.patchState({
-                                sendBulkEmailISuccess: false
+                                sendBulkEmailIsSuccess: false
                             });
                         }
                     ),
