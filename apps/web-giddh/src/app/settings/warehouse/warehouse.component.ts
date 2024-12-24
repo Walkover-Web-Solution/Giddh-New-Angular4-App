@@ -145,7 +145,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
