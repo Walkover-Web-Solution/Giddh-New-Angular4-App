@@ -1,3 +1,4 @@
+import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import {
@@ -57,6 +58,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { ContactComponentStore } from "./utility/contact.store";
+import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 
 @Component({
     selector: "contact-detail",
@@ -74,6 +77,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
             transition("out => in", animate("400ms ease-in-out")),
         ]),
     ],
+    providers: [ContactComponentStore]
 })
 export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
@@ -239,11 +243,17 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** Stores the send email bulk request  */
+    public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
+    /** Observable for bulk email success response */
+    public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -269,6 +279,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -284,9 +299,20 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
+        this.bulkEmailSuccess$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(success => {
+            if (success) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
+        });
 
-
-        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50),takeUntil(this.destroyed$)).subscribe(result => {
+        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
@@ -317,22 +343,109 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.setActiveTab("aging-report");
                 }
 
-                this.store.pipe(select(s => s.session.currentCompanyCurrency), filter(Boolean), take(1)).subscribe(res => {
-                    if (res) {
-                        this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
-                    }
-                });
+                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "customer_name",
+                            "label": "Customer Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "sales",
+                            "label": "Sales",
+                            "checked": true
+                        },
+                        {
+                            "value": "receipt",
+                            "label": "Receipt",
+                            "checked": true
+                        }
+                    );
+                    this.moduleType = ContactsTab.customer;
+                    this.displayedColumns = [];
+                }
+                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                    this.customiseColumns.splice(0, 0,
+                        {
+                            "value": "vendor_name",
+                            "label": "Vendor Name",
+                            "checked": true
+                        },
+                        {
+                            "value": "parent_group",
+                            "label": "Parent Group",
+                            "checked": true
+                        },
+                        {
+                            "value": "opening",
+                            "label": "Opening",
+                            "checked": true
+                        },
+                        {
+                            "value": "purchase",
+                            "label": "Purchase",
+                            "checked": true
+                        },
+                        {
+                            "value": "payment",
+                            "label": "Payment",
+                            "checked": true
+                        }
+                    );
 
-                this.store.pipe(select(state => state.company), filter(Boolean),take(1)).subscribe(response => {
-                    if (response) {
-                        // First handle the bank integration status
-                        this.handleBankIntegrationStatus(response);
-                        // Then handle the columns setup
-                        this.setCustomColumns(lastTabType);
-                    }
-                });
+                    this.moduleType = ContactsTab.vendor;
+                    this.displayedColumns = [];
+                }
+                if (lastTabType) {
+                    this.translationComplete(true);
+                }
             }
 
+        });
+
+        this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
+
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if (response?.integratedBankList?.length > 0) {
+                const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if (!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+            if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                let customiseColumns = cloneDeep(this.customiseColumns);
+                if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
+                    let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
+                    if (!filteredCustomisColumns.length) {
+                        this.customiseColumns.push({ value: "action", label: "Action", checked: true });
+                    }
+                } else {
+                    this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
+                }
+                const values = this.customiseColumns.map(item => item.value);
+                this.showSelectedHeaderColumns(values);
+            }
+            this.cdRef.detectChanges();
         });
 
 
@@ -414,7 +527,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
@@ -1624,113 +1738,47 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles the bank integration status check
-     *
-     * @private
-     * @param {*} response Company state response
-     * @memberof ContactComponent
-     */
-    private handleBankIntegrationStatus(response: any): void {
-        this.isIciciAccountPendingForApproval = false;
-        this.isGetAllIntegratedBankInProgress = true;
-
-        if (response.integratedBankList?.length > 0) {
-            let approvalPendingAccounts = response.integratedBankList.filter(account => !account.errorMessage);
-            if (!approvalPendingAccounts?.length) {
-                this.isIciciAccountPendingForApproval = true;
-            }
-            this.isICICIIntegrated = true;
-            this.isGetAllIntegratedBankInProgress = false;
-        } else {
-            this.isICICIIntegrated = false;
-            this.isGetAllIntegratedBankInProgress = false;
-        }
+    * This function will use for send email for template
+    *
+    * @memberof ContactComponent
+    */
+    public sendBulkEmail(type: string): void {
+        const accountUniqueNames = this.selectedAccountsList.map(account => account.uniqueName);
+        this.sendBulkEmailRequest = {
+            customerVendorUniqueNames: accountUniqueNames,
+            templateOf: type
+        };
+        this.componentStore.sendBulkEmailTemplate(this.sendBulkEmailRequest);
     }
 
     /**
-     * Sets up the custom columns based on active tab
-     *
-     * @private
-     * @param {string} lastTabType Previous tab type
-     * @memberof ContactComponent
-     */
-    private setCustomColumns(lastTabType: string): void {
-        this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
-
-        if (this.activeTab === ContactsTab.customer.toLowerCase()) {
-            this.customiseColumns.splice(0, 0,
-                {
-                    "value": "customer_name",
-                    "label": "Customer Name",
-                    "checked": true
-                },
-                {
-                    "value": "parent_group",
-                    "label": "Parent Group",
-                    "checked": true
-                },
-                {
-                    "value": "opening",
-                    "label": "Opening",
-                    "checked": true
-                },
-                {
-                    "value": "sales",
-                    "label": "Sales",
-                    "checked": true
-                },
-                {
-                    "value": "receipt",
-                    "label": "Receipt",
-                    "checked": true
-                }
-            );
-            this.moduleType = ContactsTab.customer;
-            this.displayedColumns = [];
-        }
-
-        if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-            this.customiseColumns.splice(0, 0,
-                {
-                    "value": "vendor_name",
-                    "label": "Vendor Name",
-                    "checked": true
-                },
-                {
-                    "value": "parent_group",
-                    "label": "Parent Group",
-                    "checked": true
-                },
-                {
-                    "value": "opening",
-                    "label": "Opening",
-                    "checked": true
-                },
-                {
-                    "value": "purchase",
-                    "label": "Purchase",
-                    "checked": true
-                },
-                {
-                    "value": "payment",
-                    "label": "Payment",
-                    "checked": true
-                }
-            );
-            if (this.isICICIIntegrated || this.isPlaidSupportedCountry) {
-                this.customiseColumns.push({
-                    value: "action",
-                    label: "Action",
-                    checked: true
-                });
+   * Open custom email dialog
+   *
+   * @param {any} account
+   * @memberof ContactComponent
+   */
+    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
             }
-            this.moduleType = ContactsTab.vendor;
-            this.displayedColumns = [];
-        }
-
-        if (lastTabType) {
-            this.translationComplete(true);
-        }
-        this.cdRef.detectChanges();
+        });
     }
 }

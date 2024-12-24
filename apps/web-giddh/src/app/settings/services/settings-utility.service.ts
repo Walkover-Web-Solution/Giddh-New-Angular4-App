@@ -101,7 +101,7 @@ export class SettingsUtilityService {
                     address: address.address,
                     isDefault: address.isDefault,
                     name: address.name,
-                    uniqueName: address?.uniqueName,
+                    uniqueName: address?.uniqueName
                 });
             });
         }
