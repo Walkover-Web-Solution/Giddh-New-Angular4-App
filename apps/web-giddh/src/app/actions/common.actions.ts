@@ -258,12 +258,12 @@ export class CommonActions {
     }
 
     /**
- * Set filters in store
- *
- * @param {*} data
- * @returns {CustomActions}
- * @memberof CommonActions
- */
+    * Set filters in store
+    *
+    * @param {*} data
+    * @returns {CustomActions}
+    * @memberof CommonActions
+    */
     public setFilters(data: any): CustomActions {
         return {
             type: CommonActions.SET_FILTERS,
