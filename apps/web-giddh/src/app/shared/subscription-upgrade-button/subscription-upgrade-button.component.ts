@@ -13,7 +13,7 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
     /** Type of restricted module to check */
     @Input() public restrictedModule: RestrictedModules;
     /** Remaining count for specific features (like users) */
-    @Input() public remainingCount?: boolean = false;
+    @Input() public isUserRestricted?: boolean = false;
     /** Flag to determine if component should use router navigation or emit event */
     @Input() public useRouterLink: boolean = false;
     /** Event emitter for upgrade button click */
@@ -63,11 +63,10 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
      * @memberof SubscriptionUpgradeButtonComponent
      */
     public shouldShowMessage(): boolean {
-        const hasRestriction = this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModule);
         if (this.restrictedModule === this.restrictedModules.Users) {
-            return this.remainingCount;
+            return this.isUserRestricted;
         } else {
-            return hasRestriction;
+            return Object.hasOwn(this.activeCompany?.subscription?.planDetails?.restrictedModules, this.restrictedModule);;
         }
     }
 

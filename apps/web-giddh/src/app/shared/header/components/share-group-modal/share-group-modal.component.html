@@ -35,7 +35,7 @@
                     </div>
                 </form>
                 <restricted-module-message [restrictedModule]="restrictedModules.Users"
-                    [remainingCount]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
+                    [isUserRestricted]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
                 </restricted-module-message>
 
                 <!--shared with array-->
