@@ -769,6 +769,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.isBankAccountConnected = true;
+                this.showBankLinkButton = false;
+                this.cdRf.detectChanges();
+            }
+        });
+
         this.lc.transactionData$.pipe(takeUntil(this.destroyed$)).subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api in case of today selected from universal date
@@ -2761,8 +2769,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
                     this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        console.log("requisitionList",response);
+                        
                         if (response) {
                             this.openBankLinkDialog();
+                            this.componentStore.setState(state => ({
+                                ...state, 
+                                requisitionList: null
+                            }));
                         }
                     });
                 }
@@ -3222,13 +3236,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             accountNumber: this.singleBank[0]?.bankResource?.accountNumber,
             accountUniqueName: this.lc.accountUnq,
             paymentAlerts: []
-        };
-        this.settingIntegrationComponentStore.updateAccount$.pipe(take(1)).subscribe((response) => {
-            if (response) {
-                this.isBankAccountConnected = true;
-                this.showBankLinkButton = false;
-            }
-        })
+        }
+
+         
         this.settingIntegrationComponentStore.updateAccount({ accountForm, request });
     }
 }
