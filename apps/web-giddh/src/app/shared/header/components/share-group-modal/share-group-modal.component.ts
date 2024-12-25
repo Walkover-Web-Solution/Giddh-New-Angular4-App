@@ -35,7 +35,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     /** Email id validation regex pattern */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
     /** Holds user module restriction */
-    public remainingUsers: number = 0;
+    public isUserRestricted: boolean = false;
     /** Active company details */
     public activeCompany: any;
     /** Enum for restricted modules */
@@ -57,11 +57,12 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                if (activeCompany?.moduleRestrictionStatus) {
+                if (activeCompany?.subscription.planDetails.restrictedModules.hasOwnProperty(this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                     let module = activeCompany.moduleRestrictionStatus.find(
                         (module) => module?.moduleName === this.restrictedModules.Users
                     );
-                    this.remainingUsers = module.remainingUsers;
+                    this.isUserRestricted = !(module?.remainingUsers ?? false);
+
                 }
             }
         });
