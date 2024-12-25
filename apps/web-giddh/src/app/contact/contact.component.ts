@@ -243,6 +243,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** Stores the send email bulk request  */
+    public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
+    /** Observable for bulk email success response */
+    public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Stores the send email bulk request  */
@@ -299,18 +303,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
-        this.bulkEmailSuccess$.pipe(
-            takeUntil(this.destroyed$)
-        ).subscribe(success => {
-            if (success) {
-                this.selectedCheckedContacts = [];
-                this.selectedAccountsList = [];
-                this.allSelectionModel = false;
-                this.checkboxInfo = {
-                    selectedPage: 1
-                };
-            }
-        });
 
 
         combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
@@ -1736,50 +1728,5 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     private resetColumns(): void {
         this.translationComplete(true);
-    }
-
-    /**
-     * This function will use for send email for template
-     *
-     * @memberof ContactComponent
-     */
-    public sendBulkEmail(type: string): void {
-        const accountUniqueNames = this.selectedAccountsList.map(account => account.uniqueName);
-        this.sendBulkEmailRequest = {
-            customerVendorUniqueNames: accountUniqueNames,
-            templateOf: type
-        };
-        this.componentStore.sendBulkEmailTemplate(this.sendBulkEmailRequest);
-    }
-
-    /**
-   *Open custom email dialog
-   *
-   * @param {any} account
-   * @memberof ContactComponent
-   */
-    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
-        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
-            data: {
-                activeTab: activeTab,
-                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-            },
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
-        });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.selectedCheckedContacts = [];
-                this.selectedAccountsList = [];
-                this.allSelectionModel = false;
-                this.checkboxInfo = {
-                    selectedPage: 1
-                };
-            }
-        });
     }
 }

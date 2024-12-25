@@ -9,6 +9,10 @@ import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
+import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
+import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'share-account-modal',
@@ -21,6 +25,12 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
+    /** Holds user module restriction */
+    public isUserRestricted: boolean = false;
     public email: string;
     public selectedPermission: string;
     public activeAccount$: Observable<AccountResponseV2>;
@@ -32,14 +42,25 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private accountActions: AccountsAction) {
+    constructor(private store: Store<AppState>, private accountActions: AccountsAction, private router: Router, private groupWithAccountsAction: GroupWithAccountsAction, private settingsProfileActions: SettingsProfileActions) {
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                if (activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.Users) && activeCompany?.moduleRestrictionStatus) {
+                    let module = activeCompany.moduleRestrictionStatus.find(
+                        (module) => module?.moduleName === this.restrictedModules.Users
+                    );
+                    this.isUserRestricted = !(module?.remainingUsers ?? false);
 
+                }
+            }
+        });
     }
 
     public getAccountSharedWith() {
@@ -48,6 +69,18 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.accountActions.sharedAccountWith(acc.uniqueName));
             }
         });
+    }
+
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  ShareAccountModalComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        this.closeModal();
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 
     public async shareAccount() {
@@ -59,12 +92,18 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         };
         let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
+        setTimeout(() => {
+            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        }, 500);
         this.email = '';
         this.selectedPermission = '';
     }
 
     public async unShareAccount(entryUniqueName: string, accountUniqueName: string) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', accountUniqueName));
+        setTimeout(() => {
+            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        }, 500);
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
