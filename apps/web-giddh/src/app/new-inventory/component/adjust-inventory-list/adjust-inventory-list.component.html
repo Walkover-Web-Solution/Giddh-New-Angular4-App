@@ -10,7 +10,7 @@
     <div class="container-fluid mr-t15 adjust-inventory-list-page">
         <div class="d-flex align-items-center column-gap1 adjust-inventory-header">
             <div
-                *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                 class="branch-width mr-0"
             >
                 <dropdown-field
@@ -51,7 +51,7 @@
                 {{ commonLocaleData?.app_clear }}
             </button>
             <button
-              *ngIf="(!isCompany && !isConsolidatedBranch)"
+              *ngIf="!isCompany"
                 id="add-adjustment-btn"
                 mat-stroked-button
                 color="primary"

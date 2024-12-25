@@ -130,8 +130,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public currentDate: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
 
@@ -240,12 +238,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      * @memberof JournalVoucherComponent
      */
     public ngOnInit(): void {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];

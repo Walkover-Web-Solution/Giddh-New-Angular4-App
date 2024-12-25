@@ -89,8 +89,6 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public searchedGroups: IOption[];
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     /**
      * TypeScript public modifiers
@@ -105,12 +103,6 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     ) { }
 
     public ngOnInit() {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.fromDate = dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         this.toDate = dayjs().format(GIDDH_DATE_FORMAT);
@@ -138,8 +130,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch,
-                    consolidatedBranch: branch?.consolidatedBranch
+                    parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

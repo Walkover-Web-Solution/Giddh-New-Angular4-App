@@ -18,7 +18,7 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { ThermalService } from "../../services/thermal.service";
 import { ToasterService } from "../../services/toaster.service";
 import { AppState } from "../../store";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { saveAs } from 'file-saver';
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
@@ -89,8 +89,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public showPaymentDetails: boolean;
     /** Holds true if company mode */
     public isCompany: boolean;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
     /** Holds create new voucher text and url */
     public createNewVoucher: any = {
         text: '',
@@ -218,12 +216,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VouchersPreviewComponent
     */
     public ngOnInit(): void {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         merge(this.activatedRoute.params, this.activatedRoute.queryParams).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 if (params?.voucherType) {

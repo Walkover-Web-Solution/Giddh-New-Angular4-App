@@ -38,7 +38,6 @@ export interface AppState {
     home: fromHome.HomeState;
     login: fromLogin.AuthenticationState;
     session: fromLogin.SessionState;
-    branchConsolidated: fromLogin.IBranchConsolidatedState;
     company: fromCompany.CurrentCompanyState;
     sales: fromSales.SalesState;
     groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
@@ -81,7 +80,6 @@ export const reducers: ActionReducerMap<AppState> = {
     company: fromCompany.CompanyReducer,
     login: fromLogin.AuthenticationReducer,
     session: fromLogin.SessionReducer,
-    branchConsolidated: fromLogin.BranchConsolidatedReducer,
     groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer,
     verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer,
     inventory: fromInventory.InventoryReducer,

@@ -48,8 +48,6 @@ export class FilingComponent implements OnInit, OnDestroy {
     public gstr2OverviewDataInProgress$: Observable<boolean>;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
@@ -129,11 +127,6 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
 
         // get activeCompany gst number
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {

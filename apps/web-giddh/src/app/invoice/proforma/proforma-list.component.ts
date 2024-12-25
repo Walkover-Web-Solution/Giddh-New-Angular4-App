@@ -66,8 +66,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public appSideMenubarIsOpen: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
 
@@ -233,11 +231,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             if (response) {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
-                this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response) {
-                        this.isConsolidatedBranch = response.isBranchConsolidated;
-                    }
-                });
             }
         });
 

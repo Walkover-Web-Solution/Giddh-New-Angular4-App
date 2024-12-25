@@ -32,7 +32,6 @@
                 matAutocompletePosition="auto"
                 class="select-multiple-field-input"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (clickOutside)="closeDropdownPanel($event)"
             />
         </mat-chip-grid>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">

@@ -4,6 +4,5 @@
     "bcc": "Bcc",
     "email_content_suggestions": "Type '@' to see suggestions",
     "recipients": "Recipients",
-    "subject": "Subject",
-    "save_and_send":"Save and Send"
+    "subject": "Subject"
 }

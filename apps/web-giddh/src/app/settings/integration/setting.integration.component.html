@@ -459,11 +459,11 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                             <div class="account-info-background width-100 font-15 row align-items-center">
+                                <div class="account-info-background width-100 font-15 row align-items-end">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
-                                        <span *ngIf="bankAccount?.bankResource?.accountNumber" class="account-number mt-2 font-15 inline"
+                                        <span class="account-number mt-2 font-15 inline"
                                             ><b
                                                 ><span *ngIf="!isIciciBankSupportedCountry"
                                                     >{{ commonLocaleData?.app_ac }} #</span

@@ -97,8 +97,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
     /* this wll store mobile screen size */
     public isMobileScreen: boolean = true;
     /* Stores warehouses for a company */
@@ -136,12 +134,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.getWarehouses();
         }
-
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
 
         this.breakPointObservar.observe([
             '(max-width: 991px)'
@@ -205,8 +197,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch,
-                    consolidatedBranch: branch?.consolidatedBranch
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

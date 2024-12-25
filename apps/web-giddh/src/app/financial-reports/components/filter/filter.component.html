@@ -21,7 +21,7 @@
                             *ngIf="
                                 showLabels &&
                                 currentCompanyBranches?.length > 2 &&
-                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                currentOrganizationType === 'COMPANY'
                             "
                         >
                             <div class="form-group">
@@ -43,11 +43,7 @@
                                             <a href="javascript:void(0)" class="list-item d-flex">
                                                 <span class="entity-icon">
                                                     <i
-                                                        [ngClass]="{
-                                                            'icon-company-profile': option.consolidatedBranch,
-                                                            'icon-branch-icon': !option.consolidatedBranch
-                                                        }"
-                                                        class="pull-right"
+                                                        class="icon-branch-icon pull-right"
                                                         *ngIf="!option.isCompany"
                                                         [tooltip]="commonLocaleData?.app_branch"
                                                     ></i>
@@ -203,7 +199,7 @@
             <div class="d-flex flex-column">
                 <div
                     class="form-group mr-r15 linked-entities"
-                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                 >
                     <div class="form-group mb-0">
                         <sh-select
@@ -223,8 +219,7 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
-                                                class="pull-right"
+                                                class="icon-branch-icon pull-right"
                                                 *ngIf="!option.isCompany"
                                                 [tooltip]="commonLocaleData?.app_branch"
                                             ></i>

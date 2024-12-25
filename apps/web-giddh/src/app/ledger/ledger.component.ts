@@ -310,8 +310,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public transactionCountConvertToEntries: number = null;
     /** Holds bank transactions account name */
     private bankTransactionsWithAccountName: any[] = [];
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -464,12 +462,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
@@ -517,7 +509,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
+        if (this.currentOrganizationType === OrganizationType.Company) {
             this.showBranchSwitcher = true;
             this.currentCompanyBranches$.subscribe(response => {
                 if (response && response.length) {
@@ -525,8 +517,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         label: branch?.name,
                         value: branch?.uniqueName,
                         name: branch?.name,
-                        parentBranch: branch?.parentBranch,
-                        consolidatedBranch: branch?.consolidatedBranch
+                        parentBranch: branch?.parentBranch
                     }));
                     this.currentCompanyBranches.unshift({
                         label: this.activeCompany ? this.activeCompany.name : '',
@@ -964,7 +955,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankAccount.reLoginRequired = res.body.reLoginRequired;
                         this.bankAccount.itemId = res.body.itemId;
                         this.zone.runOutsideAngular(() => {
-                            this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                            this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
                             this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
                         });

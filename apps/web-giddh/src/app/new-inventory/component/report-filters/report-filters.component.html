@@ -14,7 +14,7 @@
             />
         </div>
     </div>
-    <div class="pl-1 filter-dropdown-branch" *ngIf="(isCompany || isConsolidatedBranch) && allBranches?.length > 1">
+    <div class="pl-1 filter-dropdown-branch" *ngIf="isCompany && allBranches?.length > 1">
         <mat-select
             name="selectedBranch"
             [multiple]="true"

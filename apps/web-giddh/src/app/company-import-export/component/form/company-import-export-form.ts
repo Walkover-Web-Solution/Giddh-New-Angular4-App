@@ -72,8 +72,6 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -89,11 +87,6 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.fileTypes = [
             { label: this.localeData?.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES?.toString() },
             { label: this.localeData?.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS?.toString() }
@@ -125,8 +118,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch,
-                    consolidatedBranch: branch?.consolidatedBranch
+                    parentBranch: branch.parentBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';

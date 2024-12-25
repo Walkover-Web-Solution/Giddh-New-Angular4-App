@@ -31,7 +31,6 @@ export class CommonActions {
     public static SET_ACTIVE_FINANCIAL_YEAR = 'SetActiveFinancialYear';
     public static SET_ACTIVE_THEME = 'SetActiveTheme';
     public static SET_FILTERS = 'SetFilters';
-    public static SET_BRANCH_CONSOLIDATED = 'SetBranchConsolidated';
     public static SET_IMPORT_BANK_TRANSACTIONS_RESPONSE = 'SetImportBankTransactionsResponse';
     public static HAS_UNSAVED_CHANGES = 'HAS_UNSAVED_CHANGES';
     public static BYPASS_UNSAVED_CHANGES = 'BYPASS_UNSAVED_CHANGES';
@@ -244,26 +243,12 @@ export class CommonActions {
     }
 
     /**
-     * Set branch consolidated in store
+     * Set filters in store
      *
      * @param {*} data
      * @returns {CustomActions}
      * @memberof CommonActions
      */
-    public setBranchConsolidated(data: any): CustomActions {
-        return {
-            type: CommonActions.SET_BRANCH_CONSOLIDATED,
-            payload: data
-        }
-    }
-
-    /**
-    * Set filters in store
-    *
-    * @param {*} data
-    * @returns {CustomActions}
-    * @memberof CommonActions
-    */
     public setFilters(data: any): CustomActions {
         return {
             type: CommonActions.SET_FILTERS,

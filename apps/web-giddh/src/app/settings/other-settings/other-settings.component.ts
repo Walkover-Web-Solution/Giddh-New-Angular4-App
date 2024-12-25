@@ -76,8 +76,6 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public activeTheme: string = "";
     /** Holds Current Theme Label  */
     public currentThemeLabel: string;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -87,12 +85,6 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public ngOnInit(): void {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         currencyNumberSystems.map(currency => {
             this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });

@@ -1,16 +1,13 @@
-import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
-import { cloneDeep, isArray } from '../../lodash-optimized';
-import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
-
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
@@ -18,8 +15,6 @@ import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-mu
     providers: [CustomEmailComponentStore]
 })
 export class TemplateFroalaComponent implements OnInit {
-    /** Instance of select multiple fields*/
-    @ViewChildren(SelectMultipleFieldsComponent) childComponents!: QueryList<SelectMultipleFieldsComponent>;
     /** Instance of subject input field */
     @ViewChild('subjectInputField', { static: false }) subjectInputField: ElementRef;
     /** Aside pane state*/
@@ -143,11 +138,10 @@ export class TemplateFroalaComponent implements OnInit {
     };
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public inputData,
+        @Inject(MAT_DIALOG_DATA) public voucherType,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
-        private dialog: MatDialog,
-        public dialogRef: MatDialogRef<any>
+        private dialog: MatDialog
     ) { }
 
     /**
@@ -168,8 +162,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const emailSuggestions = this.inputData?.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
-                const tributeSuggestions = emailSuggestions?.map(item => ({
+                const tributeSuggestions = response?.voucherSuggestions?.map(item => ({
                     value: item,
                     key: item
                 }));
@@ -206,7 +199,6 @@ export class TemplateFroalaComponent implements OnInit {
         this.updateCustomEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.dialog.closeAll();
-                this.dialogRef.close(response);
             }
         });
     }
@@ -303,7 +295,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailTemplates(): void {
-        this.componentStore.getAllEmailTemplate(this.inputData?.activeTab ? this.inputData?.activeTab : this.inputData);
+        this.componentStore.getAllEmailTemplate(this.voucherType);
     }
 
     /**
@@ -318,7 +310,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailContents(): void {
-        this.componentStore.getEmailContentSuggestions(this.inputData?.activeTab ? this.inputData.activeTab : this.inputData);
+        this.componentStore.getEmailContentSuggestions(null);
     }
 
     /**
@@ -332,7 +324,7 @@ export class TemplateFroalaComponent implements OnInit {
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.inputData]],
+            voucherTypes: [[this.voucherType]],
             emailSubject: [template?.emailSubject ?? ''],
             html: [template?.html ?? '']
         });
@@ -350,53 +342,18 @@ export class TemplateFroalaComponent implements OnInit {
      *
      * @memberof TemplateFroalaComponent
      */
-    public onSubmit(type: string): void {
+    public onSubmit(): void {
         this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
         this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
         this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
-
         if (this.emailForm.invalid) {
             return;
         }
-
-        const formValue = cloneDeep(this.emailForm.value);
-        delete formValue?.voucherTypes;
-
-        // Prepare request based on type
-        const req = this.prepareRequest(type, formValue);
+        let req = {
+            voucherType: this.voucherType,
+            model: this.emailForm.value
+        }
         this.componentStore.updateCustomTemplate(req);
-    }
-
-    /**
-     * Prepares the request object based on the submission type
-     * @param type - Type of submission ('save' or 'send')
-     * @param formValue - Form values to be included in request
-     * @returns Prepared request object
-     */
-    private prepareRequest(type: string, formValue: any): any {
-        const isActiveTab = this.inputData?.activeTab;
-
-        if (!isActiveTab) {
-            return {
-                voucherType: this.inputData,
-                model: this.emailForm.value
-            };
-        }
-
-        const model = {
-            ...formValue,
-            customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName)  ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
-        };
-
-        // Only add sendMail flag when type is 'send'
-        if (type === 'send') {
-            model.sendMail = true;
-        }
-
-        return {
-            voucherType: isActiveTab,
-            model
-        };
     }
 
     /**
@@ -407,11 +364,6 @@ export class TemplateFroalaComponent implements OnInit {
     */
     public toggleBccCc(emailType: string): void {
         this.setEmailFocus(emailType);
-        if (this.childComponents.length > 0) {
-            this.childComponents.forEach(result => {
-                result?.trigger?.closePanel();
-            });
-        }
         this.showBcc = emailType === EmailType.Bcc ? true : this.showBcc;
         this.showCc = emailType === EmailType.Cc ? true : this.showCc;
     }

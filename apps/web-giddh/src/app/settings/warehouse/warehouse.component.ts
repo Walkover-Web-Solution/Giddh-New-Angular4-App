@@ -29,8 +29,6 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
-import { OrganizationType } from '../../models/user-login-state';
-import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 
 /**
  * Warehouse component
@@ -43,8 +41,7 @@ import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 @Component({
     selector: 'setting-warehouse',
     templateUrl: './warehouse.component.html',
-    styleUrls: ['./warehouse.component.scss'],
-    providers: [VoucherComponentStore]
+    styleUrls: ['./warehouse.component.scss']
 })
 export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -112,10 +109,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         type: SettingsAsideFormType.EditWarehouse,
         linkedEntities: []
     };
-    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
-    public isCompany: boolean;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     /** @ignore */
     constructor(
@@ -132,8 +125,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private toasterService: ToasterService,
         private warehouseActions: WarehouseActions,
         private settingsWarehouseService: SettingsWarehouseService,
-        public dialog: MatDialog,
-        private componentStore: VoucherComponentStore
+        public dialog: MatDialog
     ) { }
 
     /**
@@ -145,18 +137,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
-
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
-
-        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
-            }
-        });
 
         this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }

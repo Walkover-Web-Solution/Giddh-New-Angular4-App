@@ -197,7 +197,7 @@ const removeZeroAmountGroup = (grpList) => {
             removeZeroAmountGroup(grp.childGroups);
         }
         return reject(grp.childGroups, (cGrp) => {
-
+            
         });
     });
 };
@@ -238,15 +238,15 @@ const filterProfitLossData = (data, statement) => {
 };
 
 const prepareProfitLossData = (data) => {
-    if (data && data.groupInfo && data.groupInfo.groupDetails && data.incomeStatement) {
-        let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatement);
+    if (data && data.groupInfo && data.groupInfo.groupDetails && data.incomeStatment) {
+        let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
         plData.expenseTotal = calculateTotalExpense(plData.expArr);
         plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
         plData.incomeTotal = calculateTotalIncome(plData.incArr);
         plData.incomeTotalEnd = calculateTotalIncomeEnd(plData.incArr);
         plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
         plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
-        plData.incomeStatement = data.incomeStatement;
+        plData.incomeStatment = data.incomeStatment;
         if (plData.incomeTotal >= plData.expenseTotal) {
             plData.inProfit = true;
         }

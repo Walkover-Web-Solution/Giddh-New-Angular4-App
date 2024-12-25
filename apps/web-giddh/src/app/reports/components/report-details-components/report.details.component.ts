@@ -55,8 +55,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(
         private router: Router,
@@ -77,12 +75,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.router.events.pipe(
             filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
@@ -102,8 +94,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch,
-                    consolidatedBranch: branch?.consolidatedBranch
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

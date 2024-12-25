@@ -22,7 +22,7 @@
                 <div class="input-group flex-nowrap mr-b15">
                     <div
                         class="form-group linked-entities mr-r15 mb-0"
-                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                     >
                         <sh-select
                             [options]="currentCompanyBranches"
@@ -41,8 +41,7 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
-                                                class="pull-right"
+                                                class="icon-branch-icon pull-right"
                                                 *ngIf="!option.isCompany"
                                                 [tooltip]="commonLocaleData?.app_branch"
                                             ></i>

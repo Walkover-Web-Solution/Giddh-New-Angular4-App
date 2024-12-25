@@ -193,8 +193,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private isGetLinkedEntitiesInProgress: boolean = false;
     /** Holds true if get states API call in progress */
     private isGetStatesInProgress: boolean = false;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(
         private commonService: CommonService,
@@ -215,12 +213,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -305,7 +297,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -320,7 +312,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (!this.initialDataFetched) {
                 this.initialDataFetched = true;
                 if (organization) {
-                    if (organization.type === OrganizationType.Branch || this.isConsolidatedBranch) {
+                    if (organization.type === OrganizationType.Branch) {
                         this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                         this.currentOrganizationType = OrganizationType.Branch;
                     } else if (organization.type === OrganizationType.Company) {
@@ -365,7 +357,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.handleCompanyProfileResponse(response);
-                } else if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
+                } else if (this.currentOrganizationType === OrganizationType.Branch) {
                     this.companyProfileObj = {
                         ...this.companyProfileObj,
                         country: {
@@ -384,7 +376,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.settings.currentBranch), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentBranchDetails = response;
-                if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
+                if (this.currentOrganizationType === OrganizationType.Branch) {
                     this.handleBranchProfileResponse(response);
                 }
             }
@@ -836,7 +828,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             } else {
                 this.patchProfile({ ...value });
             }
-        } else if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
+        } else if (this.currentOrganizationType === OrganizationType.Branch) {
             this.updateBranchProfile(value);
         }
     }
@@ -848,7 +840,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public updateBranchProfile(value: any): void {
-        this.currentBranchDetails.name = this.currentOrganizationType === OrganizationType.Company ? this.companyProfileObj.name : value?.alias ?? this.companyProfileObj.alias;
+        this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias;
 
         this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
@@ -1031,7 +1023,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.closeAddressSidePane = true;
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.loadAddresses('GET');
-                } else if (this.currentOrganizationType === OrganizationType.Branch || this.isConsolidatedBranch) {
+                } else if (this.currentOrganizationType === OrganizationType.Branch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                 }
                 this._toasty.successToast('Address created successfully');

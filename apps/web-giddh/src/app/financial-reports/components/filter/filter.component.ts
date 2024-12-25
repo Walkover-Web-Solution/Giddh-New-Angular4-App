@@ -101,8 +101,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
@@ -162,12 +160,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.getTags();
 
         this.breakPointObservar.observe([
@@ -233,8 +225,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch,
-                    consolidatedBranch: branch?.consolidatedBranch
+                    parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

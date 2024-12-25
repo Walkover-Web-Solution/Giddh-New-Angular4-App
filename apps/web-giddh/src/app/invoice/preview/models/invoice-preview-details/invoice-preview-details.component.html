@@ -11,7 +11,7 @@
                         <div
                             class="btn-group"
                             dropdown
-                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherType === 'sales'"
+                            *ngIf="!isCompany && voucherType === 'sales'"
                             [autoClose]="true"
                         >
                             <button
@@ -51,7 +51,7 @@
 
                         <button
                             class="btn btn-sky-blue mr-0"
-                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherType !== 'sales'"
+                            *ngIf="!isCompany && voucherType !== 'sales'"
                             (click)="goToInvoice()"
                         >
                             {{ localeData?.new }}
@@ -129,10 +129,10 @@
 
                                         <!-- region for proforma and estimates -->
                                         <div
-                                            [class.disabled-change-status]="(isCompany || isConsolidatedBranch)"
+                                            [class.disabled-change-status]="isCompany"
                                             class="btn-group change-status-dropdown pull-right"
                                             dropdown
-                                            *ngIf="(!isCompany && !isConsolidatedBranch) && only4ProformaEstimates"
+                                            *ngIf="!isCompany && only4ProformaEstimates"
                                         >
                                             <button
                                                 id="button-basic"
@@ -200,11 +200,11 @@
 
                                         <!-- region for invoice -->
                                         <div
-                                            [class.disabled-change-status]="(isCompany || isConsolidatedBranch)"
+                                            [class.disabled-change-status]="isCompany"
                                             class="btn-group change-status-dropdown pull-right"
                                             dropdown
                                             *ngIf="
-                                                (!isCompany && !isConsolidatedBranch) &&
+                                                !isCompany &&
                                                 !only4ProformaEstimates &&
                                                 selectedItem?.voucherType !== 'purchase'
                                             "
@@ -288,10 +288,10 @@
 
                                         <!-- region for purchase -->
                                         <div
-                                            [class.disabled-change-status]="(isCompany || isConsolidatedBranch)"
+                                            [class.disabled-change-status]="isCompany"
                                             class="btn-group change-status-dropdown pull-right"
                                             dropdown
-                                            *ngIf="(!isCompany && !isConsolidatedBranch) && selectedItem?.voucherType === 'purchase'"
+                                            *ngIf="!isCompany && selectedItem?.voucherType === 'purchase'"
                                         >
                                             <button
                                                 id="button-basic2"
@@ -344,12 +344,12 @@
                                         <!-- endregion -->
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
-                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
+                                                <span *ngIf="!isCompany">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_edit"
                                                         placement="top"
-                                                        (click)="(isCompany || isConsolidatedBranch) ? '' : toggleEditMode()"
+                                                        (click)="isCompany ? '' : toggleEditMode()"
                                                         aria-label="edit icon"
                                                         ><i class="icon-edit-pencil"></i
                                                     ></a>
@@ -473,7 +473,7 @@
                                                     ></a>
                                                 </span>
 
-                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
+                                                <span *ngIf="!isCompany">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_delete"
@@ -516,7 +516,7 @@
                                 <div
                                     class="col-md-4 col-12"
                                     *ngIf="
-                                        (!isCompany && !isConsolidatedBranch) &&
+                                        !isCompany &&
                                         selectedItem?.voucherType !== 'credit note' &&
                                         selectedItem?.voucherType !== 'debit note' &&
                                         selectedItem?.voucherStatus !== 'paid' &&
@@ -649,7 +649,7 @@
                             <div
                                 *ngIf="
                                     shouldShowUploadAttachment &&
-                                    (!isCompany && !isConsolidatedBranch) &&
+                                    !isCompany &&
                                     !(attachedPdfFileUrl || imagePreviewSource)
                                 "
                                 class="upload-excel max-width-500 center-block box dashed-border"
@@ -684,7 +684,7 @@
                                 *ngIf="
                                     voucherApiVersion === 2 &&
                                     shouldShowUploadAttachment &&
-                                    (isCompany || isConsolidatedBranch) &&
+                                    isCompany &&
                                     !isPdfAvailable &&
                                     !attachedPdfFileUrl &&
                                     !imagePreviewSource

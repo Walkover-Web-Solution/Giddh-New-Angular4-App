@@ -113,8 +113,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commandkDialogRef: MatDialogRef<any>;
     /** Holds true if company has no branch */
     public isCompanyWithoutBranch: boolean = false;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -225,12 +223,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))

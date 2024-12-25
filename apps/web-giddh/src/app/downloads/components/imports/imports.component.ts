@@ -91,8 +91,6 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -104,12 +102,6 @@ export class ImportsComponent implements OnInit, OnDestroy {
      * @memberof ImportsComponent
      */
     public ngOnInit(): void {
-        /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('import-page');
 
@@ -128,8 +120,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch,
-                    consolidatedBranch: branch?.consolidatedBranch
+                    parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

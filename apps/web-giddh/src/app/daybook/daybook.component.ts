@@ -148,8 +148,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
     /** This will hold the file type extension for expand */
     public fileTypeExtension: string = 'base64';
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -174,11 +172,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-            }
-        });
         this.lc = new LedgerVM();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
@@ -194,8 +187,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch,
-                    consolidatedBranch: branch?.consolidatedBranch
+                    parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

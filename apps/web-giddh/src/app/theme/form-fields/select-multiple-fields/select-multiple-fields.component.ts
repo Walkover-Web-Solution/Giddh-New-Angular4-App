@@ -165,12 +165,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public removeOption(index: number): void {
         if (index >= 0) {
             this.chipList.splice(index, 1);
-            // Close the autocomplete dropdown if it's open
-            setTimeout(() => {
-                if (this.trigger && this.trigger.panelOpen) {
-                    this.trigger.closePanel();
-                }
-            }, 100);  // Delay slightly to allow for view update
             this.emitList();
         }
     }
@@ -227,22 +221,5 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private emitList(): void {
         this.selectedOption.emit(this.chipList);
         this.changeDetection.detectChanges();
-    }
-
-    /**
-   * This will use for close dropdown panel
-   *
-   * @param {*} event Pointer event
-   * @memberof SelectMultipleFieldsComponent
-   */
-    public closeDropdownPanel(event?: any): void {
-        if (event?.currentTarget?.activeElement?.className?.indexOf("select-multiple-field-input") > -1) {
-            /*
-                Don't close the panel if the user clicks at the corner of the input field,
-                handles the edge case when user clicks the corner and the suggestions get hidden
-            */
-            return;
-        }
-        this.trigger?.closePanel();
     }
 }
