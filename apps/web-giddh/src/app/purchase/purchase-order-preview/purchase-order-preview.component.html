@@ -6,14 +6,14 @@
                     <div class="invoice-search-box">
                         <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement />
                         <button
-                            *ngIf="!isCompany && voucherApiVersion === 1"
+                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                             class="btn btn-sky-blue"
                             [routerLink]="['/pages/purchase-management/purchase-order/new']"
                         >
                             {{ localeData?.new_order }}
                         </button>
                         <button
-                            *ngIf="!isCompany && voucherApiVersion === 2"
+                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                             class="btn btn-sky-blue"
                             [routerLink]="['/pages/vouchers/purchase-order/create']"
                         >
@@ -80,7 +80,7 @@
                                         /></span>
 
                                         <div
-                                            *ngIf="!isCompany"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
                                             class="btn-group change-status-dropdown pull-right"
                                             dropdown
                                         >
@@ -153,7 +153,7 @@
 
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
-                                                <span *ngIf="!isCompany">
+                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_edit"
@@ -206,7 +206,7 @@
                                                     ></a>
                                                 </span>
 
-                                                <span *ngIf="!isCompany">
+                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_delete"

@@ -155,6 +155,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public giddhBalanceDecimalPlaces: number = 2;
     /** Hold aside menu state for product service  */
     public asideMenuStateForProductService: any;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig, public dialog: MatDialog) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -163,6 +165,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
         this.getTransportersList();
@@ -191,7 +199,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.isDefaultLoad = true;
         }
         this.isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
-        this.isCompanyWithSingleBranch = this._generalService.currentOrganizationType === OrganizationType.Company && this.branches && this.branches.length === 1;
+        this.isCompanyWithSingleBranch = (this._generalService.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.branches && this.branches.length === 1;
     }
 
     public ngOnChanges(changes: SimpleChanges) {

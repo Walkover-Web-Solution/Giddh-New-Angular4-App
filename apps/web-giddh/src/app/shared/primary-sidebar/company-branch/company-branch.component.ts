@@ -216,6 +216,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
         this.generalService.voucherApiVersion = company?.voucherVersion;
+        this.store.dispatch(this.commonAction.setBranchConsolidated(false));
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
@@ -226,8 +227,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
-
         this.store.dispatch(this.loginAction.ChangeCompany(company?.uniqueName, fetchLastState));
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -387,7 +388,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
-                    this.switchBranch(company, branchUniqueName, event);
+                    this.switchBranch(company, branchUniqueName, event, branch);
                 } else {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
                 }
@@ -395,7 +396,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        this.switchBranch(company, branchUniqueName, event);
+        this.switchBranch(company, branchUniqueName, event, branch);
     }
 
     /**
@@ -407,7 +408,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {*} event
      * @memberof CompanyBranchComponent
      */
-    private switchBranch(company: any, branchUniqueName: string, event: any): void {
+    private switchBranch(company: any, branchUniqueName: string, event: any, branch: any): void {
+        this.store.dispatch(this.commonAction.setBranchConsolidated(branch?.consolidatedBranch ?? false));
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branchUniqueName, false);
@@ -428,6 +430,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                 }
             });
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
