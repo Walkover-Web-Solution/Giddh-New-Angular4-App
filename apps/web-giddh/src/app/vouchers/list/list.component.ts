@@ -864,10 +864,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 4;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 5;
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 1) {
                 if (this.voucherType === 'debit note' && this.activeModule === 'list') {
@@ -876,18 +874,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 3;
                 } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 4;
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 2) {
                 if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
@@ -996,9 +990,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     activeModule = "pending";
                 } else if (selectedTabIndex === 4) {
                     voucherType = "sales";
-                    activeModule = "settings";
-                } else if (selectedTabIndex === 5) {
-                    voucherType = "sales";
                     activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 1) {
@@ -1013,9 +1004,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     activeModule = "pending";
                 } else if (selectedTabIndex === 3) {
                     voucherType = "debit-note";
-                    activeModule = "settings";
-                } else if (selectedTabIndex === 4) {
-                    voucherType = "debit-note";
                     activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 2) {
@@ -1025,9 +1013,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = "purchase";
                     activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "purchase";
-                    activeModule = "settings";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
