@@ -45,7 +45,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
 @NgModule({
     declarations: [
@@ -102,8 +101,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatSlideToggleModule,
         MatListModule,
         ScrollingModule,
-        WatchVideoModule,
-        FroalaTemplateEditorModule
+        WatchVideoModule
     ],
     providers: [
         GiddhCurrencyPipe
