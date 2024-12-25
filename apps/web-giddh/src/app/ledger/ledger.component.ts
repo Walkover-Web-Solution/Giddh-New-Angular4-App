@@ -1036,7 +1036,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
-                console.log('Response Body:', response.body);
                 if (response.body?.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
                     this.isBankAccountConnected = true;
                 } else {
@@ -2769,8 +2768,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
                     this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        console.log("requisitionList",response);
-                        
                         if (response) {
                             this.openBankLinkDialog();
                             this.componentStore.setState(state => ({
@@ -3229,16 +3226,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
             dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); })).subscribe();
         }
     }
-
+    
+    /**
+     * This will link the connected bank accounts
+     * 
+     * @memberof LedgerComponent
+     */
     public linkBankAccount(): void {
         let request = { bankAccountUniqueName: this.singleBank[0]?.bankResource?.uniqueName };
         let accountForm = {
             accountNumber: this.singleBank[0]?.bankResource?.accountNumber,
             accountUniqueName: this.lc.accountUnq,
             paymentAlerts: []
-        }
-
-         
+        } 
         this.settingIntegrationComponentStore.updateAccount({ accountForm, request });
     }
 }
