@@ -1130,7 +1130,7 @@
                                                                             </ng-container>
                                                                             <ng-container *ngIf="stockUnits[entryIndex] | async as resolvedStockUnits">
                                                                                 <mat-select *ngIf="activeEntryIndex === entryIndex" formControlName="uniqueName"
-                                                                                    [placeholder]="commonLocaleData?.app_select" class="form-control mt-2 bg"
+                                                                                    [placeholder]="commonLocaleData?.app_select" class="form-control mt-2"
                                                                                     (selectionChange)="selectUnit($event, transaction, resolvedStockUnits)"
                                                                                     name="transactionUnit{{entryIndex}}">
                                                                                     <mat-option *ngFor="let unit of resolvedStockUnits" [value]="unit.stockUnitUniqueName">
