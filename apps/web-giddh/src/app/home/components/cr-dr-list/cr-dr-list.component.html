@@ -8,7 +8,12 @@
     <mat-card class="last-card">
         <div class="panel-heading">
             <div class="cursor-pointer">
-                <span [matMenuTriggerFor]="crDrListChartMenu" class="menu-trigger-btn" role="button" aria-label="top-select">
+                <span
+                    [matMenuTriggerFor]="crDrListChartMenu"
+                    class="menu-trigger-btn"
+                    role="button"
+                    aria-label="top-select"
+                >
                     <span>
                         <strong>{{ localeData?.chart_title }} {{ showRecords }}</strong>
                     </span>
@@ -38,12 +43,19 @@
                 <div class="debtors-table">
                     <ng-container>
                         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
-                        <div class="no-entries" *ngIf="!isLoading && !drAccounts?.length">
+                        <div
+                            class="no-entries"
+                            *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !drAccounts?.length"
+                        >
                             <button
                                 mat-stroked-button
                                 color="primary"
                                 class="min-width-130"
-                                [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']"
+                                [routerLink]="[
+                                    voucherApiVersion === 2
+                                        ? '/pages/vouchers/sales/create'
+                                        : '/pages/proforma-invoice/invoice/sales'
+                                ]"
                             >
                                 {{ localeData?.do_sales }}
                             </button>
@@ -136,12 +148,19 @@
                 <div>
                     <ng-container>
                         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
-                        <div class="no-entries" *ngIf="!isLoading && !crAccounts?.length">
+                        <div
+                            class="no-entries"
+                            *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !crAccounts?.length"
+                        >
                             <button
                                 mat-stroked-button
                                 color="primary"
                                 class="min-width-130"
-                                [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/purchase/create' : '/pages/proforma-invoice/invoice/sales']"
+                                [routerLink]="[
+                                    voucherApiVersion === 2
+                                        ? '/pages/vouchers/purchase/create'
+                                        : '/pages/proforma-invoice/invoice/sales'
+                                ]"
                             >
                                 {{ localeData?.do_purchase }}
                             </button>

@@ -69,9 +69,13 @@
                 </li>
 
                 <li>
-                    <div *ngIf="isCompany && showGstFiling">
-                        <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated"
-                            (click)="pullFromGstIn($event)" *ngIf="showTaxPro">
+                    <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling">
+                        <button
+                            class="btn btn-primary pull-right"
+                            [disabled]="!gstAuthenticated"
+                            (click)="pullFromGstIn($event)"
+                            *ngIf="showTaxPro"
+                        >
                             {{ localeData?.filing?.pull_from_gstn }}
                         </button>
                         <button class="btn btn-primary authenticate-btn pull-right"
@@ -96,8 +100,13 @@
 
     <!-- region gstr2 -->
     <div class="list-style" *ngIf="selectedGst === GstReport.Gstr2">
-        <a href="javascript:void(0);" aria-label="back img" id="ember1210" class="ember-view"
-            [routerLink]="['/gstfiling']">
+        <a
+            href="javascript:void(0);"
+            aria-label="back img"
+            id="ember1210"
+            class="ember-view"
+            [routerLink]="['/gstfiling']"
+        >
             <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img" />
         </a>
         <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img" />
@@ -118,8 +127,11 @@
                     <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                         <li role="menuitem">
                             <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
-                                <bs-datepicker-inline name="fromDate" (click)="$event.stopPropagation()"
-                                    (bsValueChange)="periodChanged($event); monthWise.hide()" [bsConfig]="{
+                                <bs-datepicker-inline
+                                    name="fromDate"
+                                    (click)="$event.stopPropagation()"
+                                    (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                    [bsConfig]="{
                                         startView: 'month',
                                         dateInputFormat: 'MM/YYYY',
                                         adaptivePosition: true,
@@ -154,22 +166,31 @@
                 <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                     aria-labelledby="button-triggers-manual">
                     <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download"
-                            (click)="onDownloadSheetGSTR('main')">{{
-                            localeData?.filing?.download_sheet
-                            }}</a>
+                        <a
+                            class="dropdown-item"
+                            href="javascript:void(0);"
+                            aria-label="download"
+                            (click)="onDownloadSheetGSTR('main')"
+                            >{{ localeData?.filing?.download_sheet }}</a
+                        >
                     </li>
                     <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download"
-                            (click)="onDownloadSheetGSTR('error')">{{
-                            localeData?.filing?.download_error_sheet
-                            }}</a>
+                        <a
+                            class="dropdown-item"
+                            href="javascript:void(0);"
+                            aria-label="download"
+                            (click)="onDownloadSheetGSTR('error')"
+                            >{{ localeData?.filing?.download_error_sheet }}</a
+                        >
                     </li>
                 </ul>
             </div>
-            <div *ngIf="isCompany && showGstFiling" class="d-inline-flex">
-                <button class="btn btn-primary pull-right" [ngClass]="{ 'btn-success': gstAuthenticated }"
-                    (click)="!gstAuthenticated ? toggleSettingAsidePane($event, 'TAXPRO') : ''">
+            <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex">
+                <button
+                    class="btn btn-primary pull-right"
+                    [ngClass]="{ 'btn-success': gstAuthenticated }"
+                    (click)="!gstAuthenticated ? toggleSettingAsidePane($event, 'TAXPRO') : ''"
+                >
                     {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
                 </button>
                 <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated"
