@@ -632,6 +632,14 @@
                                             : "Rate"
                                     }}
                                 </th>
+                                <th *ngIf="fieldsAndVisibility.table.showVariantImage?.display" class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
+                                    {{
+                                    fieldsAndVisibility.table.showVariantImage?.label?.length > 0
+                                    ? fieldsAndVisibility.table.showVariantImage?.label
+                                    : "Display Image"
+                                    }}
+                                </th>
                                 <th
                                     *ngIf="fieldsAndVisibility.table.amountBeforeDiscount?.display"
                                     class="text-right"
@@ -761,6 +769,10 @@
                                         <span [innerHTML]="dollarSymbol"></span>14.28
                                     </p>
                                 </td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display" class="text-right">
+                                    <img src="https://media.istockphoto.com/id/889994654/photo/full-length-male-mannequin.jpg?s=1024x1024&w=is&k=20&c=kt8FVOO0YYUIFpUE5LWqHNmfBitmuRX8ahL_TGDDv9o="
+                                        height="50px" width="50px" />
+                                </td>
                                 <td *ngIf="fieldsAndVisibility.table.amountBeforeDiscount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"> </span>2000.00
                                 </td>
@@ -841,6 +853,10 @@
                                         <span [innerHTML]="dollarSymbol"></span>4.28
                                     </p>
                                 </td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display" class="text-right">
+                                    <img src="https://media.istockphoto.com/id/889994654/photo/full-length-male-mannequin.jpg?s=1024x1024&w=is&k=20&c=kt8FVOO0YYUIFpUE5LWqHNmfBitmuRX8ahL_TGDDv9o="
+                                        height="50px" width="50px" />
+                                </td>
                                 <td *ngIf="fieldsAndVisibility.table.amountBeforeDiscount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>600.00
                                 </td>
@@ -898,6 +914,10 @@
                                     [innerHTML]='rupeeSymbol'></span>1500.00
                                <p><span [innerHTML]='dollarSymbol'></span>21.90</p>
                             </td>
+                            <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display" class="text-right">
+                                <img src="https://media.istockphoto.com/id/889994654/photo/full-length-male-mannequin.jpg?s=1024x1024&w=is&k=20&c=kt8FVOO0YYUIFpUE5LWqHNmfBitmuRX8ahL_TGDDv9o="
+                                    height="50px" width="50px" />
+                            </td>
                             <td *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "><span
                                     [innerHTML]='rupeeSymbol'></span>400.00</td>
                             <td *ngIf="fieldsAndVisibility.table.taxableValue?.display " class="text-right "><span
@@ -935,6 +955,10 @@
                             <td *ngIf="fieldsAndVisibility.table.rate?.display " class="text-right "><span
                                     [innerHTML]='rupeeSymbol'></span>1030.00
                                <p><span [innerHTML]='dollarSymbol'></span>12.00</p>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display " class="text-right ">
+                                <img src="https://media.istockphoto.com/id/889994654/photo/full-length-male-mannequin.jpg?s=1024x1024&w=is&k=20&c=kt8FVOO0YYUIFpUE5LWqHNmfBitmuRX8ahL_TGDDv9o="
+                                    height="50px" width="50px" />
                             </td>
                             <td *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right ">--</td>
                             <td *ngIf="fieldsAndVisibility.table.taxableValue?.display " class="text-right "><span
@@ -998,6 +1022,9 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
                                 ></th>
+                                <th *ngIf="fieldsAndVisibility.table.showVariantImage?.display" class="text-right"
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
+                                </th>
                                 <th
                                     *ngIf="fieldsAndVisibility.table.amountBeforeDiscount.display"
                                     class="text-right"
@@ -1009,11 +1036,11 @@
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
                                 ></th>
                                 <!--<th *ngIf="fieldsAndVisibility.table.rate?.display " class="text-right "
-                [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>7000.00
-            </th>
-            <th *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "
-                [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
-            </th>-->
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>7000.00
+                                </th>
+                                <th *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
+                                </th>-->
                                 <th
                                     *ngIf="fieldsAndVisibility.table.taxableValue?.display"
                                     class="text-right"
