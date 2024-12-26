@@ -339,6 +339,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectedAccountUniquename: any;
     /** Holds selected bank unique name */
     private selectedBankUniqueName: string;
+    /** Holds the bank account which is not linked */
+    public unlinkBankList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -767,6 +769,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.isBankAccountConnected = true;
+                this.showBankLinkButton = false;
+                this.cdRf.detectChanges();
+            }
+        });
+
         this.lc.transactionData$.pipe(takeUntil(this.destroyed$)).subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api in case of today selected from universal date
@@ -1030,6 +1040,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.isBankAccountConnected = true;
                 } else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
+                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 }
             }
         });
@@ -2759,6 +2770,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response) {
                             this.openBankLinkDialog();
+                            this.componentStore.setState(state => ({
+                                ...state, 
+                                requisitionList: null
+                            }));
                         }
                     });
                 }
@@ -3195,16 +3210,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public openBankLinkDialog(): void {
-        const data = {
-            bankList: this.selectedBankUniqueName,
-            accountUniqueName: this.lc.accountUnq,
-        }
-        const dialogRef = this.dialog.open(BankLinkComponent, {
-            data: data,
-            panelClass: ['mat-dialog-md'],
-            disableClose: true
-        });
+        if (this.unlinkBankList.length === 1) {
+            this.linkBankAccount();
+        } else {
+            const data = {
+                bankList: this.selectedBankUniqueName,
+                accountUniqueName: this.lc.accountUnq
+            }
+            const dialogRef = this.dialog.open(BankLinkComponent, {
+                data: data,
+                panelClass: ['mat-dialog-md'],
+                disableClose: true
+            });
 
-        dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); })).subscribe();
+            dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); })).subscribe();
+        }
+    }
+    
+    /**
+     * This will link the connected bank accounts
+     * 
+     * @memberof LedgerComponent
+     */
+    public linkBankAccount(): void {
+        let request = { bankAccountUniqueName: this.unlinkBankList[0]?.bankResource?.uniqueName };
+        let accountForm = {
+            accountNumber: this.unlinkBankList[0]?.bankResource?.accountNumber,
+            accountUniqueName: this.lc.accountUnq,
+            paymentAlerts: []
+        } 
+        this.settingIntegrationComponentStore.updateAccount({ accountForm, request });
     }
 }
