@@ -51,7 +51,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.initData(response?.groupDetails);

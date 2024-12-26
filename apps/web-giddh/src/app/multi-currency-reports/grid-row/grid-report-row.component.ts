@@ -18,10 +18,6 @@ import { Account, ChildGroup } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../financial-reports/constants/trial-balance-profit.constant';
 import { SearchService } from '../../services/search.service';
-// import { Account, ChildGroup } from '../../../models/api-models/Search';
-// import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
-// import { SearchService } from '../../../services/search.service';
-// import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../constants/trial-balance-profit.constant';
 
 @Component({
     selector: '[grid-report-row]',
@@ -75,10 +71,10 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     /**
      * Open the account ledger in a new tab or in Electron.
      *
-     * @param {*} account - Selected account details
+     * @param {any} account - Selected account details
      * @returns {void}
      */
-    public entryClicked(account): void {
+    public entryClicked(account: any): void {
         let url = location.href + '?returnUrl=ledger/' + account?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
@@ -92,12 +88,12 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     /**
      * Load detailed account information and update the modal state.
      *
-     * @param {*} account - Selected account details
+     * @param {any} account - Selected account details
      * @param {Event} event - Triggering event
      * @returns {void}
      * @memberof GridRowComponent
      */
-    public accountInfo(account, event: Event): void {
+    public accountInfo(account: any, event: Event): void {
         this.searchService.loadDetails(account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.accountDetails = response.body;
@@ -151,7 +147,7 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     /**
      * Handles when SMS/E-mail modal is opened from the account detail popover
      *
-     * @param {*} modalInstance Modal instance to be opened
+     * @param {any} modalInstance Modal instance to be opened
      * @memberof GridRowComponent
      */
     public handleModalOpened(modalInstance: any): void {

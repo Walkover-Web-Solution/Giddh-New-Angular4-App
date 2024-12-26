@@ -79,9 +79,10 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * Initializes the component by formatting the last synchronization date and setting up the search input subscription.
      * This also listens for search input changes and emits the updated value.
      * 
+     * @returns {void}
      * @memberof ProfitLossReportGridComponent
      */
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.lastSyncDate = dayjs(this.lastSyncDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_DD_MMMM_YYYY);
         this.plSearchControl.valueChanges.pipe(
             debounceTime(700),
@@ -108,10 +109,11 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
      * Responds to changes in input properties. Specifically, it listens for changes to the `expandAll` property
      * and adjusts the visibility of data accordingly.
      * 
+     * @returns {void}
      * @param {SimpleChanges} changes - The changes in input properties
      * @memberof ProfitLossReportGridComponent
      */
-    public ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
             if (this.plData && this.cogsData) {

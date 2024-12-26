@@ -78,7 +78,13 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     * 
+     * @returns {void}
+     * @memberof TrialBalanceReportGridComponent
+     */
+    public ngOnInit(): void {
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -97,8 +103,8 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
                 }
             });
     }
-
-    public ngOnChanges(changes: SimpleChanges) {
+    //ankit
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
             if (this.data$) {
@@ -137,10 +143,11 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Triggers change detection for the component.
+     * 
      * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
-    public markForCheck() {
+    public markForCheck(): void {
         this.changeDetectionRef.markForCheck();
     }
 
@@ -232,7 +239,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     /**
      * Shows the account update modal
      *
-     * @param {*} account
+     * @param {any} account
      * @returns {void}
      * @memberof TrialBalanceGridComponent
      */

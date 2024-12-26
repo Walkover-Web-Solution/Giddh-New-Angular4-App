@@ -10,7 +10,7 @@ export class AccountsFilterPipe implements PipeTransform {
     /**
      * Filters the array of accounts based on opening, closing balance and account name
      *
-     * @param {*} accounts Array of accounts to be filtered
+     * @param {Array<Account>} accounts Array of accounts to be filtered
      * @param {boolean} showOnlyVisible True, if only visible accounts should be returned
      * @memberof AccountsFilterPipe
      */
