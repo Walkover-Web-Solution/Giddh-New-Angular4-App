@@ -151,7 +151,7 @@
             <div class="action-button text-right text-xl-left" [ngClass]="{ 'text-xl-right': isUpdtCase }">
                 <div class="add-btn">
                     <button mat-stroked-button color="primary" [ladda]="createPermissionInProcess$ | async" [disabled]="
-                            permissionForm.invalid || isUserRestricted
+                            permissionForm?.invalid || isUserRestricted
                         " class="btn custom-btn">
                         <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                         <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>

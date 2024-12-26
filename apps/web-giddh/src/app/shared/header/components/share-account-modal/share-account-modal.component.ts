@@ -51,14 +51,11 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (Object.hasOwn(activeCompany?.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany?.moduleRestrictionStatus) {
-                    let module = activeCompany.moduleRestrictionStatus.find(
-                        (module) => module?.moduleName === this.restrictedModules.Users
-                    );
-                    this.isUserRestricted = !(module?.remainingUsers ?? false);
-
-                }
+            if (activeCompany && Object.hasOwn(activeCompany?.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany?.moduleRestrictionStatus) {
+                const module = activeCompany.moduleRestrictionStatus.find(
+                    (module) => module?.moduleName === this.restrictedModules.Users
+                );
+                this.isUserRestricted = !module?.remainingUsers;
             }
         });
     }
