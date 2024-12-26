@@ -37,7 +37,13 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
         private router: Router) {
     }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @returns {void}
+     * @memberof MultiCurrencyReportsComponent
+     */
+    public ngOnInit(): void {
 
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.tabIndex) {

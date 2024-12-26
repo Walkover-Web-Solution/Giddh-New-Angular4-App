@@ -33,10 +33,11 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
     /**
      * Lifecycle hook called when input properties change
      *
+     * @returns {void}
      * @param {SimpleChanges} changes Changes detected in input properties
      * @memberof BalanceSheetReportGridRowComponent
      */
-    public ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
             this.changeDetectionRef.detectChanges();
         }
@@ -48,10 +49,11 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
     /**
      * Handles the click event on an entry and navigates to the corresponding ledger page
      *
-     * @param {Account} acc The account object clicked
+     * @returns {void}
+     * @param {any} acc The account object clicked
      * @memberof BalanceSheetReportGridRowComponent
      */
-    public entryClicked(acc) {
+    public entryClicked(acc: any): void {
         let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;

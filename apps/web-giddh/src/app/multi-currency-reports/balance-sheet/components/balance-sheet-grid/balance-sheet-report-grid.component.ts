@@ -75,11 +75,12 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Handles changes to the component's input properties
-     *
+     * 
+     * @returns {void}
      * @param {SimpleChanges} changes The changes object
      * @memberof BalanceSheetReportGridComponent
      */
-    public ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
             this.isExpandToggledDuringSearch = true;
             if (this.bsData) {
@@ -122,9 +123,10 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     /**
      * Initializes the component
      *
+     * @returns {void}
      * @memberof BalanceSheetReportGridComponent
      */
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.lastSyncDate = dayjs(this.lastSyncDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_DD_MMMM_YYYY);
         this.bsSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
@@ -179,12 +181,12 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     /**
      * Checks if an element is a child of another
      *
-     * @param {*} child The child element
-     * @param {*} parent The parent element
+     * @param {any} child The child element
+     * @param {any} parent The parent element
      * @returns {boolean} True if the element is a child, false otherwise
      * @memberof BalanceSheetReportGridComponent
      */
-    public childOf(child, parent): boolean {
+    public childOf(child: any, parent: any): boolean {
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;

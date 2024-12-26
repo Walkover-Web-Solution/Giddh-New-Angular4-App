@@ -36,10 +36,11 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
     /**
      * Detects changes in the groupDetail and search inputs, triggering change detection when a change occurs.
      * 
+     * @returns {void}
      * @param {SimpleChanges} changes - The changes to the input properties.
      * @memberof ProfitLossReportGridComponent
      */
-    public ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
             this.changeDetectionRef.detectChanges();
         }
@@ -56,7 +57,7 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
      * @returns {void}
      * @memberof ProfitLossReportGridComponent
      */
-    public entryClicked(acc): void {
+    public entryClicked(acc: any): void {
         let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
@@ -70,7 +71,7 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
     /**
      * Track by function for profit loss item
      *
-     * @param {*} index Index of the item
+     * @param {number} index Index of the item
      * @param {Account} item Current item
      * @return {string} Item uniquename
      * @memberof ProfitLossGridRowComponent

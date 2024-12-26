@@ -49,9 +49,10 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     /**
      * Initializes the component with report data from the store.
      *
+     * @returns {void}
      * @memberof ProfitLossReportComponent
      */
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 let data = prepareProfitLossData(cloneDeep(response)) as ProfitLossData;
@@ -191,7 +192,7 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     /**
      * Sets the last synchronization date based on the event value.
      *
-     * @param {*} event - The synchronization date event.
+     * @param {any} event - The synchronization date event.
      * @returns {void}
      * @memberof ProfitLossReportComponent
      */
@@ -212,12 +213,12 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     /**
      * Handles the search event and triggers report creation based on the event.
      *
-     * @param {*} event - The search event object.
+     * @param {any} event - The search event object.
      * @returns {void}
      * @memberof ProfitLossReportComponent
      */
     public searchData(event: any): void {
-        this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.BalanceSheet, payload: event });
+        this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.ProfitLoss, payload: event });
     }
 
     /**
@@ -229,28 +230,6 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * Finds the index of the active financial year from the list of financial years.
-     *
-     * @param {any} activeFY - The currently active financial year.
-     * @param {any} financialYears - The list of available financial years.
-     * @return {number} - The index of the active financial year.
-     * @memberof ProfitLossReportComponent
-     */
-    public findIndex(activeFY: any, financialYears: any): number {
-        let tempFYIndex = 0;
-        financialYears.forEach((fy: any, index: number) => {
-            if (fy?.uniqueName === activeFY?.uniqueName) {
-                if (index === 0) {
-                    tempFYIndex = index;
-                } else {
-                    tempFYIndex = index * -1;
-                }
-            }
-        });
-        return tempFYIndex;
     }
 
     /**

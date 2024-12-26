@@ -12,7 +12,6 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial-balance-grid.component';
 
-
 @Component({
     selector: 'trial-balance',
     templateUrl: './trial-balance.component.html'

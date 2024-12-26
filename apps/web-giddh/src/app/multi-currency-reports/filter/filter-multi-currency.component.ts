@@ -100,7 +100,13 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
 
     }
 
-    public ngOnInit() {
+        /**
+     * Initializes the component
+     *
+     * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
+     */
+    public ngOnInit(): void {
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -183,7 +189,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /**
      * Handle selected date and update the form values
      *
-     * @param {*} value - Selected date value
+     * @param {any} value - Selected date value
      * @returns {void}
      */
     public selectedDate(value: any): void {
@@ -258,7 +264,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /**
      * Show the datepicker
      *
-     * @param {*} element - The target element for the datepicker
+     * @param {any} element - The target element for the datepicker
      * @returns {void}
      */
     public showGiddhDatepicker(element: any): void {
@@ -283,7 +289,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /**
      * Callback function for date/range selection in the datepicker
      *
-     * @param {*} [value] - Selected date/range value
+     * @param {any} [value] - Selected date/range value
      * @returns {void}
      */
     public dateSelectedCallback(value?: any): void {

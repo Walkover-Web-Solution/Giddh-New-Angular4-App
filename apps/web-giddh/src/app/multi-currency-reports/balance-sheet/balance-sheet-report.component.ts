@@ -123,7 +123,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Updates the last sync date
      *
-     * @param {*} event The event containing the sync date
+     * @param {any} event The event containing the sync date
      * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
@@ -135,7 +135,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      * Searches and updates data based on the provided criteria
      *
      * @returns {void}
-     * @param {*} event The event containing search criteria
+     * @param {any} event The event containing search criteria
      * @memberof BalanceSheetReportComponent
      */
     public searchData(event: any): void {
@@ -150,28 +150,6 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * Finds the index of the active financial year in the list of financial years
-     *
-     * @param {any} activeFY The active financial year
-     * @param {any} financialYears The list of financial years
-     * @returns {number} The index of the active financial year
-     * @memberof BalanceSheetReportComponent
-     */
-    public findIndex(activeFY: any, financialYears: any): number {
-        let tempFYIndex = 0;
-        financialYears.forEach((fy: any, index: number) => {
-            if (fy?.uniqueName === activeFY?.uniqueName) {
-                if (index === 0) {
-                    tempFYIndex = index;
-                } else {
-                    tempFYIndex = index * -1;
-                }
-            }
-        });
-        return tempFYIndex;
     }
 
     /**
