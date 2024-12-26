@@ -340,7 +340,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds selected bank unique name */
     private selectedBankUniqueName: string;
     /** Holds the bank account which is not linked */
-    public singleBank: any[] = [];
+    public unlinkBankList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -1040,7 +1040,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.isBankAccountConnected = true;
                 } else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
-                    this.singleBank = response.body.filter(bank => Object.keys(bank.account).length === 0);
+                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 }
             }
         });
@@ -3210,12 +3210,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public openBankLinkDialog(): void {
-        if (this.singleBank.length === 1) {
-            this.linkBankAccount()
+        if (this.unlinkBankList.length === 1) {
+            this.linkBankAccount();
         } else {
             const data = {
                 bankList: this.selectedBankUniqueName,
-                accountUniqueName: this.lc.accountUnq,
+                accountUniqueName: this.lc.accountUnq
             }
             const dialogRef = this.dialog.open(BankLinkComponent, {
                 data: data,
@@ -3233,9 +3233,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public linkBankAccount(): void {
-        let request = { bankAccountUniqueName: this.singleBank[0]?.bankResource?.uniqueName };
+        let request = { bankAccountUniqueName: this.unlinkBankList[0]?.bankResource?.uniqueName };
         let accountForm = {
-            accountNumber: this.singleBank[0]?.bankResource?.accountNumber,
+            accountNumber: this.unlinkBankList[0]?.bankResource?.accountNumber,
             accountUniqueName: this.lc.accountUnq,
             paymentAlerts: []
         } 
