@@ -5312,7 +5312,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public selectUnit(event: MatSelectChange, transaction: AbstractControl, resolvedUnits: any[]): void {
         const selectedUnitCode = resolvedUnits.find(unit => unit?.stockUnitUniqueName === event?.value)?.stockUnitCode;
         if (selectedUnitCode) {
-            transaction.get('stock.stockUnit.code')?.setValue(selectedUnitCode);
+            transaction.get('stock.stockUnit.code')?.patchValue(selectedUnitCode);
         }
     }
 }
