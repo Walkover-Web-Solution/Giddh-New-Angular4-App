@@ -3591,7 +3591,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .font-14 {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-14) !important;
 }
 
 .font-15 {
@@ -12876,7 +12876,9 @@ hamburger-menu {
             float: right;
             max-width: 435px;
             margin-left: auto;
-
+            button {
+                color: var(--color-table-tertiary-content) !important;
+            }
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
                 border-radius: 0;
