@@ -67,6 +67,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public selectedFontSize: string = "";
     /** Default image size */
     public defaultImageSize: string = 'S';
+    public defaultUniqueName: any;
+    public matchingTemplates: any;
 
     constructor(
         private _invoiceUiDataService: InvoiceUiDataService,
@@ -90,10 +92,18 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
+            // console.log(ss.defaultTemplate ,'default')
+            this.defaultUniqueName = ss.defaultTemplate.uniqueName
+            // console.log(this.defaultUniqueName ,'name')
         });
 
-        this.store.pipe(select(s => s.invoiceTemplate.sampleTemplates), take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
-            this.sampleTemplates = cloneDeep(sampleTemplates);
+        this.store.pipe(select(s => s.invoiceTemplate.sampleTemplates), take(2)).subscribe((sampleTemplates: CustomTemplateResponse[] | null | undefined) => {
+            let t = [];
+            if (sampleTemplates?.length && this.customTemplate.templateType) {
+                t = sampleTemplates.filter(t => t.templateType === this.customTemplate.templateType);
+            }
+            this.sampleTemplates = cloneDeep(t);
+            console.log(sampleTemplates, 'sample')
         });
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 
