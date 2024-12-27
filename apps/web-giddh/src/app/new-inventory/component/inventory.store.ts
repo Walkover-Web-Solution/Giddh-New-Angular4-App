@@ -3,21 +3,31 @@ import { Store } from "@ngrx/store";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { AppState } from "../../store";
 import { InventoryService } from "../../services/inventory.service";
-import { Observable, switchMap } from "rxjs";
+import { catchError, EMPTY, Observable, of, switchMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
 import { IDiscountList } from "../../models/api-models/SettingsDiscount";
 import { SettingsDiscountService } from "../../services/settings.discount.service";
+import { CommonService } from '../../services/common.service';
+import { LedgerService } from "../../services/ledger.service";
 
 export interface InventoryState {
     isLoading: boolean;
     discountsList: IDiscountList[];
+    uploadAttachmentInProgress: boolean;
+    uploadAttachmentIsSuccess: any;
+    downloadAttachmentInProgress: boolean;
+    downloadAttachmentIsSuccess: any;
 }
 
 const DEFAULT_STATE: InventoryState = {
     isLoading: false,
-    discountsList: null
+    discountsList: null,
+    uploadAttachmentInProgress: null,
+    uploadAttachmentIsSuccess: null,
+    downloadAttachmentInProgress: null,
+    downloadAttachmentIsSuccess: null
 };
 
 @Injectable()
@@ -27,13 +37,19 @@ export class InventoryComponentStore extends ComponentStore<any> {
         private inventoryService: InventoryService,
         private settingsDiscountService: SettingsDiscountService,
         private toaster: ToasterService,
-        public router: Router
+        public router: Router,
+        private commonService: CommonService,
+        private ledgerService: LedgerService
     ) {
         super(DEFAULT_STATE);
     }
 
     public isLoading$ = this.select((state) => state.isLoading);
     public discountsList$: Observable<any> = this.select((state) => state.discountsList);
+    public uploadAttachmentIsSuccess$ = this.select((state) => state.uploadAttachmentIsSuccess);
+    public uploadAttachmentInProgress$ = this.select((state) => state.uploadAttachmentInProgress);
+    public downloadAttachmentIsSuccess$ = this.select((state) => state.downloadAttachmentIsSuccess);
+    public downloadAttachmentInProgress$ = this.select((state) => state.downloadAttachmentInProgress);
 
     /**
      * This will use for Export Item Wise Report Data
@@ -121,11 +137,11 @@ export class InventoryComponentStore extends ComponentStore<any> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success" && typeof res?.body === "string") {
-                                    this.toaster.showSnackBar("success", res.body);
-                                    this.router.navigate(["/pages/downloads"]);
-                                    return this.patchState({
-                                        isLoading: false
-                                    });
+                                this.toaster.showSnackBar("success", res.body);
+                                this.router.navigate(["/pages/downloads"]);
+                                return this.patchState({
+                                    isLoading: false
+                                });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({
@@ -158,11 +174,11 @@ export class InventoryComponentStore extends ComponentStore<any> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success" && typeof res?.body === "string") {
-                                    this.toaster.showSnackBar("success", res.body);
-                                    this.router.navigate(["/pages/downloads"]);
-                                    return this.patchState({
-                                        isLoading: false
-                                    });
+                                this.toaster.showSnackBar("success", res.body);
+                                this.router.navigate(["/pages/downloads"]);
+                                return this.patchState({
+                                    isLoading: false
+                                });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({
@@ -194,9 +210,9 @@ export class InventoryComponentStore extends ComponentStore<any> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             const discounts = res?.body?.map(discount => {
-                                 discount['label']= discount?.name;
-                                 discount['value']= discount?.uniqueName;
-                                 return discount;
+                                discount['label'] = discount?.name;
+                                discount['value'] = discount?.uniqueName;
+                                return discount;
                             });
                             return this.patchState({
                                 discountsList: discounts
@@ -210,6 +226,99 @@ export class InventoryComponentStore extends ComponentStore<any> {
                         }
                     )
                 );
+            })
+        );
+    });
+
+    /**
+     * This will use for upload attachments
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly uploadAttachment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ uploadAttachmentInProgress: true, uploadAttachmentIsSuccess: null });
+                return this.commonService.uploadFile(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({ uploadAttachmentInProgress: false, uploadAttachmentIsSuccess: res?.body });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ uploadAttachmentInProgress: false, uploadAttachmentIsSuccess: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                uploadAttachmentInProgress: false,
+                                uploadAttachmentIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Reset upload attachment state
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly resetUploadAttachmentState = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    uploadAttachmentIsSuccess: null
+                });
+                return of(null);
+            })
+        );
+    });
+
+/**
+ * This will use for download preview attachments
+ *
+ * @memberof InventoryComponentStore
+ */
+    readonly downloadPreviewAttachment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ downloadAttachmentInProgress: true, downloadAttachmentIsSuccess: null });
+                return this.ledgerService.DownloadAttachement(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({ downloadAttachmentInProgress: false, downloadAttachmentIsSuccess: res?.body });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ downloadAttachmentInProgress: false, downloadAttachmentIsSuccess: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                downloadAttachmentInProgress: false,
+                                downloadAttachmentIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly resetDownloadPreviewAttachmentState = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    downloadAttachmentIsSuccess: null
+                });
+                return of(null);
             })
         );
     });
