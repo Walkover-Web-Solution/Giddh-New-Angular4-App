@@ -63,6 +63,38 @@
     .invoice-video {
         display: none;
     }
+
+    .column-width{
+        min-width: 110px;
+    }
+
+    .invoiceNumber-width{
+        min-width: 84px;
+    }
+
+    .balanceDue-width{
+       min-width: 127px;
+    }
+
+    .recipt-width{
+        min-width: 114px;
+    }
+
+    .type-width{
+        min-width: 150px;
+    }
+
+    .customer-width{
+        min-width: 162px;
+    }
+
+    .paymentMode-width{
+        min-width: 90px;
+    }
+
+    .total-with{
+        min-width: 87px;
+    }
 }
 
 table {
@@ -77,8 +109,11 @@ table {
             &.invoice-column-width{
                 min-width: 162px;
                 @media screen and (min-width:992px) {
-                    min-width: 94px;
+                    min-width: 136px;
                 }
+            }
+            &.invoice-status-width{
+                min-width: 147px;
             }
         }
     }
@@ -155,6 +190,30 @@ table {
 
 .ontime-delivery {
     color: var(--color-secondary-success);
+}
+.proforma-date-width{
+    min-width: 141px;
+}
+.total-width{
+    min-width: 110px;
+}
+.due-date-width{
+    min-width: 122px;
+}
+.action-width{
+    min-width: 100px;
+}
+.status-width{
+    min-width: 100px;
+}
+.proforma-width{
+    min-width: 140px;
+}
+.proforma-customer-width{
+    min-width: 116px;
+}
+.estimate-width{
+    min-width: 137px;
 }
 
 @media screen and (max-width: 1199px) {
