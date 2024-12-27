@@ -316,7 +316,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Hold reference number */
-    public referenceNumber: string = '';
+    public referenceNumber: string = 'null';
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** True, if is integration module are in scope  */
@@ -1041,6 +1041,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
                     this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
+                }
+                if (this.referenceNumber != null) {
+                    this.openBankLinkDialog()
                 }
             }
         });
@@ -2767,12 +2770,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
-                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response) {
-                            this.openBankLinkDialog();
+                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => { 
+                        if(response){
+                            this.getAllBankAccounts();
                             this.componentStore.setState(state => ({
                                 ...state, 
-                                requisitionList: null
+                                 requisitionList: null
                             }));
                         }
                     });
@@ -3223,7 +3226,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
 
-            dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); })).subscribe();
+            dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); this.referenceNumber = null; })).subscribe();
         }
     }
     
