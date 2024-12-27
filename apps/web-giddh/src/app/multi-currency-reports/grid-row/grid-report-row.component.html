@@ -63,6 +63,7 @@
         <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>
     </ng-container>
 </ng-container>
+<ng-content></ng-content>
 <ng-template #templateSection let-account>
     <section
         class="account overflow-visible"
@@ -70,10 +71,10 @@
         (dblclick)="accountInfo(account, $event)"
         [exclude]="'.row-item'"
     >
-        <div class="row text-ellipsis row-item">
-            <div class="col-4 account text-ellipsis no-select" [ngStyle]="{ 'padding-left': padding + 20 + 'px' }">
+        <div class="row row-item">
+            <div class="col-4 account no-select" [ngStyle]="{ 'padding-left': padding + 20 + 'px' }">
                 <div
-                    class="p-0 bd-r-right-none text-ellipsis"
+                    class="p-0 bd-r-right-none"
                     [innerHTML]="account.name | lowercase | highlight: search"
                     [popover]="accountDetailModalTemplate"
                     #accountDetailPopup="bs-popover"
@@ -101,7 +102,7 @@
                     </span>
                 </ng-template>
             </div>
-            <div class="col-2 account text-right text-ellipsis">
+            <div class="col-2 account text-right">
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="account.openingBalance?.amount"
@@ -111,19 +112,19 @@
                     </amount-field>
                 </span>
             </div>
-            <div class="col-2 account text-right text-ellipsis">
+            <div class="col-2 account text-right">
                 <span class="d-inline-flex">
                     <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false">
                     </amount-field>
                 </span>
             </div>
-            <div class="col-2 account text-right text-ellipsis">
+            <div class="col-2 account text-right">
                 <span class="d-inline-flex">
                     <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false">
                     </amount-field>
                 </span>
             </div>
-            <div class="col-2 account text-right text-ellipsis">
+            <div class="col-2 account text-right">
                 <span class="d-inline-flex">
                     <amount-field
                         [amount]="account.closingBalance?.amount"

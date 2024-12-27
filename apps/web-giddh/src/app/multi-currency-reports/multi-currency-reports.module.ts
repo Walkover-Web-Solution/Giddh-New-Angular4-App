@@ -15,8 +15,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BalanceSheetReportComponent } from './balance-sheet/balance-sheet-report.component';
-import { BalanceSheetReportGridComponent } from './balance-sheet/components/balance-sheet-grid/balance-sheet-report-grid.component';
-import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
 import { MultiCurrencyReportsComponent } from './multi-currency-reports.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -43,7 +41,9 @@ import { ProfitLossReportGridComponent } from './profit-loss/components/profit-l
 import { ProfitLossReportGridRowComponent } from './profit-loss/components/profit-loss-grid/components/profit-loss-grid-row/profit-loss-report-grid-row.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
-
+import { FinancialAccordionDirective } from './directives/financial-accordion.directive';
+import { BalanceSheetReportGridComponent } from './balance-sheet/components/balance-sheet-grid/balance-sheet-report-grid.component';
+import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
 
 @NgModule({
     declarations: [
@@ -58,7 +58,8 @@ import { MatInputModule } from '@angular/material/input';
         GridReportRowComponent,
         ProfitLossReportComponent,
         ProfitLossReportGridComponent,
-        ProfitLossReportGridRowComponent
+        ProfitLossReportGridRowComponent,
+        FinancialAccordionDirective
     ],
     exports: [
         MultiCurrencyReportsComponent, CurrencyModule
