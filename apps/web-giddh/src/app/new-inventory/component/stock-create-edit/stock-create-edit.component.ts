@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -25,18 +25,23 @@ import { GeneralService } from "../../../services/general.service";
 import { ManufacturingService } from "../../../services/manufacturing.service";
 import { InventoryComponentStore } from "../inventory.store";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
+import { CommonService } from "../../../services/common.service";
+import { NewConfirmationModalComponent } from "../../../theme/new-confirmation-modal/confirmation-modal.component";
+import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
 
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
     styleUrls: ["./stock-create-edit.component.scss"],
-    providers: [InventoryComponentStore]
+    providers: [InventoryComponentStore, VoucherComponentStore]
 })
 export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Instance of stock create/edit form */
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
     /** Instance of recipe create/update component */
     @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
+    /** Instance of preview image dialog */
+    @ViewChild("previewImage") public variantPreviewImageDialog: TemplateRef<any>;
     /* This will hold add stock value from aside menu */
     @Input() public addStock: boolean = false;
     /* This will hold stock type from aside menu */
@@ -111,6 +116,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 purchaseTaxInclusive: false,
                 fixedAssetTaxInclusive: false,
                 customFields: [],
+                attachmentUniqueName: null,
+                attachmentName: null,
+                isUploading: false,
                 salesInformation: [
                     {
                         rate: undefined,
@@ -247,6 +255,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list */
     public discountsList: IDiscountList[] = [];
+    /** True if file upload in progress */
+    public isFileUploading: boolean = false;
+    /** Name of the selected file */
+    public selectedFileName: string = '';
+    /** Hold variant index*/
+    public variantIndex: number;
+    /** Upload attachment in progress Observable */
+    public uploadAttachmentInProgress$: Observable<any> = this.componentStore.uploadAttachmentInProgress$;
+    /** Preview attachment in progress Observable */
+    public downloadAttachmentInProgress$: Observable<any> = this.componentStore.downloadAttachmentInProgress$;
 
     constructor(
         private inventoryService: InventoryService,
@@ -263,7 +281,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private location: Location,
         private generalService: GeneralService,
         private manufacturingService: ManufacturingService,
-        private componentStore: InventoryComponentStore
+        private componentStore: InventoryComponentStore,
+        private commonService: CommonService,
+        private voucherComponentStore: VoucherComponentStore
     ) {
     }
 
@@ -326,6 +346,53 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (profile) {
                 this.companyCurrencySymbol = profile.baseCurrencySymbol;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            }
+        });
+
+        this.componentStore.uploadAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response, this.variantIndex);
+
+            if (response?.uniqueName && this.variantIndex >= 0) {
+                this.stockForm.variants[this.variantIndex].isUploading = false;
+                this.stockForm.variants[this.variantIndex].attachmentUniqueName = response?.uniqueName; // Save the uploaded file name
+                this.stockForm.variants[this.variantIndex].attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
+                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+            } else if (this.variantIndex >= 0) {
+                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null; // Save the uploaded file name
+                this.stockForm.variants[this.variantIndex].attachmentName = null; // Save the uploaded file name
+                this.stockForm.variants[this.variantIndex].isUploading = false
+                this.componentStore.resetUploadAttachmentState();
+            }
+        });
+
+        this.componentStore.downloadAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response, this.variantIndex);
+
+            // if (response?.uniqueName && this.variantIndex >= 0) {
+            //     this.stockForm.variants[this.variantIndex].isUploading = false;
+            //     this.stockForm.variants[this.variantIndex].attachmentUniqueName = response?.uniqueName; // Save the uploaded file name
+            //     this.stockForm.variants[this.variantIndex].attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
+            //     this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+            // } else if (this.variantIndex >= 0) {
+            //     this.stockForm.variants[this.variantIndex].attachmentUniqueName = null; // Save the uploaded file name
+            //     this.stockForm.variants[this.variantIndex].attachmentName = null; // Save the uploaded file name
+            //     this.stockForm.variants[this.variantIndex].isUploading = false
+            //     this.componentStore.resetUploadAttachmentState();
+            // }
+        });
+
+        this.voucherComponentStore.deleteAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.variantIndex >= 0) {
+                this.toaster.showSnackBar("success", this.localeData?.attachment_deleted);
+                this.selectedFileName = "";
+                this.stockForm.variants[this.variantIndex].isUploading = false
+                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null;
+                this.voucherComponentStore.resetAttachmentState();
+            } else if (this.variantIndex >= 0) {
+                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null; // Save the uploaded file name
+                this.stockForm.variants[this.variantIndex].attachmentName = null; // Save the uploaded file name
+                this.stockForm.variants[this.variantIndex].isUploading = false
+                this.componentStore.resetUploadAttachmentState();
             }
         });
     }
@@ -900,7 +967,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private getAllDiscounts(): void {
-        this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+        this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.discountsList = response;
             }
@@ -1282,6 +1349,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['fixedAssetsInformation'] = variant?.fixedAssetAccountDetails?.unitRates;
+                    if (variant?.image?.uniqueName) {
+                        variant['attachmentUniqueName'] = variant?.image?.uniqueName;
+                        variant['attachmentName'] = `data:image/${variant?.image?.fileType};base64,${variant?.image?.uploadedFile}`;
+                    } else {
+                        variant['attachmentUniqueName'] = null;
+                        variant['attachmentName'] = null;
+                    }
+                    variant['isUploading'] = false;
+                    console.log(variant);
 
                     return variant;
                 });
@@ -2203,5 +2279,64 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.getStockUnits();
             }
         });
+    }
+
+    /**
+     * This will use for upload file on variant
+     *
+     * @param {Event} event
+     * @param {number} index
+     * @memberof StockCreateEditComponent
+     */
+    public uploadFile(event: Event, index: number): void {
+        this.variantIndex = index;
+        const input = event.target as HTMLInputElement;
+        if (input?.files?.length) {
+            const file = input.files[0];
+            this.stockForm.variants[index].isUploading = true;
+            this.generalService.getSelectedFile(file, (blob: any, file: any) => {
+                this.componentStore.uploadAttachment({ file: blob, fileName: file.name, type: 'variant' });
+            });
+        }
+    }
+
+    /**
+     * This will be use for delete attachment files
+     *
+     * @param {number} index
+     * @memberof StockCreateEditComponent
+     */
+    public deleteAttachment(index: number): void {
+        this.variantIndex = index;
+        let attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: attachmentDeleteConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.stockForm.variants[index].isUploading = true;
+                this.voucherComponentStore.deleteAttachment(this.stockForm.variants[index].attachmentUniqueName);
+            } else {
+                this.dialog.closeAll();
+                this.stockForm.variants[index].isUploading = false;
+            }
+        });
+    }
+
+    public previewImage(uniqueName: string): void {
+        console.log(uniqueName);
+        if (uniqueName) {
+            this.dialog.open(this.variantPreviewImageDialog, {
+                data: uniqueName,
+                panelClass: 'preview-image',
+                role: 'alertdialog',
+                ariaLabel: 'Preview Image'
+            });
+            this.componentStore.downloadPreviewAttachment(uniqueName);
+        }
     }
 }

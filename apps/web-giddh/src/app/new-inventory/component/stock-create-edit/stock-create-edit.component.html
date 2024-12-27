@@ -193,6 +193,38 @@
                                             >
                                             </dropdown-field>
                                         </div>
+                                        <div class="col-6"  *ngIf="!isVariantAvailable">
+                                        <div class="variant-image" >
+                                            <div *ngIf="!stockForm.variants[0].attachmentUniqueName">
+                                                <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
+                                                    [matTooltip]="'No file chosen'" matTooltipPosition="right">
+                                                    <input type="file" class="position-absolute" name="variantImage" id="variantImage"
+                                                        (change)="uploadFile($event,0)" />
+                                                    <ng-container *ngIf="stockForm.variants[0].isUploading">
+                                                        <mat-spinner [diameter]="30"></mat-spinner>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="!stockForm.variants[0].isUploading">
+                                                        <div class="attachment-add-icon">
+                                                            <i class="icon-add"></i>
+                                                        </div>
+                                                        <span class="attachment-placeholder">{{ localeData?.attach_file }}</span>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="stockForm.variants[0].attachmentUniqueName">
+                                                <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success">
+                                                    <div class="attachment-add-icon">
+                                                        <i class="icon-tick"></i>
+                                                    </div>
+                                                    <img height="30" width="30" [src]="stockForm.variants[0].attachmentName"
+                                                        (click)="previewImage(stockForm.variants[0].attachmentUniqueName)" alt="variantImage" />
+                                                    <button mat-icon-button (click)="deleteAttachment(0)" class="ml-auto remove-attachment font-16">
+                                                        <i class="icon-cross"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1031,6 +1063,9 @@
                                                     >
                                                         <table class="stock-table font-15">
                                                             <tr>
+                                                                <th class="variant-image table-heading-color">
+                                                                    Variant Image
+                                                                </th>
                                                                 <th class="variant-name-column table-heading-color">
                                                                     {{ localeData?.variant_name
                                                                     }}<span class="red-text">*</span>
@@ -1109,6 +1144,38 @@
                                                                 "
                                                             >
                                                                 <tr class="variant-row" *ngIf="variant.name">
+                                                                <td class="text-center variant-image">
+                                                                    <!-- Display if no file is uploaded -->
+                                                                    <div *ngIf="!variant.attachmentUniqueName">
+                                                                        <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
+                                                                            [matTooltip]="'No file chosen'" matTooltipPosition="right">
+                                                                            <input type="file" class="position-absolute" name="variantFile{{ i }}" id="variantFile{{ i }}"
+                                                                                (change)="uploadFile($event, i)" />
+                                                                            <ng-container *ngIf="variant.isUploading">
+                                                                                <mat-spinner [diameter]="30"></mat-spinner>
+                                                                            </ng-container>
+                                                                            <ng-container *ngIf="!variant.isUploading">
+                                                                                <div class="attachment-add-icon">
+                                                                                    <i class="icon-add"></i>
+                                                                                </div>
+                                                                                <span class="attachment-placeholder">{{ localeData?.attach_file || 'Attach File' }}</span>
+                                                                            </ng-container>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Display file name if file is uploaded -->
+                                                                    <div *ngIf="variant.attachmentUniqueName">
+                                                                        <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success">
+                                                                            <div class="attachment-add-icon">
+                                                                                <i class="icon-tick"></i>
+                                                                            </div>
+                                                                            <img height="30" width="30"   (click)="previewImage(variant.attachmentUniqueName)" [src]="variant.attachmentName" alt="variantImage{{index}}"/>
+                                                                            <button mat-icon-button (click)="deleteAttachment(i)" class="ml-auto remove-attachment font-16">
+                                                                                <i class="icon-cross"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
                                                                     <td class="variant-name-column">
                                                                         {{ variant.name }}
                                                                     </td>
@@ -4882,7 +4949,7 @@
                     color="primary"
                     class="min-width-100"
                     (click)="updateStock(stockCreateEditForm)"
-                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
+                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError || (uploadAttachmentInProgress$ | async)"
                 >
                     {{ commonLocaleData?.app_update }}
                 </button>
@@ -4902,6 +4969,7 @@
                     color="warn"
                     class="min-width-100"
                     (click)="deleteStock()"
+                    [disabled]="uploadAttachmentInProgress$ | async"
                 >
                     {{ commonLocaleData?.app_delete }}
                 </button>
@@ -4909,3 +4977,17 @@
         </div>
     </div>
 </ng-container>
+<ng-template #previewImage>
+    <div class="modal-header">
+        <h4 mat-dialog-title class="font-16">Preivew Image</h4>
+        <button mat-icon-button mat-dialog-close type="button"
+            class="close d-flex justify-content-center align-items-center">
+            <i mat-dialog-close class="icon-cross icon-font-16"></i>
+        </button>
+    </div>
+    <mat-dialog-content>
+        <div class="modal-body">
+         Hello
+        </div>
+    </mat-dialog-content>
+</ng-template>
