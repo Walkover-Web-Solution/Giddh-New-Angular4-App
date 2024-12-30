@@ -21,7 +21,7 @@ export class PreviewVariantImageComponent implements OnInit, OnDestroy {
      * @memberof PreviewVariantImageComponent
      */
     public ngOnInit(): void {
-        this.inputData.uploadedFile = `data:image/${this.inputData.fileType};base64,${this.inputData.uploadedFile}`;
+        this.inputData.variant.uploadedFile = `data:image/${this.inputData.variant.fileType};base64,${this.inputData.variant.uploadedFile}`;
     }
 
     /**

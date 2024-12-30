@@ -1368,8 +1368,8 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage">
-                            <td *ngIf="customTemplate.templateType !== 'thermal_template'">
+                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage && customTemplate.templateType !== 'thermal_template'">
+                            <td>
                                 <label>
                                     <input type="checkbox" name="variant-image"
                                         [(ngModel)]="customTemplate.sections['table'].data['showVariantImage'].display"
