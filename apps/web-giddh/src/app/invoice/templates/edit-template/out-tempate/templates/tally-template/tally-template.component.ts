@@ -59,6 +59,8 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
     public isBaseCurrencyRupee = true;
     /** Holds rupee symbol */
     public rupeeSymbol = '&#8377';
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -73,6 +75,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
      * @memberof TallyTemplateAComponent
      */
     public ngOnInit(): void {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.companySetting$.subscribe(address => {
             if (address && address.address) {
                 this.companyAddress = cloneDeep(address.address);

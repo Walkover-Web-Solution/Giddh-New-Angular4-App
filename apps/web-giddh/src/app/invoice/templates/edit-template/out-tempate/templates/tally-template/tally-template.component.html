@@ -16,6 +16,8 @@
             'font-size': inputTemplate.fontDefault + 'px'
         }"
     >
+    <div>
+    </div>
         <!-- Header -->
         <div
             id="Template-header"
@@ -53,7 +55,7 @@
                                                     class="text-center"
                                                     style="font-size: 22px !important"
                                                 >
-                                                    <strong>
+                                                    <strong class="strong">
                                                         {{
                                                             fieldsAndVisibility.header.formNameTaxInvoice?.display
                                                                 ? fieldsAndVisibility.header.formNameTaxInvoice?.label
@@ -116,16 +118,15 @@
                                             </table>
                                         </td>
                                         <td
-                                            width="180px"
+                                            width="120px"
                                             id="qr-code-section"
-                                            class="border-none text-center vertical-align-bottom"
+                                            class="border-none text-right vertical-align-bottom"
                                             *ngIf="fieldsAndVisibility?.header?.showQrCode?.display"
                                         >
                                             <img
-                                                style="transform: translateY(18px)"
-                                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                                                src="{{imgPath}}QR_code.png"
                                                 alt="qr image"
-                                                width="100%"
+                                                width="120px"
                                             />
                                         </td>
                                     </tr>
@@ -162,7 +163,7 @@
                                                                     "
                                                                 >
                                                                     <h2 class="word-break" *ngIf="fieldsAndVisibility.header.companyName?.display">
-                                                                        <strong> 
+                                                                        <strong class="strong"> 
                                                                             {{ fieldsAndVisibility.header.companyName?.label || "Walkover Web Solutions Pvt" }}
                                                                         </strong>
                                                                     </h2>
@@ -209,7 +210,7 @@
                                                         </p>
 
                                                         <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                                            <strong> Green Soft Solutions </strong>
+                                                            <strong class="strong"> Green Soft Solutions </strong>
                                                         </p>
 
                                                         <p>5 A.B. Road</p>
@@ -296,7 +297,7 @@
                                                         </p>
 
                                                         <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                                            <strong> Green Soft Solutions </strong>
+                                                            <strong class="strong"> Green Soft Solutions </strong>
                                                         </p>
 
                                                         <p>5 A.B. Road</p>
@@ -406,7 +407,7 @@
                                                                     "Invoice No."
                                                             }}</span>
                                                             <p class="margin-0">
-                                                                <strong>{{ getTodayDate(false, true) + "-1" }}</strong>
+                                                                <strong class="strong">{{ getTodayDate(false, true) + "-1" }}</strong>
                                                             </p>
                                                         </ng-container>
                                                     </td>
@@ -419,7 +420,7 @@
                                                                     "Invoice Date"
                                                             }}</span>
                                                             <p class="margin-0">
-                                                                <strong>{{ getTodayDate(false) }}</strong>
+                                                                <strong class="strong">{{ getTodayDate(false) }}</strong>
                                                             </p>
                                                         </ng-container>
                                                     </td>
@@ -497,7 +498,7 @@
                                                 class="border-none border-right border-left"
                                                 *ngIf="fieldsAndVisibility.table.item?.display"
                                             >
-                                                <span *ngIf="fieldsAndVisibility.table.item?.display">
+                                                <span class="strong" *ngIf="fieldsAndVisibility.table.item?.display">
                                                     Dummy Product Edition 1
                                                 </span>
                                                 <p
@@ -526,7 +527,7 @@
                                                 class="border-none border-right border-left text-center"
                                                 *ngIf="fieldsAndVisibility.table.quantity?.display"
                                             >
-                                                2 No.
+                                                <span class="strong">2 No.</span>
                                             </td>
                                             <td
                                                 class="border-none border-right border-left text-right"
@@ -558,7 +559,7 @@
                                                 class="border-none border-right border-left"
                                                 *ngIf="fieldsAndVisibility.table.item?.display"
                                             >
-                                                <span *ngIf="fieldsAndVisibility.table.item?.display">
+                                                <span class="strong" *ngIf="fieldsAndVisibility.table.item?.display">
                                                     Dummy Product Edition 2
                                                 </span>
                                                 <p
@@ -587,7 +588,7 @@
                                                 class="border-none border-right border-left text-center"
                                                 *ngIf="fieldsAndVisibility.table.quantity?.display"
                                             >
-                                                2 No.
+                                                <span class="strong">2 No.</span>
                                             </td>
                                             <td
                                                 class="border-none border-right border-left text-right"
@@ -638,7 +639,7 @@
                                             ></td>
                                             <td class="border-none border-right border-left border-top text-right" *ngIf="fieldsAndVisibility.table.total?.display">
                                                 <div class="pull-right text-black">
-                                                    <strong> <span [innerHTML]="rupeeSymbol"></span>1800.00 </strong>
+                                                    <span [innerHTML]="rupeeSymbol"></span>1800.00
                                                 </div>
                                             </td>
                                         </tr>
@@ -652,7 +653,7 @@
                                                 class="border-none border-right border-left text-right"
                                                 *ngIf="fieldsAndVisibility.table.item?.display"
                                             >
-                                                <strong style="text-transform: uppercase">CGST</strong>
+                                                <strong class="strong" style="text-transform: uppercase">CGST</strong>
                                             </td>
                                             <td
                                                 class="border-none border-right border-left"
@@ -673,7 +674,7 @@
                                             ></td>
                                             <td class="border-none border-right border-left text-right" *ngIf="fieldsAndVisibility.table.total?.display">
                                                 <div class="pull-right text-black">
-                                                    <strong>162.00</strong>
+                                                    <strong class="strong">162.00</strong>
                                                 </div>
                                             </td>
                                         </tr>
@@ -686,7 +687,7 @@
                                                 class="border-none border-right border-left text-right"
                                                 *ngIf="fieldsAndVisibility.table.item?.display"
                                             >
-                                                <strong style="text-transform: uppercase">SGST</strong>
+                                                <strong class="strong" style="text-transform: uppercase strong">SGST</strong>
                                             </td>
                                             <td
                                                 class="border-none border-right border-left"
@@ -707,7 +708,7 @@
                                             ></td>
                                             <td class="border-none border-right border-left text-right" *ngIf="fieldsAndVisibility.table.total?.display">
                                                 <div class="pull-right text-black">
-                                                    <strong>162.00</strong>
+                                                    <strong class="strong">162.00</strong>
                                                 </div>
                                             </td>
                                         </tr>
@@ -722,13 +723,13 @@
                                                 class="text-center"
                                                 *ngIf="fieldsAndVisibility.table.quantity?.display"
                                             >
-                                                <span *ngIf="fieldsAndVisibility.table.totalQuantity?.display">4 No.</span>
+                                                <span class="strong" *ngIf="fieldsAndVisibility.table.totalQuantity?.display">4 No.</span>
                                             </td>
                                             <td *ngIf="fieldsAndVisibility.table.rate?.display"></td>
                                             <td></td>
                                             <td *ngIf="fieldsAndVisibility.table.discount?.display"></td>
                                             <td class="text-right">
-                                                <strong>
+                                                <strong class="strong">
                                                     <span [innerHTML]="rupeeSymbol"></span>2124.00
                                                 </strong>
                                             </td>
@@ -750,7 +751,7 @@
                                 </tr>
                                 <tr>
                                     <td class="border-none" colspan="100%">
-                                        <strong>Two Thousand One Hundred Twenty Four Only</strong>
+                                        <strong class="strong">Two Thousand One Hundred Twenty Four Only</strong>
                                     </td>
                                 </tr>
                             </table>
@@ -831,25 +832,25 @@
                             <td
                                 class="text-right"
                             >
-                                <strong>Total</strong>
+                                <strong class="strong">Total</strong>
                             </td>
                             <td
                                 class="text-center"
                             >
-                                <strong>1800.00</strong>
+                                <strong class="strong">1800.00</strong>
                             </td>
                             <td></td>
                             <td class="text-center">
-                                <strong>162.00</strong>
+                                <strong class="strong">162.00</strong>
                             </td>
                             <td></td>
                             <td class="text-center">
-                                <strong>162.00</strong>
+                                <strong class="strong">162.00</strong>
                             </td>
                             <td
                                 class="text-right"
                             >
-                                <strong>324.00</strong>
+                                <strong class="strong">324.00</strong>
                             </td>
                         </tr>
                     </tfoot>
@@ -857,7 +858,7 @@
 
                 <p *ngIf="false">
                     Tax Amount (in words):
-                    <strong>INR ... Only</strong>
+                    <strong class="strong">INR ... Only</strong>
                 </p>
             </main>
         </div>
@@ -892,7 +893,7 @@
                                                 <tr>
                                                     <td class="border-none border-right" width="50%" rowspan="2" [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px' }">
                                                         <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                                            <u><strong>Declaration: </strong></u>
+                                                            <u><strong class="strong">Declaration: </strong></u>
                                                             <p class="margin-0" style="white-space: pre-line">{{ fieldsAndVisibility.footer.message1?.label }}</p>
                                                         </ng-container>
                                                     </td>
@@ -901,8 +902,7 @@
                                                             <span class="font-12">
                                                                 for
                                                                 {{
-                                                                    fieldsAndVisibility.footer.companyName?.label ||
-                                                                        fieldsAndVisibility.header.companyName?.label
+                                                                    fieldsAndVisibility.header.companyName?.label
                                                                 }}
                                                             </span>
                                                         </ng-container>

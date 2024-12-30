@@ -243,12 +243,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
     /** Stores the send email bulk request  */
     public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
     /** Observable for bulk email success response */
     public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -311,7 +311,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 };
             }
         });
-
 
         combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
