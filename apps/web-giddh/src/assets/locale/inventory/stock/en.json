@@ -99,5 +99,7 @@
     "select_discounts": "Select discounts",
     "file_uploaded": "File uploaded successfully",
     "attachment_deleted": "Attachment deleted.",
-    "attach_file": "Attach File"
+    "attach_file": "Attach File",
+    "preview_image":"Preview Image",
+    "no_file_chosen":"No file chosen"
 }

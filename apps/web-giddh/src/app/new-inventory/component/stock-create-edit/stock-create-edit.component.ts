@@ -348,45 +348,29 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.uploadAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.uniqueName && this.variantIndex >= 0) {
-                this.stockForm.variants[this.variantIndex].attachmentUniqueName = response?.uniqueName;
-                this.stockForm.variants[this.variantIndex].attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
-                this.stockForm.variants[this.variantIndex].isUploading = false;
-                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-            } else if (this.variantIndex >= 0) {
-                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null;
-                this.stockForm.variants[this.variantIndex].attachmentName = null;
-                this.stockForm.variants[this.variantIndex].isUploading = false;
-                this.componentStore.resetUploadAttachmentState();
-            }
-        });
+        this.componentStore.uploadAttachmentIsSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (this.variantIndex >= 0) {
+                    this.updateAttachmentState(response);
+                }
+            });
 
-        this.componentStore.downloadAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.dialog.open(PreviewVariantImageComponent, {
-                    data: response,
-                    panelClass: 'preview-image',
-                    role: 'alertdialog',
-                    ariaLabel: 'Preview Image'
-                });
-            }
-        });
+        this.componentStore.previewAttachmentIsSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (response) {
+                    this.openPreviewDialog(response);
+                }
+            });
 
-        this.voucherComponentStore.deleteAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.variantIndex >= 0) {
-                this.toaster.showSnackBar("success", this.localeData?.attachment_deleted);
-                this.selectedFileName = "";
-                this.stockForm.variants[this.variantIndex].isUploading = false
-                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null;
-                this.voucherComponentStore.resetAttachmentState();
-            } else if (this.variantIndex >= 0) {
-                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null; // Save the uploaded file name
-                this.stockForm.variants[this.variantIndex].attachmentName = null; // Save the uploaded file name
-                this.stockForm.variants[this.variantIndex].isUploading = false
-                this.componentStore.resetUploadAttachmentState();
-            }
-        });
+        this.voucherComponentStore.deleteAttachmentIsSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (this.variantIndex >= 0) {
+                    this.handleAttachmentDeletion(response);
+                }
+            });
     }
 
     /**
@@ -1341,13 +1325,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['fixedAssetsInformation'] = variant?.fixedAssetAccountDetails?.unitRates;
-                    if (variant?.image?.uniqueName) {
-                        variant['attachmentUniqueName'] = variant?.image?.uniqueName;
-                        variant['attachmentName'] = `data:image/${variant?.image?.fileType};base64,${variant?.image?.uploadedFile}`;
-                    } else {
-                        variant['attachmentUniqueName'] = null;
-                        variant['attachmentName'] = null;
-                    }
+                    variant['attachmentUniqueName'] = variant?.image?.uniqueName || null;
+                    variant['attachmentName'] = variant?.image?.uniqueName
+                        ? `data:image/${variant?.image?.fileType};base64,${variant?.image?.uploadedFile}`
+                        : null;
                     variant['isUploading'] = false;
                     return variant;
                 });
@@ -2279,15 +2260,22 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public uploadFile(event: Event, index: number): void {
-        this.variantIndex = index;
         const input = event.target as HTMLInputElement;
         if (input?.files?.length) {
+            this.variantIndex = index;
             const file = input.files[0];
-            this.generalService.getSelectedFile(file, (blob: any, file: any) => {
-                this.componentStore.uploadAttachment({ file: blob, fileName: file.name, type: 'variant' });
+            const variant = this.stockForm.variants[this.variantIndex];
+            variant.isUploading = true;
+            this.generalService.getSelectedFile(file, (blob: Blob, selectedFile: File) => {
+                this.componentStore.uploadAttachment({
+                    file: blob,
+                    fileName: selectedFile.name,
+                    type: 'variant'
+                });
             });
         }
     }
+
 
     /**
      * This will be use for delete attachment files
@@ -2297,24 +2285,26 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public deleteAttachment(index: number): void {
         this.variantIndex = index;
-        let attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
-        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+        const variant = this.stockForm.variants[index];
+        const attachmentDeleteConfig = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
-            data: {
-                configuration: attachmentDeleteConfiguration
-            }
+            data: { configuration: attachmentDeleteConfig }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response === this.commonLocaleData?.app_yes) {
-                this.stockForm.variants[index].isUploading = true;
-                this.voucherComponentStore.deleteAttachment(this.stockForm.variants[index].attachmentUniqueName);
-            } else {
-                this.dialog.closeAll();
-                this.stockForm.variants[index].isUploading = false;
-            }
-        });
+        dialogRef.afterClosed()
+            .pipe(take(1))
+            .subscribe(response => {
+                variant.isUploading = response === this.commonLocaleData?.app_yes;
+                if (variant.isUploading) {
+                    this.voucherComponentStore.deleteAttachment(variant.attachmentUniqueName);
+                } else {
+                    this.dialog.closeAll();
+                }
+            });
     }
+
 
     /**
      * This will be use for preview variant image
@@ -2324,7 +2314,90 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public previewVariantImage(uniqueName: string): void {
         if (uniqueName) {
-            this.componentStore.downloadPreviewAttachment({ uniqueName: uniqueName, type: 'variant' });
+            this.componentStore.previewVariantImage({ uniqueName: uniqueName, type: 'variant' });
         }
+    }
+
+    /**
+     * Updates the attachment state based on the response.
+     *
+     * @param response - The response containing the uniqueName, fileType, and uploadedFile.
+     * @returns void
+     */
+    private updateAttachmentState(response: any): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+
+        if (response?.uniqueName) {
+            variant.attachmentUniqueName = response.uniqueName;
+            variant.attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
+            this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+        } else {
+            this.resetAttachmentState();
+            this.componentStore.resetUploadAttachmentState();
+        }
+
+        variant.isUploading = false;
+    }
+
+    /**
+     * Resets the attachment state for a variant.
+     *
+     * @remarks This function clears the uniqueName and attachmentName of the variant's attachment.
+     * @private
+     * @returns {void}
+     */
+    private resetAttachmentState(): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+        variant.attachmentUniqueName = null;
+        variant.attachmentName = null;
+    }
+
+    /**
+     * Opens a dialog to preview the variant image.
+     *
+     * @param response - The response containing the uniqueName, fileType, and uploadedFile.
+     * @returns void
+     */
+    private openPreviewDialog(response: any): void {
+        this.dialog.open(PreviewVariantImageComponent, {
+            data: response,
+            role: 'alertdialog',
+            ariaLabel: this.localeData?.preview_image
+        });
+    }
+
+    /**
+     * Handles the deletion of an attachment.
+     *
+     * @param response - The response containing the uniqueName, fileType, and uploadedFile.
+     * @returns void
+     */
+    private handleAttachmentDeletion(response: any): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+
+        if (response) {
+            this.toaster.showSnackBar("success", this.localeData?.attachment_deleted);
+            this.selectedFileName = "";
+            variant.isUploading = false;
+            variant.attachmentUniqueName = null;
+            this.voucherComponentStore.resetAttachmentState();
+        } else {
+            this.resetVariantAttachmentState();
+            this.componentStore.resetUploadAttachmentState();
+        }
+    }
+
+    /**
+     * Resets the attachment state for a variant.
+     *
+     * @remarks This function clears the uniqueName and attachmentName of the variant's attachment.
+     * @private
+     * @returns {void}
+     */
+    private resetVariantAttachmentState(): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+        variant.attachmentUniqueName = null;
+        variant.attachmentName = null;
+        variant.isUploading = false;
     }
 }

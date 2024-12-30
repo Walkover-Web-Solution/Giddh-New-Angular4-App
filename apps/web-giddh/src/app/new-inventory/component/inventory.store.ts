@@ -18,7 +18,7 @@ export interface InventoryState {
     uploadAttachmentInProgress: boolean;
     uploadAttachmentIsSuccess: any;
     downloadAttachmentInProgress: boolean;
-    downloadAttachmentIsSuccess: any;
+    previewAttachmentIsSuccess: any;
 }
 
 const DEFAULT_STATE: InventoryState = {
@@ -27,7 +27,7 @@ const DEFAULT_STATE: InventoryState = {
     uploadAttachmentInProgress: false,
     uploadAttachmentIsSuccess: null,
     downloadAttachmentInProgress: false,
-    downloadAttachmentIsSuccess: null
+    previewAttachmentIsSuccess: null
 };
 
 @Injectable()
@@ -48,7 +48,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     public discountsList$: Observable<any> = this.select((state) => state.discountsList);
     public uploadAttachmentIsSuccess$ = this.select((state) => state.uploadAttachmentIsSuccess);
     public uploadAttachmentInProgress$ = this.select((state) => state.uploadAttachmentInProgress);
-    public downloadAttachmentIsSuccess$ = this.select((state) => state.downloadAttachmentIsSuccess);
+    public previewAttachmentIsSuccess$ = this.select((state) => state.previewAttachmentIsSuccess);
     public downloadAttachmentInProgress$ = this.select((state) => state.downloadAttachmentInProgress);
 
     /**
@@ -231,7 +231,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     });
 
     /**
-     * This will use for upload attachments
+     * This will use for upload attachment
      *
      * @memberof InventoryComponentStore
      */
@@ -264,50 +264,34 @@ export class InventoryComponentStore extends ComponentStore<any> {
     });
 
     /**
-     * This will use for download preview attachment
+     * This will use for preview image
      *
      * @memberof InventoryComponentStore
      */
-    readonly downloadPreviewAttachment = this.effect((data: Observable<any>) => {
+    readonly previewVariantImage = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ downloadAttachmentInProgress: true, downloadAttachmentIsSuccess: null });
-                return this.ledgerService.DownloadAttachement(req?.uniqueName, req?.type).pipe(
+                this.patchState({ downloadAttachmentInProgress: true, previewAttachmentIsSuccess: null });
+                return this.ledgerService.downloadAttachement(req?.uniqueName, req?.type).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                return this.patchState({ downloadAttachmentInProgress: false, downloadAttachmentIsSuccess: res?.body });
+                                return this.patchState({ downloadAttachmentInProgress: false, previewAttachmentIsSuccess: res?.body });
                             } else {
                                 this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ downloadAttachmentInProgress: false, downloadAttachmentIsSuccess: null });
+                                return this.patchState({ downloadAttachmentInProgress: false, previewAttachmentIsSuccess: null });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 downloadAttachmentInProgress: false,
-                                downloadAttachmentIsSuccess: null
+                                previewAttachmentIsSuccess: null
                             });
                         }
                     ),
                     catchError((err) => EMPTY)
                 );
-            })
-        );
-    });
-
-    /**
-     * Reset preview attachment state
-     *
-     * @memberof InventoryComponentStore
-     */
-    readonly resetDownloadPreviewAttachmentState = this.effect((data: Observable<void>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({
-                    downloadAttachmentIsSuccess: null
-                });
-                return of(null);
             })
         );
     });
