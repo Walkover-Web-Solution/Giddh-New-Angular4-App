@@ -1316,7 +1316,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
         if (data && data.length > 0) {
             data.forEach(res => {
-                if (res && !res.isCompany) {
+                if (res && !res.isCompany && !res.isConsolidatedBranch ) {
                     res.warehouses?.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });

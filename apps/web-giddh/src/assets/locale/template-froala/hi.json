@@ -1,9 +1,9 @@
 {
-    "select_to": "किसे चुनें",
-    "select_bcc": "बीसीसी चुनें",
-    "select_cc": "सीसी चुनें",
-    "cc": "सीसी",
-    "bcc": "बीसीसी",
+    "to": "To",
+    "cc": "Cc",
+    "bcc": "Bcc",
     "email_content_suggestions": "सुझाव देखने के लिए '@' टाइप करें",
-    "enter_subject_placeholder": "यहां विषय दर्ज करें"
+    "recipients": "प्राप्तकर्ता",
+    "subject": "विषय",
+    "save_and_send":"सहेजें और भेजें"
 }
