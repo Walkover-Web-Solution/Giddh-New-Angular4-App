@@ -364,7 +364,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public downloadFile(url: any): void {
         if (url) {
             let fileName = url.substring(url.lastIndexOf('/') + 1);
-            return download(fileName, url, "");
+            download(fileName, url, "");
         }
     }
 
@@ -381,7 +381,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
@@ -401,7 +401,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
