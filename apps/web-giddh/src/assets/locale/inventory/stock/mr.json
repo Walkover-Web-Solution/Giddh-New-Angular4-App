@@ -98,6 +98,8 @@
     "select_unit_group": "युनिट गट निवडा",
     "select_discounts": "सवलत निवडा",
     "file_uploaded": "फाईल यशस्वीरित्या अपलोड केली",
-    "attachment_deleted": "Attachment deleted.",
-    "attach_file": "Attach File"
+    "attachment_deleted": "कोई फाइल चयनित नहीं",
+    "attach_file": "फाइल जोडावी",
+    "preview_image": "प्रतिमेचे पूर्वावलोकन",
+    "no_file_chosen": "कोणतीही फाइल निवडलेली नाही"
 }
