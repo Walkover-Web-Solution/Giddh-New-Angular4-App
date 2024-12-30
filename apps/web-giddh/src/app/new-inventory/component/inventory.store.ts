@@ -24,9 +24,9 @@ export interface InventoryState {
 const DEFAULT_STATE: InventoryState = {
     isLoading: false,
     discountsList: null,
-    uploadAttachmentInProgress: null,
+    uploadAttachmentInProgress: false,
     uploadAttachmentIsSuccess: null,
-    downloadAttachmentInProgress: null,
+    downloadAttachmentInProgress: false,
     downloadAttachmentIsSuccess: null
 };
 
@@ -264,31 +264,15 @@ export class InventoryComponentStore extends ComponentStore<any> {
     });
 
     /**
-     * Reset upload attachment state
+     * This will use for download preview attachment
      *
      * @memberof InventoryComponentStore
      */
-    readonly resetUploadAttachmentState = this.effect((data: Observable<void>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({
-                    uploadAttachmentIsSuccess: null
-                });
-                return of(null);
-            })
-        );
-    });
-
-/**
- * This will use for download preview attachments
- *
- * @memberof InventoryComponentStore
- */
     readonly downloadPreviewAttachment = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ downloadAttachmentInProgress: true, downloadAttachmentIsSuccess: null });
-                return this.ledgerService.DownloadAttachement(req).pipe(
+                return this.ledgerService.DownloadAttachement(req?.uniqueName, req?.type).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -312,11 +296,32 @@ export class InventoryComponentStore extends ComponentStore<any> {
         );
     });
 
+    /**
+     * Reset preview attachment state
+     *
+     * @memberof InventoryComponentStore
+     */
     readonly resetDownloadPreviewAttachmentState = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({
                     downloadAttachmentIsSuccess: null
+                });
+                return of(null);
+            })
+        );
+    });
+
+    /**
+     * Reset upload attachment state
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly resetUploadAttachmentState = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    uploadAttachmentIsSuccess: null
                 });
                 return of(null);
             })

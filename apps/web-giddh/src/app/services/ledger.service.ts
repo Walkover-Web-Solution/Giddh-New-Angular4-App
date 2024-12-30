@@ -220,11 +220,12 @@ export class LedgerService {
         }), catchError((e) => this.errorHandler.HandleCatch<ReconcileResponse[], string>(e, '', { accountUniqueName, from, to, chequeNumber })));
     }
 
-    public DownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
+    public DownloadAttachement(fileName: string, type?: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.DOWNLOAD_ATTACHMENT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':fileName', fileName);
-        if (this.generalService.voucherApiVersion === 2) {
+
+        if (this.generalService.voucherApiVersion === 2 && !type) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.get(url).pipe(

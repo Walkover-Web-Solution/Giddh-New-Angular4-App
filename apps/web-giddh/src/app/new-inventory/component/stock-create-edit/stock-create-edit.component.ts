@@ -28,6 +28,7 @@ import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { CommonService } from "../../../services/common.service";
 import { NewConfirmationModalComponent } from "../../../theme/new-confirmation-modal/confirmation-modal.component";
 import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
+import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
 
 @Component({
     selector: "stock-create-edit",
@@ -40,8 +41,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
     /** Instance of recipe create/update component */
     @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
-    /** Instance of preview image dialog */
-    @ViewChild("previewImage") public variantPreviewImageDialog: TemplateRef<any>;
     /* This will hold add stock value from aside menu */
     @Input() public addStock: boolean = false;
     /* This will hold stock type from aside menu */
@@ -350,35 +349,28 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.uploadAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response, this.variantIndex);
-
             if (response?.uniqueName && this.variantIndex >= 0) {
-                this.stockForm.variants[this.variantIndex].isUploading = false;
-                this.stockForm.variants[this.variantIndex].attachmentUniqueName = response?.uniqueName; // Save the uploaded file name
+                this.stockForm.variants[this.variantIndex].attachmentUniqueName = response?.uniqueName;
                 this.stockForm.variants[this.variantIndex].attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
+                this.stockForm.variants[this.variantIndex].isUploading = false;
                 this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
             } else if (this.variantIndex >= 0) {
-                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null; // Save the uploaded file name
-                this.stockForm.variants[this.variantIndex].attachmentName = null; // Save the uploaded file name
-                this.stockForm.variants[this.variantIndex].isUploading = false
+                this.stockForm.variants[this.variantIndex].attachmentUniqueName = null;
+                this.stockForm.variants[this.variantIndex].attachmentName = null;
+                this.stockForm.variants[this.variantIndex].isUploading = false;
                 this.componentStore.resetUploadAttachmentState();
             }
         });
 
         this.componentStore.downloadAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response, this.variantIndex);
-
-            // if (response?.uniqueName && this.variantIndex >= 0) {
-            //     this.stockForm.variants[this.variantIndex].isUploading = false;
-            //     this.stockForm.variants[this.variantIndex].attachmentUniqueName = response?.uniqueName; // Save the uploaded file name
-            //     this.stockForm.variants[this.variantIndex].attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
-            //     this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-            // } else if (this.variantIndex >= 0) {
-            //     this.stockForm.variants[this.variantIndex].attachmentUniqueName = null; // Save the uploaded file name
-            //     this.stockForm.variants[this.variantIndex].attachmentName = null; // Save the uploaded file name
-            //     this.stockForm.variants[this.variantIndex].isUploading = false
-            //     this.componentStore.resetUploadAttachmentState();
-            // }
+            if (response) {
+                this.dialog.open(PreviewVariantImageComponent, {
+                    data: response,
+                    panelClass: 'preview-image',
+                    role: 'alertdialog',
+                    ariaLabel: 'Preview Image'
+                });
+            }
         });
 
         this.voucherComponentStore.deleteAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1357,8 +1349,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         variant['attachmentName'] = null;
                     }
                     variant['isUploading'] = false;
-                    console.log(variant);
-
                     return variant;
                 });
 
@@ -2293,7 +2283,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const input = event.target as HTMLInputElement;
         if (input?.files?.length) {
             const file = input.files[0];
-            this.stockForm.variants[index].isUploading = true;
             this.generalService.getSelectedFile(file, (blob: any, file: any) => {
                 this.componentStore.uploadAttachment({ file: blob, fileName: file.name, type: 'variant' });
             });
@@ -2327,16 +2316,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    public previewImage(uniqueName: string): void {
-        console.log(uniqueName);
+    /**
+     * This will be use for preview variant image
+     *
+     * @param {string} uniqueName
+     * @memberof StockCreateEditComponent
+     */
+    public previewVariantImage(uniqueName: string): void {
         if (uniqueName) {
-            this.dialog.open(this.variantPreviewImageDialog, {
-                data: uniqueName,
-                panelClass: 'preview-image',
-                role: 'alertdialog',
-                ariaLabel: 'Preview Image'
-            });
-            this.componentStore.downloadPreviewAttachment(uniqueName);
+            this.componentStore.downloadPreviewAttachment({ uniqueName: uniqueName, type: 'variant' });
         }
     }
 }
