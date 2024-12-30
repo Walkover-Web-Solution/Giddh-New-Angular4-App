@@ -2283,7 +2283,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteAttachment(index: number): void {
-        console.log(index);
         if (index >=0) {
             this.variantIndex = index;
             const variant = this.stockForm.variants[index];
@@ -2305,7 +2304,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 });
         }
     }
-
 
     /**
      * This will be use for preview variant image
