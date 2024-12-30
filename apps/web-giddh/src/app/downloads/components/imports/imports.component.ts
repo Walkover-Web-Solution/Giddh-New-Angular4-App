@@ -17,6 +17,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
+import { download } from '@giddh-workspaces/utils';
 
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
@@ -92,6 +93,8 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public initialApiCalled: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Instance of is electron variable */
+    public isElectron: any = isElectron;
 
     constructor(public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -353,38 +356,15 @@ export class ImportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Downloads Excel file using window.open approach
-     * @param blob The blob data
-     * @param fileName The name of the file
+     * Download export file
+     *
+     * @param {*} url
      * @memberof ImportsComponent
      */
-    private downloadExcelFile(blob: Blob, fileName: string) {
-        const win = window.open('', '_blank');
-        if (win) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                win.document.write(`
-                        <html>
-                            <body>
-                                <script>
-                                    window.onload = function() {
-                                        var dataUrl = "${reader.result}";
-                                        var link = document.createElement('a');
-                                        link.href = dataUrl;
-                                        link.download = "${fileName}";
-                                        document.body.appendChild(link);
-                                        link.click();
-                                        setTimeout(function() {
-                                            window.close();
-                                        }, 100);
-                                    };
-                                </script>
-                            </body>
-                        </html>
-                    `);
-                win.document.close();
-            };
-            reader.readAsDataURL(blob);
+    public downloadFile(url: any): void {
+        if (url) {
+            let fileName = url.substring(url.lastIndexOf('/') + 1);
+            return download(fileName, url, "");
         }
     }
 
@@ -401,7 +381,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return this.downloadExcelFile(blob, 'error_sheet.xlsx');
+                return download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
@@ -421,7 +401,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return this.downloadExcelFile(blob, 'success_sheet.xlsx');
+                return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
