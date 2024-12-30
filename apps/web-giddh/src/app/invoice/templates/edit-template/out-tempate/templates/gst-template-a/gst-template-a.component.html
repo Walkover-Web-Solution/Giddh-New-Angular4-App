@@ -912,9 +912,6 @@
                                     [innerHTML]='rupeeSymbol'></span>1500.00
                                <p><span [innerHTML]='dollarSymbol'></span>21.90</p>
                             </td>
-                            <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
-                                <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px" width="50px" />
-                            </td>
                             <td *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "><span
                                     [innerHTML]='rupeeSymbol'></span>400.00</td>
                             <td *ngIf="fieldsAndVisibility.table.taxableValue?.display " class="text-right "><span

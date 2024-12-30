@@ -180,7 +180,7 @@
                         class="form-group"
                         *ngIf="
                             (customTemplate?.templateType === 'gst_template_a' ||
-                                customTemplate?.templateType === 'gst_template_e' || 
+                                customTemplate?.templateType === 'gst_template_e' ||
                                 customTemplate?.templateType === 'tally_template') &&
                             showGstComposition &&
                             customTemplate.sections['header'].data['showEInvoiceDetails']
@@ -457,7 +457,7 @@
                     </ng-container>
                     <div
                         *ngIf="
-                            fieldsAndVisibility.header.dueDate && 
+                            fieldsAndVisibility.header.dueDate &&
                             customTemplate?.templateType !== 'thermal_template' &&
                             customTemplate?.templateType !== 'tally_template'
                         "
@@ -1399,8 +1399,8 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage">
-                            <td *ngIf="customTemplate.templateType !== 'thermal_template'">
+                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage && customTemplate.templateType !== 'thermal_template'">
+                            <td>
                                 <label>
                                     <input type="checkbox" name="variant-image"
                                         [(ngModel)]="customTemplate.sections['table'].data['showVariantImage'].display"
@@ -2274,7 +2274,7 @@
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
                             customTemplate?.templateType !== 'gst_template_e' &&
-                            customTemplate?.templateType !== 'thermal_template' && 
+                            customTemplate?.templateType !== 'thermal_template' &&
                             customTemplate?.templateType !== 'tally_template'
                         "
                         class="form-group"

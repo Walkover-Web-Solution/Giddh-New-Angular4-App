@@ -413,8 +413,7 @@ table.stock-table {
             }
 
             &.variant-image {
-                max-width: 165px;
-                min-width: 165px;
+                width: clamp(165px, 165px, 165px);
             }
 
             &.sales-purchase-info {
@@ -502,14 +501,12 @@ table.stock-table {
     &.text-success {
         .attachment-add-icon {
             border-color: var(--color-success-enable);
-            font-size: var(--font-size-12);
         }
 
         .attachment-placeholder {
             color: var(--color-success-enable);
             width: 60%;
             white-space: nowrap;
-            text-overflow: ellipsis;
             overflow: hidden;
         }
     }
@@ -523,7 +520,6 @@ table.stock-table {
         border-radius: 5px;
         z-index: 1;
         opacity: 0;
-        cursor: pointer;
 
         //  This will hide "Default Choose file" button
         &::-webkit-file-upload-button {
@@ -532,10 +528,9 @@ table.stock-table {
     }
 
     .remove-attachment {
-        height: 25px;
         width: 25px;
         padding: 2px;
-        color: black;
+        color: var(--color-nero);
     }
 }
 

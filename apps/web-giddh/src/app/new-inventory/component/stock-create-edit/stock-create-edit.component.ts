@@ -261,9 +261,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Hold variant index*/
     public variantIndex: number;
     /** Upload attachment in progress Observable */
-    public uploadAttachmentInProgress$: Observable<any> = this.componentStore.uploadAttachmentInProgress$;
+    public uploadAttachmentInProgress$: Observable<boolean> = this.componentStore.uploadAttachmentInProgress$;
     /** Preview attachment in progress Observable */
-    public downloadAttachmentInProgress$: Observable<any> = this.componentStore.downloadAttachmentInProgress$;
+    public downloadAttachmentInProgress$: Observable<boolean> = this.componentStore.downloadAttachmentInProgress$;
 
     constructor(
         private inventoryService: InventoryService,
@@ -2276,7 +2276,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * This will be use for delete attachment files
      *
@@ -2284,25 +2283,27 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteAttachment(index: number): void {
-        this.variantIndex = index;
-        const variant = this.stockForm.variants[index];
-        const attachmentDeleteConfig = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
-
-        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: { configuration: attachmentDeleteConfig }
-        });
-
-        dialogRef.afterClosed()
-            .pipe(take(1))
-            .subscribe(response => {
-                variant.isUploading = response === this.commonLocaleData?.app_yes;
-                if (variant.isUploading) {
-                    this.voucherComponentStore.deleteAttachment(variant.attachmentUniqueName);
-                } else {
-                    this.dialog.closeAll();
-                }
+        console.log(index);
+        if (index >=0) {
+            this.variantIndex = index;
+            const variant = this.stockForm.variants[index];
+            const attachmentDeleteConfig = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-md",
+                data: { configuration: attachmentDeleteConfig }
             });
+
+            dialogRef.afterClosed()
+                .pipe(take(1))
+                .subscribe(response => {
+                    variant.isUploading = response === this.commonLocaleData?.app_yes;
+                    if (variant.isUploading) {
+                        this.voucherComponentStore.deleteAttachment(variant.attachmentUniqueName);
+                    } else {
+                        this.dialog.closeAll();
+                    }
+                });
+        }
     }
 
 
@@ -2359,11 +2360,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @returns void
      */
     private openPreviewDialog(response: any): void {
-        this.dialog.open(PreviewVariantImageComponent, {
-            data: response,
-            role: 'alertdialog',
-            ariaLabel: this.localeData?.preview_image
-        });
+        if (response) {
+            const variantData = {
+                variant: response,
+                localeData: this.localeData
+            };
+            this.dialog.open(PreviewVariantImageComponent, {
+                data: variantData,
+                role: 'alertdialog',
+                ariaLabel: this.localeData?.preview_image
+            });
+        }
     }
 
     /**
