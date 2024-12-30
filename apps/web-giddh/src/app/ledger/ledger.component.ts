@@ -10,7 +10,7 @@ import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -50,15 +50,16 @@ import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
-import { SettingsIntegrationService } from '../services/settings.integration.service';
 import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
 import { HomeComponentStore } from '../home/home.store';
+import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
+import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 
 @Component({
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
-    providers: [BankIntegrationComponentStore, HomeComponentStore],
+    providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -174,9 +175,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isHide: boolean = false;
     public visibleTransactionTypeMobile: string = "all";
     public ledgerTransactions: any;
-
-    /* New Datepicker Variables */
-
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -331,6 +329,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
+    /** Holds Store refresh bank error as observable */
+    public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
+    /** True if active account is bank account */
+    public isBankAccountConnected: boolean;
+    /** True, if show bank link button is to show */
+    public showBankLinkButton: boolean;
+    /** Holds accountUniquename of get all bank-Account  */
+    public selectedAccountUniquename: any;
+    /** Holds selected bank unique name */
+    private selectedBankUniqueName: string;
+    /** Holds the bank account which is not linked */
+    public unlinkBankList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -356,9 +366,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private router: Router,
-        private settingsIntegrationService: SettingsIntegrationService,
+        private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
-        private homeComponentStore: HomeComponentStore
+        private homeComponentStore: HomeComponentStore,
+        private toasty: ToasterService
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -381,8 +392,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public get isBankAccount(): boolean {
         return this.lc.activeAccount?.parentGroups?.some(group => group.uniqueName === 'bankaccounts');
     }
-    /** True if active account is bank account */
-    public isBankAccountConnected: boolean;
 
     public toggleShow() {
         this.Shown = this.Shown ? false : true;
@@ -496,29 +505,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * @param {*} element
    * @memberof LedgerComponent
    */
-    public openInstitutionsDialog(): void {
-        if (this.isBankAccountConnected) {
-            this.router.navigate(["/pages/settings/integration/payment"]);
-        } else {
-            let data = {
-                localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
-            }
-            const dialogRef = this.dialog.open(InstitutionsListComponent, {
-                data: data,
-                width: 'var(--aside-pane-width)',
-                panelClass: 'subscription-sidebar',
-                role: 'alertdialog',
-                ariaLabel: 'institutionsListDialog'
-            });
+    public openInstitutionsDialog(bankAccount): void {
+        this.selectedBankUniqueName = bankAccount?.uniqueName;
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                if (response) {
-                    this.referenceNumber = response;
-                    this.setupGocardlessMessageListener();
-                }
-            });
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
         }
+        const dialogRef = this.dialog.open(InstitutionsListComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.referenceNumber = response;
+                this.setupGocardlessMessageListener();
+            }
+        });
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
@@ -759,6 +766,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.lc.currencies = res;
+            }
+        });
+
+        this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.isBankAccountConnected = true;
+                this.showBankLinkButton = false;
+                this.cdRf.detectChanges();
             }
         });
 
@@ -1010,6 +1025,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
+        /**
+         * When refresh bank api getting error then this code works
+         */
+        this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.openInstitutionsDialog(this.bankAccount);
+            }
+        });
+
+        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                if (response.body?.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
+                    this.isBankAccountConnected = true;
+                } else {
+                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
+                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
+                }
+            }
+        });
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -2724,7 +2758,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
                         }
                     }
-                    profile.userEntityRoles.forEach(role => {
+                    profile.userEntityRoles?.forEach(role => {
                         const scopes = role.role.scopes;
                         if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                             this.hasIntegrationScope = true;
@@ -2733,6 +2767,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
+                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response) {
+                            this.openBankLinkDialog();
+                            this.componentStore.setState(state => ({
+                                ...state, 
+                                requisitionList: null
+                            }));
+                        }
+                    });
                 }
             });
         }
@@ -3147,14 +3190,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     */
     public getAllBankAccounts(accountUniqueName?: string): void {
         this.isBankAccountConnected = false;
-        this.settingsIntegrationService.getAllBankAccounts().pipe(take(1)).subscribe(response => {
-            if (response?.body) {
-                const result = response.body?.find(item => item.account?.uniqueName === (this.lc.accountUnq ?? accountUniqueName));
-                if (result) {
-                    this.isBankAccountConnected = true;
-                }
-            }
-        });
+        this.showBankLinkButton = false;
+        this.selectedAccountUniquename = accountUniqueName;
+        this.settingIntegrationComponentStore.getAllBankAccounts();
     }
 
     /**
@@ -3163,7 +3201,44 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public refreshBankTransactions(): void {
-        this.homeComponentStore.refreshBank();
+        this.homeComponentStore.refreshGoCardlessBankTransactions(this.lc.accountUnq);
     }
 
+    /**
+     * This will open the dialog to link a bank
+     * 
+     * @memberof LedgerComponent
+     */
+    public openBankLinkDialog(): void {
+        if (this.unlinkBankList.length === 1) {
+            this.linkBankAccount();
+        } else {
+            const data = {
+                bankList: this.selectedBankUniqueName,
+                accountUniqueName: this.lc.accountUnq
+            }
+            const dialogRef = this.dialog.open(BankLinkComponent, {
+                data: data,
+                panelClass: ['mat-dialog-md'],
+                disableClose: true
+            });
+
+            dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); })).subscribe();
+        }
+    }
+    
+    /**
+     * This will link the connected bank accounts
+     * 
+     * @memberof LedgerComponent
+     */
+    public linkBankAccount(): void {
+        let request = { bankAccountUniqueName: this.unlinkBankList[0]?.bankResource?.uniqueName };
+        let accountForm = {
+            accountNumber: this.unlinkBankList[0]?.bankResource?.accountNumber,
+            accountUniqueName: this.lc.accountUnq,
+            paymentAlerts: []
+        } 
+        this.settingIntegrationComponentStore.updateAccount({ accountForm, request });
+    }
 }

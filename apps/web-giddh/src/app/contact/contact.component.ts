@@ -1,3 +1,4 @@
+import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import {
@@ -58,6 +59,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
+import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 
 @Component({
     selector: "contact-detail",
@@ -241,13 +243,17 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** Stores the send email bulk request  */
+    public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
+    /** Observable for bulk email success response */
+    public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private contactComponentStore: ContactComponentStore) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -293,7 +299,20 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
-        combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.bulkEmailSuccess$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(success => {
+            if (success) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
+        });
+
+        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
@@ -323,30 +342,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 } else {
                     this.setActiveTab("aging-report");
                 }
+
                 this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
-
-                this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-                    if (res) {
-                        this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
-                    }
-                });
-
-                this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isIciciAccountPendingForApproval = false;
-                    this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-                    if (response?.integratedBankList?.length > 0) {
-                        let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
-                        if (!approvalPendingAccounts?.length) {
-                            this.isIciciAccountPendingForApproval = true;
-                        }
-
-                        this.isICICIIntegrated = true;
-                    } else {
-                        this.isICICIIntegrated = false;
-                    }
-                    this.cdRef.detectChanges();
-                });
-
                 if (this.activeTab === ContactsTab.customer.toLowerCase()) {
                     this.customiseColumns.splice(0, 0,
                         {
@@ -406,14 +403,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             "checked": true
                         }
                     );
-                    if (this.isICICIIntegrated || this.isPlaidSupportedCountry) {
-                        this.customiseColumns.push(
-                            {
-                                value: "action",
-                                label: "Action",
-                                checked: true
-                            })
-                    }
+
                     this.moduleType = ContactsTab.vendor;
                     this.displayedColumns = [];
                 }
@@ -422,6 +412,40 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             }
 
+        });
+
+        this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
+
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if (response?.integratedBankList?.length > 0) {
+                const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if (!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+            if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                let customiseColumns = cloneDeep(this.customiseColumns);
+                if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
+                    let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
+                    if (!filteredCustomisColumns.length) {
+                        this.customiseColumns.push({ value: "action", label: "Action", checked: true });
+                    }
+                } else {
+                    this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
+                }
+                const values = this.customiseColumns.map(item => item.value);
+                this.showSelectedHeaderColumns(values);
+            }
+            this.cdRef.detectChanges();
         });
 
 
@@ -598,12 +622,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     event.stopPropagation();
                 }
                 this.openEmailDialog();
-                break;
-            case 5: // send email for customer information
-                if (event) {
-                    event.stopPropagation();
-                }
-                this.sendCustomerInformation(account);
                 break;
             default:
                 break;
@@ -1720,12 +1738,47 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for send customer information
+     * This function will use for send email for template
      *
-     * @param {*} account
      * @memberof ContactComponent
      */
-    public sendCustomerInformation(account: any): void {
-        this.contactComponentStore.sendCustomerInformation(account?.uniqueName);
+    public sendBulkEmail(type: string): void {
+        const accountUniqueNames = this.selectedAccountsList.map(account => account.uniqueName);
+        this.sendBulkEmailRequest = {
+            customerVendorUniqueNames: accountUniqueNames,
+            templateOf: type
+        };
+        this.componentStore.sendBulkEmailTemplate(this.sendBulkEmailRequest);
+    }
+
+    /**
+   *Open custom email dialog
+   *
+   * @param {any} account
+   * @memberof ContactComponent
+   */
+    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
+        });
     }
 }

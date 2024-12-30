@@ -17,7 +17,10 @@
                 </div>
                 <div
                     class="form-group mr-r15 pull-left linked-entities mb-0"
-                    *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY'  || isConsolidatedBranch)"
+                    *ngIf="
+                        currentCompanyBranches?.length > 2 &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                    "
                 >
                     <div class="form-group mb-0">
                         <sh-select
@@ -36,10 +39,11 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                [ngClass]="{
-                                                    'icon-company-profile': option?.consolidatedBranch,
-                                                    'icon-branch-icon': !option?.consolidatedBranch
-                                                }"
+                                                [ngClass]="
+                                                    option?.consolidatedBranch
+                                                        ? 'icon-company-profile'
+                                                        : 'icon-branch-icon'
+                                                "
                                                 *ngIf="!option.isCompany"
                                                 matTooltip="{{ commonLocaleData?.app_branch }}"
                                                 matTooltipPosition="above"
@@ -634,18 +638,11 @@
         <div class="list-wrapper pd-15">
             <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
                 <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
-                    <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
-                        <a
-                            [href]="
-                                item?.voucherNumber !== 'OPENING BALANCE'
-                                    ? '/pages/invoice/preview/sales?voucherUniqueName=' +
-                                      item?.uniqueName +
-                                      '&accountUniqueName=' +
-                                      item?.account?.uniqueName
-                                    : domSantizer('javascript:;')
-                            "
-                            [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined"
-                            [ngClass]="{ 'cursor-default': item?.voucherNumber === 'OPENING BALANCE' }"
+                    <mat-list-item class="list-item px-2"  *cdkVirtualFor="let item of unpaidInvoiceData">
+                        <a 
+                            [href]="getInvoicePreviewUrl(item)" 
+                            [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined" 
+                            [ngClass]="{ 'cursor-default' : item?.voucherNumber === 'OPENING BALANCE'}"
                         >
                             <div class="d-flex justify-content-space-between align-items-center">
                                 <div>

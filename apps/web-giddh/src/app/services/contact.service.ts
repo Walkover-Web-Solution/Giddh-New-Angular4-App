@@ -7,7 +7,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CONTACT_API } from './apiurls/contact.api';
-import { ContactAdvanceSearchModal } from "../models/api-models/Contact";
+import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
 
 interface IBankRefreshResponse {
@@ -19,12 +19,14 @@ interface IBankRefreshResponse {
 export class ContactService {
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
-        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler,
+        public http: HttpWrapperService,
+        private generalService: GeneralService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /**
-     *To get contact details
+     * To get contact details
      *
      * @param {string} fromDate From date
      * @param {string} toDate To date
@@ -128,30 +130,15 @@ export class ContactService {
     }
 
     /**
-     * This will be use for send customer information
-     *
-     * @param {string} accountUniqueName
-     * @return {*}  {Observable<BaseResponse<any, string>>}
-     * @memberof ContactService
-     */
-    public sendCustomerInformation(accountUniqueName: string): Observable<BaseResponse<any, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + CONTACT_API.SEND_CUSTOMER_INFORMATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<any, string> = res;
-            data.request = '';
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
-    }
-    
-    /**
      * Refresh bank accounts
-     * 
+     *
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof ContactService
      */
-    public refreshBank(): Observable<BaseResponse<IBankRefreshResponse, string>> {
-        let url = this.config.apiUrl + CONTACT_API.BANKACCOUNTS_REFRESH;
+    public refreshGoCardlessBankTransactions(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, any>> {
+        let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        url = url.replace(':accountUniqueName', encodeURIComponent(accountUniqueName ?? ''));
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -160,4 +147,19 @@ export class ContactService {
             }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
     }
 
+    /**
+     * Send bulk email template to specified customers or vendors
+     * @param model Request payload containing customer/vendor unique names and template type
+     * @returns Observable<BaseResponse<any, string>> API response
+     */
+    public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
+        return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.request = '';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
+    }
 }

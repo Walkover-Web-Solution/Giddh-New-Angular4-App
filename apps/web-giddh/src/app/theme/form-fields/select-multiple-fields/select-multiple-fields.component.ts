@@ -7,6 +7,7 @@ import { takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
 import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
+import { EmailType } from "../../../shared/template-froala/utility/template-froala.const";
 
 @Component({
     selector: "select-multiple-fields",
@@ -55,6 +56,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to allow adding of new chips */
     private allowAddChip: boolean = true;
+    /** Holds type of email */
+    public emailType = EmailType;
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -109,7 +112,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
-            if (this.selectField && this.autoFocus) {
+            if (this.autoFocus && this.selectField) {
                 this.selectField.nativeElement.focus();
             }
         }, 100);
@@ -162,6 +165,12 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public removeOption(index: number): void {
         if (index >= 0) {
             this.chipList.splice(index, 1);
+            // Close the autocomplete dropdown if it's open
+            setTimeout(() => {
+                if (this.trigger && this.trigger.panelOpen) {
+                    this.trigger.closePanel();
+                }
+            }, 100);  // Delay slightly to allow for view update
             this.emitList();
         }
     }
@@ -218,5 +227,22 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private emitList(): void {
         this.selectedOption.emit(this.chipList);
         this.changeDetection.detectChanges();
+    }
+
+    /**
+   * This will use for close dropdown panel
+   *
+   * @param {*} event Pointer event
+   * @memberof SelectMultipleFieldsComponent
+   */
+    public closeDropdownPanel(event?: any): void {
+        if (event?.currentTarget?.activeElement?.className?.indexOf("select-multiple-field-input") > -1) {
+            /*
+                Don't close the panel if the user clicks at the corner of the input field,
+                handles the edge case when user clicks the corner and the suggestions get hidden
+            */
+            return;
+        }
+        this.trigger?.closePanel();
     }
 }

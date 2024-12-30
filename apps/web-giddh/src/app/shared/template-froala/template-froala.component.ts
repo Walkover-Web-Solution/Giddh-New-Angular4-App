@@ -1,14 +1,16 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
-import { GeneralService } from '../../services/general.service';
 import { EmailType } from './utility/template-froala.const';
+import { cloneDeep } from '../../lodash-optimized';
+import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
@@ -16,6 +18,8 @@ import { EmailType } from './utility/template-froala.const';
     providers: [CustomEmailComponentStore]
 })
 export class TemplateFroalaComponent implements OnInit {
+    /** Instance of select multiple fields*/
+    @ViewChildren(SelectMultipleFieldsComponent) childComponents!: QueryList<SelectMultipleFieldsComponent>;
     /** Instance of subject input field */
     @ViewChild('subjectInputField', { static: false }) subjectInputField: ElementRef;
     /** Aside pane state*/
@@ -117,29 +121,33 @@ export class TemplateFroalaComponent implements OnInit {
     public bccEmails: any[] = [];
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
-    /** Hold false if user click on out of email section */
+    /** Hold if user click outside of email section */
     public clickedInsideEmailSection: boolean = false;
     /** Holds all static emails (To, Cc, Bcc) combined in a single string */
     public allStaticEmails: string = "";
     /** This variable is used to store the count of hidden emails, formatted as a string */
-    public isHiddenEmails: string = "";
+    public hiddenEmailList: string = "";
     /** Holds the maximum number of emails to display */
     public noOfMaximumEmailsShow: number = 2;
-    /** Holds type of email */
-    public emailType = EmailType;
+    /** Holds email type */
+    public emailType : any = EmailType;
     /** This variable maintains the focus state for email types: "to", "cc", and "bcc". */
     public emailFocusStates: any = {
-        To: true,
-        Cc: true,
-        Bcc: true
-    }
+        isTo: true,
+        isCc: true,
+        isBcc: true
+    };
+    /** Calculates the total number of email addresses across To, Cc, and Bcc fields. */
+    public get getTotalEmailsCount(): number {
+        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
+    };
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public voucherType,
+        @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService
+        public dialogRef: MatDialogRef<any>
     ) { }
 
     /**
@@ -160,7 +168,8 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const tributeSuggestions = response?.voucherSuggestions?.map(item => ({
+                const emailSuggestions = this.inputData?.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
+                const tributeSuggestions = emailSuggestions?.map(item => ({
                     value: item,
                     key: item
                 }));
@@ -186,7 +195,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.showCc = true;
                     this.selectedCcEmails = response.cc;
                 }
-                if (response?.to?.length) {
+                if (response.to?.length) {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
@@ -197,6 +206,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.updateCustomEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.dialog.closeAll();
+                this.dialogRef.close(response);
             }
         });
     }
@@ -213,14 +223,14 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
      * Updates the focus state for the email types ('to', 'cc', 'bcc').
-     *
-     * @param emailType
+     * @returns {void}
+     * @param {string} emailType
      * @memberof TemplateFroalaComponent
      */
     public setEmailFocus(emailType: string): void {
-        this.emailFocusStates.To = emailType === 'to';
-        this.emailFocusStates.Cc = emailType === 'cc';
-        this.emailFocusStates.Bcc = emailType === 'bcc';
+        this.emailFocusStates.isTo = emailType === EmailType.To;
+        this.emailFocusStates.isCc = emailType === EmailType.Cc;
+        this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
     }
 
     /**
@@ -293,7 +303,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailTemplates(): void {
-        this.componentStore.getAllEmailTemplate(this.voucherType);
+        this.componentStore.getAllEmailTemplate(this.inputData?.activeTab ? this.inputData?.activeTab : this.inputData);
     }
 
     /**
@@ -308,7 +318,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailContents(): void {
-        this.componentStore.getEmailContentSuggestions(null);
+        this.componentStore.getEmailContentSuggestions(this.inputData?.activeTab ? this.inputData.activeTab : this.inputData);
     }
 
     /**
@@ -322,7 +332,7 @@ export class TemplateFroalaComponent implements OnInit {
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.voucherType]],
+            voucherTypes: [[this.inputData]],
             emailSubject: [template?.emailSubject ?? ''],
             html: [template?.html ?? '']
         });
@@ -340,33 +350,70 @@ export class TemplateFroalaComponent implements OnInit {
      *
      * @memberof TemplateFroalaComponent
      */
-    public onSubmit(): void {
+    public onSubmit(type: string): void {
         this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
         this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
         this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
+
         if (this.emailForm.invalid) {
             return;
         }
-        let req = {
-            voucherType: this.voucherType,
-            model: this.emailForm.value
-        }
+
+        const formValue = cloneDeep(this.emailForm.value);
+        delete formValue?.voucherTypes;
+
+        // Prepare request based on type
+        const req = this.prepareRequest(type, formValue);
         this.componentStore.updateCustomTemplate(req);
     }
 
     /**
+     * Prepares the request object based on the submission type
+     * @param type - Type of submission ('save' or 'send')
+     * @param formValue - Form values to be included in request
+     * @returns Prepared request object
+     */
+    private prepareRequest(type: string, formValue: any): any {
+        const isActiveTab = this.inputData?.activeTab;
+
+        if (!isActiveTab) {
+            return {
+                voucherType: this.inputData,
+                model: this.emailForm.value
+            };
+        }
+
+        const model = {
+            ...formValue,
+            customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName)  ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
+        };
+
+        // Only add sendMail flag when type is 'send'
+        if (type === 'send') {
+            model.sendMail = true;
+        }
+
+        return {
+            voucherType: isActiveTab,
+            model
+        };
+    }
+
+    /**
     * Show/Hide bcc/cc field
-    *
-    * @param {string} type
+    * @returns {void}
+    * @param {string} emailType
     * @memberof TemplateFroalaComponent
     */
-    public toggleBccCc(type: string): void {
-        this.setEmailFocus(type);
-        if (type == EmailType.Bcc) {
-            this.showBcc = true;
-        } else if (type === EmailType.Cc) {
-            this.showCc = true;
+    public toggleBccCc(emailType: string): void {
+        this.setEmailFocus(emailType);
+        if (this.childComponents.length > 0) {
+            this.childComponents.forEach(result => {
+                result?.trigger?.closePanel();
+            });
         }
+        this.showBcc = emailType === EmailType.Bcc ? true : this.showBcc;
+        this.showCc = emailType === EmailType.Cc ? true : this.showCc;
     }
 
     /**
@@ -386,7 +433,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public clickedInsideEmail(): void {
         this.allStaticEmails = '';
-        this.isHiddenEmails = '';
+        this.hiddenEmailList = '';
         this.clickedInsideEmailSection = true;
     }
 
@@ -396,27 +443,16 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public clickedOutsideEmail(): void {
-        if (!this.allStaticEmails.length) {
+        if (!this.allStaticEmails) {
             this.getAllStaticEmails();
+            this.clickedInsideEmailSection = false;
+            if ((this.emailFocusStates.isBcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.isCc && this.selectedCcEmails.length === 0)) {
+                this.setEmailFocus(EmailType.To);
+            }
+            this.showBcc = this.selectedBccEmails.length > 0;
+            this.showCc = this.selectedCcEmails.length > 0;
         }
-        this.clickedInsideEmailSection = false;
-        if ((this.emailFocusStates.Bcc && this.selectedBccEmails.length === 0) || (this.emailFocusStates.Cc && this.selectedCcEmails.length === 0)) {
-            this.setEmailFocus(EmailType.To);
-        }
-        this.showBcc = this.selectedBccEmails.length > 0;
-        this.showCc = this.selectedCcEmails.length > 0;
     }
-
-    /**
-     * Calculates the total number of email addresses across To, Cc, and Bcc fields.
-     *
-     * @returns {number} The total count of email addresses
-     * @memberof TemplateFroalaComponent
-     */
-    public getTotalEmailsCount(): number {
-        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
-    }
-
 
     /**
      * Get all Emails
@@ -425,7 +461,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private getAllStaticEmails(): void {
         this.allStaticEmails = '';
-        this.isHiddenEmails = '';
+        this.hiddenEmailList = '';
 
         // Helper function to append emails
         const appendEmails = (emails: string[], prefix = '', limit = this.noOfMaximumEmailsShow - (this.allStaticEmails.trim() === "" ? 0 : this.allStaticEmails.split(',').length)) => {
@@ -451,16 +487,16 @@ export class TemplateFroalaComponent implements OnInit {
         }
 
         // Calculate hidden emails
-        const totalEmails = this.getTotalEmailsCount();
+        const totalEmails = this.getTotalEmailsCount;
         const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length;
         const hiddenEmailsCount = totalEmails - this.noOfMaximumEmailsShow;
 
         if (hiddenEmailsCount > 0) {
             if (visibleEmails <= this.noOfMaximumEmailsShow) {
-                this.isHiddenEmails += ` ${hiddenEmailsCount} Bcc`;
+                this.hiddenEmailList += ` ${hiddenEmailsCount} Bcc`;
             } else {
                 const bccInfo = this.selectedBccEmails.length ? ` (${this.selectedBccEmails.length} Bcc)` : '';
-                this.isHiddenEmails += ` ${hiddenEmailsCount} more${bccInfo}`;
+                this.hiddenEmailList += ` ${hiddenEmailsCount} ${this.commonLocaleData.app_more}${bccInfo}`;
             }
         }
     }
