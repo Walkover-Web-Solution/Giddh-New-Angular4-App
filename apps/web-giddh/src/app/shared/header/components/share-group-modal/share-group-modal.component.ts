@@ -34,7 +34,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public allPermissions$: Observable<GetAllPermissionResponse[]>;
     /** Email id validation regex pattern */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
-    /** Holds user module restriction */
+    /** Holds true if user module is restricted */
     public isUserRestricted: boolean = false;
     /** Active company details */
     public activeCompany: any;
@@ -81,10 +81,12 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
      * @memberof  ShareGroupModalComponent
      */
     public buyPlan(subscriptionId: string): void {
-        this.closeModal();
-        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
-        document.querySelector('body')?.classList?.remove('master-page');
-        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+        if (subscriptionId) {
+            this.closeModal();
+            this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+            document.querySelector('body')?.classList?.remove('master-page');
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+        }
     }
 
     public async shareGroup() {

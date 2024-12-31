@@ -10,9 +10,9 @@
                     [readonly]="userdata?.uniqueName" [disabled]="isUserRestricted"></input-field>
             </div>
             <div>
-                <reactive-dropdown-field [label]="isLblShow ? localeData?.role_name_label : ''" [name]="'roles'"
+                <reactive-dropdown-field [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''" [name]="'roles'"
                     [placeholder]="localeData?.role_name_placeholder" [options]="allRoles"
-                    formControlName="roleUniqueName" [labelValue]="userdata?.roleName ?? ''"
+                    formControlName="roleUniqueName" [labelValue]="isUserRestricted  ? '' : userdata?.roleName"
                     [required]="true" [readonly]="isUserRestricted"></reactive-dropdown-field>
             </div>
             <!-- time span -->
