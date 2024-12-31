@@ -444,7 +444,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public updateBranchInfo(branchDetails: any): void {
         if (branchDetails) {
-            branchDetails.formValue.linkedEntity = branchDetails?.formValue?.linkedEntity || [];
+            branchDetails.formValue.linkedEntity = branchDetails.formValue?.linkedEntity || [];
             this.isBranchChangeInProgress = true;
             const linkAddresses = branchDetails.addressDetails?.linkedEntities?.filter(entity => (branchDetails.formValue?.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
                 uniqueName: filteredEntity?.uniqueName,
