@@ -579,6 +579,14 @@
                                             : "#"
                                     }}
                                 </th>
+                                <th *ngIf="fieldsAndVisibility.table.showVariantImage?.display"
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
+                                    {{
+                                    fieldsAndVisibility.table.showVariantImage?.label?.length > 0
+                                    ? fieldsAndVisibility.table.showVariantImage?.label
+                                    : "Display Image"
+                                    }}
+                                </th>
                                 <th
                                     *ngIf="
                                         fieldsAndVisibility.table.item?.display ||
@@ -630,14 +638,6 @@
                                         fieldsAndVisibility.table.rate?.label?.length > 0
                                             ? fieldsAndVisibility.table.rate?.label
                                             : "Rate"
-                                    }}
-                                </th>
-                                <th *ngIf="fieldsAndVisibility.table.showVariantImage?.display"
-                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
-                                    {{
-                                    fieldsAndVisibility.table.showVariantImage?.label?.length > 0
-                                    ? fieldsAndVisibility.table.showVariantImage?.label
-                                    : "Display Image"
                                     }}
                                 </th>
                                 <th
@@ -730,6 +730,10 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">1</td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
                                 <td
                                     class="text-left"
                                     *ngIf="
@@ -768,9 +772,6 @@
                                     <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
                                         <span [innerHTML]="dollarSymbol"></span>14.28
                                     </p>
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
-                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px" width="50px" />
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.amountBeforeDiscount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"> </span>2000.00
@@ -816,6 +817,10 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">2</td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
                                 <td
                                     class="text-left"
                                     *ngIf="
@@ -851,9 +856,6 @@
                                     <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
                                         <span [innerHTML]="dollarSymbol"></span>4.28
                                     </p>
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
-                                <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px" width="50px" />
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.amountBeforeDiscount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>600.00
@@ -950,9 +952,6 @@
                                     [innerHTML]='rupeeSymbol'></span>1030.00
                                <p><span [innerHTML]='dollarSymbol'></span>12.00</p>
                             </td>
-                            <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display ">
-                                <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px" width="50px" />
-                            </td>
                             <td *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right ">--</td>
                             <td *ngIf="fieldsAndVisibility.table.taxableValue?.display " class="text-right "><span
                                     [innerHTML]='rupeeSymbol'></span>1700.00
@@ -1015,9 +1014,6 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
                                 ></th>
-                                <th *ngIf="fieldsAndVisibility.table.showVariantImage?.display"
-                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
-                                </th>
                                 <th
                                     *ngIf="fieldsAndVisibility.table.amountBeforeDiscount.display"
                                     class="text-right"
