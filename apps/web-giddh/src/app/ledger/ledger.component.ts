@@ -1046,15 +1046,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isBankAccountConnected = false;
             if (response?.body?.length) {
-                this.bankList = response?.body;
-                if (response.body?.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
+                this.bankList = response.body;
+                if (response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
                     this.isBankAccountConnected = true;
                 } else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
                     this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 }
                 if (this.referenceNumber !== null) {
-                    this.openBankLinkDialog()
+                    this.openBankLinkDialog();
                 }
             }
         });
@@ -2781,12 +2781,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
-                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => { 
-                        if(response){
+                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response) {
                             this.getAllBankAccounts();
                             this.componentStore.setState(state => ({
-                                ...state, 
-                                 requisitionList: null
+                                ...state,
+                                requisitionList: null
                             }));
                         }
                     });
@@ -3237,10 +3237,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
 
-            dialogRef.afterClosed().pipe(take(1), tap(response => { if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); this.referenceNumber = null; })).subscribe();
+            dialogRef.afterClosed().pipe(take(1), tap(response => { 
+                if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); this.referenceNumber = null; 
+            })).subscribe();
         }
     }
-    
+
     /**
      * This will link the connected bank accounts
      * 
@@ -3252,7 +3254,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             accountNumber: this.unlinkBankList[0]?.bankResource?.accountNumber,
             accountUniqueName: this.lc.accountUnq,
             paymentAlerts: []
-        } 
+        }
         this.settingIntegrationComponentStore.updateAccount({ accountForm, request });
     }
 }
