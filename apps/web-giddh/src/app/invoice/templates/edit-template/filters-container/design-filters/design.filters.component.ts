@@ -413,7 +413,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
     /**
-     * This is use for toster message for change up to template click
+     * This is used when the user changes the template.
      */
     public showMessage(): void{
         this._toasty.warningToast('You cannot modify the template while in update mode.');
