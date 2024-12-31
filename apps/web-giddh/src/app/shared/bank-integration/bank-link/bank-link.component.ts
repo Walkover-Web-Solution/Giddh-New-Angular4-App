@@ -47,10 +47,10 @@ export class BankLinkComponent implements OnInit, OnDestroy {
      * @memberof BankLinkComponent
      */
     public ngOnInit(): void {
-        if (!this.inputData?.bankList) {
-            this.getAllBankAccounts();
-        } else {
+        if (this.inputData?.bankList) {
             this.setTransformBankListData(this.inputData?.bankList);
+        } else {
+            this.getAllBankAccounts();
         }
 
         this.componentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {

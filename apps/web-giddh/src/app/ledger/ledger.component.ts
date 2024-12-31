@@ -316,7 +316,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Hold reference number */
-    public referenceNumber: string = 'null';
+    public referenceNumber: string = null;
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** True, if is integration module are in scope  */
@@ -332,15 +332,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds Store refresh bank error as observable */
     public isBankRefreshingError$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshingError);
     /** True if active account is bank account */
-    public isBankAccountConnected: boolean;
+    public isBankAccountConnected: boolean = null;
     /** True, if show bank link button is to show */
     public showBankLinkButton: boolean;
     /** Holds accountUniquename of get all bank-Account  */
     public selectedAccountUniquename: any;
-    /** Holds selected bank unique name */
-    private selectedBankUniqueName: string;
     /** Holds the bank account which is not linked */
     public unlinkBankList: any[] = [];
+    /** Holds list of connected banks */
+    private bankList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -505,10 +505,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
    * @param {*} element
    * @memberof LedgerComponent
    */
-    public openInstitutionsDialog(bankAccount): void {
-        this.selectedBankUniqueName = bankAccount?.uniqueName;
-
-        let data = {
+    public openInstitutionsDialog(): void {
+        const data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData
         }
@@ -1030,19 +1028,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
          */
         this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.openInstitutionsDialog(this.bankAccount);
+                this.openInstitutionsDialog();
             }
         });
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body) {
+            this.isBankAccountConnected = false;
+            if (response?.body?.length) {
+                this.bankList = response?.body;
                 if (response.body?.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
                     this.isBankAccountConnected = true;
                 } else {
                     this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
                     this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 }
-                if (this.referenceNumber != null) {
+                if (this.referenceNumber !== null) {
                     this.openBankLinkDialog()
                 }
             }
@@ -3192,8 +3192,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     * @memberof LedgerComponent
     */
     public getAllBankAccounts(accountUniqueName?: string): void {
-        this.isBankAccountConnected = false;
-        this.showBankLinkButton = false;
+        this.isBankAccountConnected = null;
+        this.showBankLinkButton = null;
         this.selectedAccountUniquename = accountUniqueName;
         this.settingIntegrationComponentStore.getAllBankAccounts();
     }
@@ -3217,7 +3217,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.linkBankAccount();
         } else {
             const data = {
-                bankList: this.selectedBankUniqueName,
+                bankList: this.bankList ?? [],
                 accountUniqueName: this.lc.accountUnq
             }
             const dialogRef = this.dialog.open(BankLinkComponent, {
