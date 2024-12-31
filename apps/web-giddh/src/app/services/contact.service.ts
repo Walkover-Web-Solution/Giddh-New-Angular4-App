@@ -7,7 +7,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CONTACT_API } from './apiurls/contact.api';
-import { ContactAdvanceSearchModal } from "../models/api-models/Contact";
+import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
 
 interface IBankRefreshResponse {
@@ -19,12 +19,14 @@ interface IBankRefreshResponse {
 export class ContactService {
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
-        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler,
+        public http: HttpWrapperService,
+        private generalService: GeneralService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /**
-     *To get contact details
+     * To get contact details
      *
      * @param {string} fromDate From date
      * @param {string} toDate To date
@@ -143,5 +145,21 @@ export class ContactService {
                 data.request = '';
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
+    }
+
+    /**
+    * Send bulk email template to specified customers or vendors
+    * @param model Request payload containing customer/vendor unique names and template type
+    * @returns Observable<BaseResponse<any, string>> API response
+    */
+    public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
+        return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.request = '';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
     }
 }

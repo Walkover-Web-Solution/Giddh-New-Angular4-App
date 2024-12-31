@@ -284,6 +284,14 @@
                                             >
                                                 {{ localeData?.bulk_payment }}
                                             </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0"
+                                                 (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
+                                                aria-label="send bulk email"
+                                            >
+                                              {{ localeData?.send_bulk_email }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </div>
@@ -697,6 +705,14 @@
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button> -->
+                                     <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
                                 </mat-menu>
                             </div>
                         </td>
@@ -1036,6 +1052,14 @@
                                         aria-label="record bill"
                                     >
                                         {{ commonLocaleData?.app_record_bill }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
                                     </button>
                                     <!-- <button
                                         mat-menu-item

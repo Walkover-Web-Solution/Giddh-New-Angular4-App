@@ -70,6 +70,7 @@ import { BulkVoucherExportService } from "./bulkvoucherexport.service";
 import { CustomFieldsService } from "./custom-fields.service";
 import { VoucherService } from "./voucher.service";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
+import { CountryCodeService } from './country-code.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -151,7 +152,8 @@ export class ServiceModule {
                 PageLeaveUtilityService,
                 LedgerService,
                 VoucherService,
-                VouchersUtilityService
+                VouchersUtilityService,
+                CountryCodeService
             ]
         };
     }
