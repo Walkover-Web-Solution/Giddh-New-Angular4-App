@@ -12,8 +12,8 @@ import { select, Store } from '@ngrx/store';
 export class SubscriptionUpgradeButtonComponent implements OnDestroy {
     /** Type of restricted module to check */
     @Input() public restrictedModule: RestrictedModules;
-    /** Remaining count for specific features (like users) */
-    @Input() public isUserRestricted?: boolean = false;
+    /** Holds true if user module is restricted */
+    @Input() public isUserRestricted: boolean = false;
     /** Flag to determine if component should use router navigation or emit event */
     @Input() public useRouterLink: boolean = false;
     /** Event emitter for upgrade button click */

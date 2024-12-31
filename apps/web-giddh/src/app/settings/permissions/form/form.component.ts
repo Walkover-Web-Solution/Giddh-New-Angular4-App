@@ -70,7 +70,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds user module restriction */
+    /** Holds true if user module is restricted */
     public isUserRestricted: boolean = false;
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
