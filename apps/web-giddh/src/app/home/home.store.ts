@@ -32,7 +32,7 @@ export class HomeComponentStore extends ComponentStore<HomeState> {
     public profile$: Observable<any> = this.select(this.store.select(profileObj => profileObj.settings.profile), (response) => response);
 
     /**
-    *  Refresh go-cardless bank transactions
+    *  Refresh bank accounts
     *
     *  @memberof HomeComponentStore
     */
