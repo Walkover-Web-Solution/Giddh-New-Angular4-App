@@ -27,6 +27,7 @@
     width: 100%;
     background: var(--color-grid-row-tb-pl-custom-header-background);
 }
+
 .tb-pl-custom-title {
     font-family: var(--font-semibold) !important;
     font-size: var(--font-size-15) !important;
@@ -54,12 +55,14 @@ ul.list-unstyled li {
 ul.list-unstyled li a {
     color: var(--color-nero);
 }
+
 .no-select {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
+
 .account {
     div {
         -webkit-line-clamp: 1;
@@ -68,9 +71,11 @@ ul.list-unstyled li a {
         text-overflow: ellipsis;
     }
 }
+
 .row.row-item {
     height: 35px !important;
 }
+
 .trial-balance-viewport {
     background-color: var(--color-common-senary-background-for-all-components);
 }

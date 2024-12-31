@@ -1,5 +1,5 @@
 <div
-    class="row pl-grid-row"
+    class="row flex-nowrap"
     [financial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
     [ngClass]="{ 'd-none': !groupDetail.isVisible }"
@@ -62,7 +62,7 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section class="account pl-grid-row" [ngClass]="{ 'd-none': !account.isVisible }">
+    <section class="account flex-nowrap" [ngClass]="{ 'd-none': !account.isVisible }">
         <div class="row" (dblclick)="entryClicked(account)">
             <div
                 class="col-4 account"

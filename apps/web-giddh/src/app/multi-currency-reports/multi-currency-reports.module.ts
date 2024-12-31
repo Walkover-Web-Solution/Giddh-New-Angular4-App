@@ -2,16 +2,11 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BalanceSheetReportComponent } from './balance-sheet/balance-sheet-report.component';
@@ -21,7 +16,6 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { MultiCurrencyReportsRoutingModule } from './multi-currency-reports.routing.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
@@ -44,6 +38,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FinancialAccordionDirective } from './directives/financial-accordion.directive';
 import { BalanceSheetReportGridComponent } from './balance-sheet/components/balance-sheet-grid/balance-sheet-report-grid.component';
 import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     declarations: [
@@ -67,15 +62,10 @@ import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/b
     providers: [],
     imports: [
         CommonModule,
-        ModalModule.forRoot(),
         FormsModule,
         ReactiveFormsModule,
         Daterangepicker,
         MultiCurrencyReportsRoutingModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
         HighlightModule,
         RecTypeModule,
         ClickOutsideModule,
@@ -91,15 +81,14 @@ import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/b
         AsideMenuAccountModule,
         MatTooltipModule,
         MatButtonModule,
-        MatTableModule,
         MatFormFieldModule,
         MatSelectModule,
-        FormFieldsModule,
         FinancialSearchPipe,
         MatInputModule,
-        MatTableModule,
         TooltipModule,
-        MatTabsModule
+        MatTabsModule,
+        MatListModule,
+        FormFieldsModule
     ],
 })
 export class MultiCurrencyReportsModule {

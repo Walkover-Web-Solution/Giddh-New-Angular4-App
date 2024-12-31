@@ -5,7 +5,6 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="tb-wrapper clearfix">
-        <!-- start main content -->
         <div class="mt-1 mr-b1 pull-right">
             <div class="tbpl-list">
                 <ul class="list-inline color-codes pull-right">
@@ -27,7 +26,6 @@
                     </li>
                 </ul>
             </div>
-            <!-- end of column -->
         </div>
         <div class="table-container clearfix trial-balance">
             <section class="tb-section">
@@ -72,7 +70,6 @@
                     </div>
                 </div>
             </section>
-            <!--Start Grid-->
             <div *ngIf="data$?.groupDetails">
                 <ng-template #groupDetails let-list let-padding="padding" let-isSubGroup="isSubGroup">
                     <ng-container *ngIf="!expandAll || isSubGroup || (expandAll && search)">
@@ -205,7 +202,6 @@
                 </table>
             </div>
         </div>
-        <!-- end main content -->
     </div>
 </ng-container>
 <ng-template #createNew>

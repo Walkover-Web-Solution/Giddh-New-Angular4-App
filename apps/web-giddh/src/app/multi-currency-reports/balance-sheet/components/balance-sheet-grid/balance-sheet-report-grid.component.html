@@ -5,8 +5,6 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div  class="tb-wrapper mr-t2 clearfix">
-        <!--top heading  labels-->
-        <!--Main Grid-->
         <div class="table-container" *ngIf="!hideData">
             <div class="income mr-b1">
                 <div class="clearfix profit-loss">
@@ -41,7 +39,7 @@
                                 <th class="text-right font-16" width="33.33%">
                                     {{ commonLocaleData?.app_as_of }}
                                     <span
-                                        *ngIf="lastSyncDate.length && (lastSyncDate !== 'Invalid Date')"
+                                        *ngIf="lastSyncDate && dayjs(lastSyncDate)?.isValid()"
                                     >  
                                         {{ lastSyncDate }}</span
                                     >
@@ -49,7 +47,6 @@
                             </tr>
                         </thead>
                     </table>
-                    <!--Grid-->
                     <div class="m-10">
                         <strong class="font-15">{{ localeData?.equity_liabilities }}</strong>
                     </div>
@@ -84,7 +81,6 @@
                         "
                     >
                     </ng-container>
-                    <!--/Grid-->
                     <div class="top-bar row clearfix">
                         <div class="col-4 group">
                             <strong class="font-15">{{ localeData?.total_liabilities }}</strong>
@@ -119,7 +115,6 @@
 
             <div class="expenses">
                 <div class="clearfix profit-loss">
-                    <!--Grid-->
                     <div class="m-10">
                         <strong class="font-15">{{ localeData?.ii_assets }}</strong>
                     </div>
@@ -152,7 +147,6 @@
                         "
                     >
                     </ng-container>
-                    <!--/Grid-->
                 </div>
             </div>
 
@@ -185,8 +179,6 @@
                     </strong>
                 </div>
             </div>
-            <!-- end of expenses -->
         </div>
-        <!-- end row -->
     </div>
 </ng-container>

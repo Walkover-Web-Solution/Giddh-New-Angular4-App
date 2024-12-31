@@ -44,11 +44,10 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
      * @memberof MultiCurrencyReportsComponent
      */
     public ngOnInit(): void {
-
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.tabIndex) {
                 this.selectedTabIndex = Number(val.tabIndex);
-                this.tabChanged(this.selectedTabIndex)
+                this.tabChanged(this.selectedTabIndex);
             }
         });
     }

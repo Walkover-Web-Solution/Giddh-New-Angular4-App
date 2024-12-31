@@ -9,7 +9,6 @@ import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.st
 import { ReportType } from '../multi-currency.const';
 import { prepareProfitLossData } from '../../store/tl-pl/tl-pl.reducer';
 
-
 @Component({
     selector: 'profit-loss-report',
     templateUrl: './profit-loss-report.component.html',
@@ -17,7 +16,8 @@ import { prepareProfitLossData } from '../../store/tl-pl/tl-pl.reducer';
 })
 export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Reference to the ProfitLossGridComponent */
-    @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;/** Holds the local JSON data */
+    @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;
+    /** Holds the local JSON data */
     public localeData: any = {};
     /** Holds the common JSON data */
     public commonLocaleData: any = {};
