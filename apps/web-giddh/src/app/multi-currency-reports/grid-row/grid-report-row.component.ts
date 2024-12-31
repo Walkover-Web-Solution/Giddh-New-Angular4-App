@@ -75,10 +75,10 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
      * @returns {void}
      */
     public entryClicked(account: any): void {
-        let url = location.href + '?returnUrl=ledger/' + account?.uniqueName + '/' + this.from + '/' + this.to;
+        let url = `${location.href}?returnUrl=ledger/${encodeURIComponent(account?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + account?.uniqueName + '/' + this.from + '/' + this.to;
+            url = `${location.origin}${location.pathname}#./pages/ledger/${encodeURIComponent(account?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
@@ -154,7 +154,7 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
         const parentNode = this.document.querySelector('.financial-report-account-detail-container');
         /* Need to remove the element from the popover so that it could be attached to body as we show the account
          modal within a popover which can't display the modal within it */
-        this.renderer.addClass(modalInstance._element.nativeElement, 'm-0')
+        this.renderer.addClass(modalInstance._element.nativeElement, 'm-0');
         this.renderer.removeChild(parentNode, modalInstance._element.nativeElement);
     }
 }

@@ -5,8 +5,6 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="tb-wrapper mr-t2 clearfix table-container">
-        <!--top heading  labels-->
-        <!--Main Grid-->
         <div class="income">
             <div class="clearfix profit-loss">
                 <table class="table basic pl-table-grid">
@@ -51,7 +49,6 @@
                     </thead>
                 </table>
                 <div *ngIf="plData && plData.incArr && !hideData">
-                    <!--Grid-->
                     <ng-template #groupDetails let-list let-padding="padding">
                         <ng-container *ngFor="let grp of list">
                             <section
@@ -90,7 +87,7 @@
                     >
                     </ng-container>
                     <section>
-                        <div class="pl-grid-row row">
+                        <div class="flex-nowrap row">
                             <div class="col-8 group pd-l1">{{ localeData?.total_cost_of_goods_sold }}</div>
                             <div class="col-4 bd-rl group text-right pull-right">
                                 <span>
@@ -106,7 +103,6 @@
                             </div>
                         </div>
                     </section>
-                    <!--/Grid-->
                 </div>
                 <div class="account clearfix row" *ngIf="plData && plData.incomeStatment && !hideData">
                     <div class="col-8 group pd-1">
@@ -149,7 +145,7 @@
                             </ng-container>
                         </section>
                         <section *ngIf="grp.groupName && grp?.uniqueName === 'revenue'">
-                            <div class="pl-grid-row row">
+                            <div class="flex-nowrap row">
                                 <div class="col-8 group pd-l1">{{ localeData?.total_revenue }}</div>
                                 <div class="col-4 bd-rl group text-right pull-right pd-l1">
                                     <span>
@@ -226,7 +222,7 @@
                         <section
                             *ngIf="grp.groupName && grp?.uniqueName === 'otherexpenses'"
                         >
-                            <div class="pl-grid-row row">
+                            <div class="flex-nowrap row">
                                 <div class="col-8 group pd-l1">
                                     {{ localeData?.total_other_expense }}
                                 </div>
@@ -312,8 +308,6 @@
                 </div>
             </div>
         </ng-template>
-        <!-- end of expenses -->
-        <!-- end row -->
     </div>
     <ng-template #operatorSign let-data let-category="category">
         <span

@@ -26,9 +26,9 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
     /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
     /** Minimum limit on which Trial balance viewport enables */
+    public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
-    public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
 
     constructor(private changeDetectionRef: ChangeDetectorRef) {
     }
@@ -58,11 +58,11 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
      * @memberof ProfitLossReportGridComponent
      */
     public entryClicked(acc: any): void {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+        let url = `${location.href}?returnUrl=ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = `${location.origin}${location.pathname}#./pages/ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-            ipcRenderer.send('open-url', url)
+            ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
         }

@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
@@ -9,7 +9,7 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, orderBy } from '../../lodash-optimized';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 
 @Component({
@@ -40,13 +40,13 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /** The selected date option, initialized to '0' */
     public selectedDateOption: string = '0';
     /** The reactive form group for managing filter inputs */
-    public filterForm: UntypedFormGroup;
+    public filterForm: FormGroup;
     /** The string used for searching items */
     public search: string = '';
     /** The list of financial options available for selection */
     public financialOptions: IOption[] = [];
     /** The form control for managing account search input */
-    public accountSearchControl: FormControl = new FormControl();
+    public accountSearchControl: FormControl = new FormControl<string>('');
     /** The list of tags associated with the component */
     public tags: TagRequest[] = [];
     /** The currently selected tag */
@@ -84,7 +84,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /** ReplaySubject used to handle cleanup and prevent memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-
     constructor(private formBuilder: FormBuilder,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -100,10 +99,10 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
 
     }
 
-        /**
+    /**
      * Initializes the component
      *
-     * @returns {void}
+     * @returns {void}ß
      * @memberof FilterMultiCurrencyComponent
      */
     public ngOnInit(): void {
@@ -117,19 +116,19 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.componentStore.universalDate$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((a) => {
-            if (a) {
+        this.componentStore.universalDate$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
                 this.universalDateICurrent = false;
                 this.filterForm?.patchValue({
-                    from: dayjs(a[0]).format(GIDDH_DATE_FORMAT),
-                    to: dayjs(a[1]).format(GIDDH_DATE_FORMAT)
+                    from: dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT)
                 });
                 if (!this.changeDetectionRef['destroyed']) {
                     this.changeDetectionRef.detectChanges();
                 }
-                let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
-                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                let universalDate = cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
@@ -139,28 +138,24 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
 
         this.componentStore.currencyList$.pipe(takeUntil(this.destroyed$)).subscribe(currency => {
             if (currency) {
-                let currencyList = [];
-                currency.forEach((res) => {
-                    currencyList.push({ label: res.code, value: res.code, additional: { symbol: res.symbol } });
-                })
-                this.currencyList = currencyList;
+                this.currencyList = currency.map(res => ({
+                    label: res.code,
+                    value: res.code,
+                    additional: { symbol: res.symbol }
+                }));
             }
         });
 
         this.componentStore.companyList$.pipe(takeUntil(this.destroyed$)).subscribe(companies => {
             if (companies) {
-                let orderedCompanies = _.orderBy(companies, 'name');
+                let orderedCompanies = orderBy(companies, 'name');
                 this.companyList = orderedCompanies;
             }
         });
         this.componentStore.filterRequestData$.pipe(takeUntil(this.destroyed$)).subscribe(filterRequestData => {
             if (filterRequestData) {
                 this.getForm('selectCurrency').patchValue(filterRequestData.request.reportCurrency);
-                let selectCompany = [];
-                filterRequestData.request.companiesList.forEach((company) => {
-                    selectCompany.push(company.uniqueName)
-                });
-                this.getForm('shareCompanyList').patchValue(selectCompany);
+                this.getForm('shareCompanyList').patchValue(filterRequestData.request.companiesList.map(company => company.uniqueName));
                 this.lastSyncDate.emit(filterRequestData.lastFetchedAt);
                 this.changeDetectionRef.detectChanges();
             }

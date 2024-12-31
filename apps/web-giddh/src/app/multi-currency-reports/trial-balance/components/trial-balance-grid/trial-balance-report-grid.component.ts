@@ -19,6 +19,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
@@ -56,12 +57,12 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     /** Indicates if there is no data available */
     public noData: boolean;
     /** Controls the search input field for account search */
-    public accountSearchControl: FormControl = new FormControl();
+    public accountSearchControl: FormControl = new FormControl<string>('');
     /** Indicates whether the clear search button should be shown */
     public showClearSearch: boolean = false;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Hides the data while a new search is made to refresh the virtual list */
     public hideData: boolean;
@@ -74,7 +75,10 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private changeDetectionRef: ChangeDetectorRef, private zone: NgZone, public dialog: MatDialog) {
+    constructor(private changeDetectionRef: ChangeDetectorRef,
+        private zone: NgZone,
+        public dialog: MatDialog,
+        public generalService: GeneralService) {
 
     }
 
@@ -186,25 +190,11 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public clickedOutside(event: any, element: ElementRef): void {
-        if ((this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') || this.childOf(event.target, element)) {
+        if ((this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') || this.generalService.childOf(event.target, element)) {
             return;
         } else {
             this.showClearSearch = false;
         }
-    }
-
-    /**
-     * Checks if an element is a child of a specific parent element.
-     * 
-     * @param {EventTarget} child - The current element being checked
-     * @param {HTMLElement} parent - The parent element to check against
-     * @returns {boolean} True if the current element is a child of the parent, otherwise false
-     * @memberof TrialBalanceReportComponent
-     */
-    public childOf(child, parent): boolean {
-        while ((child = child.parentNode) && child !== parent) {
-        }
-        return !!child;
     }
 
     /**
@@ -244,14 +234,16 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof TrialBalanceGridComponent
      */
     public openAccountModal(account: any): void {
-        this.accountDetails = account;
-        this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
-        this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        if (account) {
+            this.accountDetails = account;
+            this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
+            this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
+                width: 'var(--aside-pane-width)',
+                position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
+        }
     }
 }

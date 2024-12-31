@@ -16,6 +16,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MMMM_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
@@ -55,7 +56,7 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     /** Determines if the clear search button should be shown */
     public showClearSearch: boolean = false;
     /** Form control for the search input */
-    public bsSearchControl: FormControl = new FormControl();
+    public bsSearchControl: FormControl = new FormControl<string>('');
     /** Stores the Giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Stores local JSON data */
@@ -69,7 +70,9 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     /** Observable to manage memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private changeDetectionRef: ChangeDetectorRef, private zone: NgZone) {
+    constructor(private changeDetectionRef: ChangeDetectorRef, 
+        private zone: NgZone,
+        public generalService: GeneralService) {
 
     }
 
@@ -171,25 +174,11 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof BalanceSheetReportGridComponent
      */
     public clickedOutside(event: any, element: ElementRef): void {
-        if ((this.bsSearchControl?.value !== null && this.bsSearchControl?.value !== '') || this.childOf(event.target, element)) {
+        if ((this.bsSearchControl?.value !== null && this.bsSearchControl?.value !== '') || this.generalService.childOf(event.target, element)) {
             return;
         } else {
             this.showClearSearch = false;
         }
-    }
-
-    /**
-     * Checks if an element is a child of another
-     *
-     * @param {any} child The child element
-     * @param {any} parent The parent element
-     * @returns {boolean} True if the element is a child, false otherwise
-     * @memberof BalanceSheetReportGridComponent
-     */
-    public childOf(child: any, parent: any): boolean {
-        while ((child = child.parentNode) && child !== parent) {
-        }
-        return !!child;
     }
 
     /**

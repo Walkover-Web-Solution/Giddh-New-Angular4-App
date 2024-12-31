@@ -54,17 +54,15 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
      * @memberof BalanceSheetReportGridRowComponent
      */
     public entryClicked(acc: any): void {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+        let url = `${location.href}?returnUrl=ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = `${location.origin}${location.pathname}#./pages/ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-            ipcRenderer.send('open-url', url)
+            ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
         }
-
     }
-
 
     /**
      * Track by function for balance sheet item to optimize DOM rendering
