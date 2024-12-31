@@ -256,6 +256,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Holds true if plan is either trial or cancelled */
+    public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
@@ -769,6 +771,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
+                    this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
                 }
                 this.activeCompany = res;
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
@@ -1785,15 +1788,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        let text = this.localeData?.subscription_ended_note;
-        text = text
-            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+        let text = "";
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && !this.isCurrentSubscriptionTrialOrCancelled) {
+            text = this.localeData?.subscription_expire_renewal_message;
+        } else {
+            text = this.localeData?.subscription_ended_note
+                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+        }
         return text;
     }
-
     /**
      * This will return plan transactions ended note
      *

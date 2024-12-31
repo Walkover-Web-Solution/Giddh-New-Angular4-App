@@ -12,7 +12,6 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
 import { WarehouseActions } from '../warehouse/action/warehouse.action';
-import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'address-settings',
@@ -149,7 +148,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
-        private generalService: GeneralService,
         private settingsBranchActions: SettingsBranchActions,
         public dialog: MatDialog
     ) { }

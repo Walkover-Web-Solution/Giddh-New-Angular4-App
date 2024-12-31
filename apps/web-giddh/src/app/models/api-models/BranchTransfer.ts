@@ -56,6 +56,7 @@ export class BranchTransferResponse {
 export interface ILinkedStocksResult extends INameUniqueName {
     warehouses: INameUniqueName[];
     isCompany?: boolean;
+    isConsolidatedBranch?: boolean;
 }
 
 export class LinkedStocksResponse {
