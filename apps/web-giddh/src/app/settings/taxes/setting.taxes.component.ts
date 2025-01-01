@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { select, Store } from '@ngrx/store';
@@ -104,21 +104,16 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             this.isLoading = o.isTaxesLoading;
         });
 
-        this.store
-            .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
-            .subscribe(result => {
-                if (result) {
-                    this.openCreateUpdateDialog();
+        combineLatest([
+            this.store.pipe(select(state => state.company && state.company.isTaxCreatedSuccessfully)),
+            this.store.pipe(select(state => state.company && state.company.isTaxUpdatedSuccessfully))
+        ])
+        .pipe(takeUntil(this.destroyed$)).subscribe(
+            ([isTaxCreatedSuccessfully, isTaxUpdatedSuccessfully]) => {
+                if (isTaxCreatedSuccessfully || isTaxUpdatedSuccessfully) {
+                    this.createUpdateDialogRef?.close();
                 }
-            });
-
-        this.store
-            .pipe(select(state => state.company && state.company.isTaxUpdatedSuccessfully), takeUntil(this.destroyed$))
-            .subscribe(result => {
-                if (result) {
-                    this.openCreateUpdateDialog();
-                }
-            });
+        });
     }
 
     public deleteTax(taxToDelete): void {
@@ -144,7 +139,8 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 body: this.confirmationMessage,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
-            }
+            },
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -228,7 +224,8 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 top: '0'
             },
             width: 'var(--aside-pane-width)',
-            height: '100vh !important'
+            height: '100vh !important',
+            disableClose: true
         });
     }
 

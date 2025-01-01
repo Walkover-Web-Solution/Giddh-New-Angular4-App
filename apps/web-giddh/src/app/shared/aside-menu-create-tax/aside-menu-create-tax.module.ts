@@ -13,6 +13,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
+import { GiddhDatepickerModule } from "../../theme/giddh-datepicker/giddh-datepicker.module";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 
 @NgModule({
@@ -33,7 +36,10 @@ import { MatButtonModule } from '@angular/material/button';
         MatDialogModule,
         MatFormFieldModule,
         FormFieldsModule,
-        MatButtonModule
+        MatButtonModule,
+        GiddhDatepickerModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     exports: [AsideMenuCreateTaxComponent],
     declarations: [AsideMenuCreateTaxComponent],

@@ -15,7 +15,6 @@ import { VatReportComponent } from './vat-report.component';
 import { VatReportTransactionsComponent } from './transactions/vat-report-transactions.component';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { InvoiceModule } from '../invoice/invoice.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -67,7 +66,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         ModalModule.forRoot(),
         ElementViewChildModule,
         InvoiceModule,
-        ShSelectModule,
         SharedModule,
         TaxSidebarModule,
         FormFieldsModule,

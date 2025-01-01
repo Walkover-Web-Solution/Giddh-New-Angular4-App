@@ -262,8 +262,10 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                     body: this.localeData?.confirm_delete_message,
                     ok: this.commonLocaleData?.app_yes,
                     cancel: this.commonLocaleData?.app_no
-                }
+                },
+                disableClose: true
             });
+            
             dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                 if (response) {
                     if (index === 0) {

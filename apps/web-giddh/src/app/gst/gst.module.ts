@@ -33,7 +33,6 @@ import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { SharedModule } from '../shared/shared.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -70,28 +69,21 @@ import { MatListModule } from '@angular/material/list';
     imports: [
         GstRoutingModule,
         CollapseModule,
-        PaginationModule.forRoot(),
-        BsDatepickerModule.forRoot(),
-        BsDropdownModule.forRoot(),
         Daterangepicker,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
         HighlightModule,
-        TooltipModule.forRoot(),
         ClickOutsideModule,
-        TabsModule.forRoot(),
         ElementViewChildModule,
         DecimalDigitsModule,
-        ModalModule.forRoot(),
         TranslateDirectiveModule,
         PurchaseModule,
         InvoiceModule,
         CurrencyModule,
         ConfirmModalModule,
         SharedModule,
-        ShSelectModule,
         TaxSidebarModule,
         MatGridListModule,
         FormFieldsModule,

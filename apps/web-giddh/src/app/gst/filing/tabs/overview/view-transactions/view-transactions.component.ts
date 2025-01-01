@@ -392,6 +392,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             height: '80vh',
             width: '80vw',
             maxWidth: '800px',
+            disableClose: true
         });
     }
 }

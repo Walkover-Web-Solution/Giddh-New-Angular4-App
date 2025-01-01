@@ -306,7 +306,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(FileReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -335,7 +336,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.dialog.open(ViewReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
     }
 

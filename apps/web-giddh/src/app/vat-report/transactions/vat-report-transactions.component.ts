@@ -199,6 +199,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 this.dialog.open(this.downloadOrSendMailModel, {
                     panelClass: 'modal-dialog',
                     width: '600px !important',
+                    disableClose: true
                 });
             }
         }

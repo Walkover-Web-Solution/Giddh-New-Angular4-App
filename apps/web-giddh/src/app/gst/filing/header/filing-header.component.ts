@@ -332,7 +332,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openCancelConfirmationDialog(): void {
         this.cancelConfirmationDialogRef = this.dialog.open(this.cancelConfirmationDialog, {
-            panelClass: ['mat-dialog-sm']
+            panelClass: ['mat-dialog-sm'],
+            disableClose: true
         });
     }
 
@@ -342,7 +343,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof FilingHeaderComponent
      */
     public openPushToPortalDialog(): void {
-        this.dialog.open(this.pushToPortalDialog);
+        this.dialog.open(this.pushToPortalDialog, {
+            disableClose: true
+        });
     }
 
     /**
