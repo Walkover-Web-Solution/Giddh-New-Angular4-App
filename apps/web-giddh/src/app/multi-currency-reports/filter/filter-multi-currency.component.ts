@@ -102,7 +102,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /**
      * Initializes the component
      *
-     * @returns {void}ß
+     * @returns {void}
      * @memberof FilterMultiCurrencyComponent
      */
     public ngOnInit(): void {
