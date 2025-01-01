@@ -9,12 +9,6 @@
         }
     }
 
-    div {
-        &.row {
-            border-bottom: 0;
-        }
-    }
-
     thead {
         tr {
             th {
@@ -26,21 +20,26 @@
     }
 }
 
-:host {
-    ::ng-deep {
-        .table-container {
-            &.profit-loss section div > div {
-                padding-left: 8px;
-            }
+:host ::ng-deep {
+    .table-container {
+        &.profit-loss section div>div {
+            padding-left: 8px;
         }
 
-        .basic {
-            margin-bottom: 0;
-            > thead {
-                > tr {
-                    > th {
-                        padding: 8px 8px;
-                    }
+        div {
+            &.row {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    .basic {
+        margin-bottom: 0;
+
+        >thead {
+            >tr {
+                >th {
+                    padding: 8px 8px;
                 }
             }
         }
