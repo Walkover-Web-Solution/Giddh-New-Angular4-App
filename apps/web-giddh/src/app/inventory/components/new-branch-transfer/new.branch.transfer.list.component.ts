@@ -129,6 +129,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private _generalService: GeneralService,
@@ -150,6 +152,12 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
         branchTransferVoucherTypes.map(voucherType => {
@@ -185,7 +193,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

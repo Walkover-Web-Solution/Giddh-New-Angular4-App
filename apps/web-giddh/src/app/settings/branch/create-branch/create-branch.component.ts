@@ -101,6 +101,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public asideAccountAsidePaneRef: MatDialogRef<any>;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** This will use for instance of branches Dropdown */
     public branchesDropdown: FormControl;
     /** This will use for instance of branches Dropdown */
@@ -144,8 +146,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public getBranchWiseData(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
-                this.allBranches = response.body.results?.filter(branch => !branch?.isCompany);
-                this.branches = response.body.results?.filter(branch => !branch?.isCompany);
+                const branches = response.body;
+                this.allBranches = branches.results?.filter(branch => !branch?.isCompany);
+                this.branches = this.allBranches?.map(branch => {
+                    const { name, uniqueName, ...rest } = branch;
+                    return branch = { label: name, value: uniqueName, ...rest };
+                });
                 this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
             }
         });
@@ -157,6 +163,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         document.querySelector('body').classList.add('setting-sidebar-open');
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {

@@ -21,7 +21,7 @@
                                 #searchElement
                             ></text-field>
                             <button
-                                *ngIf="!isCompany"
+                                *ngIf="(!isCompany && !isConsolidatedBranch)"
                                 class="mr-l1"
                                 mat-stroked-button
                                 color="primary"
@@ -169,7 +169,7 @@
                                                         </button>
                                                     </span>
 
-                                                    <span *ngIf="!isCompany">
+                                                    <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                         <a
                                                             href="javascript:;"
                                                             [matTooltip]="commonLocaleData?.app_delete"

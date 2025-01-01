@@ -26,7 +26,7 @@
     "enable_sms_proforma": "SMS के माध्यम से प्रोफार्मा भेजने में सक्षम करें",
     "invoice_lock_date": "चालान लॉक की तारीख",
     "show_seal": "भुगतान की स्थिति के अनुसार सील दिखाएं",
-    "auto_mail_update": "अपडेट होने पर ऑटो मेल",
+    "auto_mail_update": "बनाते और अपडेट करते समय ऑटो मेल",
     "enable_sms_invoice": "एसएमएस के माध्यम से चालान भेजने में सक्षम करें",
     "custom_invoice_no": "कस्टम चालान#",
     "branch_prefix": "शाखा उपसर्ग",

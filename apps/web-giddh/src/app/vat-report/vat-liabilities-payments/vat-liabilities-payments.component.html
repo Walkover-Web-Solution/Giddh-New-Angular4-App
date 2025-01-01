@@ -35,7 +35,7 @@
                     >
                     </dropdown-field>
                 </div>
-                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
+                <div class="col flex-grow-0" *ngIf="(isCompanyMode || isConsolidatedBranch) && isMultipleBranch">
                     <dropdown-field
                         [label]="commonLocaleData?.app_branch"
                         [options]="branchList"
@@ -154,7 +154,7 @@
                             </a>
                         </div>
                         <div class="no-data" *ngIf="!connectToHMRCUrl" >
-                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1> 
+                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                         </div>
                     </div>
                     <div *ngIf="!hasTaxNumber" class="no-data no-report">
