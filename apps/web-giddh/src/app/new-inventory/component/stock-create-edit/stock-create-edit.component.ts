@@ -1218,6 +1218,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             delete variant.fixedAssetAccountDetails;
             delete variant.purchaseAccountDetails;
             delete variant.salesAccountDetails;
+            delete variant.attachmentName;
+            delete variant.isUploading;
             variant['unitRates'] = variant?.unitRates?.filter(rate => rate?.rate);
             return variant;
         });
