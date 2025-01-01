@@ -31,7 +31,7 @@
             <section class="tb-section">
                 <div class="row">
                     <div
-                        class="col-4 search-container"
+                        class="col-4 d-flex align-items-center"
                         #searchContainer
                         (clickOutside)="clickedOutside($event, searchContainer)"
                     >
@@ -44,7 +44,7 @@
                             >
                             <i class="position-relative font-14 pd-r1 cursor-pointer d-flex align-items-center light-gray" id="showSearch" (click)="toggleSearch()"></i>
                         </span>
-                        <span [hidden]="!showClearSearch" class="show-clear-search">
+                        <span [hidden]="!showClearSearch" class="show-clear-search d-flex">
                             <input
                                 matInput
                                 type="search"
