@@ -416,6 +416,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      * This is used when the user changes the template.
      */
     public showMessage(): void{
-        this._toasty.warningToast('You cannot modify the template while in update mode.');
+        this._toasty.warningToast('You can not change the template type in update mode.');
     }
 }
