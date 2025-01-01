@@ -196,7 +196,7 @@
                                         <div class="col-6" *ngIf="!isVariantAvailable">
                                             <div class="variant-image">
                                                 <div *ngIf="!stockForm.variants[0].attachmentUniqueName">
-                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
+                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 position-relative"
                                                         [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                         <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
                                                             [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
@@ -208,13 +208,13 @@
                                                             <div class="attachment-add-icon font-12 text-center rounded-circle">
                                                                 <i class="icon-add"></i>
                                                             </div>
-                                                            <span class="attachment-placeholder text-ellipsis">{{ localeData?.attach_file }}</span>
+                                                            <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
                                                         </ng-container>
                                                     </div>
                                                 </div>
                                                 <div *ngIf="stockForm.variants[0].attachmentUniqueName">
                                                     <div
-                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success">
+                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success position-relative">
                                                         <div class="attachment-add-icon font-12 text-center rounded-circle">
                                                             <i class="icon-tick"></i>
                                                         </div>
@@ -1149,7 +1149,7 @@
                                                                 <tr class="variant-row" *ngIf="variant.name">
                                                                     <td class="text-center variant-image">
                                                                         <div *ngIf="!variant.attachmentUniqueName">
-                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
+                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 position-relative"
                                                                                 [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                                                 <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
                                                                                     [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
@@ -1159,13 +1159,13 @@
                                                                                     <div class="attachment-add-icon text-center font-12 rounded-circle">
                                                                                         <i class="icon-add"></i>
                                                                                     </div>
-                                                                                    <span class="attachment-placeholder text-ellipsis">{{ localeData?.attach_file }}</span>
+                                                                                    <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
                                                                                 </ng-container>
                                                                             </div>
                                                                         </div>
                                                                         <div *ngIf="variant.attachmentUniqueName">
                                                                             <div
-                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success">
+                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success position-relative">
                                                                                 <div class="attachment-add-icon text-center font-12 rounded-circle">
                                                                                     <i class="icon-tick"></i>
                                                                                 </div>
