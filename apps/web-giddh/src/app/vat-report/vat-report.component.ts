@@ -134,7 +134,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                             this.vatReport = res.body?.sections;
                             this.cdRef.detectChanges();
                         } else {
-                            this.toasty.errorToast(res.message);
+                            this.toasty.showSnackBar('error',res.message);
                         }
                     }
                 });
@@ -151,7 +151,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
                             this.cdRef.detectChanges();
                         } else {
-                            this.toasty.errorToast(res.message);
+                            this.toasty.showSnackBar('error',res.message);
                         }
                     }
                 });
@@ -183,7 +183,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' : '.xlsx'}`);
             } else {
                 this.toasty.clearAllToaster();
-                this.toasty.errorToast(res?.message);
+                this.toasty.showSnackBar('error',res?.message);
             }
         });
     }

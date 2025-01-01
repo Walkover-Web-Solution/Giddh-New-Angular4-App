@@ -173,7 +173,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.gstReconcileActions.SaveGSPSession(this.taxProForm));
         } else if ((this.selectedService === 'TAXPRO' || this.selectedService === 'VAYANA') && this.otpSentSuccessFully) {
             if (!(/^(?!\s*$).+/g.test(this.taxProForm.otp))) {
-                this.toaster.errorToast(this.localeData?.aside_menu?.otp_required_error);
+                this.toaster.showSnackBar('error',this.localeData?.aside_menu?.otp_required_error);
                 return;
             }
             this.store.dispatch(this.gstReconcileActions.SaveGSPSessionWithOTP(this.taxProForm));
@@ -197,7 +197,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     public submitGstReturn() {
         this.submitGstForm.isAccepted = true;
         if (this.submitGstForm.txtVal?.toLowerCase() !== 'SUBMIT'?.toLowerCase()) {
-            this.toaster.errorToast(this.localeData?.aside_menu?.submit_gst_error);
+            this.toaster.showSnackBar('error',this.localeData?.aside_menu?.submit_gst_error);
             return;
         }
         this.fileGst.emit(true);

@@ -630,15 +630,15 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public emailGSTR3bSheet(isDownloadDetailSheet: boolean) {
 
         if (!this.userEmail) {
-            return this.toasty.errorToast(this.localeData?.email_required_error);
+            return this.toasty.showSnackBar('error',this.localeData?.email_required_error);
         }
         // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser
         let convertValidDateFormat = this.selectedMonth + ',1';
         let monthToSend = dayjs(convertValidDateFormat).format("MM") + "-" + dayjs(convertValidDateFormat).format("YYYY");
         if (!monthToSend) {
-            this.toasty.errorToast(this.localeData?.month_required_error);
+            this.toasty.showSnackBar('error',this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
-            return this.toasty.errorToast(this.localeData?.gstin_unavailable_error);
+            return this.toasty.showSnackBar('error',this.localeData?.gstin_unavailable_error);
         } else {
             this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
             this.userEmail = '';

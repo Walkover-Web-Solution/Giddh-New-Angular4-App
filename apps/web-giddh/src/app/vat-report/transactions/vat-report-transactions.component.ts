@@ -144,7 +144,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     this.vatReportTransactions = res.body;
                     this.cdRef.detectChanges();
                 } else {
-                    this.toasty.errorToast(res?.message);
+                    this.toasty.showSnackBar('error',res?.message);
                 }
                 this.isLoading = false;
             });
@@ -158,7 +158,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        if (this.vatReportTransactionsRequest.page !== (event.pageIndex + 1)) {
+        if (event && this.vatReportTransactionsRequest.page !== (event.pageIndex + 1)) {
             this.vatReportTransactionsRequest.page = event.pageIndex + 1;
             this.vatReportTransactionsRequest.count = event.pageSize;
             this.vatReportTransactions.results = [];
@@ -303,7 +303,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     }
                     return saveAs(res, `${this.selectedInvoice?.voucherNumber}.` + 'pdf');
                 } else {
-                    this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    this.toasty.showSnackBar('error',this.commonLocaleData?.app_something_went_wrong);
                 }
             });
         } else {
@@ -321,7 +321,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     } else {
-                        this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                        this.toasty.showSnackBar('error',this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
         }

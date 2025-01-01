@@ -224,13 +224,12 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Select tax handler
-     *
-     * @param {*} [event]
-     * @memberof TaxSidebarComponent
-     */
-    public selectTax(): void {        
+   /**
+    * Select tax handler
+    *
+    * @memberof TaxSidebarComponent
+    */
+   public selectTax(): void {        
         this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
     }
 

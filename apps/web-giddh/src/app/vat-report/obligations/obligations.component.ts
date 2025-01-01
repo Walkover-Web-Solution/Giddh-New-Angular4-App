@@ -303,7 +303,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         }
 
-        let dialogRef = this.dialog.open(FileReturnComponent, {
+        const dialogRef = this.dialog.open(FileReturnComponent, {
             data: dataToSend,
             width: '60vw',
             height: '80vh',

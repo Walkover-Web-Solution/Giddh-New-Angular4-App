@@ -215,7 +215,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
             }
         } else {
-            this.toasty.warningToast(this.localeData?.gstin_required_error);
+            this.toasty.showSnackBar('warning',this.localeData?.gstin_required_error);
         }
         this.cdRf.detectChanges();
     }
@@ -242,17 +242,17 @@ export class GstComponent implements OnInit, OnDestroy {
 
     public emailSheet(isDownloadDetailSheet: boolean) {
         if (!this.isMonthSelected) {
-            return this.toasty.errorToast(this.localeData?.monthonly_required_error);
+            return this.toasty.showSnackBar('error',this.localeData?.monthonly_required_error);
         }
         if (!this.userEmail) {
-            return this.toasty.errorToast(this.localeData?.email_required_error);
+            return this.toasty.showSnackBar('error',this.localeData?.email_required_error);
         }
         let check = dayjs(this.selectedMonth, 'MM-YYYY');
         let monthToSend = check.format('MM') + '-' + check.format('YYYY');
         if (!monthToSend) {
-            this.toasty.errorToast(this.localeData?.month_required_error);
+            this.toasty.showSnackBar('error',this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
-            return this.toasty.errorToast(this.localeData?.gstin_unavailable_error);
+            return this.toasty.showSnackBar('error',this.localeData?.gstin_unavailable_error);
         } else {
             this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
             this.userEmail = '';

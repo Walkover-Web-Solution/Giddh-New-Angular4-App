@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header theme-bg d-flex justify-content-between">
         <h3 class="modal-title" mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</h3>
-        <button aria-hidden="true" class="close" id="closedialog" (click)="onCancel()">×</button>
+        <i (click)="onCancel()" aria-hidden="true" aria-label="close icon" class="icon-cross"></i>
     </div>
     <mat-dialog-content>
         <div class="p-3">

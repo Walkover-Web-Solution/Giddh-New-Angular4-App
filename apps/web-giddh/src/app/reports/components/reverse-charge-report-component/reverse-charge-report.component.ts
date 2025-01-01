@@ -15,7 +15,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { Router } from '@angular/router';
-import { FormControl, UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -257,12 +257,20 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.asideGstSidebarMenuState === 'out';
     }
 
+    /**
+     * Handle page change
+     *
+     * @param {*} event
+     * @memberof ReverseChargeReport
+     */
     public pageChanged(event: any): void {
-        const pageIndex = event.pageIndex + 1;
-        if (this.reverseChargeReportGetRequest.page !== pageIndex) {
-            this.reverseChargeReportResults.results = [];
-            this.reverseChargeReportGetRequest.page = pageIndex;
-            this.getReverseChargeReport(false);
+        if (event) {
+            const pageIndex = event.pageIndex + 1;
+            if (this.reverseChargeReportGetRequest.page !== pageIndex) {
+                this.reverseChargeReportResults.results = [];
+                this.reverseChargeReportGetRequest.page = pageIndex;
+                this.getReverseChargeReport(false);
+            }
         }
     }
 
@@ -501,8 +509,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public sortChange(event: any): void {
         if (event) {
-            this.reverseChargeReportGetRequest.sort = event?.direction ? event?.direction : 'asc';
-            this.reverseChargeReportGetRequest.sortBy = event?.active;
+            this.reverseChargeReportGetRequest.sort = event.direction ? event.direction : 'asc';
+            this.reverseChargeReportGetRequest.sortBy = event.active;
             this.getReverseChargeReport(true);
         }
     }
