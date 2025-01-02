@@ -668,7 +668,7 @@
                                             type="button"
                                             aria-label="create bulk entry"
                                             *ngIf="transactionCountConvertToEntries > 0"
-                                            (click)="saveBulkBankTransactionDialog()"
+                                            (click)="openBulkBankTransactionConfirmationDialog()"
                                         >
                                             <span
                                                 >{{ transactionCountConvertToEntries }} -

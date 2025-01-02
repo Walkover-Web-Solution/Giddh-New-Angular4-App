@@ -1207,8 +1207,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @returns {void}
      * @memberof LedgerComponent
      */
-    public saveBulkBankTransactionDialog(): void {
-        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+    public openBulkBankTransactionConfirmationDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
             data: {
                 configuration: this.generalService.deleteConfiguration(this.localeData?.convert_entries_message, this.commonLocaleData)
