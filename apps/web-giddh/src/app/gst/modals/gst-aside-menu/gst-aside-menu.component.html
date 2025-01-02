@@ -1,6 +1,7 @@
 <div class="modal-header theme-bg d-flex justify-content-between">
-    <h3 class="modal-title bg" id="modal-title" mat-dialog-title *ngIf="selectedService === 'TAXPRO' || ('VAYANA' && !gstAuthenticated && !gspSessionOtpAuthorized)">
-        {{ localeData?.aside_menu?.choose_provider }}</h3>
+    <h3 class="modal-title bg" id="modal-title" mat-dialog-title *ngIf="(selectedService === 'TAXPRO' || selectedService === 'VAYANA') && !gstAuthenticated && !gspSessionOtpAuthorized">
+        {{ localeData?.aside_menu?.choose_provider }}
+    </h3>
     <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</h3>
     <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</h3>
     <h3 *ngIf="selectedService === 'RECONCILE'">{{ localeData?.aside_menu?.gst_reconcile }}</h3>

@@ -113,7 +113,7 @@ export class GStTransactionRequest extends GstOverViewRequest {
     public entityType: string;
     public type: string;
     public status: string;
-    public count: number
+    public count: number;
 }
 
 export class Gstr1SummaryRequest extends GstOverViewRequest {

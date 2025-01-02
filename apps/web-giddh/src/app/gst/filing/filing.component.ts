@@ -150,7 +150,13 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.fileReturnSucces = false;
     }
 
-    public selectTabFromUrl(tab: number) {
+    /**
+     * Select tab from url
+     *
+     * @param {number} tab
+     * @memberof FilingComponent
+     */
+    public selectTabFromUrl(tab: number): void {
         this.activeTabIndex = tab;
     }
 

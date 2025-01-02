@@ -18,6 +18,7 @@ import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models
 import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
 import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
 
 export const filterTransaction = {
     entityType: '',
@@ -93,16 +94,18 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         'cess',
         'totalInvoiceValue'
     ];
-     /** Hold table page index number */
-     public pageIndex: number = 0;
-     /** Holds page size options */
-     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-     /** Holds download or send mail dialog reference */
-     public downloadOrSendMailDialogRef: MatDialogRef<any>;
+    /** Hold table page index number */
+    public pageIndex: number = 0;
+    /** Holds page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Holds download or send mail dialog reference */
+    public downloadOrSendMailDialogRef: MatDialogRef<any>;
+    /** Holds voucher type enum */
+    public voucherTypeEnum: any = VoucherTypeEnum;
 
-    constructor(private gstAction: GstReconcileActions, 
-        private store: Store<AppState>, private route: Router, 
-        private activatedRoute: ActivatedRoute, 
+    constructor(private gstAction: GstReconcileActions,
+        private store: Store<AppState>, private route: Router,
+        private activatedRoute: ActivatedRoute,
         private invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
@@ -210,7 +213,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof ViewTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
-        if (invoice.voucherType !== 'purchase') {
+        if (invoice.voucherType !== this.voucherTypeEnum.purchase) {
             let downloadVoucherRequestObject;
             if (invoice && invoice.account) {
                 this.selectedInvoice = invoice;

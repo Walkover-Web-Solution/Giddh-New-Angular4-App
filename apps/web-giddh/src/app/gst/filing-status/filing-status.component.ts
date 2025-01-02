@@ -60,16 +60,16 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public startAt: Date = new Date();
     /** Holds selected date */
     public date: FormControl = new FormControl();
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Hold table page index number */
     public pageIndex: number = 0;
-    /** Holds Pagination Data */
+    /** Holds pagination data */
     private pagination: any = {
         "page": 1,
         "count": this.pageSizeOptions[0],
         "totalPages": 1,
-        "totalItems": 1,
+        "totalItems": 1
     }
 
     constructor(
@@ -256,10 +256,10 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
     public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker.close();
-        let selectedMonth = new Date(date);
-        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
-        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        datepicker?.close();
+        const selectedMonth = new Date(date);
+        const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
         this.dateSelected([firstDay, lastDay]);
     }
 }

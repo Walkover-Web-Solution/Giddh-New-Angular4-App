@@ -65,13 +65,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isConsolidatedBranch: boolean;
     /** Holds cancel confirmation dialog template ref */
     @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
-    /** Holds cancel Confirmation dialog ref */
+    /** Holds cancel confirmation dialog ref */
     public cancelConfirmationDialogRef: MatDialogRef<any>;
-    /** Holds cancel push To Portal Dialog template ref */
+    /** Holds cancel push to portal dialog template ref */
     @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
-    /** AsideAuthentication Dialog Open */
+    /** Aside authentication dialog open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     public gstAuthenticated$: Observable<boolean>;
     /** Stores the active company information observable*/
@@ -101,7 +101,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public showDate: boolean = true;
     /** Instance of dayjs */
     public dayjs = dayjs;
-    /** Holds Aside Authentication Dialog Ref */
+    /** Holds aside authentication dialog ref */
     public asideAuthenticationDialogRef: MatDialogRef<any>;
     /** Custom selected month */
     public customMonth: string = '';
@@ -422,10 +422,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof FilingHeaderComponent
      */
     public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker.close();
-        let selectedMonth = new Date(date);
-        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
-        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        datepicker?.close();
+        const selectedMonth = new Date(date);
+        const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
         this.dateSelected([firstDay, lastDay]);
     }
 

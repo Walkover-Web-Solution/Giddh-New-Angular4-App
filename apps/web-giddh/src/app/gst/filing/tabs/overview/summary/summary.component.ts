@@ -20,7 +20,7 @@ interface SequenceConfig {
     // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
     templateUrl: './summary.component.html',
-    styleUrls: ['summary.component.scss'],
+    styleUrls: ['summary.component.scss']
 })
 export class OverviewSummaryComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -65,13 +65,11 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-
         this.gstr1OverviewData$.subscribe(data => {
             if (data && this.selectedGst === GstReport.Gstr1) {
                 this.gstrOverviewData = this.transformedSummaryData(data);
             }
         });
-
         this.gstr2OverviewData$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && this.selectedGst === GstReport.Gstr2) {
                 this.gstrOverviewData = this.transformedSummaryData(data);
@@ -91,29 +89,23 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Transformed Summary data to display in table
+     * Transformed summary data to display in table
      * 
      * @param data 
      * @returns 
      */
     private transformedSummaryData(data: GstOverViewResult): GstOverViewResult {
-        const results = cloneDeep(data);
-        if (results?.summary?.length) {
-            const transformedSummary = [];
-            results.summary.forEach((item, index) => {
-                transformedSummary.push(item);
-                if (Array.isArray(item.transactions)) {
-                    transformedSummary.push(
-                        ...item.transactions.map(transaction => ({
-                            ...transaction,
-                            parentIndex: index
-                        }))
-                    );
-                }
-            });
-
-            results.summary = transformedSummary;
-        }
+        if (!data?.summary?.length) return data;
+        const results = { ...data };
+        results.summary = results.summary.flatMap((item, index) => [
+            item,
+            ...(Array.isArray(item.transactions)
+                ? item.transactions.map(transaction => ({
+                    ...transaction,
+                    parentIndex: index
+                }))
+                : [])
+        ]);
         return results;
     }
 

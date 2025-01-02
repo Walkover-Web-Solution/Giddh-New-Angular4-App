@@ -39,7 +39,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
     /** Holds vehicle dialog template reference */
     @ViewChild("addVehicle") vehicleDialog: TemplateRef<any>;
-    /** Holds cancellation dialog template reference */ 
+    /** Holds cancellation dialog template reference */
     @ViewChild("cancellation") cancelDialog: TemplateRef<any>;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
@@ -51,6 +51,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public cancelEwaySuccess$: Observable<boolean>;
     public updateEwayvehicleProcess$: Observable<boolean>;
     public updateEwayvehicleSuccess$: Observable<boolean>;
+    /** Holds list of eway bill */
     public ewaybillLists: IEwayBillAllList;
     public modalRef: BsModalRef;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -224,18 +225,18 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.modalRef.hide();
             }
         });
-        this.store.pipe(select(p => p.ewaybillstate.EwayBillList), takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
-            if (o) {
-                this.ewaybillLists = _.cloneDeep(o);
-                this.ewaybillLists.results = o.results;
+        this.store.pipe(select(state => state.ewaybillstate.EwayBillList), takeUntil(this.destroyed$)).subscribe((response: IEwayBillAllList) => {
+            if (response) {
+                this.ewaybillLists = cloneDeep(response);
+                this.ewaybillLists.results = response.results;
 
                 if (this.todaySelected) {
-                    this.selectedDateRange = { startDate: dayjs(o.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(o.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = dayjs(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = dayjs(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.EwayBillfilterRequest.fromDate = dayjs(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.EwayBillfilterRequest.toDate = dayjs(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.EwayBillfilterRequest.fromDate = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.EwayBillfilterRequest.toDate = dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 }
                 this.detectChange();
             }

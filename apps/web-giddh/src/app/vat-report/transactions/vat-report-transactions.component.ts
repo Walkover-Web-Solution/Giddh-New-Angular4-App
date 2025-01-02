@@ -32,7 +32,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public vatReportTransactions: any = {};
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     public vatReportTransactionsRequest: VatReportTransactionsRequest = {
         from: '',

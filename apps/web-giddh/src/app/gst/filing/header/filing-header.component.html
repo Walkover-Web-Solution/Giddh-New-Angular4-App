@@ -139,8 +139,8 @@
         [returnType]="selectedGst"
         (fileGst)="fileGstReturnV2()"
         (cancelConfirmationEvent)="openCancelConfirmationDialog()"
-        (closeAsideEvent)="asideAuthenticationDialogRef.close()"
-        (fileGstComplete)="asideAuthenticationDialogRef.close()"
+        (closeAsideEvent)="asideAuthenticationDialogRef?.close()"
+        (fileGstComplete)="asideAuthenticationDialogRef?.close()"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     ></gst-aside-menu>
@@ -150,8 +150,8 @@
 <ng-template #cancelConfirmationDialog>
     <confirm-modal
         [body]="localeData?.filing?.cancel_title"
-        (successCallBack)="cancelConfirmationDialogRef.close(); asideAuthenticationDialogRef.close()"
-        (cancelCallBack)="cancelConfirmationDialogRef.close()"
+        (successCallBack)="cancelConfirmationDialogRef?.close(); asideAuthenticationDialogRef?.close()"
+        (cancelCallBack)="cancelConfirmationDialogRef?.close()"
     ></confirm-modal>
 </ng-template>
 

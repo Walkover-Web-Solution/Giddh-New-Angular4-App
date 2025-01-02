@@ -21,7 +21,7 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     public voucherVersionsResponse$: Observable<any> = this.componentStore.voucherVersionsResponse$;
     /** Holds List of Version History */
     public versionHistory: any;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Hold Pagination Information */
     public pagination: any = {
@@ -76,9 +76,11 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     * @memberof HistoryDialogComponent
     */
     public handlePageChange(event: any): void {
-        this.pagination.count = event.pageSize;
-        this.pagination.page = event.pageIndex + 1;
-        this.getVoucherVersions();
+        if (typeof event?.pageIndex === 'number') {
+            this.pagination.count = event.pageSize;
+            this.pagination.page = event.pageIndex + 1;
+            this.getVoucherVersions();
+        }
     }
 
     /**

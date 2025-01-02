@@ -62,7 +62,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
     /** Holds active tab index */
     public activeTabIndex: number = 0;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Hold table page index number */
     public pageIndex: number = 0;
@@ -91,7 +91,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      * @param {MatTabChangeEvent} event
      * @memberof ReconcileComponent
      */
-    public reconcileTabChanged(event: MatTabChangeEvent) {
+    public reconcileTabChanged(event: MatTabChangeEvent): void {
         if (typeof event?.index === 'number') {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
@@ -110,7 +110,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
                     action = 'matched';
                     break;
                 default:
-                    action = 'notfoundonportal'; // Default case
+                    action = 'notfoundonportal';
             }
 
             this.reconcileActiveTab = GstReconcileActionsEnum[action];

@@ -106,12 +106,12 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             this.store.pipe(select(state => state.company && state.company.isTaxCreatedSuccessfully)),
             this.store.pipe(select(state => state.company && state.company.isTaxUpdatedSuccessfully))
         ])
-        .pipe(takeUntil(this.destroyed$)).subscribe(
-            ([isTaxCreatedSuccessfully, isTaxUpdatedSuccessfully]) => {
-                if (isTaxCreatedSuccessfully || isTaxUpdatedSuccessfully) {
-                    this.createUpdateDialogRef?.close();
-                }
-        });
+            .pipe(takeUntil(this.destroyed$)).subscribe(
+                ([isTaxCreatedSuccessfully, isTaxUpdatedSuccessfully]) => {
+                    if (isTaxCreatedSuccessfully || isTaxUpdatedSuccessfully) {
+                        this.createUpdateDialogRef?.close();
+                    }
+                });
     }
 
     public deleteTax(taxToDelete): void {
@@ -263,9 +263,9 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     private toggleTaxAuthority(): void {
         const hasTaxAuthority = this.availableTaxes?.length && this.availableTaxes[0]?.taxAuthority;
         const taxAuthorityIndex = this.displayedColumns.indexOf('taxAuthority');
-        
+
         if (!hasTaxAuthority && taxAuthorityIndex !== -1) {
-            this.displayedColumns = this.displayedColumns.filter(column => column !== 'taxAuthority');
+            this.displayedColumns = this.displayedColumns?.filter(column => column !== 'taxAuthority');
         } else if (hasTaxAuthority && taxAuthorityIndex === -1) {
             this.displayedColumns.splice(3, 0, 'taxAuthority');
         }

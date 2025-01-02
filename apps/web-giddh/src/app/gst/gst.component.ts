@@ -358,10 +358,10 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker.close();
-        let selectedMonth = new Date(date);
-        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
-        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        datepicker?.close();
+        const selectedMonth = new Date(date);
+        const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
         this.dateSelected([firstDay, lastDay]);
     }
 }

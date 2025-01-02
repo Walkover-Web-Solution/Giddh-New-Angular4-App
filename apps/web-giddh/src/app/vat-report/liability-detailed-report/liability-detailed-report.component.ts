@@ -16,7 +16,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Vat Liability Detailed Report data */
     public vatLiabilityDetailedReport: any = {};
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds Vat Liability Detailed Report request object */
     public vatLiabilityReportRequest: VatDetailedReportRequest = {

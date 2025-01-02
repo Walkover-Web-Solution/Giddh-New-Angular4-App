@@ -533,7 +533,7 @@ export class UpdateEwayVehicle {
     public reasonRem: string;
 
     public transDocNo?: string;
-    public transDocDate?: any;
+    public transDocDate?: string | Date;
     public transMode: string;
     public vehicleType: string;
 }

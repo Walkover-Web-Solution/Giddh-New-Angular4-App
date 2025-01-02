@@ -42,7 +42,7 @@ export class HsnSummaryComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         if (this.selectedGst !== GstReport.Gstr1) {
-            this.displayedColumns = this.displayedColumns.filter(column => column !== 'rt');
+            this.displayedColumns = this.displayedColumns?.filter(column => column !== 'rt');
         }
     }
 

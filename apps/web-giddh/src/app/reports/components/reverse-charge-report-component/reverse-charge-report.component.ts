@@ -16,6 +16,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { Router } from '@angular/router';
 import { FormControl } from "@angular/forms";
+
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -30,7 +31,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public showEntryDate = true;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     public reverseChargeReportGetRequest: ReverseChargeReportGetRequest = {
         from: '',
