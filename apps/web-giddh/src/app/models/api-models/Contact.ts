@@ -203,3 +203,13 @@ export class BulkUpdateInvoiceCustomfields {
     customField3: string = '';
 }
 
+/**
+ * Send Bulk Email Template request model
+ *
+ * @export
+ * @interface SendEmailTemplateRequest
+ */
+export interface SendBulkEmailTemplateRequest {
+    customerVendorUniqueNames: string[];
+    templateOf: string;
+}

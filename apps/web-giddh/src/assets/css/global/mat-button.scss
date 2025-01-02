@@ -11,11 +11,9 @@
 }
 .mat-mdc-outlined-button {
     color: var(--color-default-button) !important;
+    border-color: var(--color-fields-border) !important;
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
-    }
-    &:not(:disabled){
-        border-color: var(--color-fields-border) !important;
     }
 }
 
@@ -28,7 +26,6 @@
 .mat-fab,
 .mat-mini-fab,
 .mat-mdc-outlined-button .mdc-button__label {
-    // font-size: var(--font-size-15) !important;
     border-color: var(--color-fields-border) !important;
 }
 /*==========  Material Button Default Font Size End Here ===============*/
