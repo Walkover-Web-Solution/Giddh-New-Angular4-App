@@ -17,7 +17,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
-import { FormBuilder, FormArray, FormGroup, Validators, FormControl } from "@angular/forms";
+import { FormBuilder, FormArray, FormGroup, Validators, FormControl, AbstractControl } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { AccountType, BriedAccountsGroup, OtherTaxTypes, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
@@ -49,6 +49,7 @@ import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxe
 import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
+import { MatSelectChange } from "@angular/material/select";
 
 @Component({
     selector: "create",
@@ -2275,7 +2276,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         customField2: this.formBuilder.group({
                             key: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.key : ''],
                             value: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.value : '']
-                        }),      
+                        }),
                         hasVariants: [entryData ? entryData?.transactions[0]?.stock?.hasVariants : false]
                     })
                 })
@@ -2331,10 +2332,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Calculate max quantity for PO linking in PB 
-     * 
-     * @param entryData 
-     * @returns 
+     * Calculate max quantity for PO linking in PB
+     *
+     * @param entryData
+     * @returns
      */
     private getStockMaxQuantity(entryData: any): number | undefined {
         let maxQuantity = undefined;
@@ -5295,6 +5296,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getStockVariants(entry: any, entryIndex: number): void {
         if (!this.stockVariants[entryIndex] && entry.transactions[0]?.stock?.hasVariants) {
             this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: entryIndex, autoSelectVariant: false });
+        }
+    }
+
+/**
+ * This will be use for select unit in transaction
+ *
+ * @param {MatSelectChange} event
+ * @param {AbstractControl} transaction
+ * @param {any[]} resolvedUnits
+ * @memberof VoucherCreateComponent
+ */
+    public selectUnit(event: MatSelectChange, transaction: AbstractControl, resolvedUnits: any[]): void {
+        const selectedUnitCode = resolvedUnits.find(unit => unit?.stockUnitUniqueName === event?.value)?.stockUnitCode;
+        if (selectedUnitCode) {
+            transaction.get('stock.stockUnit.code')?.patchValue(selectedUnitCode);
         }
     }
 }
