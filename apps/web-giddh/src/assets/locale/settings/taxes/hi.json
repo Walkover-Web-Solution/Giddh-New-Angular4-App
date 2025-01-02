@@ -1,6 +1,5 @@
 {
 	"tax_delete_message": "क्या आप वाकई [TAX_NAME] को हटाना चाहते हैं?",
-	"tax_update_message": "क्या आप वाकई [TAX_NAME] को अपडेट करना चाहते हैं?",
 	"added_taxes": "जोड़ा गया कर",
 	"new_tax": "नया कर",
 	"create_new_tax": "नया कर बनाएं",

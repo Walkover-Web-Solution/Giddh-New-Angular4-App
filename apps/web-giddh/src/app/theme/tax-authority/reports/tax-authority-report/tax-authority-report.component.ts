@@ -26,7 +26,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['reporting_tax_authority', 'sales_with_tax', 'sales', 'non_taxable_amount', 'taxable_amount', 'tax_collected'];
     /** Holds page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds pagination request  */
     public pagination: IPagination = {
@@ -181,7 +181,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     * @memberof AccountWiseReportComponent
     */
     public handlePageChange(event: any): void {
-        if (event) {
+        if (typeof event?.pageIndex === 'number') {
             this.pageIndex = event.pageIndex;
             this.pagination.count = event.pageSize;
             this.pagination.page = event.pageIndex + 1;

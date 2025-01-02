@@ -26,7 +26,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['tax_name', 'total_sales', 'taxable_amount', 'tax_percentage', 'tax_collected'];
     /** Holds page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds pagination request  */
     public pagination: IPagination = {
@@ -188,7 +188,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     * @memberof RateWiseReportComponent
     */
     public handlePageChange(event: any): void {
-        if (event) {
+        if (typeof event?.pageIndex === 'number') {
             this.pageIndex = event.pageIndex;
             this.pagination.count = event.pageSize;
             this.pagination.page = event.pageIndex + 1;
