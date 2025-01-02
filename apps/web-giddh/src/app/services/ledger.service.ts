@@ -82,7 +82,8 @@ export class LedgerService {
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
         }
         // tslint:disable-next-line:max-line-length
-        return this.http.get(url, null, { headers: { 'token':  request.paginationToken }}).pipe(map((res) => {
+        const options = request.paginationToken ? { headers: { 'token':  request.paginationToken }} : null;
+        return this.http.get(url, null, options).pipe(map((res) => {
             let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
             data.request = request;
             return data;
