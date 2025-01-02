@@ -492,8 +492,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public pageChanged(event: any): void {
-        this.trxRequest.paginationToken = event;
+        if (typeof event === 'string') {
+            this.trxRequest.paginationToken = event;
+        }
         if (this.isAdvanceSearchImplemented) {
+            this.trxRequest.paginationToken = ''; //Reset ledger pagination token 
             this.advanceSearchRequest.page = event.page;
             this.getAdvanceSearchTxn();
         } else {
