@@ -72,7 +72,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     /** Holds Table Display columns for Credit Voucher */
-    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'status'];
+    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'einvoicestatus', 'status'];
     /** Holds Table Display columns for Purchase Order Voucher */
     public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
     /** Holds Table Display columns for Purchase Bill Voucher */
