@@ -49,6 +49,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'ledger',
@@ -1201,6 +1202,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
         }
+    }
+
+    /**
+     * Save bulk bank transaction Dialog
+     *
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
+    public openBulkBankTransactionConfirmationDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.convert_entries_message, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.saveBulkBankTransaction();
+            }
+        });
     }
 
     /**
