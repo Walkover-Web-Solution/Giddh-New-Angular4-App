@@ -92,7 +92,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      * @memberof ReconcileComponent
      */
     public reconcileTabChanged(event: MatTabChangeEvent): void {
-        if (typeof event?.index === 'number') {
+        if (event) {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
             let action = '';
@@ -118,7 +118,15 @@ export class ReconcileComponent implements OnInit, OnDestroy {
             this.fireGstReconcileRequest(this.reconcileActiveTab, pageInfo.pageNumber, false, pageInfo.count);
         }
     }
-
+    /**
+     * Handle the fire gst reconcile request
+     * 
+     * @param action 
+     * @param page 
+     * @param refresh 
+     * @param count 
+     * @returns 
+     */
     public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = this.pageSizeOptions[0]) {
         if (!this.currentPeriod) {
             return;
@@ -191,14 +199,14 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Page Change event and Make API Call
+     * Handle page change event and make API call
      *
      * @param {*} event
      * @param {string} action
      * @memberof ReconcileComponent
      */
     public reconcilePageChanged(event: any, action: string): void {
-        if (typeof event?.pageIndex === 'number') {
+        if (event) {
             this.pageIndex = event.pageIndex;
             const pageIndex = event.pageIndex + 1;
             this.fireGstReconcileRequest(GstReconcileActionsEnum[action], pageIndex, false, event.pageSize);

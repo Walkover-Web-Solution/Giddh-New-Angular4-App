@@ -12,7 +12,7 @@ import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBill
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, UntypedFormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -450,29 +450,22 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open add vehicle dialog
+     * Open add vehicle/cancel dialog 
      *
      * @memberof EWayBillComponent
      */
-    public openAddVehicleDialog(ewayItem: Result): void {
+    public openAddVehicleOrCancelDialog(dialogType: 'vehicle' | 'cancel', ewayItem: Result | any): void {
         this.selectedEwayItem = ewayItem;
-        this.dialog.open(this.vehicleDialog, {
+        const dialogConfig = {
             panelClass: "mat-dialog-md",
             disableClose: true
-        });
-    }
-
-    /**
-     * Open cancel dialog
-     *
-     * @memberof EWayBillComponent
-     */
-    public openCancelDialog(ewayItem: any): void {
-        this.selectedEwayItem = ewayItem;
-        this.cancelDialogRef = this.dialog.open(this.cancelDialog, {
-            panelClass: "mat-dialog-md",
-            disableClose: true
-        })
+        };
+    
+        if (dialogType === 'vehicle') {
+            this.dialog.open(this.vehicleDialog, dialogConfig);
+        } else if (dialogType === 'cancel') {
+            this.cancelDialogRef = this.dialog.open(this.cancelDialog, dialogConfig);
+        }
     }
 
     /**
@@ -500,7 +493,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (updateEwayTransportFormValue) {
             this.updateEwayVehicleObj = updateEwayTransportFormValue;
             this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
-            this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
+            this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
             this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportFormValue));
         }
         this.detectChange();
@@ -761,7 +754,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public onTabChange(event: MatTabChangeEvent): void {
-        if (typeof event?.index === 'number') {
+        if (event) {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
         }

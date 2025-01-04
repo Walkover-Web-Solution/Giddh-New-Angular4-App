@@ -10,7 +10,11 @@
         <div class="text-uppercase title" *ngIf="!isTransactionSummary">{{ localeData?.filing?.overall_summary }}</div>
 
         <div *ngIf="gstrOverviewData.count" class="table-responsive">
-            <table mat-table [dataSource]="gstrOverviewData.summary" class="table table-striped transactions-table transactions-summary-table w-100">
+            <table
+                mat-table
+                [dataSource]="gstrOverviewData.summary"
+                class="table table-striped transactions-table transactions-summary-table w-100"
+            >
                 <!-- Description -->
                 <ng-container matColumnDef="description">
                     <th mat-header-cell *matHeaderCellDef width="30%" class="text-uppercase">
@@ -72,7 +76,12 @@
                         {{ localeData?.filing?.total_transactions }}
                     </th>
                     <td mat-cell *matCellDef="let element" class="text-center">
-                        <ng-container *ngIf="element.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'; else transactionBlock">
+                        <ng-container
+                            *ngIf="
+                                element.gstReturnType === 'CreditNote/DebitNote/RefundVouchers';
+                                else transactionBlock
+                            "
+                        >
                             -
                         </ng-container>
                         <ng-template #transactionBlock>
@@ -99,7 +108,7 @@
                         </span>
                     </td>
                 </ng-container>
-                
+
                 <!-- IGST -->
                 <ng-container matColumnDef="igst">
                     <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
@@ -108,16 +117,12 @@
                     <td mat-cell *matCellDef="let element" class="text-right">
                         <i class="icon-rupees icon-font-11"></i>
                         <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="element.igstAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="element.igstAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
                 </ng-container>
-                
+
                 <!-- CGST -->
                 <ng-container matColumnDef="cgst">
                     <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
@@ -126,16 +131,12 @@
                     <td mat-cell *matCellDef="let element" class="text-right">
                         <i class="icon-rupees icon-font-11"></i>
                         <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="element.cgstAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="element.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
                 </ng-container>
-                
+
                 <!-- SGST -->
                 <ng-container matColumnDef="sgst">
                     <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
@@ -144,11 +145,7 @@
                     <td mat-cell *matCellDef="let element" class="text-right">
                         <i class="icon-rupees icon-font-11"></i>
                         <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="element.sgstAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="element.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
@@ -162,27 +159,23 @@
                     <td mat-cell *matCellDef="let element" class="text-right">
                         <i class="icon-rupees icon-font-11"></i>
                         <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="element.cessAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="element.cessAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
-                <tr 
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
                     (click)="viewTransactions(row)"
                     class="row-hover"
                     [ngClass]="{
-                        'cursor-default no-hover': row.transactions?.length, 
+                        'cursor-default no-hover': row.transactions?.length,
                         'cursor-pointer': !row.transactions?.length,
                         'secondary-row no-strip': row?.hasOwnProperty('parentIndex')
                     }"
-                    mat-row 
-                    *matRowDef="let row; columns: displayedColumns" 
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
                 ></tr>
             </table>
         </div>

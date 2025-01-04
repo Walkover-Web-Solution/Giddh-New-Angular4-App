@@ -96,7 +96,7 @@ export class GstComponent implements OnInit, OnDestroy {
     /** Holds start month/year */
     public startAt: Date = new Date();
     /** Holds selected date */
-    public date: FormControl = new FormControl('');
+    public date: FormControl<string | null> = new FormControl<string | null>('');
 
     constructor(
         private store: Store<AppState>,
@@ -191,10 +191,10 @@ export class GstComponent implements OnInit, OnDestroy {
      * @param {*} date
      * @memberof GstComponent
      */
-    public periodChanged(date): void {
+    public periodChanged(date:  any): void {
         this.currentPeriod = {
-            from: dayjs(date.from).format(GIDDH_DATE_FORMAT),
-            to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
+            from: dayjs(date?.from).format(GIDDH_DATE_FORMAT),
+            to: dayjs(date?.to).format(GIDDH_DATE_FORMAT)
         };
         this.isMonthSelected = true;
         this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
@@ -347,7 +347,6 @@ export class GstComponent implements OnInit, OnDestroy {
         this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
         this.date.setValue(this.customMonth);
         this.periodChanged({ from: event[0], to: event[1] });
-
     }
 
     /**

@@ -181,7 +181,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     * @memberof AccountWiseReportComponent
     */
     public handlePageChange(event: any): void {
-        if (typeof event?.pageIndex === 'number') {
+        if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.count = event.pageSize;
             this.pagination.page = event.pageIndex + 1;

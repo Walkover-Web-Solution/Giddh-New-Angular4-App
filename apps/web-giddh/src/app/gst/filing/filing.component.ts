@@ -280,7 +280,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @returns {string}
      * @memberof FilingComponent
      */
-    public getGstReturnFiledText(): string {
+    public getGstReturnFieldText(): string {
         let text = this.localeData?.filing?.gst_filed_success;
         text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
         return text;
@@ -308,7 +308,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public onTabChange(event: MatTabChangeEvent): void {
-        if (typeof event?.index === 'number') {
+        if (event) {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
         }

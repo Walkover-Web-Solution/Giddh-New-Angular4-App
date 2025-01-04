@@ -113,8 +113,13 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                     }
                 });
     }
-
-    public deleteTax(taxToDelete): void {
+    /**
+     * Delete the tax and open the confirmation dialog
+     * 
+     * @param taxToDelete 
+     * @returns 
+     */
+    public deleteTax(taxToDelete: any): void {
         this.selectedTax = this.availableTaxes.find((tax) => tax?.uniqueName === taxToDelete?.uniqueName);
         if (!this.selectedTax) {
             return;

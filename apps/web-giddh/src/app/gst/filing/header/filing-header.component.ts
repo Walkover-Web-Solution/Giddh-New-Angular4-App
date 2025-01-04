@@ -108,7 +108,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds start month/year */
     public startAt: Date = new Date();
     /** Holds selected date */
-    public date: FormControl = new FormControl('');
+    public date: FormControl<string | null> = new FormControl<string | null>('');
     /** Active company details */
     public activeCompany: any = null;
     /** Enum for restricted modules */
@@ -246,7 +246,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @param {('JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA')} [selectedService]
      * @memberof FilingHeaderComponent
      */
-    public openSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
+    public openSettingAsidePane(event: any, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
         if (event) {
             event.preventDefault();
         }
@@ -358,8 +358,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (date) {
             this.selectedMonth = date;
             this.currentPeriod = {
-                from: dayjs(date.from).format(GIDDH_DATE_FORMAT),
-                to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
+                from: dayjs(date?.from).format(GIDDH_DATE_FORMAT),
+                to: dayjs(date?.to).format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));

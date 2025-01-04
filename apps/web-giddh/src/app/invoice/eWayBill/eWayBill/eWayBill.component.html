@@ -143,13 +143,13 @@
                                     <i class="caret"></i>
                                 </button>
                                 <mat-menu #downloadCsvEmail="matMenu">
-                                    <button mat-menu-item (click)="openAddVehicleDialog(item, template)">
+                                    <button mat-menu-item (click)="openAddVehicleOrCancelDialog('vehicle', item)">
                                         {{ localeData?.add_vehicle_details }}
                                     </button>
                                     <button mat-menu-item (click)="onSelectEwayDetailedDownload(item)">
                                         {{ localeData?.download_detailed_eway }}
                                     </button>
-                                    <button mat-menu-item (click)="openCancelDialog(item)">
+                                    <button mat-menu-item (click)="openAddVehicleOrCancelDialog('cancel', item)">
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </mat-menu>
