@@ -221,11 +221,20 @@ export class LedgerService {
         }), catchError((e) => this.errorHandler.HandleCatch<ReconcileResponse[], string>(e, '', { accountUniqueName, from, to, chequeNumber })));
     }
 
-    public DownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
+    /**
+     * Downloads an attachment associated with a ledger entry.
+     *
+     * @param fileName - The name of the file to be downloaded.
+     * @param type - Optional. The type of the attachment. If not provided and voucherApiVersion is 2, the URL will be modified accordingly.
+     * @returns An Observable that emits a BaseResponse containing the DownloadLedgerAttachmentResponse and the original file name.
+     *          The response includes the downloaded attachment data and any relevant metadata.
+     */
+    public downloadAttachement(fileName: string, type?: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.DOWNLOAD_ATTACHMENT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':fileName', fileName);
-        if (this.generalService.voucherApiVersion === 2) {
+
+        if (this.generalService.voucherApiVersion === 2 && !type) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.get(url).pipe(

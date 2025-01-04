@@ -989,13 +989,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (!transaction) {
                 let bankTransactions: any[] = [];
 
-                this.lc.bankTransactionsDebitData.forEach(transaction => {
-                    if (transaction.transactions[0].selectedAccount?.name) {
+                this.lc.bankTransactionsDebitData?.forEach(transaction => {
+                    if (transaction.transactions[0]?.selectedAccount?.name) {
                         bankTransactions.push(transaction);
                     }
                 });
-                this.lc.bankTransactionsCreditData.forEach(transaction => {
-                    if (transaction.transactions[0].selectedAccount?.name) {
+                this.lc.bankTransactionsCreditData?.forEach(transaction => {
+                    if (transaction.transactions[0]?.selectedAccount?.name) {
                         bankTransactions.push(transaction);
                     }
                 });
@@ -1212,7 +1212,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public saveBulkBankTransaction(): void {
         let blankTransactionsObjArray: BlankLedgerVM[] = [];
 
-        this.bankTransactionsWithAccountName.forEach(currentBankEntry => {
+        this.bankTransactionsWithAccountName?.forEach(currentBankEntry => {
             let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject(currentBankEntry);
             blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
             delete blankTransactionObj['voucherType'];
@@ -1298,7 +1298,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+        this.ledgerService.downloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body?.uploadedFile, `image/${d.body?.fileType}`, 512);
                 download(d.body?.name, blob, `image/${d.body?.fileType}`)
@@ -1877,11 +1877,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectAllBankEntries(event: any, type: 'debit' | 'credit' | 'all'): void {
         if (event?.checked) {
             if (type === 'debit') {
-                this.lc.bankTransactionsDebitData.forEach(response => {
+                this.lc.bankTransactionsDebitData?.forEach(response => {
                     this.selectedDebitTransactionIds.add(response.transactions[0]?.id);
                 });
             } else {
-                this.lc.bankTransactionsCreditData.forEach(response => {
+                this.lc.bankTransactionsCreditData?.forEach(response => {
                     this.selectedCreditTransactionIds.add(response.transactions[0]?.id);
                 });
             }
@@ -2401,7 +2401,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let index = 0;
 
             if (this.visibleTransactionTypeMobile === "debit" && this.ledgerTransactions.debitTransactions) {
-                this.ledgerTransactions.debitTransactions.forEach(transaction => {
+                this.ledgerTransactions.debitTransactions?.forEach(transaction => {
                     if (this.allTransactionsList[transaction?.entryDate] === undefined) {
                         this.allTransactionsList[transaction?.entryDate] = [];
                     }
@@ -2410,7 +2410,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     index++;
                 });
             } else if (this.visibleTransactionTypeMobile === "credit" && this.ledgerTransactions.creditTransactions) {
-                this.ledgerTransactions.creditTransactions.forEach(transaction => {
+                this.ledgerTransactions.creditTransactions?.forEach(transaction => {
                     if (this.allTransactionsList[transaction?.entryDate] === undefined) {
                         this.allTransactionsList[transaction?.entryDate] = [];
                     }
@@ -2932,7 +2932,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.stock?.groupTaxes ?? [],
                     data.body.taxes ?? [],
                     data.body.groupTaxes ?? []);
-                if (txn?.taxesVm) {
+                if (txn?.taxesVm?.length) {
                     txn?.taxesVm.forEach(tax => {
                         tax.isChecked = false;
                         tax.isDisabled = false;

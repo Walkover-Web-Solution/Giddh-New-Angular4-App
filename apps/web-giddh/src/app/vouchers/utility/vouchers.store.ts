@@ -412,10 +412,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.ledgerService.removeAttachment(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                deleteAttachmentInProgress: false,
-                                deleteAttachmentIsSuccess: true
-                            });
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: false });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
