@@ -354,12 +354,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             if (fieldValue) {
                 if (typeof fieldValue === 'string' && DATE_REGEX.test(fieldValue)) {
                     // If the field value is a string in the format YYYY-MM-DD, reformat it
-                    fieldValue = this.generalService.convertDateStringFormat(fieldValue);
+                    fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
                 } else if (typeof fieldValue === 'object') {
                     fieldValue = dayjs(fieldValue).format(GIDDH_DATE_FORMAT);
                     if (DATE_REGEX.test(fieldValue)) {
                         // If the field value is a string in the format YYYY-MM-DD, reformat it
-                        fieldValue = this.generalService.convertDateStringFormat(fieldValue);
+                        fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
                     }
                 }
 
