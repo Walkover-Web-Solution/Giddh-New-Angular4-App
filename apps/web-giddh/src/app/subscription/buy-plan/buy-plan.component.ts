@@ -1623,7 +1623,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
+<<<<<<< HEAD
             if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && subscription?.region?.code !== 'GBR') {
+=======
+            if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && subscription?.region?.code !== 'GBR') {
+>>>>>>> 69a58792c3866dffd4184d07048b67de8c4e3163
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId });
             } else {
                 this.componentStore.changePlan(data);

@@ -13,7 +13,7 @@ import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAIN
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
 
@@ -2002,6 +2002,16 @@ export class GeneralService {
     }
 
     /**
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD-MM-YYYY).
+     *
+     * @param {string} value - The date string to be formatted.
+     * @returns {string} - The formatted date string.
+     */
+    public convertDateStringFormat(value: string): string {
+        return dayjs(value, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
     * This will be use for open window in center
     *
     * @param {string} url
@@ -2146,19 +2156,6 @@ export class GeneralService {
     }
 
     /**
-     * Round a Number to Company Decimal Places
-     *
-     * @param {number} value
-     * @param {number} [companyDecimalPlaces=2]
-     * @returns {number}
-     * @memberof GeneralService
-     */
-    public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
-        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
-        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
-    }
-
-    /**
      * Update current page query params
      *
      * @param {Params} queryParams
@@ -2176,6 +2173,19 @@ export class GeneralService {
                 replaceUrl  // Replace current history entry with new URL
             }
         );
+    }
+
+    /**
+     * Round a Number to Company Decimal Places
+     *
+     * @param {number} value
+     * @param {number} [companyDecimalPlaces=2]
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
+        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 }
 
