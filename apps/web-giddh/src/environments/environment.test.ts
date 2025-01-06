@@ -8,7 +8,7 @@ enableProdMode();
 export const environment: Environment = {
     production: true,
     showDevModule: false,
-    AppUrl: 'https://test.giddh.com',
+    AppUrl: 'http://giddh-test-app.ap-south-1.elasticbeanstalk.com/',
     ApiUrl: 'http://localhost:9292/giddh-api/',
     UkApiUrl: 'https://gbapi.giddh.com/',
     isElectron: false,
