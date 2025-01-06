@@ -99,7 +99,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
         this.files = []; // local uploading files array
     }
-    
+
     public ngOnInit() {
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = cloneDeep(template);
@@ -412,10 +412,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     /**
-     * This is used when the user changes the template.
+     * * This is used when the user changes the template.
      */
     public showMessage(): void{
-        this._toasty.warningToast('You can not change the template type in update mode.');
+        this._toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
     }
 }

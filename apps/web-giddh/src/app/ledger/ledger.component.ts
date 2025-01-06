@@ -496,7 +496,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.trxRequest.paginationToken = event;
         }
         if (this.isAdvanceSearchImplemented) {
-            this.trxRequest.paginationToken = ''; //Reset ledger pagination token 
+            this.trxRequest.paginationToken = ''; //Reset ledger pagination token
             this.advanceSearchRequest.page = event.page;
             this.getAdvanceSearchTxn();
         } else {
@@ -531,7 +531,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
-     * 
+     *
      * @memberof LedgerComponent
      */
     public setupGocardlessMessageListener(): void {
@@ -3244,7 +3244,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * This will open the dialog to link a bank
-     * 
+     *
      * @memberof LedgerComponent
      */
     public openBankLinkDialog(): void {
@@ -3261,15 +3261,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
 
-            dialogRef.afterClosed().pipe(take(1), tap(response => { 
-                if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); this.referenceNumber = null; 
+            dialogRef.afterClosed().pipe(take(1), tap(response => {
+                if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); this.referenceNumber = null;
             })).subscribe();
         }
     }
 
     /**
      * This will link the connected bank accounts
-     * 
+     *
      * @memberof LedgerComponent
      */
     public linkBankAccount(): void {
