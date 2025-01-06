@@ -13,7 +13,7 @@ import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAIN
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
 
@@ -1999,6 +1999,16 @@ export class GeneralService {
      */
     public getClientIp(): Observable<any> {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
+    }
+
+    /**
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD/MM/YYYY).
+     *
+     * @param {string} value - The date string to be formatted.
+     * @returns {string} - The formatted date string.
+     */
+    public convertDateStringFormat(value: string): string {
+        return dayjs(value, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
     }
 
     /**
