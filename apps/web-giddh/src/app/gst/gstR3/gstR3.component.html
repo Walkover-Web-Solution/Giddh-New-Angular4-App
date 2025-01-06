@@ -28,7 +28,6 @@
                     <div class="d-flex column-gap1 align-items-center">
                         <span class="font-16">
                             <a
-                                href="javascript:void(0);"
                                 [routerLink]="['/gstfiling']"
                                 id="ember2007"
                                 class="ember-view cursor-pointer"
@@ -53,8 +52,8 @@
                                 [matDatepicker]="picker"
                                 [placeholder]="date?.value ?? '--'"
                                 autocomplete="off"
-                                (focus)="picker.open()"
-                                (click)="picker.open()"
+                                (focus)="picker?.open()"
+                                (click)="picker?.open()"
                                 class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer"
                                 name="date"
                                 readonly

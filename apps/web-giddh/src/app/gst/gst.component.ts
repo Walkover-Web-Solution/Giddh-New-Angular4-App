@@ -14,7 +14,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { GstReconcileService } from '../services/gst-reconcile.service';
 import { ToasterService } from '../services/toaster.service';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR, GIDDH_DATE_FORMAT_WITH_SPACE } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
@@ -97,6 +97,10 @@ export class GstComponent implements OnInit, OnDestroy {
     public startAt: Date = new Date();
     /** Holds selected date */
     public date: FormControl<string | null> = new FormControl<string | null>('');
+    /** Holds  "MMMM YYYY"  date format string*/
+    public giddhDateFormatMonthYear: string = GIDDH_DATE_FORMAT_MONTH_YEAR;
+    /** Holds  "DD MMM YYYY"  date format string*/
+    public giddhDateFormatWithSpace: string = GIDDH_DATE_FORMAT_WITH_SPACE;
 
     constructor(
         private store: Store<AppState>,

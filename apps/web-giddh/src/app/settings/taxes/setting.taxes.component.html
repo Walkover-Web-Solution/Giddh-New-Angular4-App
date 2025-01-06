@@ -61,8 +61,8 @@
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
                         <td mat-cell *matCellDef="let element">
                             <ng-container *ngIf="element?.accounts?.length; else showDash">
-                                <p *ngFor="let acc of element.accounts">
-                                    {{ acc.name }}
+                                <p *ngFor="let account of element.accounts">
+                                    {{ account.name }}
                                 </p>
                             </ng-container>
                         </td>
@@ -149,7 +149,6 @@
                 <div class="no-data" *ngIf="!isLoading && !availableTaxes?.length">
                     <no-data
                         [primaryMessage]="commonLocaleData?.app_no_entries_found"
-                        [secondaryMessage]="' '"
                         [secondaryMessage]="' '"
                         [secondaryMessageClass]="'p-0'"
                     ></no-data>

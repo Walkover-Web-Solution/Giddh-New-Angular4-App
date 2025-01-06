@@ -1,10 +1,10 @@
 <div class="modal-header theme-bg d-flex justify-content-between">
-    <h3 class="modal-title bg" id="modal-title" mat-dialog-title *ngIf="(selectedService === 'TAXPRO' || selectedService === 'VAYANA') && !gstAuthenticated && !gspSessionOtpAuthorized">
+    <h3 class="modal-title bg" id="modal-title" mat-dialog-title *ngIf="(selectedService === taxServiceEnum.TAXPRO || selectedService === taxServiceEnum.VAYANA) && !gstAuthenticated && !gspSessionOtpAuthorized">
         {{ localeData?.aside_menu?.choose_provider }}
     </h3>
     <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</h3>
     <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</h3>
-    <h3 *ngIf="selectedService === 'RECONCILE'">{{ localeData?.aside_menu?.gst_reconcile }}</h3>
+    <h3 *ngIf="selectedService === taxServiceEnum.RECONCILE">{{ localeData?.aside_menu?.gst_reconcile }}</h3>
     <i (click)="closeAsidePane($event)" aria-label="close icon" class="icon-cross"></i>
 </div>
 
@@ -99,7 +99,7 @@
                     </form>
 
                     <!--reconcile-->
-                    <form class="form-group" #reconcileFormVM="ngForm" *ngIf="selectedService === 'RECONCILE'">
+                    <form class="form-group" #reconcileFormVM="ngForm" *ngIf="selectedService === taxServiceEnum.RECONCILE">
                         <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
                             <div class="form-group">
                                 <input-field

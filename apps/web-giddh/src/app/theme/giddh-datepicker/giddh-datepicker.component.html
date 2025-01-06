@@ -8,8 +8,8 @@
             [value]="calendarDate"
             [min]="minDate"
             autocomplete="off"
-            (focus)="emitDatepickerState(true); picker.open()"
-            (click)="emitDatepickerState(true); picker.open()"
+            (focus)="emitDatepickerState(true); picker?.open()"
+            (click)="emitDatepickerState(true); picker?.open()"
             (dateChange)="dateChange($event)"
             [class]="cssClass"
             [disabled]="disabled"
@@ -21,7 +21,7 @@
                 matSuffix
                 [for]="picker"
                 (focusout)="!isDatepickerOpen ? focusOut.emit(true) : ''"
-                (click)="emitDatepickerState(true); picker.open()"
+                (click)="emitDatepickerState(true); picker?.open()"
             >
             </mat-datepicker-toggle>
         </ng-container>
@@ -37,8 +37,8 @@
             [value]="calendarDate"
             [min]="minDate"
             autocomplete="off"
-            (focus)="emitDatepickerState(true); picker.open()"
-            (click)="emitDatepickerState(true); picker.open()"
+            (focus)="emitDatepickerState(true); picker?.open()"
+            (click)="emitDatepickerState(true); picker?.open()"
             (dateChange)="dateChange($event)"
             [class]="cssClass"
             [disabled]="disabled"
