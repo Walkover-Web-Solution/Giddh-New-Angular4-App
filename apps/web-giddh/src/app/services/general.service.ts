@@ -2002,7 +2002,7 @@ export class GeneralService {
     }
 
     /**
-     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD/MM/YYYY).
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD-MM-YYYY).
      *
      * @param {string} value - The date string to be formatted.
      * @returns {string} - The formatted date string.
