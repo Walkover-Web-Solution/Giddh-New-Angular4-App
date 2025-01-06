@@ -8,6 +8,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-advance-search',
@@ -82,6 +83,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
+        private generalService: GeneralService,
         private formBuilder: FormBuilder
     ) { }
 
@@ -352,12 +354,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             if (fieldValue) {
                 if (typeof fieldValue === 'string' && DATE_REGEX.test(fieldValue)) {
                     // If the field value is a string in the format YYYY-MM-DD, reformat it
-                    fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+                    fieldValue = this.generalService.convertDateStringFormat(fieldValue);
                 } else if (typeof fieldValue === 'object') {
                     fieldValue = dayjs(fieldValue).format(GIDDH_DATE_FORMAT);
                     if (DATE_REGEX.test(fieldValue)) {
                         // If the field value is a string in the format YYYY-MM-DD, reformat it
-                        fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+                        fieldValue = this.generalService.convertDateStringFormat(fieldValue);
                     }
                 }
 
