@@ -70,13 +70,13 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Handle Page Change event and Make API Call
+    * Handle page change event and make API call
     *
     * @param {*} event
     * @memberof HistoryDialogComponent
     */
     public handlePageChange(event: any): void {
-        if (typeof event?.pageIndex === 'number') {
+        if (event) {
             this.pagination.count = event.pageSize;
             this.pagination.page = event.pageIndex + 1;
             this.getVoucherVersions();

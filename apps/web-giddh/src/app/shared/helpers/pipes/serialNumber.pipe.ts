@@ -17,7 +17,6 @@ export class SerialNumberPipe implements PipeTransform {
     if (currentPage < 1 || itemsPerPage < 1 || index < 0) {
       return -1; // Return an invalid serial number for invalid inputs
     }
-
     return (currentPage - 1) * itemsPerPage + index + 1;
   }
 

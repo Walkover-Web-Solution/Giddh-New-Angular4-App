@@ -14,7 +14,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { GstReconcileService } from '../services/gst-reconcile.service';
 import { ToasterService } from '../services/toaster.service';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR, GIDDH_DATE_FORMAT_WITH_SPACE } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
@@ -96,7 +96,11 @@ export class GstComponent implements OnInit, OnDestroy {
     /** Holds start month/year */
     public startAt: Date = new Date();
     /** Holds selected date */
-    public date: FormControl = new FormControl('');
+    public date: FormControl<string | null> = new FormControl<string | null>('');
+    /** Holds  "MMMM YYYY"  date format string*/
+    public giddhDateFormatMonthYear: string = GIDDH_DATE_FORMAT_MONTH_YEAR;
+    /** Holds  "DD MMM YYYY"  date format string*/
+    public giddhDateFormatWithSpace: string = GIDDH_DATE_FORMAT_WITH_SPACE;
 
     constructor(
         private store: Store<AppState>,
@@ -191,10 +195,10 @@ export class GstComponent implements OnInit, OnDestroy {
      * @param {*} date
      * @memberof GstComponent
      */
-    public periodChanged(date): void {
+    public periodChanged(date:  any): void {
         this.currentPeriod = {
-            from: dayjs(date.from).format(GIDDH_DATE_FORMAT),
-            to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
+            from: dayjs(date?.from).format(GIDDH_DATE_FORMAT),
+            to: dayjs(date?.to).format(GIDDH_DATE_FORMAT)
         };
         this.isMonthSelected = true;
         this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
@@ -347,7 +351,6 @@ export class GstComponent implements OnInit, OnDestroy {
         this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
         this.date.setValue(this.customMonth);
         this.periodChanged({ from: event[0], to: event[1] });
-
     }
 
     /**

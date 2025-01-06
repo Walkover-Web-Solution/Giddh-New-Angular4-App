@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { AsideMenuCreateTaxComponent } from './aside-menu-create-tax.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LaddaModule } from 'angular2-ladda';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -12,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { GiddhDatepickerModule } from "../../theme/giddh-datepicker/giddh-datepicker.module";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
+import { GiddhProgressSpinnerComponent } from '../giddh-progress-spinner/giddh-progress-spinner.component';
 
 
 @NgModule({
@@ -19,10 +19,6 @@ import { MatNativeDateModule } from "@angular/material/core";
         CommonModule, 
         FormsModule,
         FormFieldsModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }), 
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
@@ -30,7 +26,8 @@ import { MatNativeDateModule } from "@angular/material/core";
         MatDialogModule,
         MatButtonModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        GiddhProgressSpinnerComponent
     ],
     exports: [AsideMenuCreateTaxComponent],
     declarations: [AsideMenuCreateTaxComponent],

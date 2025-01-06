@@ -156,7 +156,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
     public pageChanged(event: any): void {
-        if (typeof event?.pageIndex === 'number') {
+        if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = event.pageIndex + 1;
             this.pagination.count = event.pageSize;

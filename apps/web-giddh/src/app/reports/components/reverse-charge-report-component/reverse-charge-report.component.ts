@@ -100,15 +100,15 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Holds searched name form control */
-    public searchedName: FormControl = new FormControl(null);
+    public searchedName: FormControl<string | null> = new FormControl<string | null>(null);
     /** True, if Invoice No search field is to be shown in the filters */
     public showInvoiceNoSearch: boolean;
     /** Holds searched Invoice No form control */
-    public searchedInvoiceNo: FormControl = new FormControl(null);
+    public searchedInvoiceNo: FormControl<string | null> = new FormControl<string | null>(null);
     /** True, if Country search field is to be shown in the filters */
     public showCountrySearch: boolean;
     /** Holds searched Country form control */
-    public searchedCountry: FormControl = new FormControl(null);
+    public searchedCountry: FormControl<string | null> = new FormControl<string | null>(null);
     /** Holds Id of active search input field */
     public activeSearchField: any = null;
     /** Holds true if searching is in progress */

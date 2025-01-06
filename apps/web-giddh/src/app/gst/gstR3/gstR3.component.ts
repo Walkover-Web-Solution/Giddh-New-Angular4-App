@@ -65,7 +65,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     /** Holds start month/year */
     public startAt: Date = new Date();
     /** Holds selected date */
-    public date: FormControl = new FormControl('');
+    public date: FormControl<string | null> = new FormControl<string | null>('');
     /** Holds displayed columns */
     public gstrUserTableDataDisplayedColumns: string[] = ['number', 'label', 'value'];
     /** Holds gstr user table data */
@@ -596,12 +596,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @param {*} date
      * @memberof GstR3Component
      */
-    public periodChanged(date): void {
+    public periodChanged(date:  any): void {
         if (date) {
             this.selectedMonth = date;
             this.currentPeriod = {
-                from: dayjs(date.from).format(GIDDH_DATE_FORMAT),
-                to: dayjs(date.to).format(GIDDH_DATE_FORMAT)
+                from: dayjs(date?.from).format(GIDDH_DATE_FORMAT),
+                to: dayjs(date?.to).format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = true;
             this.dateSelected = true;
@@ -701,7 +701,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @returns {string}
      * @memberof FileGstR3Component
      */
-    public getGstReturnFiledText(): string {
+    public getGstReturnFieldText(): string {
         let text = this.localeData?.filing?.gst_filed_success;
         text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
         return text;

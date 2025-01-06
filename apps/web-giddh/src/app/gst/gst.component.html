@@ -132,12 +132,12 @@
                                         <b class="text-middle"
                                             >{{ localeData?.gstr1_label }}
                                             <ng-container *ngIf="isMonthSelected">
-                                                ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
+                                                ({{ dayjs(selectedMonth).format(giddhDateFormatMonthYear) }})
                                             </ng-container>
                                             <ng-container *ngIf="!isMonthSelected">
-                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
+                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format(giddhDateFormatWithSpace) }}
                                                 -
-                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format(giddhDateFormatWithSpace) }})
                                             </ng-container>
                                         </b>
                                         &nbsp;&nbsp;
@@ -287,12 +287,12 @@
                                     >{{ localeData?.gstr2_label }}
 
                                     <ng-container *ngIf="isMonthSelected">
-                                        ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
+                                        ({{ dayjs(selectedMonth).format(giddhDateFormatMonthYear) }})
                                     </ng-container>
                                     <ng-container *ngIf="!isMonthSelected">
-                                        ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
+                                        ({{ dayjs(currentPeriod?.from, giddhDateFormat).format(giddhDateFormatWithSpace) }}
                                         -
-                                        {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                                        {{ dayjs(currentPeriod?.to, giddhDateFormat).format(giddhDateFormatWithSpace) }})
                                     </ng-container>
                                 </b>
                             </div>

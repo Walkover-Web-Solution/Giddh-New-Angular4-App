@@ -148,7 +148,7 @@
                                     class="mr-3"
                                     appearance="outline"
                                     class="w-100"
-                                    (click)="campaignOnePicker.open()"
+                                    (click)="campaignOnepicker?.open()"
                                 >
                                     <mat-label>{{ localeData?.date_range }}</mat-label>
                                     <mat-date-range-input
@@ -177,7 +177,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="date-range-block">
-                                <mat-form-field appearance="outline" class="w-100" (click)="campaignTwoPicker.open()">
+                                <mat-form-field appearance="outline" class="w-100" (click)="campaignTwopicker?.open()">
                                     <mat-label>{{ localeData?.compare_to }}</mat-label>
                                     <mat-date-range-input
                                         [rangePicker]="campaignTwoPicker"

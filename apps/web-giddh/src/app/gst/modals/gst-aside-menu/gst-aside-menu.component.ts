@@ -7,7 +7,7 @@ import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-
 import { AppState } from '../../../store';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
-import { GstReport } from '../../constants/gst.constant';
+import { GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
@@ -17,7 +17,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
     templateUrl: './gst-aside-menu.component.html'
 })
 export class GstAsideMenuComponent implements OnInit, OnDestroy {
-    @Input() public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+    @Input() public selectedService: TaxServiceType;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public fileGst: EventEmitter<boolean> = new EventEmitter();
@@ -56,6 +56,8 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public providerOptions: IOption[] = [];
+    /** Holds Tax Service Enum */
+    public taxServiceEnum: any = TaxServiceEnum;
 
     constructor(
         private store: Store<AppState>,
@@ -150,7 +152,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
 
     public resetTaxPro() {
-        this.selectedService = 'TAXPRO';
+        this.selectedService = this.taxServiceEnum.TAXPRO;
         this.taxProForm.otp = '';
         this.taxProForm.userName = '';
         this.otpSentSuccessFully = false;
@@ -169,9 +171,9 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
      */
     public save() {
         this.taxProForm.gsp = this.selectedService;
-        if ((this.selectedService === 'TAXPRO' || this.selectedService === 'VAYANA') && !this.otpSentSuccessFully) {
+        if ((this.selectedService === this.taxServiceEnum.TAXPRO || this.selectedService === this.taxServiceEnum.VAYANA) && !this.otpSentSuccessFully) {
             this.store.dispatch(this.gstReconcileActions.SaveGSPSession(this.taxProForm));
-        } else if ((this.selectedService === 'TAXPRO' || this.selectedService === 'VAYANA') && this.otpSentSuccessFully) {
+        } else if ((this.selectedService === this.taxServiceEnum.TAXPRO || this.selectedService === this.taxServiceEnum.VAYANA) && this.otpSentSuccessFully) {
             if (!(/^(?!\s*$).+/g.test(this.taxProForm.otp))) {
                 this.toaster.showSnackBar('error',this.localeData?.aside_menu?.otp_required_error);
                 return;

@@ -159,8 +159,13 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             this.selectedTaxAuthority = this.tax?.taxAuthority ? this.tax.taxAuthority?.name : '';
         }
     }
-
-    public genUniqueName() {
+  
+    /**
+     * Generate uniqueName
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public generateUniqueName(): void {
         let val: string = this.newTaxObj.name;
         val = uniqueNameInvalidStringReplace(val);
         if (val) {

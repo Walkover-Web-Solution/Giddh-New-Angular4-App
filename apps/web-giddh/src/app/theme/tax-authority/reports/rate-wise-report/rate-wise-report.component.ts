@@ -188,7 +188,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     * @memberof RateWiseReportComponent
     */
     public handlePageChange(event: any): void {
-        if (typeof event?.pageIndex === 'number') {
+        if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.count = event.pageSize;
             this.pagination.page = event.pageIndex + 1;
