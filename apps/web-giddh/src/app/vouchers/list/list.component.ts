@@ -360,6 +360,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
+                    this.advanceFilters.count = this.queryParams.count ?? this.pageSizeOptions[2];
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
                 }
@@ -785,6 +786,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showVoucherPreview(voucherUniqueName: string): void {
         const queryParams = {
             page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
         };
