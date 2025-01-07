@@ -188,6 +188,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LoginSuccessBYUrl),
             switchMap((action) => {
+                console.log('action', action);
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList());
             }), map((results: any[]) => {
@@ -265,9 +266,13 @@ export class LoginActions {
             ofType(LoginActions.LoginSuccess),
             switchMap((action: CustomActions) => {
                 console.log("Login Init");
+                console.log('action', action);
+
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList(), [action.payload]);
             }), map((results: any[]) => {
                 console.log("Login Success");
+                console.log('results', results);
+
                 /* check if local storage is cleared or not for first time
                  for application menu set up in localstorage */
 
@@ -782,6 +787,8 @@ export class LoginActions {
     }
 
     public LoginSuccess(response?: any, isSocialLogin?: boolean): CustomActions {
+        console.log('LoginSuccess',response,isSocialLogin);
+
         if (response && response.body && response.body.session) {
             this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
         }

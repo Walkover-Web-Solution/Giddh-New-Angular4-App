@@ -47,13 +47,9 @@ const phpScript = `<?php
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
 
-    if ($response === false) {
-        // need to confirm with Shubhendra sir, what to do if server don't responds
-        echo "Error: " . curl_error($ch);
-    } else {
+    if ($response !== false) {
         setcookie("whiteLabel", $response, 0, "/", "", false, false);
     }
-
     curl_close($ch);
 ?>
 `;
