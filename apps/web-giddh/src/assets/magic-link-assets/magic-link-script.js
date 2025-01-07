@@ -412,7 +412,7 @@ getApi: function () {
         // Original logic based on hostname
         switch (window.location.hostname) {
             case 'localhost':
-            case 'test.giddh.com':
+            case 'giddh-test-app.ap-south-1.elasticbeanstalk.com':
                 apiBaseUrl = 'https://apitest.giddh.com/';
                 break;
             case 'dev.giddh.com':
