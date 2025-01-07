@@ -358,7 +358,8 @@ export class SignupComponent implements OnInit, OnDestroy {
             widgetId: OTP_WIDGET_ID,
             tokenAuth: OTP_TOKEN_AUTH,
             success: (data: any) => {
-                this.ngZone.run(() => {
+                this.ngZone.run(() => {console.log('signup data',data);
+
                     this.initiateSignup(data);
                 });
             },
@@ -391,8 +392,11 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @param {*} data
      * @memberof SignupComponent
      */
-     private initiateSignup(data: any): void {
+    private initiateSignup(data: any): void {
+        console.log('initiateSingup method', data);
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log('Singup method', response);
+
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
             } else {

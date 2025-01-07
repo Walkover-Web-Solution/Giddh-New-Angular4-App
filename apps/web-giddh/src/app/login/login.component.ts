@@ -443,6 +443,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             tokenAuth: OTP_TOKEN_AUTH,
             success: (data: any) => {
                 this.ngZone.run(() => {
+                    console.log('signInWithOtp',data);
+
                     this.initiateLogin(data);
                 });
             },
@@ -476,7 +478,11 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @memberof LoginComponent
      */
     private initiateLogin(data: any): void {
+        console.log('initiateLogin method',data);
+
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log('loginWithOtp', response);
+
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
             } else {

@@ -485,6 +485,8 @@ export function BranchConsolidatedReducer(state: IBranchConsolidatedState = bran
 }
 
 export function SessionReducer(state: SessionState = sessionInitialState, action: CustomActions): SessionState {
+    console.log('SessionReducer',state, action);
+
     switch (action.type) {
         case LoginActions.renewSessionResponse: {
             let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
@@ -755,6 +757,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         }
         case LoginActions.LoginWithPasswdResponse: {
             let res: BaseResponse<any, any> = action.payload;
+            console.log(res, action);
+
             let newStates = _.cloneDeep(state);
             newStates.isLoginWithPasswordInProcess = false;
             if (res?.status === 'success') {

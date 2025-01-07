@@ -104,21 +104,20 @@ function setTempCookie() {
         .split('; ')
         .find(cookie => cookie.startsWith('whiteLabel='))
         ?.split('=')[1];
-    const cookieValue = encodeURIComponent(whiteLabelCookie);
-    document.cookie = `giddh_config=${cookieValue}; path=/`;
+    document.cookie = `whiteLabel=${whiteLabelCookie}; path=/`;
 }
 
 // Simple function to get cookie config
 function getCookieConfig() {
     // Set temporary cookie if it doesn't exist
-    if (!document.cookie.includes('giddh_config=')) {
+    if (!document.cookie.includes('whiteLabel=')) {
         setTempCookie();
     }
 
     try {
         const cookie = document.cookie
             .split('; ')
-            .find(row => row.startsWith('giddh_config='));
+            .find(row => row.startsWith('whiteLabel='));
         return cookie ? JSON.parse(decodeURIComponent(cookie.split('=')[1])) : null;
     } catch (e) {
         console.error('Error parsing cookie:', e);
