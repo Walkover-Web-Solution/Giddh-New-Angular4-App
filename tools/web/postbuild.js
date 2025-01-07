@@ -29,17 +29,31 @@ const newIndexFilePath = path.join(__dirname, rootDirectiory, 'index.php');
 
 // Add PHP script to be inserted at the beginning
 const phpScript = `<?php
-    $apiUrl = "https://apitest.giddh.com/white-label";
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    $host = $_SERVER['HTTP_HOST'];
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $fullUrl = $protocol . "://" . $host . $requestUri;
+    $parsedUrl = parse_url($fullUrl);
+    $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
+    // setting fetched baseUrl in Origin Header
+    $headers = [
+        "Origin: $baseUrl"
+    ];
+
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_URL, getenv("GIDDH_WHITE_LABEL_URL"));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
+
     if ($response === false) {
+        // need to confirm with Shubhendra sir, what to do if server don't responds
         echo "Error: " . curl_error($ch);
     } else {
-        $data = json_decode($response, true);
+        setcookie("whiteLabel", $response, 0, "/", "", false, false);
     }
-    print_r($data);
+
     curl_close($ch);
 ?>
 `;

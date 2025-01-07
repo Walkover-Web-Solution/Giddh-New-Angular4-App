@@ -436,6 +436,7 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public signInWithOtp(): void {
         this.loaderService.show();
+        console.log('configuration', OTP_WIDGET_ID, OTP_TOKEN_AUTH);
 
         let configuration = {
             widgetId: OTP_WIDGET_ID,

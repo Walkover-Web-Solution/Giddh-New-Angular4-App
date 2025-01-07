@@ -73,34 +73,38 @@ if (giddhRegion === "UK") {
     localStorage.setItem("Country-Region", "GL");
 }
 
-// Temporary config object
-const tempConfig = {
-    "status": "success",
-    "body": {
-        "googleClientId": "641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com",
-        "googleClientSecret": "8htr7iQVXfZp_n87c99-jm7a",
-        "otpWidgetId": "33686b716134333831313239",
-        "otpWidgetToken": "205968TmXguUAwoD633af103P1",
-        "giddhWhiteLabel": {
-            "companyName": "Giddh",
-            "domainName": "test.giddh.com",
-            "apiDomainName": "apitest.giddh.com",
-            "adminDomainName": "vtest.giddh.com",
-            "archiveStatus": "UNARCHIVED",
-            "portalDomainName": "master.d2n1i21e52r793.amplifyapp.com",
-            "supportedDomains": [
-                "localhost",
-                "stage.giddh.com",
-                "vtest.giddh.com",
-                "test.giddh.com"
-            ]
-        }
-    }
-};
+// // Temporary config object
+// const tempConfig = {
+//     "status": "success",
+//     "body": {
+//         "googleClientId": "641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com",
+//         "googleClientSecret": "8htr7iQVXfZp_n87c99-jm7a",
+//         "otpWidgetId": "33686b716134333831313239",
+//         "otpWidgetToken": "205968TmXguUAwoD633af103P1",
+//         "giddhWhiteLabel": {
+//             "companyName": "Giddh",
+//             "domainName": "giddh-test-app.ap-south-1.elasticbeanstalk.com",
+//             "apiDomainName": "apitest.giddh.com",
+//             "adminDomainName": "vtest.giddh.com",
+//             "archiveStatus": "UNARCHIVED",
+//             "portalDomainName": "master.d2n1i21e52r793.amplifyapp.com",
+//             "supportedDomains": [
+//                 "localhost",
+//                 "stage.giddh.com",
+//                 "vtest.giddh.com",
+//                 "giddh-test-app.ap-south-1.elasticbeanstalk.com"
+//             ]
+//         }
+//     }
+// };
 
 // Set temporary cookie
 function setTempCookie() {
-    const cookieValue = encodeURIComponent(JSON.stringify(tempConfig));
+    const whiteLabelCookie = document.cookie
+        .split('; ')
+        .find(cookie => cookie.startsWith('whiteLabel='))
+        ?.split('=')[1];
+    const cookieValue = encodeURIComponent(whiteLabelCookie);
     document.cookie = `giddh_config=${cookieValue}; path=/`;
 }
 
@@ -138,6 +142,7 @@ function initializeEnvironment(): () => void {
                 'OTP_TOKEN_AUTH': config.otpWidgetToken,
                 'PORTAL_URL': `https://${config.giddhWhiteLabel.portalDomainName}/`
             };
+            console.log('envUpdates', envUpdates);
 
             // Update both window and process.env variables
             Object.entries(envUpdates).forEach(([key, value]) => {
@@ -151,6 +156,8 @@ function initializeEnvironment(): () => void {
 // Function to create service config
 function createServiceConfig() {
     const config = getCookieConfig()?.body;
+    console.log('config', config);
+
     return {
         apiUrl: config?.giddhWhiteLabel?.apiDomainName
             ? `https://${config.giddhWhiteLabel.apiDomainName}/`
