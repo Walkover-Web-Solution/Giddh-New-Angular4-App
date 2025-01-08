@@ -70,7 +70,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will use for subscription pagination logs object */
     public adjustInventoryListRequest: InventorytAdjustReportQueryRequest;
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds page size options */
     public pageSizeOptions: any[] = [20,

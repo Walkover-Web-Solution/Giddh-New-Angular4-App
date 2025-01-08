@@ -4,7 +4,10 @@
         [appearance]="appearance"
         [floatLabel]="floatLabel"
     >
-        <mat-label>{{ label ? label : placeholder }}</mat-label>
+        <mat-label>
+            {{ label || placeholder }} 
+            <i *ngIf="showLabelIcon" [class]="labelIconClass" [matTooltip]="labelIconTooltip" matTooltipPosition="above"></i>
+        </mat-label>
         <input
             matInput
             [name]="name"

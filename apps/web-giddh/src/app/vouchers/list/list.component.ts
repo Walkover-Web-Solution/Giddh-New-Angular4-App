@@ -385,7 +385,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getLedgersOfInvoice();
                 }
             }
-            this.getInvoiceSettings();
         });
 
         /** Universal date */
@@ -1118,7 +1117,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Page Change event and Make API Call
+     * Handle page change event and make API call
      *
      * @param {*} event
      * @memberof VoucherListComponent

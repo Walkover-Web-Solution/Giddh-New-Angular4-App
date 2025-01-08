@@ -8,7 +8,6 @@ import { takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
-import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep } from '../../lodash-optimized';
@@ -47,7 +46,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public taxListSource$: Observable<IOption[]> = observableOf([]);
     public taxNameTypesMapping: any[] = [];
     public selectedTax: string = '';
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -161,16 +159,13 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             this.selectedTaxAuthority = this.tax?.taxAuthority ? this.tax.taxAuthority?.name : '';
         }
     }
-
-    public customAccountFilter(term: string, item: IOption) {
-        return (item?.label?.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value?.toLocaleLowerCase()?.indexOf(term) > -1);
-    }
-
-    public customDateSorting(a: IOption, b: IOption) {
-        return (parseInt(a?.label) - parseInt(b?.label));
-    }
-
-    public genUniqueName() {
+  
+    /**
+     * Generate uniqueName
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public generateUniqueName(): void {
         let val: string = this.newTaxObj.name;
         val = uniqueNameInvalidStringReplace(val);
         if (val) {
@@ -213,7 +208,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             });
         }
 
-        dataToSave.date = dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT);
+        dataToSave.date = typeof(dataToSave.date) === "object" ? dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT) : dataToSave.date;
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 
@@ -258,9 +253,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
      *
      * @memberof AsideMenuCreateTaxComponent
      */
-    public selectTax(): void {
-        this.newTaxObj.tdsTcsTaxSubTypes = "";
-        this.forceClear$ = observableOf({ status: true });
+    public selectTax(event: any): void {
+        if (event) {
+            this.newTaxObj.taxType = event.value;
+            this.newTaxObj.tdsTcsTaxSubTypes = "";
+        }
     }
 
     /**
@@ -316,5 +313,17 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             { label: this.commonLocaleData?.app_tax_subtypes?.receivable, value: 'rc' },
             { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
         ];
+    }
+
+    /**
+     * This will be use for select date
+     *
+     * @param {*} date
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public selectDate(date: any): void {
+        if (date) {
+            this.newTaxObj.date = dayjs(date).format(GIDDH_DATE_FORMAT);
+        }
     }
 }
