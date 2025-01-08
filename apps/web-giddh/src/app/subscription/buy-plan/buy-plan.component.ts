@@ -543,7 +543,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             } else {
                 if (response) {
-                    if (response?.region?.code !== 'IND') {
+                    if (response.region?.code !== 'IND') {
                         this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
                         this.router.navigate(['/pages/user-details/subscription']);
                     } else {
