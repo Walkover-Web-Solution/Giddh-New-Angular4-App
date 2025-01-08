@@ -158,6 +158,8 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyEmailResponce),
             map((action: CustomActions) => {
+                console.log(action);
+
                 let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action?.payload;
                 if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -188,7 +190,6 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LoginSuccessBYUrl),
             switchMap((action) => {
-                console.log('action', action);
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList());
             }), map((results: any[]) => {
@@ -266,12 +267,9 @@ export class LoginActions {
             ofType(LoginActions.LoginSuccess),
             switchMap((action: CustomActions) => {
                 console.log("Login Init");
-                console.log('action', action);
-
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList(), [action.payload]);
             }), map((results: any[]) => {
                 console.log("Login Success");
-                console.log('results', results);
 
                 /* check if local storage is cleared or not for first time
                  for application menu set up in localstorage */
@@ -577,12 +575,14 @@ export class LoginActions {
                             this._toaster.successToast(action.payload.body?.text, action.payload.code);
                         }
                     } else if (action.payload.body?.user?.isVerified) {
+                        console.log('yes',action);
+
                         return this.LoginSuccess();
                     }
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-                return { type: 'EmptyAction' };
+
             })));
 
     public forgotPasswordRequest$: Observable<Action> = createEffect(() => this.actions$
@@ -908,6 +908,8 @@ export class LoginActions {
     }
 
     public LoginWithPasswdRequest(value: LoginWithPassword): CustomActions {
+        console.log(value);
+
         return {
             type: LoginActions.LoginWithPasswdRequest,
             payload: value
@@ -915,6 +917,7 @@ export class LoginActions {
     }
 
     public LoginWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, LoginWithPassword>): CustomActions {
+        console.log('value', value);
         return {
             type: LoginActions.LoginWithPasswdResponse,
             payload: value

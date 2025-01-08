@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,6 +38,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { EnvironmentService } from './services/enviroment.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -49,7 +50,9 @@ const APP_PROVIDERS = [
 let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-    return localStorageSync({ keys: ['session', 'permission','branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
+    console.log(reducer);
+
+    return localStorageSync({ keys: ['session', 'permission', 'branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
@@ -73,99 +76,6 @@ if (giddhRegion === "UK") {
     localStorage.setItem("Country-Region", "GL");
 }
 
-// // Temporary config object
-// const tempConfig = {
-//     "status": "success",
-//     "body": {
-//         "googleClientId": "641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com",
-//         "googleClientSecret": "8htr7iQVXfZp_n87c99-jm7a",
-//         "otpWidgetId": "33686b716134333831313239",
-//         "otpWidgetToken": "205968TmXguUAwoD633af103P1",
-//         "giddhWhiteLabel": {
-//             "companyName": "Giddh",
-//             "domainName": "giddh-test-app.ap-south-1.elasticbeanstalk.com",
-//             "apiDomainName": "apitest.giddh.com",
-//             "adminDomainName": "vtest.giddh.com",
-//             "archiveStatus": "UNARCHIVED",
-//             "portalDomainName": "master.d2n1i21e52r793.amplifyapp.com",
-//             "supportedDomains": [
-//                 "localhost",
-//                 "stage.giddh.com",
-//                 "vtest.giddh.com",
-//                 "giddh-test-app.ap-south-1.elasticbeanstalk.com"
-//             ]
-//         }
-//     }
-// };
-
-// Set temporary cookie
-function setTempCookie() {
-    const whiteLabelCookie = document.cookie
-        .split('; ')
-        .find(cookie => cookie.startsWith('whiteLabel='))
-        ?.split('=')[1];
-    document.cookie = `whiteLabel=${whiteLabelCookie}; path=/`;
-}
-
-// Simple function to get cookie config
-function getCookieConfig() {
-    // Set temporary cookie if it doesn't exist
-    if (!document.cookie.includes('whiteLabel=')) {
-        setTempCookie();
-    }
-
-    try {
-        const cookie = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('whiteLabel='));
-        return cookie ? JSON.parse(decodeURIComponent(cookie.split('=')[1])) : null;
-    } catch (e) {
-        console.error('Error parsing cookie:', e);
-        return null;
-    }
-}
-
-// Function to update environment variables
-function initializeEnvironment(): () => void {
-    return () => {
-        const config = getCookieConfig()?.body;
-        console.log('config',config);
-        if (config) {
-            // Update all environment variables at once
-            const envUpdates = {
-                'AppUrl': `https://${config.giddhWhiteLabel.domainName}/`,
-                'ApiUrl': `https://${config.giddhWhiteLabel.apiDomainName}/`,
-                'GOOGLE_CLIENT_ID': config.googleClientId,
-                'GOOGLE_CLIENT_SECRET': config.googleClientSecret,
-                'OTP_WIDGET_ID': config.otpWidgetId,
-                'OTP_TOKEN_AUTH': config.otpWidgetToken,
-                'PORTAL_URL': `https://${config.giddhWhiteLabel.portalDomainName}/`
-            };
-            console.log('envUpdates', envUpdates);
-
-            // Update both window and process.env variables
-            Object.entries(envUpdates).forEach(([key, value]) => {
-                (window as any)[key] = value;
-                (window as any)[`process.env.${key}`] = value;
-            });
-        }
-    };
-}
-
-// Function to create service config
-function createServiceConfig() {
-    const config = getCookieConfig()?.body;
-    console.log('config', config);
-
-    return {
-        apiUrl: config?.giddhWhiteLabel?.apiDomainName
-            ? `https://${config.giddhWhiteLabel.apiDomainName}/`
-            : Configuration.ApiUrl,
-        appUrl: config?.giddhWhiteLabel?.domainName
-            ? `https://${config.giddhWhiteLabel.domainName}/`
-            : Configuration.AppUrl
-    };
-}
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -214,17 +124,10 @@ function createServiceConfig() {
      * enableTracing: true,
      */
     providers: [
-        environment.ENV_PROVIDERS,
-        APP_PROVIDERS,
-        WindowRef,
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initializeEnvironment,
-            multi: true
-        },
         {
             provide: ServiceConfig,
-            useFactory: createServiceConfig
+            useFactory: (environmentService: EnvironmentService) => environmentService.createServiceConfig(),
+            deps: [EnvironmentService], // Inject the service
         },
         {
             provide: HTTP_INTERCEPTORS,
