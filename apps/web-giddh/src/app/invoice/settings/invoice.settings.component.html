@@ -791,11 +791,9 @@
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                                 <mat-slide-toggle aria-label="gst invoice"
-                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable" (ngModelChange)="
-                                                        invoiceSetting.gstEInvoiceEnable
-                                                            ? null
-                                                            : (invoiceSetting.generateEinvoiceShowPopUp = false)
-                                                    " class="show-on-mobile" color="primary"
+                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable" 
+                                                    (ngModelChange)="gstEInvoiceEnableChange()"
+                                                    class="show-on-mobile" color="primary"
                                                     (change)="handleEInvoiceChange($event)"
                                                     [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.EInvoice)">
                                                 </mat-slide-toggle>
@@ -805,11 +803,9 @@
                                             </div>
                                             <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
                                                 <mat-slide-toggle aria-label="gst invoice"
-                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable" (ngModelChange)="
-                                                        invoiceSetting.gstEInvoiceEnable
-                                                            ? null
-                                                            : (invoiceSetting.generateEinvoiceShowPopUp = false)
-                                                    " class="hide-on-mobile" color="primary"
+                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable" 
+                                                    (ngModelChange)="gstEInvoiceEnableChange()"
+                                                    class="hide-on-mobile" color="primary"
                                                     (change)="handleEInvoiceChange($event)"
                                                     [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.EInvoice)">
                                                 </mat-slide-toggle>
@@ -856,6 +852,25 @@
                                                 <mat-slide-toggle aria-label="generate einvoice"
                                                     [(ngModel)]="invoiceSetting.generateEinvoiceShowPopUp"
                                                     name="enableEInvoiceShowPopup" class="hide-on-mobile"
+                                                    color="primary">
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle aria-label="generate einvoice"
+                                                    [(ngModel)]="invoiceSetting.generateAutoEWayBill"
+                                                    name="generateAutoEWayBill" class="show-on-mobile"
+                                                    color="primary">
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{
+                                                    localeData?.generate_e_way_bill
+                                                    }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle aria-label="generate einvoice"
+                                                    [(ngModel)]="invoiceSetting.generateAutoEWayBill"
+                                                    name="generateAutoEWayBill" class="hide-on-mobile"
                                                     color="primary">
                                                 </mat-slide-toggle>
                                             </div>

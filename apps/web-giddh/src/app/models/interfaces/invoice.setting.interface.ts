@@ -32,7 +32,7 @@ export class CompanyCashFreeSettings {
 }
 
 export class CompanyEmailSettings {
-    constructor(){
+    constructor() {
         this.sendThroughGmail = false;
     }
     sendThroughSendgrid: boolean;
@@ -55,7 +55,7 @@ export class EstimateSettings {
 }
 
 export class ProformaSettings {
-    constructor(){
+    constructor() {
         this.autoMail = false;
         this.autoChangeStatusOnExp = false;
     }
@@ -75,7 +75,7 @@ export class ProformaSettings {
 }
 
 export class InvoiceSettings {
-    constructor(){
+    constructor() {
         this.showSeal = false;
         this.autoMail = false;
         this.useCustomInvoiceNumber = false;
@@ -85,9 +85,10 @@ export class InvoiceSettings {
         this.salesRoundOff = false;
         this.purchaseRoundOff = false;
         this.debitNoteRoundOff = false;
-        this.creditNoteRoundOff = false;     
+        this.creditNoteRoundOff = false;
         this.autoWhatsAppInvoice = true;
         this.autoWhatsAppCreditNote = true;
+        this.generateAutoEWayBill = false;
     }
     duePeriod?: any;
     autoMail: boolean;
@@ -128,6 +129,8 @@ export class InvoiceSettings {
     smsContent?: any;
     autoDeleteEntries?: any;
     gstEInvoiceEnable?: boolean;
+    generateAutoEWayBill?: boolean;
+    generateEinvoiceShowPopUp: boolean;
     gstEInvoiceGstin?: string;
     gstEInvoiceUserName?: string;
     gstEInvoiceUserPassword?: string;

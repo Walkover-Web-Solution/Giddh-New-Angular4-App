@@ -50,6 +50,7 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
+import { EWayBillCreateComponent } from "../../shared/eWayBill/create/eWayBill.create.component";
 
 @Component({
     selector: "create",
@@ -417,6 +418,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private totalDepositAmount: number = 0;
     /** Holds current route query parameters */
     public queryParams: any = {};
+    public eWayBillResponse: any = {};
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3502,18 +3504,44 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Deletes the session
+     *
+     * @param {string} sessionId Session ID
+     * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
+     * @memberof SubscriptionComponent
+     */
+    public ewayBillDialog(): void {
+        console.log("ok");
+        let dialogRef = this.dialog.open(EWayBillCreateComponent, {
+            panelClass: ['mat-dialog-md'],
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                console.log("this.saveVoucher()", response);
+                this.eWayBillResponse = response;
+                this.saveVoucher();
+            }
+        });
+    }
+
+    /**
      * Generate voucher
      *
      * @memberof VoucherCreateComponent
      */
     public generateVoucher(): void {
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
+        console.log("this.isPendingEntries ", this.isPendingEntries);
         if (this.isPendingEntries) {
             this.saveVoucher(() => {
                 this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
-            this.saveVoucher();
+            if (this.voucherType === "sales" && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+                this.ewayBillDialog();
+            } else {
+                this.saveVoucher();
+            }
         }
     }
 
@@ -3975,6 +4003,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
+                if (this.eWayBillResponse) {
+                    invoiceForm.ewayBillDetails = this.eWayBillResponse;
+                    this.eWayBillResponse = null;
+                }
                 this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
@@ -5299,14 +5331,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-/**
- * This will be use for select unit in transaction
- *
- * @param {MatSelectChange} event
- * @param {AbstractControl} transaction
- * @param {any[]} resolvedUnits
- * @memberof VoucherCreateComponent
- */
+    /**
+     * This will be use for select unit in transaction
+     *
+     * @param {MatSelectChange} event
+     * @param {AbstractControl} transaction
+     * @param {any[]} resolvedUnits
+     * @memberof VoucherCreateComponent
+     */
     public selectUnit(event: MatSelectChange, transaction: AbstractControl, resolvedUnits: any[]): void {
         const selectedUnitCode = resolvedUnits.find(unit => unit?.stockUnitUniqueName === event?.value)?.stockUnitCode;
         if (selectedUnitCode) {
