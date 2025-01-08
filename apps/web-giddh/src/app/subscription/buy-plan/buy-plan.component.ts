@@ -279,7 +279,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                if (this.subscriptionId && this.isChangePlan) {
+                    this.router.navigate(['/pages/user-details/subscription']);
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                };
             }
         });
 
@@ -538,11 +542,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.initializePayment(response);
                 }
             } else {
-                if (response?.region?.code === 'GBR') {
-                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                    this.router.navigate(['/pages/user-details/subscription']);
-                } else {
-                    this.updateSubscriptionPayment(response, true);
+                if (response) {
+                    if (response?.region?.code !== 'IND') {
+                        this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                        this.router.navigate(['/pages/user-details/subscription']);
+                    } else {
+                        this.updateSubscriptionPayment(response, true);
+                    }
                 }
             }
         });
@@ -1624,7 +1630,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
-            if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && subscription?.region?.code !== 'GBR') {
+            if (request.paymentId && this.firstStepForm.get('duration')?.value === 'MONTHLY' && payResponse?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId });
             } else {
                 this.componentStore.changePlan(data);
