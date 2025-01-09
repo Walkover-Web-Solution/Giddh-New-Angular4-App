@@ -5,7 +5,6 @@ import { ChangeBillingComponent } from './change-billing/change-billing.componen
 import { ViewSubscriptionComponent } from './view-subscription/view-subscription.component';
 import { BuyPlanComponent } from './buy-plan/buy-plan.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
-import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 
 @NgModule({
     imports: [
@@ -30,9 +29,6 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
             },
             {
                 path: 'subscription/buy-plan/:id', component: BuyPlanComponent
-            },
-            {
-                path: 'subscription/call-back', component: CallBackPageComponent
             }
         ])
     ],

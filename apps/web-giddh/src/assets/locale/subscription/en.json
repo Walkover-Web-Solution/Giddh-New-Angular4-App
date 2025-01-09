@@ -142,7 +142,5 @@
         "reject": "Reject",
         "enter_reason": "Enter reason",
         "submit": "Submit",
-        "cancel": "Cancel",
-        "razorpay": "RAZORPAY",
-        "paypal": "PAYPAL"
+        "cancel": "Cancel"
     }

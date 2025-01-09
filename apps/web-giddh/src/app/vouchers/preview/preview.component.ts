@@ -239,7 +239,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 if (params?.page) {
                     this.queryParams = params;
                     this.advanceFilters.page = Number(params.page);
-                    this.advanceFilters.count = params.count ? Number(params.count) : PAGINATION_LIMIT;
                     this.advanceFilters.from = params.from ?? '';
                     this.advanceFilters.to = params.to ?? '';
                     const searchString = params.search;
@@ -261,7 +260,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     page: 1,
                     from: this.advanceFilters.from,
                     to: this.advanceFilters.to,
-                    count: PAGINATION_LIMIT,
+                    count: this.advanceFilters.count,
                     q: '',
                     sort: '',
                     sortBy: ''
@@ -390,7 +389,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     page: 1,
                     from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
                     to: dayjs(response[1]).format(GIDDH_DATE_FORMAT),
-                    count: PAGINATION_LIMIT,
+                    count: this.advanceFilters.count,
                     q: '',
                     sort: '',
                     sortBy: ''
@@ -446,7 +445,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.defaultThermalTemplate = response?.find(response => response.isDefault && (response.templateType === 'thermal_template'));
+                this.defaultThermalTemplate = response?.find(response =>  response.isDefault && (response.templateType === 'thermal_template'));
             }
         });
 
@@ -1137,8 +1136,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         const queryParams = {
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
-            page: this.advanceFilters.page,
-            count: this.advanceFilters.count ?? PAGINATION_LIMIT
+            page: this.advanceFilters.page
         }
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
@@ -1245,7 +1243,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
             queryParams: {
                 page: this.queryParams.page ?? 1,
-                count: this.queryParams.count ?? PAGINATION_LIMIT,
                 from: this.advanceFilters.from,
                 to: this.advanceFilters.to
             }

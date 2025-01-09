@@ -57,7 +57,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
 import { SubscriptionV1Component } from './components/subscription-v1/subscription-v1.component';
-import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 
 @NgModule({
     imports: [
@@ -88,7 +87,6 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
         MatTooltipModule,
         SafePipeModule,
         NewConfirmationModalModule,
-        CallBackPageComponent,
         MatCardModule,
         MatStepperModule,
         MatRadioModule,
