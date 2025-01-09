@@ -490,6 +490,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
     }
 
+    public gstEInvoiceEnableChange(): void {
+        if (!this.invoiceSetting.gstEInvoiceEnable) {
+            this.invoiceSetting.generateEinvoiceShowPopUp = false;
+            this.invoiceSetting.generateAutoEWayBill = false;
+        }
+    }
     /**
      * setInvoiceLockDate
      */
