@@ -41,7 +41,6 @@ import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { CommonService } from '../../../services/common.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { EWayBillCreateComponent } from '../../../shared/eWayBill/create/eWayBill.create.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -848,34 +847,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.convertedCompoundTotal = this.calculateConversionRate(this.blankLedger.compoundTotal);
     }
 
-    // /**
-    //      * Deletes the session
-    //      *
-    //      * @param {string} sessionId Session ID
-    //      * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
-    //      * @memberof SubscriptionComponent
-    //      */
-    //     public ewayBillDialog(): void {
-    //         console.log("ok");
-    //         let dialogRef = this.dialog.open(EWayBillCreateComponent, {
-    //             panelClass: ['mat-dialog-md'],
-    //         });
-    //         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-    //             if (response) {
-    //                 console.log("this.saveVoucher()", response);
-    //                 this.saveLedger();
-    //             }
-    //         });
-    //     }
-
-    // public generateLedger(){
-    //     if (this.blankLedger.transactions[1]?.selectedAccount?.name === "Sales" && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
-    //         this.ewayBillDialog();
-    //     } else {
-    //         this.saveLedger();
-    //     }
-    // }
-
     public saveLedger() {
         if ((this.isRcmEntry) && !this.validateTaxes()) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
@@ -893,8 +864,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 tax.isChecked = false;
             });
         }
-        console.log("this.blankLedger ", this.blankLedger);
-        
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
         this.blankLedger.transactions?.map((transaction) => {

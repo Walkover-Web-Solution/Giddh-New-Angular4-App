@@ -90,7 +90,6 @@ import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
 import { A11yModule } from "@angular/cdk/a11y";
 import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
 import { EWayBillComponentModule } from "../shared/eWayBill/eWayBill.module";
-// import { EWayBillCreateComponent } from "../shared/eWayBill/create/eWayBill.create.component";
 
 @NgModule({
     declarations: [
@@ -116,7 +115,6 @@ import { EWayBillComponentModule } from "../shared/eWayBill/eWayBill.module";
         FullAddressComponent,
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
-        // EWayBillCreateComponent
     ],
     imports: [
         CommonModule,

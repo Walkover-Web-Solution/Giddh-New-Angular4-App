@@ -345,6 +345,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankList: any[] = [];
     /** Invoice Settings */
     public invoiceSettings: any;
+    /** E-way bill dialog response */
     public eWayBillResponse: any;
 
     constructor(
@@ -1335,6 +1336,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public ewayBillDialog(): void {
+        this.dialog?.closeAll();
         let dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true
@@ -1351,13 +1353,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public generateLedger() {
-        if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+        if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
             this.ewayBillDialog();
         } else {
             this.saveBlankTransaction();
         }
     }
-
 
     public saveBankTransaction() {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
@@ -1693,7 +1694,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBlankTransaction() {
-        console.log("txn.particular", this.lc.blankLedger.transactions[1].particular);
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
@@ -1728,7 +1728,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
                 model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
             }
-            if (this.eWayBillResponse) {
+            if (this.eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
                 model.ewayBillDetails = this.eWayBillResponse;
                 this.eWayBillResponse = null;
             }

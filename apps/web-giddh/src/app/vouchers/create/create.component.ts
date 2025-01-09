@@ -418,6 +418,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private totalDepositAmount: number = 0;
     /** Holds current route query parameters */
     public queryParams: any = {};
+    /** E-way bill dialog response */
     public eWayBillResponse: any = {};
 
     /**
@@ -3509,7 +3510,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ewayBillDialog(): void {
-        console.log("ok");
+        this.dialog?.closeAll();
         let dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true
@@ -3532,7 +3533,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
-            if (this.voucherType === "sales" && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+            if (this.voucherType === "sales" && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
                 this.ewayBillDialog();
             } else {
                 this.saveVoucher();
@@ -3999,7 +4000,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
-                if (this.eWayBillResponse) {
+                if (this.eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
                     invoiceForm.ewayBillDetails = this.eWayBillResponse;
                     this.eWayBillResponse = null;
                 }

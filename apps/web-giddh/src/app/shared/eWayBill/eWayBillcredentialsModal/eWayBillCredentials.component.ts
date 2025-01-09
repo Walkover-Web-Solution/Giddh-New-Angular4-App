@@ -14,15 +14,14 @@ import { takeUntil } from 'rxjs/operators';
 })
 
 export class EWayBillCredentialsComponent implements OnInit {
+    /** Event emitter to notify when the modal is closed. */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    // @ViewChild('ewayBillform', { static: true }) public loginForm: NgForm;
-    // public ewayBillLogForm: EwayBillLogin = new EwayBillLogin();
     /** Form group for Credentials e-Way Bill form */
     public eWayBillCredentialsForm: FormGroup;
     /** Flag to toggle password visibility */
     public togglePassword: boolean = true;
     /** Observable indicating if user addition is in process */
-    public isUserAdeedInProcess$: Observable<boolean>;
+    public isUserAddedInProcess$: Observable<boolean>;
     /** Observable indicating if e-Way Bill user creation was successful */
     public isEwaybillUserCreationSuccess$: Observable<boolean>;
     /** Subject for managing component destruction */
@@ -35,7 +34,7 @@ export class EWayBillCredentialsComponent implements OnInit {
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions, private formBuilder: FormBuilder) {
-        this.isUserAdeedInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillAddnewUserInProcess), takeUntil(this.destroyed$));
+        this.isUserAddedInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillAddnewUserInProcess), takeUntil(this.destroyed$));
         this.isEwaybillUserCreationSuccess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
 
     }
@@ -78,7 +77,9 @@ export class EWayBillCredentialsComponent implements OnInit {
      * @memberof EWayBillCredentialsComponent
      */
     public onSubmit() {
-        this.store.dispatch(this.invoiceActions.LoginEwaybillUser(this.eWayBillCredentialsForm?.value));
+        if (this.eWayBillCredentialsForm?.valid) {
+            this.store.dispatch(this.invoiceActions.LoginEwaybillUser(this.eWayBillCredentialsForm?.value));
+        }
     }
 
     /**

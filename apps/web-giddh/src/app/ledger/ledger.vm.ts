@@ -416,7 +416,6 @@ export class BlankLedgerVM {
     public mergePB?: boolean;
     public referenceVoucher?: ReferenceVoucher;
     public generateEInvoice?: boolean;
-    public ewayBillDetails?: any;
 }
 
 export class IInvoiceLinkingRequest {
