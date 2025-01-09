@@ -49,6 +49,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'ledger',
@@ -454,8 +455,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public pageChanged(event: any): void {
-        this.trxRequest.paginationToken = event;
+        if (typeof event === 'string') {
+            this.trxRequest.paginationToken = event;
+        }
         if (this.isAdvanceSearchImplemented) {
+            this.trxRequest.paginationToken = ''; //Reset ledger pagination token 
             this.advanceSearchRequest.page = event.page;
             this.getAdvanceSearchTxn();
         } else {
@@ -986,13 +990,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (!transaction) {
                 let bankTransactions: any[] = [];
 
-                this.lc.bankTransactionsDebitData.forEach(transaction => {
-                    if (transaction.transactions[0].selectedAccount?.name) {
+                this.lc.bankTransactionsDebitData?.forEach(transaction => {
+                    if (transaction.transactions[0]?.selectedAccount?.name) {
                         bankTransactions.push(transaction);
                     }
                 });
-                this.lc.bankTransactionsCreditData.forEach(transaction => {
-                    if (transaction.transactions[0].selectedAccount?.name) {
+                this.lc.bankTransactionsCreditData?.forEach(transaction => {
+                    if (transaction.transactions[0]?.selectedAccount?.name) {
                         bankTransactions.push(transaction);
                     }
                 });
@@ -1201,6 +1205,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Save bulk bank transaction Dialog
+     *
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
+    public openBulkBankTransactionConfirmationDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.convert_entries_message, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.saveBulkBankTransaction();
+            }
+        });
+    }
+
+    /**
      * Save bulk bank transaction
      *
      * @returns {void}
@@ -1209,7 +1233,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public saveBulkBankTransaction(): void {
         let blankTransactionsObjArray: BlankLedgerVM[] = [];
 
-        this.bankTransactionsWithAccountName.forEach(currentBankEntry => {
+        this.bankTransactionsWithAccountName?.forEach(currentBankEntry => {
             let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject(currentBankEntry);
             blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
             delete blankTransactionObj['voucherType'];
@@ -1295,7 +1319,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+        this.ledgerService.downloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body?.uploadedFile, `image/${d.body?.fileType}`, 512);
                 download(d.body?.name, blob, `image/${d.body?.fileType}`)
@@ -1874,11 +1898,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectAllBankEntries(event: any, type: 'debit' | 'credit' | 'all'): void {
         if (event?.checked) {
             if (type === 'debit') {
-                this.lc.bankTransactionsDebitData.forEach(response => {
+                this.lc.bankTransactionsDebitData?.forEach(response => {
                     this.selectedDebitTransactionIds.add(response.transactions[0]?.id);
                 });
             } else {
-                this.lc.bankTransactionsCreditData.forEach(response => {
+                this.lc.bankTransactionsCreditData?.forEach(response => {
                     this.selectedCreditTransactionIds.add(response.transactions[0]?.id);
                 });
             }
@@ -2398,7 +2422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let index = 0;
 
             if (this.visibleTransactionTypeMobile === "debit" && this.ledgerTransactions.debitTransactions) {
-                this.ledgerTransactions.debitTransactions.forEach(transaction => {
+                this.ledgerTransactions.debitTransactions?.forEach(transaction => {
                     if (this.allTransactionsList[transaction?.entryDate] === undefined) {
                         this.allTransactionsList[transaction?.entryDate] = [];
                     }
@@ -2407,7 +2431,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     index++;
                 });
             } else if (this.visibleTransactionTypeMobile === "credit" && this.ledgerTransactions.creditTransactions) {
-                this.ledgerTransactions.creditTransactions.forEach(transaction => {
+                this.ledgerTransactions.creditTransactions?.forEach(transaction => {
                     if (this.allTransactionsList[transaction?.entryDate] === undefined) {
                         this.allTransactionsList[transaction?.entryDate] = [];
                     }
@@ -2929,7 +2953,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.stock?.groupTaxes ?? [],
                     data.body.taxes ?? [],
                     data.body.groupTaxes ?? []);
-                if (txn?.taxesVm) {
+                if (txn?.taxesVm?.length) {
                     txn?.taxesVm.forEach(tax => {
                         tax.isChecked = false;
                         tax.isDisabled = false;
