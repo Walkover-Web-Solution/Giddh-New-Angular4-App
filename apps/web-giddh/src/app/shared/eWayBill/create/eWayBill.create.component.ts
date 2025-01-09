@@ -87,30 +87,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public confirmationFlag: string;
     /** Flag for showing the clear button */
     public showClear: boolean = false;
-    // public generateEwayBillform: GenerateEwayBill = {
-    //     supplyType: null,
-    //     subSupplyType: null,
-    //     transMode: null,
-    //     toPinCode: null,
-    //     transDistance: null,
-    //     invoiceNumber: null,
-    //     transporterName: null,
-    //     transporterId: null,
-    //     transDocNo: null,
-    //     transDocDate: null,
-    //     vehicleNo: null,
-    //     vehicleType: null,
-    //     transactionType: null,
-    //     docType: null,
-    //     toGstIn: null,
-    //     uniqueName: null
-    // };
-
-    // public generateNewTransporter: IEwayBillTransporter = {
-    //     transporterId: null,
-    //     transporterName: null
-    // };
-
     /** Selected invoices */
     public selectedInvoices: any[] = [];
     /** Supply type data */
@@ -175,7 +151,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.isLoggedInUserEwayBill$ = this.store.pipe(select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess), takeUntil(this.destroyed$));
         this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
         this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : null;
-        // this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
     }
 
     public toggleEwayBillCredentialsPopup() {
@@ -191,7 +166,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.isUserlogedIn = true;
                 if (res.body && res.body?.gstIn) {
-                    // this.invoiceBillingGstinNo = this.generateEwayBillform.toGstIn = res.body.gstIn;
                     this.invoiceBillingGstinNo = res.body.gstIn;
                     this.generateEwayBillform.get('toGstIn').patchValue(res.body.gstIn);
                 }
@@ -223,9 +197,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         } else {
             this.generateEwayBillform.get('toGstIn').patchValue('URP');
         }
-        // if (this.selectedInvoices?.length === 0) {
-        //     this.redirectToSalesInvoice();
-        // }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
             if (s) {
                 this.generateEwayBillform.reset();
@@ -236,7 +207,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.generateNewTransporterForm.reset();
             }
         });
-
         this.store.pipe(select(state => state.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
                 this.clearTransportForm();
@@ -291,7 +261,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public clearTransportForm() {
         this.generateNewTransporterForm.get('transporterId').patchValue(null);
-        this.generateNewTransporterForm.get('transporterId').patchValue(null);
+        this.generateNewTransporterForm.get('transporterName').patchValue(null);
     }
 
     /**
@@ -322,33 +292,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      *
      * @memberof EWayBillCreateComponent
      */
-    public onCancelGenerateBill() {
-        // this.transport.clear();
-        // this.generateEwayBillform.get('toPinCode').patchValue(this.voucherDetails?.account?.billingDetails?.pincode || null);
-        // this.generateEwayBillform.get('transDistance').patchValue(null);
-        // this.generateEwayBillform.get('transMode').patchValue(null);
-        // this.generateEwayBillform.get('vehicleType').patchValue(null);
-        // this.generateEwayBillform.get('vehicleNo').patchValue(null);
-        // this.generateEwayBillform.get('transDocNo').patchValue(null);
-        // this.generateEwayBillform.get('transDocDate').patchValue(null);
-        this.generateEwayBillform.reset();
+    public onResetGenerateBillForm() {
+        this.generateEwayBillform.get('toPinCode').patchValue(this.voucherDetails?.account?.billingDetails?.pincode || null);
+        this.generateEwayBillform.get('transDistance').patchValue(null);
+        this.generateEwayBillform.get('transMode').patchValue(null);
+        this.generateEwayBillform.get('vehicleType').patchValue(null);
+        this.generateEwayBillform.get('vehicleNo').patchValue(null);
+        this.generateEwayBillform.get('transDocNo').patchValue(null);
+        this.generateEwayBillform.get('transDocDate').patchValue(null);
     }
-
-    // public selectTransporter(e) {
-    //     this.showClear = true;
-    //     this.generateEwayBillform.get('transporterName').patchValue(e.label);
-    // }
-
-    // public keydownPressed(e) {
-    //     if (e.code === 'ArrowDown') {
-    //         this.keydownClassAdded = true;
-    //     } else if (e.code === 'Enter' && this.keydownClassAdded) {
-    //         this.keydownClassAdded = true;
-    //         this.OpenTransporterModel();
-    //     } else {
-    //         this.keydownClassAdded = false;
-    //     }
-    // }
 
     /**
      * Opens the transporter model dialog
@@ -401,6 +353,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     /**
      * Enables edit mode for the selected transporter and populates its details in the form
      *
@@ -426,6 +379,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
         this.detectChanges();
     }
+
     /**
      * Deletes the specified transporter and refreshes the transporter list
      *
@@ -438,6 +392,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.OpenTransporterModel();
         this.detectChanges();
     }
+
     /**
      * Detects and applies changes to the view
      *
@@ -448,6 +403,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this._cdRef.detectChanges();
         }
     }
+
     /**
      * Handles pagination for the transporter list
      *
@@ -459,6 +415,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
+
     /**
      * Sorts the transporter list based on column and order
      *
@@ -471,27 +428,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterFilterRequest.sortBy = columnName;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
-
-    // public selectedModeOfTrans(mode: string) {
-    //     if (mode !== 'road') {
-    //         this.isTransModeRoad = true;
-    //     } else {
-    //         this.isTransModeRoad = false;
-    //     }
-    // }
-    // public subTypeElementSelected(event) {
-    //     this.doctype.clear();
-    //     this.TransporterDocType = this.ModifiedTransporterDocType;
-    //     if (event) {
-    //         if (event.label === this.localeData?.subsupply_types_list?.supply || event.label === this.localeData?.subsupply_types_list?.export) {
-    //             this.TransporterDocType = this.TransporterDocType?.filter((item) => item?.value !== 'CHL');
-    //         } else if (event.label === this.localeData?.subsupply_types_list?.job_work) {
-    //             this.TransporterDocType = this.TransporterDocType?.filter((item) => item?.value !== 'INV' && item?.value !== 'BIL');
-    //         } else {
-    //             this.TransporterDocType = this.ModifiedTransporterDocType;
-    //         }
-    //     }
-    // }
 
     /**
      * Callback for translation completion, initializes dropdown lists for subtypes, supply types, and document types
@@ -530,10 +466,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 { value: '2', label: this.localeData?.transaction_type?.credit_notes },
                 { value: '3', label: this.localeData?.transaction_type?.delivery_challan }
             ];
-            // this.prefillDocType();
             this.prefillSubType();
         }
     }
+
     /**
      * Prefills the subtype based on the active company's currency and invoice details
      *
@@ -553,71 +489,4 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-    // private prefillDocType(): void {
-    //     this.store.pipe(select(state => state.receipt.voucher), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
-    //         console.log("voucher  " , voucher);
-    //         if (voucher) {
-    //             console.log("voucher1 " , voucher);
-
-    //             if (!voucher?.account?.billingDetails?.pincode) {
-    //                 this.toaster.errorToast(this.localeData?.pincode_required);
-    //                 this.redirectToSalesInvoice();
-    //             }
-
-    //             this.voucherDetails = voucher;
-
-    //             let hasNonNilRatedTax = false;
-
-    //             voucher?.entries?.forEach(entry => {
-    //                 entry?.taxes?.forEach(tax => {
-    //                     if (tax.taxPercent !== 0) {
-    //                         hasNonNilRatedTax = true;
-    //                     }
-    //                 });
-    //             });
-
-    //             if (hasNonNilRatedTax) {
-    //                 // this.generateEwayBillform.docType = 'INV';
-    //                 this.generateEwayBillform.get('docType').patchValue('INV');
-    //                 this.selectedDocType = this.localeData?.modified_transporter_doc_type?.invoice;
-    //             } else {
-    //                 // this.generateEwayBillform.docType = 'BIL';
-    //                 this.generateEwayBillform.get('docType').patchValue('BIL');
-    //                 this.selectedDocType = this.localeData?.modified_transporter_doc_type?.bill_supply;
-    //             }
-
-    //             // this.generateEwayBillform.toPinCode = voucher?.account?.billingDetails?.pincode;
-    //             this.generateEwayBillform.get('toPinCode').patchValue(voucher?.account?.billingDetails?.pincode);
-
-    //             if (this.invoiceBillingGstinNo) {
-    //                 // this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
-    //                 this.generateEwayBillform.get('toGstIn').patchValue(this.invoiceBillingGstinNo);
-    //             } else {
-    //                 // this.generateEwayBillform.toGstIn = 'URP';
-    //                 this.generateEwayBillform.get('toGstIn').patchValue('URP');
-    //             }
-
-    //             // this.generateEwayBillform.uniqueName = voucher?.uniqueName;
-    //             this.generateEwayBillform.get('uniqueName').patchValue(voucher?.uniqueName);
-    //             console.log(this.selectedDocType);
-
-    //             this._cdRef.detectChanges();
-    //         }
-    //     });
-    // }
-
-    // /**
-    //  * Redirect Sales invoice get all page based on voucher version
-    //  *
-    //  * @private
-    //  * @memberof EWayBillCreateComponent
-    //  */
-    // private redirectToSalesInvoice(): void {
-    //     if (this.generalService.voucherApiVersion === 2) {
-    //         // this.router.navigate(['/pages/vouchers/preview/sales/list']);
-    //     } else {
-    //         // this.router.navigate(['/pages/invoice/preview/sales']);
-    //     }
-    // }
 }

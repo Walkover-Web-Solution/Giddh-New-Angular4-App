@@ -90,15 +90,6 @@
     border-radius: 0px;
 }
 
-// .aside-pane {
-//     overflow: auto;
-//     width: 475px;
-//     position: fixed;
-//     top: var(--top-distance);
-//     right: 0;
-//     padding: 0px;
-// }
-
 .bg-white {
     background: var(--color-white) !important;
 }
@@ -133,25 +124,4 @@
 .table-modal tbody tr td .icon-edit {
     border-bottom: 2px solid var(--color-iron);
 }
-
-// .aside-overlay.out {
-//     visibility: hidden;
-//     opacity: 0;
-// }
-
-// .aside-overlay.in {
-//     visibility: visible;
-//     opacity: 0.6;
-//     z-index: 991;
-// }
-
-// .aside-overlay {
-//     transition: 0.5s all ease;
-//     z-index: 991;
-// }
-
-// .date-input-icon {
-//     top: 9px;
-//     right: 8px;
-// }
 

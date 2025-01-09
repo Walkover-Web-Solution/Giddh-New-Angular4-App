@@ -27,7 +27,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 import { LaddaModule } from 'angular2-ladda';
-import { EWayBillComponentModule } from '../../../shared/eWayBill/eWayBill.module';
 
 @NgModule({
     declarations: [
@@ -63,8 +62,7 @@ import { EWayBillComponentModule } from '../../../shared/eWayBill/eWayBill.modul
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
-        }),
-        EWayBillComponentModule
+        })
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })
