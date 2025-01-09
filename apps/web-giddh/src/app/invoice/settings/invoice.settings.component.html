@@ -790,22 +790,16 @@
                                         class="clearfix pd-t1">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                                <mat-slide-toggle aria-label="gst invoice"
-                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable" 
-                                                    (ngModelChange)="gstEInvoiceEnableChange()"
-                                                    class="show-on-mobile" color="primary"
-                                                    (change)="handleEInvoiceChange($event)"
-                                                    [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.EInvoice)">
-                                                </mat-slide-toggle>
                                                 <label class="left-gap">{{
                                                     localeData?.e_invoice_authentication_label
                                                     }}</label>
                                             </div>
                                             <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
-                                                <mat-slide-toggle aria-label="gst invoice"
+                                                <mat-slide-toggle 
+                                                    aria-label="gst invoice"
                                                     [(ngModel)]="invoiceSetting.gstEInvoiceEnable" 
                                                     (ngModelChange)="gstEInvoiceEnableChange()"
-                                                    class="hide-on-mobile" color="primary"
+                                                    color="primary"
                                                     (change)="handleEInvoiceChange($event)"
                                                     [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.EInvoice)">
                                                 </mat-slide-toggle>

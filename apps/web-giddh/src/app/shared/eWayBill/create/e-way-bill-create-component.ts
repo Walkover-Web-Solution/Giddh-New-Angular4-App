@@ -1,38 +1,26 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
-import { Router } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../helpers/defaultDateFormat';
-import { ToasterService } from '../../../services/toaster.service';
-import { GeneralService } from '../../../services/general.service';
-import { GenerateEwayBill, IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
+import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'app-e-way-bill-create',
-    templateUrl: './eWayBill.create.component.html',
-    styleUrls: [`./eWayBill.create.component.scss`]
+    templateUrl: './e-way-bill-create-component.html',
+    styleUrls: [`./e-way-bill-create-component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    /** Modal directive for e-Way Bill credentials */
-    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
-    /** Template reference for invoice removal confirmation modal */
+    /** EWay Bill Credentials template reference  */
+    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: TemplateRef<any>;
+    /** Template reference for invoice removal confirmation dialog */
     @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: TemplateRef<any>;
-    /** Holds subgroup information */
-    @ViewChild('subgrp', { static: true }) public subgrp: any;
-    /** Holds document types */
-    @ViewChild('doctypes', { static: true }) public doctype: any;
-    /** Holds transport details */
-    @ViewChild('trans', { static: true }) public transport: any;
     /** Template reference for account aside menu */
     @ViewChild('accountAsideMenu', { static: true }) public accountAsideMenu: TemplateRef<any>;
     /** Form group for generating e-Way Bill */
@@ -93,13 +81,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public supplyType: any = [{}];
     /** Flag for transport mode road */
     public isTransModeRoad: boolean = false;
-    /** Configuration for modal settings */
-    public modalConfig = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     /** List of sub-supply types */
     public SubsupplyTypesList: IOption[] = [];
     /** List of supply types */
@@ -137,9 +118,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         return this.generateNewTransporterForm.get('transporterName') as FormControl;
     }
 
-    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private dialogRef: MatDialogRef<any>,
-        private _invoiceService: InvoiceService, private router: Router, private formBuilder: FormBuilder, private dialog: MatDialog,
-        private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService) {
+    constructor(
+        private store: Store<AppState>,
+        private invoiceActions: InvoiceActions,
+        private dialogRef: MatDialogRef<any>,
+        private _invoiceService: InvoiceService,
+        private formBuilder: FormBuilder,
+        private dialog: MatDialog,
+        private _cdRef: ChangeDetectorRef
+    ) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -151,10 +138,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.isLoggedInUserEwayBill$ = this.store.pipe(select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess), takeUntil(this.destroyed$));
         this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
         this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : null;
-    }
-
-    public toggleEwayBillCredentialsPopup() {
-        this.eWayBillCredentials.toggle();
     }
 
     public ngOnInit() {
@@ -226,10 +209,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             subSupplyType: [null],
             transMode: [null],
             toPinCode: [null, Validators.required],
-            transDistance: [null],
+            transDistance: [null, Validators.required],
             invoiceNumber: [null],
             transporterName: [null, Validators.required],
-            transporterId: [null, Validators.required],
+            transporterId: [null],
             transDocNo: [null],
             transDocDate: [null],
             vehicleNo: [null],
@@ -260,8 +243,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public clearTransportForm() {
-        this.generateNewTransporterForm.get('transporterId').patchValue(null);
-        this.generateNewTransporterForm.get('transporterName').patchValue(null);
+        this.generateNewTransporterForm.reset();
     }
 
     /**
@@ -280,13 +262,26 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public onSubmitEwaybill() {
-        if (this.isUserlogedIn) {
+        if (!this.isUserlogedIn) {
             this.sendResponse(this.generateEwayBillform?.value);
         } else {
-            this.eWayBillCredentials.toggle();
+            this.openEWayBillCredentialsDialog();
         }
         this.detectChanges();
     }
+
+    /**
+     * Opens the transporter model dialog
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public openEWayBillCredentialsDialog(): void {
+        this.dialog.open(this.eWayBillCredentials, {
+            panelClass: "mat-dialog-md",
+            disableClose: true
+        });
+    }
+
     /**
      * Resets the e-Way Bill form to its initial state
      *
@@ -307,10 +302,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      *
      * @memberof ExpenseDetailsComponent
      */
-    public OpenTransporterModel(): void {
+    public openTransporterModel(): void {
         this.dialog.closeAll();
         this.dialog.open(this.accountAsideMenu, {
-            width: '715px',  //var(--aside-pane-width)
+            width: 'var(--aside-pane-width)',
             position: {
                 right: '0',
                 top: '0'
@@ -389,7 +384,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public deleteTransporter(trans: IEwayBillTransporter) {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.OpenTransporterModel();
+        this.openTransporterModel();
         this.detectChanges();
     }
 

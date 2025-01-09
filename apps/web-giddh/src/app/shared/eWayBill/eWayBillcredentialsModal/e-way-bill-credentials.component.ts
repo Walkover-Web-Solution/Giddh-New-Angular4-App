@@ -1,21 +1,19 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { EwayBillLogin } from 'apps/web-giddh/src/app/models/api-models/Invoice';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-eWayBill-credentials-modal',
-    templateUrl: './eWayBillCredentials.component.html',
-    styleUrls: [`./eWayBillCredentials.component.scss`]
+    selector: 'e-way-bill-credentials-dialog',
+    templateUrl: './e-way-bill-credentials.component.html',
+    styleUrls: [`./e-way-bill-credentials.component.scss`]
 })
 
 export class EWayBillCredentialsComponent implements OnInit {
-    /** Event emitter to notify when the modal is closed. */
-    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Form group for Credentials e-Way Bill form */
     public eWayBillCredentialsForm: FormGroup;
     /** Flag to toggle password visibility */
@@ -32,12 +30,17 @@ export class EWayBillCredentialsComponent implements OnInit {
     public commonLocaleData: any = {};
 
     constructor(
-        private store: Store<AppState>,
+        private store: Store<AppState>, private dialogRef: MatDialogRef<any>,
         private invoiceActions: InvoiceActions, private formBuilder: FormBuilder) {
         this.isUserAddedInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillAddnewUserInProcess), takeUntil(this.destroyed$));
         this.isEwaybillUserCreationSuccess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
-
     }
+
+    /**
+     * Initializes the component
+     * 
+     * @memberof EWayBillCredentialsComponent
+     */
     public ngOnInit(): void {
         this.initEWayBillCredentialsForm();
         this.isEwaybillUserCreationSuccess$.subscribe(response => {
@@ -67,8 +70,8 @@ export class EWayBillCredentialsComponent implements OnInit {
      *
      * @memberof EWayBillCredentialsComponent
      */
-    public onCancel() {
-        this.closeModelEvent.emit(true);
+    public onCancel(): void {
+        this.dialogRef.close();
     }
 
     /**
@@ -76,7 +79,7 @@ export class EWayBillCredentialsComponent implements OnInit {
      *
      * @memberof EWayBillCredentialsComponent
      */
-    public onSubmit() {
+    public onSubmit(): void {
         if (this.eWayBillCredentialsForm?.valid) {
             this.store.dispatch(this.invoiceActions.LoginEwaybillUser(this.eWayBillCredentialsForm?.value));
         }
@@ -87,7 +90,7 @@ export class EWayBillCredentialsComponent implements OnInit {
      *
      * @memberof EWayBillCredentialsComponent
      */
-    public showPassword() {
-        this.togglePassword = this.togglePassword ? false : true;
+    public showPassword(): void {
+        this.togglePassword = !this.togglePassword;
     }
 }

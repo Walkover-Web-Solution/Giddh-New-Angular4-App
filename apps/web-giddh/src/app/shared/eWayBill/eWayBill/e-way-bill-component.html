@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div class="custom-tabs e-waybill-tabs heightVH-100">
+    <div class="e-waybill-tabs heightVH-100">
         <mat-tab-group
             mat-stretch-tabs="false"
             [selectedIndex]="activeTabIndex"
@@ -60,7 +60,7 @@
             *ngIf="!(ewaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)"
         >
             <mat-tab [label]="localeData?.tab_generated_bills">
-                <div class="table-responsive table-wrapper overflow-visible px-3">
+                <div class="table-responsive overflow-visible px-3">
                     <table
                         mat-table
                         class="table basic table-bordered giddh-table"
@@ -86,7 +86,7 @@
                                     matTooltipPosition="above"
                                     class="pull-right cursor-pointer"
                                 >
-                                    <i class="icon-download1"></i>
+                                    <i class="icon-download1 font-16"></i>
                                 </a>
                             </td>
                         </ng-container>
@@ -481,7 +481,7 @@
             <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
         </div>
         <mat-dialog-content class="w-100">
-            <form #cancelEwayForm="ngForm" autocomplete="off" class="p-3">
+            <form autocomplete="off" name="cancelEwayForm" [formGroup]="cancelEwayForm" class="p-3" >
                 <div class="d-flex flex-column row-gap15">
                     <!-- Reason Code -->
                     <dropdown-field
@@ -490,7 +490,7 @@
                         [options]="ewayCancelReason"
                         [name]="'cancelRsnCode'"
                         [required]="true"
-                        (selectedOption)="cancelEwayRequest.cancelRsnCode = $event.value"
+                        formControlName="transporterName"
                     >
                     </dropdown-field>
 
@@ -501,7 +501,7 @@
                             matInput
                             rows="2"
                             name="cancelRmrk"
-                            [(ngModel)]="cancelEwayRequest.cancelRmrk"
+                            formControlName="cancelRmrk"
                             [placeholder]="localeData?.remark_placeholder"
                         ></textarea>
                     </mat-form-field>
@@ -511,7 +511,7 @@
                             mat-stroked-button
                             color="primary"
                             type="submit"
-                            (click)="cancelEwayBill(cancelEwayRequest)"
+                            (click)="cancelEwayBill()"
                             aria-label="confirm"
                         >
                             {{ commonLocaleData?.app_confirm }}

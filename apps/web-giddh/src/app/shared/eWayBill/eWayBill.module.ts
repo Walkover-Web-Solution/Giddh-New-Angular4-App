@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { EWayBillCreateComponent } from './create/eWayBill.create.component';
-import { EWayBillComponent } from './eWayBill/eWayBill.component';
-import { EWayBillCredentialsComponent } from './eWayBillcredentialsModal/eWayBillCredentials.component';
+import { EWayBillCreateComponent } from './create/e-way-bill-create-component';
+import { EWayBillComponent } from './eWayBill/e-way-bill-component';
+import { EWayBillCredentialsComponent } from './eWayBillcredentialsModal/e-way-bill-credentials.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { HamburgerMenuModule } from '../header/components/hamburger-menu/hamburger-menu.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -51,5 +51,5 @@ import { MatButtonModule } from '@angular/material/button';
         EWayBillCredentialsComponent
     ]
 })
-export class EWayBillComponentModule {
+export class EWayBillModule {
 }
