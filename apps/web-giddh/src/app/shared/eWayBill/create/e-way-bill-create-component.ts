@@ -262,7 +262,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public onSubmitEwaybill() {
-        if (!this.isUserlogedIn) {
+        if (this.isUserlogedIn) {
             this.sendResponse(this.generateEwayBillform?.value);
         } else {
             this.openEWayBillCredentialsDialog();
