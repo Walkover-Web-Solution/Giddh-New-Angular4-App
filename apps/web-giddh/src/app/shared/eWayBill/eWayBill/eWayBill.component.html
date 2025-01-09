@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div class="custom-tabs e-waybill-tabs heightVH-100">
+    <div class="e-waybill-tabs heightVH-100">
         <mat-tab-group
             mat-stretch-tabs="false"
             [selectedIndex]="activeTabIndex"
@@ -60,7 +60,7 @@
             *ngIf="!(ewaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)"
         >
             <mat-tab [label]="localeData?.tab_generated_bills">
-                <div class="table-responsive table-wrapper overflow-visible px-3">
+                <div class="table-responsive overflow-visible px-3">
                     <table
                         mat-table
                         class="table basic table-bordered giddh-table"
@@ -86,7 +86,7 @@
                                     matTooltipPosition="above"
                                     class="pull-right cursor-pointer"
                                 >
-                                    <i class="icon-download1"></i>
+                                    <i class="icon-download1 font-16"></i>
                                 </a>
                             </td>
                         </ng-container>

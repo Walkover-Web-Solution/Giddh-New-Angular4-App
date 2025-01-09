@@ -55,7 +55,7 @@
     "document_type": "Document Type*",
     "gstin_receiver_label": "GSTIN of Receiver*",
     "gstin_receiver_placeholder": "Enter GSTIN of receiver",
-    "pincode_receiver_label": "PinCode of Receiver*",
+    "pincode_receiver_label": "Pincode of Receiver*",
     "pincode_receiver_placeholder": "Enter pincode",
     "transporter_placeholder": "Select the Transporter's name",
     "distance_km_label": "Distance in KM*",

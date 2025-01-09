@@ -1,21 +1,15 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
-import { Router } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../helpers/defaultDateFormat';
-import { ToasterService } from '../../../services/toaster.service';
-import { GeneralService } from '../../../services/general.service';
-import { GenerateEwayBill, IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
+import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -23,9 +17,9 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
     styleUrls: [`./eWayBill.create.component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    /** Modal directive for e-Way Bill credentials */
-    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
-    /** Template reference for invoice removal confirmation modal */
+    /** EWay Bill Credentials template reference  */
+    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: TemplateRef<any>;
+    /** Template reference for invoice removal confirmation dialog */
     @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: TemplateRef<any>;
     /** Holds subgroup information */
     @ViewChild('subgrp', { static: true }) public subgrp: any;
@@ -93,13 +87,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public supplyType: any = [{}];
     /** Flag for transport mode road */
     public isTransModeRoad: boolean = false;
-    /** Configuration for modal settings */
-    public modalConfig = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     /** List of sub-supply types */
     public SubsupplyTypesList: IOption[] = [];
     /** List of supply types */
@@ -137,9 +124,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         return this.generateNewTransporterForm.get('transporterName') as FormControl;
     }
 
-    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private dialogRef: MatDialogRef<any>,
-        private _invoiceService: InvoiceService, private router: Router, private formBuilder: FormBuilder, private dialog: MatDialog,
-        private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService) {
+    constructor(
+        private store: Store<AppState>,
+        private invoiceActions: InvoiceActions,
+        private dialogRef: MatDialogRef<any>,
+        private _invoiceService: InvoiceService,
+        private formBuilder: FormBuilder,
+        private dialog: MatDialog,
+        private _cdRef: ChangeDetectorRef
+    ) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -154,7 +147,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public toggleEwayBillCredentialsPopup() {
-        this.eWayBillCredentials.toggle();
+        // this.eWayBillCredentials.toggle();
     }
 
     public ngOnInit() {
@@ -283,7 +276,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (this.isUserlogedIn) {
             this.sendResponse(this.generateEwayBillform?.value);
         } else {
-            this.eWayBillCredentials.toggle();
+            // this.eWayBillCredentials.toggle();
+            // Convert dialog
         }
         this.detectChanges();
     }
@@ -310,7 +304,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public OpenTransporterModel(): void {
         this.dialog.closeAll();
         this.dialog.open(this.accountAsideMenu, {
-            width: '715px',  //var(--aside-pane-width)
+            width: 'var(--aside-pane-width)',
             position: {
                 right: '0',
                 top: '0'

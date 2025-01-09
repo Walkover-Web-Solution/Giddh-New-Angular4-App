@@ -240,16 +240,17 @@
                     <div class="text-align-center">
                         <strong class="mt-3 d-block">{{ localeData?.part_b }}</strong>
                     </div>
-                    <div class="row d-flex e-way-body">
+                    <div class="row d-flex">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
                             <label>{{ localeData?.mode_of_transportation }}</label>
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 pd-t15">
-                            <ul class="list-icon-group">
-                                <li>
+                            <ul class="list-icon-group list-style-none p-0 d-flex">
+                                <li class="d-flex align-items-center cursor-pointer">
                                     <input
                                         id="transMode1"
                                         type="radio"
+                                        class="d-none"
                                         name="transMode"
                                         value="1"                                       
                                         formControlName="transMode"
@@ -258,10 +259,11 @@
                                         ><img src="assets/icon/4.svg " /> {{ commonLocaleData?.app_road }}</label
                                     >
                                 </li>
-                                <li>
+                                <li class="d-flex align-items-center cursor-pointer">
                                     <input
                                         id="transMode2"
                                         type="radio"
+                                        class="d-none"
                                         name="transMode"
                                         value="2"
                                         formControlName="transMode"
@@ -270,10 +272,11 @@
                                         ><img src="assets/icon/3.svg " /> {{ commonLocaleData?.app_rail }}</label
                                     >
                                 </li>
-                                <li>
+                                <li class="d-flex align-items-center cursor-pointer">
                                     <input
                                         id="transMode3"
                                         type="radio"
+                                        class="d-none"
                                         name="transMode"
                                         value="3"
                                         formControlName="transMode"
@@ -282,10 +285,11 @@
                                         ><img src="assets/icon/1.svg " /> {{ commonLocaleData?.app_air }}</label
                                     >
                                 </li>
-                                <li>
+                                <li class="d-flex align-items-center cursor-pointer">
                                     <input
                                         id="transMode4"
                                         type="radio"
+                                        class="d-none"
                                         name="transMode"
                                         value="4"
                                         formControlName="transMode"
@@ -297,7 +301,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="row d-flex e-way-body">
+                    <div class="row d-flex">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
                             <label>{{ localeData?.vehicle_type }}</label>
                         </div>
@@ -403,18 +407,20 @@
                         </div>
                     </div>
                     <div class="row clearfix d-flex justify-content-end">
-                            <button
-                                mat-button
-                                class="btn btn-success"
-                                [disabled]="generateEwayBillform.invalid"
-                                [ladda]="isEwaybillGenerateInProcess$ | async"
-                                (click)="onSubmitEwaybill()"
-                            >
-                                {{ localeData?.save_generate }}
-                            </button>
-                            <button mat-button class="btn btn-danger" (click)="onResetGenerateBillForm()">
-                                {{ commonLocaleData?.app_reset }}
-                            </button>
+                        <button
+                            mat-button
+                            [disabled]="generateEwayBillform.invalid"
+                            [ladda]="isEwaybillGenerateInProcess$ | async"
+                            (click)="onSubmitEwaybill()"
+                        >
+                            {{ localeData?.save_generate }}
+                        </button>
+                        <button 
+                            mat-button 
+                            (click)="onResetGenerateBillForm()"
+                        >
+                            {{ commonLocaleData?.app_reset }}
+                        </button>
                     </div>
                 </div>
             </form>
@@ -633,8 +639,12 @@
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
                     <td class="nowrap">
-                        <button mat-button (click)="editTransporter(item)"><i class="icon-edit"></i></button>
-                        <button mat-button (click)="deleteTransporter(item)"><i class="fa fa-trash"></i></button>
+                        <button mat-button (click)="editTransporter(item)">
+                            <i class="icon-edit"></i>
+                        </button>
+                        <button mat-button (click)="deleteTransporter(item)">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     </td>
                 </tr>
             </table>
