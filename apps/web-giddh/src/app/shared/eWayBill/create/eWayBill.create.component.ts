@@ -110,7 +110,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     //     transporterId: null,
     //     transporterName: null
     // };
-    
+
     /** Selected invoices */
     public selectedInvoices: any[] = [];
     /** Supply type data */
@@ -245,10 +245,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Initializes voucher form
+     * Initializes the form to generate an e-Way Bill with necessary fields and validators
      *
      * @private
-     * @memberof VoucherCreateComponent
+     * @memberof EWayBillCreateComponent
      */
     private initGenerateEwayBillForm(): void {
         this.generateEwayBillform = this.formBuilder.group({
@@ -272,10 +272,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Initializes voucher form
+     * Initializes the form to generate a new transporter with required fields and validators
      *
      * @private
-     * @memberof VoucherCreateComponent
+     * @memberof EWayBillCreateComponent
      */
     private initGenerateNewTransporterForm(): void {
         this.generateNewTransporterForm = this.formBuilder.group({
@@ -283,33 +283,45 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             transporterName: [null, Validators.required],
         });
     }
+
+    /**
+     * Clears the transporter form by resetting its fields
+     *
+     * @memberof EWayBillCreateComponent
+     */
     public clearTransportForm() {
         this.generateNewTransporterForm.get('transporterId').patchValue(null);
         this.generateNewTransporterForm.get('transporterId').patchValue(null);
     }
 
     /**
-     * This will close the dialog and will send response
+     * Closes the dialog and sends a response
      *
-     * @param {*} response
-     * @memberof VoucherCreateComponent
+     * @param {*} response The response data to send when closing the dialog
+     * @memberof EWayBillCreateComponent
      */
     public sendResponse(response: any): void {
         this.dialogRef.close(response);
     }
 
-    // generate Eway
+    /**
+     * Handles the submission of the e-Way Bill form; sends data if user is logged in, otherwise opens login credentials
+     *
+     * @memberof EWayBillCreateComponent
+     */
     public onSubmitEwaybill() {
-        this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.status === 'success') {
-                this.sendResponse(this.generateEwayBillform?.value);
-            } else {
-                this.eWayBillCredentials.toggle();
-            }
-        });
+        if (this.isUserlogedIn) {
+            this.sendResponse(this.generateEwayBillform?.value);
+        } else {
+            this.eWayBillCredentials.toggle();
+        }
         this.detectChanges();
     }
-
+    /**
+     * Resets the e-Way Bill form to its initial state
+     *
+     * @memberof EWayBillCreateComponent
+     */
     public onCancelGenerateBill() {
         // this.transport.clear();
         // this.generateEwayBillform.get('toPinCode').patchValue(this.voucherDetails?.account?.billingDetails?.pincode || null);
@@ -339,9 +351,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     // }
 
     /**
-     * This will open reject dialog
+     * Opens the transporter model dialog
      *
-     * @param {TemplateRef<any>} rejectionReason
      * @memberof ExpenseDetailsComponent
      */
     public OpenTransporterModel(): void {
@@ -357,30 +368,57 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public generateTransporter(generateTransporterForm: NgForm) {
-        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm?.value));
+    /**
+     * Dispatches actions to generate a new transporter and update the transporter list
+     *
+     * @memberof EWayBillCreateComponent
+     */
+    public generateTransporter() {
+        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(this.generateNewTransporterForm?.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+        this.clearTransportForm();
         this.detectChanges();
     }
 
-    public updateTransporter(generateTransporterForm: NgForm) {
-        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm?.value));
+    /**
+     * Dispatches actions to update transporter details and refresh the transporter list
+     *
+     * @memberof EWayBillCreateComponent
+     */
+    public updateTransporter() {
+        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, this.generateNewTransporterForm?.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.transportEditMode = false;
         this.detectChanges();
     }
 
+    /**
+     * Cleans up resources when the component is destroyed
+     *
+     * @memberof EWayBillCreateComponent
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
+    /**
+     * Enables edit mode for the selected transporter and populates its details in the form
+     *
+     * @param {*} trans The transporter details to edit
+     * @memberof EWayBillCreateComponent
+     */
     public editTransporter(trans: any) {
-        this.seTransporterDetail(trans);
+        this.setTransporterDetail(trans);
         this.transportEditMode = true;
     }
 
-    public seTransporterDetail(trans) {
+    /**
+     * Populates the transporter form with the given details
+     *
+     * @param {*} trans The transporter details
+     * @memberof EWayBillCreateComponent
+     */
+    public setTransporterDetail(trans) {
         if (trans !== undefined && trans) {
             this.generateNewTransporterForm.get('transporterId').patchValue(trans.transporterId);
             this.generateNewTransporterForm.get('transporterName').patchValue(trans.transporterName);
@@ -388,26 +426,46 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
         this.detectChanges();
     }
-
+    /**
+     * Deletes the specified transporter and refreshes the transporter list
+     *
+     * @param {IEwayBillTransporter} trans The transporter to delete
+     * @memberof EWayBillCreateComponent
+     */
     public deleteTransporter(trans: IEwayBillTransporter) {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.OpenTransporterModel();
         this.detectChanges();
     }
-
-    detectChanges() {
+    /**
+     * Detects and applies changes to the view
+     *
+     * @memberof EWayBillCreateComponent
+     */
+    public detectChanges(): void {
         if (!this._cdRef['destroyed']) {
             this._cdRef.detectChanges();
         }
     }
-
+    /**
+     * Handles pagination for the transporter list
+     *
+     * @param {*} event The pagination event
+     * @memberof EWayBillCreateComponent
+     */
     public pageChanged(event: any): void {
         this.transporterFilterRequest.page = event.page;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
-
+    /**
+     * Sorts the transporter list based on column and order
+     *
+     * @param {'asc' | 'desc'} type The sort order
+     * @param {string} columnName The column to sort by
+     * @memberof EWayBillCreateComponent
+     */
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
         this.transporterFilterRequest.sort = type;
         this.transporterFilterRequest.sortBy = columnName;
@@ -436,9 +494,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     // }
 
     /**
-     * Callback for translation response complete
+     * Callback for translation completion, initializes dropdown lists for subtypes, supply types, and document types
      *
-     * @param {*} event
+     * @param {*} event The translation event
      * @memberof EWayBillCreateComponent
      */
     public translationComplete(event: any): void {
@@ -476,7 +534,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.prefillSubType();
         }
     }
-
+    /**
+     * Prefills the subtype based on the active company's currency and invoice details
+     *
+     * @private
+     * @memberof EWayBillCreateComponent
+     */
     private prefillSubType(): void {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {

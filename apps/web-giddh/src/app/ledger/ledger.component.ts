@@ -1194,25 +1194,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Deletes the session
+     * Opens the e-Way Bill dialog for creating or editing an e-Way Bill.
      *
-     * @param {string} sessionId Session ID
-     * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
-     * @memberof SubscriptionComponent
+     * @memberof LedgerComponent
      */
     public ewayBillDialog(): void {
-        console.log("ok");
         let dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.eWayBillResponse = response
-                this.saveBlankTransaction();
-            }
+            this.eWayBillResponse = response
+            this.saveBlankTransaction();
         });
     }
 
+    /**
+     * Generates a ledger entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the blank transaction.
+     *
+     * @memberof LedgerComponent
+     */
     public generateLedger() {
         if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
             this.ewayBillDialog();
@@ -1536,7 +1537,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public saveBlankTransaction() {
-        console.log("txn.particular",this.lc.blankLedger.transactions[1].particular);
+        console.log("txn.particular", this.lc.blankLedger.transactions[1].particular);
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {

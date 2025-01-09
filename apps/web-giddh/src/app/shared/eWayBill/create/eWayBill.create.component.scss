@@ -90,59 +90,22 @@
     border-radius: 0px;
 }
 
-// modal css start
-.aside-pane {
-    overflow: auto;
-    width: 475px;
-    position: fixed;
-    top: var(--top-distance);
-    right: 0;
-    padding: 0px;
-}
-
-// .aside-pane.aside-right.out button#close {
-//     right: -60px;
-// }
-
-// .aside-right {
-//     font-size: var(--font-size-15);
-//     background: var(--color-white);
-//     right: -530px;
-//     transition: 0.5s all ease;
-//     z-index: 999;
+// .aside-pane {
+//     overflow: auto;
+//     width: 475px;
+//     position: fixed;
+//     top: var(--top-distance);
+//     right: 0;
+//     padding: 0px;
 // }
 
 .bg-white {
     background: var(--color-white) !important;
 }
 
-// .aside-right .control-label {
-//     padding-left: 20px;
-//     text-align: left;
-// }
-
 .bg-gray {
     background: var(--color-wild-sand);
 }
-
-// .aside-right .list-icon-group label {
-//     margin: 0px !important;
-//     vertical-align: middle;
-// }
-
-// .aside-right .list-icon-group label {
-//     padding: 5px 10px;
-//     border: 1px solid transparent;
-// }
-
-// .aside-right .list-icon-group input:checked + label {
-//     border-radius: 0px;
-// }
-
-// .aside-pane.aside-right.in {
-//     right: 0;
-//     z-index: 9999;
-// }
 
 .table-modal tbody td {
     border-top: 0px solid !important;
@@ -171,33 +134,24 @@
     border-bottom: 2px solid var(--color-iron);
 }
 
-.aside-overlay.out {
-    visibility: hidden;
-    opacity: 0;
-}
+// .aside-overlay.out {
+//     visibility: hidden;
+//     opacity: 0;
+// }
 
-.aside-overlay.in {
-    visibility: visible;
-    opacity: 0.6;
-    z-index: 991;
-}
+// .aside-overlay.in {
+//     visibility: visible;
+//     opacity: 0.6;
+//     z-index: 991;
+// }
 
-.aside-overlay {
-    transition: 0.5s all ease;
-    z-index: 991;
-}
+// .aside-overlay {
+//     transition: 0.5s all ease;
+//     z-index: 991;
+// }
 
-.date-input-icon {
-    top: 9px;
-    right: 8px;
-}
+// .date-input-icon {
+//     top: 9px;
+//     right: 8px;
+// }
 
-.right-side-dialog {
-    position: fixed;
-    right: 0;
-    top: 0;
-    height: 100%;
-    overflow: auto;
-    border-left: 1px solid #ddd;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-  }

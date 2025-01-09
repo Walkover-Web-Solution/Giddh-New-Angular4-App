@@ -3504,40 +3504,35 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Deletes the session
+     * Opens the e-Way Bill dialog for creating or editing an e-Way Bill.
      *
-     * @param {string} sessionId Session ID
-     * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
-     * @memberof SubscriptionComponent
+     * @memberof VoucherCreateComponent
      */
     public ewayBillDialog(): void {
         console.log("ok");
         let dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                console.log("this.saveVoucher()", response);
-                this.eWayBillResponse = response;
-                this.saveVoucher();
-            }
+            this.eWayBillResponse = response;
+            this.saveVoucher();
         });
     }
 
     /**
-     * Generate voucher
+     * Generates a voucher entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the voucher.
      *
      * @memberof VoucherCreateComponent
      */
     public generateVoucher(): void {
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
-        console.log("this.isPendingEntries ", this.isPendingEntries);
         if (this.isPendingEntries) {
             this.saveVoucher(() => {
                 this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
-            if (this.voucherType === "sales" && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+            if (this.voucherType === "sales" && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
                 this.ewayBillDialog();
             } else {
                 this.saveVoucher();
