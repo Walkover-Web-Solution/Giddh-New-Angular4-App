@@ -50,7 +50,7 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
-import { EWayBillCreateComponent } from "../../shared/eWayBill/create/eWayBill.create.component";
+import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 
 @Component({
     selector: "create",
@@ -3505,13 +3505,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Opens the e-Way Bill dialog for creating or editing an e-Way Bill.
+     * Open E-Way Bill dialog for creating or editing an E-Way Bill.
      *
      * @memberof VoucherCreateComponent
      */
-    public ewayBillDialog(): void {
+    public openEwayBillDialog(): void {
         this.dialog?.closeAll();
-        let dialogRef = this.dialog.open(EWayBillCreateComponent, {
+        const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true
         });
@@ -3522,7 +3522,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Generates a voucher entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the voucher.
+     * Generates a voucher
      *
      * @memberof VoucherCreateComponent
      */
@@ -3534,7 +3534,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         } else {
             if (this.voucherType === "sales" && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
-                this.ewayBillDialog();
+                this.openEwayBillDialog();
             } else {
                 this.saveVoucher();
             }

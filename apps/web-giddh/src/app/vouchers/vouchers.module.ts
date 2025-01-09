@@ -89,7 +89,7 @@ import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
 import { A11yModule } from "@angular/cdk/a11y";
 import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
-import { EWayBillComponentModule } from "../shared/eWayBill/eWayBill.module";
+import { EWayBillModule } from "../shared/eWayBill/eWayBill.module";
 
 @NgModule({
     declarations: [
@@ -185,7 +185,7 @@ import { EWayBillComponentModule } from "../shared/eWayBill/eWayBill.module";
         CdkScrollModule,
         TrimPipeModule,
         A11yModule,
-        EWayBillComponentModule
+        EWayBillModule
     ],
     exports: [
 

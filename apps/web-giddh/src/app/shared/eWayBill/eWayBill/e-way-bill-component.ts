@@ -14,7 +14,7 @@ import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { NgForm, UntypedFormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, UntypedFormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -28,15 +28,15 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
-    // tslint:disable-next-line:component-selector
-    selector: 'app-ewaybill-component',
-    templateUrl: './eWayBill.component.html',
-    styleUrls: [`./eWayBill.component.scss`]
+    selector: 'e-way-bill-component',
+    templateUrl: './e-way-bill-component.html',
+    styleUrls: [`./e-way-bill-component.scss`]
 })
 
 export class EWayBillComponent implements OnInit, OnDestroy {
-    @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
     @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
+    /** Form group for creating a cancel eway form */
+    public cancelEwayForm: FormGroup;
     /** Holds vehicle dialog template reference */
     @ViewChild("addVehicle") vehicleDialog: TemplateRef<any>;
     /** Holds cancellation dialog template reference */
@@ -73,11 +73,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public showSearchInvoiceNo: boolean = false;
     public showSearchCustomer: boolean = false;
     public EwayBillfilterRequest: IEwayBillfilter = new IEwayBillfilter();
-    public cancelEwayRequest: IEwayBillCancel = {
-        ewbNo: null,
-        cancelRsnCode: null,
-        cancelRmrk: null,
-    };
+    // public cancelEwayRequest: IEwayBillCancel = {
+    //     ewbNo: null,
+    //     cancelRsnCode: null,
+    //     cancelRmrk: null,
+    // };
     public ewayUpdateVehicleReasonList: IOption[] = [];
     public ewayCancelReason: IOption[] = [];
     public updateEwayVehicleform: UpdateEwayVehicle = {
@@ -163,7 +163,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
         private gstReconcileService: GstReconcileService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private formBuilder: FormBuilder
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -203,6 +204,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.initCancelEwayForm();
         this.updateEwayVehicleform.transDocDate = "" + dayjs().toDate();
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -398,6 +400,19 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.getAllFilteredInvoice();
     }
 
+    /**
+     * Initializes the form to generate a new transporter with required fields and validators
+     *
+     * @private
+     * @memberof EWayBillCreateComponent
+     */
+    private initCancelEwayForm(): void {
+        this.cancelEwayForm = this.formBuilder.group({
+            ewbNo: [null],
+            cancelRsnCode: [null],
+            cancelRmrk: [null],
+        });
+    }
 
     /**
      * Search query handler for from place field
@@ -478,14 +493,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     /**
      * Cancel eway bill
      *
-     * @param {any} cancelEwayFormValue
      * @memberof EWayBillComponent
      */
-    public cancelEwayBill(cancelEwayFormValue: any): void {
-        if (cancelEwayFormValue) {
-            this.cancelEwayRequest = cloneDeep(cancelEwayFormValue);
-            this.cancelEwayRequest['ewbNo'] = this.selectedEwayItem.ewbNo;
-            this.store.dispatch(this.invoiceActions.cancelEwayBill(this.cancelEwayRequest));
+    public cancelEwayBill(): void {
+        if (this.cancelEwayForm.valid) {
+            this.cancelEwayForm.get('ewbNo').patchValue(this.selectedEwayItem.ewbNo);
+            this.store.dispatch(this.invoiceActions.cancelEwayBill(this.cancelEwayForm.value));
         }
         this.detectChange();
     }

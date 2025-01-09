@@ -49,7 +49,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
-import { EWayBillCreateComponent } from '../shared/eWayBill/create/eWayBill.create.component';
+import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -1199,19 +1199,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Opens the e-Way Bill dialog for creating or editing an e-Way Bill.
+     * Open E-Way Bill dialog for creating or editing an E-Way Bill.
      *
      * @memberof LedgerComponent
      */
-    public ewayBillDialog(): void {
+    public openEwayBillDialog(): void {
         this.dialog?.closeAll();
-        let dialogRef = this.dialog.open(EWayBillCreateComponent, {
+        const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            this.eWayBillResponse = response
-            this.saveBlankTransaction();
+            this.saveBlankTransaction(response);
         });
     }
 
@@ -1222,7 +1221,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public generateLedger() {
         if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
-            this.ewayBillDialog();
+            this.openEwayBillDialog();
         } else {
             this.saveBlankTransaction();
         }
@@ -1561,7 +1560,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public saveBlankTransaction() {
+    public saveBlankTransaction(eWayBillResponse: any = false) {
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
@@ -1596,7 +1595,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
                 model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
             }
-            if (this.eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
+            if (eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
                 model.ewayBillDetails = this.eWayBillResponse;
                 this.eWayBillResponse = null;
             }
