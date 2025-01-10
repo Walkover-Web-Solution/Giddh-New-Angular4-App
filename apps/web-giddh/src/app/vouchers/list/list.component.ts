@@ -845,10 +845,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
+                } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
                 }
             }
         } else {
@@ -958,11 +962,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 if (selectedTabIndex === 0) {
                     voucherType = "receipt";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "pending";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
                     voucherType = "payment";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "pending";
                 }
             }
         } else {
