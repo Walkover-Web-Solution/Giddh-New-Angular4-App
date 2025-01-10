@@ -33,6 +33,10 @@
 .table-modal {
     border: 1px solid var(--color-iron) !important;
 
+    th {
+        border-right: 1px solid var(--color-iron) !important;
+    }
+    
     td {
         border-top: 0px solid !important;
         border-right: 1px solid var(--color-iron);
@@ -46,13 +50,6 @@
             padding: 2px;
             margin-right: 3px;
             cursor: pointer;
-        }
-    }
-
-
-    thead {
-        th {
-            border-right: 1px solid var(--color-iron) !important;
         }
     }
 }
