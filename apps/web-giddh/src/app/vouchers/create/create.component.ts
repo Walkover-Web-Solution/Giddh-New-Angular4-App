@@ -3526,6 +3526,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private redirectToVoucherPreview(): void {
         const queryParams = {
             page: this.queryParams?.page ?? 1,
+            count: this.queryParams?.count ?? '',
             from: this.queryParams?.from ?? '',
             to: this.queryParams?.to ?? ''
         };
@@ -5299,14 +5300,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-/**
- * This will be use for select unit in transaction
- *
- * @param {MatSelectChange} event
- * @param {AbstractControl} transaction
- * @param {any[]} resolvedUnits
- * @memberof VoucherCreateComponent
- */
+    /**
+     * This will be use for select unit in transaction
+     *
+     * @param {MatSelectChange} event
+     * @param {AbstractControl} transaction
+     * @param {any[]} resolvedUnits
+     * @memberof VoucherCreateComponent
+     */
     public selectUnit(event: MatSelectChange, transaction: AbstractControl, resolvedUnits: any[]): void {
         const selectedUnitCode = resolvedUnits.find(unit => unit?.stockUnitUniqueName === event?.value)?.stockUnitCode;
         if (selectedUnitCode) {
