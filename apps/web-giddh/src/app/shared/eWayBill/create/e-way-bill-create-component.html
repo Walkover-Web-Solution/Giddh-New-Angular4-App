@@ -140,7 +140,7 @@
                                         formControlName="transMode"
                                     />
                                     <label for="transMode1"
-                                        ><img alt="Road icon" src="assets/icon/4.svg " /> {{ commonLocaleData?.app_road
+                                        ><img alt="Road icon" src="assets/icon/4.svg" /> {{ commonLocaleData?.app_road
                                         }}</label
                                     >
                                 </li>
@@ -154,7 +154,7 @@
                                         formControlName="transMode"
                                     />
                                     <label for="transMode2"
-                                        ><img alt="Railway icon" src="assets/icon/3.svg " /> {{
+                                        ><img alt="Railway icon" src="assets/icon/3.svg" /> {{
                                         commonLocaleData?.app_rail }}</label
                                     >
                                 </li>
@@ -168,7 +168,7 @@
                                         formControlName="transMode"
                                     />
                                     <label for="transMode3"
-                                        ><img alt="Airway icon" src="assets/icon/1.svg " /> {{ commonLocaleData?.app_air
+                                        ><img alt="Airway icon" src="assets/icon/1.svg" /> {{ commonLocaleData?.app_air
                                         }}</label
                                     >
                                 </li>
@@ -182,7 +182,7 @@
                                         formControlName="transMode"
                                     />
                                     <label for="transMode4"
-                                        ><img alt="Ship icon" src="assets/icon/2.svg " /> {{ commonLocaleData?.app_ship
+                                        ><img alt="Ship icon" src="assets/icon/2.svg" /> {{ commonLocaleData?.app_ship
                                         }}</label
                                     >
                                 </li>
@@ -357,7 +357,7 @@
         </form>
 
         <div class="pd-t1 table-responsive">
-            <table class="table basic giddh-table pending-table">
+            <table class="table basic giddh-table table-modal">
                 <thead class="thead-background1">
                     <tr>
                         <th width="40%">
@@ -412,7 +412,7 @@
                 <tr *ngFor="let item of transporterList$ | async">
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
-                    <td class="nowrap d-flex column-gap15">
+                    <td class="nowrap d-flex column-gap15 border-top-0">
                         <button mat-stroked-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
                             <i class="icon-edit"></i>
                         </button>

@@ -19,7 +19,7 @@
         border-radius: 3px;
         cursor: pointer;
 
-        input:checked + & {
+        input:checked+& {
             background-color: var(--color-white);
             box-shadow: 2px 2px 5px var(--color-primary-common-box-shadow);
         }
@@ -31,19 +31,13 @@
 }
 
 .table-modal {
-    tbody td {
+    border: 1px solid var(--color-iron) !important;
+
+    td {
+        border-top: 0px solid !important;
         border-right: 1px solid var(--color-iron);
-    }
-
-    thead th {
-        border-right: 1px solid var(--color-iron) !important;
-    }
-
-    & {
         border-bottom: 1px solid var(--color-iron) !important;
-    }
 
-    tbody tr td {
         button {
             background: none;
             border: 0px;
@@ -52,6 +46,13 @@
             padding: 2px;
             margin-right: 3px;
             cursor: pointer;
+        }
+    }
+
+
+    thead {
+        th {
+            border-right: 1px solid var(--color-iron) !important;
         }
     }
 }

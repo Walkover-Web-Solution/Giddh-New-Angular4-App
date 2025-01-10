@@ -95,6 +95,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
+    /** It will show Icon suffix in the input field */
     @Input() public matSuffixIcon: string = "";
 
     constructor(
