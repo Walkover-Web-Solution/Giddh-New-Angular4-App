@@ -1560,7 +1560,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public saveBlankTransaction(eWayBillResponse: any = false) {
+    /**
+     * Handle save blank transaction
+     * 
+     * @param eWayBillResponse 
+     * @returns 
+     */
+    public saveBlankTransaction(eWayBillResponse?: any): void {
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {

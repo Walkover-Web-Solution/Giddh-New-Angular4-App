@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { EWayBillCreateComponent } from './create/e-way-bill-create-component';
-import { EWayBillComponent } from './eWayBill/e-way-bill-component';
-import { EWayBillCredentialsComponent } from './eWayBillcredentialsModal/e-way-bill-credentials.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { EWayBillComponent } from './e-way-bill/e-way-bill-component';
+import { EWayBillCredentialsComponent } from './e-way-bill-credentials-dialog/e-way-bill-credentials.component';
 import { HamburgerMenuModule } from '../header/components/hamburger-menu/hamburger-menu.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { LaddaModule } from 'angular2-ladda';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { DeleteTemplateConfirmationModalModule } from '../../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
@@ -27,23 +24,21 @@ import { MatButtonModule } from '@angular/material/button';
         EWayBillCredentialsComponent
     ],
     imports: [
-        TranslateModule,
         TranslateDirectiveModule,
         HamburgerMenuModule,
         MatFormFieldModule,
         CommonModule,
         FormsModule,
-        BsDatepickerModule.forRoot(),
         LaddaModule,
-        ModalModule.forRoot(),
         DeleteTemplateConfirmationModalModule,
         ReactiveFormsModule,
+        GiddhDatepickerModule,
         FormFieldsModule,
         MatInputModule,
+        MatFormFieldModule,
         MatRadioModule,
-        GiddhDatepickerModule,
         MatDialogModule,
-        MatButtonModule,
+        MatButtonModule
     ],
     exports: [
         EWayBillComponent,
@@ -51,5 +46,4 @@ import { MatButtonModule } from '@angular/material/button';
         EWayBillCredentialsComponent
     ]
 })
-export class EWayBillModule {
-}
+export class EWayBillModule { }

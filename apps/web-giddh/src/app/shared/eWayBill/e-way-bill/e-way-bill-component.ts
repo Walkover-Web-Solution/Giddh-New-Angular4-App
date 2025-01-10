@@ -8,11 +8,11 @@ import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
-import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
+import { IEwayBillAllList, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { FormBuilder, FormGroup, NgForm, UntypedFormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -203,6 +203,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.getAllFilteredInvoice();
     }
 
+    /**
+     * Initializes the component
+     * 
+     * @memberof EWayBillComponent
+     */
     public ngOnInit(): void {
         this.initCancelEwayForm();
         this.updateEwayVehicleform.transDocDate = "" + dayjs().toDate();
@@ -214,15 +219,15 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.loadTaxDetails();
-        this.cancelEwaySuccess$.subscribe(p => {
-            if (p) {
+        this.cancelEwaySuccess$.subscribe(state => {
+            if (state) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
                 this.cancelEwayForm.reset();
                 this.cancelDialogRef?.close();
             }
         });
-        this.updateEwayvehicleSuccess$.subscribe(p => {
-            if (p) {
+        this.updateEwayvehicleSuccess$.subscribe(state => {
+            if (state) {
                 this.updateVehicleForm.reset();
                 this.modalRef.hide();
             }
@@ -272,23 +277,23 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe(s => {
+        ).subscribe(state => {
             this.EwayBillfilterRequest.sort = null;
             this.EwayBillfilterRequest.sortBy = null;
-            this.EwayBillfilterRequest.searchTerm = s;
+            this.EwayBillfilterRequest.searchTerm = state;
             this.EwayBillfilterRequest.searchOn = 'invoiceNumber';
             this.getAllFilteredInvoice();
-            if (s === '') {
+            if (state === '') {
                 this.showSearchInvoiceNo = false;
             }
         });
         this.customerNameInput.valueChanges.pipe(debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe(s => {
+        ).subscribe(state => {
             this.EwayBillfilterRequest.sort = null;
             this.EwayBillfilterRequest.sortBy = null;
-            this.EwayBillfilterRequest.searchTerm = s;
+            this.EwayBillfilterRequest.searchTerm = state;
             this.EwayBillfilterRequest.searchOn = 'customerName';
             this.getAllFilteredInvoice();
         });
@@ -352,7 +357,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
     }
 
-    public getAllFilteredInvoice() {
+    public getAllFilteredInvoice(): void {
         this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
         this.detectChange();
     }
@@ -362,7 +367,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      *
      * @memberof EWayBillComponent
      */
-    public initialRequest() {
+    public initialRequest(): void {
         this.showAdvanceSearchIcon = false;
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
@@ -555,12 +560,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
     }
 
-    public clickedOutside() {
+    public clickedOutside(): void {
         this.showSearchInvoiceNo = false;
         this.showSearchCustomer = false;
 
     }
-    detectChange() {
+    detectChange(): void {
         if (!this._cd['destroyed']) {
             this._cd.detectChanges();
         }
