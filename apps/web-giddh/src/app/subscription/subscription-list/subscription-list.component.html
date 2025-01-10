@@ -312,7 +312,7 @@
                                         *ngIf="
                                             element?.isOwner &&
                                             element?.companies &&
-                                            element?.companies?.length === 1 &&
+                                            element?.companies?.length > 1 &&
                                             element?.companyArchiveStatus === 'USER_ARCHIVED'
                                         "
                                         mat-menu-item
@@ -325,7 +325,7 @@
                                         *ngIf="
                                             element?.isOwner &&
                                             element?.companies &&
-                                            element?.companies?.length === 1 &&
+                                            element?.companies?.length > 1 &&
                                             element?.companyArchiveStatus === 'UNARCHIVED'
                                         "
                                         mat-menu-item
