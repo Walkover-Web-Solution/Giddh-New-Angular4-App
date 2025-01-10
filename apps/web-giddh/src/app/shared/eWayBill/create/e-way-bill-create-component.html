@@ -11,7 +11,7 @@
     </div>
     <div mat-dialog-content class="dialog-body">
         <div>
-            <form autocomplete="off" name="generateInvForm" [formGroup]="generateEwayBillform">
+            <form autocomplete="off" name="generateEwayBillform" [formGroup]="generateEwayBillform">
                 <div>
                     <ng-container *ngIf="selectedInvoices.length">
                         <div class="row mr-t1">
@@ -282,7 +282,7 @@
         <i mat-dialog-close class="icon-cross"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
-        <form autocomplete="off" name="generateTransporterForm" [formGroup]="generateNewTransporterForm">
+        <form autocomplete="off" name="generateNewTransporterForm" [formGroup]="generateNewTransporterForm">
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
                     <label for="transporterName"
@@ -322,7 +322,7 @@
                 </div>
 
                 <div class="form-group mt-3">
-                    <div class="clearfix d-flex justify-content-end" *ngIf="!transportEditMode">
+                    <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="!transportEditMode">
                         <button
                             mat-stroked-button
                             color="primary"
@@ -337,7 +337,7 @@
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
-                    <div class="clearfix d-flex justify-content-end" *ngIf="transportEditMode">
+                    <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="transportEditMode">
                         <button
                             mat-stroked-button
                             color="primary"
@@ -356,9 +356,9 @@
             </div>
         </form>
 
-        <div class="table-responsive">
-            <table class="table basic table-modal">
-                <thead>
+        <div class="pd-t1 table-responsive">
+            <table class="table basic giddh-table pending-table">
+                <thead class="thead-background1">
                     <tr>
                         <th width="40%">
                             {{ commonLocaleData?.app_name }}
@@ -383,7 +383,7 @@
                                 ></div>
                             </div>
                         </th>
-                        <th width="45%">
+                        <th width="40%">
                             {{ commonLocaleData?.app_transporter_id }}
                             <div class="icon-pointer pull-right">
                                 <div
@@ -406,17 +406,17 @@
                                 ></div>
                             </div>
                         </th>
-                        <th width="15%" class="nowrap">{{ commonLocaleData?.app_actions }}</th>
+                        <th width="20%" class="nowrap">{{ commonLocaleData?.app_actions }}</th>
                     </tr>
                 </thead>
                 <tr *ngFor="let item of transporterList$ | async">
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
-                    <td class="nowrap">
-                        <button mat-stroked-button color="primary" (click)="editTransporter(item)">
+                    <td class="nowrap d-flex column-gap15">
+                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
                             <i class="icon-edit"></i>
                         </button>
-                        <button mat-stroked-button color="primary" (click)="deleteTransporter(item)">
+                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>

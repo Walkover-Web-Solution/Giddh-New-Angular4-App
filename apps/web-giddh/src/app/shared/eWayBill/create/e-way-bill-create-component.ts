@@ -309,7 +309,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public openTransporterModel(): void {
-        this.dialog.closeAll();
         this.dialog.open(this.accountAsideMenu, {
             width: 'var(--aside-pane-width)',
             position: {
@@ -390,7 +389,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public deleteTransporter(trans: IEwayBillTransporter) {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.openTransporterModel();
         this.detectChanges();
     }
 

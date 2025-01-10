@@ -84,6 +84,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public defaultValue: any;
     /** Emits on change event */
     @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits on suffix icon click */
+    @Output() public clickOnSuffix: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -93,6 +95,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
+    @Input() public matSuffixIcon: string = "";
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -237,5 +240,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public emitBlurEvent(): void {
         this.onChange.emit(this.value);
+    }
+
+    /**
+     * Emits click on suffix icon
+     *
+     * @memberof InputFieldComponent
+     */
+    public clickOnSuffixIcon(): void {
+        this.clickOnSuffix.emit(true);
     }
 }
