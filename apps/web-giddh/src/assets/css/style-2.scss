@@ -10314,6 +10314,11 @@ giddh-datepicker {
                             display: flex;
                         }
                     }
+                    .linked-entities{
+                        sh-select-menu .menu{
+                            min-width: 300px;
+                        }
+                    }
                 }
             }
         }
