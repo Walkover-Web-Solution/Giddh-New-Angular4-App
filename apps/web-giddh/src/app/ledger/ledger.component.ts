@@ -55,7 +55,7 @@ import { HomeComponentStore } from '../home/home.store';
 import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
-import { EWayBillCreateComponent } from '../shared/eWayBill/create/eWayBill.create.component';
+import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 
 @Component({
     selector: 'ledger',
