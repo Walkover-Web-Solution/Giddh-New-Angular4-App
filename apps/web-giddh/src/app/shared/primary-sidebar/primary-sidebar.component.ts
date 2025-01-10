@@ -339,7 +339,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((accountDetails) => {
             if (accountDetails) {
-                this.genericAsideMenuAccountDialogRef.close();
+                this.genericAsideMenuAccountDialogRef?.close();
             }
         });
     }
@@ -374,7 +374,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleNewTeamCreationEmitter(e: any): void {
         if (e[0] === "group") {
-            this.genericAsideMenuAccountDialogRef.close();
+            this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
         } else if (e[0] === "account") {
             this.selectedGroupForCreateAccount = e[1]?.uniqueName;
@@ -651,7 +651,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public closeAccountAsidePane(event: any): void {
         if (event) {
-            this.genericAsideMenuAccountDialogRef.close();
+            this.genericAsideMenuAccountDialogRef?.close();
         }
     }
 
