@@ -3887,7 +3887,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/list']);
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
