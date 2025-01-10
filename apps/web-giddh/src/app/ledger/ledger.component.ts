@@ -345,8 +345,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankList: any[] = [];
     /** Invoice Settings */
     public invoiceSettings: any;
-    /** E-way bill dialog response */
-    public eWayBillResponse: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1692,7 +1690,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public saveBlankTransaction(eWayBillResponse: any = false) {
+    /**
+     * Handle save blank transaction
+     * 
+     * @param eWayBillResponse 
+     * @returns 
+     */
+    public saveBlankTransaction(eWayBillResponse?: any): void {
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
@@ -1727,9 +1731,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
                 model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
             }
-            if (eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
-                model.ewayBillDetails = this.eWayBillResponse;
-                this.eWayBillResponse = null;
+            if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
+                model.ewayBillDetails = eWayBillResponse;
             }
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {

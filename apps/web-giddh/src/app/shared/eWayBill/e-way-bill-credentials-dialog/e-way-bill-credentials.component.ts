@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -13,25 +13,28 @@ import { MatDialogRef } from '@angular/material/dialog';
     styleUrls: [`./e-way-bill-credentials.component.scss`]
 })
 
-export class EWayBillCredentialsComponent implements OnInit {
-    /** Form group for Credentials e-Way Bill form */
-    public eWayBillCredentialsForm: FormGroup;
-    /** Flag to toggle password visibility */
-    public togglePassword: boolean = true;
+export class EWayBillCredentialsComponent implements OnInit, OnDestroy {
+    /** Subject for managing component destruction */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Observable indicating if user addition is in process */
     public isUserAddedInProcess$: Observable<boolean>;
     /** Observable indicating if e-Way Bill user creation was successful */
     public isEwaybillUserCreationSuccess$: Observable<boolean>;
-    /** Subject for managing component destruction */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Form group for Credentials e-Way Bill form */
+    public eWayBillCredentialsForm: FormGroup;
+    /** Flag to toggle password visibility */
+    public togglePassword: boolean = true;
 
     constructor(
-        private store: Store<AppState>, private dialogRef: MatDialogRef<any>,
-        private invoiceActions: InvoiceActions, private formBuilder: FormBuilder) {
+        private store: Store<AppState>,
+        private dialogRef: MatDialogRef<any>,
+        private invoiceActions: InvoiceActions,
+        private formBuilder: FormBuilder
+    ) {
         this.isUserAddedInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillAddnewUserInProcess), takeUntil(this.destroyed$));
         this.isEwaybillUserCreationSuccess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
     }
@@ -92,5 +95,16 @@ export class EWayBillCredentialsComponent implements OnInit {
      */
     public showPassword(): void {
         this.togglePassword = !this.togglePassword;
+    }
+
+
+    /**
+     * Cleans up resources when the component is destroyed
+     *
+     * @memberof EWayBillCredentialsComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
