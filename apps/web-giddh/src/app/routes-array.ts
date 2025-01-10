@@ -1,13 +1,14 @@
 import { Routes } from "@angular/router";
+import { ReplaceEnvGuard } from "./decorators/replace-env-variables-guard";
 export const ROUTES: Routes = [
     { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404' },
     { path: 'app-login-success' },
-    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule) },
-    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule) },
-    { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
+    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate:[ReplaceEnvGuard] },
+    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [ReplaceEnvGuard] },
+    { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule), canActivate: [ReplaceEnvGuard] },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
     { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },

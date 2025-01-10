@@ -4,6 +4,7 @@ import { NeedsAuthentication } from './needsAuthentication';
 import { UserAuthenticated } from './UserAuthenticated';
 import { NewUserAuthGuard } from './newUserGuard';
 import { PageLeaveConfirmationGuard } from './page-leave-confirmation-guard';
+import { ReplaceEnvGuard } from './replace-env-variables-guard';
 
 @NgModule({
     imports: [],
@@ -18,7 +19,8 @@ export class DecoratorsModule {
                 UserAuthenticated,
                 NewUserAuthGuard,
                 NeedsAuthorization,
-                PageLeaveConfirmationGuard
+                PageLeaveConfirmationGuard,
+                ReplaceEnvGuard
             ]
         };
     }

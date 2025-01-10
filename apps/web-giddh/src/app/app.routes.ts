@@ -7,6 +7,7 @@ import { AppLoginSuccessComponent } from "./app-login-success/app-login-success"
 import { PageComponent } from './page/page.component';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { VerifySubscriptionTransferOwnershipComponent } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.component';
+import { ReplaceEnvGuard } from './decorators/replace-env-variables-guard';
 
 export const ROUTES: Routes = [
     { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
@@ -14,9 +15,9 @@ export const ROUTES: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
     { path: 'verify-subscription-ownership/:requestId', component: VerifySubscriptionTransferOwnershipComponent, pathMatch: 'full' },
-    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate: [UserAuthenticated] },
-    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [UserAuthenticated] },
-    { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
+    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate: [UserAuthenticated, ReplaceEnvGuard] },
+    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [UserAuthenticated, ReplaceEnvGuard] },
+    { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule), canActivate: [ReplaceEnvGuard]},
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
     { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
