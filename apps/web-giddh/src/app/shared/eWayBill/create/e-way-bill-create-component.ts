@@ -224,8 +224,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             vehicleNo: [null],
             vehicleType: [null],
             transactionType: [null],
-            docType: [this.localeData?.modified_transporter_doc_type?.invoice],
-            toGstIn: [this.invoiceBillingGstinNo],
+            docType: [this.localeData?.modified_transporter_doc_type?.invoice ?? null],
+            toGstIn: [this.invoiceBillingGstinNo ?? null],
             uniqueName: [null]
         });
     }
