@@ -50,6 +50,7 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
+import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 
 @Component({
     selector: "create",
@@ -417,8 +418,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private totalDepositAmount: number = 0;
     /** Holds current route query parameters */
     public queryParams: any = {};
-    /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    /** E-way bill dialog response */
+    public eWayBillResponse: any = {};
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3504,7 +3505,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Generate voucher
+     * Open E-Way Bill dialog for creating or editing an E-Way Bill.
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openEwayBillDialog(): void {
+        this.dialog?.closeAll();
+        const dialogRef = this.dialog.open(EWayBillCreateComponent, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.eWayBillResponse = response;
+            this.saveVoucher();
+        });
+    }
+
+    /**
+     * Generates a voucher
      *
      * @memberof VoucherCreateComponent
      */
@@ -3515,7 +3533,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
-            this.saveVoucher();
+            if (this.voucherType === "sales" && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+                this.openEwayBillDialog();
+            } else {
+                this.saveVoucher();
+            }
         }
     }
 
@@ -3986,6 +4008,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
+                if (this.eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
+                    invoiceForm.ewayBillDetails = this.eWayBillResponse;
+                    this.eWayBillResponse = null;
+                }
                 this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {

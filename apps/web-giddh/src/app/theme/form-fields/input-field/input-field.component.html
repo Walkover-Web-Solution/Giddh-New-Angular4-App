@@ -145,5 +145,14 @@
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
+        <i 
+            matSuffix 
+            *ngIf="matSuffixIcon" 
+            [ngClass]="matSuffixIcon" 
+            (click)="clickOnSuffixIcon()" 
+            role="button"
+            [attr.aria-label]="label || placeholder"
+            >
+        </i>
     </mat-form-field>
 </div>

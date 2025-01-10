@@ -55,6 +55,7 @@ import { HomeComponentStore } from '../home/home.store';
 import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 
 @Component({
     selector: 'ledger',
@@ -342,6 +343,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public unlinkBankList: any[] = [];
     /** Holds list of connected banks */
     private bankList: any[] = [];
+    /** Invoice Settings */
+    public invoiceSettings: any;
 
     constructor(
         private store: Store<AppState>,
@@ -1325,6 +1328,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Open E-Way Bill dialog for creating or editing an E-Way Bill.
+     *
+     * @memberof LedgerComponent
+     */
+    public openEwayBillDialog(): void {
+        this.dialog?.closeAll();
+        const dialogRef = this.dialog.open(EWayBillCreateComponent, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.saveBlankTransaction(response);
+        });
+    }
+
+    /**
+     * Generates a ledger entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the blank transaction.
+     *
+     * @memberof LedgerComponent
+     */
+    public generateLedger() {
+        if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+            this.openEwayBillDialog();
+        } else {
+            this.saveBlankTransaction();
+        }
+    }
+
     public saveBankTransaction() {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
@@ -1658,7 +1690,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public saveBlankTransaction() {
+    /**
+     * Handle save blank transaction
+     * 
+     * @param eWayBillResponse 
+     * @returns 
+     */
+    public saveBlankTransaction(eWayBillResponse?: any): void {
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
@@ -1692,6 +1730,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (model.transactions[0]?.subVoucher === "ADVANCE_RECEIPT") {
                 /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
                 model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
+            }
+            if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
+                model.ewayBillDetails = eWayBillResponse;
             }
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {
@@ -3028,14 +3069,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
-
-            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
-            if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
-                this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
-            } else {
-                this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+            if (response) {
+                this.invoiceSettings = response;
+                this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
+                if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
+                    this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
+                } else {
+                    this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+                }
+                this.cdRf.detectChanges();
             }
-            this.cdRf.detectChanges();
         });
     }
 
