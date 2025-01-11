@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
@@ -16,6 +16,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DiscountDropdownModule } from '../theme/discount-dropdown/discount-dropdown.module';
+import { ProjectAccountingService } from './project-wise-accounting.service';
 
 @NgModule({
     declarations: [
@@ -37,8 +38,10 @@ import { DiscountDropdownModule } from '../theme/discount-dropdown/discount-drop
         MatPaginatorModule,
         MatTabsModule,
         MatDialogModule,
-        DiscountDropdownModule
+        DiscountDropdownModule,
+        ReactiveFormsModule
     ],
-    exports: [CreateProjectComponent]
+    exports: [CreateProjectComponent],
+    providers: [ProjectAccountingService]
 })
 export class ProjectWiseAccountingModule { }

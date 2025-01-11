@@ -1,10 +1,11 @@
 
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CreateProjectComponent } from '../components/create-project/create-project.component';
-import {MatPaginator } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { takeUntil } from 'rxjs/operators';
-import {  ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { ProjectAccountingComponentStore } from '../project-wise-accounting.store';
 
 export interface projectDetails {
     name: string;
@@ -12,19 +13,20 @@ export interface projectDetails {
     status: string;
     symbol: string;
     action: string;
-  }
-  
-  const ELEMENT_DATA: projectDetails[] = [
-    {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: '', action: ''},
-    {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: '', action: ''},
-    {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: '', action: ''},
-  ];
-  
+}
+
+const ELEMENT_DATA: projectDetails[] = [
+    { position: 1, name: 'Project 1', status: 'ACTIVE', symbol: '', action: '' },
+    { position: 2, name: 'Project 2', status: 'ACTIVE', symbol: '', action: '' },
+    { position: 3, name: 'Project 3', status: 'ACTIVE', symbol: '', action: '' },
+];
+
 
 @Component({
     selector: 'project-wise-accounting',
     styleUrls: ['./project-wise-accounting.component.scss'],
-    templateUrl: './project-wise-accounting.component.html'
+    templateUrl: './project-wise-accounting.component.html',
+    providers: [ProjectAccountingComponentStore]
 })
 export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
@@ -34,7 +36,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
     public dataSource: projectDetails[] = [];
-
+    public model: projectType;
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
@@ -42,11 +44,19 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
 
     constructor(
         public dialog: MatDialog,
+        private componentStore: ProjectAccountingComponentStore
 
-    ) {}
+    ) { 
+        
+    }
 
     public ngOnInit() {
-        this.dataSource = this.dataToDisplay;  
+        this.getAllProject();
+        this.dataSource = this.dataToDisplay;
+    }
+
+    public getAllProject() {
+        this.componentStore.getAllProjects(this.model);
     }
 
     public ngOnDestroy() {
@@ -55,7 +65,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /**
      * 
      */
-    public openCreateProjectDialog(){
+    public openCreateProjectDialog() {
         this.dialog.open(CreateProjectComponent, {
             width: 'var(--aside-pane-width)',
             height: '100vh',
