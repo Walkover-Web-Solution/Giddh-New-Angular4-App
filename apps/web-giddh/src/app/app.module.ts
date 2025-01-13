@@ -38,12 +38,11 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
-import { ReplaceEnvGuard } from './decorators/replace-env-variables-guard';
 
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }, ReplaceEnvGuard
+    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
 ];
 
 // tslint:disable-next-line:prefer-const
@@ -74,27 +73,6 @@ if (giddhRegion === "UK") {
     localStorage.setItem("Country-Region", "GL");
 }
 
-// Function to create service config
-function createServiceConfig() {
-    let whiteLabel = document.cookie
-        .split('; ')
-        .find(cookie => cookie.startsWith('whiteLabel='))
-        ?.split('=')[1];
-    console.log('white label',whiteLabel);
-
-    const config = whiteLabel;
-    // return {
-    //     apiUrl: config?.giddhWhiteLabel?.apiDomainName
-    //         ? `https://${config.giddhWhiteLabel.apiDomainName}/`
-    //         : Configuration.ApiUrl,
-    //     appUrl: config?.giddhWhiteLabel?.domainName
-    //         ? `https://${config.giddhWhiteLabel.domainName}/`
-    //         : Configuration.AppUrl
-    // };
-}
-
-
-
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -110,11 +88,6 @@ function createServiceConfig() {
      */
     imports: [
         BrowserModule,
-        RouterModule.forRoot(ROUTES, {
-            useHash: IS_ELECTRON_WA,
-            onSameUrlNavigation: 'reload',
-            preloadingStrategy: QuicklinkStrategy
-        }),
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
@@ -129,6 +102,11 @@ function createServiceConfig() {
         ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
         StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         ScrollingModule,
+        RouterModule.forRoot(ROUTES, {
+            useHash: IS_ELECTRON_WA,
+            onSameUrlNavigation: 'reload',
+            preloadingStrategy: QuicklinkStrategy
+        }),
         QuicklinkModule,
         MatSnackBarModule,
         SnackBarModule,
@@ -148,7 +126,7 @@ function createServiceConfig() {
         WindowRef,
         {
             provide: ServiceConfig,
-            useValue: createServiceConfig()
+            useValue: { apiUrl: localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
         },
         {
             provide: HTTP_INTERCEPTORS,
@@ -158,7 +136,6 @@ function createServiceConfig() {
             provide: ErrorHandler,
             useClass: ExceptionLogService
         },
-        ReplaceEnvGuard,
         CustomPreloadingStrategy
     ]
 })
