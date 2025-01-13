@@ -73,6 +73,25 @@ if (giddhRegion === "UK") {
     localStorage.setItem("Country-Region", "GL");
 }
 
+function createServiceConfig() {
+    let whiteLabel = document.cookie
+        .split('; ')
+        .find(cookie => cookie.startsWith('whiteLabel='))
+        ?.split('=')[1];
+    console.log('white label', whiteLabel);
+
+    const config = whiteLabel as any;
+    return {
+        apiUrl: config?.giddhWhiteLabel?.apiDomainName
+            ? `https://${config.giddhWhiteLabel.apiDomainName}/`
+            : Configuration.ApiUrl,
+        appUrl: config?.giddhWhiteLabel?.domainName
+            ? `https://${config.giddhWhiteLabel.domainName}/`
+            : Configuration.AppUrl
+    };
+}
+
+
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -126,7 +145,7 @@ if (giddhRegion === "UK") {
         WindowRef,
         {
             provide: ServiceConfig,
-            useValue: { apiUrl: localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+            useValue: createServiceConfig()
         },
         {
             provide: HTTP_INTERCEPTORS,
