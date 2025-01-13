@@ -82,6 +82,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Show apple login if electron app and mac user */
     public showAppleLogin: boolean = false;
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -147,6 +149,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
@@ -499,7 +502,7 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public async appleLogin(): Promise<void> {
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : 'https://apitest.giddh.com';
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : `https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.apiDomainName}/`;
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');

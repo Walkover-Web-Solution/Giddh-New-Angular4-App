@@ -4,6 +4,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { ReplaySubject, combineLatest, takeUntil } from 'rxjs';
 import { SettingsProfileService } from '../services/settings.profile.service';
 import { ToasterService } from '../services/toaster.service';
+import { GeneralService } from '../services/general.service';
 export interface GetDomainList {
     type: any;
     hostName: any;
@@ -39,11 +40,14 @@ export class DnsRecordsComponent implements OnInit {
     public displayedColumns: string[] = ['type', 'hostName', 'value', 'status'];
     /* it will store company uniquename */
     public companyUniqueName: string = '';
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
 
 
     constructor(private route: ActivatedRoute,
         private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
+        private generalService :GeneralService,
         private changeDetectorRef: ChangeDetectorRef,
         private clipboardService: ClipboardService) {
     }
@@ -57,7 +61,7 @@ export class DnsRecordsComponent implements OnInit {
     public ngOnInit(): void {
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
+        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),
             this.route.params.pipe(takeUntil(this.destroyed$))

@@ -2181,13 +2181,34 @@ export class GeneralService {
 
     /**
      * This will be use for sync with tally help documentation
-     * 
+     *
      * @memberof GeneralService
      */
     public syncWithTally(): void {
         const url = this.router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
         const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
         window.open(cleanedUrl, '_blank');
+    }
+
+
+    public getDecodedWhiteLabelFromCookie(cookieName: string): any {
+        // Retrieve the cookie value
+        const cookie = document.cookie
+
+            .split('; ')
+            .find((row) => row.startsWith(`${cookieName}=`));
+        if (!cookie) return null;
+
+        // Extract and decode the cookie value
+        const cookieValue = decodeURIComponent(cookie.split('=')[1]);
+
+        try {
+            // Parse the decoded cookie value
+            return JSON.parse(cookieValue)?.body;
+        } catch (error) {
+            console.error('Error parsing cookie JSON:', error);
+            return null;
+        }
     }
 }
 

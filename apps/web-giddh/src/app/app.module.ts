@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,21 +38,24 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { EnvironmentService } from './services/enviroment.service';
 
+let metaReducers: Array<MetaReducer<any, any>> = [];
+let CONDITIONAL_IMPORTS: any[] = [];
+
+export function initializeApp(envService: EnvironmentService): () => Promise<any> {
+    return (): Promise<any> => envService.initializeEnvironment();
+}
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
 ];
 
-// tslint:disable-next-line:prefer-const
-let CONDITIONAL_IMPORTS = [];
-
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
     return localStorageSync({ keys: ['session', 'permission', 'branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
 }
 
-let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
@@ -74,13 +77,19 @@ if (giddhRegion === "UK") {
 }
 
 function createServiceConfig() {
+    console.log(document.cookie);
+    console.log(localStorage.getItem('session'));
+    console.log(localStorage.getItem('permission'));
+    console.log(localStorage.getItem('branchConsolidated'));
     let whiteLabel = document.cookie
         .split('; ')
         .find(cookie => cookie.startsWith('whiteLabel='))
         ?.split('=')[1];
-    console.log('white label', whiteLabel);
 
-    const config = whiteLabel as any;
+    // Parse the cookie value if it exists
+    const whiteLabelConfig = whiteLabel ? JSON.parse(decodeURIComponent(whiteLabel)) : null;
+    const config = whiteLabelConfig?.body;
+
     return {
         apiUrl: config?.giddhWhiteLabel?.apiDomainName
             ? `https://${config.giddhWhiteLabel.apiDomainName}/`
@@ -90,6 +99,7 @@ function createServiceConfig() {
             : Configuration.AppUrl
     };
 }
+
 
 
 /**
@@ -140,6 +150,13 @@ function createServiceConfig() {
      * enableTracing: true,
      */
     providers: [
+        EnvironmentService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeApp,
+            deps: [EnvironmentService],
+            multi: true
+        },
         environment.ENV_PROVIDERS,
         APP_PROVIDERS,
         WindowRef,
@@ -159,4 +176,21 @@ function createServiceConfig() {
     ]
 })
 export class AppModule {
+    constructor(private envService: EnvironmentService) {
+        this.envService.initializationComplete$.subscribe((initialized) => {
+            console.log(initializeApp);
+
+            if (initialized) {
+                // Now that environment is loaded, initialize metaReducers
+                this.initializeMetaReducers();
+            }
+        });
+    }
+
+    private initializeMetaReducers() {
+        metaReducers = [localStorageSyncReducer];
+        if (!environment.production) {
+            CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
+        }
+    }
 }
