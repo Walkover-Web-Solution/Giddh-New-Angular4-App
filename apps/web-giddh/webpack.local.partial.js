@@ -1,6 +1,23 @@
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
 const zlib = require("zlib");
+// Function to extract cookie configuration
+function getCookieConfig() {
+    const cookieString = process.env.COOKIE_STRING || ''; // Simulate a cookie string for the build environment
+    const cookie = cookieString.split("; ").find((row) => row.startsWith("whiteLabel="));
+    if (!cookie) {
+     return   console.error("whiteLabel cookie not found. Using default values.");
+    }
+    try {
+        return JSON.parse(decodeURIComponent(cookie.split("=")[1]))?.body;
+    } catch (e) {
+       return console.error("Error parsing cookie:", e);
+    }
+}
+
+// Current environment configuration
+const config = getCookieConfig();
+console.log('webpack locla config',config);
 module.exports = {
     plugins: [
         new webpack.DefinePlugin({
@@ -9,40 +26,65 @@ module.exports = {
             'isElectron': JSON.stringify(false),
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
-            'AppUrl': 'window.APP_URL || ' + JSON.stringify('http://localhost:3000/'),
-            'ApiUrl': 'window.API_URL || ' + JSON.stringify('https://apitest.giddh.com/'),
-            'PORTAL_URL': 'window.PORTAL_URL || ' + JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
-            'GOOGLE_CLIENT_ID': 'window.GOOGLE_CLIENT_ID || ' + JSON.stringify(process.env.GOOGLE_CLIENT_ID_TEST),
-            'GOOGLE_CLIENT_SECRET': 'window.GOOGLE_CLIENT_SECRET || ' + JSON.stringify(process.env.GOOGLE_CLIENT_SECRET_TEST),
-            'OTP_WIDGET_ID': 'window.OTP_WIDGET_ID || ' + JSON.stringify(process.env.OTP_WIDGET_ID),
-            'OTP_TOKEN_AUTH': 'window.OTP_TOKEN_AUTH || ' + JSON.stringify(process.env.OTP_TOKEN_AUTH),
+            'AppUrl': JSON.stringify('http://localhost:3000/'),
+            'ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
             'UkApiUrl': JSON.stringify('https://gbapi.giddh.com/'),
+            'PORTAL_URL': JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(false),
             'STAGING_ENV': JSON.stringify(false),
             'TEST_ENV': JSON.stringify(false),
             'LOCAL_ENV': JSON.stringify(false),
             'enableVoucherAdjustmentMultiCurrency': JSON.stringify(true),
+            'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID_TEST),
+            'GOOGLE_CLIENT_SECRET': JSON.stringify(process.env.GOOGLE_CLIENT_SECRET_TEST),
             'RAZORPAY_KEY': JSON.stringify(process.env.RAZORPAY_KEY_TEST),
             'FROALA_EDITOR_KEY': JSON.stringify(process.env.FROALA_EDITOR_KEY),
-            'process.env.GOOGLE_CLIENT_ID': 'window["process.env.GOOGLE_CLIENT_ID"] || ' + JSON.stringify(process.env.GOOGLE_CLIENT_ID_TEST),
-            'process.env.GOOGLE_CLIENT_SECRET': 'window["process.env.GOOGLE_CLIENT_SECRET"] || ' + JSON.stringify(process.env.GOOGLE_CLIENT_SECRET_TEST),
-            'process.env.OTP_WIDGET_ID': 'window["process.env.OTP_WIDGET_ID"] || ' + JSON.stringify(process.env.OTP_WIDGET_ID),
-            'process.env.OTP_TOKEN_AUTH': 'window["process.env.OTP_TOKEN_AUTH"] || ' + JSON.stringify(process.env.OTP_TOKEN_AUTH),
-            'process.env.AppUrl': 'window["process.env.AppUrl"] || ' + JSON.stringify('http://localhost:3000/'),
-            'process.env.ApiUrl': 'window["process.env.ApiUrl"] || ' + JSON.stringify('https://apitest.giddh.com/'),
-            'process.env.PORTAL_URL': 'window["process.env.PORTAL_URL"] || ' + JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
+            'OTP_WIDGET_ID': JSON.stringify(process.env.OTP_WIDGET_ID),
+            'OTP_TOKEN_AUTH': JSON.stringify(process.env.OTP_TOKEN_AUTH),
             'process.env.enableVoucherAdjustmentMultiCurrency': JSON.stringify(true),
+            'process.env.GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID_TEST),
+            'process.env.GOOGLE_CLIENT_SECRET': JSON.stringify(process.env.GOOGLE_CLIENT_SECRET_TEST),
             'process.env.RAZORPAY_KEY': JSON.stringify(process.env.RAZORPAY_KEY_TEST),
             'process.env.FROALA_EDITOR_KEY': JSON.stringify(process.env.FROALA_EDITOR_KEY),
+            'process.env.OTP_WIDGET_ID': JSON.stringify(process.env.OTP_WIDGET_ID),
+            'process.env.OTP_TOKEN_AUTH': JSON.stringify(process.env.OTP_TOKEN_AUTH),
             'process.env.ENV': JSON.stringify('development'),
             'process.env.NODE_ENV': JSON.stringify('development'),
             'process.env.isElectron': JSON.stringify(false),
             'process.env.errlyticsNeeded': JSON.stringify(false),
             'process.env.errlyticsKey': JSON.stringify(''),
+            'process.env.AppUrl': JSON.stringify('http://localhost:3000/'),
+            'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
             'process.env.UkApiUrl': JSON.stringify('https://gbapi.giddh.com/'),
+            'process.PORTAL_URL': JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
+        // Replace only the matched keys with values from the cookie configuration
+            Object.keys(defaultEnvVars).forEach((key) => {
+                if (key === "AppUrl") {
+                    defaultEnvVars[key] = `https://${config.giddhWhiteLabel.domainName}/`;
+                } else if (key === "ApiUrl") {
+                    defaultEnvVars[key] = `https://${config.giddhWhiteLabel.apiDomainName}/`;
+                } else if (key === "PORTAL_URL") {
+                    defaultEnvVars[key] = `https://${config.giddhWhiteLabel.portalDomain}/`;
+                } else if (key === "GOOGLE_CLIENT_ID") {
+                    defaultEnvVars[key] = config.googleClientId;
+                } else if (key === "GOOGLE_CLIENT_SECRET") {
+                    defaultEnvVars[key] = config.googleClientSecret;
+                } else if (key === "OTP_WIDGET_ID") {
+                    defaultEnvVars[key] = config.otpWidgetId;
+                } else if (key === "OTP_TOKEN_AUTH") {
+                    defaultEnvVars[key] = config.otpWidgetToken;
+                }
+            }),
+        new webpack.DefinePlugin(
+            Object.entries(defaultEnvVars).reduce((acc, [key, value]) => {
+                acc[key] = JSON.stringify(value);
+                acc[`process.env.${key}`] = JSON.stringify(value);
+                return acc;
+            }, {})
+        ),
         new CompressionPlugin({
             filename: "[path][base].br",
             algorithm: "brotliCompress",

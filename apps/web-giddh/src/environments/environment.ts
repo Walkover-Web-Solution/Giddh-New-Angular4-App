@@ -8,7 +8,7 @@ Error.stackTraceLimit = Infinity;
 
 export const environment: Environment = {
     production: true,
-    AppUrl: 'http://localhost:3000/',
+    AppUrl: 'http://giddh-test-app.ap-south-1.elasticbeanstalk.com',
     ApiUrl: 'https://apitest.giddh.com/',
     UkApiUrl: 'https://gbapi.giddh.com/',
     isElectron: false,

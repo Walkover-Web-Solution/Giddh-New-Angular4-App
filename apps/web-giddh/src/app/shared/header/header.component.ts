@@ -84,6 +84,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -303,6 +305,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private socialAuthService: AuthService,
         private salesAction: SalesActions
     ) {
+        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());

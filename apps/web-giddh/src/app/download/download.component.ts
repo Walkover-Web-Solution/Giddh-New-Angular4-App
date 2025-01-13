@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'download',
@@ -18,8 +19,12 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
+    /* Hold giddh domain url */
+    public giddhDomainUrl: string = '';
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute, private generalService: GeneralService) {
     }
 
     /**
@@ -28,7 +33,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
      * @memberof DownloadBulkInvoiceComponent
      */
     public ngOnInit(): void {
-
+        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
+        this.giddhDomainUrl = `https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.domainName}/`;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {

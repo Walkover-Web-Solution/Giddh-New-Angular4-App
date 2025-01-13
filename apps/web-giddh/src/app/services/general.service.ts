@@ -2187,5 +2187,25 @@ export class GeneralService {
         const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
+
+    public getDecodedWhiteLabelFromCookie(cookieName: string): any {
+        // Retrieve the cookie value
+        const cookie = document.cookie
+
+            .split('; ')
+            .find((row) => row.startsWith(`${cookieName}=`));
+        if (!cookie) return null;
+
+        // Extract and decode the cookie value
+        const cookieValue = decodeURIComponent(cookie.split('=')[1]);
+
+        try {
+            // Parse the decoded cookie value
+            return JSON.parse(cookieValue)?.body;
+        } catch (error) {
+            console.error('Error parsing cookie JSON:', error);
+            return null;
+        }
+    }
 }
 

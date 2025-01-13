@@ -26,6 +26,7 @@ import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
+import { GeneralService } from "../services/general.service";
 
 declare var initSendOTP: any;
 
@@ -68,6 +69,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: UntypedFormBuilder,
@@ -78,7 +81,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private generalService : GeneralService
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -126,6 +130,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this.fb.group({

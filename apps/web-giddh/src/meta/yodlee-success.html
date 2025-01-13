@@ -35,7 +35,7 @@
 
     <div class="copy-right">
         <p>
-            All right are reserved &copy; 2020 Walkover <a href="https://books.giddh.com/" target="_Blank">Giddh.com</a>
+            All right are reserved &copy; 2020 Walkover <a [href]="giddhDomainUrl" target="_Blank">Giddh.com</a>
         </p>
     </div>
 </div>
@@ -43,6 +43,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     var companyUniqueName = getQueryStringValue("companyUniqueName");
+    var giddhDomainUrl=this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.domainName;
     var search = "";
     var status = getQueryStringValue("status");
     var JSONcallBackStatus = getQueryStringValue("JSONcallBackStatus");
@@ -51,23 +52,8 @@
     }
 
     function getApi() {
-        switch (window.location.hostname) {
-            case "localhost":
-            case "dev.giddh.com":
-                apiBaseUrl = "https://apidev.giddh.com/";
-                break;
-            case "giddh-test-app.ap-south-1.elasticbeanstalk.com":
-                apiBaseUrl = "https://apitest.giddh.com/";
-                break;
-            case "stage.giddh.com":
-                apiBaseUrl = "https://apitest.giddh.com/";
-                break;
-            case "books.giddh.com":
-                apiBaseUrl = "https://api.giddh.com/";
-                break;
-            default:
-                apiBaseUrl = "https://api.giddh.com/";
-        }
+        apiBaseUrl =  `https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.apiDomainName}/`;
+        this.giddhDomainUrl = `https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.domainName}/`;
         return apiBaseUrl;
     }
 
