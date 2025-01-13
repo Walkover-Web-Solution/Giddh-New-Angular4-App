@@ -18,7 +18,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    public isSavingProject$: Observable<any> = this.componentStore.isSavingProject;
+    public isSavingProject$: Observable<any> = this.componentStore.isSavingProject$;
     public createProjectForm: FormGroup;
     private model: any = {
         companyUniqueName: 'multipin168414461208805dao0',

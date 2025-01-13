@@ -43,13 +43,13 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
     public commonCountries$: Observable<any> = this.select(this.store.select(state => state.common.countries), (response) => response);
     public generalState$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
 
-    public isFetchingProjects = this.select((state) => state.isFetchingProjects);
-    public projectsList = this.select((state) => state.projectsList);
-    public saveProjectSuccess = this.select((state) => state.saveProjectSuccess);
-    public isSavingProject = this.select((state) => state.isSavingProject);
-    public projectDetails = this.select((state) => state.projectDetails);
-    public removeProjectSuccess = this.select((state) => state.removeProjectSuccess);
-    public projectProfitDetails = this.select((state) => state.projectProfitDetails);
+    public isFetchingProjects$ = this.select((state) => state.isFetchingProjects);
+    public projectsList$ = this.select((state) => state.projectsList);
+    public projectDetails$ = this.select((state) => state.projectDetails);
+    public saveProjectSuccess$ = this.select((state) => state.saveProjectSuccess);
+    public isSavingProject$ = this.select((state) => state.isSavingProject);
+    public removeProjectSuccess$ = this.select((state) => state.removeProjectSuccess);
+    public projectProfitDetails$ = this.select((state) => state.projectProfitDetails);
 
     /**
      * Creates a new project and updates the state.

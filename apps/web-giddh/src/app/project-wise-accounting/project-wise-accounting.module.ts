@@ -17,6 +17,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DiscountDropdownModule } from '../theme/discount-dropdown/discount-dropdown.module';
 import { ProjectAccountingService } from './project-wise-accounting.service';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { ProjectAccountingService } from './project-wise-accounting.service';
         MatTabsModule,
         MatDialogModule,
         DiscountDropdownModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ClickOutsideModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]
