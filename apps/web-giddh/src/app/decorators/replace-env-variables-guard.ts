@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { CanActivateChild } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { Configuration } from '../app.constant';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ReplaceEnvGuard implements CanActivateChild {
+export class ReplaceEnvGuard implements CanActivate {
     private envConfig: any;
 
-    canActivateChild(): Promise<boolean> {
+    // CanActivate guard method
+    canActivate(): Promise<boolean> {
         return this.initializeEnvironment().then(() => true);
     }
 
+    // Initialize environment variables based on cookie data
     private initializeEnvironment(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const config = this.getCookieConfig()?.body;
@@ -43,6 +45,7 @@ export class ReplaceEnvGuard implements CanActivateChild {
         });
     }
 
+    // Get cookie configuration
     private getCookieConfig(): any {
         // Set temporary cookie if it doesn't exist
         if (!document.cookie.includes('whiteLabel=')) {
@@ -60,6 +63,7 @@ export class ReplaceEnvGuard implements CanActivateChild {
         }
     }
 
+    // Set temporary cookie if needed
     private setTempCookie(): void {
         const whiteLabelCookie = document.cookie
             .split('; ')
@@ -68,6 +72,7 @@ export class ReplaceEnvGuard implements CanActivateChild {
         document.cookie = `whiteLabel=${whiteLabelCookie}; path=/`;
     }
 
+    // Create service configuration based on the environment config
     private createServiceConfig(): any {
         const config = this.envConfig?.body;
         return {
