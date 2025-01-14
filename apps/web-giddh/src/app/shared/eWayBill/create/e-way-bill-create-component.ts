@@ -278,16 +278,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Set Id and name in generateEwayBillform
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public setTransportNameAndId(event: any): void {
-        this.generateEwayBillform.get('transId').patchValue(event?.value);
-        this.generateEwayBillform.get('transName').patchValue(event?.label);
-    }
-
-    /**
      * Opens the transporter model dialog
      *
      * @memberof ExpenseDetailsComponent
