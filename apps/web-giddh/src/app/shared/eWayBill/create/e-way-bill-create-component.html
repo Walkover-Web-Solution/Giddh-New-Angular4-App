@@ -31,34 +31,6 @@
                     </div>
                     <div class="row mr-t1">
                         <div class="col-6">
-                            <reactive-dropdown-field
-                                [options]="SubsupplyTypesList"
-                                [label]="localeData?.sub_type"
-                                [placeholder]="localeData?.reason_placeholder"
-                                [labelValue]="selectedSubType ?? ''"
-                                [name]="'subSupplyType'"
-                                formControlName="subSupplyType"
-                                [readonly]="true"
-                                [disabled]="true"
-                            >
-                            </reactive-dropdown-field>
-                        </div>
-                        <div class="col-6">
-                            <reactive-dropdown-field
-                                [options]="TransporterDocType"
-                                [label]="localeData?.document_type"
-                                [placeholder]="localeData?.reason_placeholder"
-                                [labelValue]="localeData?.modified_transporter_doc_type?.invoice ?? ''"
-                                [name]="'docType'"
-                                formControlName="docType"
-                                [readonly]="true"
-                                [disabled]="true"
-                            >
-                            </reactive-dropdown-field>
-                        </div>
-                    </div>
-                    <div class="row mr-t1">
-                        <div class="col-6">
                             <input-field
                                 [name]="'toGstIn'"
                                 [type]="'text'"
@@ -98,7 +70,8 @@
                                 [placeholder]="localeData?.transporter_placeholder"
                                 [name]="'transporterName'"
                                 [required]="true"
-                                formControlName="transporterName"
+                                formControlName="transName"
+                                (selectedOption)="this.generateEwayBillform.get('transId').patchValue($event.value)"
                                 [createNewText]="commonLocaleData?.app_create_new"
                                 (createOption)="openTransporterModel()"
                             >
@@ -113,7 +86,7 @@
                                 [minlength]="4"
                                 [placeholder]="localeData?.distance_km_placeholder"
                                 [label]="commonLocaleData?.distance_km_label"
-                                formControlName="transDistance"
+                                formControlName="distance"
                                 [required]="true"
                             >
                             </input-field>
@@ -194,11 +167,11 @@
                             <label>{{ localeData?.vehicle_type }}</label>
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <mat-radio-group name="vehicleType" formControlName="vehicleType">
+                            <mat-radio-group name="vehicleType" formControlName="vehType">
                                 <mat-radio-button color="primary" value="R">
                                     {{ localeData?.regular }}
                                 </mat-radio-button>
-                                <ng-container *ngIf="generateEwayBillform.get('transMode').value !== '1'">
+                                <ng-container *ngIf="generateEwayBillform.get('transMode').value === '1'">
                                     <mat-radio-button color="primary" value="O">
                                         {{ localeData?.over_dimensional_cargo }}
                                     </mat-radio-button>
@@ -227,7 +200,7 @@
                                 [showToggleIcon]="false"
                                 [appearance]="'outline'"
                                 class="settings-field d-block"
-                                formControlName="transDocDate"
+                                formControlName="transDocDt"
                             ></giddh-datepicker>
                         </div>
                     </div>
@@ -241,7 +214,7 @@
                                 [pattern]="'[a-zA-Z0-9]{7,11}'"
                                 [maxlength]="11"
                                 [minlength]="7"
-                                formControlName="vehicleNo"
+                                formControlName="vehNo"
                                 [showError]="vehicleNo.touched && vehicleNo?.invalid"
                             >
                             </input-field>
