@@ -71,7 +71,7 @@
                                 [name]="'transporterName'"
                                 [required]="true"
                                 formControlName="transName"
-                                (selectedOption)="this.generateEwayBillform.get('transId').patchValue($event.value)"
+                                (selectedOption)="this.generateEwayBillform.get('transId').patchValue($event?.value)"
                                 [createNewText]="commonLocaleData?.app_create_new"
                                 (createOption)="openTransporterModel()"
                             >
