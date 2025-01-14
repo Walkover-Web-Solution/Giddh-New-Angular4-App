@@ -23,6 +23,9 @@ export enum BranchHierarchyType {
     Tree = 'tree'
 };
 
+/** Date Regex for 'MMM D, YYYY' */
+export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 /** Regex for mobile number */
 export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
