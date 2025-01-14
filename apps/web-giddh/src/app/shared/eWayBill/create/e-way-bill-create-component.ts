@@ -107,7 +107,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public voucherDetails: any;
     /** Getter for vehicle number form control */
     public get vehicleNo(): FormControl {
-        return this.generateEwayBillform.get('vehicleNo') as FormControl;
+        return this.generateEwayBillform.get('vehNo') as FormControl;
     }
     /** Getter for transporter ID form control */
     public get transporterId(): FormControl {
@@ -211,22 +211,16 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     private initGenerateEwayBillForm(): void {
         this.generateEwayBillform = this.formBuilder.group({
-            supplyType: [null],
-            subSupplyType: [null],
-            transMode: [null],
-            toPinCode: [null, Validators.required],
-            transDistance: [null, Validators.required],
-            invoiceNumber: [null],
-            transporterName: [null, Validators.required],
-            transporterId: [null],
-            transDocNo: [null],
-            transDocDate: [null],
-            vehicleNo: [null],
-            vehicleType: [null],
-            transactionType: [null],
-            docType: [this.localeData?.modified_transporter_doc_type?.invoice ?? null],
             toGstIn: [this.invoiceBillingGstinNo ?? null],
-            uniqueName: [null]
+            toPinCode: [this.voucherDetails?.account?.billingDetails?.pincode || null, Validators.required],
+            transName: [null, Validators.required],
+            transId: [null],
+            distance: [null, Validators.required],
+            transMode: [null],
+            vehType: [null],
+            transDocNo: [null],
+            transDocDt: [null],
+            vehNo: [null]
         });
     }
 
@@ -269,7 +263,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public onSubmitEwaybill(): void {
         if (this.isUserlogedIn) {
-            this.sendResponse(this.generateEwayBillform?.value);
+            const formData = this.generateEwayBillform?.value;
+            Object.keys(formData).forEach(key => {
+                if (formData[key] === null) {
+                    delete formData[key];
+                }
+            });
+            delete formData['toGstIn'];
+            this.sendResponse(formData);
         } else {
             this.openEWayBillCredentialsDialog();
         }
@@ -294,13 +295,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public onResetGenerateBillForm(): void {
+        Object.keys(this.generateEwayBillform.controls).forEach((key) => {
+            if (key !== 'toGstIn') {
+                this.generateEwayBillform.get(key)?.reset(null);
+            }
+        });
         this.generateEwayBillform.get('toPinCode').patchValue(this.voucherDetails?.account?.billingDetails?.pincode || null);
-        this.generateEwayBillform.get('transDistance').patchValue(null);
-        this.generateEwayBillform.get('transMode').patchValue(null);
-        this.generateEwayBillform.get('vehicleType').patchValue(null);
-        this.generateEwayBillform.get('vehicleNo').patchValue(null);
-        this.generateEwayBillform.get('transDocNo').patchValue(null);
-        this.generateEwayBillform.get('transDocDate').patchValue(null);
     }
 
     /**
@@ -465,27 +465,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 { value: '2', label: this.localeData?.transaction_type?.credit_notes },
                 { value: '3', label: this.localeData?.transaction_type?.delivery_challan }
             ];
-            this.prefillSubType();
         }
-    }
-
-    /**
-     * Prefills the subtype based on the active company's currency and invoice details
-     *
-     * @private
-     * @memberof EWayBillCreateComponent
-     */
-    private prefillSubType(): void {
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (activeCompany.baseCurrency === this.selectedInvoices[0]?.account?.currency?.code) {
-                    this.generateEwayBillform.get('subSupplyType').patchValue('1');
-                    this.selectedSubType = this.localeData?.subsupply_types_list?.supply;
-                } else {
-                    this.generateEwayBillform.get('subSupplyType').patchValue('3');
-                    this.selectedSubType = this.localeData?.subsupply_types_list?.export;
-                }
-            }
-        });
     }
 }
