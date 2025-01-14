@@ -265,7 +265,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (this.isUserlogedIn) {
             const formData = this.generateEwayBillform?.value;
             Object.keys(formData).forEach(key => {
-                if (formData[key] === null) {
+                if (formData[key] === null || formData[key] === "") {
                     delete formData[key];
                 }
             });
