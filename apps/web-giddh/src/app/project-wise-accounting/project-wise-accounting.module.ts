@@ -18,6 +18,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DiscountDropdownModule } from '../theme/discount-dropdown/discount-dropdown.module';
 import { ProjectAccountingService } from './project-wise-accounting.service';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { MatSortModule } from '@angular/material/sort';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { MatInputModule } from '@angular/material/input';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { SharedModule } from '../shared/shared.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
 @NgModule({
     declarations: [
@@ -41,7 +49,16 @@ import { ClickOutsideModule } from 'ng-click-outside';
         MatDialogModule,
         DiscountDropdownModule,
         ReactiveFormsModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        NewConfirmationModalModule,
+        MatSortModule,
+        Daterangepicker,
+        DatepickerWrapperModule,
+        MatInputModule,
+        BsDropdownModule.forRoot(),
+        SharedModule,
+        GiddhPageLoaderModule,
+
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

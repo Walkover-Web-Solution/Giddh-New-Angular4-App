@@ -3,24 +3,38 @@
   (localeData)="localeData = $event"
   (commonLocaleData)="commonLocaleData = $event">
 
-   <div class="project clearfix section-center position-relative overflow-visible pd-2">
-      <div *ngIf="(isFetchingProjects$ | async)">
-          <giddh-page-loader></giddh-page-loader>
+
+  <div *ngIf="(isFetchingProjects$ | async)">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+   <div *ngIf="!(isFetchingProjects$ | async)" class="project clearfix section-center position-relative overflow-visible pd-2">
+      
+      <div class="d-flex align-items-center justify-content-space-between section-center">
+        
+          <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+              <input
+                matInput
+                type="text"
+                name="selectedDateRange"
+                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                class="giddh-datepicker date-range-picker"
+              />
+          </div>
+        
+        <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!(isFetchingProjects$ | async) && !dataSource?.length">
+          <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ Create project</button>
+        </div>
+        <div class="pull-right" *ngIf="dataSource?.length && !isLoading">
+            <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ Create project</button>
+        </div>
       </div>
-      <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!(isFetchingProjects$ | async) && !dataSource?.length">
-        <button mat-raised-button color="primary" (click)="openCreateProjectDialog()">+ Create project</button>
-      </div>
-      <div class="pull-right" *ngIf="dataSource?.length && !isLoading">
-          <button mat-raised-button color="primary" (click)="openCreateProjectDialog()">+ Create project</button>
-      </div>
-      <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="!(isFetchingProjects$ | async) && dataSource?.length">
+      <div class="mr-t5 overflow-visible table-header-sticky">
         <table
-                mat-table
-                matSort
-                [dataSource]="dataSource"
-                [matSortActive]="projectListRequest.sortBy"
-                [matSortDirection]="projectListRequest.sort"
-                class="giddh-table basic w-100"
+          mat-table
+          matSort
+          [dataSource]="dataSource"
+          (matSortChange)="sortChange($event)"
+          class="giddh-table basic w-100"
          >
           <!-- Position Column -->
           <ng-container matColumnDef="position">
@@ -50,7 +64,7 @@
                         [placeholder]="'Search Product'"
                         [label]="'Search'"
                         #productSearch
-                         [formControl]="name"
+                        [formControl]="name"
                     />
                 </div>
             </th>
@@ -59,14 +73,14 @@
           </ng-container>
 
           <!-- Weight Column -->
-          <ng-container matColumnDef="weight">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef class="sortable-header-justify-center">Status</th>
             <td mat-cell *matCellDef="let element">{{element.status}}</td>
           </ng-container>
 
             <!-- Archived Column -->
-          <ng-container matColumnDef="archived">
-            <th mat-header-cell *matHeaderCellDef>Archived</th>
+          <ng-container matColumnDef="archive_status">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Archived</th>
             <td mat-cell *matCellDef="let element">{{element.archiveStatus}}</td>
           </ng-container>
 
@@ -74,7 +88,8 @@
           <ng-container matColumnDef="symbol">
             <th mat-header-cell *matHeaderCellDef>Profit and Loss</th>
             <td mat-cell *matCellDef="let element">
-              <button mat-stroked-button>{{ commonLocaleData?.app_show }}</button>
+              <button mat-stroked-button *ngIf="element.profitAndLoss === -1" (click)="getProfitLoss(element)" >{{ commonLocaleData?.app_show }}</button>
+              <span *ngIf="element.profitAndLoss > -1" >{{ element.profitAndLoss }}</span>
             </td>
           </ng-container>
 
@@ -82,20 +97,51 @@
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef class="text-center">Action</th>
             <td mat-cell *matCellDef="let element" class="text-center">
-              <span><i class="icon-edit mr-r2"></i></span>
-              <span><i class="icon-trash"></i></span>
+              <span (click)="openCreateProjectDialog(false, element)" ><i class="icon-edit mr-r2"></i></span>
+              <span><i (click)="openDeleteProjectDialog(element)" class="icon-trash"></i></span>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <mat-paginator [length]="100"
-            [pageSize]="10"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            aria-label="Select page">
-        </mat-paginator>
+        <mat-paginator
+            *ngIf="!(isFetchingProjects$ | async) && totalResults > pageSizeOptions[0]"
+            class="mt-3"
+            (page)="handlePageChange($event)"
+            [length]="totalResults"
+            [pageSize]="projectListRequest.count"
+            [showFirstLastButtons]="true"
+            [pageSizeOptions]="pageSizeOptions"
+            [hidePageSize]="false"
+            [pageIndex]="projectListRequest.page - 1"
+        ></mat-paginator>
       </div>
    </div>
-
 </ng-container>
+
+
+<ng-template #datepickerTemplate>
+  <div class="datepicker-modal">
+      <div class="modal-body">
+          <app-datepicker-wrapper
+              [inputStartDate]="selectedDateRange?.startDate"
+              [inputEndDate]="selectedDateRange?.endDate"
+              [alwaysShowCalendars]="true"
+              [ranges]="datePickerOptions"
+              [selectedRangeLabel]="selectedRangeLabel"
+              [showCustomRangeLabel]="true"
+              [showClearButton]="false"
+              [showCancel]="true"
+              [linkedCalendars]="true"
+              [showDropdowns]="true"
+              [locale]="{ applyLabel: commonLocaleData?.app_done }"
+              (rangeClicked)="dateSelectedCallback($event)"
+              (datesUpdated)="dateSelectedCallback($event)"
+              [keepCalendarOpeningWithRange]="false"
+              [showRangeLabelOnInput]="false"
+              [dateFieldPosition]="dateFieldPosition"
+          ></app-datepicker-wrapper>
+      </div>
+  </div>
+</ng-template>

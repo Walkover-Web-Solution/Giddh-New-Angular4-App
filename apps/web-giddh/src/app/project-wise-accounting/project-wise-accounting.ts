@@ -10,9 +10,9 @@ export interface projectType {
 
 
 export interface projectDetails {
+    uniqueName: string;
     name: string;
-    position: number;
+    archiveStatus: string;
     status: string;
-    symbol: string;
-    action: string;
+    profitAndLoss: number;
 }

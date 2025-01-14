@@ -28,7 +28,7 @@ export class ProjectAccountingService {
      */
     public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
         if (!url || !model) return url;
-        if(model.hasOwnProperty('companyUniqueName')){
+        if (model.hasOwnProperty('companyUniqueName')) {
             model.companyUniqueName = this.generalService.companyUniqueName;
         }
         url = this.config.apiUrl + url;
@@ -46,14 +46,25 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public createNewProject(model: any, payload: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_PROJECT, model), payload)
-            .pipe(
-                map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+        if (model.isCreateFlow) {
+            return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_PROJECT, model.data), payload)
+                .pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, any> = res;
+                        data.request = '';
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+        } else {
+            return this.http.patch(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model.data), model.data)
+                .pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, any> = res;
+                        data.request = '';
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+        }
     }
 
     /**

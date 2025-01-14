@@ -8,3 +8,11 @@
 .min-height{
     min-height: calc(100vh - 145px);
 }
+
+.custom-datepicker-wrapper {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}

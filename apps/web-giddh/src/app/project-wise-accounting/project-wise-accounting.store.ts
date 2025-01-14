@@ -41,7 +41,7 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
     public commonCountries$: Observable<any> = this.select(this.store.select(state => state.common.countries), (response) => response);
-    public generalState$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
+    public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
 
     public isFetchingProjects$ = this.select((state) => state.isFetchingProjects);
     public projectsList$ = this.select((state) => state.projectsList);
@@ -58,7 +58,7 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ isSavingProject: true, saveProjectSuccess: null });
-                return this.projectAccountingService.createNewProject(req.model, req.payload).pipe(
+                return this.projectAccountingService.createNewProject(req.request, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
@@ -79,34 +79,34 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         );
     });
 
-    /**
-     * Updates project details and updates the state.
-     */
-    readonly editProjectDetails = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({ isSavingProject: true, saveProjectSuccess: null });
-                return this.projectAccountingService.editProjectDetails(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Project update successfully');
-                                this.patchState({ isSavingProject: false, saveProjectSuccess: res.body });
-                            } else {
-                                res?.message && this.toasterService.showSnackBar('error', res.message);
-                                this.patchState({ isSavingProject: false, saveProjectSuccess: null });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({ isSavingProject: false, saveProjectSuccess: null });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
+    // /**
+    //  * Updates project details and updates the state.
+    //  */
+    // readonly editProjectDetails = this.effect((data: Observable<any>) => {
+    //     return data.pipe(
+    //         switchMap((req) => {
+    //             this.patchState({ isSavingProject: true, saveProjectSuccess: null });
+    //             return this.projectAccountingService.editProjectDetails(req).pipe(
+    //                 tapResponse(
+    //                     (res: BaseResponse<any, any>) => {
+    //                         if (res?.status === 'success') {
+    //                             this.toasterService.showSnackBar('success', 'Project update successfully');
+    //                             this.patchState({ isSavingProject: false, saveProjectSuccess: res.body });
+    //                         } else {
+    //                             res?.message && this.toasterService.showSnackBar('error', res.message);
+    //                             this.patchState({ isSavingProject: false, saveProjectSuccess: null });
+    //                         }
+    //                     },
+    //                     (error: any) => {
+    //                         this.toasterService.showSnackBar("error", error);
+    //                         return this.patchState({ isSavingProject: false, saveProjectSuccess: null });
+    //                     }
+    //                 ),
+    //                 catchError((err) => EMPTY)
+    //             );
+    //         })
+    //     );
+    // });
 
     /**
      * Fetches all projects and updates the state.
@@ -176,7 +176,7 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Project delete successfully');
-                                this.patchState({ removeProjectSuccess: res.body });
+                                this.patchState({ removeProjectSuccess: req.projectUniqueName });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
                                 this.patchState({ removeProjectSuccess: null });
@@ -200,11 +200,11 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ projectProfitDetails: null });
-                return this.projectAccountingService.removeProject(req).pipe(
+                return this.projectAccountingService.getProjectProfit(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({ projectProfitDetails: res.body });
+                                this.patchState({ projectProfitDetails: { profitAndLoss: res.body, uniqueName: req.projectUniqueName } });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
                                 this.patchState({ projectProfitDetails: null });
