@@ -265,7 +265,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (this.isUserlogedIn) {
             const formData = this.generateEwayBillform?.value;
             Object.keys(formData).forEach(key => {
-                if (formData[key] === null) {
+                if (formData[key] === null || formData[key] === "") {
                     delete formData[key];
                 }
             });
@@ -275,6 +275,16 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.openEWayBillCredentialsDialog();
         }
         this.detectChanges();
+    }
+
+    /**
+     * Set Id and name in generateEwayBillform
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public setTransportNameAndId(event: any): void {
+        this.generateEwayBillform.get('transId').patchValue(event?.value);
+        this.generateEwayBillform.get('transName').patchValue(event?.label);
     }
 
     /**
