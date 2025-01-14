@@ -3685,6 +3685,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm.entries = entries;
         invoiceForm.deposits = deposits;
+
+        if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder) {
+            this.invoiceForm.get('entries')['controls']?.forEach(control => {
+                if (control?.value) {
+                    delete control.value.date;
+                }
+            });
+        }
+
         if (this.currencySwitched) {
             invoiceForm.exchangeRate = 1 / invoiceForm.exchangeRate;
         }
@@ -3868,7 +3877,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm.accountDetails = { uniqueName: invoiceForm.account?.uniqueName };
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
-
             if (this.isUpdateMode) {
                 this.proformaService.update(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
