@@ -13881,3 +13881,8 @@ import-wizard {
         }
     }
 }
+.cdk-overlay-pane { 
+    .mat-mdc-autocomplete-panel {
+        min-width: 300px;
+    }
+}
