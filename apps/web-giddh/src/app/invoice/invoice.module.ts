@@ -83,6 +83,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -177,7 +178,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         InvoiceGenerateModule,
         DeleteTemplateConfirmationModalModule,
         MatMenuModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatCheckboxModule
     ],
     exports: [
         InvoiceRoutingModule,
