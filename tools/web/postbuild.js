@@ -2,23 +2,22 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 
-// get application version from package.json
+// Get application version from package.json
 const appVersion = require('../../package.json').version;
 
-// promisify core API's
+// Promisify core API's
 const readDir = util.promisify(fs.readdir);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
+const renameFile = util.promisify(fs.rename);
 
 console.log('\nRunning post-build tasks');
 
-// our version.json will be in the dist folder
+// Define variables
 let rootDirectiory = '';
-for (var i = 0; i < process.argv.length; i++) {
-    console.log(process.argv[i]);
+for (let i = 0; i < process.argv.length; i++) {
     if (process.argv[i].startsWith('--path=')) {
-
-        rootDirectiory = '../../' + process.argv[i].replace('--path=', '').replace(' ', '');
+        rootDirectiory = '../../' + process.argv[i].replace('--path=', '').trim();
         console.log("Dist Folder Path = " + rootDirectiory);
     }
 }
@@ -27,7 +26,11 @@ const versionFilePath = path.join(__dirname, rootDirectiory, 'version.json');
 const indexFilePath = path.join(__dirname, rootDirectiory, 'index.html');
 const newIndexFilePath = path.join(__dirname, rootDirectiory, 'index.php');
 
-// Add PHP script to be inserted at the beginning
+let mainHash = '';
+let mainBundleFile = '';
+const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
+
+// PHP script to prepend to index.html
 const phpScript = `<?php
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
     $host = $_SERVER['HTTP_HOST'];
@@ -50,72 +53,70 @@ const phpScript = `<?php
 ?>
 `;
 
-let mainHash = '';
-let mainBundleFile = '';
+// JavaScript to append to index.html
+const whiteLabelScript = `
+<script>
+    var response = "<?php echo $response ?>";
+    if (response) {
+        localStorage.setItem('whiteLabel', response);
+    }
+</script>
+`;
 
-// RegExp to find main.bundle.js, even if it doesn't include a hash in it's name (dev build)
-let mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
+// Function to append script to index.html
+const appendScriptToIndex = (indexPath, phpScriptContent, jsScriptContent) => {
+    return readFile(indexPath, 'utf8')
+        .then((indexContent) => {
+            // Prepend the PHP script and append the JS script just before the closing </body> tag
+            const updatedContent = indexContent.replace('</body>', `${jsScriptContent}\n</body>`);
+            const finalContent = `${phpScriptContent}\n${updatedContent}`;
+            return writeFile(indexPath, finalContent);
+        })
+        .then(() => {
+            console.log('Successfully appended PHP and JS scripts to index.html');
+        });
+};
 
-// read the dist folder files and find the one we're looking for
+// Read the dist folder and perform operations
 readDir(path.join(__dirname, rootDirectiory))
     .then(files => {
         mainBundleFile = files.find(f => mainBundleRegexp.test(f));
         if (mainBundleFile) {
-            let matchHash = mainBundleFile.match(mainBundleRegexp);
-
-            // if it has a hash in it's name, mark it down
+            const matchHash = mainBundleFile.match(mainBundleRegexp);
             if (matchHash.length > 1 && !!matchHash[1]) {
                 mainHash = matchHash[1];
             }
         }
 
         console.log(`Writing version and hash to ${versionFilePath}`);
-        console.log(`Index ${indexFilePath}`);
-
-        // write current version and hash into the version.json file
-        const src = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
-        return writeFile(versionFilePath, src);
-    }).then(() => {
-        // main bundle file not found, dev build?
+        const versionContent = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
+        return writeFile(versionFilePath, versionContent);
+    })
+    .then(() => {
         if (!mainBundleFile) {
+            console.warn('Main bundle file not found, skipping hash replacement.');
             return;
         }
 
         console.log(`Replacing hash in the ${mainBundleFile}`);
-
-        // replace hash placeholder in our main.js file so the code knows it's current hash
-        const mainFilepath = path.join(__dirname, rootDirectiory, mainBundleFile);
-        return readFile(mainFilepath, 'utf8')
+        const mainFilePath = path.join(__dirname, rootDirectiory, mainBundleFile);
+        return readFile(mainFilePath, 'utf8')
             .then(mainFileData => {
-                const replacedFile = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
-                return writeFile(mainFilepath, replacedFile);
+                const replacedContent = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
+                return writeFile(mainFilePath, replacedContent);
             });
-    }).then(() => {
-        // Read index.html and convert to PHP
-        console.log('Converting index.html to index.php...');
-        return readFile(indexFilePath, 'utf8')
-            .then(indexContent => {
-                // Combine PHP script with existing HTML content
-                const newContent = phpScript + indexContent;
-
-                // Write the new index.php file
-                return writeFile(newIndexFilePath, newContent)
-                    .then(() => {
-                        console.log('Successfully created index.php');
-                        // Delete the original index.html
-                        return new Promise((resolve, reject) => {
-                            fs.unlink(indexFilePath, (err) => {
-                                if (err) {
-                                    console.log('Error deleting index.html:', err);
-                                  reject(err);
-                                } else {
-                                    console.log('Successfully deleted index.html');
-                                    resolve();
-                                }
-                            });
-                        });
-                    });
-            });
-    }).catch(err => {
-        console.log('Error with post build:', err);
+    })
+    .then(() => {
+        console.log('Appending PHP and JS scripts to index.html...');
+        return appendScriptToIndex(indexFilePath, phpScript, whiteLabelScript);
+    })
+    .then(() => {
+        console.log('Renaming index.html to index.php...');
+        return renameFile(indexFilePath, newIndexFilePath);
+    })
+    .then(() => {
+        console.log('Successfully renamed index.html to index.php');
+    })
+    .catch(err => {
+        console.error('Error during post-build tasks:', err);
     });
