@@ -409,7 +409,8 @@ getApi: function () {
     if (region) {
         apiBaseUrl = 'https://gbapi.giddh.com/';
     } else {
-       apiBaseUrl =  `https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.apiDomainName}/`;
+       const whiteLabel = this.generalService.getDecodedWhiteLabel();
+       apiBaseUrl = `https://${whiteLabel?.giddhWhiteLabel?.apiDomainName}/`;
     }
     return apiBaseUrl;
 },

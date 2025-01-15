@@ -180,7 +180,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Hold confirmationModalRef mat dailog reference */
     public confirmationModalRef: any;
     /** Holds array of company uniqueNames which ICICI allowed companies */
-    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    public iciciAllowedCompanies: any[] = [];
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Holds Create New Account Dialog Ref */
@@ -203,7 +203,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -225,6 +225,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private componentStore: SettingIntegrationComponentStore
 
     ) {
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));

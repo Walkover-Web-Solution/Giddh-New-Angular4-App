@@ -57,18 +57,21 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
     /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+    public syncWithTallyHelpDocUrl: string = "";
 
     constructor(
-        private router: Router, 
+        private router: Router,
         private generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
         private componentStore: OnboardingComponentStore
     ) {
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        const whiteLabelDomain = whiteLabel?.giddhWhiteLabel?.domainName;
+        this.syncWithTallyHelpDocUrl = SYNC_TALLY_HELP_DOC_URL.replace('giddh.com', whiteLabelDomain);
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
-    }  
+    }
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -86,7 +89,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isGoCardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
-        
+
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.accountAsideMenuState === "in") {

@@ -60,7 +60,7 @@ export class BankIntegrationComponent implements OnInit {
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Holds array of company uniqueNames which ICICI allowed companies */
-    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    public iciciAllowedCompanies: any[] = [];
     /** Holds image path */
     public imgPath: string = '';
     /** Holds Create New Account Dialog Ref */
@@ -105,7 +105,10 @@ export class BankIntegrationComponent implements OnInit {
         private changeDetectionRef: ChangeDetectorRef,
         private toasty: ToasterService,
         public dialog: MatDialog
-    ) { }
+    ) {
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
+    }
     /**
     * This function will use for get institutions details
     *
@@ -134,7 +137,7 @@ export class BankIntegrationComponent implements OnInit {
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
-     * 
+     *
      * @memberof BankIntegrationComponent
      */
     public setupGocardlessMessageListener(): void {

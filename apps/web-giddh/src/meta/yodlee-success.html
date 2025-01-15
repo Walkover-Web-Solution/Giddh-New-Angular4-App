@@ -43,7 +43,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     var companyUniqueName = getQueryStringValue("companyUniqueName");
-    var giddhDomainUrl=this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.domainName;
+    const whiteLabel = this.generalService.getDecodedWhiteLabel();
+    var giddhDomainUrl=`https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
     var search = "";
     var status = getQueryStringValue("status");
     var JSONcallBackStatus = getQueryStringValue("JSONcallBackStatus");
@@ -52,8 +53,9 @@
     }
 
     function getApi() {
-        apiBaseUrl =  `https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.apiDomainName}/`;
-        this.giddhDomainUrl = `https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.domainName}/`;
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhDomainUrl =`https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
+        apiBaseUrl=`https://${whiteLabel?.giddhWhiteLabel?.apiDomainName}/`;
         return apiBaseUrl;
     }
 
