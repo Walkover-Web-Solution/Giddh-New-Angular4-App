@@ -7,9 +7,10 @@ import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { GIDDH_DATE_FORMAT } from '../../helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../helpers/defaultDateFormat';
 import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import * as dayjs from 'dayjs';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -265,11 +266,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (this.isUserlogedIn) {
             const formData = this.generateEwayBillform?.value;
             Object.keys(formData).forEach(key => {
-                if (formData[key] === null) {
+                if (formData[key] === null || (typeof formData[key] === "string" && formData[key].trim() === "")) {
                     delete formData[key];
                 }
             });
             delete formData['toGstIn'];
+            if (!!formData["transDocDt"]) {
+                formData["transDocDt"] = dayjs(formData["transDocDt"]).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+            }
             this.sendResponse(formData);
         } else {
             this.openEWayBillCredentialsDialog();

@@ -70,8 +70,8 @@
                                 [placeholder]="localeData?.transporter_placeholder"
                                 [name]="'transporterName'"
                                 [required]="true"
-                                formControlName="transName"
-                                (selectedOption)="this.generateEwayBillform.get('transId').patchValue($event.value)"
+                                formControlName="transId"
+                                (selectedOption)="this.generateEwayBillform.get('transName').patchValue($event.label)"
                                 [createNewText]="commonLocaleData?.app_create_new"
                                 (createOption)="openTransporterModel()"
                             >
