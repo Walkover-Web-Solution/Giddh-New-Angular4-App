@@ -150,6 +150,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        console.log('Login',ApiUrl, GOOGLE_CLIENT_ID, AppUrl, GOOGLE_CLIENT_SECRET, PORTAL_URL, OTP_TOKEN_AUTH, OTP_WIDGET_ID);
+
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
