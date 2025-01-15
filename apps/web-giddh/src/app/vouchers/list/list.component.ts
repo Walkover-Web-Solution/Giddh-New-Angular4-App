@@ -72,7 +72,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     /** Holds Table Display columns for Credit Voucher */
-    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'status'];
+    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'einvoicestatus', 'status'];
     /** Holds Table Display columns for Purchase Order Voucher */
     public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
     /** Holds Table Display columns for Purchase Bill Voucher */
@@ -183,7 +183,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         giddhBalanceDecimalPlaces: 0
     };
     /** True, if user has enable GST E-invoice */
-    public isEInvoiceEnabled: boolean;
+    public isEInvoiceEnabled: boolean = null;
     /** Holds page Size Options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
@@ -310,8 +310,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private salesAction: SalesActions,
-        private invoiceActions: InvoiceActions
+        private invoiceActions: InvoiceActions,
+        private salesAction: SalesActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -334,15 +334,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.setInitialAdvanceFilter(true);
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.setInitialAdvanceFilter(true);
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -352,13 +354,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
-
-                if (this.isEInvoiceEnabled != undefined && this.voucherType === VoucherTypeEnum.sales && params.module === 'list') {
-                    this.componentStore.getInvoiceSettings();
-                }
                 this.setInitialAdvanceFilter(true);
+                if (this.isEInvoiceEnabled === null) {
+                    this.getInvoiceSettings();
+                }
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
+                    this.advanceFilters.count = this.queryParams.count ?? this.pageSizeOptions[2];
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
                 }
@@ -384,7 +386,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.getInvoiceSettings();
+
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -447,17 +449,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 if (this.queryParams.page) {
                     if (this.activeModule === 'list') {
-                        this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/' + this.activeModule], {
-                            queryParams: {
-                                page: this.queryParams.page,
-                                from: this.advanceFilters.from,
-                                to: this.advanceFilters.to
-                            }
-                        });
+                        this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
                     }
                     this.advanceFilters.page = this.queryParams.page;
-                    this.advanceFilters.from = this.queryParams.from;
-                    this.advanceFilters.to = this.queryParams.to;
                 }
                 this.getVouchers(true);
                 this.getVoucherBalances();
@@ -637,31 +631,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
-            if (settings) {
-                this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
-                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
-                    }
-                } else if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
-                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
-                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    this.applyRoundOff = true;
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    this.applyRoundOff = true;
-                }
-            }
-        });
-
         this.componentStore.universalPendingDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
@@ -802,7 +771,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
-                    document.getElementById(this.activeSearchField).focus();
+                    document.getElementById(this.activeSearchField)?.focus();
                 }, 200);
             }
         }
@@ -816,6 +785,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showVoucherPreview(voucherUniqueName: string): void {
         const queryParams = {
             page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
         };
@@ -875,13 +845,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'receipt' && this.activeModule === 'pending') {
+                } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'payment' && this.activeModule === 'pending') {
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
                 }
             }
@@ -895,10 +865,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 4;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 5;
+                    this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 1) {
                 if (this.voucherType === 'debit note' && this.activeModule === 'list') {
@@ -907,18 +875,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 3;
                 } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
-                    this.selectedTabIndex = 4;
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 2) {
                 if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
-                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
@@ -999,7 +963,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     voucherType = "receipt";
                     activeModule = "list";
                 } else if (selectedTabIndex === 1) {
-                    voucherType = "receipt";
+                    voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "pending";
                 }
             } else if (this.activeTabGroup === 4) {
@@ -1007,7 +971,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     voucherType = "payment";
                     activeModule = "list";
                 } else if (selectedTabIndex === 1) {
-                    voucherType = "payment";
+                    voucherType = this.voucherTypeEnum.payment;
                     activeModule = "pending";
                 }
             }
@@ -1027,9 +991,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     activeModule = "pending";
                 } else if (selectedTabIndex === 4) {
                     voucherType = "sales";
-                    activeModule = "settings";
-                } else if (selectedTabIndex === 5) {
-                    voucherType = "sales";
                     activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 1) {
@@ -1044,9 +1005,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     activeModule = "pending";
                 } else if (selectedTabIndex === 3) {
                     voucherType = "debit-note";
-                    activeModule = "settings";
-                } else if (selectedTabIndex === 4) {
-                    voucherType = "debit-note";
                     activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 2) {
@@ -1056,9 +1014,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = "purchase";
                     activeModule = "list";
-                } else if (selectedTabIndex === 2) {
-                    voucherType = "purchase";
-                    activeModule = "settings";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1162,7 +1117,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Page Change event and Make API Call
+     * Handle page change event and make API call
      *
      * @param {*} event
      * @memberof VoucherListComponent
@@ -1291,7 +1246,32 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.componentStore.getInvoiceSettings();
+        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+            if (!settings) {
+                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+            } else {
+                this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
+                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+
+                    if (!this.isEInvoiceEnabled) {
+                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
+                    }
+                } else if (this.voucherType === VoucherTypeEnum.purchase) {
+                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
+                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
+                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    this.applyRoundOff = true;
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.applyRoundOff = true;
+                }
+            }
+        });
     }
 
     /**

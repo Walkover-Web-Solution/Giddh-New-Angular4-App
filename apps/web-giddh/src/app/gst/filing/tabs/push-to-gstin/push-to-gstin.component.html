@@ -114,10 +114,7 @@
                     <!-- </tabset> -->
 
                     <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess">
-                        <div class="spinner2">
-                            <div class="cube1"></div>
-                            <div class="cube2"></div>
-                        </div>
+                        <giddh-page-loader></giddh-page-loader>
 
                         <div class="empty-msg">
                             <span> {{ localeData?.filing?.loading_data }} </span>

@@ -1,6 +1,5 @@
 {
 	"tax_delete_message": "आपली खात्री आहे की आपण [TAX_NAME] हटवू इच्छिता?",
-	"tax_update_message": "आपली खात्री आहे की आपण [TAX_NAME] अद्यतनित करू इच्छिता?",
 	"added_taxes": "कर जोडले",
 	"new_tax": "नवीन कर",
 	"create_new_tax": "नवीन कर तयार करा",

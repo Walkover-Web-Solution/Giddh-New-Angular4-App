@@ -1,5 +1,4 @@
 .form-header {
-    top: 0px;
     z-index: 1;
 }
 
@@ -15,8 +14,7 @@
 
 .suffix-emails {
     background-color: var(--color-common-secondary-background-for-all-components);
-    border-radius: 6px; 
-    padding: 2px 4px; 
-    color: var(--color-common-primary-text); 
+    border-radius: 6px;
+    padding: 2px 4px;
     box-shadow: inset 0 0 0 1px var(--color-warning);
 }

@@ -83,5 +83,6 @@
     "show_bank_balance": "बैंक शेष दिखाएं",
     "hide_bank_balance": "बैंक शेष छिपाएं",
     "unpaid_invoices": "अवैतनिक चालान",
-    "connect_bank": "बैंक कनेक्ट करें"
+    "connect_bank": "बैंक कनेक्ट करें",
+    "send_bulk_email": "थोक ईमेल भेजें"
 }

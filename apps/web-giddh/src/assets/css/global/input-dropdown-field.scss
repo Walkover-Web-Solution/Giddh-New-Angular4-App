@@ -293,6 +293,13 @@ giddh-datepicker,
     display: none;
 }
 
+
+.mdc-text-field--filled {
+    &:not(.mdc-text-field--disabled) {
+        background-color: transparent !important;
+    }
+}
+
 .stock-option-fields {
     .mat-form-field-appearance-outline {
         .mat-form-field-wrapper {

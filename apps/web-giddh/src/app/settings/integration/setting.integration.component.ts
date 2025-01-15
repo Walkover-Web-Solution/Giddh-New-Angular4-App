@@ -238,15 +238,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
-    /**
-    * This will be use for sync with tally help documentation
-    * 
-    * @memberof SettingIntegrationComponent
-    */
-    public redirectToTallyHelpDocPage(): void {
-        this.generalService.syncWithTally();
-    }
-    
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 

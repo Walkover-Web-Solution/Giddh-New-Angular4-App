@@ -96,5 +96,10 @@
     "confirm_delete_option": "विकल्प को हटाने से विकल्प के सभी प्रकार भी हट जायेंगे। क्या आप अब भी विकल्प हटाना चाहते हैं?",
     "unit_group": "इकाई समूह",
     "select_unit_group": "इकाई समूह का चयन करें",
-    "select_discounts": "छूट का चयन करें"
+    "select_discounts": "छूट का चयन करें",
+    "file_uploaded": "फ़ाइल सफलतापूर्वक अपलोड की गई",
+    "attachment_deleted": "अनुलग्न हटाया गया।",
+    "add_image": "छवि जोड़ें",
+    "preview_image": "छवि पूर्वावलोकन",
+    "no_file_chosen": "कोई फाइल चयनित नहीं"
 }

@@ -30,7 +30,7 @@
                     </p>
                 </div>
             </div>
-        </ng-container> 
+        </ng-container>
         <!-- This is not using no due to gocardless -->
         <!-- <ng-container *ngIf="isPlaidSupportedCountry">
             <div class="form-group">
@@ -60,12 +60,15 @@
             <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
                 <div class="account-wrapper"
                     *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName">
-                    <div class="account-info-background width-100 font-15 row align-items-end">
+                    <div class="account-info-background width-100 font-15 row align-items-center">
                         <div class="col-md-4">
                             <span class="field-label">{{ bankAccount?.bankName }}</span><br />
-                            <span class="account-number mt-2 font-15 inline"><b><span
-                                        *ngIf="!isIciciBankSupportedCountry">{{ commonLocaleData?.app_ac }} #</span>
-                                    {{ bankAccount?.bankResource?.accountNumber | accountNumberMask }}</b></span>
+                            <span *ngIf="bankAccount?.bankResource?.accountNumber" class="account-number mt-2 font-15 inline">
+                                <b>
+                                    <span *ngIf="!isIciciBankSupportedCountry">{{ commonLocaleData?.app_ac }} #</span>
+                                    {{ bankAccount?.bankResource?.accountNumber | accountNumberMask }}
+                                </b>
+                            </span>
                         </div>
                         <div class="col-md-4">
                             <span *ngIf="isIciciBankSupportedCountry" class="width-100 view-only-field inline">{{

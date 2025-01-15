@@ -160,6 +160,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
+            this._cdr.detectChanges();
         });
         this.breakpointObserver.observe([
             '(max-width: 1023px)'

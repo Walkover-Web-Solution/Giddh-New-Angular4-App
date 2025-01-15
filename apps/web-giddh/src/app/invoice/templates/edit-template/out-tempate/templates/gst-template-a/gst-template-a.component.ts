@@ -31,7 +31,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
     @Input() public voucherType: string;
-
     @Output() public sectionName: EventEmitter<string> = new EventEmitter();
     public companySetting$: Observable<any> = observableOf(null);
     public companyAddress: string = '';
@@ -41,7 +40,9 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     public isBaseCurrencyRupee = true;
     public rupeeSymbol = '&#8377';
     /* This will hold active company*/
-    @Input() public activeCompany : any;
+    @Input() public activeCompany: any;
+    /** Holds images folder path */
+    public imgPath: string = "";
 
 
     constructor(
@@ -51,6 +52,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);

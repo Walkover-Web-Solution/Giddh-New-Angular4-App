@@ -491,6 +491,18 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handles changes to the GST e-Invoice enable setting.
+     *
+     * @memberof InvoiceSettingComponent
+     */
+    public gstEInvoiceEnableChange(): void {
+        if (!this.invoiceSetting.gstEInvoiceEnable) {
+            this.invoiceSetting.generateEinvoiceShowPopUp = false;
+            this.invoiceSetting.generateAutoEWayBill = false;
+        }
+    }
+    
+    /**
      * setInvoiceLockDate
      */
     public setInvoiceLockDate(date) {
@@ -615,7 +627,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Open custom email dialog
+     * Open custom email dialog
      *
      * @param {string} voucherType
      * @memberof InvoiceSettingComponent
@@ -628,7 +640,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             position: {
                 right: '15px',
                 bottom: '0'
-            }
+            },
+            disableClose: true
         });
     }
 

@@ -209,7 +209,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold paypal capture order id */
     public paypalCaptureOrderId: any = '';
     /** Holds Store Paypal Order Id Success observable*/
-    public paypalCaptureOrderIdSuccess$: Observable<any> = this.componentStore.select(state => state.paypalCaptureOrderIdSuccess);
+    public paypalCaptureOrderIdSuccess$: Observable<boolean> = this.componentStore.select(state => state.paypalCaptureOrderIdSuccess);
     /** Hold filtered payment providers */
     public filteredPaymentProviders: any[] = [];
     /** Hold all payment providers */
@@ -279,7 +279,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                if (this.subscriptionId && this.isChangePlan) {
+                    this.router.navigate(['/pages/user-details/subscription']);
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                };
             }
         });
 
@@ -356,7 +360,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
-                let model = {
+                const model = {
                     orderId: this.paypalCaptureOrderId,
                     subscriptionId: this.subscriptionId
                 }
@@ -413,7 +417,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
                                 if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND') {
-                                    let model = {
+                                    const model = {
                                         planUniqueName: response?.planDetails?.uniqueName,
                                         paymentProvider: this.thirdStepForm.value.paymentProvider,
                                         subscriptionId: response.subscriptionId,
@@ -538,11 +542,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.initializePayment(response);
                 }
             } else {
-                if (response?.region?.code === 'GBR') {
-                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                    this.router.navigate(['/pages/user-details/subscription']);
-                } else {
-                    this.updateSubscriptionPayment(response, true);
+                if (response) {
+                    if (response.region?.code !== 'IND') {
+                        this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                        this.router.navigate(['/pages/user-details/subscription']);
+                    } else {
+                        this.updateSubscriptionPayment(response, true);
+                    }
                 }
             }
         });
@@ -1623,7 +1629,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
-            if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && subscription?.region?.code !== 'GBR') {
+            if (request.paymentId && (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && payResponse?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId });
             } else {
                 this.componentStore.changePlan(data);

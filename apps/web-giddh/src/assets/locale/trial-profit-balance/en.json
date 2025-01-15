@@ -3,5 +3,7 @@
         "trial_balance": "Trial Balance",
         "profit_loss": "Profit & Loss",
         "balance_sheet": "Balance Sheet"
-    }
+    },
+    "company_list": "Company List",
+    "currency_list": "Currency List"
 }

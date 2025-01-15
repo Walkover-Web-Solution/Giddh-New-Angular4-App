@@ -3595,7 +3595,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .font-14 {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-14) !important;
 }
 
 .font-15 {
@@ -6889,10 +6889,35 @@ GST filing
     width: auto;
 }
 
-.tax-engine .column.list-column {
-    display: block;
-    border-right: 1px solid var(--color-common-secondary-border);
-}
+.tax-engine {
+    .summary-content {
+      .gstr-3b-user.table, .gstr-3b-report {
+        tr {
+        height: auto;
+        > th, td {
+            border: 1px solid var(--color-table-primary-content-bar-border) !important;
+            padding: 10px 30px 10px 10px !important;
+          }
+          &.bg-thead {
+            th {        
+              background-color: var(--color-dark-fog) !important;
+              color: var(--color-nero);
+            }
+          } 
+          &.text-muted {
+            th,td {
+                background-color: var(--color-transparent-background) !important;
+            }
+          }
+          &:hover {
+            th, td {
+                background-color: var(--color-invoice-preview-giddh-table-tbody-tr-background-hover) !important;
+            }
+          }
+        }
+      }
+    }
+  }
 
 .tax-engine .column {
     height: 100%;
@@ -7228,21 +7253,34 @@ perfect-scrollbar>.ps>.ps-overlay {
     border-top: 1px solid var(--color-table-primary-content-bar-border);
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr:not(.secondary-row)+tr.secondary-row>td {
-    border-top: 1px solid var(--color-table-primary-content-bar-border);
-}
-
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:nth-child(1) {
-    padding-left: 50px;
-}
-
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td {
-    border: none;
-    background-color: var(--color-white);
-    border-right: 1px solid var(--color-table-primary-content-bar-border);
-    font-size: var(--font-size-15);
-    padding: 13px;
-}
+.tax-engine {
+    .table {
+      &.transactions-summary-table {
+         tbody {
+          & > tr {
+            &:not(.secondary-row) + tr.secondary-row {
+              & > td {
+                border-top: 1px solid var(--color-table-primary-content-bar-border) !important;
+              }
+            }
+            
+            &.secondary-row {
+              & > td:nth-child(1) {
+                padding-left: 50px !important;
+              }
+              & > td {
+                border: none !important;
+                background-color: var(--color-white) !important;
+                border-right: 1px solid var(--color-table-primary-content-bar-border) !important;
+                font-size: var(--font-size-15) !important;
+                padding: 13px !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
 .tax-engine .table.transactions-table tbody>tr>td {
     max-width: 160px;
@@ -7258,7 +7296,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 }
 
 .tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:first-child {
-    border-right: none;
+    border-right: none !important;
 }
 
 .tax-engine .nav-band .nav-tabs {
@@ -7325,8 +7363,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 }
 
 .tax-engine .transactions-list .filter-band {
-    height: 66px;
-    padding: 20px;
+    padding: 15px 20px;
     background-color: var(--color-tab-secondary-background);
 }
 
@@ -7371,26 +7408,6 @@ perfect-scrollbar>.ps>.ps-overlay {
     margin-left: 10px;
 }
 
-.tax-engine .transactions-list .filter-band .btn,
-.tax-engine .transactions-list .filter-band .btn:focus,
-.tax-engine .transactions-list .filter-band .btn:hover {
-    color: var(--color-blue) !important;
-    border-color: var(--color-blue) !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-}
-
-.tax-engine .transactions-list .filter-band .btn {
-    padding: 2px 12px;
-    text-transform: capitalize;
-    font-size: var(--font-size-12);
-}
-
-.tax-engine .transactions-list .filter-band .btn .caret,
-.tax-engine .transactions-list .filter-band .btn:focus .caret,
-.tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: var(--color-blue) !important;
-}
 
 .tax-engine .caret {
     display: inline-block;
@@ -9911,6 +9928,12 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .linked-entities {
+    sh-select {
+        .menu {
+          min-width: 300px;
+        }
+    }
+    
     .list-item {
         .entity-icon {
             padding: 4px;
@@ -10295,6 +10318,14 @@ giddh-datepicker {
                     #reload-bank-transaction {
                         .mat-button-wrapper {
                             display: flex;
+                        }
+                    }
+
+                    .linked-entities {
+                        sh-select {
+                          .menu {
+                            min-width: 300px;
+                          }
                         }
                     }
                 }
@@ -11476,10 +11507,6 @@ body {
 @media (max-width: 991px) {
     .tax-engine {
         .transactions-list {
-            .filter-band {
-                height: auto;
-                padding: 10px 20px;
-            }
 
             .filter-row {
                 margin-left: 0 !important;
@@ -12890,7 +12917,7 @@ hamburger-menu {
             float: right;
             max-width: 435px;
             margin-left: auto;
-
+            
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
                 border-radius: 0;
@@ -13861,3 +13888,43 @@ import-wizard {
         }
     }
 }
+
+.rotate-icon-130deg {
+    .mdc-button__label {
+        transform: rotate(130deg);
+    }
+}
+
+// table header search icon
+.table-search-icon {
+    top: 2px;
+    width: 25px !important;
+    height: 25px !important;
+    padding: 0 !important;
+}
+
+// Mat Datepicker for Year and Month selection
+.month-selection {
+    border-radius: 50px !important;
+    background: var(--color-denary-button-background) !important;
+    height: 38px;
+    border-radius: 18px;
+    &::placeholder {
+        color: var(--color-denary-button-text) !important;
+    }
+}
+
+.download-arrow {
+    .icon-download1 {
+        visibility: hidden;
+        opacity: 0;
+        font-size: 17px;
+        transition: 0.5s all ease;
+    }
+    &:hover {
+      .icon-download1 {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }

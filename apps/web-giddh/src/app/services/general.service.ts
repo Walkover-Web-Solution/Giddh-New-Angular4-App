@@ -13,10 +13,9 @@ import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAIN
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
-import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 
 @Injectable()
 export class GeneralService {
@@ -85,8 +84,6 @@ export class GeneralService {
     private _currencyType = '1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000
 
     private _sessionId: string;
-    /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
 
     constructor(
         private router: Router,
@@ -2005,6 +2002,16 @@ export class GeneralService {
     }
 
     /**
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD-MM-YYYY).
+     *
+     * @param {string} value - The date string to be formatted.
+     * @returns {string} - The formatted date string.
+     */
+    public convertDateStringFormat(value: string): string {
+        return dayjs(value, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
     * This will be use for open window in center
     *
     * @param {string} url
@@ -2149,6 +2156,26 @@ export class GeneralService {
     }
 
     /**
+     * Update current page query params
+     *
+     * @param {Params} queryParams
+     * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @param {boolean} [replaceUrl=true]
+     * @memberof GeneralService
+     */
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge', replaceUrl: boolean = true): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling,  // Merge new parameters with existing ones
+                replaceUrl  // Replace current history entry with new URL
+            }
+        );
+    }
+
+    /**
      * Round a Number to Company Decimal Places
      *
      * @param {number} value
@@ -2160,36 +2187,6 @@ export class GeneralService {
         const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
-
-    /**
-     * Update current page query params
-     *
-     * @param {Params} queryParams
-     * @param {QueryParamsHandling} [queryParamsHandling='merge']
-     * @memberof GeneralService
-     */
-    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
-        this.router.navigate(
-            [],
-            {
-                relativeTo: this.activatedRoute,
-                queryParams,
-                queryParamsHandling: queryParamsHandling
-            }
-        );
-    }
-
-    /**
-     * This will be use for sync with tally help documentation
-     *
-     * @memberof GeneralService
-     */
-    public syncWithTally(): void {
-        const url = this.router.createUrlTree([this.syncWithTallyHelpDocUrl], { queryParams: {} }).toString();
-        const cleanedUrl = url.startsWith('/') ? url.substring(1) : url;
-        window.open(cleanedUrl, '_blank');
-    }
-
 
     public getDecodedWhiteLabelFromCookie(cookieName: string): any {
         // Retrieve the cookie value

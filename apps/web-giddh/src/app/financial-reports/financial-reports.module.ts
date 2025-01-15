@@ -68,7 +68,6 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         BalanceSheetGridComponent,
         BalanceSheetGridRowComponent,
         FinancialAccordionDirective,
-        FinancialSearchPipe,
         AccountsFilterPipe
     ],
     exports: [
@@ -102,7 +101,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         AmountFieldComponentModule,
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        FinancialSearchPipe
     ],
 })
 export class FinancialReportsModule {
