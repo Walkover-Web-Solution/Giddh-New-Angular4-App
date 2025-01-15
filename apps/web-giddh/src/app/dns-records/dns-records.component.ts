@@ -61,7 +61,9 @@ export class DnsRecordsComponent implements OnInit {
     public ngOnInit(): void {
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
+
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),
             this.route.params.pipe(takeUntil(this.destroyed$))

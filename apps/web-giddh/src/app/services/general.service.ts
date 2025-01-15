@@ -2188,24 +2188,23 @@ export class GeneralService {
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 
-    public getDecodedWhiteLabelFromCookie(cookieName: string): any {
-        // Retrieve the cookie value
-        const cookie = document.cookie
-
-            .split('; ')
-            .find((row) => row.startsWith(`${cookieName}=`));
-        if (!cookie) return null;
-
-        // Extract and decode the cookie value
-        const cookieValue = decodeURIComponent(cookie.split('=')[1]);
-
+    /**
+     * Retrieves the decoded white label data from the local storage.
+     *
+     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
+     *
+     * @throws {Error} If there is an error parsing the white label data from the local storage.
+     */
+    public getDecodedWhiteLabel(): any {
         try {
-            // Parse the decoded cookie value
-            return JSON.parse(cookieValue)?.body;
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
         } catch (error) {
-            console.error('Error parsing cookie JSON:', error);
+            console.error('Error parsing whiteLabel data from localStorage:', error);
             return null;
         }
     }
+
+
 }
 

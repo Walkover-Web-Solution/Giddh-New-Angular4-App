@@ -35,5 +35,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    var giddhDomainUrl=`https://${this.generalService.getDecodedWhiteLabelFromCookie("whiteLabel")?.giddhWhiteLabel?.domainName}/`;
+     const whiteLabel = this.generalService.getDecodedWhiteLabel();
+    var giddhDomainUrl=`https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
 </script>

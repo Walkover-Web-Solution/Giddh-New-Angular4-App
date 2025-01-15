@@ -305,8 +305,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private socialAuthService: AuthService,
         private salesAction: SalesActions
     ) {
-        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
-        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
+        const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
+        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));

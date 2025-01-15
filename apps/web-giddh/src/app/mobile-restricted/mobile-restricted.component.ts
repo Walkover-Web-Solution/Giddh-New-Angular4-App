@@ -20,7 +20,8 @@ export class MobileRestrictedComponent {
 
     constructor(private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
-        this.giddhLogoSrc = this.generalService.getDecodedWhiteLabelFromCookie('whiteLabel')?.giddhWhiteLabel?.logo;
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
         this.breakpointObserver.observe([
             '(min-width: 481px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
