@@ -44,7 +44,7 @@
 <script type="text/javascript">
     var companyUniqueName = getQueryStringValue("companyUniqueName");
     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl=`https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
+    var giddhDomainUrl=`http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
     var search = "";
     var status = getQueryStringValue("status");
     var JSONcallBackStatus = getQueryStringValue("JSONcallBackStatus");
@@ -54,7 +54,7 @@
 
     function getApi() {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhDomainUrl =`https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
+        this.giddhDomainUrl =`http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
         apiBaseUrl=`https://${whiteLabel?.giddhWhiteLabel?.apiDomainName}/`;
         return apiBaseUrl;
     }

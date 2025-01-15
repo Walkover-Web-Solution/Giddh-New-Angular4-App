@@ -35,7 +35,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
-        this.giddhDomainUrl = `https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
+        this.giddhDomainUrl = `http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
