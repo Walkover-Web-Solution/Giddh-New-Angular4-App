@@ -38,7 +38,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public selectedTaxType: string = '';
     /** Holds Default value for Tax Authority Dropdown value */
     public selectedTaxAuthority: string = '';
-    /** Holds Default value for Tax Duration Dropdown value */
+    /** Holds default value for tax duration dropdown value */
     public selectedDuration: string = '';
     /** Holds Default value for Tax File Date Dropdown value */
     public selectedTaxFileDate: string | number = '';
@@ -66,7 +66,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     /** Holds if UntypedFormArray is valid or not */
     public isValidForm: boolean = true;
     /** Holds TDS TCS tax sub type */
-    private subTyp: string = '';
+    private subType: string = '';
 
     constructor(
         private store: Store<AppState>,
@@ -138,7 +138,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
             this.checkIfTdsOrTcs = this.tax.taxType.includes('tcs') || this.tax.taxType.includes('tds');
             if (this.checkIfTdsOrTcs) {
-                this.subTyp = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
+                this.subType = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
             }
             this.taxForm.get('name').setValue(this.tax?.name ?? '');
             this.taxForm.get('duration').setValue(this.tax?.duration ?? '');
@@ -150,8 +150,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             (this.taxForm.get('taxAuthorityRequest') as FormGroup).get('uniqueName').setValue(this.tax.taxAuthority?.uniqueName ?? '');
             this.taxForm.get('taxValue').setValue(this.tax.taxDetail[0].taxValue ?? '');
             this.taxForm.get('date').setValue(dayjs(this.tax.taxDetail[0].date).toDate() ?? dayjs().toDate() ?? '');
-            this.taxForm.get('tdsTcsTaxSubTypes').setValue(this.subTyp ?? '');
-            this.taxForm.get('taxType').setValue(this.subTyp ? this.tax.taxType?.replace(this.subTyp, '') : this.tax.taxType);
+            this.taxForm.get('tdsTcsTaxSubTypes').setValue(this.subType ?? '');
+            this.taxForm.get('taxType').setValue(this.subType ? this.tax.taxType?.replace(this.subType, '') : this.tax.taxType);
             this.taxForm.get('taxFileDate').setValue(this.tax.taxFileDate?.toString() ?? '');
 
             this.selectedTaxAuthority = this.tax?.taxAuthority ? this.tax.taxAuthority?.name : '';
@@ -384,9 +384,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             { label: this.commonLocaleData?.app_tax_subtypes?.receivable, value: 'rc' },
             { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
         ];
-        if (this.subTyp) {
+        if (this.subType) {
             this.tdsTcsTaxSubTypes.forEach(key => {
-                if (key?.value === this.subTyp) {
+                if (key?.value === this.subType) {
                     this.selectedTaxType = key.label;
                 }
             });

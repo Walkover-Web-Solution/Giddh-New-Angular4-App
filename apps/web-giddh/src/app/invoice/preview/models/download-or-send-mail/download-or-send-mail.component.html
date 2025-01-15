@@ -7,11 +7,11 @@
     <div class="dialog-header">
         <span>
             <ng-container *ngIf="showPdfWrap">
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     mat-stroked-button
-                    class="btn-default mr-r1" 
-                    *ngIf="showEditButton" 
+                    class="btn-default mr-r1"
+                    *ngIf="showEditButton"
                     (click)="editVoucher()"
                 >
                     {{ commonLocaleData?.app_edit }}
@@ -23,16 +23,12 @@
                     [matMenuTriggerFor]="showMoreOptions"
                     (click)="showEsign = false"
                 >
-                    {{ commonLocaleData?.app_more }} 
+                    {{ commonLocaleData?.app_more }}
                     <span class="caret"></span>
                 </button>
             </ng-container>
         </span>
-        <i
-            class="icon-cross"
-            aria-hidden="true"
-            (click)="onCancel('closed')"
-        ></i>
+        <i class="icon-cross" aria-hidden="true" (click)="onCancel('closed')"></i>
 
         <!-- drop down for Esignature area -->
         <div class="dropdown-menu mr-l3" [ngClass]="{ open: showEsign }">
@@ -44,8 +40,8 @@
         <!-- drop down for invoice copies -->
         <mat-menu #showMoreOptions="matMenu">
             <div class="more-options" (click)="$event.stopPropagation()">
-                <mat-tab-group 
-                    mat-stretch-tabs="false" 
+                <mat-tab-group
+                    mat-stretch-tabs="false"
                     mat-align-tabs="start"
                     [selectedIndex]="selectedTabIndex"
                     (selectedIndexChange)="tabChanged($event)"
@@ -58,16 +54,19 @@
                                 #emailList
                                 [placeholder]="localeData?.enter_email_addresses"
                             ></textarea>
-    
+
                             <ng-template [ngIf]="currentVoucherFilter === 'invoices' && voucherApiVersion === 2">
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
-    
+
                             <div class="mr-t15 text-right">
                                 <button
-                                    [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
+                                    [disabled]="
+                                        !emailList?.value ||
+                                        (currentVoucherFilter === 'invoices' && !invoiceType?.length)
+                                    "
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="onSendInvoiceOnMail(emailList?.value)"
                                 >
@@ -81,13 +80,15 @@
                             <ng-template [ngIf]="currentVoucherFilter === 'invoices' && voucherApiVersion === 2">
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
-                            <div  class="mr-t15 text-right">
+                            <div class="mr-t15 text-right">
                                 <button
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="downloadInvoice()"
-                                    [disabled]="!invoiceType?.length && !isAttachment && currentVoucherFilter === 'invoices'"
+                                    [disabled]="
+                                        !invoiceType?.length && !isAttachment && currentVoucherFilter === 'invoices'
+                                    "
                                 >
                                     {{ localeData?.download_invoice }}
                                 </button>
@@ -96,17 +97,17 @@
                     </mat-tab>
                     <mat-tab [label]="commonLocaleData?.app_send_sms" *ngIf="isSendSmsEnabled">
                         <div class="pd-2 text-right">
-                            <textarea 
+                            <textarea
                                 matInput
-                                class="form-control" 
-                                #smsList 
+                                class="form-control"
+                                #smsList
                                 [placeholder]="localeData?.enter_mobile_no"
                             ></textarea>
-    
+
                             <div class="mr-t15">
                                 <button
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="onSendInvoiceOnSms(smsList?.value)"
                                 >
@@ -115,7 +116,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                  </mat-tab-group>
+                </mat-tab-group>
             </div>
         </mat-menu>
     </div>
@@ -139,45 +140,30 @@
     </div>
 </ng-container>
 
-<!-- Invoice Copy Options  (checkbox) -->
+<!-- Invoice Copy Options (checkbox) -->
 <ng-template #invoiceCopyOptions>
     <div>
         <h3 class="font-15 mr-t15 mr-b15">{{ localeData?.invoice_copy }}</h3>
         <mat-divider></mat-divider>
         <div>
-            <mat-checkbox
-                color="primary"
-                value="Original"
-                checked
-                (change)="onSelectInvoiceCopy($event)"
-            >{{ localeData?.original }}</mat-checkbox>
+            <mat-checkbox color="primary" value="Original" checked (change)="onSelectInvoiceCopy($event)">{{
+                localeData?.original
+            }}</mat-checkbox>
         </div>
         <div>
-            <mat-checkbox
-                color="primary"
-                value="Transport"
-                (change)="onSelectInvoiceCopy($event)"
-            >{{ localeData?.transport }}</mat-checkbox>
+            <mat-checkbox color="primary" value="Transport" (change)="onSelectInvoiceCopy($event)">{{
+                localeData?.transport
+            }}</mat-checkbox>
         </div>
         <div>
-            <mat-checkbox
-                color="primary"
-                value="Customer"
-                (change)="onSelectInvoiceCopy($event)"
-            >{{ commonLocaleData?.app_customer }}</mat-checkbox>
+            <mat-checkbox color="primary" value="Customer" (change)="onSelectInvoiceCopy($event)">{{
+                commonLocaleData?.app_customer
+            }}</mat-checkbox>
         </div>
-        <div
-            *ngIf="voucherHasAttachments && selectedTabIndex === 1"
-        >
-            <mat-checkbox
-                color="primary"
-                name="attachment"
-                value="Attachment"
-                [(ngModel)]="isAttachment"
-            >
+        <div *ngIf="voucherHasAttachments && selectedTabIndex === 1">
+            <mat-checkbox color="primary" name="attachment" value="Attachment" [(ngModel)]="isAttachment">
                 {{ localeData?.attachment }}
             </mat-checkbox>
         </div>
     </div>
 </ng-template>
-   
