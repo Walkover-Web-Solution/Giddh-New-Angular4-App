@@ -38,41 +38,47 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+
+// Get white label configuration from localStorage
 let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
-// Application wide providers
+console.log(whiteLabelConfig)
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : AppUrl + APP_FOLDER }
+    {
+        provide: APP_BASE_HREF,
+        useValue: IS_ELECTRON_WA
+            ? './'
+            : whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.giddhWhiteLabel.domainName
+                ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/`
+                : AppUrl + APP_FOLDER
+    }
 ];
 
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
-
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
     return localStorageSync({ keys: ['session', 'permission', 'branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
+
 if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 
+// Determine giddh region from cookie and set Country-Region in localStorage
 let giddhRegion = document.cookie
     .split('; ')
     .find(cookie => cookie.startsWith('giddh_region='))
-    ?.split('=')[1];
-giddhRegion = giddhRegion?.toUpperCase();
+    ?.split('=')[1]?.toUpperCase() || 'GL';
 
-if (giddhRegion === "UK") {
-    localStorage.setItem("Country-Region", "GB");
-} else if (giddhRegion === "AE") {
-    localStorage.setItem("Country-Region", "AE");
-} else if (giddhRegion === "IN") {
-    localStorage.setItem("Country-Region", "IN");
-} else {
-    localStorage.setItem("Country-Region", "GL");
-}
-console.log(JSON.parse(localStorage.getItem('whiteLabel')));
+localStorage.setItem("Country-Region",
+    giddhRegion === "UK" ? "GB" :
+        giddhRegion === "AE" ? "AE" :
+            giddhRegion === "IN" ? "IN" : "GL"
+);
+
+console.log('WhiteLabel Config: ', whiteLabelConfig);
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -84,9 +90,6 @@ console.log(JSON.parse(localStorage.getItem('whiteLabel')));
         AppLoginSuccessComponent,
         MobileRestrictedComponent,
     ],
-    /**
-     * Import Angular's modules.
-     */
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -115,16 +118,9 @@ console.log(JSON.parse(localStorage.getItem('whiteLabel')));
         MatButtonModule,
         LoaderModule,
         PageModule,
-        ...CONDITIONAL_IMPORTS
+         ...CONDITIONAL_IMPORTS
     ],
-    /**
-     * Expose our Services and Providers into Angular's dependency injection.
-     * enableTracing: true,
-     */
     providers: [
-        environment.ENV_PROVIDERS,
-        APP_PROVIDERS,
-        WindowRef,
         {
             provide: ServiceConfig,
             useValue: {
@@ -138,16 +134,19 @@ console.log(JSON.parse(localStorage.getItem('whiteLabel')));
                 _
             }
         },
+        environment.ENV_PROVIDERS,
+        APP_PROVIDERS,
+        WindowRef,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: GiddhHttpInterceptor,
             multi: true
-        }, {
+        },
+        {
             provide: ErrorHandler,
             useClass: ExceptionLogService
         },
         CustomPreloadingStrategy
     ]
 })
-export class AppModule {
-}
+export class AppModule { }
