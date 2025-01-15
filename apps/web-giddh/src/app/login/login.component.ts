@@ -508,7 +508,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         // Safely retrieve properties from whiteLabel
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : `https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : `http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
