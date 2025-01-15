@@ -96,6 +96,10 @@ interface GlobalEnvironment {
     ApiUrl: string;
     UkApiUrl: string;
     PORTAL_URL: string;
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_CLIENT_SECRET: string;
+    OTP_WIDGET_ID: string;
+    OTP_TOKEN_AUTH: string;
     isElectron: boolean;
     errlyticsNeeded: boolean;
     errlyticsKey: string;

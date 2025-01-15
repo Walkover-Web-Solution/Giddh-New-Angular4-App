@@ -2,23 +2,7 @@ const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
 const zlib = require("zlib");
 require('dotenv').config();
-// Function to extract cookie configuration
-function getCookieConfig() {
-    const cookieString = process.env.COOKIE_STRING || ''; // Simulate a cookie string for the build environment
-    const cookie = cookieString.split("; ").find((row) => row.startsWith("whiteLabel="));
-    if (!cookie) {
-     return   console.error("whiteLabel cookie not found. Using default values.");
-    }
-    try {
-        return JSON.parse(decodeURIComponent(cookie.split("=")[1]))?.body;
-    } catch (e) {
-       return console.error("Error parsing cookie:", e);
-    }
-}
 
-// Current environment configuration
-const config = getCookieConfig();
-console.log('webpack config',config);
 module.exports = {
     plugins: [
         new webpack.DefinePlugin({
@@ -61,32 +45,6 @@ module.exports = {
             'process.PORTAL_URL': JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
-
-            // Replace only the matched keys with values from the cookie configuration
-            Object.keys(defaultEnvVars).forEach((key) => {
-                if (key === "AppUrl") {
-                    defaultEnvVars[key] = `https://${config.giddhWhiteLabel.domainName}/`;
-                } else if (key === "ApiUrl") {
-                    defaultEnvVars[key] = `https://${config.giddhWhiteLabel.apiDomainName}/`;
-                } else if (key === "PORTAL_URL") {
-                    defaultEnvVars[key] = `https://${config.giddhWhiteLabel.portalDomain}/`;
-                } else if (key === "GOOGLE_CLIENT_ID") {
-                    defaultEnvVars[key] = config.googleClientId;
-                } else if (key === "GOOGLE_CLIENT_SECRET") {
-                    defaultEnvVars[key] = config.googleClientSecret;
-                } else if (key === "OTP_WIDGET_ID") {
-                    defaultEnvVars[key] = config.otpWidgetId;
-                } else if (key === "OTP_TOKEN_AUTH") {
-                    defaultEnvVars[key] = config.otpWidgetToken;
-                }
-            }),
-        new webpack.DefinePlugin(
-            Object.entries(defaultEnvVars).reduce((acc, [key, value]) => {
-                acc[key] = JSON.stringify(value);
-                acc[`process.env.${key}`] = JSON.stringify(value);
-                return acc;
-            }, {})
-        ),
         new CompressionPlugin({
             filename: "[path][base].br",
             algorithm: "brotliCompress",

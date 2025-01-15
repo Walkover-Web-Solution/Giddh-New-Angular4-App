@@ -8,11 +8,16 @@ enableProdMode();
 export const environment: Environment = {
     production: true,
     showDevModule: false,
-    AppUrl: 'http://giddh-test-app.ap-south-1.elasticbeanstalk.com',
+    AppUrl: 'https://test.giddh.com',
     ApiUrl: 'http://localhost:9292/giddh-api/',
     UkApiUrl: 'https://gbapi.giddh.com/',
     isElectron: false,
     APP_FOLDER: '/',
+    PORTAL_URL: '',
+    GOOGLE_CLIENT_ID: '',
+    GOOGLE_CLIENT_SECRET: '',
+    OTP_WIDGET_ID: '',
+    OTP_TOKEN_AUTH: '',
     /** Angular debug tools in the dev console
      * https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
      * @param modRef
