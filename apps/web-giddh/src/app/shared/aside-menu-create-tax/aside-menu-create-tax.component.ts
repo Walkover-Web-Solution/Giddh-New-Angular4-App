@@ -4,7 +4,7 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
-import { takeUntil } from 'rxjs/operators';
+import { skip, take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
@@ -13,6 +13,7 @@ import { SalesService } from '../../services/sales.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { TaxAuthorityComponentStore } from '../../theme/tax-authority/utility/tax-authority.store';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -37,9 +38,12 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public selectedTaxType: string = '';
     /** Holds Default value for Tax Authority Dropdown value */
     public selectedTaxAuthority: string = '';
+    /** Holds Default value for Tax Duration Dropdown value */
+    public selectedDuration: string = '';
+    /** Holds Default value for Tax File Date Dropdown value */
+    public selectedTaxFileDate: string | number = '';
     public checkIfTdsOrTcs: boolean = false;
     public days: IOption[] = [];
-    public newTaxObj: TaxResponse = new TaxResponse();
     public linkedAccountsOption: IOption[] = [];
     public isTaxCreateInProcess: boolean = false;
     public isUpdateTaxInProcess: boolean = false;
@@ -57,15 +61,22 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public taxAuthorityList: IOption[] = [];
     /** Holds true if tax authority list is inprogress */
     public isTaxAuthoritiesLoading$: Observable<any> = this.componentStore.isLoading$;
+    /** Holds tax form */
+    public taxForm: FormGroup;
+    /** Holds if UntypedFormArray is valid or not */
+    public isValidForm: boolean = true;
+    /** Holds TDS TCS tax sub type */
+    private subTyp: string = '';
 
     constructor(
         private store: Store<AppState>,
         private settingsTaxesActions: SettingsTaxesActions,
         private salesService: SalesService,
         private generalService: GeneralService,
-        private componentStore: TaxAuthorityComponentStore
+        private componentStore: TaxAuthorityComponentStore,
+        private formBuilder: FormBuilder
     ) {
-        this.newTaxObj.date = dayjs().toDate();
+        this.initForm();
     }
 
     /**
@@ -74,8 +85,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
      * @memberof AsideMenuCreateTaxComponent
      */
     public ngOnInit(): void {
-        this.newTaxObj.taxAuthorityRequest = { uniqueName: this.tax?.taxAuthority ? this.tax.taxAuthority?.uniqueName : '' };
-
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i?.toString(), value: i?.toString() });
         }
@@ -86,6 +95,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             if (activeCompany && activeCompany.countryV2) {
                 this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
                 this.isUSCompany = activeCompany.countryV2.alpha2CountryCode === 'US';
+                if (this.isUSCompany) {
+                    this.getTaxAuthorityList();
+                    (this.taxForm.get('taxAuthorityRequest') as FormGroup).get('uniqueName').setValidators([Validators.required]);
+                }
             }
         });
 
@@ -102,17 +115,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                     this.allTaxes = arr;
                 }
             });
-
-        this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(taxAuthorities => {
-            if (taxAuthorities?.length) {
-                let arr: IOption[] = [];
-                taxAuthorities.forEach(tax => {
-                    arr.push({ label: tax.name, value: tax?.uniqueName });
-                });
-                this.taxAuthorityList = arr;
-            }
-        });
-        this.componentStore.getTaxAuthorityList();
 
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
@@ -135,53 +137,123 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public ngOnChanges(changes: SimpleChanges): void {
         if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
             this.checkIfTdsOrTcs = this.tax.taxType.includes('tcs') || this.tax.taxType.includes('tds');
-            let subTyp;
             if (this.checkIfTdsOrTcs) {
-                subTyp = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
+                this.subTyp = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
             }
+            this.taxForm.get('name').setValue(this.tax?.name ?? '');
+            this.taxForm.get('duration').setValue(this.tax?.duration ?? '');
+            this.taxForm.get('uniqueName').setValue(this.tax?.uniqueName ?? '');
+            this.taxForm.get('taxNumber').setValue(this.tax?.taxNumber ?? '');
+            this.taxForm.get('accounts').setValue(this.tax?.accounts ?? []);
+            this.taxForm.get('taxDetail').setValue(this.tax?.taxDetail ?? '');
+            this.taxForm.get('taxAuthority').setValue(this.tax?.taxAuthority ?? '');
+            (this.taxForm.get('taxAuthorityRequest') as FormGroup).get('uniqueName').setValue(this.tax.taxAuthority?.uniqueName ?? '');
+            this.taxForm.get('taxValue').setValue(this.tax.taxDetail[0].taxValue ?? '');
+            this.taxForm.get('date').setValue(dayjs(this.tax.taxDetail[0].date).toDate() ?? dayjs().toDate() ?? '');
+            this.taxForm.get('tdsTcsTaxSubTypes').setValue(this.subTyp ?? '');
+            this.taxForm.get('taxType').setValue(this.subTyp ? this.tax.taxType?.replace(this.subTyp, '') : this.tax.taxType);
+            this.taxForm.get('taxFileDate').setValue(this.tax.taxFileDate?.toString() ?? '');
 
-            if (subTyp) {
-                this.tdsTcsTaxSubTypes.forEach(key => {
-                    if (key?.value === subTyp) {
-                        this.selectedTaxType = key.label;
-                    }
-                });
-            }
-
-            this.newTaxObj = {
-                ...this.tax,
-                taxValue: this.tax.taxDetail[0].taxValue,
-                date: dayjs(this.tax.taxDetail[0].date).toDate(),
-                tdsTcsTaxSubTypes: subTyp ? subTyp : null,
-                taxType: subTyp ? this.tax.taxType?.replace(subTyp, '') : this.tax.taxType,
-                taxFileDate: this.tax.taxFileDate?.toString()
-            };
             this.selectedTaxAuthority = this.tax?.taxAuthority ? this.tax.taxAuthority?.name : '';
+            this.selectedDuration = this.tax?.duration ? this.tax?.duration : '';
+            this.selectedTaxFileDate = this.tax?.taxFileDate ? this.tax.taxFileDate : '';
         }
     }
-  
+
+    /**
+     * Get tax authority list
+     *
+     * @private
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    private getTaxAuthorityList(): void {
+        this.componentStore.taxAuthorityList$.pipe(skip(1),take(1)).subscribe(taxAuthorities => {
+            if (taxAuthorities?.length) {
+                let arr: IOption[] = [];
+                taxAuthorities.forEach(tax => {
+                    arr.push({ label: tax.name, value: tax?.uniqueName });
+                });
+                this.taxAuthorityList = arr;
+            }
+        });
+        this.componentStore.getTaxAuthorityList();
+    }
+
+    /**
+     * Initializes the form
+     *
+     * @private
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    private initForm(): void {
+        this.taxForm = this.formBuilder.group({
+            name: ['', [Validators.required]],
+            duration: ['', [Validators.required]],
+            uniqueName: [''],
+            taxFileDate: ['', [Validators.required]],
+            taxNumber: [''],
+            account: [{}],
+            accounts: [[]],
+            taxType: ['', [Validators.required]],
+            taxDetail: [{}, [Validators.required]],
+            taxAuthority: [''],
+            taxValue: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+            date: ['', [Validators.required]],
+            tdsTcsTaxSubTypes: [null],
+            taxAuthorityRequest: this.formBuilder.group({
+                uniqueName: ['']
+            })
+        });
+
+        this.taxForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            if (value) {
+                if (this.taxForm?.get('taxType')?.value === 'tds' || this.taxForm?.get('taxType')?.value === 'tcs') {
+                    this.taxForm.get('tdsTcsTaxSubTypes').setValidators([Validators.required]);
+                } else {
+                    this.taxForm.get('tdsTcsTaxSubTypes').removeValidators([Validators.required]);
+                }
+
+                if (this.taxForm?.get('taxType')?.value === 'others') {
+                    this.taxForm.get('account').setValidators([Validators.required]);
+                } else {
+                    this.taxForm.get('account').removeValidators([Validators.required]);
+                }
+            }
+        })
+    }
+
     /**
      * Generate uniqueName
      *
      * @memberof AsideMenuCreateTaxComponent
      */
     public generateUniqueName(): void {
-        let val: string = this.newTaxObj.name;
+        let val: string = this.taxForm.get('name').value;
         val = uniqueNameInvalidStringReplace(val);
         if (val) {
             let isDuplicate = this.allTaxes.some(s => s?.value?.toLowerCase().includes(val));
             if (isDuplicate) {
-                this.newTaxObj.taxNumber = val + 1;
+                this.taxForm.get('taxNumber').patchValue(val + 1);
             } else {
-                this.newTaxObj.taxNumber = val;
+                this.taxForm.get('taxNumber').patchValue(val);
             }
         } else {
-            this.newTaxObj.taxNumber = '';
+            this.taxForm.get('taxNumber').patchValue('');
         }
     }
 
-    public onSubmit() {
-        let dataToSave = cloneDeep(this.newTaxObj);
+    /**
+     * Handle form submit
+     * 
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public onSubmit(): void {
+        this.isValidForm = this.taxForm.valid;
+
+        if (!this.isValidForm) {
+            return;
+        }
+        let dataToSave = cloneDeep(this.taxForm.value);
 
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
             if (this.tax && this.tax.uniqueName) {
@@ -208,7 +280,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             });
         }
 
-        dataToSave.date = typeof(dataToSave.date) === "object" ? dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT) : dataToSave.date;
+        dataToSave.date = typeof (dataToSave.date) === "object" ? dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT) : dataToSave.date;
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 
@@ -235,7 +307,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                         this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
                     }
 
-                    if (res.taxes[key].value === this.newTaxObj.taxType) {
+                    if (res.taxes[key].value === this.taxForm.get('taxType').value) {
                         this.selectedTax = res.taxes[key]?.label;
                     }
 
@@ -255,8 +327,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
      */
     public selectTax(event: any): void {
         if (event) {
-            this.newTaxObj.taxType = event.value;
-            this.newTaxObj.tdsTcsTaxSubTypes = "";
+            this.taxForm.get('tdsTcsTaxSubTypes').patchValue('');
         }
     }
 
@@ -275,7 +346,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         let accounts = [];
         this.salesService.getAccountsWithCurrency(params).subscribe(response => {
             if (response?.body?.results) {
-                accounts = response.body.results.map(account => {
+                accounts = response.body.results?.map(account => {
                     return { label: `${account.name} - (${account?.uniqueName})`, value: account?.uniqueName };
                 });
                 this.linkedAccountsOption = accounts;
@@ -313,6 +384,13 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             { label: this.commonLocaleData?.app_tax_subtypes?.receivable, value: 'rc' },
             { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
         ];
+        if (this.subTyp) {
+            this.tdsTcsTaxSubTypes.forEach(key => {
+                if (key?.value === this.subTyp) {
+                    this.selectedTaxType = key.label;
+                }
+            });
+        }
     }
 
     /**
@@ -323,7 +401,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
      */
     public selectDate(date: any): void {
         if (date) {
-            this.newTaxObj.date = dayjs(date).format(GIDDH_DATE_FORMAT);
+            this.taxForm.get('date').patchValue(dayjs(date).format(GIDDH_DATE_FORMAT));
         }
     }
 }
