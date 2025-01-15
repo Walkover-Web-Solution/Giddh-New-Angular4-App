@@ -42,7 +42,7 @@ let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
+    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : AppUrl + APP_FOLDER }
 ];
 
 // tslint:disable-next-line:prefer-const
