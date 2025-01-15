@@ -46,10 +46,6 @@ const phpScript = `<?php
     curl_setopt($ch, CURLOPT_URL, getenv("GIDDH_WHITE_LABEL_URL"));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
-
-    if ($response !== false) {
-        setcookie("whiteLabel", $response, 0, "/", "", false, false);
-    }
     curl_close($ch);
 ?>
 `;
