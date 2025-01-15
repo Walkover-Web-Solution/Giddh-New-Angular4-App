@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        console.log(ApiUrl, GOOGLE_CLIENT_ID, AppUrl, GOOGLE_CLIENT_SECRET, PORTAL_URL, OTP_TOKEN_AUTH, OTP_WIDGET_ID);
+        console.log('HOME',ApiUrl, GOOGLE_CLIENT_ID, AppUrl, GOOGLE_CLIENT_SECRET, PORTAL_URL, OTP_TOKEN_AUTH, OTP_WIDGET_ID);
 
         this.companyUniqueName = this.generalService.companyUniqueName;
 

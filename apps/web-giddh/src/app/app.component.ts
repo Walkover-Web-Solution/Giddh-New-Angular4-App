@@ -282,7 +282,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck(AppUrl + 'version.json');
+            const whiteLabel = this._generalService.getDecodedWhiteLabel();
+            let domainUrl = `https://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
+            this._versionCheckService.initVersionCheck((domainUrl || AppUrl) + 'version.json');
 
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
