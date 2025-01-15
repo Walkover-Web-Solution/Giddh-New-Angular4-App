@@ -16,6 +16,11 @@ export interface ProjectAccountingState {
     projectDetails: any;
     removeProjectSuccess: any;
     projectProfitDetails: any;
+    isEntryProgress: boolean;
+    entryCreateSuccess: any;
+    entryUpdateSuccess: any;
+    entryDeleteSuccess: any;
+    entrySearch: any;
 }
 
 export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
@@ -26,6 +31,11 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
     projectDetails: null,
     removeProjectSuccess: null,
     projectProfitDetails: null,
+    isEntryProgress: false,
+    entryCreateSuccess: null,
+    entryUpdateSuccess: null,
+    entryDeleteSuccess: null,
+    entrySearch: null,
 };
 
 @Injectable()
@@ -37,10 +47,7 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         super(DEFAULT_PROJECT_ACCOUNTING_STATE);
     }
 
-    public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
-    public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
-    public commonCountries$: Observable<any> = this.select(this.store.select(state => state.common.countries), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
 
     public isFetchingProjects$ = this.select((state) => state.isFetchingProjects);
@@ -50,6 +57,11 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
     public isSavingProject$ = this.select((state) => state.isSavingProject);
     public removeProjectSuccess$ = this.select((state) => state.removeProjectSuccess);
     public projectProfitDetails$ = this.select((state) => state.projectProfitDetails);
+    public isEntryProgress$ = this.select((state) => state.isEntryProgress);
+    public entryCreateSuccess$ = this.select((state) => state.entryCreateSuccess);
+    public entryUpdateSuccess$ = this.select((state) => state.entryUpdateSuccess);
+    public entryDeleteSuccess$ = this.select((state) => state.entryDeleteSuccess);
+    public entrySearch$ = this.select((state) => state.entrySearch);
 
     /**
      * Creates a new project and updates the state.
@@ -78,35 +90,6 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
             })
         );
     });
-
-    // /**
-    //  * Updates project details and updates the state.
-    //  */
-    // readonly editProjectDetails = this.effect((data: Observable<any>) => {
-    //     return data.pipe(
-    //         switchMap((req) => {
-    //             this.patchState({ isSavingProject: true, saveProjectSuccess: null });
-    //             return this.projectAccountingService.editProjectDetails(req).pipe(
-    //                 tapResponse(
-    //                     (res: BaseResponse<any, any>) => {
-    //                         if (res?.status === 'success') {
-    //                             this.toasterService.showSnackBar('success', 'Project update successfully');
-    //                             this.patchState({ isSavingProject: false, saveProjectSuccess: res.body });
-    //                         } else {
-    //                             res?.message && this.toasterService.showSnackBar('error', res.message);
-    //                             this.patchState({ isSavingProject: false, saveProjectSuccess: null });
-    //                         }
-    //                     },
-    //                     (error: any) => {
-    //                         this.toasterService.showSnackBar("error", error);
-    //                         return this.patchState({ isSavingProject: false, saveProjectSuccess: null });
-    //                     }
-    //                 ),
-    //                 catchError((err) => EMPTY)
-    //             );
-    //         })
-    //     );
-    // });
 
     /**
      * Fetches all projects and updates the state.
@@ -221,6 +204,110 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         );
     });
 
+
+    readonly createNewEntry = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isEntryProgress: true, entryCreateSuccess: null });
+                return this.projectAccountingService.createEntry(req.request, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({ isEntryProgress: false, entryCreateSuccess: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ isEntryProgress: false, entryCreateSuccess: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ isEntryProgress: false, entryCreateSuccess: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
+    readonly deleteEntry = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isEntryProgress: true, entryDeleteSuccess: null });
+                return this.projectAccountingService.removeEntry(req.request, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar('success', 'Entry delete successfully');
+                                this.patchState({ isEntryProgress: false, entryDeleteSuccess: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ isEntryProgress: false, entryDeleteSuccess: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ isEntryProgress: false, entryDeleteSuccess: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly updateEntry = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isEntryProgress: true, entryUpdateSuccess: null });
+                return this.projectAccountingService.updateEntry(req.request, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar('success', 'Entry delete successfully');
+                                this.patchState({ isEntryProgress: false, entryUpdateSuccess: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ isEntryProgress: false, entryUpdateSuccess: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ isEntryProgress: false, entryUpdateSuccess: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
+    readonly searchEntry = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ entrySearch: null });
+                return this.projectAccountingService.searchEntry(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({ entrySearch: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ entrySearch: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ entrySearch: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
     /**
      * Lifecycle hook for component destroy
      *

@@ -15,6 +15,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
 
 
@@ -73,6 +74,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public modalRef: BsModalRef;
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
 
 
     constructor(
@@ -123,7 +126,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     if (project.uniqueName === profitandloss.uniqueName)
                         project.profitAndLoss = profitandloss.profitAndLoss;
                 })
-                console.log("dfghjkl;", this.dataSource);
             }
         });
 
@@ -144,9 +146,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                         return project;
                     }
                 });
-                this.totalResults-=1;
+                this.totalResults -= 1;
                 this.changeDetection.detectChanges();
-                console.log("dfghjkl;", this.dataSource);
             }
         });
     }

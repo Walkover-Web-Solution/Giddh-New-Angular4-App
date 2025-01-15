@@ -27,7 +27,7 @@
                         <span class="text-primary">+ Add more project</span>
                     </div>
 
-                    <div class="table-responsive section-center overflow-visible table-header-sticky mr-t1">
+                    <div class="table-responsive section-center overflow-visible table-header-sticky mr-t1" *ngIf="dataSource?.length">
                         <table mat-table [dataSource]="dataSource" class="giddh-table basic w-100" (mouseout)="activeTableRowIndex = null">
                             <ng-container matColumnDef="position">
                                 <th mat-header-cell *matHeaderCellDef>Select Account</th>

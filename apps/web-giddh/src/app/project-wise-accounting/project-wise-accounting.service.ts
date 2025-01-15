@@ -157,4 +157,49 @@ export class ProjectAccountingService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
+
+    public createEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model.data), payload)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public removeEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        return this.http.delete(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model.data), payload)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public updateEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        return this.http.put(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_ENTRY, model), payload)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public searchEntry(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.ENTRY_SEARCH, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
 }

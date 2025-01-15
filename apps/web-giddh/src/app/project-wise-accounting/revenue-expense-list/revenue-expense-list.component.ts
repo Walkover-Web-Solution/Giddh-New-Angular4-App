@@ -3,12 +3,17 @@ import { GeneralService } from '../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
-import { GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest, ReplaySubject, takeUntil, filter, tap } from 'rxjs';
+import { ProjectAccountingComponentStore } from '../project-wise-accounting.store';
+import { projectType } from '../project-wise-accounting';
 
 @Component({
     selector: 'revenue-expense-list.',
     styleUrls: ['./revenue-expense-list.component.scss'],
-    templateUrl: './revenue-expense-list.component.html'
+    templateUrl: './revenue-expense-list.component.html',
+    providers: [ProjectAccountingComponentStore]
 })
 export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -28,22 +33,26 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** Instance of bootstrap modal */
+    public getProjectRequest: any = {
+        companyUniqueName: '',
+        projectUniqueName: '',
+        branchUniqueName: ''
+    };
+    public activeCompany: any;
     public modalRef: BsModalRef;
     public activeTableRowIndex: number = null;
-    public dataSource: any = [
-        {position: 1, name: 'Project 1', status: 'ACTIVE', symbol: 100 , action: ''},
-        {position: 2, name: 'Project 2', status: 'ACTIVE', symbol: 200,action: ''},
-        {position: 3, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
-        {position: 4, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
-
-        {position: 5, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
-
-        {position: 6, name: 'Project 3', status: 'ACTIVE', symbol: 230, action: ''},
-
-      ];
-
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public dataSource: any;
+    private isApiCallInProgress = false; // Flag to prevent multiple API calls
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
-
+    /** Selected from date */
+    public fromDate: string;
+    /** Selected to date */
+    public toDate: string;
+    /** Selected from date */
+    public page: number = 1;
+    /** Selected to date */
+    public count: number = 10;
     public selecteAccount = [
         {
             label: 'Option 1',
@@ -88,22 +97,108 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     ]
     constructor(
         private generalService: GeneralService,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private route: ActivatedRoute,
+        private componentStore: ProjectAccountingComponentStore
     ) { }
 
-    public ngOnInit() { 
-        this.dataSource = [{}, ...this.dataSource];
-     }
+    public ngOnInit() {
+        console.log(this.dataSource);
+        // this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(query => {
+        //     this.getProjectRequest.projectUniqueName = query.uniqueName
+        //     this.getProjectEntry();
+        // });
+        // this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        //     if (activeCompany) {
+        //         this.activeCompany = activeCompany;
+        //         this.getProjectRequest.companyUniqueName = activeCompany.uniqueName
+        //         this.getProjectRequest.branchUniqueName = this.generalService.currentBranchUniqueName ?? this.activeCompany.uniqueName,
+        //         this.getProjectEntry();
+        //     }
+        // });
+
+        combineLatest([
+            this.route.params.pipe(takeUntil(this.destroyed$)), // Route parameters
+            this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)) // Active company data
+        ])
+            .pipe(
+                filter(([params, activeCompany]) => !!(params.uniqueName && activeCompany)), // Ensure both values are available
+                tap(([params, activeCompany]) => {
+                    // Update the project request object
+                    this.getProjectRequest.projectUniqueName = params.uniqueName;
+                    this.getProjectRequest.companyUniqueName = activeCompany.uniqueName;
+                    this.getProjectRequest.branchUniqueName =
+                        this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
+                }),
+                takeUntil(this.destroyed$) // Clean up on component destruction
+            )
+            .subscribe(() => {
+                // Call the API only if dataSource is empty and no API call is in progress
+                if (!this.dataSource?.length && !this.isApiCallInProgress) {
+                    this.getProject();
+                }
+            });
+
+        // Listen for project details changes and update the dataSource
+        this.componentStore.projectDetails$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(entryList => {
+                if (entryList) {
+                    this.dataSource = entryList;
+                    this.isApiCallInProgress = false; // Reset the API call flag once data is received
+                }
+            });
+
+        this.componentStore.entrySearch$.pipe(takeUntil(this.destroyed$))
+            .subscribe(entrySearch => {
+                if (entrySearch) {
+                    console.log("entrySearch", entrySearch);
+
+                }
+            });
+
+        this.componentStore.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            }
+        });
+
+    }
+    public getProject(): void {
+        console.log("getProject");
+        this.isApiCallInProgress = true; // Mark API call as in progress
+        this.componentStore.getProjectById(this.getProjectRequest);
+        this.getProjectEntry();
+    }
+
+    public getProjectEntry(): void {
+        console.log("getProjectEntry");
+        let entryRequest = this.getProjectRequest
+        entryRequest.from = this.fromDate;
+        entryRequest.to = this.toDate;
+        entryRequest.page = this.page;
+        entryRequest.count = this.count;
+        this.componentStore.searchEntry(entryRequest);
+    }
+
+    public getProjectAccount(): void {
+        console.log("getProjectAccount");
+        this.componentStore.getProjectById(this.getProjectRequest);
+    }
 
     public ngOnDestroy() {
 
     }
     /**
-     * This will be use for show datepicker
-     *
-     * @param {*} element
-     * @memberof ListBranchTransfer
-     */
+     *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -115,20 +210,20 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for hide datepicker
+     * This will hide the datepicker
      *
-     * @memberof ListBranchTransfer
+     * @memberof AuditLogsFormComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
 
     /**
-    * Call back function for date/range selection in datepicker
-    *
-    * @param {*} value
-    * @memberof ListBranchTransfer
-    */
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof ActivityLogsComponent
+     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -143,11 +238,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
-    public selectProject(event:any){
+    public selectProject(event: any) {
 
     }
 }

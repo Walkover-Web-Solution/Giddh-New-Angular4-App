@@ -7,23 +7,24 @@ import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expe
 @NgModule({
     imports: [
         RouterModule.forChild([
-            { path: "", 
-              component: MainComponent,
-              children: [
-                {
-                    path: "",
-                    redirectTo: "list",
-                    pathMatch: "full"
-                },
-                {
-                    path: "list",
-                    component: ProjectWiseAccountingListComponent
-                },
-                {
-                    path: ":module/list",
-                    component: RevenueExpenseListComponent
-                }
-              ]
+            {
+                path: "",
+                component: MainComponent,
+                children: [
+                    {
+                        path: "",
+                        redirectTo: "list",
+                        pathMatch: "full"
+                    },
+                    {
+                        path: "list",
+                        component: ProjectWiseAccountingListComponent
+                    },
+                    {
+                        path: ":module/list/:uniqueName",
+                        component: RevenueExpenseListComponent
+                    }
+                ]
             }
         ])
     ],
