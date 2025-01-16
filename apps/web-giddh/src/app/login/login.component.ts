@@ -83,8 +83,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Show apple login if electron app and mac user */
     public showAppleLogin: boolean = false;
-    /* Hold giddh logo source */
+    /* Hold logo source */
     public giddhLogoSrc: string = '';
+    /* Hold domain url */
+    public giddhDomainUrl: string = "";
+    /* Hold image path */
+    public imgPath: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -100,7 +104,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig
     ) {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || (this.serviceConfig.AppUrl || AppUrl)) + APP_FOLDER;
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -152,7 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
@@ -499,7 +505,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public async appleLogin(): Promise<void> {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         // Safely retrieve properties from whiteLabel
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         const CLIENT_ID = "com.giddh.appsignin.client"
         const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : `http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
