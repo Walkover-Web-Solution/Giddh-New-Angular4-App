@@ -155,7 +155,8 @@ export class ServiceModule {
                 VoucherService,
                 VouchersUtilityService,
                 CountryCodeService,
-                EnvironmentService
+                EnvironmentService,
+                CountryCodeService
             ]
         };
     }

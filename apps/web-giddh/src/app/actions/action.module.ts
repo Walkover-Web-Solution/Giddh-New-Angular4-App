@@ -97,8 +97,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
 })
 export class ActionModule {
     public static forRoot(): ModuleWithProviders<ActionModule> {
-        console.log("called");
-
         return {
             ngModule: ActionModule,
             providers: []

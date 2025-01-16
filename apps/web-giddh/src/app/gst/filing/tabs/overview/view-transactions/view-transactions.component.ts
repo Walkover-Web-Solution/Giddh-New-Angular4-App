@@ -1,5 +1,5 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject,ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,7 +20,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
-
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 export const filterTransaction = {
     entityType: '',
     type: '',
@@ -87,6 +87,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private breakpointObserver: BreakpointObserver,
+        @Inject(ServiceConfig) private serviceConfig,
         private receiptService: ReceiptService) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -136,7 +137,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             { label: this.localeData?.unregistered, value: 'unregistered' }
         ];
 
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;

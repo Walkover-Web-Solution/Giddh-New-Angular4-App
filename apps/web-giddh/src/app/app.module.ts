@@ -38,10 +38,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
-
 // Get white label configuration from localStorage
 let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
-console.log(whiteLabelConfig)
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     {
@@ -49,7 +47,7 @@ const APP_PROVIDERS = [
         useValue: IS_ELECTRON_WA
             ? './'
             : whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.giddhWhiteLabel.domainName
-                ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/`
+                ? `http://localhost:3000/` + APP_FOLDER
                 : AppUrl + APP_FOLDER
     }
 ];
@@ -77,8 +75,6 @@ localStorage.setItem("Country-Region",
         giddhRegion === "AE" ? "AE" :
             giddhRegion === "IN" ? "IN" : "GL"
 );
-
-console.log('WhiteLabel Config: ', whiteLabelConfig);
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -118,19 +114,23 @@ console.log('WhiteLabel Config: ', whiteLabelConfig);
         MatButtonModule,
         LoaderModule,
         PageModule,
-         ...CONDITIONAL_IMPORTS
+        ...CONDITIONAL_IMPORTS
     ],
     providers: [
         {
             provide: ServiceConfig,
             useValue: {
                 apiUrl: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` : (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-                appUrl: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-                PORTAL_URL: whiteLabelConfig ? `prince.dilpreet.com/` : Configuration.PORTAL_URL,
-                OTP_WIDGET_ID: whiteLabelConfig ? `https://${whiteLabelConfig.otpWidgetId}/` : Configuration.OTP_WIDGET_ID,
-                OTP_TOKEN_AUTH: whiteLabelConfig ? `https://${whiteLabelConfig.otpWidgetToken}/` : Configuration.OTP_TOKEN_AUTH,
-                GOOGLE_CLIENT_ID: whiteLabelConfig ? `https://${whiteLabelConfig.googleClientId}/` : Configuration.GOOGLE_CLIENT_ID,
-                GOOGLE_CLIENT_SECRET: whiteLabelConfig ? `https://${whiteLabelConfig.googleClientSecret}/` : Configuration.GOOGLE_CLIENT_SECRET,
+                appUrl: whiteLabelConfig ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
+                PORTAL_URL: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.portalDomain}/` : Configuration.PORTAL_URL,
+                OTP_WIDGET_ID: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetId}` : Configuration.OTP_WIDGET_ID,
+                OTP_TOKEN_AUTH: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetToken}` : Configuration.OTP_TOKEN_AUTH,
+                GOOGLE_CLIENT_ID: whiteLabelConfig ? `${whiteLabelConfig.body.googleClientId}/` : Configuration.GOOGLE_CLIENT_ID,
+                GOOGLE_CLIENT_SECRET: whiteLabelConfig ? `${whiteLabelConfig.body.googleClientSecret}` : Configuration.GOOGLE_CLIENT_SECRET,
+                ApiUrl: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` : (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+                AppUrl: whiteLabelConfig ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
+                OTP_WIDGET_ID_NEW: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetIdNew}` : '33686b716134333831313239',
+                OTP_TOKEN_AUTH_NEW: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetTokenNew}` : '205968TmXguUAwoD633af103P1',
                 _
             }
         },

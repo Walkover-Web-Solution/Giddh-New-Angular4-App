@@ -1,5 +1,5 @@
 import { GstOverViewRequest, GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -8,6 +8,7 @@ import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 interface SequenceConfig {
     name: string;
@@ -49,7 +50,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
         this.gstr2OverviewData$ = this.store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -61,8 +62,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.gstr1OverviewData$.subscribe(data => {
             if (this.selectedGst === GstReport.Gstr1) {
                 this.gstrOverviewData = data;
