@@ -38,43 +38,40 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
-// Get white label configuration from localStorage
-let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
+
+// Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    {
-        provide: APP_BASE_HREF,
-        useValue: IS_ELECTRON_WA
-            ? './'
-            : whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.giddhWhiteLabel.domainName
-                ? `http://localhost:3000/` + APP_FOLDER
-                : AppUrl + APP_FOLDER
-    }
+    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
 ];
 
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
+
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
     return localStorageSync({ keys: ['session', 'permission', 'branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
-
 if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 
-// Determine giddh region from cookie and set Country-Region in localStorage
 let giddhRegion = document.cookie
     .split('; ')
     .find(cookie => cookie.startsWith('giddh_region='))
-    ?.split('=')[1]?.toUpperCase() || 'GL';
+    ?.split('=')[1];
+giddhRegion = giddhRegion?.toUpperCase();
 
-localStorage.setItem("Country-Region",
-    giddhRegion === "UK" ? "GB" :
-        giddhRegion === "AE" ? "AE" :
-            giddhRegion === "IN" ? "IN" : "GL"
-);
+if (giddhRegion === "UK") {
+    localStorage.setItem("Country-Region", "GB");
+} else if (giddhRegion === "AE") {
+    localStorage.setItem("Country-Region", "AE");
+} else if (giddhRegion === "IN") {
+    localStorage.setItem("Country-Region", "IN");
+} else {
+    localStorage.setItem("Country-Region", "GL");
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -86,6 +83,9 @@ localStorage.setItem("Country-Region",
         AppLoginSuccessComponent,
         MobileRestrictedComponent,
     ],
+    /**
+     * Import Angular's modules.
+     */
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -116,37 +116,28 @@ localStorage.setItem("Country-Region",
         PageModule,
         ...CONDITIONAL_IMPORTS
     ],
+    /**
+     * Expose our Services and Providers into Angular's dependency injection.
+     * enableTracing: true,
+     */
     providers: [
-        {
-            provide: ServiceConfig,
-            useValue: {
-                apiUrl: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` : (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-                appUrl: whiteLabelConfig ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-                PORTAL_URL: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.portalDomain}/` : Configuration.PORTAL_URL,
-                OTP_WIDGET_ID: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetId}` : Configuration.OTP_WIDGET_ID,
-                OTP_TOKEN_AUTH: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetToken}` : Configuration.OTP_TOKEN_AUTH,
-                GOOGLE_CLIENT_ID: whiteLabelConfig ? `${whiteLabelConfig.body.googleClientId}/` : Configuration.GOOGLE_CLIENT_ID,
-                GOOGLE_CLIENT_SECRET: whiteLabelConfig ? `${whiteLabelConfig.body.googleClientSecret}` : Configuration.GOOGLE_CLIENT_SECRET,
-                ApiUrl: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` : (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-                AppUrl: whiteLabelConfig ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-                OTP_WIDGET_ID_NEW: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetIdNew}` : '33686b716134333831313239',
-                OTP_TOKEN_AUTH_NEW: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetTokenNew}` : '205968TmXguUAwoD633af103P1',
-                _
-            }
-        },
         environment.ENV_PROVIDERS,
         APP_PROVIDERS,
         WindowRef,
         {
+            provide: ServiceConfig,
+            useValue: { apiUrl: localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+        },
+        {
             provide: HTTP_INTERCEPTORS,
             useClass: GiddhHttpInterceptor,
             multi: true
-        },
-        {
+        }, {
             provide: ErrorHandler,
             useClass: ExceptionLogService
         },
         CustomPreloadingStrategy
     ]
 })
-export class AppModule { }
+export class AppModule {
+}

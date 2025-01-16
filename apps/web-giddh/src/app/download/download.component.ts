@@ -34,10 +34,10 @@ export class DownloadComponent implements OnInit, OnDestroy {
      * @memberof DownloadBulkInvoiceComponent
      */
     public ngOnInit(): void {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
-        this.giddhDomainUrl = `http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        this.giddhDomainUrl = `http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.url) {

@@ -72,6 +72,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
     /* Hold giddh logo source */
     public giddhLogoSrc: string = '';
+    /* Hold domain url */
+    public giddhDomainUrl: string = "";
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: UntypedFormBuilder,
@@ -87,6 +91,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         private generalService : GeneralService
     ) {
         this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER;
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -132,8 +137,9 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this.fb.group({

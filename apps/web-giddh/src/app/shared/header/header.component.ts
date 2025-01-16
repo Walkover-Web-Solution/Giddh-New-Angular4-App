@@ -310,7 +310,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         @Inject(ServiceConfig) private serviceConfig
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
         // Reset old stored application date
