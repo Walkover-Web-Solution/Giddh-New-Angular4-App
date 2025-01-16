@@ -27,6 +27,7 @@ import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { GeneralService } from "../services/general.service";
+import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
 
@@ -82,9 +83,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
         private ngZone: NgZone,
+        @Inject(ServiceConfig) private serviceConfig,
         private generalService : GeneralService
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -361,11 +363,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         let configuration = {
-            widgetId: OTP_WIDGET_ID,
-            tokenAuth: OTP_TOKEN_AUTH,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
             success: (data: any) => {
-                this.ngZone.run(() => {console.log('signup data',data);
-
+                this.ngZone.run(() => {
                     this.initiateSignup(data);
                 });
             },
@@ -399,10 +400,7 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @memberof SignupComponent
      */
     private initiateSignup(data: any): void {
-        console.log('initiateSingup method', data);
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log('Singup method', response);
-
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
             } else {

@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, pipe, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef, Inject } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -31,6 +31,7 @@ import { SettingIntegrationComponentStore } from './utility/setting.integration.
 import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { BankIntegrationComponent } from '../../shared/bank-integration/bank-integration.component';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'setting-integration',
@@ -221,13 +222,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         public dialog: MatDialog,
         private activateRoute: ActivatedRoute,
         private commonAction: CommonActions,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetectionRef: ChangeDetectorRef,
         private componentStore: SettingIntegrationComponentStore
 
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl)))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
@@ -241,11 +243,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         let companyUniqueName = this.generalService.companyUniqueName;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
+        this.apiUrl = `${(this.serviceConfig.ApiUrl || ApiUrl) }company/${companyUniqueName}/imports/tally-import`;
 
         // getting all page data of integration page
         this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {

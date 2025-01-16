@@ -70,7 +70,6 @@ import { BulkVoucherExportService } from "./bulkvoucherexport.service";
 import { CustomFieldsService } from "./custom-fields.service";
 import { VoucherService } from "./voucher.service";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
-import { EnvironmentService } from "./enviroment.service";
 import { CountryCodeService } from './country-code.service';
 
 /**
@@ -154,7 +153,6 @@ export class ServiceModule {
                 LedgerService,
                 VoucherService,
                 VouchersUtilityService,
-                EnvironmentService,
                 CountryCodeService
             ]
         };

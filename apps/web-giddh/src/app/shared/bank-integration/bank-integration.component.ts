@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -20,6 +20,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: 'bank-integration',
@@ -96,6 +97,7 @@ export class BankIntegrationComponent implements OnInit {
         private _companyActions: CompanyActions,
         private router: Router,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService,
         private settingsPermissionActions: SettingsPermissionActions,
         private activateRoute: ActivatedRoute,
@@ -171,7 +173,7 @@ export class BankIntegrationComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {

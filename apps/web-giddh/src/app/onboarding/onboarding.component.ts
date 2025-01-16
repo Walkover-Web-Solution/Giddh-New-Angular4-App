@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '../services/general.service';
 import { takeUntil } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OnboardingComponentStore } from './utility/onboarding.store';
 import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
+import { ServiceConfig } from '../services/service.config';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private router: Router,
         private generalService: GeneralService,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
         private componentStore: OnboardingComponentStore
@@ -75,7 +77,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {

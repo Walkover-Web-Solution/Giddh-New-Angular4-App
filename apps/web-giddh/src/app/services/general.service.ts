@@ -361,9 +361,10 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
+        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
+            if ((whiteLabelDomainsAllowed?.emailDomains ||JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ViewChild, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -18,6 +18,7 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 import { GeneralService } from '../../services/general.service';
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { IForceClear } from '../../models/api-models/Sales';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'payment-aside',
@@ -144,6 +145,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private companyService: CompanyService,
         private toaster: ToasterService,
         private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsIntegrationService: SettingsIntegrationService
     ) {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
@@ -168,7 +170,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);

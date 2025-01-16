@@ -1,8 +1,10 @@
 import { InjectionToken } from '@angular/core';
 
 export interface IServiceConfigArgs {
-    appUrl: string;
     apiUrl: string;
+    appUrl:string
+    ApiUrl: string;
+    AppUrl: string;
     PORTAL_URL: string;
     GOOGLE_CLIENT_ID: string;
     GOOGLE_CLIENT_SECRET: string;

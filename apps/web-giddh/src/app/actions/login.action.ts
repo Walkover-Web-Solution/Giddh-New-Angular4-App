@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { sortBy } from '../lodash-optimized';
 import { COMMON_ACTIONS } from './common.const';
 import { AppState } from '../store';
-import { Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -32,6 +32,7 @@ import { ROUTES } from '../routes-array';
 import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
 import { LocaleService } from '../services/locale.service';
 import { COUNTRY_REGION_MAP } from '../app.constant';
+import { ServiceConfig } from '../services/service.config';
 
 @Injectable()
 export class LoginActions {
@@ -158,8 +159,6 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyEmailResponce),
             map((action: CustomActions) => {
-                console.log(action);
-
                 let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action?.payload;
                 if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -351,7 +350,7 @@ export class LoginActions {
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
-                    window.location.href = AppUrl + 'login/';
+                    window.location.href = (this.serviceConfig.AppUrl || AppUrl) + 'login/';
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -575,8 +574,6 @@ export class LoginActions {
                             this._toaster.successToast(action.payload.body?.text, action.payload.code);
                         }
                     } else if (action.payload.body?.user?.isVerified) {
-                        console.log('yes',action);
-
                         return this.LoginSuccess();
                     }
                 } else {
@@ -656,7 +653,8 @@ export class LoginActions {
         private _dbService: DbService,
         private settingsProfileActions: SettingsProfileActions,
         private zone: NgZone,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
     }
 
@@ -787,8 +785,6 @@ export class LoginActions {
     }
 
     public LoginSuccess(response?: any, isSocialLogin?: boolean): CustomActions {
-        console.log('LoginSuccess',response,isSocialLogin);
-
         if (response && response.body && response.body.session) {
             this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
         }
@@ -908,8 +904,6 @@ export class LoginActions {
     }
 
     public LoginWithPasswdRequest(value: LoginWithPassword): CustomActions {
-        console.log(value);
-
         return {
             type: LoginActions.LoginWithPasswdRequest,
             payload: value
@@ -917,7 +911,6 @@ export class LoginActions {
     }
 
     public LoginWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, LoginWithPassword>): CustomActions {
-        console.log('value', value);
         return {
             type: LoginActions.LoginWithPasswdResponse,
             payload: value

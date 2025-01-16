@@ -28,6 +28,7 @@ import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 import { GeneralService } from "../services/general.service";
+import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
 
@@ -96,9 +97,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private ngZone: NgZone,
         private commonAction: CommonActions,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || (this.serviceConfig.AppUrl || AppUrl)) + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -150,8 +152,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        console.log('Login',ApiUrl, GOOGLE_CLIENT_ID, AppUrl, GOOGLE_CLIENT_SECRET, PORTAL_URL, OTP_TOKEN_AUTH, OTP_WIDGET_ID);
-
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo;
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
@@ -442,14 +442,11 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public signInWithOtp(): void {
         this.loaderService.show();
-        console.log('configuration', OTP_WIDGET_ID, OTP_TOKEN_AUTH);
-
         let configuration = {
-            widgetId: OTP_WIDGET_ID,
-            tokenAuth: OTP_TOKEN_AUTH,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID ,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
             success: (data: any) => {
                 this.ngZone.run(() => {
-                    console.log('signInWithOtp',data);
 
                     this.initiateLogin(data);
                 });
@@ -484,11 +481,7 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @memberof LoginComponent
      */
     private initiateLogin(data: any): void {
-        console.log('initiateLogin method',data);
-
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log('loginWithOtp', response);
-
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
             } else {

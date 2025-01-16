@@ -56,9 +56,9 @@ const phpScript = `<?php
 // JavaScript to append to index.html
 const whiteLabelScript = `
 <script>
-    var response = "<?php echo $response ?>";
+    var response = '<?php echo json_encode($response) ?>';
     if (response) {
-        localStorage.setItem('whiteLabel', response);
+        localStorage.setItem('whiteLabel', response.slice(1,-1));
     }
 </script>
 `;
