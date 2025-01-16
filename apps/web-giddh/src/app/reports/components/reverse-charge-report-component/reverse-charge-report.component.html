@@ -96,7 +96,7 @@
                     matSort 
                     [dataSource]="reverseChargeReportResults?.items"  
                     (matSortChange)="sortChange($event)"
-                    [hidden]="!(reverseChargeReportResults?.items?.length || isSearching)"
+                    [hidden]="isLoading || isSearching || !reverseChargeReportResults?.items?.length"
                 >
                     <!-- Index Column -->
                     <ng-container matColumnDef="index">
@@ -258,7 +258,7 @@
                 <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
             
             </div>
-            <div class="pagination-wrapper mt-1" [hidden]="isLoading" *ngIf="reverseChargeReportResults.totalPages > 1">
+            <div [hidden]="isLoading" *ngIf="!isLoading && reverseChargeReportResults.totalPages > 1">
                 <mat-paginator
                     (page)="pageChanged($event)"
                     [length]="reverseChargeReportResults.totalItems"

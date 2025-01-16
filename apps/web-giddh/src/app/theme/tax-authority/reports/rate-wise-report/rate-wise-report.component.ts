@@ -31,7 +31,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     /** Holds pagination request  */
     public pagination: IPagination = {
         page: 1,
-        count: this.pageSizeOptions[0],
+        count: this.pageSizeOptions[2],
         totalItems: null,
         totalPages: null
     };

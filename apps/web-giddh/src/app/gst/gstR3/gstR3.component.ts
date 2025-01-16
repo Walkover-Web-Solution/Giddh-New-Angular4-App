@@ -610,8 +610,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
-            this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
-            this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr2, request));
             this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr3b, request));
         }
     }

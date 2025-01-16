@@ -51,6 +51,7 @@
                             <textarea
                                 matInput
                                 class="form-control"
+                                [ngClass]="{'mr-b15': (currentVoucherFilter === 'invoices' && voucherApiVersion === 2)}"
                                 #emailList
                                 [placeholder]="localeData?.enter_email_addresses"
                             ></textarea>
@@ -59,7 +60,7 @@
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
 
-                            <div class="mr-t15 text-right">
+                            <div class="mr-t15">
                                 <button
                                     [disabled]="
                                         !emailList?.value ||
@@ -80,7 +81,7 @@
                             <ng-template [ngIf]="currentVoucherFilter === 'invoices' && voucherApiVersion === 2">
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
-                            <div class="mr-t15 text-right">
+                            <div [ngClass]="{'mr-t15': (currentVoucherFilter === 'invoices' && voucherApiVersion === 2)}">
                                 <button
                                     type="button"
                                     mat-stroked-button
@@ -143,7 +144,7 @@
 <!-- Invoice Copy Options (checkbox) -->
 <ng-template #invoiceCopyOptions>
     <div>
-        <h3 class="font-15 mr-t15 mr-b15">{{ localeData?.invoice_copy }}</h3>
+        <h3 class="font-15 mr-b15">{{ localeData?.invoice_copy }}</h3>
         <mat-divider></mat-divider>
         <div>
             <mat-checkbox color="primary" value="Original" checked (change)="onSelectInvoiceCopy($event)">{{

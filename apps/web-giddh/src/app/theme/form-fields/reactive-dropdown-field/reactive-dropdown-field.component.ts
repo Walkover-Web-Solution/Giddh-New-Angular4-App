@@ -115,12 +115,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.dynamicSearchedQuery.emit(search);
                 if (!search) {
                     this.onClear.emit({ label: "", value: "" });
+                    this.clearSearchAndControlValue();
                 }
             });
         } else {
             this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
                 if (!search) {
                     this.onClear.emit({ label: "", value: "" });
+                    this.clearSearchAndControlValue();
                 }
                 this.fieldFilteredOptions$ = this.filterOptions(String(search));
                 this.changeDetection.detectChanges();
@@ -156,6 +158,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
+        if (filteredOptions.length === 0) {
+            this.clearSearchAndControlValue();
+        }
         return of(filteredOptions);
     }
 
@@ -277,5 +282,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         setTimeout(() => {
             this.selectField?.nativeElement?.focus();
         }, 10);
+    }
+
+    /**
+     * Use to clear search and control value
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private clearSearchAndControlValue(): void {
+        this.writeValue("");
     }
 }
