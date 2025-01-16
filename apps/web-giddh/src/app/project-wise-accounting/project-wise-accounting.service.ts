@@ -159,7 +159,7 @@ export class ProjectAccountingService {
     }
 
     public createEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model.data), payload)
+        return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -170,7 +170,7 @@ export class ProjectAccountingService {
     }
 
     public removeEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
-        return this.http.delete(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model.data), payload)
+        return this.http.deleteWithBody(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -193,6 +193,17 @@ export class ProjectAccountingService {
 
     public searchEntry(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.ENTRY_SEARCH, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public getAllEntryList(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_ENTRY, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;

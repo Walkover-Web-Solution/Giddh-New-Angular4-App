@@ -16,6 +16,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { cloneDeep } from '../../lodash-optimized';
 
 
 
@@ -92,7 +93,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 this.setDefaultProject();
             }
         });
-        this.universalDate$ = this.componentStore.universalDate$;
     }
 
     public ngOnInit() {
@@ -129,15 +129,16 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.universalDate$.subscribe(dateObj => {
+        this.componentStore.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
+        
         this.componentStore.removeProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(deleteProject => {
             if (deleteProject) {
                 console.log(deleteProject);

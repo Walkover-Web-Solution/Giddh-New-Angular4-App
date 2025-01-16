@@ -7,6 +7,7 @@ import { BaseResponse } from "../models/api-models/BaseResponse";
 import { ProjectAccountingService } from "./project-wise-accounting.service";
 import { LocaleService } from "../services/locale.service";
 import { AppState } from "../store";
+import { SearchService } from "../services/search.service";
 
 export interface ProjectAccountingState {
     isFetchingProjects: boolean;
@@ -21,6 +22,8 @@ export interface ProjectAccountingState {
     entryUpdateSuccess: any;
     entryDeleteSuccess: any;
     entrySearch: any;
+    accountSearch: any;
+    entryList: any;
 }
 
 export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
@@ -36,6 +39,8 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
     entryUpdateSuccess: null,
     entryDeleteSuccess: null,
     entrySearch: null,
+    accountSearch: null,
+    entryList: null,
 };
 
 @Injectable()
@@ -43,6 +48,7 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
 
     constructor(private toasterService: ToasterService,
         private projectAccountingService: ProjectAccountingService,
+        private searchService: SearchService,
         private store: Store<AppState>) {
         super(DEFAULT_PROJECT_ACCOUNTING_STATE);
     }
@@ -62,6 +68,8 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
     public entryUpdateSuccess$ = this.select((state) => state.entryUpdateSuccess);
     public entryDeleteSuccess$ = this.select((state) => state.entryDeleteSuccess);
     public entrySearch$ = this.select((state) => state.entrySearch);
+    public accountSearch$ = this.select((state) => state.accountSearch);
+    public entryList$ = this.select((state) => state.entryList);
 
     /**
      * Creates a new project and updates the state.
@@ -240,7 +248,7 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Entry delete successfully');
-                                this.patchState({ isEntryProgress: false, entryDeleteSuccess: res.body });
+                                this.patchState({ isEntryProgress: false, entryDeleteSuccess: { index: req.index, body: res.body } });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
                                 this.patchState({ isEntryProgress: false, entryDeleteSuccess: null });
@@ -265,7 +273,7 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Entry delete successfully');
+                                this.toasterService.showSnackBar('success', 'Entry update successfully');
                                 this.patchState({ isEntryProgress: false, entryUpdateSuccess: res.body });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
@@ -308,6 +316,57 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
             })
         );
     });
+
+    readonly getProjectAccount = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ accountSearch: null });
+                return this.searchService.searchAccountV3(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({ accountSearch: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ accountSearch: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ accountSearch: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getAllEnteryList = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isFetchingProjects: true, entryList: null });
+                return this.projectAccountingService.getAllEntryList(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({ isFetchingProjects: false, entryList: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ isFetchingProjects: false, entryList: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ isFetchingProjects: false, entryList: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
     /**
      * Lifecycle hook for component destroy
      *

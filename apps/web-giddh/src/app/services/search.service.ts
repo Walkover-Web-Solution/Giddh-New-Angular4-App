@@ -131,6 +131,8 @@ export class SearchService {
      * @memberof SearchService
      */
     public searchAccountV3(params: any): Observable<any> {
+        console.log("params----",params);
+        
         const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V3}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         if (params) {
@@ -144,6 +146,7 @@ export class SearchService {
                 }
             });
         }
+        console.log("params----",params);
         return this.http.get(contextPath)
             .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
     }
