@@ -27,6 +27,7 @@ import { SharedModule } from '../shared/shared.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         BsDropdownModule.forRoot(),
         SharedModule,
         GiddhPageLoaderModule,
-        NoDataModule
+        NoDataModule,
+        FinancialReportsModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

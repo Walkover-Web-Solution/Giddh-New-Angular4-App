@@ -115,3 +115,27 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
         width: fit-content;
     }
 }
+
+// Add class editable-table to the table to make the form fields border invisible when the row is not active (hovered)
+table {
+    &.editable-table {
+        tbody {
+            tr {
+                &:not(.active-row) {
+                    td {
+                        mat-form-field {
+                            mat-label,
+                            .dropdown-bg,
+                            .mdc-notched-outline {
+                                visibility: hidden;
+                            }
+                        }
+                        .editable-table-hide-element {
+                            visibility: hidden;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

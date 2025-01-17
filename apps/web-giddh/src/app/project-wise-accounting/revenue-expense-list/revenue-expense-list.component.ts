@@ -95,6 +95,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     };
     /** Observable for fetching projects */
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
+    public activeRowIndex: number = -1;
 
     constructor(
         private generalService: GeneralService,

@@ -9,185 +9,201 @@
             <mat-tab label="Expense"> 
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
-            <mat-tab label="Profit and Loss"> 
-                <profit-loss [selectedCompany]="activeCompany"></profit-loss>
+            <mat-tab label="Profit and Loss">
+                <div class="pd-15">
+                    <profit-loss [selectedCompany]="activeCompany"></profit-loss>
+                </div>
             </mat-tab>
         </mat-tab-group>
     </div>
 </ng-container>
 
 <ng-template #commonTemplateForIncomeAndExpense>
-    <div class="d-flex align-items-center justify-content-space-between section-center pd-15">
-        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-            <input type="text" name="selectedDateRange"
-                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                class="giddh-datepicker date-range-picker" />
-        </div>
-        <div>
-            <span>Total Revenue : {{totalResults}}</span>&nbsp;&nbsp;
-            <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
-                {{ commonLocaleData?.app_back }}
-            </button>
-        </div>
-    </div>
-    <giddh-page-loader *ngIf="(isFetchingProjects$ | async)">
-    </giddh-page-loader>
-    <div class="table-responsive bd-rt " *ngIf="!(isFetchingProjects$ | async)">
-        <table class="table entry-table">
-            <thead>
-                <tr>
-                    <th class="text-left">Select Account</th>
-                    <th class="text-left">Select Entry</th>
-                    <th class="text-left">Select Method</th>
-                    <th class="text-left">Amount</th>
-                    <th class="text-left">Action</th>
-                </tr>
-                <tr [formGroup]="createAccountEntryForm">
-                    <td>
-                        <reactive-dropdown-field 
-                            [label]="'Search Account'" 
-                            [placeholder]="'Select'"
-                            [options]="accountSearchResponse"
-                            [labelValue]="createAccountEntryForm?.get('account')?.value"
-                            formControlName="accountUniqueName" 
-                            [enableDynamicSearch]="true"
-                            [isPaginationEnabled]="true" 
-                            (scrollEnd)="handleSearchAccountScrollEnd()"
-                            (dynamicSearchedQuery)="searchAccount($event)"
-                            (selectedOption)="selectAccount($event)"
-                            (onClear)="createAccountEntryForm?.get('account')?.patchValue(null)"
-                        >
-                        </reactive-dropdown-field>
-                    </td>
-                    <td>
-                        <reactive-dropdown-field 
-                            [label]="'Search Entry'" 
-                            [placeholder]="'Select'"
-                            [options]="entrySearchResponse"
-                            [labelValue]="createAccountEntryForm?.get('entry')?.value" 
-                            formControlName="entryUniqueName"
-                            [enableDynamicSearch]="true" 
-                            [isPaginationEnabled]="true"
-                            (scrollEnd)="handleSearchEntryScrollEnd()"
-                            (dynamicSearchedQuery)="searchEntry($event)"
-                            (selectedOption)="createAccountEntryForm?.get('entry')?.patchValue($event.label)"
-                            (onClear)="createAccountEntryForm?.get('entry')?.patchValue(null)"
-                        >
-                        </reactive-dropdown-field>
-                    </td>
-
-                    <td>
-                        <reactive-dropdown-field 
-                            [label]="'Search Method'" 
-                            [placeholder]="'Select'"
-                            [options]="selectMethod" 
-                            [labelValue]="createAccountEntryForm?.get('calculationMethod')?.value"
-                            formControlName="calculationMethod"
-                            (onClear)="createAccountEntryForm?.get('calculationMethod')?.patchValue(null)"
-                        >
-                        </reactive-dropdown-field>
-                    </td>
-                    <td>
-                        <input-field 
-                            [name]="'amount'" 
-                            [type]="'number'" 
-                            [label]="'amount'"
-                            [placeholder]="'amount'" 
-                            formControlName="value">
-                        </input-field>
-                    </td>
-                    <td class="text-center">
-                        <button mat-raised-button color="primary" (click)="createEntry()">Save</button>
-                    </td>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
-                    <ng-container formArrayName="entryList">
-                        <ng-container
-                            *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
-                            <tr [formGroupName]="i">
-                                <td>
-                                    <reactive-dropdown-field 
-                                        [label]="'Search Account'" 
-                                        [placeholder]="'Select'"
-                                        [labelValue]="entry.get('account')?.value"
-                                        [options]="accountSearchResponse"
-                                        formControlName="accountUniqueName" 
-                                        [enableDynamicSearch]="true"
-                                        [isPaginationEnabled]="true" 
-                                        (scrollEnd)="handleSearchAccountScrollEnd()"
-                                        (dynamicSearchedQuery)="searchAccount($event)"
-                                        (onClear)="entry.get('accountUniqueName').patchValue(null); entry.get('entryUniqueName').patchValue(null) ; entry.get('entry').patchValue(null)"
-                                        (selectedOption)="entry.get('account').patchValue($event.label)">
-                                    </reactive-dropdown-field>
-                                </td>
-                                <td>
-                                    <reactive-dropdown-field 
-                                        [label]="'Search Entry'" 
-                                        [placeholder]="'Select'"
-                                        [labelValue]="entry.get('entry')?.value" 
-                                        [options]="entrySearchResponse"
-                                        formControlName="entryUniqueName" 
-                                        [enableDynamicSearch]="true"
-                                        [isPaginationEnabled]="true" 
-                                        (scrollEnd)="handleSearchEntryScrollEnd()"
-                                        (selectedOption)="entry.get('entry').patchValue($event.label)"
-                                        (onClear)="entry.get('entryUniqueName').patchValue(null)"
-                                        (dynamicSearchedQuery)="searchEntry($event)"
-                                        [disabled]="!entry.get('accountUniqueName').value"
-                                        [readonly]="!entry.get('accountUniqueName').value">
-                                    </reactive-dropdown-field>
-                                </td>
-
-                                <td>
-                                    <reactive-dropdown-field 
-                                        [label]="'Search Method'" 
-                                        [placeholder]="'Select'"
-                                        [labelValue]="entry.get('calculationMethod')?.value" 
-                                        [options]="selectMethod"
-                                        formControlName="calculationMethod"
-                                        [disabled]="!entry.get('entryUniqueName').value"
-                                        [readonly]="!entry.get('entryUniqueName').value"
-                                    >
-                                    </reactive-dropdown-field>
-                                </td>
-                                <td>
-                                    <input-field 
-                                        [name]="'amount'" 
-                                        [type]="'number'" 
-                                        [label]="'amount'"
-                                        [placeholder]="'amount'" 
-                                        formControlName="value"
-                                        [disabled]="!entry.get('entryUniqueName').value"
-                                        [readonly]="!entry.get('entryUniqueName').value"
-                                    >
-                                    </input-field>
-                                </td>
-                                <td class="text-center">
-                                    <button mat-raised-button color="primary" (click)="updateSingleEntry(i)">Update</button>
-                                    <span class="cursor-pointer" ><i (click)="deleteEntry(i)" color="primary" class="icon-trash font-16"></i></span>
-                                </td>
-                            </tr>
+    <div class="section-center pd-15">
+       <header class="d-flex align-items-center justify-content-space-between">
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <input type="text" name="selectedDateRange"
+                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                    class="giddh-datepicker date-range-picker" />
+            </div>
+            <div>
+                <span>Total Revenue : {{totalResults}}</span>&nbsp;&nbsp;
+                <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
+                    {{ commonLocaleData?.app_back }}
+                </button>
+            </div>
+       </header>
+        <giddh-page-loader *ngIf="(isFetchingProjects$ | async)">
+        </giddh-page-loader>
+        <div class="table-responsive mt-5" *ngIf="!(isFetchingProjects$ | async)">
+            <table class="table entry-table editable-table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Select Account</th>
+                        <th class="text-left">Select Entry</th>
+                        <th class="text-left">Select Method</th>
+                        <th class="text-left">Amount</th>
+                        <th class="text-left">Action</th>
+                    </tr>
+                    <tr [formGroup]="createAccountEntryForm">
+                        <td>
+                            <reactive-dropdown-field 
+                                [label]="'Search Account'" 
+                                [placeholder]="'Select'"
+                                [options]="accountSearchResponse"
+                                [labelValue]="createAccountEntryForm?.get('account')?.value"
+                                formControlName="accountUniqueName" 
+                                [enableDynamicSearch]="true"
+                                [isPaginationEnabled]="true" 
+                                (scrollEnd)="handleSearchAccountScrollEnd()"
+                                (dynamicSearchedQuery)="searchAccount($event)"
+                                (selectedOption)="selectAccount($event)"
+                                (onClear)="createAccountEntryForm?.get('account')?.patchValue(null)"
+                            >
+                            </reactive-dropdown-field>
+                        </td>
+                        <td>
+                            <reactive-dropdown-field 
+                                [label]="'Search Entry'" 
+                                [placeholder]="'Select'"
+                                [options]="entrySearchResponse"
+                                [labelValue]="createAccountEntryForm?.get('entry')?.value" 
+                                formControlName="entryUniqueName"
+                                [enableDynamicSearch]="true" 
+                                [isPaginationEnabled]="true"
+                                (scrollEnd)="handleSearchEntryScrollEnd()"
+                                (dynamicSearchedQuery)="searchEntry($event)"
+                                (selectedOption)="createAccountEntryForm?.get('entry')?.patchValue($event.label)"
+                                (onClear)="createAccountEntryForm?.get('entry')?.patchValue(null)"
+                            >
+                            </reactive-dropdown-field>
+                        </td>
+    
+                        <td>
+                            <reactive-dropdown-field 
+                                [label]="'Search Method'" 
+                                [placeholder]="'Select'"
+                                [options]="selectMethod" 
+                                [labelValue]="createAccountEntryForm?.get('calculationMethod')?.value"
+                                formControlName="calculationMethod"
+                                (onClear)="createAccountEntryForm?.get('calculationMethod')?.patchValue(null)"
+                            >
+                            </reactive-dropdown-field>
+                        </td>
+                        <td>
+                            <input-field 
+                                [name]="'amount'" 
+                                [type]="'number'" 
+                                [label]="'amount'"
+                                [placeholder]="'amount'" 
+                                formControlName="value">
+                            </input-field>
+                        </td>
+                        <td class="text-center">
+                            <button 
+                                mat-raised-button 
+                                color="primary" 
+                                (click)="createEntry()"
+                            >
+                            Save</button>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
+                        <ng-container formArrayName="entryList">
+                            <ng-container
+                                *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
+                                <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
+                                    <td>
+                                        <reactive-dropdown-field 
+                                            [label]="'Search Account'" 
+                                            [placeholder]="'Select'"
+                                            [labelValue]="entry.get('account')?.value"
+                                            [options]="accountSearchResponse"
+                                            formControlName="accountUniqueName" 
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true" 
+                                            (scrollEnd)="handleSearchAccountScrollEnd()"
+                                            (dynamicSearchedQuery)="searchAccount($event)"
+                                            (onClear)="entry.get('accountUniqueName').patchValue(null); entry.get('entryUniqueName').patchValue(null) ; entry.get('entry').patchValue(null)"
+                                            (selectedOption)="entry.get('account').patchValue($event.label)">
+                                        </reactive-dropdown-field>
+                                    </td>
+                                    <td>
+                                        <reactive-dropdown-field 
+                                            [label]="'Search Entry'" 
+                                            [placeholder]="'Select'"
+                                            [labelValue]="entry.get('entry')?.value" 
+                                            [options]="entrySearchResponse"
+                                            formControlName="entryUniqueName" 
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true" 
+                                            (scrollEnd)="handleSearchEntryScrollEnd()"
+                                            (selectedOption)="entry.get('entry').patchValue($event.label)"
+                                            (onClear)="entry.get('entryUniqueName').patchValue(null)"
+                                            (dynamicSearchedQuery)="searchEntry($event)"
+                                            [disabled]="!entry.get('accountUniqueName').value"
+                                            [readonly]="!entry.get('accountUniqueName').value">
+                                        </reactive-dropdown-field>
+                                    </td>
+    
+                                    <td>
+                                        <reactive-dropdown-field 
+                                            [label]="'Search Method'" 
+                                            [placeholder]="'Select'"
+                                            [labelValue]="entry.get('calculationMethod')?.value" 
+                                            [options]="selectMethod"
+                                            formControlName="calculationMethod"
+                                            [disabled]="!entry.get('entryUniqueName').value"
+                                            [readonly]="!entry.get('entryUniqueName').value"
+                                        >
+                                        </reactive-dropdown-field>
+                                    </td>
+                                    <td>
+                                        <input-field 
+                                            [name]="'amount'" 
+                                            [type]="'number'" 
+                                            [label]="'amount'"
+                                            [placeholder]="'amount'" 
+                                            formControlName="value"
+                                            [disabled]="!entry.get('entryUniqueName').value"
+                                            [readonly]="!entry.get('entryUniqueName').value"
+                                        >
+                                        </input-field>
+                                    </td>
+                                    <td class="position-relative text-center">
+                                        <span class="editable-table-hide-element">
+                                            <button mat-raised-button color="primary" (click)="updateSingleEntry(i)">Update</button>
+                                            <i (click)="deleteEntry(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-container>
                         </ng-container>
                     </ng-container>
-                </ng-container>
-                <div class="no-data" *ngIf="!totalResults">
-                    <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
-                </div>
-            </tbody>
-        </table>
-        <mat-paginator
-            *ngIf="!(isFetchingProjects$ | async)"
-            class="mt-3"
-            (page)="handlePageChange($event)"
-            [length]="totalResults"
-            [pageSize]="getProjectEntryListRequest.count"
-            [showFirstLastButtons]="true"
-            [pageSizeOptions]="pageSizeOptions"
-            [hidePageSize]="false"
-            [pageIndex]="getProjectEntryListRequest.page - 1"
-        ></mat-paginator>
+                    <tr>
+                        <td colspan="100%">
+                            <div class="no-data" *ngIf="!totalResults">
+                                <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+           
+            <mat-paginator
+                *ngIf="totalResults && (pageSizeOptions[0] > totalResults) && !(isFetchingProjects$ | async)"
+                class="mt-3"
+                (page)="handlePageChange($event)"
+                [length]="totalResults"
+                [pageSize]="getProjectEntryListRequest.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="getProjectEntryListRequest.page - 1"
+            ></mat-paginator>
+        </div>
     </div>
 </ng-template>
 

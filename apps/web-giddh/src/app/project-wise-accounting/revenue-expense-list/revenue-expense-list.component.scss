@@ -1,10 +1,18 @@
-.table-responsive{
-    max-width: var(--center-content-max-width);
-
-    .giddh-table {
-        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+.table-responsive {
+    table {
+        tbody {
+            tr {
+                td {
+                    border: none;
+                    &:last-child {
+                        padding-right: 25px;
+                    }
+                    .icon-trash {
+                        right: 0px;
+                        top: 22px;
+                    }                    
+                }
+            }
+        }
     }
-}
-.borderless-select {
-    border: none;
 }
