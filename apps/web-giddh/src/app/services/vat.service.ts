@@ -26,7 +26,7 @@ export class VatService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const apiEndPoint = countryCode === 'ZW' ? VAT_API.VIEW_ZW_REPORT : (countryCode === 'KE' ? VAT_API.VIEW_KENYA_REPORT : VAT_API.VIEW_REPORT);
 
-        let url = this.config.apiUrl + apiEndPoint;;
+        let url = this.config.apiUrl + apiEndPoint;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);

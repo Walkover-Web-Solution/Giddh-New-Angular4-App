@@ -51,12 +51,12 @@
                             <textarea
                                 matInput
                                 class="form-control"
-                                [ngClass]="{'mr-b15': (currentVoucherFilter === 'invoices' && voucherApiVersion === 2)}"
+                                [ngClass]="{'mr-b15': (currentVoucherFilter === invoicesEnum && voucherApiVersion === 2)}"
                                 #emailList
                                 [placeholder]="localeData?.enter_email_addresses"
                             ></textarea>
 
-                            <ng-template [ngIf]="currentVoucherFilter === 'invoices' && voucherApiVersion === 2">
+                            <ng-template [ngIf]="currentVoucherFilter === invoicesEnum && voucherApiVersion === 2">
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
 
@@ -64,7 +64,7 @@
                                 <button
                                     [disabled]="
                                         !emailList?.value ||
-                                        (currentVoucherFilter === 'invoices' && !invoiceType?.length)
+                                        (currentVoucherFilter === invoicesEnum && !invoiceType?.length)
                                     "
                                     type="button"
                                     mat-stroked-button
@@ -78,17 +78,17 @@
                     </mat-tab>
                     <mat-tab [label]="commonLocaleData?.app_download">
                         <div class="pd-2">
-                            <ng-template [ngIf]="currentVoucherFilter === 'invoices' && voucherApiVersion === 2">
+                            <ng-template [ngIf]="currentVoucherFilter === invoicesEnum && voucherApiVersion === 2">
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
-                            <div [ngClass]="{'mr-t15': (currentVoucherFilter === 'invoices' && voucherApiVersion === 2)}">
+                            <div [ngClass]="{'mr-t15': (currentVoucherFilter === invoicesEnum && voucherApiVersion === 2)}">
                                 <button
                                     type="button"
                                     mat-stroked-button
                                     color="primary"
                                     (click)="downloadInvoice()"
                                     [disabled]="
-                                        !invoiceType?.length && !isAttachment && currentVoucherFilter === 'invoices'
+                                        !invoiceType?.length && !isAttachment && currentVoucherFilter === invoicesEnum
                                     "
                                 >
                                     {{ localeData?.download_invoice }}
