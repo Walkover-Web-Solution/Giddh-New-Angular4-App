@@ -10,7 +10,7 @@
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
             <mat-tab label="Profit and Loss"> 
-                <!-- <profit-loss [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></profit-loss> -->
+                <profit-loss [selectedCompany]="activeCompany"></profit-loss>
             </mat-tab>
         </mat-tab-group>
     </div>
@@ -30,6 +30,8 @@
             </button>
         </div>
     </div>
+    <giddh-page-loader *ngIf="(isFetchingProjects$ | async)">
+    </giddh-page-loader>
     <div class="table-responsive bd-rt " *ngIf="!(isFetchingProjects$ | async)">
         <table class="table entry-table">
             <thead>

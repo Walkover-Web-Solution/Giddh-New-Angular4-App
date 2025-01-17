@@ -7,7 +7,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, delay } from 'rxjs';
 import { ProjectAccountingComponentStore } from '../project-wise-accounting.store';
-import { projectType } from '../project-wise-accounting';
+import { defaultParamType, projectType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
@@ -36,12 +36,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** Instance of bootstrap modal */
-    public getProjectEntryListRequest: any = {
-        count: 50,
-        page: 1
-    };
-    public defaultParamsValue: any = {
+    /** Request parameters for fetching project entries */
+    public getProjectEntryListRequest: any = { count: 50, page: 1 };
+    /** Default parameters for API requests */
+    public defaultParamsValue: defaultParamType = {
         companyUniqueName: '',
         projectUniqueName: '',
         branchUniqueName: '',
@@ -49,59 +47,54 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         from: '',
         category: ''
     };
+    /** Active company details */
     public activeCompany: any;
+    /** Reference to the modal instance */
     public modalRef: BsModalRef;
-    public activeTableRowIndex: number = null;
+    /** ReplaySubject to handle component's lifecycle */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public dataSource: any;
-    private isApiCallInProgress = false; // Flag to prevent multiple API calls
-    displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
-    /** Selected from date */
-    public page: number = 1;
-    /** Selected to date */
-    public count: number = 10;
-    /** Stock Transactional Object */
-    public searchRequest: any = {};
-    /** Stock search request */
-    public stockSearchRequest: any;
-    /** Form Group for invoice form */
+    /** Columns to be displayed in the table */
+    public displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
+    /** Form for creating a new account entry */
     public createAccountEntryForm: FormGroup;
-    /** Form Group for invoice form */
+    /** Form for managing the account entry list */
     public accountEntryListForm: FormGroup;
-    public accountSearchResponse: any = [];
+    /** Stores the search results for accounts */
+    public accountSearchResponse: any[] = [];
+    /** Stores the search results for entries */
     public entrySearchResponse: any;
-    /** Holds page Size Options for pagination */
+    /** Pagination options for the table */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
-    /** Holds Total Results Count */
+    /** Total number of results in the entry list */
     public totalResults: number = 0;
-    public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
+    /** Default result count for account searches */
+    public defaultCount = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
+    /** Index of the currently selected tab */
+    public selectedTabIndex: number = 0;
+    /** Income group categories */
     public incomeGroup: string = "revenuefromoperations,otherincome";
+    /** Expense group categories */
     public expenseGroup: string = "indirectexpenses,operatingcost";
+    /** Getter for the entry list form array */
     public get entryList(): FormArray {
         return this.accountEntryListForm.get('entryList') as FormArray;
     }
+    /** Options for selecting calculation method */
     public selectMethod = [
-        {
-            label: 'PERCENTAGE',
-            value: 'PERCENTAGE'
-        },
-        {
-            label: 'VALUE',
-            value: 'VALUE'
-        }
+        { label: 'PERCENTAGE', value: 'PERCENTAGE' },
+        { label: 'VALUE', value: 'VALUE' }
     ];
+    /** Request parameters for account searches */
     public accountSearchRequest: any = {
-        count: 200,
+        count: this.defaultCount,
         withStocks: false
     };
+    /** Request parameters for entry searches */
     public entrySearchRequest: any = {
-        count: 6
+        count: this.defaultCount
     };
-    public defaultCount = 6;     //ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
-    public category = "income";
-    /** Index of selected tab */
-    public selectedTabIndex: number = 0;
-
+    /** Observable for fetching projects */
+    public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
 
     constructor(
         private generalService: GeneralService,
@@ -112,7 +105,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         private router: Router
     ) { }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component and sets up subscriptions for reactive data streams.
+     *
+     * @memberof RevenueExpenseListComponent
+     */
+    public ngOnInit(): void {
         this.initCreateAccountEntryForm();
         this.initAccountEntryListForm();
         this.componentStore.universalDate$.subscribe(dateObj => {
@@ -137,6 +135,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
                     this.defaultParamsValue.category = params.module === 'revenue' ? "income" : "expenses"
                     this.accountSearchRequest.group = this.defaultParamsValue.category === "income" ? this.incomeGroup : this.expenseGroup;
+                    this.activeCompany = activeCompany;
                 }),
                 takeUntil(this.destroyed$)
             )
@@ -150,7 +149,6 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                         this.searchAccount();
                     }
                 }
-
             });
 
         this.componentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
@@ -181,13 +179,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.entryCreateSuccess$.pipe(takeUntil(this.destroyed$))
-            .subscribe(entryCreateSuccess => {
-                if (entryCreateSuccess) {
-                    this.accountEntryListForm.get('entryList')['controls'].push(this.initEntryListForm(this.createAccountEntryForm.value));
-                    this.createAccountEntryForm.reset();
-                }
-            });
+        this.componentStore.entryCreateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryCreateSuccess => {
+            if (entryCreateSuccess) {
+                this.accountEntryListForm.get('entryList')['controls'].push(this.initEntryListForm(this.createAccountEntryForm.value));
+                this.createAccountEntryForm.reset();
+            }
+        });
 
         this.componentStore.entryList$.pipe(takeUntil(this.destroyed$)).subscribe(entryList => {
             if (entryList) {
@@ -204,7 +201,6 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     }
                     this.accountEntryListForm.get('entryList')['controls'].push(this.initEntryListForm(requestObject));
                 });
-                this.isApiCallInProgress = true;
             }
         });
 
@@ -217,7 +213,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
 
     }
 
-
+    /**
+     * Initializes the form group for creating account entries with required fields.
+     *
+     * @private
+     * @memberof RevenueExpenseListComponent
+     */
     private initCreateAccountEntryForm(): void {
         this.createAccountEntryForm = this.formBuilder.group({
             account: ['', Validators.required],
@@ -229,13 +230,25 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         })
     }
 
-
-    public initAccountEntryListForm(data?: any): void {
+    /**
+     * Initializes the form group for managing the list of account entries.
+     *
+     * @param {any} [data] Optional data to pre-fill the form.
+     * @memberof RevenueExpenseListComponent
+     */
+    public initAccountEntryListForm(): void {
         this.accountEntryListForm = this.formBuilder.group({
             entryList: this.formBuilder.array([])
         })
     }
 
+    /**
+     * Initializes a form group for an individual account entry.
+     *
+     * @param {any} [data] Optional data to pre-fill the form.
+     * @returns {FormGroup} The initialized form group.
+     * @memberof RevenueExpenseListComponent
+     */
     public initEntryListForm(data?: any): FormGroup {
         return this.formBuilder.group({
             account: [data?.account ?? '', Validators.required],
@@ -247,24 +260,53 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Fetches a list of project entries based on the provided request parameters.
+     *
+     * @param {*} requestObject The request parameters for fetching project entries.
+     * @memberof RevenueExpenseListComponent
+     */
     public getProjectEntry(requestObject: any): void {
         this.componentStore.searchEntry(requestObject);
     }
 
-    public getProjectAccount(requestObject): void {
+    /**
+     * Fetches the list of accounts associated with a project.
+     *
+     * @param {*} requestObject The request parameters for fetching accounts.
+     * @memberof RevenueExpenseListComponent
+     */
+    public getProjectAccount(requestObject: any): void {
         this.componentStore.getProjectAccount(requestObject);
     }
 
+    /**
+     * Fetches the list of all entries for the current project and updates the UI.
+     *
+     * @memberof RevenueExpenseListComponent
+     */
     public getEntryList(): void {
         const requestObject = { ...this.defaultParamsValue, ...this.getProjectEntryListRequest };
         this.componentStore.getAllEnteryList(requestObject);
     }
+
+    /**
+     * Handles pagination for the entry list and fetches new data for the selected page.
+     *
+     * @param {*} event The pagination event.
+     * @memberof RevenueExpenseListComponent
+     */
     public handlePageChange(event: any): void {
         this.getProjectEntryListRequest.count = event.pageSize;
         this.getProjectEntryListRequest.page = event.pageIndex + 1;
         this.getEntryList();
     }
 
+    /**
+     * Handles infinite scroll for account search by fetching the next page of results.
+     *
+     * @memberof RevenueExpenseListComponent
+     */
     public handleSearchAccountScrollEnd(): void {
         if (this.accountSearchRequest.isLoading) {
             return;
@@ -274,7 +316,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public handleSearchEntryScrollEnd() {
+    /**
+     * Handles infinite scroll for entry search by fetching the next page of results.
+     *
+     * @memberof RevenueExpenseListComponent
+     */
+    public handleSearchEntryScrollEnd(): void {
         if (this.entrySearchRequest.isLoading) {
             return;
         }
@@ -283,6 +330,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Searches for accounts based on the query and updates the account search results.
+     *
+     * @param {string} [query=''] The search query.
+     * @param {number} [page=1] The page number for paginated results.
+     * @memberof RevenueExpenseListComponent
+     */
     public searchAccount(query: string = '', page: number = 1): void {
         if (this.accountSearchRequest.q !== query) {
             this.accountSearchResponse = [];
@@ -296,6 +350,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.getProjectAccount(requestObject);
     }
 
+    /**
+     * Searches for entries based on the query and updates the entry search results.
+     *
+     * @param {string} [query=''] The search query.
+     * @param {number} [page=1] The page number for paginated results.
+     * @memberof RevenueExpenseListComponent
+     */
     public searchEntry(query: string = '', page: number = 1): void {
         if (this.entrySearchRequest.q !== query) {
             this.entrySearchResponse = [];
@@ -308,6 +369,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.getProjectEntry(entryRequest);
     }
 
+    /**
+     * Selects an account from the account search results and updates the form.
+     *
+     * @param {*} event The selected account object.
+     * @memberof RevenueExpenseListComponent
+     */
     public selectAccount(event: any): void {
         if (event) {
             this.createAccountEntryForm.get('account')?.patchValue(event.label);
@@ -317,7 +384,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
+    /**
+     * Cleans up subscriptions and resources when the component is destroyed.
+     *
+     * @memberof RevenueExpenseListComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -357,7 +429,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public createEntry() {
+    /**
+     * Creates a new entry based on the form data and sends the payload to the service.
+     *
+     * @memberof RevenueExpenseListComponent
+     */
+    public createEntry(): void {
         let payload = cloneDeep(this.createAccountEntryForm.value);
         delete payload['account'];
         delete payload['entry'];
@@ -369,6 +446,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.componentStore.createNewEntry(requestObject);
     }
 
+    /**
+     * Deletes an entry at the specified index.
+     *
+     * @param {number} index The index of the entry to be deleted.
+     * @memberof RevenueExpenseListComponent
+     */
     public deleteEntry(index: number): void {
         const entryUniqueName = this.entryList.at(index).value.entryUniqueName;
         const requestObject = {
@@ -379,7 +462,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.componentStore.deleteEntry(requestObject);
     }
 
-    public updateSingleEntry(index: number) {
+    /**
+     * Updates an entry at the specified index with new form data.
+     *
+     * @param {number} index The index of the entry to be updated.
+     * @memberof RevenueExpenseListComponent
+     */
+    public updateSingleEntry(index: number): void {
         const payload = cloneDeep(this.entryList.at(index).value);
         const entryUniqueName = payload.entryUniqueName;
         delete payload['account']
@@ -393,7 +482,14 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.componentStore.updateEntry(requestObject);
     }
 
+    /**
+     * Handles tab changes and navigates to the corresponding route.
+     *
+     * @param {any} event The tab change event.
+     * @memberof RevenueExpenseListComponent
+     */
     public tabChanged(event: any): void {
+        this.totalResults = 0;
         const tab = event.tab.textLabel === "Revenue" ? "revenue" : event.tab.textLabel === "Expense" ? "expenses" : "profit-loss";
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }

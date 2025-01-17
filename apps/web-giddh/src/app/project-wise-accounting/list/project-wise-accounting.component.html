@@ -6,25 +6,22 @@
 
   <div *ngIf="(isFetchingProjects$ | async)">
     <giddh-page-loader></giddh-page-loader>
-</div>
+  </div>
    <div *ngIf="!(isFetchingProjects$ | async)" class="project clearfix section-center position-relative overflow-visible pd-2">
-      
       <div class="d-flex align-items-center justify-content-space-between section-center">
-        
-          <div *ngIf="dataSource.length" class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-              <input
-                matInput
-                type="text"
-                name="selectedDateRange"
-                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                class="giddh-datepicker date-range-picker"
-              />
-          </div>
-        
+        <div *ngIf="dataSource.length" class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+            <input
+              matInput
+              type="text"
+              name="selectedDateRange"
+              [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+              class="giddh-datepicker date-range-picker"
+            />
+        </div>
         <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!(isFetchingProjects$ | async) && !dataSource?.length">
           <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ Create project</button>
         </div>
-        <div class="pull-right" *ngIf="dataSource?.length && !isLoading">
+        <div class="pull-right" *ngIf="dataSource?.length">
             <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ Create project</button>
         </div>
       </div>

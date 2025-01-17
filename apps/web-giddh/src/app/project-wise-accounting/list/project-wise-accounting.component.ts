@@ -36,29 +36,28 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if get all discounts api call in progress */
-    public isLoading: boolean = false;
+    /** Data source of table */
     public dataSource: projectDetails[] = [];
+    /** Holds the request param from the url */
     public projectListRequest: projectType;
     /** Holds page Size Options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    /** Hold active company */
     public activeCompany: any;
     /** Instance for company list form */
     public companyListForm: FormGroup;
-    /** True, if  custom searching  is performed */
-    public showClearFilter: boolean = false;
     /** Holds Total Results Count */
     public totalResults: number = 0;
+    /** Observable for fetching projects */
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
+    /** ReplaySubject to handle component's lifecycle */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** If true, the project search box is displayed */
     public showProductSearch: boolean = false;
-    public get name(): FormControl {
-        return this.companyListForm.get('name') as FormControl
-    }
+    /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator: MatPaginator;
+    /** This will use for displayed table columns */
     public displayedColumns: string[] = ['position', 'name', 'archive_status', 'status', 'symbol', 'action'];
-    /** Universal date observer */
-    public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
@@ -77,6 +76,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Getter for the 'name' form control from the companyListForm. */
+    public get name(): FormControl {
+        return this.companyListForm.get('name') as FormControl
+    }
 
 
     constructor(
@@ -95,22 +98,20 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnInit() {
+    /**
+     * Lifecycle hook for component initialization.
+     *
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public ngOnInit(): void {
         this.initForm();
         this.getAllProjectList();
-        this.companyListForm.get('name').valueChanges.pipe(
-            debounceTime(700), takeUntil(this.destroyed$))
-            .subscribe((searchedText) => {
-                if (searchedText) {
-                    console.log("searchedText", searchedText);
-
-                    this.projectListRequest.q = searchedText;
-                    this.showClearFilter = true;
-                    this.getAllProjectList();
-                } else {
-                    this.showClearFilter = false;
-                }
-            });
+        this.companyListForm.get('name').valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((searchedText) => {
+            if (searchedText) {
+                this.projectListRequest.q = searchedText;
+                this.getAllProjectList();
+            }
+        });
 
         this.componentStore.projectsList$.pipe(takeUntil(this.destroyed$)).subscribe(projectList => {
             if (projectList) {
@@ -121,7 +122,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
 
         this.componentStore.projectProfitDetails$.pipe(takeUntil(this.destroyed$)).subscribe(profitandloss => {
             if (profitandloss) {
-                console.log(profitandloss);
                 this.dataSource.forEach((project) => {
                     if (project.uniqueName === profitandloss.uniqueName)
                         project.profitAndLoss = profitandloss.profitAndLoss;
@@ -129,7 +129,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.universalDate$.subscribe(dateObj => {
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -138,10 +138,9 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
-        
+
         this.componentStore.removeProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(deleteProject => {
             if (deleteProject) {
-                console.log(deleteProject);
                 this.dataSource = this.dataSource.filter((project) => {
                     if (project.uniqueName != deleteProject) {
                         return project;
@@ -152,16 +151,26 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * Adds a default profit and loss key to the project details.
+     *
+     * @private
+     * @param {projectDetails[]} response - The project details.
+     * @returns {projectDetails[]} - The updated project details with profit and loss key.
+     * @memberof ProjectWiseAccountingListComponent
+     */
     private addProfitAndLossKey(response: projectDetails[]): projectDetails[] {
         return response.map(project => ({
             ...project,
             profitAndLoss: -1
         }));
     }
+
     /**
-     * This will be use for form intialization
+     * Initializes the form for the company list.
      *
-     * @memberof CompanyListDialogComponent
+     * @memberof ProjectWiseAccountingListComponent
      */
     public initForm(): void {
         this.companyListForm = this.fb.group({
@@ -169,10 +178,21 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public getAllProjectList() {
+    /**
+     * Retrieves the list of all projects.
+     *
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public getAllProjectList(): void {
         this.componentStore.getAllProjects(this.projectListRequest);
     }
-    public setDefaultProject() {
+
+    /**
+     * Sets the default project details for the project list request.
+     *
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public setDefaultProject(): void {
         this.projectListRequest = {
             companyUniqueName: this.activeCompany.uniqueName,
             branchUniqueName: this.generalService.currentBranchUniqueName ?? this.activeCompany.uniqueName,
@@ -185,10 +205,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Page Change event and Make API Call
+     * Handles page change events and makes an API call to fetch data for the new page.
      *
-     * @param {*} event
-     * @memberof VoucherListComponent
+     * @param {*} event - The event containing pagination details.
+     * @memberof ProjectWiseAccountingListComponent
      */
     public handlePageChange(event: any): void {
         this.projectListRequest.count = event.pageSize;
@@ -196,7 +216,13 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.getAllProjectList();
     }
 
-    showProductSearchBox(setBox: boolean) {
+    /**
+     * Toggles the visibility of the product search box and focuses on the input if visible.
+     *
+     * @param {boolean} setBox - Whether to show the product search box.
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public showProductSearchBox(setBox: boolean): void {
         this.showProductSearch = setBox;
         setTimeout(() => {
             if (this.showProductSearch) {
@@ -207,10 +233,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *  Handle Mat table sort event
+     * Handles table sort events and fetches sorted project data.
      *
-     * @param {*} event
-     * @memberof VoucherListComponent
+     * @param {*} event - The sorting event.
+     * @memberof ProjectWiseAccountingListComponent
      */
     public sortChange(event: any): void {
         this.projectListRequest.sort = event?.direction ? event?.direction : 'asc';
@@ -218,23 +244,24 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.getAllProjectList();
     }
 
-    public ngOnDestroy() {
-
-    }
     /**
+     * Lifecycle hook for component cleanup.
      *
+     * @memberof ProjectWiseAccountingListComponent
      */
-    public openCreateProjectDialog(isCreateFlow: boolean, project: any) {
-        const data: any = {
-            isCreateFlow: isCreateFlow,
-            project: {
-                companyUniqueName: this.projectListRequest.companyUniqueName,
-                branchUniqueName: this.projectListRequest.branchUniqueName,
-                ...(isCreateFlow ? {} : { projectUniqueName: project.uniqueName })
-            },
-            ...(isCreateFlow ? {} : { name: project.name })
-        };
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
+    /**
+     * Opens a dialog for creating or editing a project.
+     *
+     * @param {boolean} isCreateFlow - Whether the dialog is for creating a new project.
+     * @param {*} project - The project data (if editing).
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public openCreateProjectDialog(isCreateFlow: boolean, project: any): void {
         const dialogRef = this.dialog.open(CreateProjectComponent, {
             width: 'var(--aside-pane-width)',
             height: '100vh',
@@ -242,7 +269,15 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 right: '0',
                 top: '0'
             },
-            data: data,
+            data: {
+                isCreateFlow: isCreateFlow,
+                project: {
+                    companyUniqueName: this.projectListRequest.companyUniqueName,
+                    branchUniqueName: this.projectListRequest.branchUniqueName,
+                    ...(isCreateFlow ? {} : { projectUniqueName: project.uniqueName })
+                },
+                ...(isCreateFlow ? {} : { name: project.name })
+            },
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
@@ -258,12 +293,17 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     });
                 }
                 this.changeDetection.detectChanges();
-                console.log("Updated dataSource with response at index 0:", this.dataSource);
             }
         });
     }
 
-    public openDeleteProjectDialog(project: any) {
+    /**
+     * Opens a confirmation dialog for deleting a project.
+     *
+     * @param {*} project - The project to be deleted.
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public openDeleteProjectDialog(project: any): void {
         const data: any = {
             companyUniqueName: this.projectListRequest.companyUniqueName,
             branchUniqueName: this.projectListRequest.branchUniqueName,
@@ -284,8 +324,13 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
     }
 
-
-    public getProfitLoss(event) {
+    /**
+     * Fetches profit and loss details for a specific project.
+     *
+     * @param {*} event - The project for which to fetch profit and loss details.
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public getProfitLoss(event): void {
         const profitRequest = {
             companyUniqueName: this.activeCompany.uniqueName,
             projectUniqueName: event.uniqueName,
@@ -294,10 +339,11 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         }
         this.componentStore.getProjectProfit(profitRequest);
     }
+
     /**
      * This will hide the datepicker
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof ProjectWiseAccountingListComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -307,7 +353,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof ActivityLogsComponent
+     * @memberof ProjectWiseAccountingListComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -332,7 +378,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      *To show the datepicker
     *
     * @param {*} element
-    * @memberof AuditLogsFormComponent
+    * @memberof ProjectWiseAccountingListComponent
     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -343,5 +389,4 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
     }
-
 }

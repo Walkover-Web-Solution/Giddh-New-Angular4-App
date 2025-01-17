@@ -213,4 +213,15 @@ export class ProjectAccountingService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
+
+    public getProjectProfitAndLoss(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT_PROFIT_LOSS, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
 }

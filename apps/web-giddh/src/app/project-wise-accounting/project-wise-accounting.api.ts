@@ -9,5 +9,6 @@ export const ACCOUNTING_API = {
     CREATE_AND_DELETE_ENTRY: `company/:companyUniqueName/project/:projectUniqueName/entry`,
     UPDATE_ENTRY: `company/:companyUniqueName/project/:projectUniqueName/entry/:entryUniqueName`,
     ENTRY_SEARCH: `company/:companyUniqueName/accounts/:accountUniqueName/project-entries?from=:from&to=:to&page=:page&count=:count&branchUniqueName=:branchUniqueName&q=:q`,
-    GET_ALL_ENTRY: `company/:companyUniqueName/project/:projectUniqueName/entries?category=:category&branchUniqueName=:branchUniqueName&page=:page&count=:count`
+    GET_ALL_ENTRY: `company/:companyUniqueName/project/:projectUniqueName/entries?category=:category&branchUniqueName=:branchUniqueName&page=:page&count=:count`,
+    GET_PROJECT_PROFIT_LOSS: `company/:companyUniqueName/project/:projectUniqueName/profit-loss?from=:from&to=:to`
 };

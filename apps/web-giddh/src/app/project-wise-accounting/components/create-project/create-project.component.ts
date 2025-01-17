@@ -33,9 +33,13 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
         private componentStore: ProjectAccountingComponentStore,
         private formBuilder: FormBuilder,
         @Inject(MAT_DIALOG_DATA) public inputData: any // Holds data passed to the dialog
-    ) {}
+    ) { }
 
-    /** Lifecycle hook for component initialization */
+    /**
+      * Lifecycle hook for component initialization.
+      *
+      * @memberof CreateProjectComponent
+      */
     public ngOnInit(): void {
         this.initCreateProjectForm();
 
@@ -53,7 +57,10 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Initializes the Create Project Form with default values and validation rules
+     * Initializes the Create Project Form with default values and validation rules.
+     *
+     * @private
+     * @memberof CreateProjectComponent
      */
     private initCreateProjectForm(): void {
         this.createProjectForm = this.formBuilder.group({
@@ -62,12 +69,13 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles form submission to create or update a project
+     * Validates the form and dispatches a create/update request if valid.
+     *
+     * @memberof CreateProjectComponent
      */
     public createProject(): void {
         if (this.createProjectForm.valid) {
             const projectName = this.createProjectForm.value.projectName;
-
             this.componentStore.createNewProject({
                 request: {
                     data: this.inputData.project,
@@ -76,19 +84,25 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
                 payload: { name: projectName },
             });
         } else {
-            this.createProjectForm.markAllAsTouched(); // Mark fields as touched to show validation errors
+            this.createProjectForm.markAllAsTouched();
         }
     }
 
     /**
-     * Closes the dialog and sends the response back to the parent component
-     * @param response - The data to return to the parent
+     * Closes the dialog and sends the response back to the parent component.
+     *
+     * @param {*} response - The data to return to the parent.
+     * @memberof CreateProjectComponent
      */
     public sendResponse(response: any): void {
         this.dialogRef.close(response);
     }
 
-    /** Lifecycle hook for component cleanup */
+    /**
+     * Lifecycle hook for component cleanup.
+     *
+     * @memberof CreateProjectComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

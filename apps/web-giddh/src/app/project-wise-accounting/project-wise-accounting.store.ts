@@ -24,6 +24,8 @@ export interface ProjectAccountingState {
     entrySearch: any;
     accountSearch: any;
     entryList: any;
+    isFetchingProfitAndLoss: boolean,
+    profitAndLossData: any
 }
 
 export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
@@ -41,6 +43,8 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
     entrySearch: null,
     accountSearch: null,
     entryList: null,
+    isFetchingProfitAndLoss: false,
+    profitAndLossData: null
 };
 
 @Injectable()
@@ -70,6 +74,8 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
     public entrySearch$ = this.select((state) => state.entrySearch);
     public accountSearch$ = this.select((state) => state.accountSearch);
     public entryList$ = this.select((state) => state.entryList);
+    public isFetchingProfitAndLoss$ = this.select((state) => state.isFetchingProfitAndLoss);
+    public profitAndLossData$ = this.select((state) => state.profitAndLossData);
 
     /**
      * Creates a new project and updates the state.
@@ -366,6 +372,32 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
             })
         );
     });
+
+    readonly getProjectProfitAndLoss = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isFetchingProfitAndLoss: true, profitAndLossData: null });
+                return this.projectAccountingService.getProjectProfitAndLoss(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({ isFetchingProfitAndLoss: false, profitAndLossData: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ isFetchingProfitAndLoss: false, profitAndLossData: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ isFetchingProfitAndLoss: false, profitAndLossData: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
 
     /**
      * Lifecycle hook for component destroy
