@@ -33,13 +33,13 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public vatReportTransactions: any = {};
     /** Holds page size options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public vatReportTransactionsRequest: VatReportTransactionsRequest = {
         from: '',
         to: '',
         taxNumber: '',
         page: 1,
-        count: this.pageSizeOptions[0],
+        count: this.pageSizeOptions[2],
         section: ''
     };
     public isLoading: boolean = false;
@@ -158,7 +158,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        if (event && this.vatReportTransactionsRequest.page !== (event.pageIndex + 1)) {
+        if (event) {
             this.vatReportTransactionsRequest.page = event.pageIndex + 1;
             this.vatReportTransactionsRequest.count = event.pageSize;
             this.vatReportTransactions.results = [];

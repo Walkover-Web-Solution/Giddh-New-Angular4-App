@@ -17,14 +17,14 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     /** Holds Vat Liability Detailed Report data */
     public vatLiabilityDetailedReport: any = {};
     /** Holds page size options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Vat Liability Detailed Report request object */
     public vatLiabilityReportRequest: VatDetailedReportRequest = {
         from: '',
         to: '',
         taxNumber: '',
         page: 1,
-        count: this.pageSizeOptions[0],
+        count: this.pageSizeOptions[2],
         section: '',
         currencyCode: 'BWP'
     };
@@ -106,7 +106,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
      * @memberof LiabilityDetailedReportComponent
      */
     public pageChanged(event: any): void {
-        if (event && this.vatLiabilityReportRequest.page !== (event.pageIndex + 1)) {
+        if (event) {
             this.vatLiabilityReportRequest.page = event.pageIndex + 1;
             this.vatLiabilityReportRequest.count = event.pageSize;
             this.vatLiabilityDetailedReport.results = [];

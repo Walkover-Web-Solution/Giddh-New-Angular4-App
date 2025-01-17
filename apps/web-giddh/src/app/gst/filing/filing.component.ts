@@ -249,7 +249,7 @@ export class FilingComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
                 }
             });
-        } else {
+        } else if(this.selectedGst === GstReport.Gstr2) {
             this.gstr2OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
                 if (!bool) {
                     // it means no gstr2 data available or error occurred or user directly navigated to this tab
