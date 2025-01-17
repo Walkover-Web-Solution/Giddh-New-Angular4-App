@@ -11,7 +11,7 @@ export class AddOnsComponent{
 
     /**  Image path variable */
     public imgPath: string = '';
-    constructor(@Inject(ServiceConfig) private serviceConfig){}
+    constructor(@Inject(ServiceConfig) private serviceConfig ){}
     public ngOnInit(): void{
         /** This will use for image format */
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';

@@ -37,7 +37,7 @@ export class GroupwiseComponent implements OnInit,AfterViewInit {
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'customTab'];
     dataSource = new MatTableDataSource(ELEMENT_DATA);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private liveAnnouncer: LiveAnnouncer) {}
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private liveAnnouncer: LiveAnnouncer) {}
 
     @ViewChild(MatSort) sort: MatSort;
 

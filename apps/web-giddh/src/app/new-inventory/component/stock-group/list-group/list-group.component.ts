@@ -87,7 +87,7 @@ export class ListGroupComponent implements OnInit {
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     selection = new SelectionModel<PeriodicElement>(true, []);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig){}
+    constructor(@Inject(ServiceConfig) private serviceConfig ){}
     // @ViewChild(MatSort) sort: MatSort;
     //
     // // tslint:disable-next-line:use-life-cycle-interface

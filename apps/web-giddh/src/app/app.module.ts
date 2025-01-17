@@ -47,8 +47,8 @@ const APP_PROVIDERS = [
         provide: APP_BASE_HREF,
         useValue: IS_ELECTRON_WA
             ? './'
-            : whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.giddhWhiteLabel.domainName
-                ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
+            : whiteLabelConfig?.body?.giddhWhiteLabel?.domainName
+                ? `https://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
                 : AppUrl + APP_FOLDER
     }
 ];
@@ -69,13 +69,18 @@ if (!environment.production) {
 let giddhRegion = document.cookie
     .split('; ')
     .find(cookie => cookie.startsWith('giddh_region='))
-    ?.split('=')[1]?.toUpperCase() || 'GL';
+    ?.split('=')[1];
+giddhRegion = giddhRegion?.toUpperCase();
 
-localStorage.setItem("Country-Region",
-    giddhRegion === "UK" ? "GB" :
-        giddhRegion === "AE" ? "AE" :
-            giddhRegion === "IN" ? "IN" : "GL"
-);
+if (giddhRegion === "UK") {
+    localStorage.setItem("Country-Region", "GB");
+} else if (giddhRegion === "AE") {
+    localStorage.setItem("Country-Region", "AE");
+} else if (giddhRegion === "IN") {
+    localStorage.setItem("Country-Region", "IN");
+} else {
+    localStorage.setItem("Country-Region", "GL");
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -124,14 +129,14 @@ localStorage.setItem("Country-Region",
                 apiUrl: `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
                 appUrl: `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
                 PORTAL_URL: `https://${whiteLabelConfig.body.giddhWhiteLabel.portalDomain}/` || Configuration.PORTAL_URL,
-                OTP_WIDGET_ID: `${whiteLabelConfig.body.otpWidgetId}` || Configuration.OTP_WIDGET_ID,
-                OTP_TOKEN_AUTH: `${whiteLabelConfig.body.otpWidgetToken}` || Configuration.OTP_TOKEN_AUTH,
-                GOOGLE_CLIENT_ID: `${whiteLabelConfig.body.googleClientId}/` || Configuration.GOOGLE_CLIENT_ID,
+                OTP_WIDGET_ID: `${whiteLabelConfig.body.otpWidgetIdWeb}` || Configuration.OTP_WIDGET_ID,
+                OTP_TOKEN_AUTH: `${whiteLabelConfig.body.otpWidgetTokenWeb}` || Configuration.OTP_TOKEN_AUTH,
+                GOOGLE_CLIENT_ID: `${whiteLabelConfig.body.googleClientId}` || Configuration.GOOGLE_CLIENT_ID,
                 GOOGLE_CLIENT_SECRET: `${whiteLabelConfig.body.googleClientSecret}` || Configuration.GOOGLE_CLIENT_SECRET,
                 ApiUrl: `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
                 AppUrl: `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
-                OTP_WIDGET_ID_NEW: `${whiteLabelConfig.body.otpWidgetIdNew}` || '33686b716134333831313239',
-                OTP_TOKEN_AUTH_NEW: `${whiteLabelConfig.body.otpWidgetTokenNew}` || '205968TmXguUAwoD633af103P1',
+                OTP_WIDGET_ID_NEW: `${whiteLabelConfig.body.otpWidgetIdElectron}` || '33686b716134333831313239',
+                OTP_TOKEN_AUTH_NEW: `${whiteLabelConfig.body.otpWidgetTokenElectron}` || '205968TmXguUAwoD633af103P1',
                 _
             }
         },

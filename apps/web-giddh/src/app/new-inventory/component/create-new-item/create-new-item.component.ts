@@ -23,7 +23,7 @@ export class CreateNewItemComponent implements OnInit {
     public imgPath: string = '';
 
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
-    constructor(@Inject(ServiceConfig) private serviceConfig){}
+    constructor(@Inject(ServiceConfig) private serviceConfig ){}
     public ngOnInit() {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';

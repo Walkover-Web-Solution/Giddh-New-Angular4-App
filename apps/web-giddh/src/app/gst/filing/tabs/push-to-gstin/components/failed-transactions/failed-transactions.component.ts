@@ -24,7 +24,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     public itemsPerPage: number = 10;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig) {
+    constructor(@Inject(ServiceConfig) private serviceConfig ) {
 
     }
 

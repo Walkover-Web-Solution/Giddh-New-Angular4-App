@@ -19,7 +19,7 @@ export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig) {
+    constructor(@Inject(ServiceConfig) private serviceConfig ) {
 
     }
 

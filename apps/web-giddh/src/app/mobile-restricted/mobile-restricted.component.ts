@@ -19,7 +19,7 @@ export class MobileRestrictedComponent {
     /* Hold giddh logo source */
     public giddhLogoSrc: string = '';
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
         this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-blue-logo.svg';

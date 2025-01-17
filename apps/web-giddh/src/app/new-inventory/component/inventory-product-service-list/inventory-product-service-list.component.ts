@@ -109,7 +109,7 @@ export class ProductServiceListComponent implements OnInit {
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     selection = new SelectionModel<PeriodicElement>(true, []);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private _router: Router) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private _router: Router) {
 
     }
 
