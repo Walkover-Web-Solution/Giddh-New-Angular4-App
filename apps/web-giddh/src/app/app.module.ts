@@ -48,7 +48,7 @@ const APP_PROVIDERS = [
         useValue: IS_ELECTRON_WA
             ? './'
             : whiteLabelConfig?.body?.giddhWhiteLabel?.domainName
-                ? `https://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
+                ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
                 : AppUrl + APP_FOLDER
     }
 ];
