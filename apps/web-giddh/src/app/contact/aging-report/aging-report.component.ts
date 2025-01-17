@@ -138,6 +138,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public minDate: any;
     /** Holds End Date of Financial Year */
     public maxDate: any;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         public dialog: MatDialog,
@@ -195,6 +197,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();
@@ -238,7 +245,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
@@ -722,7 +730,26 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @return {*}  {*}
      * @memberof AgingReportComponent
      */
-    public domSantizer(str: string): any {
+    private domSantizer(str: string): any {
         return this.sanitizer.bypassSecurityTrustResourceUrl(str);
+    }
+
+    /**
+     * Redirect to invoice preview by unique name
+     * 
+     * @param voucherUniqueName 
+     * @param voucherDate 
+     * @returns 
+     */
+    public getInvoicePreviewUrl(invoice: any): string {
+        if (invoice) {
+            let url: string = '';
+            if (invoice.voucherNumber !== 'OPENING BALANCE' && invoice.uniqueName && invoice.voucherDate) {
+                url = `/pages/vouchers/view/sales/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
+            } else {
+                url = 'javascript:;';
+            }
+            return this.domSantizer(url);
+        }
     }
 }

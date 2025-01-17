@@ -155,7 +155,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
     public getLastVouchersInProgress$ = this.select((state) => state.getLastVouchersInProgress);
     public discountsList$ = this.select((state) => state.discountsList);
-    public invoiceSettings$ = this.select((state) => state.invoiceSettings);
+    public voucherSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
     public stockVariants$ = this.select((state) => state.stockVariants);
@@ -225,6 +225,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public getLedgerDataInProcess$: Observable<any> = this.select(this.store.select(state => state.invoice.isGetAllLedgerDataInProgress), (response) => response);
     public isAccountUpdated$: Observable<any> = this.select(this.store.select(state => state.common.isAccountUpdated), (response) => response);
     public universalPendingDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public invoiceSettings$: Observable<any> = this.select(this.store.select(state => state.invoice.settings), (response) => response);
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -411,10 +412,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.ledgerService.removeAttachment(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                deleteAttachmentInProgress: false,
-                                deleteAttachmentIsSuccess: true
-                            });
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: false });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);

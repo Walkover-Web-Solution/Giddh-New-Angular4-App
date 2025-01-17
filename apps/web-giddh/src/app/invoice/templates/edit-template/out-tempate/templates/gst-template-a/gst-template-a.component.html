@@ -579,6 +579,14 @@
                                             : "#"
                                     }}
                                 </th>
+                                <th *ngIf="fieldsAndVisibility.table.showVariantImage?.display"
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
+                                    {{
+                                    fieldsAndVisibility.table.showVariantImage?.label?.length > 0
+                                    ? fieldsAndVisibility.table.showVariantImage?.label
+                                    : "Display Image"
+                                    }}
+                                </th>
                                 <th
                                     *ngIf="
                                         fieldsAndVisibility.table.item?.display ||
@@ -722,6 +730,10 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">1</td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
                                 <td
                                     class="text-left"
                                     *ngIf="
@@ -805,6 +817,10 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">2</td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
                                 <td
                                     class="text-left"
                                     *ngIf="
@@ -1009,11 +1025,11 @@
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
                                 ></th>
                                 <!--<th *ngIf="fieldsAndVisibility.table.rate?.display " class="text-right "
-                [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>7000.00
-            </th>
-            <th *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "
-                [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
-            </th>-->
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>7000.00
+                                </th>
+                                <th *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
+                                </th>-->
                                 <th
                                     *ngIf="fieldsAndVisibility.table.taxableValue?.display"
                                     class="text-right"

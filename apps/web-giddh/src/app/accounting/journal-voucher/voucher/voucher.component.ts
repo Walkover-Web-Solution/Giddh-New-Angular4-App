@@ -81,6 +81,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public currentDate: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /** True if consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -727,7 +729,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'by',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -743,7 +745,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             });
             this.selectAccUnqName = discountObj?.additional?.uniqueName;
         } else if (taxData) {
-            let filteredTaxData = this.companyTaxesList.filter((item) => {
+            let filteredTaxData = this.companyTaxesList?.filter((item) => {
                 return item.additional.name === (taxData.name ? taxData.name : taxData.label) && item.additional.uniqueName === (taxData.uniqueName ? taxData.uniqueName : taxData?.value);
             });
             newTransactionFormGroup.patchValue({
@@ -756,7 +758,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 isInclusiveTax: false,
                 type: 'to',
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -773,15 +775,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.selectAccUnqName = filteredTaxData[0]?.additional?.name;
         } else {
             newTransactionFormGroup.patchValue({
-                amount: null,
-                actualAmount: null,
+                amount: 0,
+                actualAmount: 0,
                 particular: '',
                 currentBalance: '',
                 applyApplicableTaxes: false,
                 isInclusiveTax: false,
                 type: byOrTo,
                 taxes: [],
-                total: null,
+                total: 0,
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
@@ -1189,7 +1191,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         transactionAtIndex = transactionsFormArray.at(index) as FormGroup;
                         response.body.applicableTaxes.forEach(tax => {
                             if (index !== -1) {
-                                let filteredTaxData = this.companyTaxesList.filter((item) => {
+                                let filteredTaxData = this.companyTaxesList?.filter((item) => {
                                     return item.additional.uniqueName === tax.uniqueName;
                                 });
                                 transactionAtIndex.patchValue({
@@ -1384,7 +1386,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * In case of sales ( i.e To ) row update manually then 
+     * In case of sales ( i.e To ) row update manually then
      * calculate and update cash ( i.e. By ) value
      *
      * @private
@@ -1478,11 +1480,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
-                totalCredit += control.get('amount').value;
+                totalCredit += Number(control.get('amount').value) ?? 0;
             } else {
-                totalDebit += control.get('amount').value;
+                totalDebit += Number(control.get('amount').value) ?? 0;
             }
-        });
+            });
 
         totalCredit = this.generalService.roundOffValueByCompanyDecimalPlace(totalCredit);
         totalDebit = this.generalService.roundOffValueByCompanyDecimalPlace(totalDebit);
@@ -1925,7 +1927,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public removeBlankTransaction(transactions: any[]) {
-        return transactions.filter(obj => obj && obj.particular);
+        return transactions?.filter(obj => obj && obj.particular);
     }
 
     /**

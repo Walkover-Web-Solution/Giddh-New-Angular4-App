@@ -66,7 +66,6 @@
     "vendors": "विक्रेता",
     "vendors_selected": "विक्रेता चयनित",
     "select_payor": "भुगतानकर्ता का चयन करें",
-    "connect_icici_bank": "आईसीआईसीआई बैंक कनेक्ट करें",
     "pending_approval": "लंबित अनुमोदन",
     "due": "देय",
     "bulk_payment_unsupported_error": "थोक भुगतान समर्थित नहीं है।",
@@ -84,5 +83,6 @@
     "show_bank_balance": "बैंक शेष दिखाएं",
     "hide_bank_balance": "बैंक शेष छिपाएं",
     "unpaid_invoices": "अवैतनिक चालान",
-    "connect_bank": "बैंक कनेक्ट करें"
+    "connect_bank": "बैंक कनेक्ट करें",
+    "send_bulk_email": "थोक ईमेल भेजें"
 }

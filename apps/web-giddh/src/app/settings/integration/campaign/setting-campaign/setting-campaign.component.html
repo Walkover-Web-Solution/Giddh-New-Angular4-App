@@ -315,7 +315,7 @@
             <div class="dropdown-box-1">
                 <div class="compose-trigger-dropdowns">
                     <div class="chiplist-wrapper">
-                        <div class="pd-l2 pd-r2 pd-b3">
+                        <div class="pd-l2 pd-r2 border-bottom">
                             <span class="dropdown-heading pd-b15 d-block">{{ localeData?.communication?.receiver }}</span>
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_mobile"
@@ -327,7 +327,7 @@
                                 class="select-multiple-chiplist mobile-margin"
                             ></select-multiple-fields>
                         </div>
-                        <div class="border-left border-right chip-gap pd-l2 pd-r2">
+                        <div class="border-left border-right chip-gap pd-l2 pd-r2 pd-t2">
                             <select-multiple-fields
                                 [showError]="mandatoryFields.triggerToChiplist"
                                 [placeholder]="localeData?.communication?.select_to"
@@ -336,7 +336,7 @@
                                 [selectedValues]="createTrigger.campaignDetails.to"
                                 [validations]="['email']"
                                 [name]="'to'"
-                                class="select-multiple-chiplist"
+                                class="select-multiple-chiplist border-bottom"
                             ></select-multiple-fields>
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_bcc"
@@ -345,7 +345,7 @@
                                 [selectedValues]="createTrigger.campaignDetails.bcc"
                                 [validations]="['email']"
                                 [name]="'cc'"
-                                class="select-multiple-chiplist"
+                                class="select-multiple-chiplist border-bottom"
                             ></select-multiple-fields>
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_cc"
@@ -354,7 +354,7 @@
                                 [selectedValues]="createTrigger.campaignDetails.cc"
                                 [validations]="['email']"
                                 [name]="'bcc'"
-                                class="select-multiple-chiplist"
+                                class="select-multiple-chiplist border-bottom"
                             ></select-multiple-fields>
                         </div>
                         <mat-checkbox
@@ -379,7 +379,7 @@
                         *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
                     >
                         <div class="unit-value" [ngClass]="{ 'mt-2': i > 0 }">{{ variable.name }}</div>
-                        <div class="map-unit-value">
+                        <div class="map-unit-value border-bottom">
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_suggestions"
                                 [options]="fieldsSuggestion"

@@ -11,7 +11,7 @@
             </mat-tab>
             <mat-tab label="Profit and Loss">
                 <div class="pd-15">
-                    <profit-loss [selectedCompany]="activeCompany"></profit-loss>
+                    <profit-loss *ngIf="defaultParamsValue?.projectUniqueName" [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
             </mat-tab>
         </mat-tab-group>

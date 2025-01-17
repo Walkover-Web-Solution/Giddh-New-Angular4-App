@@ -29,27 +29,11 @@ import { trigger, state, style, transition, animate } from "@angular/animations"
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
 import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
-
-// bill-table
-export interface PeriodicElementBill {
-    bill: string;
-    position: number;
-    vendor: string;
-    billdate: string;
-    order: string;
-    amount: string;
-    duedate: string;
-    status: string;
-}
-// bill-table
-const BILL_DATA: PeriodicElementBill[] = [
-    { position: 1, bill: 'Hydrogen', vendor: 'Ashish RANJAN', billdate: 'H', order: 'H', amount: '', duedate: '', status: '' }
-];
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -102,8 +86,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** Holds advance search dailog template reference */
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
-    /** Holds export dailog template reference */
-    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Holds Payment template reference */
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Holds adjust payment dailog template reference */
@@ -251,6 +233,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public accountParentGroup: string = "";
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Send Email Dialog Ref */
     public sendEmailModalDialogRef: MatDialogRef<any>;
     /** Holds Currently used Voucher */
@@ -326,9 +310,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private salesAction: SalesActions,
-        private settingsProfileActions: SettingsProfileActions,
-        private invoiceActions: InvoiceActions
+        private invoiceActions: InvoiceActions,
+        private salesAction: SalesActions
     ) {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
@@ -338,7 +321,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
             }
         });
-        this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
@@ -352,9 +334,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
-        this.getInvoiceSettings();
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
@@ -366,6 +357,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.setInitialAdvanceFilter(true);
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
+                    this.advanceFilters.count = this.queryParams.count ?? this.pageSizeOptions[2];
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
                 }
@@ -380,7 +372,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
                 // 'pending', 'settings', 'templates' These tabs are not voucher list
-                if (this.universalDate && !['pending', 'settings', 'templates'].includes(this.activeModule)) {
+                let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
+                if (this.universalDate && !tab.includes(this.activeModule)) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
                 }
@@ -389,9 +382,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getLedgersOfInvoice();
                 }
             }
+            this.getInvoiceSettings();
         });
 
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -454,8 +447,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
 
                 if (this.queryParams.page) {
-                    this.advanceFilters.page = this.queryParams.page;
-                    this.advanceFilters.from = this.queryParams.from;
+                    if (this.activeModule === 'list') {
+                        this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
+                    }
                     this.advanceFilters.to = this.queryParams.to;
                 }
                 this.getVouchers(true);
@@ -636,7 +630,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-
         this.componentStore.universalPendingDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
@@ -778,7 +771,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
-                    document.getElementById(this.activeSearchField).focus();
+                    document.getElementById(this.activeSearchField)?.focus();
                 }, 200);
             }
         }
@@ -792,6 +785,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showVoucherPreview(voucherUniqueName: string): void {
         const queryParams = {
             page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
         };
@@ -813,55 +807,98 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getSelectedTabIndex(): void {
-        if (this.activeTabGroup === 0) {
-            if (this.voucherType === 'estimates' && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
-            } else if (this.voucherType === 'proformas' && this.activeModule === 'list') {
-                this.selectedTabIndex = 1;
-            } else if (this.voucherType === 'sales' && this.activeModule === 'list') {
-                this.selectedTabIndex = 2;
-            } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
-                this.selectedTabIndex = 3;
-            } else if (this.voucherType === 'sales' && this.activeModule === 'settings') {
-                this.selectedTabIndex = 4;
-            } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
-                this.selectedTabIndex = 5;
+        if (!this.isCompany && !this.isConsolidatedBranch) {
+            if (this.activeTabGroup === 0) {
+                if (this.voucherType === 'estimates' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'proformas' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'settings') {
+                    this.selectedTabIndex = 4;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 5;
+                }
+            } else if (this.activeTabGroup === 1) {
+                if (this.voucherType === 'debit note' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
+                    this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 4;
+                }
+            } else if (this.activeTabGroup === 2) {
+                if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
+                    this.selectedTabIndex = 2;
+                }
+            } else if (this.activeTabGroup === 3) {
+                if (this.voucherType === 'receipt' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
+                }
+            } else if (this.activeTabGroup === 4) {
+                if (this.voucherType === 'payment' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
+                }
             }
-        } else if (this.activeTabGroup === 1) {
-            if (this.voucherType === 'debit note' && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
-            } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
-                this.selectedTabIndex = 1;
-            } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
-                this.selectedTabIndex = 2;
-            } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
-                this.selectedTabIndex = 3;
-            } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
-                this.selectedTabIndex = 4;
-            }
-        } else if (this.activeTabGroup === 2) {
-            if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
-            } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
-                this.selectedTabIndex = 1;
-            } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
-                this.selectedTabIndex = 2;
-            }
-        } else if (this.activeTabGroup === 3) {
-            if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
-            } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
-                this.selectedTabIndex = 1;
-            }
-        } else if (this.activeTabGroup === 4) {
-            if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
-                this.selectedTabIndex = 0;
-            } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
-                this.selectedTabIndex = 1;
+        } else {
+            if (this.activeTabGroup === 0) {
+                if (this.voucherType === 'estimates' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'proformas' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 3;
+                } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 4;
+                }
+            } else if (this.activeTabGroup === 1) {
+                if (this.voucherType === 'debit note' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 3;
+                }
+            } else if (this.activeTabGroup === 2) {
+                if (this.voucherType === 'purchase-order' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
+                    this.selectedTabIndex = 1;
+                }
+            } else if (this.activeTabGroup === 3) {
+                if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
+                }
+            } else if (this.activeTabGroup === 4) {
+                if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'list') {
+                    this.selectedTabIndex = 0;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
+                }
             }
         }
     }
-
     /**
      * Redirect To Selected Tab
      *
@@ -872,71 +909,131 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private redirectToSelectedTab(selectedTabIndex: number): void {
         let voucherType = "";
         let activeModule = "";
-        if (this.activeTabGroup === 0) {
-            if (selectedTabIndex === 0) {
-                voucherType = "estimates";
-                activeModule = "list";
-            } else if (selectedTabIndex === 1) {
-                voucherType = "proformas";
-                activeModule = "list";
-            } else if (selectedTabIndex === 2) {
-                voucherType = "sales";
-                activeModule = "list";
-            } else if (selectedTabIndex === 3) {
-                voucherType = "sales";
-                activeModule = "pending";
-            } else if (selectedTabIndex === 4) {
-                voucherType = "sales";
-                activeModule = "settings";
-            } else if (selectedTabIndex === 5) {
-                voucherType = "sales";
-                activeModule = "templates";
+        if (!this.isCompany && !this.isConsolidatedBranch) {
+            if (this.activeTabGroup === 0) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "estimates";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "proformas";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "sales";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "sales";
+                    activeModule = "pending";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "sales";
+                    activeModule = "settings";
+                } else if (selectedTabIndex === 5) {
+                    voucherType = "sales";
+                    activeModule = "templates";
+                }
+            } else if (this.activeTabGroup === 1) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "debit-note";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "credit-note";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "debit-note";
+                    activeModule = "pending";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "debit-note";
+                    activeModule = "settings";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "debit-note";
+                    activeModule = "templates";
+                }
+            } else if (this.activeTabGroup === 2) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "purchase-order";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "purchase";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "purchase";
+                    activeModule = "settings";
+                }
+            } else if (this.activeTabGroup === 3) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "receipt";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "pending";
+                }
+            } else if (this.activeTabGroup === 4) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "payment";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "pending";
+                }
             }
-        } else if (this.activeTabGroup === 1) {
-            if (selectedTabIndex === 0) {
-                voucherType = "debit-note";
-                activeModule = "list";
-            } else if (selectedTabIndex === 1) {
-                voucherType = "credit-note";
-                activeModule = "list";
-            } else if (selectedTabIndex === 2) {
-                voucherType = "debit-note";
-                activeModule = "pending";
-            } else if (selectedTabIndex === 3) {
-                voucherType = "debit-note";
-                activeModule = "settings";
-            } else if (selectedTabIndex === 4) {
-                voucherType = "debit-note";
-                activeModule = "templates";
-            }
-        } else if (this.activeTabGroup === 2) {
-            if (selectedTabIndex === 0) {
-                voucherType = "purchase-order";
-                activeModule = "list";
-            } else if (selectedTabIndex === 1) {
-                voucherType = "purchase";
-                activeModule = "list";
-            } else if (selectedTabIndex === 2) {
-                voucherType = "purchase";
-                activeModule = "settings";
-            }
-        } else if (this.activeTabGroup === 3) {
-            if (selectedTabIndex === 0) {
-                voucherType = this.voucherTypeEnum.receipt;
-                activeModule = "list";
-            } else if (selectedTabIndex === 1) {
-                voucherType = this.voucherTypeEnum.receipt;
-                activeModule = "pending";
-            }
-        } else if (this.activeTabGroup === 4) {
-            if (selectedTabIndex === 0) {
-                voucherType = this.voucherTypeEnum.payment;
-                activeModule = "list";
-            } else if (selectedTabIndex === 1) {
-                voucherType = this.voucherTypeEnum.payment;
-                activeModule = "pending";
+        } else {
+            if (this.activeTabGroup === 0) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "estimates";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "proformas";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "sales";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "sales";
+                    activeModule = "pending";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "sales";
+                    activeModule = "templates";
+                }
+            } else if (this.activeTabGroup === 1) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "debit-note";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "credit-note";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "debit-note";
+                    activeModule = "pending";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "debit-note";
+                    activeModule = "templates";
+                }
+            } else if (this.activeTabGroup === 2) {
+                if (selectedTabIndex === 0) {
+                    voucherType = "purchase-order";
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = "purchase";
+                    activeModule = "list";
+                }
+            } else if (this.activeTabGroup === 3) {
+                if (selectedTabIndex === 0) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "pending";
+                }
+            } else if (this.activeTabGroup === 4) {
+                if (selectedTabIndex === 0) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "pending";
+                }
             }
         }
+
         if (this.queryParams.page) {
             this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
                 queryParams: {
@@ -1151,15 +1248,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private getInvoiceSettings(): void {
         this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (!settings) {
-                this.componentStore.getInvoiceSettings();
+                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             } else {
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
 
                     if (!this.isEInvoiceEnabled) {
                         this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
                     }
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
@@ -1275,7 +1373,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(this.bulkExport, {
+        this.dialog.open(BulkExportComponent, {
             width: '600px',
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),

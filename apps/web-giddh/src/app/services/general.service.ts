@@ -13,7 +13,7 @@ import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAIN
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
 
@@ -722,7 +722,6 @@ export class GeneralService {
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
-        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -730,8 +729,7 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons,
-            actionBtnWrapperCssClass
+            buttons
         };
     }
 
@@ -2004,6 +2002,16 @@ export class GeneralService {
     }
 
     /**
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD-MM-YYYY).
+     *
+     * @param {string} value - The date string to be formatted.
+     * @returns {string} - The formatted date string.
+     */
+    public convertDateStringFormat(value: string): string {
+        return dayjs(value, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
     * This will be use for open window in center
     *
     * @param {string} url
@@ -2152,15 +2160,17 @@ export class GeneralService {
      *
      * @param {Params} queryParams
      * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @param {boolean} [replaceUrl=true]
      * @memberof GeneralService
      */
-    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge', replaceUrl: boolean = true): void {
         this.router.navigate(
             [],
             {
                 relativeTo: this.activatedRoute,
                 queryParams,
-                queryParamsHandling: queryParamsHandling
+                queryParamsHandling,  // Merge new parameters with existing ones
+                replaceUrl  // Replace current history entry with new URL
             }
         );
     }

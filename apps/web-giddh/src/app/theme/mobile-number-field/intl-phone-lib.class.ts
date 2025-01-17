@@ -22,7 +22,7 @@ export class IntlPhoneLib {
         script.type = 'text/javascript';
         script.src = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/intlTelInput.min.js';
         script.onload = () => {
-            this.intl = window.intlTelInput(inputElement, { ...INTL_INPUT_OPTION, ...intlOptions });
+            this.intl = window?.intlTelInput(inputElement, { ...INTL_INPUT_OPTION, ...intlOptions });
             this.checkMobileFlag(parentDom, changeFlagZIndex);
         };
 

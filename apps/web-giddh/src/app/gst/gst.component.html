@@ -297,7 +297,7 @@
                                         </svg>
                                     </div>
                                     <div
-                                        *ngIf="isCompany"
+                                        *ngIf="isCompany || isConsolidatedBranch"
                                         class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
                                         (click)="navigateToTab(2, GstReport.Gstr1)"
                                     >
@@ -550,6 +550,7 @@
 
     <filing-header
         [isCompany]="isCompany"
+        [isConsolidatedBranch]="isConsolidatedBranch"
         [currentPeriod]="currentPeriod"
         [fileGstr3b]="returnGstr3B"
         [localeData]="localeData"
