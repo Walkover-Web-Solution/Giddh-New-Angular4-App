@@ -158,6 +158,14 @@ export class ProjectAccountingService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
+    /**
+     * Sends a POST request to create a new accounting entry for a project.
+     *
+     * @param model - An object containing the unique identifier of the project.
+     * @param payload - The data to be sent in the body of the request.
+     * @returns An observable of the API response with the details of the created entry.
+     * @memberof ProjectAccountingService
+     */
     public createEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
             .pipe(
@@ -168,6 +176,15 @@ export class ProjectAccountingService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
+
+    /**
+     * Sends a DELETE request to remove an accounting entry for a project.
+     *
+     * @param model - An object containing the unique identifier of the project.
+     * @param payload - The data to be sent in the body of the request.
+     * @returns An observable of the API response confirming the deletion.
+     * @memberof ProjectAccountingService
+     */
 
     public removeEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
         return this.http.deleteWithBody(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
@@ -180,6 +197,14 @@ export class ProjectAccountingService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
+    /**
+     * Sends a PUT request to update an accounting entry for a project.
+     *
+     * @param model - An object containing the unique identifier of the project.
+     * @param payload - The updated data to be sent in the body of the request.
+     * @returns An observable of the API response with the updated entry details.
+     * @memberof ProjectAccountingService
+     */
     public updateEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
         return this.http.put(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_ENTRY, model), payload)
             .pipe(
@@ -191,6 +216,13 @@ export class ProjectAccountingService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
+    /**
+     * Sends a GET request to search for accounting entries based on specific criteria.
+     *
+     * @param model - An object containing the search criteria.
+     * @returns An observable of the API response with the matching entries.
+     * @memberof ProjectAccountingService
+     */
     public searchEntry(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.ENTRY_SEARCH, model))
             .pipe(
@@ -202,6 +234,13 @@ export class ProjectAccountingService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
+    /**
+     * Sends a GET request to retrieve a list of all accounting entries for a project.
+     *
+     * @param model - An object containing the unique identifier of the project.
+     * @returns An observable of the API response with the list of entries.
+     * @memberof ProjectAccountingService
+     */
     public getAllEntryList(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_ENTRY, model))
             .pipe(
@@ -213,7 +252,13 @@ export class ProjectAccountingService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
-
+    /**
+     * Sends a GET request to retrieve the profit and loss details for a project.
+     *
+     * @param model - An object containing the unique identifier of the project.
+     * @returns An observable of the API response with the profit and loss details.
+     * @memberof ProjectAccountingService
+     */
     public getProjectProfitAndLoss(model: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT_PROFIT_LOSS, model))
             .pipe(

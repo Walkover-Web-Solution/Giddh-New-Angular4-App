@@ -219,6 +219,9 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
     });
 
 
+    /**
+     * Handles the creation of a new accounting entry and updates the state.
+     */
     readonly createNewEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -245,6 +248,9 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
     });
 
 
+    /**
+     * Handles the deletion of an accounting entry and updates the state.
+     */
     readonly deleteEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -271,6 +277,9 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         );
     });
 
+    /**
+     * Handles the update of an accounting entry and updates the state.
+     */
     readonly updateEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -297,7 +306,9 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         );
     });
 
-
+    /**
+     * Handles the search of accounting entries and updates the state.
+     */
     readonly searchEntry = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -323,6 +334,9 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         );
     });
 
+    /**
+     * Handles the retrieval of project accounts and updates the state.
+     */
     readonly getProjectAccount = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -348,6 +362,9 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         );
     });
 
+    /**
+     * Handles the retrieval of all entry lists and updates the state.
+     */
     readonly getAllEnteryList = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -373,6 +390,9 @@ export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccou
         );
     });
 
+    /**
+     * Handles the retrieval of profit and loss details for a project and updates the state.
+     */
     readonly getProjectProfitAndLoss = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {

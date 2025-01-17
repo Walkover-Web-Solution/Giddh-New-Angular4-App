@@ -1,0 +1,9 @@
+{
+    "total_revenue": "Total Revenue",
+    "select_account": "Select Account",
+    "select_entry": "Select Entry",
+    "select_method":"Select Method",
+    "enter_amount": "Enter amount",
+    "create_project": "Create Project",
+    "update_project": "Update Project"
+}

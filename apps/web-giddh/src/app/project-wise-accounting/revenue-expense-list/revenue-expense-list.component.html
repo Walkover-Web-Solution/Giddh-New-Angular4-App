@@ -1,8 +1,17 @@
-<ng-container appTranslate (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container 
+    appTranslate 
+    [file]="'project-wise-account'"
+    (localeData)="localeData = $event" 
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="project-wise-accounting">
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="w-100"
-        [selectedIndex]="selectedTabIndex"
-        (selectedTabChange)="tabChanged($event)">
+        <mat-tab-group 
+            mat-stretch-tabs="false" 
+            mat-align-tabs="start" 
+            class="w-100"
+            [selectedIndex]="selectedTabIndex"
+            (selectedTabChange)="tabChanged($event)"
+        >
             <mat-tab label="Revenue">
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
@@ -27,7 +36,7 @@
                     class="giddh-datepicker date-range-picker" />
             </div>
             <div>
-                <span>Total Revenue : {{totalResults}}</span>&nbsp;&nbsp;
+                <span>{{ localeData?.total_revenue }} : {{ totalResults }}</span>&nbsp;&nbsp;
                 <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
                     {{ commonLocaleData?.app_back }}
                 </button>
@@ -39,17 +48,17 @@
             <table class="table entry-table editable-table">
                 <thead>
                     <tr>
-                        <th class="text-left">Select Account</th>
-                        <th class="text-left">Select Entry</th>
-                        <th class="text-left">Select Method</th>
-                        <th class="text-left">Amount</th>
-                        <th class="text-left">Action</th>
+                        <th class="text-left">{{ commonLocaleData?.app_select_account }}</th>
+                        <th class="text-left">{{ localeData?.select_entry }}</th>
+                        <th class="text-left">{{ commonLocaleData?.app_select_method }}</th>
+                        <th class="text-left">{{ commonLocaleData?.app_amount }}</th>
+                        <th class="text-left">{{ commonLocaleData?.app_action }}</th>
                     </tr>
                     <tr [formGroup]="createAccountEntryForm">
                         <td>
                             <reactive-dropdown-field 
-                                [label]="'Search Account'" 
-                                [placeholder]="'Select'"
+                                [label]="commonLocaleData?.app_select_account" 
+                                [placeholder]="commonLocaleData?.app_select"
                                 [options]="accountSearchResponse"
                                 [labelValue]="createAccountEntryForm?.get('account')?.value"
                                 formControlName="accountUniqueName" 
@@ -65,8 +74,8 @@
                         <td>
                             <reactive-dropdown-field 
                                 (click)="currentEntry(createAccountEntryForm?.get('accountUniqueName')?.value)"
-                                [label]="'Search Entry'" 
-                                [placeholder]="'Select'"
+                                [label]="localeData?.select_entry" 
+                                [placeholder]="commonLocaleData?.app_select"
                                 [options]="entrySearchResponse"
                                 [labelValue]="createAccountEntryForm?.get('entry')?.value" 
                                 formControlName="entryUniqueName"
@@ -82,8 +91,8 @@
     
                         <td>
                             <reactive-dropdown-field 
-                                [label]="'Search Method'" 
-                                [placeholder]="'Select'"
+                                [label]="commonLocaleData?.app_select_method" 
+                                [placeholder]="commonLocaleData?.app_select"
                                 [options]="selectMethod" 
                                 [labelValue]="createAccountEntryForm?.get('calculationMethod')?.value"
                                 formControlName="calculationMethod"
@@ -95,8 +104,8 @@
                             <input-field 
                                 [name]="'amount'" 
                                 [type]="'number'" 
-                                [label]="'amount'"
-                                [placeholder]="'amount'" 
+                                [label]="commonLocaleData?.app_amount"
+                                [placeholder]="localeData?.enter_amount" 
                                 formControlName="value">
                             </input-field>
                         </td>
@@ -106,7 +115,7 @@
                                 color="primary" 
                                 (click)="createEntry()"
                             >
-                            Save</button>
+                            {{ commonLocaleData?.app_save }}</button>
                         </td>
                     </tr>
                 </thead>
@@ -118,8 +127,8 @@
                                 <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
                                     <td>
                                         <reactive-dropdown-field 
-                                            [label]="'Search Account'" 
-                                            [placeholder]="'Select'"
+                                            [label]="commonLocaleData?.app_select_account" 
+                                            [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry.get('account')?.value"
                                             [options]="accountSearchResponse"
                                             formControlName="accountUniqueName" 
@@ -134,8 +143,8 @@
                                     <td>
                                         <reactive-dropdown-field 
                                             (click)="currentEntry(entry.get('accountUniqueName')?.value)"
-                                            [label]="'Search Entry'" 
-                                            [placeholder]="'Select'"
+                                            [label]="localeData?.select_entry" 
+                                            [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry.get('entry')?.value" 
                                             [options]="entrySearchResponse"
                                             formControlName="entryUniqueName" 
@@ -152,8 +161,8 @@
     
                                     <td>
                                         <reactive-dropdown-field 
-                                            [label]="'Search Method'" 
-                                            [placeholder]="'Select'"
+                                            [label]="commonLocaleData?.app_select_method" 
+                                            [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry.get('calculationMethod')?.value" 
                                             [options]="selectMethod"
                                             formControlName="calculationMethod"
@@ -166,8 +175,8 @@
                                         <input-field 
                                             [name]="'amount'" 
                                             [type]="'number'" 
-                                            [label]="'amount'"
-                                            [placeholder]="'amount'" 
+                                            [label]="commonLocaleData?.app_amount"
+                                            [placeholder]="localeData?.enter_amount" 
                                             formControlName="value"
                                             [disabled]="!entry.get('entryUniqueName').value"
                                             [readonly]="!entry.get('entryUniqueName').value"
@@ -176,7 +185,7 @@
                                     </td>
                                     <td class="position-relative text-center">
                                         <span class="editable-table-hide-element">
-                                            <button mat-raised-button color="primary" (click)="updateSingleEntry(i)">Update</button>
+                                            <button mat-raised-button color="primary" (click)="updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="deleteEntry(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
                                         </span>
                                     </td>
@@ -213,13 +222,22 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition">
+            <app-datepicker-wrapper 
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate" 
+            [alwaysShowCalendars]="true" 
+            [ranges]="datePickerOption"
+            [selectedRangeLabel]="selectedRangeLabel" 
+            [showCustomRangeLabel]="true" 
+            [showClearButton]="false"
+            [showCancel]="true" 
+            [linkedCalendars]="true" 
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)" 
+            (datesUpdated)="dateSelectedCallback($event)"
+            [keepCalendarOpeningWithRange]="false" 
+            [showRangeLabelOnInput]="false"
+            [dateFieldPosition]="dateFieldPosition">
             </app-datepicker-wrapper>
         </div>
     </div>

@@ -72,7 +72,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         AccountsFilterPipe
     ],
     exports: [
-        FinancialReportsComponent, CurrencyModule,
+        FinancialReportsComponent, 
+        CurrencyModule,
         FinancialReportsComponent, 
         CurrencyModule,
         ProfitLossComponent,
