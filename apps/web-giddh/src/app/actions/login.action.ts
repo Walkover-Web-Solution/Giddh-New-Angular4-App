@@ -579,7 +579,7 @@ export class LoginActions {
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
-
+                return { type: 'EmptyAction' };
             })));
 
     public forgotPasswordRequest$: Observable<Action> = createEffect(() => this.actions$
@@ -911,6 +911,8 @@ export class LoginActions {
     }
 
     public LoginWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, LoginWithPassword>): CustomActions {
+        console.log(value, CustomActions);
+
         return {
             type: LoginActions.LoginWithPasswdResponse,
             payload: value
