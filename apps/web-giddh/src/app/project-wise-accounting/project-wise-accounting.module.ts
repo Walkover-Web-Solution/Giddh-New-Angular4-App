@@ -26,6 +26,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SharedModule } from '../shared/shared.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 
 @NgModule({
     declarations: [
@@ -58,7 +59,7 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         BsDropdownModule.forRoot(),
         SharedModule,
         GiddhPageLoaderModule,
-
+        NoDataModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

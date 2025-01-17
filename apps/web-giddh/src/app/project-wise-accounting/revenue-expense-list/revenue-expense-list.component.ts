@@ -4,13 +4,14 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { ActivatedRoute } from '@angular/router';
-import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, delay } from 'rxjs';
 import { ProjectAccountingComponentStore } from '../project-wise-accounting.store';
 import { projectType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 @Component({
     selector: 'revenue-expense-list.',
@@ -36,12 +37,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** Instance of bootstrap modal */
-    public getProjectRequest: any = {
-        companyUniqueName: '',
-        projectUniqueName: '',
-        branchUniqueName: '',
-        to: '',
-        from: '',
+    public getProjectEntryListRequest: any = {
         count: 50,
         page: 1
     };
@@ -80,7 +76,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public totalResults: number = 0;
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
     public incomeGroup: string = "revenuefromoperations,otherincome";
-    public expenseGroup: string = "revenuefromoperations,otherincome";
+    public expenseGroup: string = "indirectexpenses,operatingcost";
     public get entryList(): FormArray {
         return this.accountEntryListForm.get('entryList') as FormArray;
     }
@@ -95,7 +91,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         }
     ];
     public accountSearchRequest: any = {
-        count: 6,
+        count: 200,
         withStocks: false
     };
     public entrySearchRequest: any = {
@@ -103,6 +99,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     };
     public defaultCount = 6;     //ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
     public category = "income";
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
 
 
     constructor(
@@ -110,11 +108,11 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private route: ActivatedRoute,
         private componentStore: ProjectAccountingComponentStore,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private router: Router
     ) { }
 
     public ngOnInit() {
-        console.log(this.dataSource);
         this.initCreateAccountEntryForm();
         this.initAccountEntryListForm();
         this.componentStore.universalDate$.subscribe(dateObj => {
@@ -131,68 +129,55 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)) // Active company data
         ])
             .pipe(
-                filter(([params, activeCompany]) => !!(params.uniqueName && activeCompany)), // Ensure both values are available
+                debounceTime(200),
+                filter(([params, activeCompany]) => !!(params.uniqueName && activeCompany)),
                 tap(([params, activeCompany]) => {
-                    // Update the project request object
-                    this.getProjectRequest.projectUniqueName = params.uniqueName;
-                    this.category = params.module === 'revenue' ? "income" : "expense"
-                    this.getProjectRequest.companyUniqueName = activeCompany.uniqueName;
-                    this.getProjectRequest.branchUniqueName =
-                        this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
-
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
-                    this.defaultParamsValue.category = params.module === 'revenue' ? "income" : "expense"
+                    this.defaultParamsValue.category = params.module === 'revenue' ? "income" : "expenses"
                     this.accountSearchRequest.group = this.defaultParamsValue.category === "income" ? this.incomeGroup : this.expenseGroup;
                 }),
-                takeUntil(this.destroyed$) // Clean up on component destruction
+                takeUntil(this.destroyed$)
             )
             .subscribe(() => {
-                // Call the API only if dataSource is empty and no API call is in progress
-                if (!this.dataSource?.length && !this.isApiCallInProgress) {
-                    this.getEntryList(this.getProjectRequest);
+                this.selectedTabIndex = this.defaultParamsValue.category === "income" ? 0 : this.defaultParamsValue.category === "expenses" ? 1 : 3;
+                if (this.selectedTabIndex <= 1) {
+                    if (!this.totalResults) {
+                        this.getEntryList();
+                    }
+                    if (!this.accountSearchRequest.isLoading) {
+                        this.searchAccount();
+                    }
                 }
-                this.searchAccount();
-            });
 
-        // Listen for project details changes and update the dataSource
-        this.componentStore.projectDetails$
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(entryList => {
-                if (entryList) {
-                    this.dataSource = entryList;
-                    this.isApiCallInProgress = false; // Reset the API call flag once data is received
-                }
             });
 
         this.componentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
-                this.accountSearchRequest.isLoading = false;
-                let newAccount = accountSearchResponse.results?.map(result => {
-                    return {
+                accountSearchResponse.results?.forEach(result => {
+                    this.accountSearchResponse.push({
                         value: result?.uniqueName,
                         label: result.name,
                         additional: result
-                    }
-                }) || [];
-                this.accountSearchResponse = [...this.accountSearchResponse, ...newAccount];
+                    });
+                });
+                this.accountSearchRequest.isLoading = false;
             }
         });
 
         this.componentStore.entrySearch$.pipe(takeUntil(this.destroyed$)).subscribe(entrySearchResponse => {
             if (entrySearchResponse) {
-                this.entrySearchRequest.isLoading = false;
                 this.entrySearchRequest.nextPageAvailable = entrySearchResponse.nextPageAvailable;
-                let newEntryList = entrySearchResponse.transactions?.map(result => {
-                    return {
+                entrySearchResponse.transactions?.forEach(result => {
+                    this.entrySearchResponse.push({
                         value: result.entryUniqueName,
                         label: result.particular?.name,
                         additional: result
-                    }
-                }) || [];
-                this.entrySearchResponse = [...this.entrySearchResponse, ...newEntryList];
+                    });
+                });
+                this.entrySearchRequest.isLoading = false;
             }
         });
 
@@ -219,11 +204,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     }
                     this.accountEntryListForm.get('entryList')['controls'].push(this.initEntryListForm(requestObject));
                 });
+                this.isApiCallInProgress = true;
             }
         });
 
         this.componentStore.entryDeleteSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryDeleteSuccess => {
             if (entryDeleteSuccess) {
+                this.totalResults -= 1;
                 this.entryList.removeAt(entryDeleteSuccess.index);
             }
         });
@@ -268,14 +255,14 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.componentStore.getProjectAccount(requestObject);
     }
 
-    public getEntryList(requestObject): void {
-        requestObject['category'] = this.category;
+    public getEntryList(): void {
+        const requestObject = { ...this.defaultParamsValue, ...this.getProjectEntryListRequest };
         this.componentStore.getAllEnteryList(requestObject);
     }
     public handlePageChange(event: any): void {
-        this.getProjectRequest.count = event.pageSize;
-        this.getProjectRequest.page = event.pageIndex + 1;
-        this.getEntryList(this.getProjectRequest);
+        this.getProjectEntryListRequest.count = event.pageSize;
+        this.getProjectEntryListRequest.page = event.pageIndex + 1;
+        this.getEntryList();
     }
 
     public handleSearchAccountScrollEnd(): void {
@@ -321,7 +308,6 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.getProjectEntry(entryRequest);
     }
 
-
     public selectAccount(event: any): void {
         if (event) {
             this.createAccountEntryForm.get('account')?.patchValue(event.label);
@@ -331,9 +317,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         }
     }
 
-
     public ngOnDestroy() {
-
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public showGiddhDatepicker(element: any): void {
@@ -375,48 +361,40 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         let payload = cloneDeep(this.createAccountEntryForm.value);
         delete payload['account'];
         delete payload['entry'];
-        payload['category'] = this.category;
+        payload['category'] = this.defaultParamsValue.category;
         const requestObject = {
-            request: {
-                projectUniqueName: this.getProjectRequest.projectUniqueName,
-                companyUniqueName: this.getProjectRequest.companyUniqueName
-            },
+            request: this.defaultParamsValue,
             payload: [payload]
         }
-        console.log("Creat", requestObject);
-
         this.componentStore.createNewEntry(requestObject);
     }
 
-    // Method to delete a specific entry by index
     public deleteEntry(index: number): void {
         const entryUniqueName = this.entryList.at(index).value.entryUniqueName;
         const requestObject = {
             index: index,
-            request: this.getProjectRequest,
+            request: this.defaultParamsValue,
             payload: [entryUniqueName]
         }
-        console.log("deleteEntry", requestObject);
-
         this.componentStore.deleteEntry(requestObject);
     }
+
     public updateSingleEntry(index: number) {
-        const entryUniqueName = this.entryList.at(index).value.entryUniqueName;
-        let payload = cloneDeep(this.entryList.at(index).value);
+        const payload = cloneDeep(this.entryList.at(index).value);
+        const entryUniqueName = payload.entryUniqueName;
         delete payload['account']
         delete payload['entry']
-        payload['category'] = this.category;
+        payload['category'] = this.defaultParamsValue.category;
         const requestObject = {
-            request: {
-                projectUniqueName: this.getProjectRequest.projectUniqueName,
-                companyUniqueName: this.getProjectRequest.companyUniqueName,
-                entryUniqueName: entryUniqueName
-            },
+            request: { ...this.defaultParamsValue, entryUniqueName: entryUniqueName },
             payload: payload,
             index: index,
         }
-        console.log("Creat", requestObject);
-
         this.componentStore.updateEntry(requestObject);
+    }
+
+    public tabChanged(event: any): void {
+        const tab = event.tab.textLabel === "Revenue" ? "revenue" : event.tab.textLabel === "Expense" ? "expenses" : "profit-loss";
+        this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
 }
