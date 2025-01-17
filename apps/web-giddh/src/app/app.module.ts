@@ -39,7 +39,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
 // Get white label configuration from localStorage
-let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
+const whiteLabelString = localStorage.getItem('whiteLabel');
+let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     {
@@ -47,7 +48,7 @@ const APP_PROVIDERS = [
         useValue: IS_ELECTRON_WA
             ? './'
             : whiteLabelConfig && whiteLabelConfig.body && whiteLabelConfig.body.giddhWhiteLabel.domainName
-                ? `http://localhost:3000/` + APP_FOLDER
+                ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
                 : AppUrl + APP_FOLDER
     }
 ];
@@ -120,17 +121,17 @@ localStorage.setItem("Country-Region",
         {
             provide: ServiceConfig,
             useValue: {
-                apiUrl: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` : (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-                appUrl: whiteLabelConfig ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-                PORTAL_URL: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.portalDomain}/` : Configuration.PORTAL_URL,
-                OTP_WIDGET_ID: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetId}` : Configuration.OTP_WIDGET_ID,
-                OTP_TOKEN_AUTH: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetToken}` : Configuration.OTP_TOKEN_AUTH,
-                GOOGLE_CLIENT_ID: whiteLabelConfig ? `${whiteLabelConfig.body.googleClientId}/` : Configuration.GOOGLE_CLIENT_ID,
-                GOOGLE_CLIENT_SECRET: whiteLabelConfig ? `${whiteLabelConfig.body.googleClientSecret}` : Configuration.GOOGLE_CLIENT_SECRET,
-                ApiUrl: whiteLabelConfig ? `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` : (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-                AppUrl: whiteLabelConfig ? `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-                OTP_WIDGET_ID_NEW: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetIdNew}` : '33686b716134333831313239',
-                OTP_TOKEN_AUTH_NEW: whiteLabelConfig ? `${whiteLabelConfig.body.otpWidgetTokenNew}` : '205968TmXguUAwoD633af103P1',
+                apiUrl: `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+                appUrl: `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
+                PORTAL_URL: `https://${whiteLabelConfig.body.giddhWhiteLabel.portalDomain}/` || Configuration.PORTAL_URL,
+                OTP_WIDGET_ID: `${whiteLabelConfig.body.otpWidgetId}` || Configuration.OTP_WIDGET_ID,
+                OTP_TOKEN_AUTH: `${whiteLabelConfig.body.otpWidgetToken}` || Configuration.OTP_TOKEN_AUTH,
+                GOOGLE_CLIENT_ID: `${whiteLabelConfig.body.googleClientId}/` || Configuration.GOOGLE_CLIENT_ID,
+                GOOGLE_CLIENT_SECRET: `${whiteLabelConfig.body.googleClientSecret}` || Configuration.GOOGLE_CLIENT_SECRET,
+                ApiUrl: `https://${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+                AppUrl: `http://${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
+                OTP_WIDGET_ID_NEW: `${whiteLabelConfig.body.otpWidgetIdNew}` || '33686b716134333831313239',
+                OTP_TOKEN_AUTH_NEW: `${whiteLabelConfig.body.otpWidgetTokenNew}` || '205968TmXguUAwoD633af103P1',
                 _
             }
         },
