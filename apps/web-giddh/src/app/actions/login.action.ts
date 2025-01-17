@@ -269,7 +269,6 @@ export class LoginActions {
                 return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList(), [action.payload]);
             }), map((results: any[]) => {
                 console.log("Login Success");
-
                 /* check if local storage is cleared or not for first time
                  for application menu set up in localstorage */
 
@@ -911,8 +910,6 @@ export class LoginActions {
     }
 
     public LoginWithPasswdResponse(value: BaseResponse<VerifyMobileResponseModel, LoginWithPassword>): CustomActions {
-        console.log(value, CustomActions);
-
         return {
             type: LoginActions.LoginWithPasswdResponse,
             payload: value

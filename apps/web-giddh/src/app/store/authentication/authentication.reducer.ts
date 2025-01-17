@@ -385,7 +385,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                 isLoginWithPasswordInProcess: true
             });
         case LoginActions.LoginWithPasswdResponse: {
-
             let res: BaseResponse<any, any> = action.payload;
             if (res?.status === 'success') {
                 if (res.body?.statusCode === "AUTHENTICATE_TWO_WAY") {

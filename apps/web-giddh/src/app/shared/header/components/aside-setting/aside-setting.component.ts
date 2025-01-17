@@ -45,7 +45,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
     }
 

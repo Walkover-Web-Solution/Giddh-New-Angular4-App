@@ -24,7 +24,7 @@ export class AdjustProductServiceComponent implements OnInit {
     public mode: boolean = true;
     public closingQty: Number = 23;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private dialog: MatDialog) { }
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private dialog: MatDialog) { }
 
     public ngOnInit() {
         /* added image path */

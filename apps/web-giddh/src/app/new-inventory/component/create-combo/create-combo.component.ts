@@ -21,7 +21,7 @@ export class CreateComboComponent implements OnInit {
     public imgPath: string = '';
 
     @ViewChildren('unitNameType') public unitNameType: ShSelectComponent;
-    constructor(@Inject(ServiceConfig) private serviceConfig){}
+    constructor(@Inject(ServiceConfig) private serviceConfig ){}
     public ngOnInit() {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';

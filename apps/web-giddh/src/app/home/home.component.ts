@@ -11,7 +11,6 @@ import { ProfitLossComponent } from './components/profit-loss/profile-loss.compo
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { GeneralService } from "../services/general.service";
-import { ServiceConfig } from '../services/service.config';
 
 @Component({
     selector: 'home',
@@ -36,15 +35,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         private homeActions: HomeActions,
         private router: Router,
         private accountService: AccountService,
-        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService
     ) {
         this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        console.log('HOME', this.serviceConfig.ApiUrl, this.serviceConfig.GOOGLE_CLIENT_ID, (this.serviceConfig.AppUrl || AppUrl), this.serviceConfig.GOOGLE_CLIENT_SECRET, this.serviceConfig.PORTAL_URL, this.serviceConfig.OTP_TOKEN_AUTH, this.serviceConfig.OTP_WIDGET_ID);
-
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {

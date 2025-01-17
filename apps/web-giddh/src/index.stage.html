@@ -61,7 +61,7 @@
             window.onload = function () {
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 // Access domainName directly from the parsed object
-                const apiDomainName = whiteLabelConfig.body.giddhWhiteLabel.apiDomainName;
+                const apiDomainName = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomainName || 'apitest.giddh.com';
 
                 // Create a new preconnect link element
                 const preconnectLink = document.createElement("link");

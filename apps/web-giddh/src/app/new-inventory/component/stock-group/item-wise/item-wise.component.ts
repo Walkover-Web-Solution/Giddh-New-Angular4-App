@@ -33,7 +33,7 @@ export class ItemWiseComponent implements OnInit, OnDestroy {
     /* It will store image path */
     public imgPath: string = '';
 
-    constructor(@Inject(ServiceConfig) private serviceConfig) {}
+    constructor(@Inject(ServiceConfig) private serviceConfig ) {}
 
     displayedColumns: string[] = ['productName', 'groupName', 'openingStockQty', 'openingStockValue', 'inwardsQty', 'inwardsValue', 'outwardsQty', 'outwardsValue', 'closingStockQty', 'closingStockValue'];
     dataSource = ELEMENT_DATA;

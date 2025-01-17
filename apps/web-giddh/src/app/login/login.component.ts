@@ -107,6 +107,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || (this.serviceConfig.AppUrl || AppUrl)) + APP_FOLDER;
         this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -157,8 +159,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
@@ -504,10 +504,8 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public async appleLogin(): Promise<void> {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        // Safely retrieve properties from whiteLabel
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : `http://${whiteLabel?.giddhWhiteLabel?.domainName}/`;
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomainName ? `http://${whiteLabel.giddhWhiteLabel.apiDomainName}` : 'https://apitest.giddh.com';
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');

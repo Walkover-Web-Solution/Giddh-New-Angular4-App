@@ -48,7 +48,7 @@ export class CreateNewInventoryComponent implements OnInit {
     public isExpense: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private fb: UntypedFormBuilder,
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private fb: UntypedFormBuilder,
     ) {
     }
 

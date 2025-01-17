@@ -69,7 +69,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
         this.initProfileForm();
         this.portalUrl = (this.serviceConfig.PORTAL_URL || PORTAL_URL);
     }

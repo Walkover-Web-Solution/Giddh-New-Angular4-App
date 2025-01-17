@@ -53,7 +53,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     /** Holds table displayed columns name */
     public displayedColumns: string[] = ['description', 'total_transactions', 'taxable_amount', 'igst', 'cgst', 'sgst', 'cess'];
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
         this.gstr2OverviewData$ = this.store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -65,8 +65,6 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
-
         this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.gstr1OverviewData$.subscribe(data => {
             if (data && this.selectedGst === GstReport.Gstr1) {
