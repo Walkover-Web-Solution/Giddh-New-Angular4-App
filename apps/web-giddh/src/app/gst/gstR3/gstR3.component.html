@@ -43,8 +43,8 @@
                                         d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
                                     ></path>
                                 </svg>
+                                {{ localeData?.gstr3b_summary }}
                             </a>
-                            {{ localeData?.gstr3b_summary }}
                         </span>
                         <div>
                             <input
@@ -222,9 +222,6 @@
                     </ul>
                 </div> -->
                 <div id="ember1220" class="ember-view" *ngIf="selectedGstr3BTab === 'pushGSTN'">
-                    <div class="gstr3b-page-header">
-                        <span class="font-xxxlarge">{{ localeData?.gstr3b?.summary }}</span>
-                    </div>
                     <div class="summary-content">
                         <div class="table-responsive">
                             <table

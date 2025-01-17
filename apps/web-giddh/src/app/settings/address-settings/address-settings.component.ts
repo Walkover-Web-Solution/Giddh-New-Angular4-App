@@ -497,7 +497,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public showConfirmationModal(address: any) {
         this.selectedAddress = address;
         this.deleteAddressConfirmationModalRef = this.dialog.open(this.deleteAddressConfirmationModal, {
-            panelClass: ['modal-dialog', 'mat-dialog-md'],
+            panelClass: "mat-dialog-sm",
             disableClose: true
         });
     }

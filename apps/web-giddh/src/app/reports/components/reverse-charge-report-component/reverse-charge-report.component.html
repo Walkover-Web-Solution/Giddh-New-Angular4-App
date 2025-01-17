@@ -96,19 +96,19 @@
                     matSort 
                     [dataSource]="reverseChargeReportResults?.items"  
                     (matSortChange)="sortChange($event)"
-                    [hidden]="!(reverseChargeReportResults?.items?.length || isSearching)"
+                    [hidden]="isLoading || isSearching || !reverseChargeReportResults?.items?.length"
                 >
                     <!-- Index Column -->
                     <ng-container matColumnDef="index">
                         <th mat-header-cell *matHeaderCellDef>#</th>
-                        <td mat-cell *matCellDef="let element; let i = index" class="text-center">
+                        <td mat-cell *matCellDef="let element; let i = index" class="text-center no-wrap">
                             {{ i | serialNumber: reverseChargeReportGetRequest.page: (reverseChargeReportGetRequest.count ?? pageSizeOptions[0]) }}
                         </td>
                     </ng-container>
 
                     <!-- Entry Date Column -->
                     <ng-container matColumnDef="entryDate">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="120px">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="width-150">
                             {{ localeData?.entry_date }}
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.entryDate }}</td>
@@ -174,7 +174,7 @@
 
                     <!-- Supplier Invoice Date Column -->
                     <ng-container matColumnDef="supplierInvoiceDate">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="width-150">
                         {{ localeData?.suppliers_invoice_date }}
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.supplierInvoiceDate || '-' }}</td>
@@ -258,7 +258,7 @@
                 <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
             
             </div>
-            <div class="pagination-wrapper mt-1" [hidden]="isLoading" *ngIf="reverseChargeReportResults.totalPages > 1">
+            <div [hidden]="isLoading" *ngIf="!isLoading && reverseChargeReportResults.totalPages > 1">
                 <mat-paginator
                     (page)="pageChanged($event)"
                     [length]="reverseChargeReportResults.totalItems"

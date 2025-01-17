@@ -41,6 +41,7 @@
     "invalid_email": "अवैध ई - मेल पत्ता",
     "gmail_account_added": "Gmail खाते यशस्वीरित्या जोडले",
     "e_invoice_authentication_label": "ई-इनव्हॉइसिंग ऑथेंटिकेशन",
+    "generate_e_way_bill": "ई-इनव्हॉइस तयार करून ई-वे बिल तयार करा",
     "e_invoice_username_label": "वापरकर्तानाव",
     "e_invoice_password_label": "संकेतशब्द",
     "e_invoice_gstin_label": "जीएसटीआयएन",

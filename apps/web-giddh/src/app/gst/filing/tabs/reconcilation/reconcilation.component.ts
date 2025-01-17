@@ -63,7 +63,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     /** Holds active tab index */
     public activeTabIndex: number = 0;
     /** Holds page size options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Hold table page index number */
     public pageIndex: number = 0;
 
@@ -127,7 +127,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      * @param count 
      * @returns 
      */
-    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = this.pageSizeOptions[0]) {
+    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = this.pageSizeOptions[2]) {
         if (!this.currentPeriod) {
             return;
         }
@@ -157,7 +157,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     public getPageInfo(): { pageNumber: number, count: number } {
         const page = {
             pageNumber: 1,
-            count: this.pageSizeOptions[0]
+            count: this.pageSizeOptions[2]
         }
 
         switch (this.reconcileActiveTab) {

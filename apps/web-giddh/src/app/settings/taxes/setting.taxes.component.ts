@@ -222,7 +222,8 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             },
             width: 'var(--aside-pane-width)',
             height: '100vh !important',
-            disableClose: true
+            disableClose: true,
+            autoFocus: false
         });
     }
 

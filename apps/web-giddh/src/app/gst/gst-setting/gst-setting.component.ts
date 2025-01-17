@@ -233,7 +233,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof GstSettingComponent
      */
     public removeLutItem(index: number): void {
-        this.openConfirmationDialog(index);
+        if (typeof index === 'number') {
+            this.openConfirmationDialog(index);
+        }
     }
 
     /**

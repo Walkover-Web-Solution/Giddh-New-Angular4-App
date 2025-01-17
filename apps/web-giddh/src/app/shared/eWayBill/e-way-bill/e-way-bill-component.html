@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div class="custom-tabs e-waybill-tabs heightVH-100">
+    <div class="e-waybill-tabs heightVH-100">
         <mat-tab-group
             mat-stretch-tabs="false"
             [selectedIndex]="activeTabIndex"
@@ -60,7 +60,7 @@
             *ngIf="!(ewaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)"
         >
             <mat-tab [label]="localeData?.tab_generated_bills">
-                <div class="table-responsive table-wrapper overflow-visible px-3">
+                <div class="table-responsive overflow-visible px-3">
                     <table
                         mat-table
                         class="table basic table-bordered giddh-table"
@@ -79,17 +79,15 @@
                         <ng-container matColumnDef="docNumber">
                             <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_invoice_no }}</th>
                             <td mat-cell *matCellDef="let item" class="download-arrow">
-                                <span class="d-flex flex-nowrap align-items-center column-gap1">
-                                    <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
-                                    <a
-                                        (click)="onSelectEwayDownload(item)"
-                                        [matTooltip]="localeData?.download_eway_bill"
-                                        matTooltipPosition="above"
-                                        class="pull-right cursor-pointer"
-                                    >
-                                        <i class="icon-download1"></i>
-                                    </a>
-                                </span>
+                                <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
+                                <a
+                                    (click)="onSelectEwayDownload(item)"
+                                    [matTooltip]="localeData?.download_eway_bill"
+                                    matTooltipPosition="above"
+                                    class="pull-right cursor-pointer"
+                                >
+                                    <i class="icon-download1 font-16"></i>
+                                </a>
                             </td>
                         </ng-container>
 
@@ -145,13 +143,13 @@
                                     <i class="caret"></i>
                                 </button>
                                 <mat-menu #downloadCsvEmail="matMenu">
-                                    <button mat-menu-item (click)="openAddVehicleOrCancelDialog('vehicle', item)">
+                                    <button mat-menu-item (click)="openAddVehicleDialog(item, template)">
                                         {{ localeData?.add_vehicle_details }}
                                     </button>
                                     <button mat-menu-item (click)="onSelectEwayDetailedDownload(item)">
                                         {{ localeData?.download_detailed_eway }}
                                     </button>
-                                    <button mat-menu-item (click)="openAddVehicleOrCancelDialog('cancel', item)">
+                                    <button mat-menu-item (click)="openCancelDialog(item)">
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </mat-menu>
@@ -306,6 +304,7 @@
                         <ul class="list-icon-group column-gap1">
                             <li>
                                 <input
+                                    matInput
                                     id="transMode1"
                                     type="radio"
                                     name="transMode"
@@ -319,6 +318,7 @@
                             </li>
                             <li>
                                 <input
+                                    matInput
                                     id="transMode2"
                                     type="radio"
                                     [(ngModel)]="updateEwayVehicleform.transMode"
@@ -332,6 +332,7 @@
                             </li>
                             <li>
                                 <input
+                                    matInput
                                     id="transMode3"
                                     type="radio"
                                     [(ngModel)]="updateEwayVehicleform.transMode"
@@ -345,6 +346,7 @@
                             </li>
                             <li>
                                 <input
+                                    matInput
                                     id="transMode4"
                                     type="radio"
                                     [(ngModel)]="updateEwayVehicleform.transMode"
@@ -479,7 +481,7 @@
             <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
         </div>
         <mat-dialog-content class="w-100">
-            <form #cancelEwayForm="ngForm" autocomplete="off" class="p-3">
+            <form autocomplete="off" name="cancelEwayForm" [formGroup]="cancelEwayForm" class="p-3" >
                 <div class="d-flex flex-column row-gap15">
                     <!-- Reason Code -->
                     <dropdown-field
@@ -488,7 +490,7 @@
                         [options]="ewayCancelReason"
                         [name]="'cancelRsnCode'"
                         [required]="true"
-                        (selectedOption)="cancelEwayRequest.cancelRsnCode = $event.value"
+                        formControlName="cancelRsnCode"
                     >
                     </dropdown-field>
 
@@ -499,7 +501,7 @@
                             matInput
                             rows="2"
                             name="cancelRmrk"
-                            [(ngModel)]="cancelEwayRequest.cancelRmrk"
+                            formControlName="cancelRmrk"
                             [placeholder]="localeData?.remark_placeholder"
                         ></textarea>
                     </mat-form-field>
@@ -509,7 +511,7 @@
                             mat-stroked-button
                             color="primary"
                             type="submit"
-                            (click)="cancelEwayBill(cancelEwayRequest)"
+                            (click)="cancelEwayBill()"
                             aria-label="confirm"
                         >
                             {{ commonLocaleData?.app_confirm }}
