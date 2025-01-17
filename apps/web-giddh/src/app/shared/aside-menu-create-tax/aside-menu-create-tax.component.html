@@ -61,7 +61,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col-sm-6 col-xs-12">
                     <input-field
                         [type]="'text'"
@@ -101,7 +101,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row my-3" *ngIf="(taxForm?.get('taxType')?.value === 'cess') || (taxForm?.get('taxType')?.value === 'others' && !tax)">
                 <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'cess'">
                     <reactive-dropdown-field
                         [options]="allTaxes"
@@ -123,7 +123,7 @@
                 </div>
             </div>
 
-            <div *ngIf="tax" class="row mb-3">
+            <div *ngIf="tax" class="row">
                 <div class="col-sm-12">
                     {{ localeData?.linked_account }}
                     <div class="custom-tags" *ngIf="taxForm?.get('accounts')?.value?.length">
