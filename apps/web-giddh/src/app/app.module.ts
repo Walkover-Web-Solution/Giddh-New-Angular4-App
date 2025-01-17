@@ -71,15 +71,18 @@ let giddhRegion = document.cookie
     .find(cookie => cookie.startsWith('giddh_region='))
     ?.split('=')[1];
 giddhRegion = giddhRegion?.toUpperCase();
-
-if (giddhRegion === "UK") {
-    localStorage.setItem("Country-Region", "GB");
-} else if (giddhRegion === "AE") {
-    localStorage.setItem("Country-Region", "AE");
-} else if (giddhRegion === "IN") {
+if (whiteLabelConfig) {
     localStorage.setItem("Country-Region", "IN");
 } else {
-    localStorage.setItem("Country-Region", "GL");
+    if (giddhRegion === "UK") {
+        localStorage.setItem("Country-Region", "GB");
+    } else if (giddhRegion === "AE") {
+        localStorage.setItem("Country-Region", "AE");
+    } else if (giddhRegion === "IN") {
+        localStorage.setItem("Country-Region", "IN");
+    } else {
+        localStorage.setItem("Country-Region", "GL");
+    }
 }
 
 /**
