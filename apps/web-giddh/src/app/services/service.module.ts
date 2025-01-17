@@ -71,8 +71,6 @@ import { CustomFieldsService } from "./custom-fields.service";
 import { VoucherService } from "./voucher.service";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 import { CountryCodeService } from './country-code.service';
-import { EnvironmentService } from "./enviroment.service";
-
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
  */
@@ -155,7 +153,6 @@ export class ServiceModule {
                 VoucherService,
                 VouchersUtilityService,
                 CountryCodeService,
-                EnvironmentService,
                 CountryCodeService
             ]
         };
