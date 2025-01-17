@@ -61,13 +61,13 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     /** Holds selected date */
     public date: FormControl = new FormControl();
     /** Holds page size options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds pagination data */
     private pagination: any = {
         "page": 1,
-        "count": this.pageSizeOptions[0],
+        "count": this.pageSizeOptions[2],
         "totalPages": 1,
         "totalItems": 1
     }

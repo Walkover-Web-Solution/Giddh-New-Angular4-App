@@ -32,14 +32,14 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds page size options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public reverseChargeReportGetRequest: ReverseChargeReportGetRequest = {
         from: '',
         to: '',
         sort: '',
         sortBy: '',
         page: 1,
-        count: this.pageSizeOptions[0]
+        count: this.pageSizeOptions[2]
     };
     public reverseChargeReportPostRequest: ReverseChargeReportPostRequest = {
         supplierName: '',
@@ -266,12 +266,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public pageChanged(event: any): void {
         if (event) {
-            const pageIndex = event.pageIndex + 1;
-            if (this.reverseChargeReportGetRequest.page !== pageIndex) {
-                this.reverseChargeReportResults.results = [];
-                this.reverseChargeReportGetRequest.page = pageIndex;
-                this.getReverseChargeReport(false);
-            }
+            this.reverseChargeReportResults.results = [];
+            this.reverseChargeReportGetRequest.page = event.pageIndex + 1;
+            this.reverseChargeReportGetRequest.count = event.pageSize;
+            this.getReverseChargeReport(false);
         }
     }
 
@@ -368,6 +366,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.reverseChargeReportGetRequest.sortBy = "";
         this.reverseChargeReportGetRequest.from = "";
         this.reverseChargeReportGetRequest.to = "";
+        this.searchedName.setValue(null);
+        this.searchedInvoiceNo.setValue(null);
+        this.searchedCountry.setValue(null);
         this.isSearching = false;
         if (!this.todaySelected) {
             this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };

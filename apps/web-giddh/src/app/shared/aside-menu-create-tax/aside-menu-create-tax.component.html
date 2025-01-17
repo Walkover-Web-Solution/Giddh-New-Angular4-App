@@ -40,6 +40,7 @@
                         [labelValue]="selectedTax"
                         [placeholder]="localeData?.select_tax"
                         [required]="true"
+                        [readonly]="tax && tax?.uniqueName"
                         formControlName="taxType"
                         [showError]="!isValidForm && !taxForm?.get('taxType')?.value"
                         (selectedOption)="selectTax($event)"

@@ -12,6 +12,7 @@ import { GiddhDatepickerModule } from "../../theme/giddh-datepicker/giddh-datepi
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { GiddhProgressSpinnerComponent } from '../giddh-progress-spinner/giddh-progress-spinner.component';
+import { DatepickerWrapperModule } from '../datepicker-wrapper/datepicker.wrapper.module';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { GiddhProgressSpinnerComponent } from '../giddh-progress-spinner/giddh-p
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
+        DatepickerWrapperModule,
         MatFormFieldModule,
         MatDialogModule,
         MatButtonModule,

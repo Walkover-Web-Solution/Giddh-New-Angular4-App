@@ -149,7 +149,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             this.taxForm.get('taxAuthority').setValue(this.tax?.taxAuthority ?? '');
             (this.taxForm.get('taxAuthorityRequest') as FormGroup).get('uniqueName').setValue(this.tax.taxAuthority?.uniqueName ?? '');
             this.taxForm.get('taxValue').setValue(this.tax.taxDetail[0].taxValue ?? '');
-            this.taxForm.get('date').setValue(dayjs(this.tax.taxDetail[0].date).toDate() ?? dayjs().toDate() ?? '');
+            this.taxForm.get('date').setValue(dayjs(this.tax.taxDetail[0].date).toDate() ?? dayjs().toDate());
             this.taxForm.get('tdsTcsTaxSubTypes').setValue(this.subType ?? '');
             this.taxForm.get('taxType').setValue(this.subType ? this.tax.taxType?.replace(this.subType, '') : this.tax.taxType);
             this.taxForm.get('taxFileDate').setValue(this.tax.taxFileDate?.toString() ?? '');
@@ -198,7 +198,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             taxDetail: [{}, [Validators.required]],
             taxAuthority: [''],
             taxValue: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
-            date: ['', [Validators.required]],
+            date: [dayjs().toDate(), [Validators.required]],
             tdsTcsTaxSubTypes: [null],
             taxAuthorityRequest: this.formBuilder.group({
                 uniqueName: ['']
