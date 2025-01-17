@@ -122,3 +122,12 @@ $listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors
         width: fit-content;
     }
 }
+
+table {
+    tr {
+        th, td {
+            word-break: keep-all !important;
+            white-space: normal !important;
+        }
+    }
+}
