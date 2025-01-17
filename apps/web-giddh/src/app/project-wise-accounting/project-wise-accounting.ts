@@ -2,7 +2,7 @@ export interface projectType {
     companyUniqueName: string;
     branchUniqueName: string;
     sort: 'asc' | 'desc' | '';
-    sortBy: 'NAME' | 'TOTAL_INVOICES' | 'TOTAL_INVOICES' | 'TOTAL_BILLS' | 'STATUS';
+    sortBy: 'NAME' | 'ARCHIVE_STATUS' | 'STATUS';
     page: number;
     count: number;
     q: string;

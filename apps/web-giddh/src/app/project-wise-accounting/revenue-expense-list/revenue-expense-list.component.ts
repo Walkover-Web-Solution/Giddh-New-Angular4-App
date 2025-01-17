@@ -183,6 +183,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.componentStore.entryCreateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryCreateSuccess => {
             if (entryCreateSuccess) {
                 this.accountEntryListForm.get('entryList')['controls'].push(this.initEntryListForm(this.createAccountEntryForm.value));
+                this.totalResults += 1;
                 this.createAccountEntryForm.reset();
             }
         });
@@ -370,6 +371,14 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.getProjectEntry(entryRequest);
     }
 
+    public currentEntry(accountUniqueName: string) {
+        this.entrySearchResponse = [];
+        this.entrySearchRequest.accountUniqueName = accountUniqueName;
+        if (accountUniqueName.trim() != '') {
+            this.searchEntry(this.entrySearchRequest.q);
+        }
+    }
+
     /**
      * Selects an account from the account search results and updates the form.
      *
@@ -379,9 +388,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public selectAccount(event: any): void {
         if (event) {
             this.createAccountEntryForm.get('account')?.patchValue(event.label);
-            this.entrySearchRequest.accountUniqueName = this.createAccountEntryForm.get('accountUniqueName').value;
-            this.entrySearchResponse = [];
-            this.searchEntry(this.entrySearchRequest.q);
+            // this.entrySearchRequest.accountUniqueName = this.createAccountEntryForm.get('accountUniqueName').value;
+            // this.entrySearchResponse = [];
+            // this.searchEntry(this.entrySearchRequest.q);
         }
     }
 

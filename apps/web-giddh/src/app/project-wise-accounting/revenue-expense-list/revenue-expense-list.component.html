@@ -64,6 +64,7 @@
                         </td>
                         <td>
                             <reactive-dropdown-field 
+                                (click)="currentEntry(createAccountEntryForm?.get('accountUniqueName')?.value)"
                                 [label]="'Search Entry'" 
                                 [placeholder]="'Select'"
                                 [options]="entrySearchResponse"
@@ -132,6 +133,7 @@
                                     </td>
                                     <td>
                                         <reactive-dropdown-field 
+                                            (click)="currentEntry(entry.get('accountUniqueName')?.value)"
                                             [label]="'Search Entry'" 
                                             [placeholder]="'Select'"
                                             [labelValue]="entry.get('entry')?.value" 
