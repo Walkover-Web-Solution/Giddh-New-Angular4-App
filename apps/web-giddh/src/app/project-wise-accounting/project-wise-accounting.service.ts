@@ -1,0 +1,227 @@
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { HttpWrapperService } from '../services/http-wrapper.service';
+import { GiddhErrorHandler } from '../services/catchManager/catchmanger';
+import { GeneralService } from '../services/general.service';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
+import { ACCOUNTING_API } from './project-wise-accounting.api';
+import { BaseResponse } from '../models/api-models/BaseResponse';
+
+@Injectable()
+export class ProjectAccountingService {
+
+    constructor(
+        private http: HttpWrapperService,
+        private errorHandler: GiddhErrorHandler,
+        private generalService: GeneralService,
+        @Optional() @Inject(ServiceConfig)
+        private config: IServiceConfigArgs
+    ) {
+    }
+
+    /**
+     * Replaces placeholders in a URL with corresponding values from a model object.
+     * @param url - The URL containing placeholders like `:key`.
+     * @param model - An object containing key-value pairs to replace in the URL.
+     * @returns The formatted URL with placeholders replaced.
+     */
+    public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
+        if (!url || !model) return url;
+        if (model.hasOwnProperty('companyUniqueName')) {
+            model.companyUniqueName = this.generalService.companyUniqueName;
+        }
+        url = this.config.apiUrl + url;
+        return Object.keys(model).reduce((updatedUrl, key) => {
+            const placeholder = `:${key}`;
+            return updatedUrl.replace(placeholder, encodeURIComponent(model[key]) || '');
+        }, url);
+    }
+
+    /**
+     * Sends a POST request to create a new project.
+     * 
+     * @param model - An object containing the data required to create the project.
+     * @returns An observable of the API response.
+     * @memberof ProjectAccountingService
+     */
+    public createNewProject(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        if (model.isCreateFlow) {
+            return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_PROJECT, model.data), payload)
+                .pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, any> = res;
+                        data.request = '';
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+        } else {
+            return this.http.patch(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model.data), model.data)
+                .pipe(
+                    map((res) => {
+                        let data: BaseResponse<any, any> = res;
+                        data.request = '';
+                        return data;
+                    }),
+                    catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+        }
+    }
+
+    /**
+     * Sends a PATCH request to update an existing project.
+     * 
+     * @param model - An object containing the data to update the project.
+     * @returns An observable of the API response.
+     * @memberof ProjectAccountingService
+     */
+
+    public editProjectDetails(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.patch(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model), model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Sends a GET request to retrieve all projects.
+     * 
+     * @param model - An optional object containing query parameters for the request.
+     * @returns An observable of the API response with the list of projects.
+     * @memberof ProjectAccountingService
+     */
+    public getAllProjects(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_PROJECTS, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Sends a GET request to retrieve the details of a single project.
+     * 
+     * @param model - An object containing the unique identifier of the project.
+     * @returns An observable of the API response with the project details.
+     * @memberof ProjectAccountingService
+     */
+    public getProjectById(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Sends a DELETE request to remove a project.
+     * 
+     * @param model - An object containing the unique identifier of the project to be deleted.
+     * @returns An observable of the API response.
+     * @memberof ProjectAccountingService
+     */
+    public removeProject(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.delete(this.replaceUrlPlaceholders(ACCOUNTING_API.DELETE_PROJECT, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Sends a GET request to retrieve the net profit for a specific project.
+     * 
+     * @param model - An object containing the unique identifier of the project.
+     * @returns An observable of the API response with the net profit details.
+     * @memberof ProjectAccountingService
+     */
+    public getProjectProfit(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_NET_PROFIT, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public createEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public removeEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        return this.http.deleteWithBody(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public updateEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
+        return this.http.put(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_ENTRY, model), payload)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public searchEntry(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.ENTRY_SEARCH, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    public getAllEntryList(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_ENTRY, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+
+    public getProjectProfitAndLoss(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT_PROFIT_LOSS, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+}

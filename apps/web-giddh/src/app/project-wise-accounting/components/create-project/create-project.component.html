@@ -1,0 +1,57 @@
+<ng-container
+    appTranslate
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div>
+        <!-- Dialog Header -->
+        <div class="dialog-header">
+            <span mat-dialog-title class="font-16">{{ inputData.isCreateFlow ? 'Create Project' : 'Update Project' }}</span>
+            <i mat-dialog-close class="icon-cross"></i>
+        </div>
+
+        <!-- Dialog Body -->
+        <div class="dialog-body pd-3">
+            <div *ngIf="isSavingProject$ | async">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+
+            <!-- Project Form -->
+            <form
+                [formGroup]="createProjectForm"
+                novalidate
+                (ngSubmit)="createProject()"
+                autocomplete="off"
+                *ngIf="!(isSavingProject$ | async)"
+            >
+                <div class="col-8">
+                    <input-field 
+                        [type]="'text'"
+                        [name]="'projectName'" 
+                        [placeholder]="'Enter Project Name'"
+                        [label]="'Project Name'"
+                        formControlName="projectName"
+                    ></input-field>
+                    <div *ngIf="projectName?.invalid && projectName?.touched">
+                        <small class="danger" *ngIf="projectName?.hasError('required')">
+                            Project Name is required.
+                        </small>
+                        <small class="danger" *ngIf="projectName?.hasError('minlength')">
+                            Project Name must be at least 3 characters.
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="col-12 d-flex column-gap1 mr-t2">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="isSavingProject$ | async">
+                        {{ inputData.isCreateFlow ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
+                    </button>
+                    <button mat-raised-button color="primary" mat-dialog-close>
+                        {{ commonLocaleData?.app_cancel }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-container>
