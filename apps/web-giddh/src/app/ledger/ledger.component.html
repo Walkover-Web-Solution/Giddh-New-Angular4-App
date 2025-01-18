@@ -1691,7 +1691,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -1699,21 +1699,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2789,7 +2774,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -2797,21 +2782,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
