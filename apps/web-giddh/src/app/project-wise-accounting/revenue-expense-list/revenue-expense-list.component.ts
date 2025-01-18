@@ -14,7 +14,7 @@ import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
 import { MatTabChangeEvent } from "@angular/material/tabs";
 
 @Component({
-    selector: 'revenue-expense-list.',
+    selector: 'revenue-expense-list',
     styleUrls: ['./revenue-expense-list.component.scss'],
     templateUrl: './revenue-expense-list.component.html',
     providers: [ProjectAccountingComponentStore]
@@ -134,14 +134,14 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
-                    this.defaultParamsValue.category = params.module === 'revenue' ? "income" : "expenses"
+                    this.defaultParamsValue.category = params.module === 'revenue' ? "income" : params.module;
                     this.accountSearchRequest.group = this.defaultParamsValue.category === "income" ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
                 }),
                 takeUntil(this.destroyed$)
             )
             .subscribe(() => {
-                this.selectedTabIndex = this.defaultParamsValue.category === "income" ? 0 : this.defaultParamsValue.category === "expenses" ? 1 : 3;
+                this.selectedTabIndex = this.defaultParamsValue.category === "income" ? 0 : this.defaultParamsValue.category === "expenses" ? 1 : 2;
                 if (this.selectedTabIndex <= 1) {
                     if (!this.totalResults) {
                         this.getEntryList();

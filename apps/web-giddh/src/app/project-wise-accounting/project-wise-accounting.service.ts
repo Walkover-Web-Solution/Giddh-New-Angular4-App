@@ -28,7 +28,7 @@ export class ProjectAccountingService {
      */
     public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
         if (!url || !model) return url;
-        if (model.hasOwnProperty('companyUniqueName')) {
+        if (Object.hasOwn(model, 'companyUniqueName')) {
             model.companyUniqueName = this.generalService.companyUniqueName;
         }
         url = this.config.apiUrl + url;
@@ -56,7 +56,7 @@ export class ProjectAccountingService {
                     }),
                     catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
         } else {
-            return this.http.patch(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model.data), model.data)
+            return this.http.patch(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model.data), payload)
                 .pipe(
                     map((res) => {
                         let data: BaseResponse<any, any> = res;

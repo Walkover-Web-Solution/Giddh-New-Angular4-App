@@ -19,8 +19,8 @@
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
             <mat-tab label="Profit and Loss">
-                <div class="pd-15">
-                    <profit-loss *ngIf="defaultParamsValue?.projectUniqueName" [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
+                <div class="pd-15" *ngIf="defaultParamsValue?.projectUniqueName">
+                    <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
             </mat-tab>
         </mat-tab-group>
@@ -31,9 +31,12 @@
     <div class="section-center pd-15">
        <header class="d-flex align-items-center justify-content-space-between">
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                <input type="text" name="selectedDateRange"
+                <input 
+                    type="text" 
+                    name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker" />
+                    class="giddh-datepicker date-range-picker" 
+                />
             </div>
             <div>
                 <span>{{ localeData?.total_revenue }} : {{ totalResults }}</span>&nbsp;&nbsp;
@@ -180,6 +183,7 @@
                                             formControlName="value"
                                             [disabled]="!entry.get('entryUniqueName').value"
                                             [readonly]="!entry.get('entryUniqueName').value"
+                                            [min]="1"
                                         >
                                         </input-field>
                                     </td>
@@ -204,7 +208,7 @@
             </table>
            
             <mat-paginator
-                *ngIf="totalResults && (pageSizeOptions[0] > totalResults) && !(isFetchingProjects$ | async)"
+                *ngIf="totalResults > pageSizeOptions[0] && !(isFetchingProjects$ | async)"
                 class="mt-3"
                 (page)="handlePageChange($event)"
                 [length]="totalResults"
