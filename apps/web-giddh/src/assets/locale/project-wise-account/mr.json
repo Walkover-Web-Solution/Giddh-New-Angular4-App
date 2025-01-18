@@ -1,0 +1,18 @@
+{
+    "total_revenue": "एकूण महसूल",
+    "select_account": "खाते निवडा",
+    "select_entry": "प्रविष्टि निवडा",
+    "select_method": "पद्धत निवडा",
+    "enter_amount": "रक्कम प्रविष्ट करा",
+    "create_project": "+ प्रकल्प तयार करा",
+    "update_project": "प्रकल्प अपडेट करा",
+    "product_name": "उत्पादनाचे नाव",
+    "enter_product_name": "उत्पादनाचे नाव प्रविष्ट करा",
+    "search_product": "उत्पादन शोधा",
+    "profit_and_loss": "नफा आणि तोटा",
+    "project_name_is_required": "प्रकल्पाचे नाव आवश्यक आहे",
+    "project_name_must_be_at_least_3_characters": "प्रकल्पाचे नाव किमान 3 अक्षरांचे असावे",
+    "revenue": "महसूल",
+    "expense": "खर्च",
+    "project_delete_confirmation_message": "आपल्याला खात्री आहे का की आपण हा प्रकल्प हटवू इच्छिता?"
+}

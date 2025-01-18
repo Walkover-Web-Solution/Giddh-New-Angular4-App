@@ -1,6 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ProjectAccountingComponentStore } from '../../project-wise-accounting.store';
+import { ProjectWiseAccountingComponentStore } from '../../project-wise-accounting.store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProjectDialogData } from '../../project-wise-accounting';
@@ -9,7 +9,7 @@ import { ProjectDialogData } from '../../project-wise-accounting';
     selector: 'create-project',
     templateUrl: './create-project.component.html',
     styleUrls: ['./create-project.component.scss'],
-    providers: [ProjectAccountingComponentStore]
+    providers: [ProjectWiseAccountingComponentStore]
 })
 export class CreateProjectComponent implements OnInit, OnDestroy {
     /** Indicates if the form is loading */
@@ -31,23 +31,21 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 
     constructor(
         private dialogRef: MatDialogRef<CreateProjectComponent>,
-        private componentStore: ProjectAccountingComponentStore,
+        private componentStore: ProjectWiseAccountingComponentStore,
         private formBuilder: FormBuilder,
         @Inject(MAT_DIALOG_DATA) public inputData: ProjectDialogData
     ) { }
 
     /**
-      * Lifecycle hook for component initialization.
-      *
-      * @memberof CreateProjectComponent
-      */
+     * Lifecycle hook for component initialization.
+     *
+     * @memberof CreateProjectComponent
+     */
     public ngOnInit(): void {
         this.initCreateProjectForm();
-
-        // Subscribe to saveProjectSuccess$ to handle successful saves
         this.componentStore.saveProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((project) => {
             if (project) {
-                if (!this.inputData.isCreateFlow) {
+                if (!this.inputData?.isCreateFlow) {
                     project.name = this.createProjectForm.get('projectName')?.value;
                 }
                 this.sendResponse(project);
@@ -77,10 +75,10 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
             const projectName = this.createProjectForm.get('projectName').value;
             this.componentStore.createNewProject({
                 request: {
-                    data: this.inputData.project,
-                    isCreateFlow: this.inputData.isCreateFlow,
+                    data: this.inputData?.project,
+                    isCreateFlow: this.inputData?.isCreateFlow,
                 },
-                payload: { name: projectName },
+                payload: { name: projectName }
             });
         } else {
             this.createProjectForm.markAllAsTouched();
@@ -94,7 +92,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
      * @memberof CreateProjectComponent
      */
     public sendResponse(response: any): void {
-        this.dialogRef.close(response);
+        this.dialogRef?.close(response);
     }
 
     /**

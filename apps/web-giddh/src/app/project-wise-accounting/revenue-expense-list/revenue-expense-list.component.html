@@ -12,13 +12,13 @@
             [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
         >
-            <mat-tab label="Revenue">
+            <mat-tab [label]="localeData?.revenue">
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
-            <mat-tab label="Expense"> 
+            <mat-tab [label]="localeData?.expense"> 
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
-            <mat-tab label="Profit and Loss">
+            <mat-tab [label]="localeData?.profit_and_loss">
                 <div class="pd-15" *ngIf="defaultParamsValue?.projectUniqueName">
                     <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
@@ -70,7 +70,8 @@
                                 (scrollEnd)="handleSearchAccountScrollEnd()"
                                 (dynamicSearchedQuery)="searchAccount($event)"
                                 (selectedOption)="selectAccount($event)"
-                                (onClear)="createAccountEntryForm?.get('account')?.patchValue(null)"
+                                (onClear)="createAccountEntryForm?.get('account')?.patchValue(null); createAccountEntryForm?.get('accountUniqueName')?.patchValue(null)"
+                                [showError]="!isCreateAccountValidForm && !createAccountEntryForm?.get('accountUniqueName')?.value"
                             >
                             </reactive-dropdown-field>
                         </td>
@@ -87,7 +88,8 @@
                                 (scrollEnd)="handleSearchEntryScrollEnd()"
                                 (dynamicSearchedQuery)="searchEntry($event)"
                                 (selectedOption)="createAccountEntryForm?.get('entry')?.patchValue($event.label)"
-                                (onClear)="createAccountEntryForm?.get('entry')?.patchValue(null)"
+                                (onClear)="createAccountEntryForm?.get('entry')?.patchValue(null); createAccountEntryForm?.get('entryUniqueName')?.patchValue(null)"
+                                [showError]="!isCreateAccountValidForm && !createAccountEntryForm?.get('entryUniqueName')?.value"
                             >
                             </reactive-dropdown-field>
                         </td>
@@ -99,7 +101,8 @@
                                 [options]="selectMethod" 
                                 [labelValue]="createAccountEntryForm?.get('calculationMethod')?.value"
                                 formControlName="calculationMethod"
-                                (onClear)="createAccountEntryForm?.get('calculationMethod')?.patchValue(null)"
+                                (onClear)="createAccountEntryForm?.get('calculationMethod')?.patchValue(null);"
+                                [showError]="!isCreateAccountValidForm && !createAccountEntryForm?.get('calculationMethod')?.value"
                             >
                             </reactive-dropdown-field>
                         </td>
@@ -109,7 +112,9 @@
                                 [type]="'number'" 
                                 [label]="commonLocaleData?.app_amount"
                                 [placeholder]="localeData?.enter_amount" 
-                                formControlName="value">
+                                formControlName="value"
+                                [showError]="true"
+                            >
                             </input-field>
                         </td>
                         <td class="text-center">
@@ -140,7 +145,9 @@
                                             (scrollEnd)="handleSearchAccountScrollEnd()"
                                             (dynamicSearchedQuery)="searchAccount($event)"
                                             (onClear)="entry.get('accountUniqueName').patchValue(null); entry.get('entryUniqueName').patchValue(null) ; entry.get('entry').patchValue(null)"
-                                            (selectedOption)="entry.get('account').patchValue($event.label)">
+                                            (selectedOption)="entry.get('account').patchValue($event.label); entry.get('entryUniqueName').patchValue(null) ; entry.get('entry').patchValue(null) "
+                                            [showError]="!entry?.get('accountUniqueName')?.value"
+                                        >
                                         </reactive-dropdown-field>
                                     </td>
                                     <td>
@@ -158,7 +165,9 @@
                                             (onClear)="entry.get('entryUniqueName').patchValue(null)"
                                             (dynamicSearchedQuery)="searchEntry($event)"
                                             [disabled]="!entry.get('accountUniqueName').value"
-                                            [readonly]="!entry.get('accountUniqueName').value">
+                                            [readonly]="!entry.get('accountUniqueName').value"
+                                            [showError]="!entry?.get('entryUniqueName')?.value"
+                                        >
                                         </reactive-dropdown-field>
                                     </td>
     
@@ -171,6 +180,8 @@
                                             formControlName="calculationMethod"
                                             [disabled]="!entry.get('entryUniqueName').value"
                                             [readonly]="!entry.get('entryUniqueName').value"
+                                            (onClear)="entry.get('calculationMethod').patchValue(null)"
+                                            [showError]="!entry?.get('calculationMethod')?.value"
                                         >
                                         </reactive-dropdown-field>
                                     </td>
@@ -189,7 +200,7 @@
                                     </td>
                                     <td class="position-relative text-center">
                                         <span class="editable-table-hide-element">
-                                            <button mat-raised-button color="primary" (click)="updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
+                                            <button mat-raised-button color="primary" (click)="entry.valid && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="deleteEntry(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
                                         </span>
                                     </td>

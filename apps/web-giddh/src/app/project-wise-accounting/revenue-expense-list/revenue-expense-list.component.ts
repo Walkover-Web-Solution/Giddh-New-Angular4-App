@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
@@ -6,7 +6,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, delay } from 'rxjs';
-import { ProjectAccountingComponentStore } from '../project-wise-accounting.store';
+import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.store';
 import { defaultParamType, projectType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -17,7 +17,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
     selector: 'revenue-expense-list',
     styleUrls: ['./revenue-expense-list.component.scss'],
     templateUrl: './revenue-expense-list.component.html',
-    providers: [ProjectAccountingComponentStore]
+    providers: [ProjectWiseAccountingComponentStore]
 })
 export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -75,6 +75,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public incomeGroup: string = "revenuefromoperations,otherincome";
     /** Expense group categories */
     public expenseGroup: string = "indirectexpenses,operatingcost";
+    /** Holds true, if form is valid */
+    public isCreateAccountValidForm: boolean = true;
     /** Getter for the entry list form array */
     public get entryList(): FormArray {
         return this.accountEntryListForm.get('entryList') as FormArray;
@@ -95,15 +97,17 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     };
     /** Observable for fetching projects */
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
+    /** Active index for current fields*/
     public activeRowIndex: number = -1;
 
     constructor(
         private generalService: GeneralService,
         private modalService: BsModalService,
         private route: ActivatedRoute,
-        private componentStore: ProjectAccountingComponentStore,
+        private componentStore: ProjectWiseAccountingComponentStore,
         private formBuilder: FormBuilder,
-        private router: Router
+        private router: Router,
+        private changeDetection: ChangeDetectorRef,
     ) { }
 
     /**
@@ -228,7 +232,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             entry: ['', Validators.required],
             entryUniqueName: ['', Validators.required],
             value: ['', Validators.required],
-            calculationMethod: ['', Validators.required],
+            calculationMethod: ['', Validators.required]
         })
     }
 
@@ -258,7 +262,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             entry: [data?.entry ?? '', Validators.required],
             entryUniqueName: [data?.entryUniqueName ?? '', Validators.required],
             value: [data?.value ?? '', Validators.required],
-            calculationMethod: [data?.calculationMethod ?? '', Validators.required],
+            calculationMethod: [data?.calculationMethod ?? '', Validators.required]
         });
     }
 
@@ -404,6 +408,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof RevenueExpenseListComponent
+     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -414,12 +424,21 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         );
     }
 
-
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof RevenueExpenseListComponent
+     */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
 
-
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof RevenueExpenseListComponent
+     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -445,15 +464,18 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public createEntry(): void {
-        let payload = cloneDeep(this.createAccountEntryForm.value);
-        delete payload['account'];
-        delete payload['entry'];
-        payload['category'] = this.defaultParamsValue.category;
-        const requestObject = {
-            request: this.defaultParamsValue,
-            payload: [payload]
+        this.isCreateAccountValidForm = this.createAccountEntryForm.valid;
+        if (this.isCreateAccountValidForm) {
+            let payload = cloneDeep(this.createAccountEntryForm.value);
+            delete payload['account'];
+            delete payload['entry'];
+            payload['category'] = this.defaultParamsValue.category;
+            const requestObject = {
+                request: this.defaultParamsValue,
+                payload: [payload]
+            }
+            this.componentStore.createNewEntry(requestObject);
         }
-        this.componentStore.createNewEntry(requestObject);
     }
 
     /**
@@ -464,12 +486,14 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      */
     public deleteEntry(index: number): void {
         const entryUniqueName = this.entryList.at(index).value.entryUniqueName;
-        const requestObject = {
-            index: index,
-            request: this.defaultParamsValue,
-            payload: [entryUniqueName]
+        if (entryUniqueName) {
+            const requestObject = {
+                index: index,
+                request: this.defaultParamsValue,
+                payload: [entryUniqueName]
+            }
+            this.componentStore.deleteEntry(requestObject);
         }
-        this.componentStore.deleteEntry(requestObject);
     }
 
     /**

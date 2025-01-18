@@ -5,11 +5,11 @@
   (commonLocaleData)="commonLocaleData = $event">
 
 
-  <div *ngIf="(isFetchingProjects$ | async)">
+  <div *ngIf="(isFetchingProjects$ | async) && !totalResults">
     <giddh-page-loader></giddh-page-loader>
   </div>
-   <div *ngIf="!(isFetchingProjects$ | async)" class="project clearfix section-center position-relative overflow-visible pd-2">
-      <div class="d-flex align-items-center justify-content-space-between section-center" *ngIf="dataSource?.length">
+   <div class="project clearfix section-center position-relative overflow-visible pd-2">
+      <div class="d-flex align-items-center justify-content-space-between section-center" *ngIf="totalResults">
         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
             <input
               matInput
@@ -24,26 +24,28 @@
           <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">{{ localeData?.create_project }}</button>
         </div>
       </div>
-      <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!dataSource?.length">
+      <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!(isFetchingProjects$ | async) && !totalResults">
         <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">{{ localeData?.create_project }}</button>
       </div>
-      
-      <div class="mr-t5 overflow-visible table-header-sticky">
+      <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="totalResults">
         <table
           mat-table
           matSort
           [dataSource]="dataSource"
+          [matSortActive]="projectListRequest.sortBy"
+          [matSortDirection]="projectListRequest.sort"
           (matSortChange)="sortChange($event)"
           class="giddh-table basic w-100"
         >
           <!-- Position Column -->
-          <ng-container matColumnDef="position">
+          <ng-container matColumnDef="Sno">
             <th mat-header-cell *matHeaderCellDef>#</th>
             <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
           </ng-container>
 
           <!-- Name Column -->
-          <ng-container matColumnDef="name">
+           
+          <ng-container matColumnDef="Name">
             <th
                 mat-header-cell
                 *matHeaderCellDef
@@ -53,19 +55,19 @@
             >
                 <div [hidden]="showProductSearch">
                     <span>{{ localeData?.product_name }}</span>
-                    <i class="icon-search" (click)="showProductSearchBox(true)"></i>
+                    <i class="icon-search" (click)="$event.stopPropagation(); showProductSearchBox(true)"></i>
                 </div>
 
-                <div class="input-container" [hidden]="!showProductSearch">
-                    <input
-                        *ngIf="showProductSearch"
+                <div class="mr-t1" [hidden]="!showProductSearch" (click)="$event.stopPropagation()">
+                    <input-field
                         [type]="'text'"
                         [name]="'Product Name'"
-                        [placeholder]="'Search Product'"
-                        [label]="'Search'"
+                        [placeholder]="commonLocaleData?.app_select"
+                        [label]="localeData?.search_product"
                         #productSearch
-                        [formControl]="name"
-                    />
+                        [formControl]="projectName"
+                    >
+                    </input-field>
                 </div>
             </th>
             <td mat-cell *matCellDef="let element">
@@ -73,19 +75,19 @@
           </ng-container>
 
           <!-- Weight Column -->
-          <ng-container matColumnDef="status">
+          <ng-container matColumnDef="Status">
             <th mat-header-cell mat-sort-header *matHeaderCellDef class="sortable-header-justify-center">{{ commonLocaleData?.app_status }}</th>
             <td mat-cell *matCellDef="let element">{{element.status}}</td>
           </ng-container>
 
             <!-- Archived Column -->
-          <ng-container matColumnDef="archive_status">
+          <ng-container matColumnDef="Archive Status">
             <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ commonLocaleData?.app_archived }}</th>
             <td mat-cell *matCellDef="let element">{{element.archiveStatus}}</td>
           </ng-container>
 
           <!-- Symbol Column -->
-          <ng-container matColumnDef="symbol">
+          <ng-container matColumnDef="Symbol">
             <th mat-header-cell *matHeaderCellDef>{{ localeData?.profit_and_loss}}</th>
             <td mat-cell *matCellDef="let element">
               <button mat-stroked-button *ngIf="element.profitAndLoss === -1" (click)="getProfitLoss(element)" aria-label="Show profit and loss" >{{ commonLocaleData?.app_show }}</button>
@@ -94,9 +96,9 @@
           </ng-container>
 
           <!-- Symbol Column -->
-          <ng-container matColumnDef="action">
+          <ng-container matColumnDef="Action">
             <th mat-header-cell *matHeaderCellDef class="text-center">{{ commonLocaleData?.app_archived }}</th>
-            <td mat-cell *matCellDef="let element" class="text-center">
+            <td mat-cell *matCellDef="let element" class="text-center cursor-pointer">
               <span (click)="openCreateProjectDialog(false, element)" ><i class="icon-edit mr-r2"></i></span>
               <span><i (click)="openDeleteProjectDialog(element)" class="icon-trash"></i></span>
             </td>

@@ -48,7 +48,7 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
 };
 
 @Injectable()
-export class ProjectAccountingComponentStore extends ComponentStore<ProjectAccountingState> implements OnDestroy {
+export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectAccountingState> implements OnDestroy {
 
     constructor(private toasterService: ToasterService,
         private projectAccountingService: ProjectAccountingService,
