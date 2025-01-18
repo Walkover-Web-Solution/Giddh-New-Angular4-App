@@ -222,7 +222,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             if (search || search === '') {
                 this.reverseChargeReportPostRequest.supplierName = search;
                 this.isSearching = true;
-                this.checkIfFiltersApplied();
+                this.isSearchApplied();
                 this.getReverseChargeReport(true);
             }
         });
@@ -231,7 +231,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             if (search || search === '') {
                 this.reverseChargeReportPostRequest.invoiceNumber = search;
                 this.isSearching = true;
-                this.checkIfFiltersApplied();
+                this.isSearchApplied();
                 this.getReverseChargeReport(true);
             }
         });
@@ -240,7 +240,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             if (search || search === '') {
                 this.reverseChargeReportPostRequest.supplierCountry = search;
                 this.isSearching = true;
-                this.checkIfFiltersApplied();
+                this.isSearchApplied();
                 this.getReverseChargeReport(true);
             }
         });
@@ -292,12 +292,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
-
                     if (this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
                         this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
-
                     this.cdRef.detectChanges();
                 } else {
                     this.toasty.errorToast(res.message);
@@ -334,13 +332,31 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     }
 
     /**
-     * This function is used to check if filters are applied
+     * This function is used to check if date filters are applied
      *
      * @returns {boolean}
      * @memberof ReverseChargeReport
      */
-    public checkIfFiltersApplied(): boolean {
-        if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || (this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT)) || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) {
+    public isDateFilterApplied(): boolean {
+        if ((this.isSearchApplied() ||
+            this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT))
+            || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This function is used to check if date filters are applied
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof ReverseChargeReport
+     */
+    private isSearchApplied(): boolean {
+        if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType) {
             this.isSearching = true;
             return true;
         } else {

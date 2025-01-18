@@ -6965,7 +6965,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
                     const results = (res.body?.results || res.body?.items || res.body);
-                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));;
+                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
                     if (results?.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
@@ -9046,7 +9046,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.hsnNumber = cloneDeep(transaction.sacNumber);
                 transaction.sacNumber = null;
             } else {
-                transaction.sacNumber = cloneDeep(transaction.hsnNumber);;
+                transaction.sacNumber = cloneDeep(transaction.hsnNumber);
                 transaction.hsnNumber = null;
             }
             this.changeDetectorRef.detectChanges();

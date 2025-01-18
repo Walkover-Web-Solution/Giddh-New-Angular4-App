@@ -15,7 +15,9 @@ import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales'
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 import { saveAs } from 'file-saver';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-
+enum InvoicesEnum {
+    Invoices = 'invoices'
+};
 @Component({
     selector: 'download-or-send-mail-invoice',
     templateUrl: './download-or-send-mail.component.html',
@@ -67,6 +69,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public isAttachment: boolean = false;
     /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 0;
+    public invoicesEnum: string = InvoicesEnum.Invoices;
 
     constructor(
         private _toasty: ToasterService,

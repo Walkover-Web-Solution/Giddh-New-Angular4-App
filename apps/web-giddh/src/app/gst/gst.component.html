@@ -98,7 +98,7 @@
                 </div>
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
                 <div
-                    class="return-content pd-15 bg-white d-flex justify-content-between align-items-center flex-wrap"
+                    class="return-content pd-15 d-flex justify-content-between align-items-center flex-wrap"
                     [ngClass]="{ 'content-disabled': !isMonthSelected || !activeCompanyGstNumber }"
                 >
                     <div class="d-flex justify-content-between align-items-center column-gap1">
@@ -119,7 +119,7 @@
                 <!-- ============================ GSTR1 ================================== -->
                 <div class="mt-2 parent position-relative">
                     <div
-                        class="return-content pd-15 bg-white"
+                        class="return-content pd-15"
                         [ngClass]="{
                             'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)
                         }"
@@ -262,7 +262,7 @@
                     </div>
 
                     <div
-                        class="return-content pd-15 bg-white"
+                        class="return-content pd-15"
                         [ngClass]="{
                             'content-disabled':
                                 !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async)
@@ -406,7 +406,7 @@
                 <!-- ============================ GSTR2 ================================== -->
 
                 <!-- =================================== FINAL RETURN ============================= -->
-                <div class="return-content pd-15 bg-white" *ngIf="false">
+                <div class="return-content pd-15" *ngIf="false">
                     <span class="btn-toolbar pull-right">
                         <button 
                             mat-stroked-button
@@ -433,7 +433,7 @@
                 <!-- =================================== FINAL RETURN ============================= -->
 
                 <!-- =================================== TAX RETURN ============================= -->
-                <div class="return-content pd-15 bg-white" *ngIf="false">
+                <div class="return-content pd-15" *ngIf="false">
                     <button 
                         mat-stroked-button
                         color="primary"
