@@ -11,13 +11,13 @@ import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../mod
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-loss-grid.component';
-import { ProjectAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
+import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
 import { prepareProfitLossData } from '../../../store/tl-pl/tl-pl.reducer';
 
 @Component({
     selector: 'profit-loss',
     templateUrl: './profit-loss.component.html',
-    providers: [ProjectAccountingComponentStore]
+    providers: [ProjectWiseAccountingComponentStore]
 })
 export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -65,14 +65,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectAccountingComponentStore) {
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectWiseAccountingComponentStore) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.responseModify(response);
+                this.modifyResponse(response);
             } else {
                 this.data = null;
             }
@@ -80,27 +80,33 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.componentStore.profitAndLossData$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.responseModify(response);
+                this.modifyResponse(response);
             } else {
                 this.data = null;
             }
             this.cd.detectChanges();
         })
     }
+    
     /**
      * Profit Loss Data Modify
      *
      * @memberof ProfitLossComponent
      */
-    public responseModify(response: ProfitLossData): void {
+    public modifyResponse(response: ProfitLossData): void {
         let data = this.projectUniqueName ? prepareProfitLossData(cloneDeep(response)) as ProfitLossData : cloneDeep(response) as ProfitLossData;
         let cogs;
-        if (data && data.incomeStatement && data.incomeStatement.costOfGoodsSold) {
+        if (data?.incomeStatement?.costOfGoodsSold) {
             cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as GetCogsResponse;
         } else {
             cogs = null;
         }
-
+        if (data?.message) {
+            setTimeout(() => {
+                this.toaster.clearAllToaster();
+                this.toaster.infoToast(data.message);
+            }, 100);
+        }
         if (cogs) {
             let cogsGrp: ChildGroup = new ChildGroup();
             cogsGrp.isCreated = true;
@@ -117,7 +123,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             cogsGrp.accounts = [];
             cogsGrp.childGroups = [];
 
-            Object.keys(cogs)?.filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
+            Object.keys(cogs)?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(f => {
                 let childGroup = new ChildGroup();
                 childGroup.isCreated = false;
                 childGroup.isVisible = false;
@@ -187,7 +193,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         this.data = data;
     }
 
-    public initData(d: ChildGroup[], category: string) {
+    /**
+     * Initializes the data for the report, setting visibility and inclusion flags for each group and account.
+     * 
+     * @param {ChildGroup[]} d - The group details to initialize
+     * @returns {void}
+     * @memberof ProfitLossComponent
+     */
+    public initData(d: ChildGroup[], category: string) : void {
         each(d, (grp: ChildGroup) => {
             grp.category = category;
             grp.isVisible = false;

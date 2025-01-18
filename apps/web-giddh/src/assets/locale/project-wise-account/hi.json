@@ -1,0 +1,18 @@
+{
+    "total_revenue": "कुल राजस्व",
+    "select_account": "खाता चुनें",
+    "select_entry": "प्रविष्टि चुनें",
+    "select_method": "विधि चुनें",
+    "enter_amount": "राशि दर्ज करें",
+    "create_project": "+ परियोजना बनाएं",
+    "update_project": "परियोजना अपडेट करें",
+    "product_name": "उत्पाद का नाम",
+    "enter_product_name": "उत्पाद का नाम दर्ज करें",
+    "search_product": "उत्पाद खोजें",
+    "profit_and_loss": "लाभ और हानि",
+    "project_name_is_required": "परियोजना का नाम आवश्यक है",
+    "project_name_must_be_at_least_3_characters": "परियोजना का नाम कम से कम 3 अक्षरों का होना चाहिए",
+    "revenue": "राजस्व",
+    "expense": "व्यय",
+    "project_delete_confirmation_message": "क्या आप वाकई इस परियोजना को हटाना चाहते हैं?"
+}
