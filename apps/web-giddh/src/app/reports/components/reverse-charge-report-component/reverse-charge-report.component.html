@@ -17,7 +17,6 @@
     </div>
     <div class="reverse-table-report overflow-visible">
         <div class="container-fluid overflow-visible">
-
             <div class="position-sticky" style="left: 0;">
                 <div class="mr-t1 input-grp-date-range-picker d-flex flex-sm-row flex-column">
                     <div class="input-group flex-nowrap mr-b15">
@@ -47,7 +46,7 @@
                     </div>
                     <div
                         class="clear-filter mr-b15 w-100 align-items-baseline d-flex justify-content-start"
-                        *ngIf="checkIfFiltersApplied()"
+                        *ngIf="isDateFilterApplied()"
                     >
                         <button mat-stroked-button (click)="resetFilters()">
                             <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
@@ -96,7 +95,7 @@
                     matSort 
                     [dataSource]="reverseChargeReportResults?.items"  
                     (matSortChange)="sortChange($event)"
-                    [hidden]="isLoading || isSearching || !reverseChargeReportResults?.items?.length"
+                    *ngIf="!isLoading && (reverseChargeReportResults?.items?.length || isSearching)"
                 >
                     <!-- Index Column -->
                     <ng-container matColumnDef="index">
@@ -207,9 +206,9 @@
                         <td mat-cell *matCellDef="let element">
                         <span class="d-inline-flex">
                             <amount-field
-                            [amount]="element?.taxableValue"
-                            [currencySymbol]="activeCompany.baseCurrencySymbol"
-                            [currencyCode]="activeCompany?.baseCurrency"
+                                [amount]="element?.taxableValue"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
                             ></amount-field>
                         </span>
                         </td>
@@ -222,7 +221,11 @@
                         </th>
                         <td mat-cell *matCellDef="let element">
                         <span class="d-inline-flex">
-                            <amount-field [amount]="element?.taxRate" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                            <amount-field 
+                                [amount]="element?.taxRate" 
+                                [currencySymbol]="false" 
+                                [currencyCode]="false"
+                            ></amount-field>
                         </span>%
                         </td>
                     </ng-container>
@@ -235,9 +238,9 @@
                         <td mat-cell *matCellDef="let element">
                         <span class="d-inline-flex">
                             <amount-field
-                            [amount]="element?.taxAmount"
-                            [currencySymbol]="activeCompany.baseCurrencySymbol"
-                            [currencyCode]="activeCompany?.baseCurrency"
+                                [amount]="element?.taxAmount"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
                             ></amount-field>
                         </span>
                         </td>
@@ -319,15 +322,13 @@
     let-formControl="formControl"
 >
     <div class="d-flex align-items-center column-gap1" [hidden]="show">
-        <button
-            mat-icon-button
-            aria-label="search"
+        <span
+            class="cursor-pointer"
             (click)="toggleSearch(fieldName)"
-            class="table-search-icon d-flex justify-content-center align-items-center"
         >
-            <span class="icon-search font-16"></span>
-        </button>
-        <span> {{ title }}</span>
+            <i class="icon-search icon-font-16"></i>
+        </span>
+        <span>{{ title }}</span>
     </div>
     <div class="align-items-center d-flex pd-l14" [hidden]="!show">
         <text-field

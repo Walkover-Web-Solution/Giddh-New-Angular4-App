@@ -51,15 +51,9 @@
                             <textarea
                                 matInput
                                 class="form-control"
-                                [ngClass]="{'mr-b15': (currentVoucherFilter === invoicesEnum && voucherApiVersion === 2)}"
                                 #emailList
                                 [placeholder]="localeData?.enter_email_addresses"
                             ></textarea>
-
-                            <ng-template [ngIf]="currentVoucherFilter === invoicesEnum && voucherApiVersion === 2">
-                                <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
-                            </ng-template>
-
                             <div class="mr-t15">
                                 <button
                                     [disabled]="
