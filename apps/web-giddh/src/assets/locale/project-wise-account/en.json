@@ -4,6 +4,10 @@
     "select_entry": "Select Entry",
     "select_method":"Select Method",
     "enter_amount": "Enter amount",
-    "create_project": "Create Project",
-    "update_project": "Update Project"
+    "create_project": "+ Create Project",
+    "update_project": "Update Project",
+    "product_name": "Product Name",
+    "profit_and_loss": "Profit and Loss",
+    "project_name_is_required": "Project Name is required.",
+    "project_name_must_be_at_least_3_characters": "Project Name must be at least 3 characters."
 }

@@ -32,6 +32,8 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     /** This will hold project unique name */
     @Input() projectUniqueName: string;
+    /** Observable to track the profit loss loading */
+    public isFetchingProfitAndLoss$: Observable<boolean> = this.componentStore.isFetchingProfitAndLoss$;
     /**
      * set company and fetch data
      *
@@ -217,8 +219,6 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!request.tagName) {
             delete request.tagName;
         }
-        console.log("selectedFinancialYearOption", this.projectUniqueName);
-
         if (this.projectUniqueName) {
             const requestObject = {
                 companyUniqueName: this.selectedCompany.uniqueName,

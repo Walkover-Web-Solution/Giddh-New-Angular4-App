@@ -23,3 +23,9 @@ export interface projectDetails {
     status: string;
     profitAndLoss?: number;
 }
+
+export interface ProjectDialogData {
+    name?: string;
+    project: any;
+    isCreateFlow: boolean;
+}
