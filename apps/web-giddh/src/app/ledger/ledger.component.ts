@@ -1803,8 +1803,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * closeAdvanceSearchPopup
      */
-    public closeAdvanceSearchPopup(event) {
+    public closeAdvanceSearchPopup(event: any) {
         this.advanceSearchDialogRef?.close();
+        this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
