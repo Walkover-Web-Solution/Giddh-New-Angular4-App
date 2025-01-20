@@ -1,15 +1,15 @@
 .mat-mdc-table {
-    &.table-striped, &.table-strip {
+    &.table-striped {
         .mdc-data-table__content {
             .mat-mdc-row {
                 &:hover {
                     &:not(.no-hover) {
                         .mat-mdc-cell {
-                            background-color: var(--color-dark-fog) !important;
+                            background-color: var(--color-drag-bottom-shadow) !important;
                         }
                     }
                 }
-                &:not(.no-strip, :hover) {
+                &:not(.no-strip) {
                     &:nth-of-type(odd) {
                         .mat-mdc-cell {
                             background-color: var(--color-wild-sand) !important;
@@ -120,5 +120,14 @@ $listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors
 
     @media screen and (max-width: 992px) {
         width: fit-content;
+    }
+}
+
+table {
+    tr {
+        th, td {
+            word-break: keep-all !important;
+            white-space: normal !important;
+        }
     }
 }

@@ -261,10 +261,6 @@ table {
     border-spacing: 0;
 }
 
-.gstr-3b-report tr:hover {
-    background-color: var(--color-invoice-preview-giddh-table-tbody-tr-background-hover);
-}
-
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: var(--font-size-15);
     border: 1px solid var(--color-table-primary-content-bar-border) !important;

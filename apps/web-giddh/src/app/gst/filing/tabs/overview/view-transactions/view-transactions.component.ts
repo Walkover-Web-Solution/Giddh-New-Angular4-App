@@ -158,7 +158,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         ];
 
         this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
-        this.filterParam.count = this.pageSizeOptions[0];
+        this.filterParam.count = this.pageSizeOptions[2];
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;

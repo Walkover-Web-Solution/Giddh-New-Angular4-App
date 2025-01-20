@@ -1319,8 +1319,12 @@
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
-                            <table mat-table [dataSource]="ledgersData" class="w-100 table-strip"
-                                [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length">
+                            <table
+                                mat-table
+                                [dataSource]="ledgersData"
+                                class="w-100 table-striped"
+                                [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length"
+                            >
                                 <ng-container matColumnDef="position">
                                     <th mat-header-cell *matHeaderCellDef>
                                         <ng-container *ngIf="!selectedPendingVouchers?.length">#</ng-container>

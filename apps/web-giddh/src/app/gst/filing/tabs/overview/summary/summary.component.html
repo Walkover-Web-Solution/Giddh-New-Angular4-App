@@ -13,7 +13,7 @@
             <table
                 mat-table
                 [dataSource]="gstrOverviewData.summary"
-                class="table table-striped transactions-table transactions-summary-table w-100"
+                class="table transactions-table transactions-summary-table w-100"
             >
                 <!-- Description -->
                 <ng-container matColumnDef="description">
@@ -170,9 +170,9 @@
                     (click)="viewTransactions(row)"
                     class="row-hover"
                     [ngClass]="{
-                        'cursor-default no-hover': row.transactions?.length,
+                        'cursor-default': row.transactions?.length,
                         'cursor-pointer': !row.transactions?.length,
-                        'secondary-row no-strip': row?.hasOwnProperty('parentIndex')
+                        'secondary-row': row?.hasOwnProperty('parentIndex')
                     }"
                     mat-row
                     *matRowDef="let row; columns: displayedColumns"

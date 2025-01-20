@@ -15,32 +15,38 @@
         <!-- Loader -->
         <giddh-page-loader *ngIf="isTaxAuthoritiesLoading$ | async"></giddh-page-loader>
 
-        <form #taxForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="!(isTaxAuthoritiesLoading$ | async)">
+        <form (ngSubmit)="onSubmit()" *ngIf="!(isTaxAuthoritiesLoading$ | async) && taxForm" [formGroup]="taxForm">
             <div class="row" *ngIf="isUSCompany">
-                <div class="mb-3 col-sm-6 col-xs-12">
-                    <dropdown-field
+                <div class="mb-3 col-sm-6 col-xs-12" formGroupName="taxAuthorityRequest">
+                    <reactive-dropdown-field
                         [label]="commonLocaleData?.app_tax_authority"
                         [options]="taxAuthorityList"
                         [name]="'taxAuthority'"
-                        [defaultValue]="selectedTaxAuthority"
+                        [labelValue]="selectedTaxAuthority"
                         [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
                         [required]="true"
-                        (selectedOption)="newTaxObj.taxAuthorityRequest.uniqueName = $event.value"
-                    ></dropdown-field>
+                        formControlName="uniqueName"
+                        [showError]="!isValidForm && taxForm?.get('taxAuthorityRequest')?.invalid"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-sm-6 col-xs-12">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="localeData?.select_tax"
                         [options]="taxListSource$ | async"
                         [name]="'taxType'"
-                        [defaultValue]="selectedTax"
+                        [labelValue]="selectedTax"
                         [placeholder]="localeData?.select_tax"
                         [required]="true"
+                        [readonly]="tax && tax?.uniqueName"
+                        [disabled]="tax && tax?.uniqueName"
+                        formControlName="taxType"
+                        [showError]="!isValidForm && !taxForm?.get('taxType')?.value"
                         (selectedOption)="selectTax($event)"
-                    ></dropdown-field>
+                        (onClear)="taxForm?.get('taxType')?.patchValue('')"
+                    ></reactive-dropdown-field>
                 </div>
 
                 <div class="col-sm-6 col-xs-12">
@@ -48,23 +54,23 @@
                         [label]="localeData?.tax_percent"
                         [type]="'number'"
                         [name]="'taxValue'"
+                        (onChange)="taxForm?.get('taxValue').patchValue(+$event)"
                         [required]="true"
-                        [max]="100"
-                        [min]="0"
-                        [allowDecimalDigitsOnly]="true"
-                        [(ngModel)]="newTaxObj.taxValue"
+                        [showError]="!isValidForm && taxForm?.get('taxValue')?.invalid"
+                        formControlName="taxValue"
                     ></input-field>
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col-sm-6 col-xs-12">
                     <input-field
                         [type]="'text'"
                         [name]="'name'"
                         [label]="commonLocaleData?.app_name"
                         [placeholder]="commonLocaleData?.app_name"
-                        [(ngModel)]="newTaxObj.name"
+                        formControlName="name"
+                        [showError]="!isValidForm && taxForm?.get('name')?.invalid"
                         [required]="true"
                         (ngModelChange)="generateUniqueName()"
                     ></input-field>
@@ -76,52 +82,54 @@
                         [name]="'taxNumber'"
                         [label]="commonLocaleData?.app_unique_name"
                         [placeholder]="commonLocaleData?.app_unique_name"
-                        [(ngModel)]="newTaxObj.uniqueName"
+                        formControlName="uniqueName"
                         [disabled]="true"
                     ></input-field>
                 </div>
 
-                <div class="col-sm-6 col-xs-12" *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
-                    <dropdown-field
-                        [options]="taxNameTypesMapping[newTaxObj.taxType]"
+                <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'tds' || taxForm?.get('taxType')?.value === 'tcs'">
+                    <reactive-dropdown-field
+                        [options]="taxNameTypesMapping[taxForm?.get('taxType')?.value]"
                         [name]="'tdsTcsTaxSubTypes'"
-                        [label]="commonLocaleData?.app_select_type"
+                        [label]="commonLocaleData?.app_type"
                         [placeholder]="selectedTaxType ? selectedTaxType : commonLocaleData?.app_select_type"
-                        [defaultValue]="selectedTaxType"
+                        [labelValue]="selectedTaxType"
                         [required]="true"
                         [readonly]="checkIfTdsOrTcs"
-                        (selectedOption)="newTaxObj.tdsTcsTaxSubTypes = $event.value"
-                    ></dropdown-field>
+                        [disabled]="checkIfTdsOrTcs"
+                        formControlName="tdsTcsTaxSubTypes"
+                        [showError]="!isValidForm && taxForm?.get('tdsTcsTaxSubTypes')?.invalid"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <div class="col-sm-6 col-xs-12" *ngIf="newTaxObj.taxType === 'cess'">
-                    <dropdown-field
+            <div class="row my-3" *ngIf="(taxForm?.get('taxType')?.value === 'cess') || (taxForm?.get('taxType')?.value === 'others' && !tax)">
+                <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'cess'">
+                    <reactive-dropdown-field
                         [options]="allTaxes"
                         [name]="'linkTax'"
                         [placeholder]="localeData?.link_tax"
-                        (selectedOption)="newTaxObj.taxType = $event.value"
-                    ></dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
 
-                <div class="col-sm-6 col-xs-12" *ngIf="newTaxObj.taxType === 'others' && !tax">
-                    <dropdown-field
+                <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'others' && !tax">
+                    <reactive-dropdown-field
                         [label]="localeData?.linked_account"
                         [placeholder]="commonLocaleData?.app_select_account"
                         [name]="'account'"
                         [options]="linkedAccountsOption"
-                        (selectedOption)="newTaxObj.account = $event.value"
+                        formControlName="account"
+                        [showError]="!isValidForm && taxForm?.get('account')?.invalid"
                         [required]="true"
-                    ></dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 
-            <div *ngIf="tax" class="row mb-3">
+            <div *ngIf="tax" class="row">
                 <div class="col-sm-12">
                     {{ localeData?.linked_account }}
-                    <div class="custom-tags" *ngIf="newTaxObj.accounts?.length">
-                        <span *ngFor="let account of newTaxObj.accounts">
+                    <div class="custom-tags" *ngIf="taxForm?.get('accounts')?.value?.length">
+                        <span *ngFor="let account of taxForm.get('accounts').value">
                             {{ account.name }}
                         </span>
                     </div>
@@ -134,7 +142,8 @@
                         (dateSelected)="selectDate($event)"
                         name="date"
                         [cssClass]="'w-100'"
-                        [(ngModel)]="newTaxObj.date"
+                        formControlName="date"
+                        [showError]="!isValidForm && taxForm?.get('date')?.invalid"
                         [showToggleIcon]="false"
                         [appearance]="'outline'"
                         [placeholder]="localeData?.apply_tax_from"
@@ -144,25 +153,30 @@
                 </div>
 
                 <div class="form-group col-sm-4 col-xs-12">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="localeData?.tax_duration"
-                        [placeholder]="localeData?.select_duration"
-                        (selectedOption)="newTaxObj.duration = $event.value"
-                        [name]="'duration'"
-                        [required]="true"
+                        formControlName="duration"
+                        [showError]="!isValidForm && taxForm?.get('duration')?.invalid"
                         [options]="duration"
-                    ></dropdown-field>
+                        [name]="'duration'"
+                        [labelValue]="selectedDuration"
+                        [placeholder]="localeData?.select_duration"
+                        [required]="true"
+                    ></reactive-dropdown-field>
                 </div>
 
                 <div class="form-group col-sm-4 col-xs-12">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="localeData?.filing_date"
                         [placeholder]="commonLocaleData?.app_select_date"
-                        (selectedOption)="newTaxObj.taxFileDate = +$event.value"
+                        formControlName="taxFileDate"
+                        [showError]="!isValidForm && taxForm?.get('taxFileDate')?.invalid"
+                        [labelValue]="selectedTaxFileDate"
                         [name]="'taxFileDate'"
                         [required]="true"
                         [options]="days"
-                    ></dropdown-field>
+                        (selectedOption)="$event && taxForm.get('taxFileDate').patchValue(+$event.value)"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 
@@ -173,7 +187,6 @@
                     aria-label="create"
                     type="submit"
                     *ngIf="!tax"
-                    [disabled]="taxForm.invalid"
                 >
                     <ng-container *ngIf="!isTaxCreateInProcess; else showSpinner">
                        {{ commonLocaleData?.app_create }}
@@ -193,9 +206,9 @@
                     </ng-container>
                 </button>
 
-                <button mat-stroked-button (click)="closeEvent?.emit()">
+                <button mat-stroked-button type="button" (click)="closeEvent?.emit()">
                     {{ commonLocaleData?.app_cancel }}
-                </button>
+                </button>   
             </div>
         </form>
     </mat-dialog-content>

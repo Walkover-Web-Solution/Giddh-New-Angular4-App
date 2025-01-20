@@ -68,7 +68,7 @@
 
             <table  
                 mat-table [dataSource]="(viewTransaction$ | async)?.results" 
-                class="table table-striped transactions-table w-100 zi-table table-hover"
+                class="table transactions-table w-100 zi-table table-hover"
                 *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems"
             >
                 <!-- Invoice Date Column -->

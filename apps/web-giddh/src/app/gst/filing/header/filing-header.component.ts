@@ -186,7 +186,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (this.selectedGst === GstReport.Gstr1) {
             this.navigateToOverview();
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
-        } else {
+        } else if(this.selectedGst === GstReport.Gstr2){
             this.navigateToOverview();
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
         }
@@ -263,7 +263,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             },
             width: 'var(--aside-pane-width)',
             height: '100vh',
-            disableClose: true
+            disableClose: true,
+            autoFocus: false
         })
     }
 
