@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { TitleCasePipe } from "@angular/common";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { UntypedFormControl, NgForm } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -31,6 +31,7 @@ import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { SalesShSelectComponent } from "../../../theme/sales-ng-virtual-select/sh-select.component";
+import { ServiceConfig } from "../../../services/service.config";
 
 @Component({
     selector: 'payment-receipt',
@@ -237,6 +238,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     /** @ignore */
     constructor(
         private searchService: SearchService,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetectionRef: ChangeDetectorRef,
         private salesAction: SalesActions,
         private store: Store<AppState>,
@@ -372,7 +374,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.router.navigate(['pages', 'home']);
         }
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.loadDefaultSearchSuggestions();
         this.loadBankCashAccounts('');
 

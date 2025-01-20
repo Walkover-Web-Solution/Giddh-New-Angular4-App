@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, TemplateRef, Inject } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { ServiceConfig } from '../../../services/service.config';
 @Component({
     selector: 'adjust-group',
     templateUrl: './adjust-group.component.html',
@@ -22,6 +23,7 @@ export class AdjustGroupComponent implements OnInit {
 
     constructor(
         private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
         private modalService: BsModalService
     ) { }
 
@@ -50,6 +52,6 @@ export class AdjustGroupComponent implements OnInit {
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 }
