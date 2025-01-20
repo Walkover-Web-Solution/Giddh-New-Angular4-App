@@ -154,7 +154,7 @@
                     
                     <!-- Invoice Number Column with Search -->
                     <ng-container matColumnDef="invoiceNumber">
-                        <th mat-header-cell *matHeaderCellDef #searchInvoiceContainer width="200px" (clickOutside)="handleClickOutside($event, searchInvoiceContainer, 'invoiceNo')">
+                        <th mat-header-cell *matHeaderCellDef #searchInvoiceContainer class="invoice-column" (clickOutside)="handleClickOutside($event, searchInvoiceContainer, 'invoiceNo')">
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
@@ -207,7 +207,7 @@
                         <span class="d-inline-flex">
                             <amount-field
                                 [amount]="element?.taxableValue"
-                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                 [currencyCode]="activeCompany?.baseCurrency"
                             ></amount-field>
                         </span>
@@ -216,7 +216,7 @@
 
                     <!-- Tax Rate Column -->
                     <ng-container matColumnDef="taxRate">
-                        <th mat-header-cell *matHeaderCellDef>
+                        <th mat-header-cell *matHeaderCellDef class="width-150">
                         {{ commonLocaleData?.app_tax_rate }}
                         </th>
                         <td mat-cell *matCellDef="let element">
