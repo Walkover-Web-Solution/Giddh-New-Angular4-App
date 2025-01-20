@@ -128,6 +128,9 @@ export enum SubVoucher {
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
 
+/** URL Protocol */
+export const URL_PROTOCOL = 'http://'
+
 /** Adjustment inventory */
 export enum AdjustmentInventory {
     QuantityWise = 'QUANTITY_WISE',

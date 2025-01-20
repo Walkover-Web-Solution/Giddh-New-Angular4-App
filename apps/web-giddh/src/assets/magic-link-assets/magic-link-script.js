@@ -409,9 +409,9 @@ getApi: function () {
     if (region) {
         apiBaseUrl = 'https://gbapi.giddh.com/';
     } else {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        if (whiteLabel) {
-       apiBaseUrl = `https://${whiteLabel.giddhWhiteLabel?.apiDomainName}/`;
+        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+        if (whiteLabelData) {
+       apiBaseUrl = `https://${whiteLabelData?.body?.giddhWhiteLabel?.apiDomainName}/`;
         } else {
              // Original logic based on hostname
             switch (window.location.hostname) {
