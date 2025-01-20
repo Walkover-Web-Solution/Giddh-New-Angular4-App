@@ -289,7 +289,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Entry update successfully');
-                                this.patchState({ isEntryProgress: false, entryUpdateSuccess: res.body });
+                                this.patchState({ isEntryProgress: false, entryUpdateSuccess: { body: res.body, entryUniqueName: req.request.entryUniqueName, index: req.index } });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
                                 this.patchState({ isEntryProgress: false, entryUpdateSuccess: null });
@@ -317,7 +317,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({ entrySearch: res.body });
+                                this.patchState({ entrySearch: { body: res.body, accountUniqueName: req.accountUniqueName } });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
                                 this.patchState({ entrySearch: null });
@@ -422,7 +422,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof BuyPlanComponentStore
+     * @memberof ProjectWiseAccountingComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

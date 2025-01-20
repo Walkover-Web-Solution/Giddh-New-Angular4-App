@@ -1,5 +1,6 @@
 <ng-container
     appTranslate
+    [file]="'project-wise-account'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -20,7 +21,7 @@
             <form
                 [formGroup]="createProjectForm"
                 novalidate
-                (ngSubmit)="createProject()"
+                (ngSubmit)="createProjectForm?.valid && createProject()"
                 autocomplete="off"
                 *ngIf="!(isSavingProject$ | async)"
             >
@@ -31,15 +32,8 @@
                         [placeholder]="localeData.enter_product_name"
                         [label]="localeData.product_name"
                         formControlName="projectName"
+                        [required]="true"
                     ></input-field>
-                    <div *ngIf="projectName?.invalid && projectName?.touched">
-                        <small class="danger" *ngIf="projectName?.hasError('required')">
-                            {{ localeData?.project_name_is_required }}
-                        </small>
-                        <small class="danger" *ngIf="projectName?.hasError('minlength')">
-                            {{ localeData?.project_name_must_be_at_least_3_characters}}
-                        </small>
-                    </div>
                 </div>
 
                 <!-- Form Buttons -->
