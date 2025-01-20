@@ -29,6 +29,7 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         GiddhPageLoaderModule,
         NoDataModule,
         FinancialReportsModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        HamburgerMenuModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

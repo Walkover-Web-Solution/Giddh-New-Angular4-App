@@ -75,6 +75,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public isProductSearch: boolean = false;
     /** Getter for the 'name' form control from the companyListForm. */
     public get projectName(): FormControl {
         return this.companyListForm.get('projectName') as FormControl
@@ -106,6 +107,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.getAllProjectList();
         this.companyListForm.get('projectName').valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((searchedText) => {
             if (searchedText || searchedText === '') {
+                this.isProductSearch = searchedText !== '';
                 this.projectListRequest.q = searchedText;
                 this.getAllProjectList();
             }

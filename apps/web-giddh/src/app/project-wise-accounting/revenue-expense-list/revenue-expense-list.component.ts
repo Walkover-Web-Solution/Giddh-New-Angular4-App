@@ -91,7 +91,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     };
     /** Request parameters for entry searches */
     public entrySearchRequest: any = {
-        count: 6
+        count: this.defaultCount
     };
     /** Observable for fetching projects */
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
@@ -412,6 +412,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public selectAccount(accountUniqueName: string): void {
+        console.log(accountUniqueName);
+        
         if (accountUniqueName && !this.accountAndEntryList[accountUniqueName].data.length) {
             this.searchEntry(this.accountAndEntryList[accountUniqueName].query, 1, accountUniqueName);
         }
@@ -480,11 +482,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /**
      * Creates a new entry based on the form data and sends the payload to the service.
      *
+     * @param {*} value
      * @memberof RevenueExpenseListComponent
      */
-    public createEntry(): void {
+    public createEntry(value: number): void {
         this.isCreateAccountValidForm = this.createAccountEntryForm.valid;
-        if (this.isCreateAccountValidForm) {
+        if (this.isCreateAccountValidForm && value > 0) {
             let payload = cloneDeep(this.createAccountEntryForm.value);
             delete payload['account'];
             delete payload['entry'];
@@ -543,6 +546,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      */
     public tabChanged(event: MatTabChangeEvent): void {
         this.totalResults = 0;
+        this.createAccountEntryForm.reset();
+        this.accountSearchResponse = [];
         const tab = event.tab.textLabel === "Revenue" ? "revenue" : event.tab.textLabel === "Expense" ? "expenses" : "profit-loss";
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }

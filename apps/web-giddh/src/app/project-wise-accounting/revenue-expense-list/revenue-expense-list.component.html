@@ -5,6 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
+    <hamburger-menu></hamburger-menu>
     <div class="project-wise-accounting">
         <mat-tab-group 
             mat-stretch-tabs="false" 
@@ -73,6 +74,7 @@
                                 (selectedOption)="selectAccount($event.value); ($event.label != createAccountEntryForm.get('account')?.value) && (createAccountEntryForm.get('entryUniqueName')?.patchValue(null) || createAccountEntryForm.get('entry')?.patchValue(null)); createAccountEntryForm.get('account')?.patchValue($event.label)"
                                 (onClear)="createAccountEntryForm.get('account')?.patchValue(null); createAccountEntryForm.get('accountUniqueName')?.patchValue(null)"
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('accountUniqueName')?.value"
+                                [required]="true"
                             >
                             </reactive-dropdown-field>
                         </td>
@@ -91,6 +93,7 @@
                                 (selectedOption)="createAccountEntryForm.get('entry')?.patchValue($event.label)"
                                 (onClear)="createAccountEntryForm.get('entry')?.patchValue(null); createAccountEntryForm.get('entryUniqueName')?.patchValue(null)"
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('entryUniqueName')?.value"
+                                [required]="true"
                             >
                             </reactive-dropdown-field>
                         </td>
@@ -104,6 +107,7 @@
                                 formControlName="calculationMethod"
                                 (onClear)="createAccountEntryForm.get('calculationMethod')?.patchValue(null);"
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('calculationMethod')?.value"
+                                [required]="true"
                             >
                             </reactive-dropdown-field>
                         </td>
@@ -114,7 +118,8 @@
                                 [label]="commonLocaleData?.app_amount"
                                 [placeholder]="localeData?.enter_amount" 
                                 formControlName="value"
-                                [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('value')?.value"
+                                [showError]="!isCreateAccountValidForm &&(!createAccountEntryForm.get('value')?.value || createAccountEntryForm.get('value')?.value === '0')"
+                                [required]="true"
                             >
                             </input-field>
                         </td>
@@ -122,7 +127,7 @@
                             <button 
                                 mat-stroked-button 
                                 color="primary" 
-                                (click)="createEntry()"
+                                (click)="createEntry(createAccountEntryForm.get('value')?.value)"
                             >
                             {{ commonLocaleData?.app_save }}</button>
                         </td>
@@ -148,6 +153,7 @@
                                             (onClear)="entry?.get('accountUniqueName')?.patchValue(null); entry?.get('entryUniqueName')?.patchValue(null) ; entry?.get('entry')?.patchValue(null)"
                                             (selectedOption)="selectAccount($event.value); ($event.label != entry?.get('account')?.value) && (entry?.get('entryUniqueName')?.patchValue(null) || entry?.get('entry')?.patchValue(null)); entry?.get('account')?.patchValue($event.label)"
                                             [showError]="!entry?.get('accountUniqueName')?.value"
+                                            [required]="true"
                                         >
                                         </reactive-dropdown-field>
                                     </td>
@@ -166,6 +172,7 @@
                                             (onClear)="entry?.get('entryUniqueName')?.patchValue(null)"
                                             (dynamicSearchedQuery)="searchEntry($event, 1, entry?.get('accountUniqueName')?.value)"
                                             [showError]="!entry?.get('entryUniqueName')?.value"
+                                            [required]="true"
                                         >
                                         </reactive-dropdown-field>
                                     </td>
@@ -179,6 +186,7 @@
                                             formControlName="calculationMethod"
                                             (onClear)="entry?.get('calculationMethod')?.patchValue(null)"
                                             [showError]="!entry?.get('calculationMethod')?.value"
+                                            [required]="true"
                                         >
                                         </reactive-dropdown-field>
                                     </td>
@@ -190,12 +198,14 @@
                                             [placeholder]="localeData?.enter_amount" 
                                             formControlName="value"
                                             [min]="1"
+                                            [showError]="!entry.get('value')?.value || entry.get('value')?.value === '0'"
+                                            [required]="true"
                                         >
                                         </input-field>
                                     </td>
                                     <td class="position-relative text-center">
                                         <span class="editable-table-hide-element">
-                                            <button mat-stroked-button color="primary" (click)="entry?.valid && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
+                                            <button mat-stroked-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="deleteEntry(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
                                         </span>
                                     </td>
