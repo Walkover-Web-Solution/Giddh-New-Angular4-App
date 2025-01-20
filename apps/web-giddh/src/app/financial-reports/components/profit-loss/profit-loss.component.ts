@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
@@ -70,24 +70,21 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(state => state.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.modifyResponse(response);
-            } else {
-                this.data = null;
-            }
-            this.cd.detectChanges();
-        });
-        this.componentStore.profitAndLossData$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.modifyResponse(response);
-            } else {
-                this.data = null;
-            }
-            this.cd.detectChanges();
-        })
+        combineLatest([
+            this.store.pipe(select(state => state.tlPl.pl.data)),
+            this.componentStore.profitAndLossData$
+        ])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(([storeResponse, profitAndLossResponse]) => {
+                if (storeResponse || profitAndLossResponse) {
+                    this.modifyResponse(storeResponse || profitAndLossResponse);
+                } else {
+                    this.data = null;
+                }
+                this.cd.detectChanges();
+            });
     }
-    
+
     /**
      * Profit Loss Data Modify
      *
@@ -196,24 +193,24 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Initializes the data for the report, setting visibility and inclusion flags for each group and account.
      * 
-     * @param {ChildGroup[]} d - The group details to initialize
+     * @param {ChildGroup[]} groupList - The group details to initialize
      * @returns {void}
      * @memberof ProfitLossComponent
      */
-    public initData(d: ChildGroup[], category: string) : void {
-        each(d, (grp: ChildGroup) => {
-            grp.category = category;
-            grp.isVisible = false;
-            grp.isCreated = false;
-            grp.isIncludedInSearch = true;
-            each(grp.accounts, (acc: Account) => {
-                acc.isIncludedInSearch = true;
-                acc.isCreated = false;
-                acc.isVisible = false;
-                acc.category = category;
+    public initData(groupList: ChildGroup[], category: string): void {
+        groupList.forEach((childGroup: ChildGroup) => {
+            childGroup.category = category;
+            childGroup.isVisible = false;
+            childGroup.isCreated = false;
+            childGroup.isIncludedInSearch = true;
+            childGroup.accounts.forEach((account: Account) => {
+                account.isIncludedInSearch = true;
+                account.isCreated = false;
+                account.isVisible = false;
+                account.category = category;
             });
-            if (grp.childGroups) {
-                this.initData(grp.childGroups, category);
+            if (childGroup.childGroups) {
+                this.initData(childGroup.childGroups, category);
             }
         });
     }

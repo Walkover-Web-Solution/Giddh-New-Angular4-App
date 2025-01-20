@@ -38,69 +38,68 @@
           class="giddh-table basic w-100"
         >
           <!-- Position Column -->
-          <ng-container matColumnDef="Sno">
+          <ng-container matColumnDef="sno">
             <th mat-header-cell *matHeaderCellDef>#</th>
             <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
           </ng-container>
 
           <!-- Name Column -->
-           
-          <ng-container matColumnDef="Name">
+          <ng-container matColumnDef="name">
             <th
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
                 class="max-width-150 td-search-box"
-                (clickOutside)="showProductSearchBox(false)"
             >
                 <div [hidden]="showProductSearch">
-                    <span>{{ localeData?.product_name }}</span>
-                    <i class="icon-search" (click)="$event.stopPropagation(); showProductSearchBox(true)"></i>
+                  <i class="icon-search" (click)="$event.stopPropagation(); showProductSearchBox(true)"></i>
+                  <span>{{ localeData?.product_name }}</span>
                 </div>
 
-                <div class="mr-t1" [hidden]="!showProductSearch" (click)="$event.stopPropagation()">
-                    <input-field
+                <div [hidden]="!showProductSearch" (click)="$event.stopPropagation()" (clickOutside)="showProductSearchBox(false)">
+                    <text-field
                         [type]="'text'"
-                        [name]="'Product Name'"
-                        [placeholder]="commonLocaleData?.app_select"
+                        [placeholder]="commonLocaleData?.app_search"
                         [label]="localeData?.search_product"
-                        #productSearch
+                        [cssClass]="'form-control search-table'"
                         [formControl]="projectName"
+                        [autoFocus]="show"
                     >
-                    </input-field>
+                    </text-field>
                 </div>
             </th>
             <td mat-cell *matCellDef="let element">
               <a [routerLink]="['/pages/project-wise-accounting', 'revenue', 'list', element.uniqueName]">{{element.name}}</a></td>
           </ng-container>
 
-          <!-- Weight Column -->
-          <ng-container matColumnDef="Status">
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
             <th mat-header-cell mat-sort-header *matHeaderCellDef class="sortable-header-justify-center">{{ commonLocaleData?.app_status }}</th>
             <td mat-cell *matCellDef="let element">{{element.status}}</td>
           </ng-container>
 
             <!-- Archived Column -->
-          <ng-container matColumnDef="Archive Status">
+          <ng-container matColumnDef="archive_status">
             <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ commonLocaleData?.app_archived }}</th>
             <td mat-cell *matCellDef="let element">{{element.archiveStatus}}</td>
           </ng-container>
 
           <!-- Symbol Column -->
-          <ng-container matColumnDef="Symbol">
+          <ng-container matColumnDef="symbol">
             <th mat-header-cell *matHeaderCellDef>{{ localeData?.profit_and_loss}}</th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell *matCellDef="let element" class="text-center align-center">
+              <mat-spinner *ngIf="element.profitAndLoss === -2" class="ml-auto mr-auto" [diameter]="30"></mat-spinner>
               <button mat-stroked-button *ngIf="element.profitAndLoss === -1" (click)="getProfitLoss(element)" aria-label="Show profit and loss" >{{ commonLocaleData?.app_show }}</button>
-              <span *ngIf="element.profitAndLoss > -1" >{{ element.profitAndLoss }}</span>
+              <span *ngIf="element.profitAndLoss > -1">{{ element.profitAndLoss }}</span>
             </td>
           </ng-container>
 
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="Action">
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef class="text-center">{{ commonLocaleData?.app_archived }}</th>
-            <td mat-cell *matCellDef="let element" class="text-center cursor-pointer">
-              <span (click)="openCreateProjectDialog(false, element)" ><i class="icon-edit mr-r2"></i></span>
-              <span><i (click)="openDeleteProjectDialog(element)" class="icon-trash"></i></span>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <span class="cursor-pointer" (click)="openCreateProjectDialog(false, element)" ><i class="icon-edit mr-r2"></i></span>
+              <span class="cursor-pointer"><i (click)="openDeleteProjectDialog(element)" class="icon-trash"></i></span>
             </td>
           </ng-container>
 

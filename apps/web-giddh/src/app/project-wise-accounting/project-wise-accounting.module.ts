@@ -28,6 +28,7 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
     declarations: [
@@ -61,7 +62,8 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
         SharedModule,
         GiddhPageLoaderModule,
         NoDataModule,
-        FinancialReportsModule
+        FinancialReportsModule,
+        MatProgressSpinnerModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

@@ -13,10 +13,10 @@ import { ProjectDialogData } from '../../project-wise-accounting';
 })
 export class CreateProjectComponent implements OnInit, OnDestroy {
     /** Indicates if the form is loading */
-    public isLoading: boolean = true;
+    public isLoading: boolean = false;
     /** Localized strings specific to this component */
     public localeData: any = {};
-    /** Common localized strings used across components */
+    /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Observable to track the saving state of the project */
     public isSavingProject$: Observable<boolean> = this.componentStore.isSavingProject$;
@@ -51,6 +51,10 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
                 this.sendResponse(project);
             }
         });
+        
+        this.componentStore.isSavingProject$.pipe(takeUntil(this.destroyed$)).subscribe((loading) => {
+            this.isLoading = loading;
+        });
     }
 
     /**
@@ -61,7 +65,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
      */
     private initCreateProjectForm(): void {
         this.createProjectForm = this.formBuilder.group({
-            projectName: [this.inputData?.name || '', [Validators.required, Validators.minLength(3)]]
+            projectName: [this.inputData?.name || '', Validators.required]
         });
     }
 
@@ -71,7 +75,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
      * @memberof CreateProjectComponent
      */
     public createProject(): void {
-        if (this.createProjectForm.valid) {
+        if (!this.isLoading) {
             const projectName = this.createProjectForm.get('projectName').value;
             this.componentStore.createNewProject({
                 request: {
@@ -80,8 +84,6 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
                 },
                 payload: { name: projectName }
             });
-        } else {
-            this.createProjectForm.markAllAsTouched();
         }
     }
 
