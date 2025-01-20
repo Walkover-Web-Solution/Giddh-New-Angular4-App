@@ -141,7 +141,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                         name: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                         additional: result
                     };
-                }) || [];;
+                }) || [];
                 this.stockResults$ = of(stockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;

@@ -73,7 +73,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /* Hold list searching value */
     public inlineSearch: any = '';
     /** Form Group for Adjust Inventory form */
