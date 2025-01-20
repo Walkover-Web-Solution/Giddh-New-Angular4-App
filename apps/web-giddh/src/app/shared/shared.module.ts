@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -60,7 +60,18 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
 import { CallBackPageComponent } from './call-back-page/call-back-page.component';
-import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
+
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+    {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
+    }
+], false);
+
+export function provideConfig() {
+    return SOCIAL_CONFIG || { id: null, providers: [] };
+}
+
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -176,24 +187,11 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
     providers: [
         {
             provide: AuthServiceConfig,
-            useFactory: () => {
-                const injector = Injector.create({ providers: [{ provide: ServiceConfig, useValue: {} }] });
-                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
-                return new AuthServiceConfig(
-                    [
-                        {
-                            id: GoogleLoginProvider.PROVIDER_ID,
-                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
-                        }
-                    ],
-                    false
-                );
-            }
+            useFactory: provideConfig
         }
     ]
 })
 export class SharedModule {
-    constructor(private injector: Injector){}
     public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
@@ -14,7 +14,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
-import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'app-pending-list',
@@ -86,7 +85,6 @@ export class PendingListComponent implements OnInit, OnChanges {
         private cdRef: ChangeDetectorRef,
         public dialog: MatDialog,
         private lightbox: Lightbox,
-        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -370,7 +368,7 @@ export class PendingListComponent implements OnInit, OnChanges {
         event.stopPropagation();
         let images = [];
         fileNames?.forEach(file => {
-            images.push({ src: (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + file });
+            images.push({ src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + file });
         });
         this.lightbox.open(images, 0);
     }

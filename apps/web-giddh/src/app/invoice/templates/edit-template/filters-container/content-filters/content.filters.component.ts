@@ -1,7 +1,7 @@
 import { ToasterService } from '../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, DoCheck, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import { ReplaySubject } from 'rxjs';
@@ -13,7 +13,6 @@ import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'content-selector',
@@ -57,7 +56,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         private invoiceUiDataService: InvoiceUiDataService,
         private activatedRoute: ActivatedRoute,
         private toaster: ToasterService,
-        @Inject(ServiceConfig) private serviceConfig,
         private invoiceService: InvoiceService,
         private generalService: GeneralService,
         private commonService: CommonService
@@ -233,7 +231,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                         if (this.invoiceUiDataService.unusedImageSignature) {
                             this.removeFileFromServer();
                         }
-                        this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
+                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
                         this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
                         this.invoiceUiDataService.unusedImageSignature = response.body?.uniqueName;
                         this.onChangeFieldVisibility(null, null, null);
@@ -340,7 +338,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public assignImageSignature(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
-            this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
             this.signatureImgAttached = true;
         } else {
             this.signatureSrc = '';

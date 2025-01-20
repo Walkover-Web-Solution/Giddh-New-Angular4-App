@@ -2,7 +2,6 @@ import {
     AfterViewInit,
     Component,
     ComponentFactoryResolver,
-    Inject,
     OnDestroy,
     OnInit,
     TemplateRef,
@@ -32,7 +31,6 @@ import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
-import { ServiceConfig } from '../../services/service.config';
 
 /**
  * Warehouse component
@@ -135,7 +133,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private warehouseActions: WarehouseActions,
         private settingsWarehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
-        @Inject(ServiceConfig) private serviceConfig,
         private componentStore: VoucherComponentStore
     ) { }
 
@@ -145,7 +142,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
 
@@ -161,7 +158,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
