@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
@@ -18,7 +18,6 @@ import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { InventoryComponentStore } from "../inventory.store";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
-import { ServiceConfig } from "../../../services/service.config";
 
 @Component({
     selector: 'create-update-group',
@@ -93,7 +92,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private dialog: MatDialog,
         private location: Location,
-        @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private componentStore: InventoryComponentStore
     ) {
@@ -107,7 +105,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering create group page */
         document.querySelector("body").classList.add("group-create-update");
         this.initGroupForm();

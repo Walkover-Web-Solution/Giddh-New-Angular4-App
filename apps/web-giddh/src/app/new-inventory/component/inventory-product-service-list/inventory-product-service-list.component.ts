@@ -1,9 +1,8 @@
-import { Component, Inject, OnInit, ViewChildren } from "@angular/core";
+import { Component, OnInit, ViewChildren } from "@angular/core";
 import { ShSelectComponent } from "../../../theme/ng-virtual-select/sh-select.component";
 import { Router } from "@angular/router";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
-import { ServiceConfig } from "../../../services/service.config";
 
 export interface PeriodicElement {
     name: string;
@@ -109,13 +108,13 @@ export class ProductServiceListComponent implements OnInit {
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     selection = new SelectionModel<PeriodicElement>(true, []);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private _router: Router) {
+    constructor(private _router: Router) {
 
     }
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     // @ViewChild(MatSort) sort: MatSort;

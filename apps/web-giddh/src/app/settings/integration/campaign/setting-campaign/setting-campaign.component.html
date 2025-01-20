@@ -20,11 +20,11 @@
             </mat-menu>
         </div>
         <div class="image" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
-            <img src="{{ imgPath }}msgOne.png" class="brand-logo" alt="" />
+            <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
             <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
         </div>
         <div class="image" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-            <img src="{{ imgPath }}msgOne-color.png" class="brand-logo" alt="" />
+            <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="" />
             <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
         </div>
         <div class="integrate mini-icons" *ngIf="communicationPlatforms?.MSG91?.isConnected">

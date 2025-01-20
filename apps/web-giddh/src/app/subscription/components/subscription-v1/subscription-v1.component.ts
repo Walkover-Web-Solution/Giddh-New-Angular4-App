@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, Output, EventEmitter, Inject } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
@@ -18,7 +18,6 @@ import { CreateCompanyUsersPlan, SubscriptionRequest } from "../../../models/api
 import { CompanyActions } from "../../../actions/company.actions";
 import { SettingsProfileActions } from "../../../actions/settings/profile/settings.profile.action";
 import { GeneralService } from "../../../services/general.service";
-import { ServiceConfig } from "../../../services/service.config";
 
 
 /** This interface will use for monthly data */
@@ -121,7 +120,6 @@ export class SubscriptionV1Component implements OnInit, OnDestroy, OnChanges {
         public breakpointObserver: BreakpointObserver,
         private subscriptionsActions: SubscriptionsActions,
         private store: Store<AppState>,
-        @Inject(ServiceConfig) private serviceConfig,
         private subscriptionService: SubscriptionsService,
         private activeRoute: ActivatedRoute,
         private changeDetectionRef: ChangeDetectorRef,
@@ -165,7 +163,7 @@ export class SubscriptionV1Component implements OnInit, OnDestroy, OnChanges {
         });
 
         /** This will use for image format */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -11,7 +11,6 @@ import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export interface ActiveTriggers {
     title: string;
@@ -117,7 +116,6 @@ export class SettingCampaignComponent implements OnInit {
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
-        @Inject(ServiceConfig) private serviceConfig,
         private dialog: MatDialog
     ) {
         this.resetCommunicationForm();
@@ -129,7 +127,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.getCommunicationPlatforms();
     }
 

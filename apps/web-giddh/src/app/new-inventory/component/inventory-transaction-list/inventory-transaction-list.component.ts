@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList, Output, EventEmitter, Inject } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList, Output, EventEmitter } from "@angular/core";
 import { GeneralService } from "../../../services/general.service";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
@@ -19,7 +19,6 @@ import { ReportFiltersComponent } from "../report-filters/report-filters.compone
 import { ActivatedRoute, Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { OrganizationType } from "../../../models/user-login-state";
-import { ServiceConfig } from "../../../services/service.config";
 
 @Component({
     selector: "inventory-transaction-list",
@@ -117,7 +116,6 @@ export class InventoryTransactionListComponent implements OnInit {
     constructor(
         private generalService: GeneralService,
         public dialog: MatDialog,
-        @Inject(ServiceConfig) private serviceConfig,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
         public route: ActivatedRoute,
@@ -163,7 +161,7 @@ export class InventoryTransactionListComponent implements OnInit {
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (this.showAccountSearchInput) {

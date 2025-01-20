@@ -6,14 +6,9 @@ import { CountryCodeService } from './services/country-code.service';
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
-    'PORTAL_URL': PORTAL_URL,
-    'OTP_WIDGET_ID': OTP_WIDGET_ID,
-    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
     'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
-    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET
+    'APP_FOLDER': APP_FOLDER
 };
 
 /** Add Company business type*/
@@ -127,9 +122,6 @@ export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
-
-/** URL Protocol */
-export const URL_PROTOCOL = 'http://'
 
 /** Adjustment inventory */
 export enum AdjustmentInventory {

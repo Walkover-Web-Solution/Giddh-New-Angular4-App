@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnInit, ViewChild, ElementRef, OnDestroy, Inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
@@ -13,7 +13,6 @@ import { ActivatedRoute } from '@angular/router';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export class TemplateDesignUISectionVisibility {
     public templates: boolean = false;
@@ -74,7 +73,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private store: Store<AppState>,
         private _activatedRoute: ActivatedRoute,
-        @Inject(ServiceConfig) private serviceConfig,
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private invoiceActions: InvoiceActions,
         private generalService: GeneralService,
@@ -137,7 +135,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                     if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
                         this.showDeleteButton = true;
                         let preview: any = document.getElementById('logoImage');
-                        preview?.setAttribute('src', (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                        preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
                     }
                 }
             }

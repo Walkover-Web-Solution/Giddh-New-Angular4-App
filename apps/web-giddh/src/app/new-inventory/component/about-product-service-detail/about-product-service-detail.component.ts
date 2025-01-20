@@ -1,9 +1,8 @@
-import { Component, Inject, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'about-product-service-detail',
@@ -20,13 +19,12 @@ export class AboutProductServiceDetailComponent implements OnInit {
     public productContent: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
-        @Inject(ServiceConfig) private serviceConfig,
         private breakPointObservar: BreakpointObserver) {
 
     }
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         /* added break point of mobile screen size  */
         this.breakPointObservar.observe([
