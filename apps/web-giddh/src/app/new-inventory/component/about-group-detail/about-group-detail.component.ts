@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Inject } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -7,6 +7,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { ServiceConfig } from '../../../services/service.config';
 @Component({
     selector: 'about-group-detail',
     templateUrl: './about-group-detail.component.html',
@@ -44,6 +45,7 @@ export class AboutGroupDetailComponent implements OnInit {
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
 
     constructor(
+        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService, private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver) {
     }
@@ -93,7 +95,7 @@ export class AboutGroupDetailComponent implements OnInit {
     }
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'

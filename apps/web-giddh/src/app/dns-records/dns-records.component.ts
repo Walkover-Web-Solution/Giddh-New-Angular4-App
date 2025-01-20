@@ -1,9 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClipboardService } from 'ngx-clipboard';
 import { ReplaySubject, combineLatest, takeUntil } from 'rxjs';
 import { SettingsProfileService } from '../services/settings.profile.service';
 import { ToasterService } from '../services/toaster.service';
+import { GeneralService } from '../services/general.service';
+import { ServiceConfig } from '../services/service.config';
 export interface GetDomainList {
     type: any;
     hostName: any;
@@ -39,12 +41,16 @@ export class DnsRecordsComponent implements OnInit {
     public displayedColumns: string[] = ['type', 'hostName', 'value', 'status'];
     /* it will store company uniquename */
     public companyUniqueName: string = '';
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
 
 
     constructor(private route: ActivatedRoute,
         private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
+        private generalService: GeneralService,
         private changeDetectorRef: ChangeDetectorRef,
+        @Inject(ServiceConfig) private serviceConfig,
         private clipboardService: ClipboardService) {
     }
 
@@ -55,8 +61,9 @@ export class DnsRecordsComponent implements OnInit {
    * @memberof DnsRecordsComponent
    */
     public ngOnInit(): void {
-
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-blue-logo.svg';
 
         combineLatest([
             this.route.queryParams.pipe(takeUntil(this.destroyed$)),

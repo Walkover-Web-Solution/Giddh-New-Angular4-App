@@ -7,6 +7,7 @@ import {
     ComponentFactoryResolver,
     ElementRef,
     EventEmitter,
+    Inject,
     OnDestroy,
     OnInit,
     Output,
@@ -60,6 +61,7 @@ import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
+import { ServiceConfig } from '../services/service.config';
 
 @Component({
     selector: "contact-detail",
@@ -250,7 +252,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
+    constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
@@ -286,7 +288,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));

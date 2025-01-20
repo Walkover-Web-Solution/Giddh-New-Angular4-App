@@ -1,6 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -18,12 +19,10 @@ export class B2csSummaryComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {
-        
-    }
+    constructor(@Inject(ServiceConfig) private serviceConfig) { }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
     }
 
     public ngOnDestroy() {

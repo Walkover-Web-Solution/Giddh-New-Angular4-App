@@ -1,5 +1,5 @@
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
@@ -17,6 +17,7 @@ import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { ServiceConfig } from './services/service.config';
 
 /**
  * App Component
@@ -54,7 +55,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         public dialog: MatDialog,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -104,7 +106,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 'LOCAL_ENV': LOCAL_ENV,
                 'TEST_ENV': TEST_ENV,
                 'PRODUCTION_ENV': PRODUCTION_ENV,
-                'AppUrl': AppUrl,
+                'AppUrl': (this.serviceConfig.AppUrl || AppUrl),
                 'APP_FOLDER': APP_FOLDER
             });
         }
@@ -282,8 +284,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck(AppUrl + 'version.json');
-
+            this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);

@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -19,6 +19,7 @@ import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'app-reports',
@@ -144,7 +145,9 @@ export class ReportsComponent implements OnInit {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private commonAction: CommonActions
+
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
@@ -188,7 +191,7 @@ export class ReportsComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;

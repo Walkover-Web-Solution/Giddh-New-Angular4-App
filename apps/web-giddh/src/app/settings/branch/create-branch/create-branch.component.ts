@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -25,6 +25,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
 import { BranchHierarchyType } from '../../../app.constant';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'create-branch',
@@ -119,6 +120,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         private generalActions: GeneralActions,
         private generalService: GeneralService,
         private router: Router,
+        @Inject(ServiceConfig) private serviceConfig,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
@@ -205,7 +207,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
-        this.imgPath = isElectron ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
+        this.imgPath = isElectron ? 'assets/images/branch-image.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/branch-image.svg';
 
         this.branchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.showPageLeaveConfirmation) {

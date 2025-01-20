@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -51,6 +51,7 @@ import { SettingsProfileActions } from "../../actions/settings/profile/settings.
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
+import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: "create",
@@ -94,7 +95,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Hold url Voucher Type */
     public urlVoucherType: string = '';
     /** Holds images folder path */
-    public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+    public imgPath: string = '';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Discounts list Observable */
@@ -508,6 +509,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
+        @Inject(ServiceConfig) private serviceConfig,
         private componentStore: VoucherComponentStore,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -533,7 +535,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
     ) {
-
+       this.imgPath =  isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**
