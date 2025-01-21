@@ -157,7 +157,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 accountSearchResponse.results?.forEach(result => {
-                    if (result.uniqueName) {
+                    if (result?.uniqueName) {
                         this.accountSearchResponse.push({
                             value: result.uniqueName,
                             label: result.name,
