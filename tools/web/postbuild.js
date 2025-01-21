@@ -1,26 +1,79 @@
+// postBuild.js
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
 
-// Promisify core APIs
+// Get application version from package.json
+const appVersion = require('../../package.json').version;
+
+// Promisify core API's
+const readDir = util.promisify(fs.readdir);
 const writeFile = util.promisify(fs.writeFile);
+const readFile = util.promisify(fs.readFile);
+const renameFile = util.promisify(fs.rename);
 const mkdir = util.promisify(fs.mkdir);
 
+console.log('\nRunning post-build tasks');
+
 // Define variables
-let rootDirectory = '';
+let rootDirectiory = '';
 for (let i = 0; i < process.argv.length; i++) {
     if (process.argv[i].startsWith('--path=')) {
-        rootDirectory = '../../' + process.argv[i].replace('--path=', '').trim();
-        console.log("Dist Folder Path = " + rootDirectory);
+        rootDirectiory = '../../' + process.argv[i].replace('--path=', '').trim();
+        console.log("Dist Folder Path = " + rootDirectiory);
     }
 }
 
+if (!rootDirectiory) {
+    console.error('Error: Missing --path argument. Please provide the dist folder path.');
+    process.exit(1);
+}
+
+const versionFilePath = path.join(__dirname, rootDirectiory, 'version.json');
+const indexFilePath = path.join(__dirname, rootDirectiory, 'index.html');
+const newIndexFilePath = path.join(__dirname, rootDirectiory, 'index.php');
 const phpConfPath = path.join(
     __dirname,
-    rootDirectory,
+    rootDirectiory,
     '.platform/nginx/conf.d/elasticbeanstalk/php.conf'
 );
 
+let mainHash = '';
+let mainBundleFile = '';
+const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
+
+// PHP script to prepend to index.html
+const phpScript = `<?php
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    $host = $_SERVER['HTTP_HOST'];
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $fullUrl = $protocol . "://" . $host . $requestUri;
+    $parsedUrl = parse_url($fullUrl);
+    $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
+    // setting fetched baseUrl in Origin Header
+    $headers = [
+        "Origin: $baseUrl"
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_URL, getenv("GIDDH_WHITE_LABEL_URL"));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+?>`;
+
+// JavaScript to append to index.html
+const whiteLabelScript = `
+<script>
+    var response = '<?php echo json_encode($response) ?>';
+    if (response) {
+        localStorage.setItem('whiteLabel', response.slice(1,-1));
+    }
+</script>`;
+
+// Nginx configuration for php.conf
 const nginxConfig = `
 # This file is managed by Elastic Beanstalk
 #
@@ -29,7 +82,7 @@ const nginxConfig = `
 root /var/www/html/public/website;
 index index.php index.html index.htm;
 # Exclude Angular files (static assets or specific routes)
-location ~* \\.(?:js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf|otf|eot|svg|mp4|webm|html|json|map|pdf|txt|br)$ {
+location ~* \.(?:js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf|otf|eot|svg|mp4|webm|html|json|map|pdf|txt|br)$ {
     try_files $uri =404;
 }
 # Serve Angular application paths directly
@@ -40,8 +93,8 @@ location /assets/ {
 location / {
     rewrite ^ /index.php$is_args$args;
 }
-location ~ \\.(php|phar)(/.*)?$ {
-    fastcgi_split_path_info ^(.+\\.(?:php|phar))(/.*)$;
+location ~ \.(php|phar)(/.*)?$ {
+    fastcgi_split_path_info ^(.+\.(?:php|phar))(/.*)$;
     fastcgi_intercept_errors on;
     fastcgi_index  index.php;
     fastcgi_param  QUERY_STRING       $query_string;
@@ -62,13 +115,28 @@ location ~ \\.(php|phar)(/.*)?$ {
     fastcgi_param  SERVER_ADDR        $server_addr;
     fastcgi_param  SERVER_PORT        $server_port;
     fastcgi_param  SERVER_NAME        $server_name;
+    # PHP only, required if PHP was built with --enable-force-cgi-redirect
     fastcgi_param  REDIRECT_STATUS    200;
     fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
     fastcgi_param  PATH_INFO $fastcgi_path_info;
     fastcgi_pass   php-fpm;
-}
-`;
+}`;
 
+// Function to append script to index.html
+const appendScriptToIndex = (indexPath, phpScriptContent, jsScriptContent) => {
+    return readFile(indexPath, 'utf8')
+        .then((indexContent) => {
+            // Prepend the PHP script and append the JS script just before the closing </body> tag
+            const updatedContent = indexContent.replace('</body>', `${jsScriptContent}\n</body>`);
+            const finalContent = `${phpScriptContent}\n${updatedContent}`;
+            return writeFile(indexPath, finalContent);
+        })
+        .then(() => {
+            console.log('Successfully appended PHP and JS scripts to index.html');
+        });
+};
+
+// Ensure directories exist
 const ensureDirectoriesExist = (filePath) => {
     const dirPath = path.dirname(filePath);
     return mkdir(dirPath, { recursive: true })
@@ -81,14 +149,83 @@ const ensureDirectoriesExist = (filePath) => {
         });
 };
 
-ensureDirectoriesExist(phpConfPath)
+// Read the dist folder and perform operations
+readDir(path.join(__dirname, rootDirectiory))
+    .then(files => {
+        mainBundleFile = files.find(f => mainBundleRegexp.test(f));
+        if (mainBundleFile) {
+            const matchHash = mainBundleFile.match(mainBundleRegexp);
+            if (matchHash.length > 1 && !!matchHash[1]) {
+                mainHash = matchHash[1];
+            }
+        }
+
+        console.log(`Writing version and hash to ${versionFilePath}`);
+        const versionContent = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
+        return writeFile(versionFilePath, versionContent);
+    })
     .then(() => {
+        if (!mainBundleFile) {
+            console.warn('Main bundle file not found, skipping hash replacement.');
+            return;
+        }
+
+        console.log(`Replacing hash in the ${mainBundleFile}`);
+        const mainFilePath = path.join(__dirname, rootDirectiory, mainBundleFile);
+        return readFile(mainFilePath, 'utf8')
+            .then(mainFileData => {
+                const replacedContent = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
+                return writeFile(mainFilePath, replacedContent);
+            });
+    })
+    .then(() => {
+        console.log('Appending PHP and JS scripts to index.html...');
+        return appendScriptToIndex(indexFilePath, phpScript, whiteLabelScript);
+    })
+    .then(() => {
+        console.log('Renaming index.html to index.php...');
+        return renameFile(indexFilePath, newIndexFilePath);
+    })
+    .then(() => {
+        console.log('Ensuring directories for php.conf...');
         console.log('Writing nginx configuration to php.conf...');
         return writeFile(phpConfPath, nginxConfig);
     })
     .then(() => {
-        console.log('php.conf created successfully.');
+        console.log('Post-build tasks completed successfully.');
     })
     .catch(err => {
         console.error('Error during post-build tasks:', err);
     });
+
+// buildspec.yml
+// // Create this file in the root directory
+// const buildSpecYmlContent = `version: 0.2
+
+// phases:
+//   pre_build:
+//     commands:
+//       - rm -rf node_modules
+//       - npm cache clean --force
+//       - npm install --force
+//   build:
+//     commands:
+//       - |
+//         if [ "${AWS_BRANCH}" = "giddh-2.0" ]; then
+//           npm run build-test
+//         elif [ "${AWS_BRANCH}" = "beta-stage" ]; then
+//           npm run build-stage
+//         elif [ "${AWS_BRANCH}" = "beta-branch" ]; then
+//           npm run build-prod
+//         elif [ "${AWS_BRANCH}" = "production" ]; then
+//           npm run build-prod
+//         fi
+
+// artifacts:
+//     baseDirectory: /dist/apps/web-giddh/
+//     files: '**/*'`;
+
+// const buildSpecPath = path.join(__dirname, '../../buildspec.yml');
+// writeFile(buildSpecPath, buildSpecYmlContent)
+//     .then(() => console.log('buildspec.yml created successfully.'))
+//     .catch(err => console.error('Error creating buildspec.yml:', err));
