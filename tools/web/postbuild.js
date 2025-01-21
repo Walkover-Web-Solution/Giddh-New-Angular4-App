@@ -179,9 +179,6 @@ phases:
         elif [ ${BRANCH} = "production" ]; then
         echo "For production branch"
         npm run build-prod
-        else
-        echo "In else condition"
-        npm run build-test
         fi
   post_build:
     commands:
@@ -189,7 +186,7 @@ phases:
 artifacts:
   base-directory: ./dist/apps/web-giddh/
   files:
-    - "**/*"
+    - '**/*'
 `;
 
 // Read the dist folder and perform operations
