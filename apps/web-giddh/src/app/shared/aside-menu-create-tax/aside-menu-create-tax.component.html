@@ -199,7 +199,6 @@
                     aria-label="cancel"
                     type="submit"
                     *ngIf="tax && tax?.uniqueName"
-                    [disabled]="taxForm.invalid"
                 >
                     <ng-container *ngIf="!isUpdateTaxInProcess; else showSpinner">
                         {{ commonLocaleData?.app_update }}

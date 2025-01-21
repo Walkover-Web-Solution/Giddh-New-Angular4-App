@@ -1,4 +1,4 @@
-<div class="text-field-container" [ngClass]="{ 'readonly-field': readonly }">
+<div class="text-field-container" [ngClass]="{ 'readonly-field': readonly || disabled }">
     <mat-form-field
         [ngClass]="{ 'mat-form-field-invalid': showError, 'prefix-icon-field': matPrefixIcon }"
         [appearance]="appearance"

@@ -22,7 +22,7 @@
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
-            z-index: 1;
+            z-index: 1 !important;
         }
     }
 
