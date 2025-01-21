@@ -1,4 +1,4 @@
-export interface projectType {
+export interface ProjectRequestType {
     companyUniqueName: string;
     branchUniqueName: string;
     sort: 'asc' | 'desc' | '';
@@ -7,7 +7,7 @@ export interface projectType {
     count: number;
     q: string;
 }
-export interface defaultParamType {
+export interface DefaultParamType {
     companyUniqueName: string,
     projectUniqueName: string,
     branchUniqueName: string,
@@ -16,7 +16,7 @@ export interface defaultParamType {
     category: string
 }
 
-export interface projectDetails {
+export interface ProjectDetails {
     uniqueName: string;
     name: string;
     archiveStatus: string;

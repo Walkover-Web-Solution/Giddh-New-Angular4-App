@@ -7,11 +7,12 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, delay } from 'rxjs';
 import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.store';
-import { defaultParamType, projectType } from '../project-wise-accounting';
+import { DefaultParamType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'revenue-expense-list',
@@ -39,7 +40,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Request parameters for fetching project entries */
     public getProjectEntryListRequest: any = { count: 50, page: 1 };
     /** Default parameters for API requests */
-    public defaultParamsValue: defaultParamType = {
+    public defaultParamsValue: DefaultParamType = {
         companyUniqueName: '',
         projectUniqueName: '',
         branchUniqueName: '',
@@ -62,7 +63,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Stores the search results for accounts */
     public accountSearchResponse: any[] = [];
     /** Stores the search results for entries */
-    public entrySearchResponse: any;
+    public accountAndEntryList: any = {};
     /** Pagination options for the table */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Total number of results in the entry list */
@@ -82,10 +83,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         return this.accountEntryListForm.get('entryList') as FormArray;
     }
     /** Options for selecting calculation method */
-    public selectMethod = [
-        { label: 'PERCENTAGE', value: 'PERCENTAGE' },
-        { label: 'VALUE', value: 'VALUE' }
-    ];
+    public selectMethod = [];
     /** Request parameters for account searches */
     public accountSearchRequest: any = {
         count: this.defaultCount,
@@ -97,7 +95,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     };
     /** Observable for fetching projects */
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
-    /** Active index for current fields*/
+    /** Active index for current fields */
     public activeRowIndex: number = -1;
 
     constructor(
@@ -107,7 +105,6 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         private componentStore: ProjectWiseAccountingComponentStore,
         private formBuilder: FormBuilder,
         private router: Router,
-        private changeDetection: ChangeDetectorRef,
     ) { }
 
     /**
@@ -160,11 +157,17 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 accountSearchResponse.results?.forEach(result => {
-                    this.accountSearchResponse.push({
-                        value: result?.uniqueName,
-                        label: result.name,
-                        additional: result
-                    });
+                    if (result.uniqueName) {
+                        this.accountSearchResponse.push({
+                            value: result.uniqueName,
+                            label: result.name,
+                            additional: result
+                        });
+                        this.accountAndEntryList[result.uniqueName] = {};
+                        this.accountAndEntryList[result.uniqueName]['data'] = [];
+                        this.accountAndEntryList[result.uniqueName]['nextPageAvailable'] = false;
+                        this.accountAndEntryList[result.uniqueName]['page'] = 1;
+                    }
                 });
                 this.accountSearchRequest.isLoading = false;
             }
@@ -172,9 +175,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
 
         this.componentStore.entrySearch$.pipe(takeUntil(this.destroyed$)).subscribe(entrySearchResponse => {
             if (entrySearchResponse) {
-                this.entrySearchRequest.nextPageAvailable = entrySearchResponse.nextPageAvailable;
-                entrySearchResponse.transactions?.forEach(result => {
-                    this.entrySearchResponse.push({
+                const accountUniqueName = entrySearchResponse.accountUniqueName;
+                this.accountAndEntryList[accountUniqueName].nextPageAvailable = entrySearchResponse.body.nextPageAvailable;
+                entrySearchResponse.body.transactions?.forEach(result => {
+                    this.accountAndEntryList[accountUniqueName].data.push({
                         value: result.entryUniqueName,
                         label: result.particular?.name,
                         additional: result
@@ -217,8 +221,27 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.componentStore.entryUpdateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryUpdateSuccess => {
+            if (entryUpdateSuccess) {
+                this.entryList.at(entryUpdateSuccess.index).get('defaultEntryUniqueName').patchValue(entryUpdateSuccess.entryUniqueName);
+            }
+        });
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.selectMethod = [
+                { label: this.localeData?.percentage, value: 'PERCENTAGE' },
+                { label: this.localeData?.value, value: 'VALUE' }
+            ]
+        }
+    }
     /**
      * Initializes the form group for creating account entries with required fields.
      *
@@ -261,6 +284,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             accountUniqueName: [data?.accountUniqueName ?? '', Validators.required],
             entry: [data?.entry ?? '', Validators.required],
             entryUniqueName: [data?.entryUniqueName ?? '', Validators.required],
+            defaultEntryUniqueName: [data?.entryUniqueName ?? '', Validators.required],
             value: [data?.value ?? '', Validators.required],
             calculationMethod: [data?.calculationMethod ?? '', Validators.required]
         });
@@ -283,6 +307,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public getProjectAccount(requestObject: any): void {
+        requestObject.count = this.defaultCount;
         this.componentStore.getProjectAccount(requestObject);
     }
 
@@ -299,10 +324,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /**
      * Handles pagination for the entry list and fetches new data for the selected page.
      *
-     * @param {*} event The pagination event.
+     * @param {PageEvent} event The pagination event.
      * @memberof RevenueExpenseListComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         this.getProjectEntryListRequest.count = event.pageSize;
         this.getProjectEntryListRequest.page = event.pageIndex + 1;
         this.getEntryList();
@@ -327,12 +352,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      *
      * @memberof RevenueExpenseListComponent
      */
-    public handleSearchEntryScrollEnd(): void {
+    public handleSearchEntryScrollEnd(accountUniqueName: string): void {
         if (this.entrySearchRequest.isLoading) {
             return;
         }
-        if (this.entrySearchRequest.nextPageAvailable) {
-            this.searchEntry(this.entrySearchRequest.q, this.entrySearchRequest.page + 1);
+        if (this.accountAndEntryList[accountUniqueName]?.nextPageAvailable) {
+            this.searchEntry(this.entrySearchRequest.q, this.accountAndEntryList[accountUniqueName].page + 1, accountUniqueName);
         }
     }
 
@@ -363,23 +388,24 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @param {number} [page=1] The page number for paginated results.
      * @memberof RevenueExpenseListComponent
      */
-    public searchEntry(query: string = '', page: number = 1): void {
-        if (this.entrySearchRequest.q !== query) {
-            this.entrySearchResponse = [];
+    public searchEntry(query: string = '', page: number = 1, accountUniqueName: string): void {
+        if (this.entrySearchRequest.q !== query && this.accountAndEntryList[accountUniqueName]) {
+            this.accountAndEntryList[accountUniqueName].data = [];
         }
         this.entrySearchRequest.q = query;
         this.entrySearchRequest.isLoading = true;
-        this.entrySearchRequest.page = page;
-
+        if (this.accountAndEntryList[accountUniqueName]) {
+            this.accountAndEntryList[accountUniqueName].page = page;
+        }
         let entryRequest = { ...this.entrySearchRequest, ...this.defaultParamsValue };
+        entryRequest['accountUniqueName'] = accountUniqueName;
+        entryRequest['page'] = page;
         this.getProjectEntry(entryRequest);
     }
 
-    public currentEntry(accountUniqueName: string) {
-        this.entrySearchResponse = [];
-        this.entrySearchRequest.accountUniqueName = accountUniqueName;
-        if (accountUniqueName.trim() != '') {
-            this.searchEntry(this.entrySearchRequest.q);
+    public currentEntry(accountUniqueName: string): void {
+        if (accountUniqueName && !this.accountAndEntryList[accountUniqueName]?.data?.length) {
+            this.searchEntry('', 1, accountUniqueName);
         }
     }
 
@@ -389,12 +415,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @param {*} event The selected account object.
      * @memberof RevenueExpenseListComponent
      */
-    public selectAccount(event: any): void {
-        if (event) {
-            this.createAccountEntryForm.get('account')?.patchValue(event.label);
-            // this.entrySearchRequest.accountUniqueName = this.createAccountEntryForm.get('accountUniqueName').value;
-            // this.entrySearchResponse = [];
-            // this.searchEntry(this.entrySearchRequest.q);
+    public selectAccount(accountUniqueName: string): void {
+        if (accountUniqueName && this.accountAndEntryList[accountUniqueName] && !this.accountAndEntryList[accountUniqueName].data.length) {
+            this.searchEntry(this.accountAndEntryList[accountUniqueName].query, 1, accountUniqueName);
         }
     }
 
@@ -430,7 +453,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.modalRef?.hide();
     }
 
     /**
@@ -461,11 +484,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /**
      * Creates a new entry based on the form data and sends the payload to the service.
      *
+     * @param {*} value
      * @memberof RevenueExpenseListComponent
      */
-    public createEntry(): void {
+    public createEntry(value: number): void {
         this.isCreateAccountValidForm = this.createAccountEntryForm.valid;
-        if (this.isCreateAccountValidForm) {
+        if (this.isCreateAccountValidForm && value > 0) {
             let payload = cloneDeep(this.createAccountEntryForm.value);
             delete payload['account'];
             delete payload['entry'];
@@ -485,7 +509,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public deleteEntry(index: number): void {
-        const entryUniqueName = this.entryList.at(index).value.entryUniqueName;
+        const entryUniqueName = this.entryList.at(index).value.defaultEntryUniqueName;
         if (entryUniqueName) {
             const requestObject = {
                 index: index,
@@ -511,7 +535,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         const requestObject = {
             request: { ...this.defaultParamsValue, entryUniqueName: entryUniqueName },
             payload: payload,
-            index: index,
+            index: index
         }
         this.componentStore.updateEntry(requestObject);
     }
@@ -519,11 +543,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /**
      * Handles tab changes and navigates to the corresponding route.
      *
-     * @param {any} event The tab change event.
+     * @param {MatTabChangeEvent} event The tab change event.
      * @memberof RevenueExpenseListComponent
      */
-    public tabChanged(event: any): void {
+    public tabChanged(event: MatTabChangeEvent): void {
         this.totalResults = 0;
+        this.createAccountEntryForm.reset();
+        this.accountSearchResponse = [];
         const tab = event.tab.textLabel === "Revenue" ? "revenue" : event.tab.textLabel === "Expense" ? "expenses" : "profit-loss";
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
