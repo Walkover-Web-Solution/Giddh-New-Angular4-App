@@ -89,7 +89,7 @@
                                 [enableDynamicSearch]="true"
                                 [isPaginationEnabled]="true"
                                 (scrollEnd)="handleSearchEntryScrollEnd(createAccountEntryForm.get('accountUniqueName')?.value)"
-                                (dynamicSearchedQuery)="searchEntry($event, 1, createAccountEntryForm.get('accountUniqueName')?.value)"
+                                (dynamicSearchedQuery)="createAccountEntryForm.get('accountUniqueName')?.value && searchEntry($event, 1, createAccountEntryForm.get('accountUniqueName')?.value)"
                                 (selectedOption)="createAccountEntryForm.get('entry')?.patchValue($event.label)"
                                 (onClear)="createAccountEntryForm.get('entry')?.patchValue(null); createAccountEntryForm.get('entryUniqueName')?.patchValue(null)"
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('entryUniqueName')?.value"
@@ -137,8 +137,8 @@
                     <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
                         <ng-container formArrayName="entryList">
                             <ng-container
-                                *ngFor="let entry of accountEntryListForm.get('entryList')['controls']; let i = index">
-                                <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
+                                *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
+                                <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry?.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
                                     <td>
                                         <reactive-dropdown-field
                                             [label]="commonLocaleData?.app_select_account"
