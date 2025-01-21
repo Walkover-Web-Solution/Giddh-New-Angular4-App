@@ -94,7 +94,7 @@ location /assets/ {
 location / {
     rewrite ^ /index.php$is_args$args;
 }
-    
+
 location ~ \.(php|phar)(/.*)?$ {
     fastcgi_split_path_info ^(.+\.(?:php|phar))(/.*)$;
     fastcgi_intercept_errors on;
@@ -153,30 +153,43 @@ const ensureDirectoriesExist = (filePath) => {
 
 // BuildSpec configuration content
 // Generate buildspec.yml file
-const buildSpecYmlContent = `version: 0.2
-
+const buildSpecYmlContent = `
+version: 0.2
 phases:
+  install:
+    runtime-versions:
+      nodejs: 16
   pre_build:
     commands:
-      - rm -rf node_modules
+      - sudo rm -rf node_modules
       - npm cache clean --force
-      - npm install --force
+      - npm install -force
   build:
     commands:
       - |
-        if [ "\${BRANCH}" = "giddh-2.0" ]; then
-          npm run build-test
-        elif [ "\${BRANCH}" = "beta-stage" ]; then
-          npm run build-stage
-        elif [ "\${BRANCH}" = "beta-branch" ]; then
-          npm run build-prod
-        elif [ "\${BRANCH}" = "production" ]; then
-          npm run build-prod
+        if [ ${BRANCH} = "giddh-2.0" ]; then
+        echo "For giddh-2.0 branch"
+        npm run build-test
+        elif [ ${BRANCH} = "beta-stage" ]; then
+        echo "For beta-stage branch"
+        npm run build-stage
+        elif [ ${BRANCH} = "beta-branch" ]; then
+        echo "For beta-branch branch"
+        npm run build-prod
+        elif [ ${BRANCH} = "production" ]; then
+        echo "For production branch"
+        npm run build-prod
+        else
+        echo "In else condition"
+        npm run build-test
         fi
-
+  post_build:
+    commands:
+      - echo "Build process completed successfully."
 artifacts:
-  baseDirectory: /dist/apps/web-giddh/
-  files: '**/*'
+  base-directory: ./dist/apps/web-giddh/
+  files:
+    - "**/*"
 `;
 
 // Read the dist folder and perform operations
