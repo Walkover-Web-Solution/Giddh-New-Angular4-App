@@ -2685,7 +2685,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2735,7 +2735,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2853,7 +2853,7 @@
 
             <!-- region total section -->
             <!-- commented due to API  -->
-            <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
+            <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable && !isAdvanceSearchImplemented">
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">
