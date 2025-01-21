@@ -230,7 +230,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.ADVANCE_SEARCH),
             switchMap((action: CustomActions) => this.ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from,
-                action.payload.to, '', action.payload.page, action.payload.count, action.payload.q, action.payload.branchUniqueName)),
+                action.payload.to, '', action.payload.page, action.payload.count, action.payload.q, action.payload.branchUniqueName, action.payload.paginationToken)),
             map(response => {
                 return this.advanceSearchResponse(response);
             })));
@@ -566,10 +566,10 @@ export class LedgerActions {
         };
     }
 
-    public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, page?: number, count?: number, q?: string, branchUniqueName?: string): CustomActions {
+    public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, page?: number, count?: number, q?: string, branchUniqueName?: string, paginationToken?: string): CustomActions {
         return {
             type: LEDGER.ADVANCE_SEARCH,
-            payload: { model, accountUniqueName, from, to, page, count, q, branchUniqueName }
+            payload: { model, accountUniqueName, from, to, page, count, q, branchUniqueName, paginationToken }
         };
     }
 
