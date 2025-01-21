@@ -133,8 +133,7 @@ label {
 
 @media screen and (max-width: 1340px) {
     .table-responsive {
-        overflow: auto !important;
-        max-width: calc(100vw - 310px)
+        height: auto !important; 
     }
 }
 
