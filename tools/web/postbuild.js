@@ -199,7 +199,6 @@ readDir(path.join(__dirname, rootDirectiory))
     });
 
 // buildspec.yml
-// Create this file in the root directory
 const buildSpecYmlContent = `version: 0.2
 
 phases:
@@ -211,21 +210,22 @@ phases:
   build:
     commands:
       - |
-        if [ "${AWS_BRANCH}" = "giddh-2.0" ]; then
+        if [ "\${AWS_BRANCH}" = "giddh-2.0" ]; then
           npm run build-test
-        elif [ "${AWS_BRANCH}" = "beta-stage" ]; then
+        elif [ "\${AWS_BRANCH}" = "beta-stage" ]; then
           npm run build-stage
-        elif [ "${AWS_BRANCH}" = "beta-branch" ]; then
+        elif [ "\${AWS_BRANCH}" = "beta-branch" ]; then
           npm run build-prod
-        elif [ "${AWS_BRANCH}" = "production" ]; then
+        elif [ "\${AWS_BRANCH}" = "production" ]; then
           npm run build-prod
         fi
 
 artifacts:
     baseDirectory: /dist/apps/web-giddh/
-    files: '**/*'`;
+    files: '**/*'
+`;
 
-const buildSpecPath = path.join(__dirname, '../../buildspec.yml');
-writeFile(buildSpecPath, buildSpecYmlContent)
-    .then(() => console.log('buildspec.yml created successfully.'))
-    .catch(err => console.error('Error creating buildspec.yml:', err));
+// const buildSpecPath = path.join(__dirname, '../../buildspec.yml');
+// writeFile(buildSpecPath, buildSpecYmlContent)
+//     .then(() => console.log('buildspec.yml created successfully.'))
+//     .catch(err => console.error('Error creating buildspec.yml:', err));
