@@ -1,0 +1,23 @@
+{
+    "unit_updated" : "Unit updated successfully.",
+    "unit_created" : "Unit created successfully.",
+    "unit_deleted" : "Unit deleted successfully.",
+    "unit_group_updated" : "Group updated successfully.",
+    "unit_group_created" : "Group created successfully.",
+    "unit_group_deleted" : "Group deleted successfully.",
+    "delete_unit_message" : "Do you want to delete the unit?",
+    "delete_unit_group_message" : "Do you want to delete the group?",
+    "select_unit": "Select Unit",
+    "create_unit": "Type to create custom unit",
+    "code": "Code",
+    "enter_code": "Enter Code",
+    "unit_name": "Unit Name",
+    "mapped_unit_label": "Mapped Unit",
+    "quantity": "Quantity per unit",
+    "enter_quantity": "Enter Quantity",
+    "mapped_unit": "Mapped",
+    "add_new":"+ Add New",
+    "enter_name": "Enter Name",
+    "unit_group": "Unit Group",
+    "select_unit_group": "Select Unit Group"
+}

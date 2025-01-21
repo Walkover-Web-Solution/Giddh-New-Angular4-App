@@ -1,0 +1,33 @@
+{
+    "page_heading": "अनुमतियां",
+    "add_new_role": "+ नई भूमिका जोड़ें",
+    "permission_error": "आपके पास इस मॉड्यूल को एक्सेस करने की अनुमति नहीं है",
+    "role_delete_content": "क्या आप वाकई [ROLE] हटाना चाहते हैं?",
+    "add_role": "भूमिका जोड़ें",
+    "new_role": "नयी भूमिका",
+    "copy_permission": "अनुमति की प्रतिलिपि",
+    "select_heads": "प्रमुखों का चयन करें",
+    "add_role_error": "कम से कम 1 स्कोप का चयन करना चाहिए।",
+    "name_codes": {
+        "view": "देखना",
+        "edit": "संपादित करें",
+        "delete": "मिटाना",
+        "create": "सृजना",
+        "share": "शेयर",
+        "view_delete": "हटाना देखें",
+        "share_lower": "शेयर कम करें",
+        "share_all": "सभी को साझा करें",
+        "share_same": "साझा करें",
+        "comment": "टिप्पणी",
+        "gst_view": "जीएसटी देखें",
+        "gst_filing": "जीएसटी फाइलिंग"
+    },
+    "select_pages": "पृष्ठों का चयन करें",
+    "option_select_pages": "--पृष्ठ का चयन करें--",
+    "role_name_label": "भूमिका का नाम",
+    "role_name_placeholder": "भूमिका का नाम",
+    "role_type_label": "भूमिका प्रकार",
+    "fresh_start": "नयी शुरुआत",
+    "copy_other_role": "अन्य भूमिका से कॉपी करें",
+    "close_list": "सूची बंद करें"
+}

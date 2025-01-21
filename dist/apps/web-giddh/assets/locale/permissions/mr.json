@@ -1,0 +1,33 @@
+{
+    "page_heading": "परवानग्या",
+    "add_new_role": "+ नवीन भूमिका जोडा",
+    "permission_error": "आपणास या मॉड्यूलमध्ये प्रवेश करण्याची परवानगी नाही",
+    "role_delete_content": "आपली खात्री आहे की आपण [ROLE] हटवू इच्छिता ?",
+    "add_role": "भूमिका जोडा",
+    "new_role": "नवीन भूमिका",
+    "copy_permission": "परवानगी कॉपी करा",
+    "select_heads": "प्रमुख निवडा",
+    "add_role_error": "कमीतकमी 1 व्याप्ती निवडली पाहिजे.",
+    "name_codes": {
+        "view": "पहा",
+        "edit": "सुधारणे",
+        "delete": "हटवा",
+        "create": "तयार करा",
+        "share": "सामायिक करा",
+        "view_delete": "पहा हटवा",
+        "share_lower": "सामायिक करा लोअर",
+        "share_all": "सर्व सामायिक करा",
+        "share_same": "समान सामायिक करा",
+        "comment": "टिप्पणी",
+        "gst_view": "जीएसटी व्ह्यू",
+        "gst_filing": "जीएसटी दाखल करणे"
+    },
+    "select_pages": "पृष्ठे निवडा",
+    "option_select_pages": "--पृष्ठे निवडा--",
+    "role_name_label": "भूमिका नाव",
+    "role_name_placeholder": "भूमिका नाव",
+    "role_type_label": "भूमिका प्रकार",
+    "fresh_start": "नवी सुरुवात",
+    "copy_other_role": "इतर भूमिकेतून कॉपी करा",
+    "close_list": "बंद यादी"
+}

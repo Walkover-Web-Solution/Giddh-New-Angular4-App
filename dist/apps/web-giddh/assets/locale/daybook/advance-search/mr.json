@@ -1,0 +1,17 @@
+{
+    "date_range": "तारीख श्रेणी",
+    "particulars_title": "तपशील",
+    "particulars_content": "डीफॉल्टनुसार सर्व खाती निवडली जातात",
+    "vouchers_title": "व्हाउचर प्रकार",
+    "vouchers_content": "डीफॉल्टनुसार सर्व व्हाउचर निवडले जातात",
+    "included": "समाविष्ट",
+    "excluded": "वगळलेले",
+    "include": "समाविष्ट करा",
+    "exclude": "वगळा",
+    "other_details": "इतर तपशील",
+    "inventory": "यादी",
+    "select_accounts": "खाती निवडा",
+    "cheque_details": "चेक तपशील",
+    "cheque_number": "चेक नंबर",
+    "clearance_date": "मंजुरीची तारीख"
+}

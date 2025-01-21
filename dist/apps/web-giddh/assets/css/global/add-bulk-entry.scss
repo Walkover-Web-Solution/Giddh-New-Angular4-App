@@ -1,0 +1,26 @@
+.bulk-entry {
+    .bulk-entry-body {
+        .mdc-list-item__primary-text {
+            color: var(--color-common-primary-text) !important;
+        }
+        button {
+            .icon-cross{
+                color: var(--color-common-primary-text) !important;
+            }
+        }
+    }
+}
+
+body{
+    &.dark-theme {
+        .bulk-entry {
+            .bulk-entry-body {
+                .mdc-list-item__primary-text {
+                    img {
+                        filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%) contrast(100%)!important;
+                    }
+                }
+            }
+        }
+    }
+}

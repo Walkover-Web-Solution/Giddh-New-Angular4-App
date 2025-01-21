@@ -1,0 +1,17 @@
+{
+    "chart_title": {
+        "income": "उत्पन्न",
+        "expenses": "खर्च",
+        "sales": "विक्री",
+        "payment": "देय",
+        "receipt": "पावती"
+    },
+    "highest": "सर्वोच्च",
+    "lowest": "सर्वात कमी",
+    "date_range": "तारीख श्रेणी",
+    "compare_to": "तुलना करा",
+    "select_dates": "तारखा निवडा",
+    "daily": "दररोज",
+    "weekly": "साप्ताहिक",
+    "monthly": "मासिक"
+}

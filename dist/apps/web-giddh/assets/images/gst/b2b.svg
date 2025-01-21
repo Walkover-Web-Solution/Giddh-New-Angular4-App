@@ -1,0 +1,4 @@
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-bottom">
+  <path fill="#1D1D1B" d="M64 32h256v128h32V0H32v512h128v-32H64z"></path>
+  <path fill="#1D1D1B" d="M192 192v320.1l120-.1V392h48v120l120 .1V192H192zm256 288.1h-56V360H280v120h-56V224h224v256.1z"></path>
+</svg>

@@ -1,0 +1,32 @@
+.view-card {
+    .mat-card-title {
+        color: var(--color-giddh-blue) !important;
+    }
+    .mat-card-content {
+        .mat-list-base {
+            .mat-list-item,
+            .mat-list-base .mat-list-option {
+                height: 30px;
+            }
+        }
+    }
+}
+/*---- from-component ----*/
+.menu-btn {
+    button {
+        .mat-button-focus-overlay {
+            background: transparent !important;
+        }
+    }
+}
+
+/*---- Add Permission Role Dropdown Select All Checkbox other than mat-option ----*/
+.custom-select-all-option{
+    padding-left: 13px;
+    padding-right: 13px;
+
+    .mdc-label{
+        margin-left: 6px;
+        font-size: var(--font-size-15);
+    }
+}

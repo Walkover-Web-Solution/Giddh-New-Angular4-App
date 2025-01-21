@@ -1,0 +1,22 @@
+{
+    "page_heading": "टैली से डेटा आयात करें",
+    "inprogress": "प्रवर्तमान",
+    "completed": "समाप्त",
+    "time_placeholder": "अंतराल का चयन करें",
+    "company_placeholder": "कंपनी का चयन करें",
+    "no_entries_found": "कोई प्रविष्टि नहीं मिली",
+    "tally": "टैली:",
+    "import_json": "आयात जेसन:",
+    "last_import": "अंतिम आयात",
+    "groups": "समूहों",
+    "complete": "सम्पूर्ण",
+    "error_occured": "त्रुटि हुई",
+    "accounts": "खाता",
+    "entries": "प्रविष्टियाँ",
+    "error_report": "त्रुटि की रिपोर्ट:",
+    "filter_criteria": "कृपया अपने फ़िल्टर मापदंड की जाँच करें",
+    "company": "कंपनी",
+    "select_company": "कंपनी का चयन करें",
+    "select_interval": "अंतराल का चयन करें",
+    "vouchers": "वाउचर"
+}

@@ -1,0 +1,17 @@
+{
+    "chart_title": {
+        "income": "आय",
+        "expenses": "खर्च",
+        "sales": "बिक्री",
+        "payment": "भुगतान",
+        "receipt": "रसीद"
+    },
+    "highest": "उच्चतम",
+    "lowest": "निम्नतम",
+    "date_range": "तिथि सीमा",
+    "compare_to": "से तुलना करें",
+    "select_dates": "तिथियाँ चुनें",
+    "daily": "रोज",
+    "weekly": "साप्ताहिक",
+    "monthly": "महीने के"
+}

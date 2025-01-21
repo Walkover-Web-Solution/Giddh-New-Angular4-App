@@ -1,0 +1,15 @@
+{
+    "page_heading": "Financial Year(s)",
+    "sr_no": "Sr. No.",
+    "lock_status": "Lock Status",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "select_financial_year": "Select Financial Year",
+    "add_financial_year": "Add Financial Year",
+    "financial_year_period": "Financial Year Period",
+    "financial_year_period_options": {
+        "jan_dec": "JAN-DEC",
+        "apr_mar": "APR-MAR",
+        "july_july": "JULY-JULY"
+    }
+}

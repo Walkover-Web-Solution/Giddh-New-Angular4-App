@@ -1,0 +1,11 @@
+.mobile-tab {
+    mat-accordion {
+        .mat-expansion-panel {
+            width: clamp(650px,100% , 60vw);
+            background-color: var(--color-white) !important;
+            .mat-expansion-panel-body {
+                padding: 0 15px !important;
+            }
+        }
+    }
+}

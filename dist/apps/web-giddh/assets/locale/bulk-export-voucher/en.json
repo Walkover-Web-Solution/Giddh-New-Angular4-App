@@ -1,0 +1,16 @@
+{
+    "select_copy": "Select Copy",
+    "select_order": "Select Order",
+    "add_multiple_email": "You can add multiple id's comma separated",
+    "recipients_email": "Recipient Email Id's",
+    "invoice_copy_options": {
+        "original": "Original",
+        "customer": "Customer",
+        "transport": "Transport",
+        "attachment": "Attachment"
+    },
+    "invalid_email": "Invalid Email Id [EMAIL]",
+    "email_required": "Please enter atleast 1 Recipient Email Id",
+    "single_pdf": "Single PDF",
+    "multiple_pdf": "Multiple PDF"
+}

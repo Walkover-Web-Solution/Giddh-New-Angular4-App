@@ -1,0 +1,28 @@
+.help-aside-body {
+    .mat-list {
+        .mat-list-item {
+            .mat-list-item-content {
+                padding: 0 !important;
+                a {
+                    color: var(--color-nero) !important;
+                }
+            }
+        }
+    }
+}
+
+.universal-list-items {
+    .mat-mdc-list {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+.aside-help-panel {
+    .mdc-dialog {
+        .mdc-dialog__content{
+            padding: 0 !important;
+            background-color: transparent !important;
+        }
+    }
+}
