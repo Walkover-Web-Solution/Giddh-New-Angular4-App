@@ -240,7 +240,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public sortChange(event: Sort): void {
         this.projectListRequest.sort = event?.direction ? event?.direction : 'asc';
-        this.projectListRequest.sortBy = event?.active;
+        this.projectListRequest.sortBy = event?.active.toUpperCase();
         this.getAllProjectList();
     }
 
