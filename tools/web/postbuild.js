@@ -1,4 +1,3 @@
-// postBuild.js
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -188,6 +187,9 @@ readDir(path.join(__dirname, rootDirectiory))
     })
     .then(() => {
         console.log('Ensuring directories for php.conf...');
+        return ensureDirectoriesExist(phpConfPath); // Ensures directory exists before writing
+    })
+    .then(() => {
         console.log('Writing nginx configuration to php.conf...');
         return writeFile(phpConfPath, nginxConfig);
     })
@@ -197,35 +199,3 @@ readDir(path.join(__dirname, rootDirectiory))
     .catch(err => {
         console.error('Error during post-build tasks:', err);
     });
-
-// buildspec.yml
-// // Create this file in the root directory
-// const buildSpecYmlContent = `version: 0.2
-
-// phases:
-//   pre_build:
-//     commands:
-//       - rm -rf node_modules
-//       - npm cache clean --force
-//       - npm install --force
-//   build:
-//     commands:
-//       - |
-//         if [ "${AWS_BRANCH}" = "giddh-2.0" ]; then
-//           npm run build-test
-//         elif [ "${AWS_BRANCH}" = "beta-stage" ]; then
-//           npm run build-stage
-//         elif [ "${AWS_BRANCH}" = "beta-branch" ]; then
-//           npm run build-prod
-//         elif [ "${AWS_BRANCH}" = "production" ]; then
-//           npm run build-prod
-//         fi
-
-// artifacts:
-//     baseDirectory: /dist/apps/web-giddh/
-//     files: '**/*'`;
-
-// const buildSpecPath = path.join(__dirname, '../../buildspec.yml');
-// writeFile(buildSpecPath, buildSpecYmlContent)
-//     .then(() => console.log('buildspec.yml created successfully.'))
-//     .catch(err => console.error('Error creating buildspec.yml:', err));
