@@ -1,15 +1,15 @@
-<ng-container 
-    appTranslate 
+<ng-container
+    appTranslate
     [file]="'project-wise-account'"
-    (localeData)="localeData = $event" 
+    (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu></hamburger-menu>
     <div class="project-wise-accounting">
-        <mat-tab-group 
-            mat-stretch-tabs="false" 
-            mat-align-tabs="start" 
+        <mat-tab-group
+            mat-stretch-tabs="false"
+            mat-align-tabs="start"
             class="w-100"
             [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
@@ -17,7 +17,7 @@
             <mat-tab [label]="localeData?.revenue">
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
-            <mat-tab [label]="localeData?.expense"> 
+            <mat-tab [label]="localeData?.expense">
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
             <mat-tab [label]="localeData?.profit_and_loss">
@@ -33,11 +33,11 @@
     <div class="section-center pd-15">
        <header class="d-flex align-items-center justify-content-space-between">
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker" 
+                    class="giddh-datepicker date-range-picker"
                 />
             </div>
             <div>
@@ -61,14 +61,14 @@
                     </tr>
                     <tr [formGroup]="createAccountEntryForm">
                         <td>
-                            <reactive-dropdown-field 
-                                [label]="commonLocaleData?.app_select_account" 
+                            <reactive-dropdown-field
+                                [label]="commonLocaleData?.app_select_account"
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="accountSearchResponse"
                                 [labelValue]="createAccountEntryForm.get('account')?.value"
                                 formControlName="accountUniqueName"
                                 [enableDynamicSearch]="true"
-                                [isPaginationEnabled]="true" 
+                                [isPaginationEnabled]="true"
                                 (scrollEnd)="handleSearchAccountScrollEnd()"
                                 (dynamicSearchedQuery)="searchAccount($event)"
                                 (selectedOption)="selectAccount($event.value); ($event.label != createAccountEntryForm.get('account')?.value) && (createAccountEntryForm.get('entryUniqueName')?.patchValue(null) || createAccountEntryForm.get('entry')?.patchValue(null)); createAccountEntryForm.get('account')?.patchValue($event.label)"
@@ -79,17 +79,17 @@
                             </reactive-dropdown-field>
                         </td>
                         <td>
-                            <reactive-dropdown-field 
+                            <reactive-dropdown-field
                                 (click)="currentEntry(createAccountEntryForm.get('accountUniqueName')?.value)"
-                                [label]="localeData?.select_entry" 
+                                [label]="localeData?.select_entry"
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="accountAndEntryList[createAccountEntryForm.get('accountUniqueName')?.value]?.data"
-                                [labelValue]="createAccountEntryForm.get('entry')?.value" 
+                                [labelValue]="createAccountEntryForm.get('entry')?.value"
                                 formControlName="entryUniqueName"
-                                [enableDynamicSearch]="true" 
+                                [enableDynamicSearch]="true"
                                 [isPaginationEnabled]="true"
                                 (scrollEnd)="handleSearchEntryScrollEnd(createAccountEntryForm.get('accountUniqueName')?.value)"
-                                (dynamicSearchedQuery)="searchEntry($event, 1, createAccountEntryForm.get('accountUniqueName')?.value)"
+                                (dynamicSearchedQuery)="createAccountEntryForm.get('accountUniqueName')?.value && searchEntry($event, 1, createAccountEntryForm.get('accountUniqueName')?.value)"
                                 (selectedOption)="createAccountEntryForm.get('entry')?.patchValue($event.label)"
                                 (onClear)="createAccountEntryForm.get('entry')?.patchValue(null); createAccountEntryForm.get('entryUniqueName')?.patchValue(null)"
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('entryUniqueName')?.value"
@@ -97,12 +97,12 @@
                             >
                             </reactive-dropdown-field>
                         </td>
-    
+
                         <td>
-                            <reactive-dropdown-field 
-                                [label]="commonLocaleData?.app_select_method" 
+                            <reactive-dropdown-field
+                                [label]="commonLocaleData?.app_select_method"
                                 [placeholder]="commonLocaleData?.app_select"
-                                [options]="selectMethod" 
+                                [options]="selectMethod"
                                 [labelValue]="createAccountEntryForm.get('calculationMethod')?.value"
                                 formControlName="calculationMethod"
                                 (onClear)="createAccountEntryForm.get('calculationMethod')?.patchValue(null);"
@@ -112,11 +112,11 @@
                             </reactive-dropdown-field>
                         </td>
                         <td>
-                            <input-field 
-                                [name]="'amount'" 
-                                [type]="'number'" 
+                            <input-field
+                                [name]="'amount'"
+                                [type]="'number'"
                                 [label]="commonLocaleData?.app_amount"
-                                [placeholder]="localeData?.enter_amount" 
+                                [placeholder]="localeData?.enter_amount"
                                 formControlName="value"
                                 [showError]="!isCreateAccountValidForm &&(!createAccountEntryForm.get('value')?.value || createAccountEntryForm.get('value')?.value === '0')"
                                 [required]="true"
@@ -124,9 +124,9 @@
                             </input-field>
                         </td>
                         <td class="text-center">
-                            <button 
-                                mat-stroked-button 
-                                color="primary" 
+                            <button
+                                mat-stroked-button
+                                color="primary"
                                 (click)="createEntry(createAccountEntryForm.get('value')?.value)"
                             >
                             {{ commonLocaleData?.app_save }}</button>
@@ -137,17 +137,17 @@
                     <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
                         <ng-container formArrayName="entryList">
                             <ng-container
-                                *ngFor="let entry of accountEntryListForm.get('entryList')['controls']; let i = index">
-                                <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
+                                *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
+                                <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry?.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
                                     <td>
-                                        <reactive-dropdown-field 
-                                            [label]="commonLocaleData?.app_select_account" 
+                                        <reactive-dropdown-field
+                                            [label]="commonLocaleData?.app_select_account"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry?.get('account')?.value"
                                             [options]="accountSearchResponse"
-                                            formControlName="accountUniqueName" 
+                                            formControlName="accountUniqueName"
                                             [enableDynamicSearch]="true"
-                                            [isPaginationEnabled]="true" 
+                                            [isPaginationEnabled]="true"
                                             (scrollEnd)="handleSearchAccountScrollEnd()"
                                             (dynamicSearchedQuery)="searchAccount($event)"
                                             (onClear)="entry?.get('accountUniqueName')?.patchValue(null); entry?.get('entryUniqueName')?.patchValue(null) ; entry?.get('entry')?.patchValue(null)"
@@ -158,30 +158,30 @@
                                         </reactive-dropdown-field>
                                     </td>
                                     <td>
-                                        <reactive-dropdown-field 
+                                        <reactive-dropdown-field
                                             (click)="currentEntry(entry?.get('accountUniqueName')?.value)"
-                                            [label]="localeData?.select_entry" 
+                                            [label]="localeData?.select_entry"
                                             [placeholder]="commonLocaleData?.app_select"
-                                            [labelValue]="entry?.get('entry')?.value" 
+                                            [labelValue]="entry?.get('entry')?.value"
                                             [options]="accountAndEntryList[entry?.get('accountUniqueName')?.value]?.data"
-                                            formControlName="entryUniqueName" 
+                                            formControlName="entryUniqueName"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleSearchEntryScrollEnd(entry?.get('accountUniqueName')?.value)"
                                             (selectedOption)="entry?.get('entry')?.patchValue($event.label)"
                                             (onClear)="entry?.get('entryUniqueName')?.patchValue(null)"
-                                            (dynamicSearchedQuery)="searchEntry($event, 1, entry?.get('accountUniqueName')?.value)"
+                                            (dynamicSearchedQuery)="entry?.get('accountUniqueName')?.value && searchEntry($event, 1, entry?.get('accountUniqueName')?.value)"
                                             [showError]="!entry?.get('entryUniqueName')?.value"
                                             [required]="true"
                                         >
                                         </reactive-dropdown-field>
                                     </td>
-    
+
                                     <td>
-                                        <reactive-dropdown-field 
-                                            [label]="commonLocaleData?.app_select_method" 
+                                        <reactive-dropdown-field
+                                            [label]="commonLocaleData?.app_select_method"
                                             [placeholder]="commonLocaleData?.app_select"
-                                            [labelValue]="entry?.get('calculationMethod')?.value" 
+                                            [labelValue]="entry?.get('calculationMethod')?.value"
                                             [options]="selectMethod"
                                             formControlName="calculationMethod"
                                             (onClear)="entry?.get('calculationMethod')?.patchValue(null)"
@@ -191,11 +191,11 @@
                                         </reactive-dropdown-field>
                                     </td>
                                     <td>
-                                        <input-field 
-                                            [name]="'amount'" 
-                                            [type]="'number'" 
+                                        <input-field
+                                            [name]="'amount'"
+                                            [type]="'number'"
                                             [label]="commonLocaleData?.app_amount"
-                                            [placeholder]="localeData?.enter_amount" 
+                                            [placeholder]="localeData?.enter_amount"
                                             formControlName="value"
                                             [min]="1"
                                             [showError]="!entry.get('value')?.value || entry.get('value')?.value === '0'"
@@ -222,7 +222,7 @@
                     </tr>
                 </tbody>
             </table>
-           
+
             <mat-paginator
                 *ngIf="totalResults > pageSizeOptions[0] && !(isFetchingProjects$ | async)"
                 class="mt-3"
@@ -242,20 +242,20 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper 
+            <app-datepicker-wrapper
             [inputStartDate]="selectedDateRange?.startDate"
-            [inputEndDate]="selectedDateRange?.endDate" 
-            [alwaysShowCalendars]="true" 
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
             [ranges]="datePickerOption"
-            [selectedRangeLabel]="selectedRangeLabel" 
-            [showCustomRangeLabel]="true" 
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
             [showClearButton]="false"
-            [showCancel]="true" 
-            [linkedCalendars]="true" 
+            [showCancel]="true"
+            [linkedCalendars]="true"
             [showDropdowns]="true"
-            (rangeClicked)="dateSelectedCallback($event)" 
+            (rangeClicked)="dateSelectedCallback($event)"
             (datesUpdated)="dateSelectedCallback($event)"
-            [keepCalendarOpeningWithRange]="false" 
+            [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
             [dateFieldPosition]="dateFieldPosition">
             </app-datepicker-wrapper>

@@ -157,15 +157,17 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 accountSearchResponse.results?.forEach(result => {
-                    this.accountSearchResponse.push({
-                        value: result?.uniqueName,
-                        label: result?.name,
-                        additional: result
-                    });
-                    this.accountAndEntryList[result?.uniqueName] = {};
-                    this.accountAndEntryList[result?.uniqueName]['data'] = [];
-                    this.accountAndEntryList[result?.uniqueName]['nextPageAvailable'] = false;
-                    this.accountAndEntryList[result?.uniqueName]['page'] = 1;
+                    if (result?.uniqueName) {
+                        this.accountSearchResponse.push({
+                            value: result.uniqueName,
+                            label: result.name,
+                            additional: result
+                        });
+                        this.accountAndEntryList[result.uniqueName] = {};
+                        this.accountAndEntryList[result.uniqueName]['data'] = [];
+                        this.accountAndEntryList[result.uniqueName]['nextPageAvailable'] = false;
+                        this.accountAndEntryList[result.uniqueName]['page'] = 1;
+                    }
                 });
                 this.accountSearchRequest.isLoading = false;
             }
@@ -387,12 +389,14 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public searchEntry(query: string = '', page: number = 1, accountUniqueName: string): void {
-        if (this.entrySearchRequest.q !== query) {
+        if (this.entrySearchRequest.q !== query && this.accountAndEntryList[accountUniqueName]) {
             this.accountAndEntryList[accountUniqueName].data = [];
         }
         this.entrySearchRequest.q = query;
         this.entrySearchRequest.isLoading = true;
-        this.accountAndEntryList[accountUniqueName].page = page;
+        if (this.accountAndEntryList[accountUniqueName]) {
+            this.accountAndEntryList[accountUniqueName].page = page;
+        }
         let entryRequest = { ...this.entrySearchRequest, ...this.defaultParamsValue };
         entryRequest['accountUniqueName'] = accountUniqueName;
         entryRequest['page'] = page;
@@ -400,7 +404,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     }
 
     public currentEntry(accountUniqueName: string): void {
-        if (accountUniqueName && !this.accountAndEntryList[accountUniqueName].data.length) {
+        if (accountUniqueName && !this.accountAndEntryList[accountUniqueName]?.data?.length) {
             this.searchEntry('', 1, accountUniqueName);
         }
     }
@@ -412,9 +416,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public selectAccount(accountUniqueName: string): void {
-        console.log(accountUniqueName);
-        
-        if (accountUniqueName && !this.accountAndEntryList[accountUniqueName].data.length) {
+        if (accountUniqueName && this.accountAndEntryList[accountUniqueName] && !this.accountAndEntryList[accountUniqueName].data.length) {
             this.searchEntry(this.accountAndEntryList[accountUniqueName].query, 1, accountUniqueName);
         }
     }
