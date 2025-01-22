@@ -203,10 +203,13 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     /**
      * Filters the profit-loss data based on the provided request object.
      *
+     * @param {any} event - The filter date
      * @returns {void}
      * @memberof ProfitLossReportComponent
      */
-    public filterData(): void {
+    public filterData(event: any): void {
+        this.from = event.from;
+        this.to = event.to;
         this.componentStore.getMultiCurrencyReport(ReportType.ProfitLoss);
     }
 

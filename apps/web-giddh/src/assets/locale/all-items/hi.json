@@ -894,6 +894,11 @@
                     "label": "आयात",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "बहु-मुद्रा रिपोर्ट",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency"
                 }
             ]
         },

@@ -894,6 +894,11 @@
                     "label": "गटाचे नाव",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "बहु-चलन अहवाल",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency"
                 }
             ]
         },
