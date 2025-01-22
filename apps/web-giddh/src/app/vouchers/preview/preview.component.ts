@@ -531,7 +531,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         if (response) {
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
-                if (response.data || response) {
+                if (response) {
                     this.isPdfAvailable = true;
                     this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data || response, 'application/pdf', 512);
                     const file = new Blob([this.selectedInvoice.blob], { type: 'application/pdf' });
@@ -706,7 +706,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 getRequest = {
                     accountUniqueName: this.selectedInvoice.account?.uniqueName,
                     voucherNumber: [this.selectedInvoice.voucherNumber],
-                    voucherType: this.voucherType
+                    voucherType: this.voucherType,
+                    fileType : fileType
                 };
             }
             this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType, isDownloadFromDialog: false });

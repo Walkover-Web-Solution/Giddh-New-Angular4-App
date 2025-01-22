@@ -777,7 +777,8 @@ export class VoucherService {
             } else {
                 apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE_V1
                     ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                    ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName));
+                    ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                    ?.replace(':fileType', fileType);
                 apiUrl = this.generalService.addVoucherVersion(apiUrl, this.generalService.voucherApiVersion);
                 delete apiParams.accountUniqueName;
             }

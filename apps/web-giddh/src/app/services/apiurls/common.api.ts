@@ -7,7 +7,7 @@ export const COMMON_API = {
     PARTY_TYPE: 'ui/party-types',
     COMMAND_K: 'company/:companyUniqueName/cmdk?page=:page&q=:q&group=:group&refresh=false&isMobile=:isMobile',
     DOWNLOAD_FILE: 'company/:companyUniqueName/download-file?voucherVersion=2&fileType=:fileType&downloadOption=:downloadOption',
-    DOWNLOAD_FILE_V1: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=base64',
+    DOWNLOAD_FILE_V1: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=:fileType',
     STOCK_UNITS: 'stock-units',
     GST_STOCK_UNITS: 'v2/company/:companyUniqueName/gst/unit-mapping',
     MODULE_WISE_COLUMNS: 'report-filters?module=:module&companyUniqueName=:companyUniqueName',
