@@ -1,9 +1,0 @@
-{
-    "chart_title": "Top",
-    "debtors": "Debtors (Customers)",
-    "invoiced_on": "Invoiced on",
-    "bill_amount": "Bill Amount",
-    "creditors": "Creditors (Vendors)",
-    "do_sales":"Do Sales",
-    "do_purchase":"Do Purchase"
-}

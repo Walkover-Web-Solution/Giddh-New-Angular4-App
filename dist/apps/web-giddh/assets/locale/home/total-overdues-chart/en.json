@@ -1,8 +1,0 @@
-{
-    "chart_title": "Total Overdues",
-    "invoice_due": "Invoice Due",
-    "bill_due": "Bill Due",
-    "pending_invoices": "Unpaid Invoices",
-    "pending_bills": "Unpaid Bills",
-    "hold_invoices": "Hold Invoices"
-}
