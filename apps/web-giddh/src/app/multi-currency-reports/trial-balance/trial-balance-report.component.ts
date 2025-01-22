@@ -100,11 +100,13 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
     /**
      * Filters the data based on the selected date range and triggers report generation.
      * 
-     * @param {TrialBalanceRequest} request - The filter request data
+     * @param {any} event - The filter date
      * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
-    public filterData(): void {
+    public filterData(event: any): void {
+        this.from = event.from;
+        this.to = event.to;
         this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
     }
 

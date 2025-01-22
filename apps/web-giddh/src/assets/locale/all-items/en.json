@@ -898,6 +898,11 @@
                     "label": "Import",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "Multi-currency Report",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency"
                 }
             ]
         },
