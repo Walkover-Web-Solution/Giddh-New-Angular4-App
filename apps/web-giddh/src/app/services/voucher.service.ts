@@ -572,7 +572,7 @@ export class VoucherService {
     }
 
     /**
-     * Update Action for Proforma 
+     * Update Action for Proforma
      *
      * @param {ProformaUpdateActionRequest} request
      * @param {string} voucherType
@@ -597,7 +597,7 @@ export class VoucherService {
     }
 
     /**
-     * Generate Invoice for Estimate and Proforma 
+     * Generate Invoice for Estimate and Proforma
      *
      * @param {ProformaGetRequest} request
      * @param {string} voucherType
@@ -755,11 +755,11 @@ export class VoucherService {
 
     /**
      * Get PDF Base64 URL or Attachement Blob file
-     * 
-     * @param {*} model 
-     * @param {string} downloadOption 
-     * @param {string} fileType 
-     * @param {*} voucherType 
+     *
+     * @param {*} model
+     * @param {string} downloadOption
+     * @param {string} fileType
+     * @param {*} voucherType
      * @return {*}  {Observable<any>}
      * @memberof VoucherService
      */
@@ -768,12 +768,24 @@ export class VoucherService {
         let httpMethod: 'post' | 'get' = 'post';
         let apiParams = model;
         let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
-
         if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(voucherType)) {
-            apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
-                ?.replace(':fileType', fileType)
-                ?.replace(':downloadOption', downloadOption)
-                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+            if (this.generalService.voucherApiVersion === 2) {
+                apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
+                    ?.replace(':fileType', fileType)
+                    ?.replace(':downloadOption', downloadOption)
+                    ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+            } else {
+                apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE_V1
+                    ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                    ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                    ?.replace(':fileType', fileType);
+                if (downloadOption && this.generalService.voucherApiVersion === 1) {
+                    const delimiter = apiUrl.includes('?') ? '&' : '?';
+                    apiUrl = apiUrl.concat(`${delimiter}downloadOption=${downloadOption}`);
+                }
+                apiUrl = this.generalService.addVoucherVersion(apiUrl, this.generalService.voucherApiVersion);
+                delete apiParams.accountUniqueName;
+            }
         } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(voucherType)) {
             apiUrl = this.config.apiUrl + PROFORMA_API.download
                 ?.replace(':vouchers', voucherType)
@@ -788,7 +800,6 @@ export class VoucherService {
                 ?.replace(':poUniqueName', model.poUniqueName);
             apiParams = undefined;
         }
-
         return this.http[httpMethod](apiUrl, apiParams, responseType).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
@@ -862,9 +873,9 @@ export class VoucherService {
 
     /**
      * Uploads file
-     * 
-     * @param {*} postRequest 
-     * @param {boolean}  addVoucherVersion 
+     *
+     * @param {*} postRequest
+     * @param {boolean}  addVoucherVersion
      * @return {*} {Observable<BaseResponse<any, any>>}
      * @memberof VoucherService
      */
@@ -896,7 +907,7 @@ export class VoucherService {
      */
     public updateAttachmentInVoucher(postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT?.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.patch(url, postRequestObject).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
     }
@@ -910,10 +921,10 @@ export class VoucherService {
      * @memberof VoucherService
      */
     public cancelEInvoice(requestObject: any, postObject: any): Observable<BaseResponse<any, any>> {
-        let contextPath = 
-        `${this.config.apiUrl}${(requestObject.voucherType === VoucherTypeEnum.creditNote || requestObject.voucherType === VoucherTypeEnum.debitNote) 
-            ? INVOICE_API.CANCEL_CN_DN_E_INVOICE_API 
-            : INVOICE_API_2.CANCEL_E_INVOICE}`;
+        let contextPath =
+            `${this.config.apiUrl}${(requestObject.voucherType === VoucherTypeEnum.creditNote || requestObject.voucherType === VoucherTypeEnum.debitNote)
+                ? INVOICE_API.CANCEL_CN_DN_E_INVOICE_API
+                : INVOICE_API_2.CANCEL_E_INVOICE}`;
 
         contextPath = contextPath?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         if (requestObject.accountUniqueName) {
