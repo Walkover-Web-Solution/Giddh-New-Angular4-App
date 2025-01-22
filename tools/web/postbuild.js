@@ -151,44 +151,6 @@ const ensureDirectoriesExist = (filePath) => {
         });
 };
 
-// BuildSpec configuration content
-// Generate buildspec.yml file
-const buildSpecYmlContent = `
-version: 0.2
-phases:
-  install:
-    runtime-versions:
-      nodejs: 16
-  pre_build:
-    commands:
-      - sudo rm -rf node_modules
-      - npm cache clean --force
-      - npm install -force
-  build:
-    commands:
-      - |
-        if [ ${BRANCH} = "giddh-2.0" ]; then
-        echo "For giddh-2.0 branch"
-        npm run build-test
-        elif [ ${BRANCH} = "beta-stage" ]; then
-        echo "For beta-stage branch"
-        npm run build-stage
-        elif [ ${BRANCH} = "beta-branch" ]; then
-        echo "For beta-branch branch"
-        npm run build-prod
-        elif [ ${BRANCH} = "production" ]; then
-        echo "For production branch"
-        npm run build-prod
-        fi
-  post_build:
-    commands:
-      - echo "Build process completed successfully."
-artifacts:
-  base-directory: ./dist/apps/web-giddh/
-  files:
-    - '**/*'
-`;
-
 // Read the dist folder and perform operations
 readDir(path.join(__dirname, rootDirectiory))
     .then(files => {
@@ -235,12 +197,8 @@ readDir(path.join(__dirname, rootDirectiory))
         return writeFile(phpConfPath, nginxConfig);
     })
     .then(() => {
-        console.log('Creating .platform folder and buildspec.yml...');
+        console.log('Creating .platform folder ');
         return mkdir(path.join(__dirname, rootDirectiory, '.platform', 'nginx', 'conf.d'), { recursive: true });
-    })
-    .then(() => {
-        const buildSpecPath = path.join(__dirname, rootDirectiory, 'buildspec.yml');
-        return writeFile(buildSpecPath, buildSpecYmlContent);
     })
     .then(() => {
         console.log('Post-build tasks completed successfully.');
