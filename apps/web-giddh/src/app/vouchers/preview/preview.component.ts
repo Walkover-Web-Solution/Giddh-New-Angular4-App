@@ -707,7 +707,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     accountUniqueName: this.selectedInvoice.account?.uniqueName,
                     voucherNumber: [this.selectedInvoice.voucherNumber],
                     voucherType: this.voucherType,
-                    fileType : fileType
+                    fileType: fileType
                 };
             }
             this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType, isDownloadFromDialog: false });
@@ -933,7 +933,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 currentInvoiceList.push(item);
             });
 
-            if ((this.isSearching && (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
+            if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.invoiceList = currentInvoiceList;
             } else {
                 this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
