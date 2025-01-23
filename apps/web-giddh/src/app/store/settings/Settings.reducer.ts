@@ -239,10 +239,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profile = response.body;
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
-                const currentCompanyIndx = _.findIndex(newState.companies, (company) => company?.uniqueName === response.body?.uniqueName);
-                if (currentCompanyIndx !== -1) {
-                    newState.companies[currentCompanyIndx].country = response.body?.country;
-                }
                 return Object.assign({}, state, newState);
             } else if (response?.status === 'error' && response.statusCode === UNAUTHORISED) {
                 return { ...state, updateProfileInProgress: false, getProfileInProgress: false };
