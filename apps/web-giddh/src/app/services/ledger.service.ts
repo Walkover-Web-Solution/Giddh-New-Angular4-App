@@ -82,7 +82,8 @@ export class LedgerService {
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
         }
         // tslint:disable-next-line:max-line-length
-        return this.http.get(url, null, { headers: { 'token': request.paginationToken } }).pipe(map((res) => {
+        const options = request.paginationToken ? { headers: { 'token': request.paginationToken } } : null;
+        return this.http.get(url, null, options).pipe(map((res) => {
             let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
             data.request = request;
             return data;
@@ -385,7 +386,7 @@ export class LedgerService {
                 catchError((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, { accountUniqueName })));
     }
 
-    public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, sortingOrder?: string, page?: number, count?, q?: string, branchUniqueName?: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
+    public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, sortingOrder?: string, page?: number, count?, q?: string, branchUniqueName?: string, paginationToken?: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let request = '';
 
@@ -409,8 +410,9 @@ export class LedgerService {
         if (branchUniqueName) {
             request = request.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? encodeURIComponent(branchUniqueName) : ''}`);
         }
+        const options = paginationToken ? { headers: { 'token': paginationToken } } : null;
         return this.http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model, options).pipe(
                 map((res) => {
                     let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
                     data.request = model;

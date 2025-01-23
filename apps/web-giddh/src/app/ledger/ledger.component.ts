@@ -54,6 +54,8 @@ import { BankIntegrationComponentStore } from '../shared/bank-integration/utilit
 import { HomeComponentStore } from '../home/home.store';
 import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 
 @Component({
     selector: 'ledger',
@@ -341,6 +343,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public unlinkBankList: any[] = [];
     /** Holds list of connected banks */
     private bankList: any[] = [];
+    /** Invoice Settings */
+    public invoiceSettings: any;
 
     constructor(
         private store: Store<AppState>,
@@ -491,12 +495,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public pageChanged(event: any): void {
-        this.trxRequest.paginationToken = event;
-        if (this.isAdvanceSearchImplemented) {
-            this.advanceSearchRequest.page = event.page;
-            this.getAdvanceSearchTxn();
-        } else {
-            this.getTransactionData();
+        if (typeof event === 'string') {
+            if (this.isAdvanceSearchImplemented) {
+                this.advanceSearchRequest.paginationToken = event;
+                this.getAdvanceSearchTxn();
+            } else {
+                this.trxRequest.paginationToken = event;
+                this.getTransactionData();
+            }
         }
     }
     /**
@@ -527,7 +533,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
-     * 
+     *
      * @memberof LedgerComponent
      */
     public setupGocardlessMessageListener(): void {
@@ -1321,6 +1327,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Open E-Way Bill dialog for creating or editing an E-Way Bill.
+     *
+     * @memberof LedgerComponent
+     */
+    public openEwayBillDialog(): void {
+        this.dialog?.closeAll();
+        const dialogRef = this.dialog.open(EWayBillCreateComponent, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.saveBlankTransaction(response);
+        });
+    }
+
+    /**
+     * Generates a ledger entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the blank transaction.
+     *
+     * @memberof LedgerComponent
+     */
+    public generateLedger() {
+        if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+            this.openEwayBillDialog();
+        } else {
+            this.saveBlankTransaction();
+        }
+    }
+
     public saveBankTransaction() {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
@@ -1330,6 +1365,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
         }
+    }
+
+    /**
+     * Save bulk bank transaction Dialog
+     *
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
+    public openBulkBankTransactionConfirmationDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.convert_entries_message, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.saveBulkBankTransaction();
+            }
+        });
     }
 
     /**
@@ -1634,7 +1689,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public saveBlankTransaction() {
+    /**
+     * Handle save blank transaction
+     *
+     * @param eWayBillResponse
+     * @returns
+     */
+    public saveBlankTransaction(eWayBillResponse?: any): void {
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
@@ -1668,6 +1729,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (model.transactions[0]?.subVoucher === "ADVANCE_RECEIPT") {
                 /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
                 model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
+            }
+            if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
+                model.ewayBillDetails = eWayBillResponse;
             }
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {
@@ -1912,8 +1976,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * closeAdvanceSearchPopup
      */
-    public closeAdvanceSearchPopup(event) {
+    public closeAdvanceSearchPopup(event: any) {
         this.advanceSearchDialogRef?.close();
+        this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
@@ -2309,12 +2374,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.todaySelected) {
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
-                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName)
+                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
         this.cdRf.detectChanges();
@@ -3004,14 +3069,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
-
-            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
-            if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
-                this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
-            } else {
-                this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+            if (response) {
+                this.invoiceSettings = response;
+                this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
+                if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
+                    this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
+                } else {
+                    this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+                }
+                this.cdRf.detectChanges();
             }
-            this.cdRf.detectChanges();
         });
     }
 
@@ -3220,7 +3287,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * This will open the dialog to link a bank
-     * 
+     *
      * @memberof LedgerComponent
      */
     public openBankLinkDialog(): void {
@@ -3237,15 +3304,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
 
-            dialogRef.afterClosed().pipe(take(1), tap(response => { 
-                if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); this.referenceNumber = null; 
+            dialogRef.afterClosed().pipe(take(1), tap(response => {
+                if (response) this.isBankAccountConnected = true; this.showBankLinkButton = false; this.getBankTransactions(); this.referenceNumber = null;
             })).subscribe();
         }
     }
 
     /**
      * This will link the connected bank accounts
-     * 
+     *
      * @memberof LedgerComponent
      */
     public linkBankAccount(): void {

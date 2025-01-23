@@ -968,6 +968,16 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
+                            <ng-container matColumnDef="einvoicestatus">
+                                <th mat-header-cell *matHeaderCellDef class="text-center">
+                                    {{ localeData?.e_invoice_status }}
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element?.status ?? '-' }}
+                                    </div>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ commonLocaleData?.app_status }}
@@ -1207,6 +1217,16 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
+                            <ng-container matColumnDef="einvoicestatus">
+                                <th mat-header-cell *matHeaderCellDef class="text-center">
+                                    {{ localeData?.e_invoice_status }}
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element?.status ?? '-' }}
+                                    </div>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ commonLocaleData?.app_status }}
@@ -1299,8 +1319,12 @@
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
-                            <table mat-table [dataSource]="ledgersData" class="w-100 table-strip"
-                                [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length">
+                            <table
+                                mat-table
+                                [dataSource]="ledgersData"
+                                class="w-100 table-striped"
+                                [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length"
+                            >
                                 <ng-container matColumnDef="position">
                                     <th mat-header-cell *matHeaderCellDef>
                                         <ng-container *ngIf="!selectedPendingVouchers?.length">#</ng-container>

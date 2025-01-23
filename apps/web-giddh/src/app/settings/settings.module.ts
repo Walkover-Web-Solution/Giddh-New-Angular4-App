@@ -55,7 +55,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
@@ -70,6 +69,8 @@ import { MatListModule } from '@angular/material/list';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
 
 @NgModule({
     declarations: [
@@ -147,7 +148,9 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
         TaxAuthorityModule,
         NgxMatSelectSearchModule,
         D3TreeChartModule,
-        BankIntegrationModule
+        BankIntegrationModule,
+        SerialNumberPipe,
+        NewConfirmModalModule
     ],
 })
 

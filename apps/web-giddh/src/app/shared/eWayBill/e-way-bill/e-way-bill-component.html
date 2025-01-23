@@ -1,0 +1,527 @@
+<ng-container
+    appTranslate
+    [file]="'invoice/ewaybill'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'"
+    >
+        <tax-sidebar
+            (navigateEvent)="handleNavigation()"
+            [exclude]="'#primary-new-header'"
+            class="gst-sidebar"
+        ></tax-sidebar>
+    </div>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="clearfix pd-15">
+        <div class="input-group flex-nowrap column-gap15 align-items-center">
+            <div
+                class="form-group linked-entities mr-r15 mb-0"
+                *ngIf="(currentCompanyBranches?.length > 2) && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+            >
+                <dropdown-field
+                    [label]="commonLocaleData?.app_entity"
+                    [defaultValue]="currentBranch?.name ?? ''"
+                    [options]="currentCompanyBranches"
+                    (selectedOption)="currentBranch.uniqueName = $event.value; handleBranchChange($event)"
+                    [placeholder]="commonLocaleData?.app_select_entity"
+                ></dropdown-field>
+            </div>
+            <dropdown-field
+                *ngIf="taxes?.length"
+                [label]="commonLocaleData?.app_gstin"
+                [options]="taxes"
+                (selectedOption)="selectTax($event)"
+                [defaultValue]="EwayBillfilterRequest.gstin ?? ''"
+                [placeholder]="localeData?.select_gstin"
+                [required]="true"
+            ></dropdown-field>
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <input
+                    matInput
+                    type="text"
+                    name="selectedDateRange"
+                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                    class="giddh-datepicker date-range-picker"
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="e-waybill-tabs heightVH-100">
+        <mat-tab-group
+            mat-stretch-tabs="false"
+            [selectedIndex]="activeTabIndex"
+            (selectedTabChange)="onTabChange($event)"
+            class="table-header-sticky"
+            *ngIf="!(ewaybillLists?.results?.length === 0) && !(isGetAllEwaybillRequestInProcess$ | async)"
+        >
+            <mat-tab [label]="localeData?.tab_generated_bills">
+                <div class="table-responsive overflow-visible px-3">
+                    <table
+                        mat-table
+                        class="table basic table-bordered giddh-table"
+                        [dataSource]="ewaybillLists?.results"
+                    >
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let item; let i = index">{{ i + 1 }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="invoiceDate">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.invoiceDate }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="docNumber">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_invoice_no }}</th>
+                            <td mat-cell *matCellDef="let item" class="download-arrow">
+                                <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
+                                <a
+                                    (click)="onSelectEwayDownload(item)"
+                                    [matTooltip]="localeData?.download_eway_bill"
+                                    matTooltipPosition="above"
+                                    class="pull-right cursor-pointer"
+                                >
+                                    <i class="icon-download1 font-16"></i>
+                                </a>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="customerName">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_customer_name }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.customerName }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="customerGstin">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_customer_gstin }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.customerGstin }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ewbNo">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.ewaybill_no }}</th>
+                            <td mat-cell *matCellDef="let item">
+                                {{ item?.ewbNo }}
+                                <br />
+                                <small *ngIf="item?.isManuallyGenerated" class="cp btn-link text-green">{{
+                                    localeData?.manually_generated
+                                }}</small>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ewayBillDate">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.ewaybill_date }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item?.ewayBillDate }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="totalValue">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">
+                                {{ commonLocaleData?.app_total }}
+                            </th>
+                            <td mat-cell *matCellDef="let item" class="text-right">
+                                <i class="icon-rupees icon-font-11"></i>
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="item?.totalValue"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    ></amount-field>
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">
+                                {{ commonLocaleData?.app_action }}
+                            </th>
+                            <td mat-cell *matCellDef="let item" class="text-center">
+                                <button mat-button [matMenuTriggerFor]="downloadCsvEmail">
+                                    {{ commonLocaleData?.app_actions }}
+                                    <i class="caret"></i>
+                                </button>
+                                <mat-menu #downloadCsvEmail="matMenu">
+                                    <button mat-menu-item (click)="openAddVehicleDialog(item, template)">
+                                        {{ localeData?.add_vehicle_details }}
+                                    </button>
+                                    <button mat-menu-item (click)="onSelectEwayDetailedDownload(item)">
+                                        {{ localeData?.download_detailed_eway }}
+                                    </button>
+                                    <button mat-menu-item (click)="openCancelDialog(item)">
+                                        {{ commonLocaleData?.app_cancel }}
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+
+                    <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+        <div
+            class="no-data"
+            *ngIf="!isLoading && ewaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)"
+        >
+            <no-data></no-data>
+        </div>
+    </div>
+
+    <!-- Not In Use -->
+    <ng-template #consolidateModal>
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">{{ localeData?.consolidated_details_heading }}</h3>
+            <button
+                type="button"
+                class="close pull-right"
+                [attr.aria-label]="commonLocaleData?.app_close"
+                (click)="closeModel()"
+                aria-label="close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <h4 class="font-24 mb-2">
+                {{ commonLocaleData?.app_numbers?.one }}. {{ localeData?.consolidated_ewaybill_details }}
+            </h4>
+            <div class="table-responsive">
+                <table class="table custom basic">
+                    <tbody>
+                        <tr>
+                            <td>{{ localeData?.consolidated_ewaybill_details }}</td>
+                            <th>12345678</th>
+                        </tr>
+                        <tr>
+                            <td>{{ commonLocaleData?.app_date }}</td>
+                            <th>24/04/2019</th>
+                        </tr>
+                        <tr>
+                            <td>{{ commonLocaleData?.app_transporter_id }}</td>
+                            <th>29BHK534534KJH43</th>
+                        </tr>
+
+                        <tr>
+                            <td>{{ commonLocaleData?.app_vehicle_no }}</td>
+                            <th>MH87786</th>
+                        </tr>
+                        <tr>
+                            <td>{{ commonLocaleData?.app_from }}</td>
+                            <th>ABC-HJK7865765JG4</th>
+                        </tr>
+
+                        <tr>
+                            <td>{{ commonLocaleData?.app_mode }}</td>
+                            <th>{{ commonLocaleData?.app_road }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="font-24 mb-2">{{ commonLocaleData?.app_numbers?.two }}. {{ localeData?.item_details }}</h4>
+            <div class="table-responsive">
+                <table class="table basic table-bordered">
+                    <thead class="thead-background1">
+                        <tr>
+                            <th>#</th>
+                            <th>{{ localeData?.ewaybill_no_date }}</th>
+                            <th>{{ localeData?.ewaybill_by }}</th>
+                            <th>{{ localeData?.document_no_date }}</th>
+                            <th>{{ commonLocaleData?.app_value }}</th>
+                            <th>{{ commonLocaleData?.app_to }}</th>
+                            <th>{{ localeData?.valid_till_date }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ewaybillLists?.results">
+                            <td>{{ item?.invoiceDate }}</td>
+                            <td>{{ item?.docNumber }}</td>
+                            <td>{{ item?.customerName }}</td>
+                            <td>{{ item?.customerGstin }}</td>
+                            <td>
+                                {{ item?.ewbNo }}
+                                <br />
+                                <small href=".." class="cp btn-link text-green">{{
+                                    localeData?.manually_generated
+                                }}</small>
+                            </td>
+                            <td>{{ item?.ewayBillDate }}</td>
+                            <td><i class="icon-rupees icon-font-11"></i> {{ item?.totalValue }}</td>
+                            <td>
+                                <a href="../../../../../../../src/app/invoice/eWayBill" class="btn-link">{{
+                                    commonLocaleData?.app_action
+                                }}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Universal Datepicker template -->
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Add Vehicle Dialog -->
+    <ng-template #addVehicle>
+        <div class="modal-header d-flex align-items-center activity-header">
+            <h3>{{ localeData?.add_vehicle }}</h3>
+            <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+        </div>
+        <mat-dialog-content class="w-100">
+            <form #updateVehicleForm="ngForm" autocomplete="off" name="updateEwayVehicleform">
+                <div class="p-3">
+                    <div class="d-flex column-gap15 mr-b15">
+                        <!-- Mode of Transportation -->
+                        <label>{{ commonLocaleData?.app_transportation_mode }}</label>
+                        <ul class="list-icon-group column-gap1">
+                            <li>
+                                <input
+                                    matInput
+                                    id="transMode1"
+                                    type="radio"
+                                    name="transMode"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    value="1"
+                                />
+                                <label for="transMode1">
+                                    <img src="assets/icon/4.svg " alt="road img" />
+                                    {{ commonLocaleData?.app_road }}
+                                </label>
+                            </li>
+                            <li>
+                                <input
+                                    matInput
+                                    id="transMode2"
+                                    type="radio"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    name="transMode"
+                                    value="2"
+                                />
+                                <label for="transMode2"
+                                    ><img src="assets/icon/3.svg " alt="rail img" />
+                                    {{ commonLocaleData?.app_rail }}
+                                </label>
+                            </li>
+                            <li>
+                                <input
+                                    matInput
+                                    id="transMode3"
+                                    type="radio"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    name="transMode"
+                                    value="3"
+                                />
+                                <label for="transMode3"
+                                    ><img src="assets/icon/1.svg " alt="air img" />
+                                    {{ commonLocaleData?.app_air }}
+                                </label>
+                            </li>
+                            <li>
+                                <input
+                                    matInput
+                                    id="transMode4"
+                                    type="radio"
+                                    [(ngModel)]="updateEwayVehicleform.transMode"
+                                    name="transMode"
+                                    value="4"
+                                />
+                                <label for="transMode4">
+                                    <img src="assets/icon/2.svg " alt="ship img" />
+                                    {{ commonLocaleData?.app_ship }}
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex flex-column row-gap15">
+                        <!-- Vehicle Type -->
+                        <div class="d-flex column-gap15 align-items-center">
+                            <label>{{ localeData?.vehicle_type_required }}</label>
+                            <mat-radio-group name="vehicleType" [(ngModel)]="updateEwayVehicleform.vehicleType">
+                                <mat-radio-button color="primary" value="R">
+                                    {{ localeData?.regular }}
+                                </mat-radio-button>
+                                <mat-radio-button color="primary" value="O">
+                                    {{ localeData?.over_dimensional_cargo }}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <!-- Vehicle No -->
+                        <input-field
+                            [label]="localeData?.vehicle_no_label"
+                            [placeholder]="localeData?.vehicle_no_placeholder"
+                            [name]="'vehicleNo'"
+                            [required]="true"
+                            [(ngModel)]="updateEwayVehicleform.vehicleNo"
+                            [maxlength]="15"
+                            [minlength]="7"
+                        ></input-field>
+
+                        <!-- From Place -->
+                        <dropdown-field
+                            [label]="localeData?.from_place_label"
+                            [placeholder]="localeData?.from_place_placeholder"
+                            [name]="'fromPlace'"
+                            [required]="true"
+                            [autocomplete]="'off'"
+                            [options]="searchResults"
+                            [enableDynamicSearch]="true"
+                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                        ></dropdown-field>
+
+                        <!-- From State -->
+                        <dropdown-field
+                            [label]="localeData?.from_state_label"
+                            [placeholder]="localeData?.from_state_placeholder"
+                            [name]="'fromState'"
+                            [required]="true"
+                            (selectedOption)="updateEwayVehicleform.fromState = $event.value"
+                            [options]="statesSource$ | async"
+                        ></dropdown-field>
+
+                        <!-- Reason Code -->
+                        <dropdown-field
+                            [name]="'reasonCode'"
+                            [label]="localeData?.reason_label"
+                            [placeholder]="localeData?.reason_placeholder"
+                            [required]="true"
+                            [options]="ewayUpdateVehicleReasonList"
+                            (selectedOption)="updateEwayVehicleform.reasonCode = $event.value"
+                        ></dropdown-field>
+
+                        <!-- Remark -->
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{ localeData?.remark_label }}</mat-label>
+                            <textarea
+                                matInput
+                                [name]="'reasonRem'"
+                                [placeholder]="localeData?.remark_placeholder"
+                                [(ngModel)]="updateEwayVehicleform.reasonRem"
+                                rows="2"
+                                required
+                            ></textarea>
+                        </mat-form-field>
+
+                        <!-- Transporter Doc No -->
+                        <input-field
+                            [label]="localeData?.transporter_doc_no_required_label"
+                            [placeholder]="localeData?.transporter_doc_no_required_placeholder"
+                            [type]="'text'"
+                            [name]="'transDocNo'"
+                            [(ngModel)]="updateEwayVehicleform.transDocNo"
+                            [required]="true"
+                        ></input-field>
+
+                        <!-- Transporter Doc Date -->
+                        <giddh-datepicker
+                            type="text"
+                            [required]="true"
+                            (keydown.enter)="$event.preventDefault()"
+                            [label]="localeData?.transporter_doc_date_required_label"
+                            [placeholder]="'DD-MM-YYYY'"
+                            name="transDocDate"
+                            [showToggleIcon]="false"
+                            [appearance]="'outline'"
+                            class="settings-field d-block"
+                            [(ngModel)]="updateEwayVehicleform.transDocDate"
+                        ></giddh-datepicker>
+
+                        <div class="d-flex column-gap15">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                type="submit"
+                                (click)="updateEwayTransport(updateEwayVehicleform)"
+                                aria-label="save"
+                            >
+                                {{ commonLocaleData?.app_save }}
+                            </button>
+                            <button mat-stroked-button mat-dialog-close type="button" aria-label="cancel">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-dialog-content>
+    </ng-template>
+
+    <!-- Cancel Dialog -->
+    <ng-template #cancellation>
+        <!-- Reasons for cancellation -->
+        <div class="modal-header d-flex align-items-center activity-header">
+            <h3>{{ localeData?.reasons_for_cancellation }}</h3>
+            <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+        </div>
+        <mat-dialog-content class="w-100">
+            <form autocomplete="off" name="cancelEwayForm" [formGroup]="cancelEwayForm" class="p-3" >
+                <div class="d-flex flex-column row-gap15">
+                    <!-- Reason Code -->
+                    <dropdown-field
+                        [label]="localeData?.reason_label"
+                        [placeholder]="localeData?.reason_placeholder"
+                        [options]="ewayCancelReason"
+                        [name]="'cancelRsnCode'"
+                        [required]="true"
+                        formControlName="cancelRsnCode"
+                    >
+                    </dropdown-field>
+
+                    <!-- Remark -->
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{ commonLocaleData?.app_remark }}</mat-label>
+                        <textarea
+                            matInput
+                            rows="2"
+                            name="cancelRmrk"
+                            formControlName="cancelRmrk"
+                            [placeholder]="localeData?.remark_placeholder"
+                        ></textarea>
+                    </mat-form-field>
+
+                    <div class="d-flex column-gap15">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            type="submit"
+                            (click)="cancelEwayBill()"
+                            aria-label="confirm"
+                        >
+                            {{ commonLocaleData?.app_confirm }}
+                        </button>
+                        <button mat-stroked-button mat-dialog-close type="submit" aria-label="cancel">
+                            {{ commonLocaleData?.app_cancel }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </mat-dialog-content>
+    </ng-template>
+</ng-container>

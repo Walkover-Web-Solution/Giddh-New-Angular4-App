@@ -692,7 +692,7 @@
                                             type="button"
                                             aria-label="create bulk entry"
                                             *ngIf="transactionCountConvertToEntries > 0"
-                                            (click)="saveBulkBankTransaction()"
+                                            (click)="openBulkBankTransactionConfirmationDialog()"
                                         >
                                             <span
                                                 >{{ transactionCountConvertToEntries }} -
@@ -1691,7 +1691,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -1699,21 +1699,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2170,7 +2155,7 @@
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                 [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
-                                                (saveBlankLedger)="saveBlankTransaction()"
+                                                (saveBlankLedger)="generateLedger()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                 [referenceVouchersTotalPages]="referenceVouchersTotalPages"
@@ -2645,7 +2630,7 @@
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                 [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
-                                                (saveBlankLedger)="saveBlankTransaction()"
+                                                (saveBlankLedger)="generateLedger()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
@@ -2700,7 +2685,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2750,7 +2735,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2789,7 +2774,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -2797,21 +2782,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2883,7 +2853,7 @@
 
             <!-- region total section -->
             <!-- commented due to API  -->
-            <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
+            <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable && !isAdvanceSearchImplemented">
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">

@@ -133,7 +133,7 @@ export class AsideManageTransportComponent implements OnInit {
     public getTransportersList(): void {
         this.isLoading = true;
         this.invoiceServices.getAllTransporterList(this.transporterObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;;
+            this.isLoading = false;
             if (response && response.status === "success" && response.body) {
                 this.transporterListDetails = response.body.results;
                 this.transporterObj.page = response.body?.page;
@@ -157,7 +157,7 @@ export class AsideManageTransportComponent implements OnInit {
     public updateTransporter(generateTransporterForm: any): void {
         this.isLoading = true;
         this.invoiceServices.UpdateGeneratedTransporter(this.currentTransporterId, generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;;
+            this.isLoading = false;
             if (response && response.status === "success" && response.body) {
                 this.toasty.successToast('Transporter updated successfully');
                 this.transportEditMode = false;
@@ -219,7 +219,7 @@ export class AsideManageTransportComponent implements OnInit {
             if (response) {
                 this.isLoading = true
                 this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isLoading = false;;
+                    this.isLoading = false;
                     if (response && response.status === "success" && response.body) {
                         this.toasty.showSnackBar("success", response.body);
                         this.getTransportersList();

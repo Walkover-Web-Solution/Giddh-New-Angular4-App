@@ -1137,26 +1137,13 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage && customTemplate.templateType !== 'thermal_template'">
+                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage && customTemplate.templateType === 'gst_template_a'">
                             <td>
                                 <label>
                                     <input type="checkbox" name="variant-image"
                                         [(ngModel)]="customTemplate.sections['table'].data['showVariantImage'].display"
                                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
-                                    Display Image</label>
-                            </td>
-                            <td>
-                                <input type="text" hasFocus #variantImage="hasFocus" [maxlength]="15"
-                                    [class.error-box]="contentForm?.controls['variant-text-length']?.errors?.maxlength" class="form-control"
-                                    name="variant-text-length" [(ngModel)]="customTemplate.sections['table'].data['showVariantImage'].label"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
-                                    [disabled]="!customTemplate.sections['table'].data['showVariantImage'].display" />
-                                <ng-container
-                                    *ngIf="variantImage?.isFocused || contentForm?.controls['variant-text-length']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{
-                                        15 - customTemplate.sections["table"].data["showVariantImage"].label?.length
-                                        }}</span>
-                                </ng-container>
+                                    Show stock/variant image</label>
                             </td>
                         </tr>
                         <tr
