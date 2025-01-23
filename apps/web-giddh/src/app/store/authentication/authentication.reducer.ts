@@ -740,6 +740,15 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return state;
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
+            let response: BaseResponse<CompanyResponse, string> = action.payload;
+            if (response?.status === 'success') {
+                let d = _.cloneDeep(state);
+                let currentCompanyIndx = _.findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
+                if (currentCompanyIndx !== -1) {
+                    d.companies[currentCompanyIndx].country = response.body?.country;
+                    return Object.assign({}, state, d);
+                }
+            }
             return state;
         }
         case LoginActions.LoginWithPasswdResponse: {
