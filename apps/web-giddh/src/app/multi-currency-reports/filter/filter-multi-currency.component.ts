@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
@@ -83,6 +83,8 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** ReplaySubject used to handle cleanup and prevent memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* Will check if form is valid */
+    public isValidForm: boolean = true;
 
     constructor(private formBuilder: FormBuilder,
         private changeDetectionRef: ChangeDetectorRef,
@@ -91,12 +93,19 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
         private componentStore: MultiCurrencyReportsComponentStore
     ) {
         this.filterForm = this.formBuilder.group({
-            from: [''],
-            to: [''],
-            shareCompanyList: [null],
-            selectCurrency: [null]
+            from: ['', Validators.required],
+            to: ['', Validators.required],
+            shareCompanyList: [null, Validators.required],
+            selectCurrency: [null, Validators.required]
         });
-
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((activeCompany) => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+                if (this.getForm('selectCurrency') && !this.getForm('selectCurrency').value) {
+                    this.getForm('selectCurrency').patchValue(this.activeCompany.baseCurrency);
+                }
+            }
+        });
     }
 
     /**
@@ -169,7 +178,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * @returns {FormControl} The requested form control
      */
     public getForm(controlName: string): FormControl {
-        return this.filterForm.get(controlName) as FormControl;
+        return this.filterForm?.get(controlName) as FormControl;
     }
     /**
      * Cleanup resources on component destruction
@@ -207,7 +216,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * @returns {void}
      */
     public filterData(): void {
-        this.onPropertyChanged.emit();
+        this.onPropertyChanged.emit({ from: this.fromDate, to: this.toDate });
         const a = this.search = '';
         this.searchChange.emit(a);
     }
@@ -218,21 +227,24 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * @returns {void}
      */
     public onSubmit(): void {
-        const data = {
-            companiesList: [],
-            reportCurrency: ''
-        };
-        this.getForm('shareCompanyList').value?.forEach((control: any) => {
-            if (control) {
-                data.companiesList.push({
-                    from: this.getForm('from').value,
-                    to: this.getForm('to').value,
-                    uniqueName: control
-                });
-            }
-        });
-        data.reportCurrency = this.getForm('selectCurrency').value || this.activeCompany?.baseCurrency;
-        this.filterValue.emit(data);
+        this.isValidForm = this.filterForm.valid;
+        if (this.isValidForm) {
+            const data = {
+                companiesList: [],
+                reportCurrency: ''
+            };
+            this.getForm('shareCompanyList').value?.forEach((control: any) => {
+                if (control) {
+                    data.companiesList.push({
+                        from: this.getForm('from').value,
+                        to: this.getForm('to').value,
+                        uniqueName: control
+                    });
+                }
+            });
+            data.reportCurrency = this.getForm('selectCurrency').value || this.activeCompany?.baseCurrency;
+            this.filterValue.emit(data);
+        }
     }
 
     /**
