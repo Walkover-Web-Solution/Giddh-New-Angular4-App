@@ -29,7 +29,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
-    /** Holds true if user module is restricted */
+    /** True if user module is restricted */
     public isUserRestricted: boolean = false;
     public email: string;
     public selectedPermission: string;
@@ -78,7 +78,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
             this.closeModal();
             this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
             document.querySelector('body')?.classList?.remove('master-page');
-            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+            this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', + subscriptionId]);
         }
     }
 
