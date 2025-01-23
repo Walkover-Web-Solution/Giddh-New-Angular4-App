@@ -505,12 +505,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         }
     }
+    
     /**
-   * This function will use for get institutions details
-   *
-   * @param {*} element
-   * @memberof LedgerComponent
-   */
+     * This function will use for get institutions details
+     *
+     * @param {*} element
+     * @memberof LedgerComponent
+     */
     public openInstitutionsDialog(): void {
         const data = {
             localeData: this.localeData,
