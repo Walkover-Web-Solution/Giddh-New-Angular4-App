@@ -355,14 +355,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
+                if (this.isEInvoiceEnabled === null) {
+                    this.getInvoiceSettings();
+                }
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.count = this.queryParams.count ?? this.pageSizeOptions[2];
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
-                }
-                if (this.isEInvoiceEnabled === undefined) {
-                    this.getInvoiceSettings();
                 }
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
 
