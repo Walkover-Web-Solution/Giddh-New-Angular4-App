@@ -1278,6 +1278,16 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
+                            <ng-container matColumnDef="einvoicestatus">
+                                <th mat-header-cell *matHeaderCellDef class="text-center">
+                                    {{ localeData?.e_invoice_status }}
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element?.status ?? '-' }}
+                                    </div>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ commonLocaleData?.app_status }}
@@ -1587,6 +1597,16 @@
                                         [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="einvoicestatus">
+                                <th mat-header-cell *matHeaderCellDef class="text-center">
+                                    {{ localeData?.e_invoice_status }}
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element?.status ?? '-' }}
+                                    </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">

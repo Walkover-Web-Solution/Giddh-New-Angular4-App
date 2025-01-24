@@ -72,7 +72,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     /** Holds Table Display columns for Credit Voucher */
-    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'status'];
+    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'einvoicestatus', 'status'];
     /** Holds Table Display columns for Purchase Order Voucher */
     public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
     /** Holds Table Display columns for Purchase Bill Voucher */
@@ -361,7 +361,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
                 }
-
+                if (this.isEInvoiceEnabled === undefined) {
+                    this.getInvoiceSettings();
+                }
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
 
                 if (this.activeTabGroup === -1) {
@@ -382,7 +384,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getLedgersOfInvoice();
                 }
             }
-            this.getInvoiceSettings();
         });
 
 
@@ -1251,14 +1252,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             } else {
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                if (!this.isEInvoiceEnabled) {
+                    this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "einvoicestatus");
+                } else {
+                    if (!this.displayedColumns?.includes("einvoicestatus")) {
                         this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
                     }
+                    if (!this.displayedColumnsCredit?.includes("einvoicestatus")) {
+                        this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "einvoicestatus");
+                    }
+                }
+                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
