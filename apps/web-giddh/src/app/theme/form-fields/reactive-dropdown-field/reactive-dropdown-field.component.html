@@ -1,11 +1,11 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <ng-container *ngIf="showLabel">
-        <div [ngClass]="{ 'readonly-field': readonly }">
+        <div [ngClass]="{ 'readonly-field': readonly || disabled }">
             <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
                 <mat-label *ngIf="showMatLabelWithLabledField">{{ label ? label : placeholder }}</mat-label>
                 <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
                     [readonly]="readonly" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
-                    [required]="required" [attr.aria-expanded]="readonly ? false : true"
+                    [required]="required" [disabled]="disabled" [attr.aria-expanded]="readonly ? false : true"
                     (input)="searchFormControl.next($event.target.value)"
                     #trigger="matAutocompleteTrigger"
                     #selectField matAutocompletePosition="auto" (focusout)="
@@ -50,7 +50,7 @@
     </ng-container>
     <ng-container *ngIf="!showLabel">
         <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
-            [readonly]="readonly" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
+            [readonly]="readonly" [disabled]="disabled" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
             [required]="required" [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
             (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()" #trigger="matAutocompleteTrigger"
