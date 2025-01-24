@@ -9912,6 +9912,12 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .linked-entities {
+    sh-select {
+        .menu {
+          min-width: 300px;
+        }
+    }
+
     .list-item {
         .entity-icon {
             padding: 4px;
