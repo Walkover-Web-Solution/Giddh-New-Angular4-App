@@ -41,7 +41,6 @@
                         [placeholder]="localeData?.select_tax"
                         [required]="true"
                         [readonly]="tax && tax?.uniqueName"
-                        [disabled]="tax && tax?.uniqueName"
                         formControlName="taxType"
                         [showError]="!isValidForm && !taxForm?.get('taxType')?.value"
                         (selectedOption)="selectTax($event)"
@@ -96,7 +95,6 @@
                         [labelValue]="selectedTaxType"
                         [required]="true"
                         [readonly]="checkIfTdsOrTcs"
-                        [disabled]="checkIfTdsOrTcs"
                         formControlName="tdsTcsTaxSubTypes"
                         [showError]="!isValidForm && taxForm?.get('tdsTcsTaxSubTypes')?.invalid"
                     ></reactive-dropdown-field>

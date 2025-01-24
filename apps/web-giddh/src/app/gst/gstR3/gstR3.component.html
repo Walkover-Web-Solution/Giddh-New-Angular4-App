@@ -510,7 +510,6 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Place of Supply Column -->
                                 <ng-container matColumnDef="placeOfSupply">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
@@ -529,7 +528,6 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Taxable Value Column -->
                                 <ng-container matColumnDef="taxableValue">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -548,7 +546,6 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Integrated Tax Column -->
                                 <ng-container matColumnDef="integratedTax">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -567,35 +564,30 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Number Column 1 -->
                                 <ng-container matColumnDef="1">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.one }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Number Column 2 -->
                                 <ng-container matColumnDef="2">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.two }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Number Column 3 -->
                                 <ng-container matColumnDef="3">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.three }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Number Column 4 -->
                                 <ng-container matColumnDef="4">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.four }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Header Row -->
                                 <tr
                                     mat-header-row
@@ -638,7 +630,6 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Integrated Tax Column -->
                                 <ng-container matColumnDef="integratedTax">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -664,7 +655,6 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Central Tax Column -->
                                 <ng-container matColumnDef="centralTax">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -690,7 +680,6 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- State/UT Tax Column -->
                                 <ng-container matColumnDef="stateUtTax">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -716,7 +705,6 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Cess Tax Column -->
                                 <ng-container matColumnDef="cessTax">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -742,42 +730,36 @@
                                         </ng-container>
                                     </td>
                                 </ng-container>
-
                                 <!-- Number Column 1 -->
                                 <ng-container matColumnDef="1">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.one }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Number Column 2 -->
                                 <ng-container matColumnDef="2">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.two }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Number Column 3 -->
                                 <ng-container matColumnDef="3">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.three }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Number Column 4 -->
                                 <ng-container matColumnDef="4">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.four }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Number Column 5 -->
                                 <ng-container matColumnDef="5">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.five }}
                                     </th>
                                 </ng-container>
-
                                 <tr mat-header-row *matHeaderRowDef="itcDisplayedColumns"></tr>
                                 <tr mat-header-row *matHeaderRowDef="['1', '2', '3', '4', '5']"></tr>
                                 <tr
@@ -800,7 +782,6 @@
                                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.gstr3b?.supply_nature }}</th>
                                     <td mat-cell *matCellDef="let row">{{ row.supplyNature }}</td>
                                 </ng-container>
-
                                 <!-- Inter State Supplies Column -->
                                 <ng-container matColumnDef="interStateSupplies">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -818,7 +799,6 @@
                                         </span>
                                     </td>
                                 </ng-container>
-
                                 <!-- Intra State Supplies Column -->
                                 <ng-container matColumnDef="intraStateSupplies">
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -836,33 +816,28 @@
                                         </span>
                                     </td>
                                 </ng-container>
-
                                 <!-- Number Column Headers -->
                                 <ng-container matColumnDef="1">
                                     <th mat-header-cell *matHeaderCellDef class="text-center pd-r190">
                                         {{ commonLocaleData?.app_numbers?.one }}
                                     </th>
                                 </ng-container>
-
                                 <ng-container matColumnDef="2">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.two }}
                                     </th>
                                 </ng-container>
-
                                 <ng-container matColumnDef="3">
                                     <th mat-header-cell *matHeaderCellDef class="text-center">
                                         {{ commonLocaleData?.app_numbers?.three }}
                                     </th>
                                 </ng-container>
-
                                 <!-- Header Rows -->
                                 <tr
                                     mat-header-row
                                     *matHeaderRowDef="exemptValuesDisplayedColumns"
                                 ></tr>
                                 <tr mat-header-row *matHeaderRowDef="['1', '2', '3']" class="bg-thead"></tr>
-
                                 <!-- Data Rows -->
                                 <tr mat-row *matRowDef="let row; columns: exemptValuesDisplayedColumns"></tr>
                             </table>
