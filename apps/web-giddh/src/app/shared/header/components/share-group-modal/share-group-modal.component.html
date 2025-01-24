@@ -15,10 +15,10 @@
                         <div class="input-share-width">
                             <input name="userEmail" type="email" [(ngModel)]="email" required
                                 [placeholder]="commonLocaleData?.app_email_id" class="form-control w-100 mr-0"
-                                [pattern]="giddhEmailRegex" />
+                                [pattern]="giddhEmailRegex" [disabled]="isUserRestricted"/>
                         </div>
                         <div class="input-group-btn d-flex justify-content-between">
-                            <select name="selectedPermission" class="form-control selected-permission"
+                            <select name="selectedPermission" class="form-control selected-permission" [disabled]="isUserRestricted"
                                 [(ngModel)]="selectedPermission" aria-label="select permission" required>
                                 <option value="">{{ localeData?.select_permission }}</option>
                                 <option [value]="permission?.uniqueName"
@@ -27,7 +27,7 @@
                                 </option>
                             </select>
                             <button class="btn btn-success btn-share ml-0" type="submit"
-                                [disabled]="shareGroupForm.invalid || remainingUsers <= 0" (click)="shareGroup()">
+                                [disabled]="shareGroupForm.invalid || isUserRestricted" (click)="shareGroup()">
                                 {{ commonLocaleData?.app_share }}
                             </button>
                         </div>
@@ -35,7 +35,7 @@
                     </div>
                 </form>
                 <restricted-module-message [restrictedModule]="restrictedModules.Users"
-                    [remainingCount]="remainingUsers" (onUpgradePlan)="buyPlan($event)">
+                    [isUserRestricted]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
                 </restricted-module-message>
 
                 <!--shared with array-->
