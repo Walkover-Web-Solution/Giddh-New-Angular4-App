@@ -78,7 +78,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
             this.closeModal();
             this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
             document.querySelector('body')?.classList?.remove('master-page');
-            this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', + subscriptionId]);
+            this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
         }
     }
 
