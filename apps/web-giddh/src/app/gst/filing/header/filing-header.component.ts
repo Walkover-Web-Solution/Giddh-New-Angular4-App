@@ -114,7 +114,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
     /** Holds Tax Service Enum */
-    public taxServiceEnum = TaxServiceEnum
+    public taxServiceEnum = TaxServiceEnum;
 
     constructor(
         private store: Store<AppState>,

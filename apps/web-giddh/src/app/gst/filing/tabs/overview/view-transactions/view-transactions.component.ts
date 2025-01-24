@@ -188,7 +188,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.mapFilters();
     }
 
-    public redirectToGstFilingReturn() {
+    /**
+     * Redirect to gst filing return page
+     *
+     * @memberof ViewTransactionsComponent
+     */
+    public redirectToGstFilingReturn(): void {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
