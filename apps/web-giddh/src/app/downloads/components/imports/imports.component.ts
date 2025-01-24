@@ -19,6 +19,7 @@ import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/hel
 import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
 
+
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
 @Component({
@@ -93,6 +94,8 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public initialApiCalled: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Instance of is electron variable */
+    public isElectron: any = isElectron;
 
     constructor(public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -351,6 +354,19 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.importRequest.branchUniqueName = selectedEntity?.value;
         this.getImports();
+    }
+
+    /**
+     * Download export file
+     *
+     * @param {*} url
+     * @memberof ImportsComponent
+     */
+    public downloadFile(url: any): void {
+        if (url) {
+            let fileName = url.substring(url.lastIndexOf('/') + 1);
+            download(fileName, url, "");
+        }
     }
 
     /**
