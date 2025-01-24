@@ -111,7 +111,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public searchedCountry: FormControl<string | null> = new FormControl<string | null>(null);
     /** Holds Id of active search input field */
     public activeSearchField: any = null;
-    /** Holds true if searching is in progress */
+    /** True if searching is in progress */
     public isSearching: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;

@@ -114,7 +114,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public accountUniqueNameInput: FormControl = new FormControl(null);
     /** Holds Purchase Order Unique Name form control */
     public purchaseOrderUniqueNameInput: FormControl = new FormControl(null);
-    /** Holds true if searching is in progress */
+    /** True if searching is in progress */
     public isSearching: boolean = false;
     /** This will hold local JSON data */
     public localeData: any = {};

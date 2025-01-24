@@ -68,7 +68,7 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
      *
      * @memberof PushToGstInComponent
      */
-    public goBack() {
+    public redirectToGstFilingReturn() {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.activeCompanyGstNumber } });
     }
 }

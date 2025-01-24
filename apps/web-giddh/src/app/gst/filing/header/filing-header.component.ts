@@ -14,7 +14,7 @@ import { takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../../shared/helpers/defaultDateFormat';
-import { GstReport } from '../../constants/gst.constant';
+import { GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
@@ -76,7 +76,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public gstAuthenticated$: Observable<boolean>;
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
-    public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+    public selectedService: TaxServiceType;
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
     public imgPath: string = '';
@@ -113,6 +113,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public activeCompany: any = null;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** Holds Tax Service Enum */
+    public taxServiceEnum = TaxServiceEnum
 
     constructor(
         private store: Store<AppState>,
@@ -184,7 +186,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (this.selectedGst === GstReport.Gstr1) {
             this.navigateToOverview();
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
-        } else if(this.selectedGst === GstReport.Gstr2){
+        } else if (this.selectedGst === GstReport.Gstr2) {
             this.navigateToOverview();
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
         }
@@ -214,22 +216,22 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
-                this.openSettingAsidePane(null, 'TAXPRO');
+                this.openSettingAsidePane(null, this.taxServiceEnum.TAXPRO);
             }
         }
 
         if (s && s.fileGstr3b && s.fileGstr3b.currentValue?.via) {
             let gsp = s.fileGstr3b.currentValue.via;
             if (this.gstAuthenticated) {
-                if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {
+                if (gsp === this.taxServiceEnum.VAYANA && this.isVayanaAuthenticated) {
                     this.fileGstr3B(gsp);
-                } else if (gsp === 'VAYANA' && !this.isVayanaAuthenticated) {
+                } else if (gsp === this.taxServiceEnum.VAYANA && !this.isVayanaAuthenticated) {
                     this.openSettingAsidePane(null, gsp);
                 }
 
-                if (gsp === 'TAXPRO' && this.isTaxproAuthenticated) {
+                if (gsp === this.taxServiceEnum.TAXPRO && this.isTaxproAuthenticated) {
                     this.fileGstr3B(gsp);
-                } else if (gsp === 'TAXPRO' && !this.isTaxproAuthenticated) {
+                } else if (gsp === this.taxServiceEnum.TAXPRO && !this.isTaxproAuthenticated) {
                     this.openSettingAsidePane(null, gsp);
                 }
 
@@ -243,10 +245,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * Open setting aside pane dialog
      *
      * @param {*} event
-     * @param {('JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA')} [selectedService]
+     * @param {TaxServiceType} [selectedService]
      * @memberof FilingHeaderComponent
      */
-    public openSettingAsidePane(event: any, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
+    public openSettingAsidePane(event: any, selectedService?: TaxServiceType): void {
         if (event) {
             event.preventDefault();
         }
@@ -311,13 +313,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 gstin: this.activeCompanyGstNumber,
                 from: this.currentPeriod.from,
                 to: this.currentPeriod.to,
-                gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO',
+                gsp: this.isVayanaAuthenticated ? this.taxServiceEnum.VAYANA : this.taxServiceEnum.TAXPRO,
                 currentDateTime: this.generalService.getCurrentDateTime()
             }));
         }
         if (this.selectedGst === GstReport.Gstr3b) {
             let gsp;
-            gsp = this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO';
+            gsp = this.isVayanaAuthenticated ? this.taxServiceEnum.VAYANA : this.taxServiceEnum.TAXPRO;
             this.fileGstr3B(gsp);
         }
     }

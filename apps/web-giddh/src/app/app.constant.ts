@@ -628,4 +628,5 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
     'AE': 'ae',
     'GL': 'gl'
 };
+/** Gst utility download portal link */
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
