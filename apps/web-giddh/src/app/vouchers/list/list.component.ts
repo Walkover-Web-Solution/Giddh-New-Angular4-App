@@ -357,6 +357,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.setInitialAdvanceFilter(true);
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
+                    this.advanceFilters.count = this.queryParams.count ?? this.pageSizeOptions[2];
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
                 }
@@ -770,7 +771,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
-                    document.getElementById(this.activeSearchField).focus();
+                    document.getElementById(this.activeSearchField)?.focus();
                 }, 200);
             }
         }
@@ -784,6 +785,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showVoucherPreview(voucherUniqueName: string): void {
         const queryParams = {
             page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
         };
@@ -843,10 +845,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
+                } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
                 }
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
+                    this.selectedTabIndex = 1;
                 }
             }
         } else {
@@ -956,11 +962,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 if (selectedTabIndex === 0) {
                     voucherType = "receipt";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "pending";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
                     voucherType = "payment";
                     activeModule = "list";
+                } else if (selectedTabIndex === 1) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "pending";
                 }
             }
         } else {

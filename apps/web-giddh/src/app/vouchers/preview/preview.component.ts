@@ -239,6 +239,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 if (params?.page) {
                     this.queryParams = params;
                     this.advanceFilters.page = Number(params.page);
+                    this.advanceFilters.count = params.count ? Number(params.count) : PAGINATION_LIMIT;
                     this.advanceFilters.from = params.from ?? '';
                     this.advanceFilters.to = params.to ?? '';
                     const searchString = params.search;
@@ -260,7 +261,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     page: 1,
                     from: this.advanceFilters.from,
                     to: this.advanceFilters.to,
-                    count: this.advanceFilters.count,
+                    count: PAGINATION_LIMIT,
                     q: '',
                     sort: '',
                     sortBy: ''
@@ -389,7 +390,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     page: 1,
                     from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
                     to: dayjs(response[1]).format(GIDDH_DATE_FORMAT),
-                    count: this.advanceFilters.count,
+                    count: PAGINATION_LIMIT,
                     q: '',
                     sort: '',
                     sortBy: ''
@@ -445,7 +446,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.defaultThermalTemplate = response?.find(response =>  response.isDefault && (response.templateType === 'thermal_template'));
+                this.defaultThermalTemplate = response?.find(response => response.isDefault && (response.templateType === 'thermal_template'));
             }
         });
 
@@ -530,9 +531,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         if (response) {
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
-                if (response.data) {
+                if (response) {
                     this.isPdfAvailable = true;
-                    this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data, 'application/pdf', 512);
+                    this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data || response, 'application/pdf', 512);
                     const file = new Blob([this.selectedInvoice.blob], { type: 'application/pdf' });
                     this.attachedDocumentBlob = file;
                     URL.revokeObjectURL(this.pdfFileURL);
@@ -699,6 +700,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 getRequest = {
                     accountUniqueName: this.selectedInvoice?.vendor?.uniqueName,
                     poUniqueName: this.selectedInvoice?.uniqueName
+                };
+            }
+            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+                getRequest = {
+                    accountUniqueName: this.selectedInvoice.account?.uniqueName,
+                    voucherNumber: [this.selectedInvoice.voucherNumber],
+                    voucherType: this.voucherType,
+                    fileType: fileType
                 };
             }
             this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType, isDownloadFromDialog: false });
@@ -924,7 +933,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 currentInvoiceList.push(item);
             });
 
-            if ((this.isSearching && (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
+            if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.invoiceList = currentInvoiceList;
             } else {
                 this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
@@ -1098,9 +1107,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
             printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
+            printWindow.document?.close();
+            printWindow?.focus();
+            printWindow?.print();
         }
     }
 
@@ -1136,7 +1145,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         const queryParams = {
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
-            page: this.advanceFilters.page
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count ?? PAGINATION_LIMIT
         }
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
@@ -1243,6 +1253,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
             queryParams: {
                 page: this.queryParams.page ?? 1,
+                count: this.queryParams.count ?? PAGINATION_LIMIT,
                 from: this.advanceFilters.from,
                 to: this.advanceFilters.to
             }

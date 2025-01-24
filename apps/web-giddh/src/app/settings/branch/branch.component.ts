@@ -443,30 +443,32 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public updateBranchInfo(branchDetails: any): void {
-        branchDetails.formValue.linkedEntity = branchDetails.formValue.linkedEntity || [];
-        this.isBranchChangeInProgress = true;
-        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity?.uniqueName,
-            isDefault: filteredEntity.isDefault,
-        }));
-        const requestObj = {
-            name: branchDetails.formValue.name,
-            alias: branchDetails.formValue.alias,
-            branchUniqueName: this.branchDetails?.uniqueName,
-            linkAddresses
-        };
-        this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.addressAsidePaneRef?.close();
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
-                this.toasterService.successToast(this.localeData?.branch_updated);
-            } else {
-                this.toasterService.errorToast(response?.message);
-            }
-            this.isBranchChangeInProgress = false;
-        }, () => {
-            this.isBranchChangeInProgress = false;
-        });
+        if (branchDetails) {
+            branchDetails.formValue.linkedEntity = branchDetails.formValue?.linkedEntity || [];
+            this.isBranchChangeInProgress = true;
+            const linkAddresses = branchDetails.addressDetails?.linkedEntities?.filter(entity => (branchDetails.formValue?.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
+                uniqueName: filteredEntity?.uniqueName,
+                isDefault: filteredEntity?.isDefault,
+            }));
+            const requestObj = {
+                name: branchDetails.formValue?.name,
+                alias: branchDetails.formValue?.alias,
+                branchUniqueName: this.branchDetails?.uniqueName,
+                linkAddresses
+            };
+            this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.addressAsidePaneRef?.close();
+                    this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+                    this.toasterService.successToast(this.localeData?.branch_updated);
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+                this.isBranchChangeInProgress = false;
+            }, () => {
+                this.isBranchChangeInProgress = false;
+            });
+        }
     }
 
     /**
