@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { ToasterService } from "../../services/toaster.service";
-import { PAGINATION_LIMIT } from "../../app.constant";
+import { PAGE_SIZE_OPTIONS } from "../../app.constant";
 import { saveAs } from 'file-saver';
 import { GstReconcileService } from "../../services/gst-reconcile.service";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
@@ -46,15 +46,6 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public to: string = '';
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /**Holds Page count in single page for Pagination */
-    private pageCount = PAGINATION_LIMIT;
-    /** Holds Pagination Data */
-    private pagination: any = {
-        "page": 1,
-        "count": this.pageCount,
-        "totalPages": 1,
-        "totalItems": 1,
-    }
     /** Holds Active GSTIN Number */
     public activeCompanyGstNumber: string = '';
     /** Holds mat table column */
@@ -69,6 +60,17 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public startAt: Date = new Date();
     /** Holds selected date */
     public date: FormControl = new FormControl();
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Hold table page index number */
+    public pageIndex: number = 0;
+    /** Holds pagination data */
+    private pagination: any = {
+        "page": 1,
+        "count": this.pageSizeOptions[2],
+        "totalPages": 1,
+        "totalItems": 1
+    }
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -154,8 +156,10 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
     public pageChanged(event: any): void {
-        if (event.page !== this.pagination.page) {
-            this.pagination.page = event.page;
+        if (event) {
+            this.pageIndex = event.pageIndex;
+            this.pagination.page = event.pageIndex + 1;
+            this.pagination.count = event.pageSize;
             this.getGstrReferences();
         }
     }
@@ -230,7 +234,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Selects date and calls api
+     * Selects date and call api
      *
      * @param {*} event
      * @memberof FilingStatusComponent
@@ -239,7 +243,6 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         this.customMonthSelected = true;
         this.from = dayjs(event[0]).format(GIDDH_DATE_FORMAT);
         this.to = dayjs(event[1]).format(GIDDH_DATE_FORMAT);
-
         this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
         this.date.setValue(this.customMonth);
         this.getGstrReferences();
@@ -253,10 +256,10 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
     public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker.close();
-        let selectedMonth = new Date(date);
-        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
-        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        datepicker?.close();
+        const selectedMonth = new Date(date);
+        const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
         this.dateSelected([firstDay, lastDay]);
     }
 }

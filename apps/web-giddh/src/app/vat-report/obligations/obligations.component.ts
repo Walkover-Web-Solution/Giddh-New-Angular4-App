@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { merge, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, MOBILE_NUMBER_SELF_URL } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -9,8 +9,6 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { VatService } from '../../services/vat.service';
-import { ToasterService } from '../../services/toaster.service';
 import { FileReturnComponent } from '../file-return/file-return.component';
 import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -305,10 +303,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         }
 
-        let dialogRef = this.dialog.open(FileReturnComponent, {
+        const dialogRef = this.dialog.open(FileReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -337,7 +336,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.dialog.open(ViewReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
     }
 
