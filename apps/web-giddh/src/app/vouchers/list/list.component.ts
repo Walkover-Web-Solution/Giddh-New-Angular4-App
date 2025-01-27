@@ -1251,14 +1251,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             } else {
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                if (!this.isEInvoiceEnabled) {
+                    this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "einvoicestatus");
+                } else {
+                    if (!this.displayedColumns?.includes("einvoicestatus")) {
                         this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
                     }
+                    if (!this.displayedColumnsCredit?.includes("einvoicestatus")) {
+                        this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "einvoicestatus");
+                    }
+                }
+                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
