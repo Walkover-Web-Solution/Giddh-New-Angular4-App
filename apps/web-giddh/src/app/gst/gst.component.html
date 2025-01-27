@@ -63,21 +63,21 @@
                             <span class="normal"> {{ localeData?.gst_summary_for }} </span>
                         </li>
                         <li>
-                            <input 
-                                matInput 
-                                [matDatepicker]="picker" 
-                                [placeholder]="date?.value ?? '--'" 
+                            <input
+                                matInput
+                                [matDatepicker]="picker"
+                                [placeholder]="date?.value ?? '--'"
                                 autocomplete="off"
-                                (focus)="picker?.open()" 
+                                (focus)="picker?.open()"
                                 (click)="picker?.open()"
-                                class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer" 
-                                name="date" 
-                                readonly 
+                                class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer"
+                                name="date"
+                                readonly
                             />
-                            <mat-datepicker 
-                                (monthSelected)="setMonthAndYear($event, picker)" 
+                            <mat-datepicker
+                                (monthSelected)="setMonthAndYear($event, picker)"
                                 [startView]="'multi-year'"
-                                [startAt]="startAt" 
+                                [startAt]="startAt"
                                 #picker
                             >
                             </mat-datepicker>
@@ -88,7 +88,6 @@
         </div>
     </ng-container>
     <!-- filter area-->
-
     <!-- main data-->
     <div class="return-body scroll-y noscroll-x body fill scroll-part tax-engine">
         <div>
@@ -115,7 +114,7 @@
                     </button>
                 </div>
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
-
+                <span class="seperate-border"></span>
                 <!-- ============================ GSTR1 ================================== -->
                 <div class="mt-2 parent position-relative">
                     <div
@@ -146,7 +145,7 @@
                                 </div>
                             </div>
                             <button
-                                *ngIf="gstr1TransactionCounts"  
+                                *ngIf="gstr1TransactionCounts"
                                 mat-stroked-button
                                 color="primary"
                                 aria-label="summary"
@@ -254,7 +253,7 @@
                     <div class="loader" *ngIf="gstr1OverviewDataInProgress$ | async"></div>
                 </div>
                 <!-- ============================ GSTR1 ================================== -->
-
+                <span class="seperate-border"></span>
                 <!-- ============================ GSTR2 ================================== -->
                 <div class="mt-2 position-relative">
                     <div class="text-overdue ss" *ngIf="!isMonthSelected">
@@ -404,11 +403,10 @@
                     <div class="loader" *ngIf="gstr2OverviewDataInProgress$ | async"></div>
                 </div>
                 <!-- ============================ GSTR2 ================================== -->
-
                 <!-- =================================== FINAL RETURN ============================= -->
                 <div class="return-content pd-15" *ngIf="false">
                     <span class="btn-toolbar pull-right">
-                        <button 
+                        <button
                             mat-stroked-button
                             color="primary"
                         >{{ localeData?.file_now }}</button>
@@ -431,10 +429,9 @@
                     </div>
                 </div>
                 <!-- =================================== FINAL RETURN ============================= -->
-
                 <!-- =================================== TAX RETURN ============================= -->
                 <div class="return-content pd-15" *ngIf="false">
-                    <button 
+                    <button
                         mat-stroked-button
                         color="primary"
                         class="btn-toolbar pull-right"
