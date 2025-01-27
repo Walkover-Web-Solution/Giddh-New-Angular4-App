@@ -145,7 +145,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                 takeUntil(this.destroyed$)
             )
             .subscribe(() => {
-                this.selectedTabIndex = this.defaultParamsValue.category === "income" ? 0 : this.defaultParamsValue.category === "expenses" ? 1 : 2;
+                this.selectedTabIndex = this.defaultParamsValue.category === "income" ? 0 : this.defaultParamsValue.category === "expense" ? 1 : 2;
                 if (this.selectedTabIndex <= 1) {
                     if (!this.totalResults) {
                         this.getEntryList();
@@ -582,7 +582,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.totalResults = 0;
         this.createAccountEntryForm.reset();
         this.accountSearchResponse = [];
-        const tab = event.tab.textLabel === "Revenue" ? "revenue" : event.tab.textLabel === "Expense" ? "expenses" : "profit-loss";
+        const tab = event.tab.textLabel === this.localeData?.revenue ? "revenue" : event.tab.textLabel === this.localeData?.expense ? "expense" : "profit-loss";
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
 }
