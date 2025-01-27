@@ -512,7 +512,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Opens a confirmation dialog for deleting a project.
+     * Opens a confirmation dialog for deleting a entry.
      *
      * @param {number} index - entry index.
      * @memberof RevenueExpenseListComponent
