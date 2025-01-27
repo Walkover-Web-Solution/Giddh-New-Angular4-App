@@ -12,7 +12,8 @@
     "profit_and_loss": "लाभ और हानि",
     "revenue": "राजस्व",
     "expense": "व्यय",
-    "project_delete_confirmation_message": "क्या आप वाकई इस परियोजना को हटाना चाहते हैं?",
+    "project_delete_confirmation_message": "क्या आप वाकई [PROJECT_NAME] प्रोजेक्ट को हटाना चाहते हैं?",
+    "entry_delete_confirmation_message": "क्या आप वाकई [ENTRY_NAME] एंट्री को हटाना चाहते हैं?",
     "percentage": "प्रतिशत",
     "value": "मूल्य"
 }

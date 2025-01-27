@@ -12,7 +12,8 @@
     "profit_and_loss": "नफा आणि तोटा",
     "revenue": "महसूल",
     "expense": "खर्च",
-    "project_delete_confirmation_message": "आपल्याला खात्री आहे का की आपण हा प्रकल्प हटवू इच्छिता?",
+    "project_delete_confirmation_message": "आपण खरोखर [PROJECT_NAME] प्रकल्प हटवू इच्छिता?",
+    "entry_delete_confirmation_message": "आपण खरोखर [ENTRY_NAME] नोंद हटवू इच्छिता?",
     "percentage": "टक्केवारी",
     "value": "मूल्य"
 }
