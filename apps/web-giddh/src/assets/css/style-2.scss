@@ -9891,7 +9891,7 @@ span#HW_badge_cont:nth-child(3) {
           min-width: 300px;
         }
     }
-    
+
     .list-item {
         .entity-icon {
             padding: 4px;
@@ -12853,7 +12853,7 @@ hamburger-menu {
             float: right;
             max-width: 435px;
             margin-left: auto;
-            
+
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
                 border-radius: 0;
@@ -13879,4 +13879,8 @@ mat-list {
             text-align: left;
         }
     }
+}
+
+.search-table {
+    min-width: 140px;
 }
