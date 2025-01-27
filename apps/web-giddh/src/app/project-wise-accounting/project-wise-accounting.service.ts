@@ -1,10 +1,9 @@
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpWrapperService } from '../services/http-wrapper.service';
 import { GiddhErrorHandler } from '../services/catchManager/catchmanger';
 import { GeneralService } from '../services/general.service';
-import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { ACCOUNTING_API } from './project-wise-accounting.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 
@@ -14,28 +13,8 @@ export class ProjectAccountingService {
     constructor(
         private http: HttpWrapperService,
         private errorHandler: GiddhErrorHandler,
-        private generalService: GeneralService,
-        @Optional() @Inject(ServiceConfig)
-        private config: IServiceConfigArgs
+        private generalService: GeneralService
     ) {
-    }
-
-    /**
-     * Replaces placeholders in a URL with corresponding values from a model object.
-     * @param url - The URL containing placeholders like `:key`.
-     * @param model - An object containing key-value pairs to replace in the URL.
-     * @returns The formatted URL with placeholders replaced.
-     */
-    public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
-        if (!url || !model) return url;
-        if (Object.hasOwn(model, 'companyUniqueName')) {
-            model.companyUniqueName = this.generalService.companyUniqueName;
-        }
-        url = this.config.apiUrl + url;
-        return Object.keys(model).reduce((updatedUrl, key) => {
-            const placeholder = `:${key}`;
-            return updatedUrl.replace(placeholder, encodeURIComponent(model[key]) || '');
-        }, url);
     }
 
     /**
@@ -47,7 +26,7 @@ export class ProjectAccountingService {
      */
     public createNewProject(model: any, payload: any): Observable<BaseResponse<any, any>> {
         if (model.isCreateFlow) {
-            return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_PROJECT, model.data), payload)
+            return this.http.post(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_PROJECT, model.data), payload)
                 .pipe(
                     map((res) => {
                         let data: BaseResponse<any, any> = res;
@@ -56,7 +35,7 @@ export class ProjectAccountingService {
                     }),
                     catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
         } else {
-            return this.http.patch(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model.data), payload)
+            return this.http.patch(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model.data), payload)
                 .pipe(
                     map((res) => {
                         let data: BaseResponse<any, any> = res;
@@ -76,7 +55,7 @@ export class ProjectAccountingService {
      */
 
     public editProjectDetails(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.patch(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model), model)
+        return this.http.patch(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_PROJECT, model), model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -94,7 +73,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public getAllProjects(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_PROJECTS, model))
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_PROJECTS, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -112,7 +91,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public getProjectById(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT, model))
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -130,7 +109,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public removeProject(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.delete(this.replaceUrlPlaceholders(ACCOUNTING_API.DELETE_PROJECT, model))
+        return this.http.delete(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.DELETE_PROJECT, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -148,7 +127,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public getProjectProfit(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_NET_PROFIT, model))
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_NET_PROFIT, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -167,7 +146,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public createEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
+        return this.http.post(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -187,7 +166,7 @@ export class ProjectAccountingService {
      */
 
     public removeEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
-        return this.http.deleteWithBody(this.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
+        return this.http.deleteWithBody(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.CREATE_AND_DELETE_ENTRY, model), payload)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -206,7 +185,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public updateEntry(model: any, payload: any): Observable<BaseResponse<any, any>> {
-        return this.http.put(this.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_ENTRY, model), payload)
+        return this.http.put(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.UPDATE_ENTRY, model), payload)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -224,7 +203,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public searchEntry(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.ENTRY_SEARCH, model))
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.ENTRY_SEARCH, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -242,7 +221,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public getAllEntryList(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_ENTRY, model))
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_ALL_ENTRY, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -260,7 +239,7 @@ export class ProjectAccountingService {
      * @memberof ProjectAccountingService
      */
     public getProjectProfitAndLoss(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT_PROFIT_LOSS, model))
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_PROJECT_PROFIT_LOSS, model))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;

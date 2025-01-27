@@ -5,7 +5,7 @@ import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, delay } from 'rxjs';
+import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, take } from 'rxjs';
 import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.store';
 import { DefaultParamType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
@@ -13,6 +13,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'revenue-expense-list',
@@ -105,6 +107,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         private componentStore: ProjectWiseAccountingComponentStore,
         private formBuilder: FormBuilder,
         private router: Router,
+        public dialog: MatDialog
     ) { }
 
     /**
@@ -165,7 +168,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                         });
                         this.accountAndEntryList[result.uniqueName] = {};
                         this.accountAndEntryList[result.uniqueName]['data'] = [];
-                        this.accountAndEntryList[result.uniqueName]['nextPageAvailable'] = false;
+                        this.accountAndEntryList[result.uniqueName]['nextPageAvailable'] = true;
                         this.accountAndEntryList[result.uniqueName]['page'] = 1;
                     }
                 });
@@ -403,8 +406,14 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.getProjectEntry(entryRequest);
     }
 
+    /**
+     * This method retrieves the entry list for a given account unique name if it does not already exist. 
+     *
+     * @param {string} accountUniqueName 
+     * @memberof RevenueExpenseListComponent
+     */
     public currentEntry(accountUniqueName: string): void {
-        if (accountUniqueName && !this.accountAndEntryList[accountUniqueName]?.data?.length) {
+        if (accountUniqueName && !this.accountAndEntryList[accountUniqueName]?.data?.length && this.accountAndEntryList[accountUniqueName].nextPageAvailable) {
             this.searchEntry('', 1, accountUniqueName);
         }
     }
@@ -416,7 +425,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public selectAccount(accountUniqueName: string): void {
-        if (accountUniqueName && this.accountAndEntryList[accountUniqueName] && !this.accountAndEntryList[accountUniqueName].data.length) {
+        if (accountUniqueName && this.accountAndEntryList[accountUniqueName] && !this.accountAndEntryList[accountUniqueName].data.length && this.accountAndEntryList[accountUniqueName].nextPageAvailable) {
             this.searchEntry(this.accountAndEntryList[accountUniqueName].query, 1, accountUniqueName);
         }
     }
@@ -503,6 +512,28 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Opens a confirmation dialog for deleting a project.
+     *
+     * @param {number} index - entry index.
+     * @memberof RevenueExpenseListComponent
+     */
+    public openDeleteEntryDialog(index: number): void {
+        const entryName = this.entryList.at(index).value.entry;
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.entry_delete_confirmation_message?.replace('[ENTRY_NAME]', entryName), this.commonLocaleData)
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.deleteEntry(index);
+            }
+        });
+    }
+
+    /**
      * Deletes an entry at the specified index.
      *
      * @param {number} index The index of the entry to be deleted.
@@ -529,8 +560,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public updateSingleEntry(index: number): void {
         const payload = cloneDeep(this.entryList.at(index).value);
         const entryUniqueName = payload.entryUniqueName;
-        delete payload['account']
-        delete payload['entry']
+        delete payload['account'];
+        delete payload['entry'];
+        delete payload['defaultEntryUniqueName'];
         payload['category'] = this.defaultParamsValue.category;
         const requestObject = {
             request: { ...this.defaultParamsValue, entryUniqueName: entryUniqueName },
