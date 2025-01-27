@@ -582,7 +582,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.totalResults = 0;
         this.createAccountEntryForm.reset();
         this.accountSearchResponse = [];
-        const tab = event.tab.textLabel === "Revenue" ? "revenue" : event.tab.textLabel === "Expense" ? "expenses" : "profit-loss";
+        const tab = event.tab.textLabel === this.localeData?.revenue ? "revenue" : event.tab.textLabel === this.localeData?.expense ? "expenses" : "profit-loss";
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
 }
