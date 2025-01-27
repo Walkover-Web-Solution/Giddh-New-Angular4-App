@@ -3,7 +3,7 @@
         <button
             mat-stroked-button
             color="primary"
-            (click)="goBack()"
+            (click)="redirectToGstFilingReturn()"
         >
             <svg
                 style="top: 3px; position: relative"
@@ -68,7 +68,7 @@
 
             <table  
                 mat-table [dataSource]="(viewTransaction$ | async)?.results" 
-                class="table transactions-table w-100 zi-table table-hover"
+                class="table transactions-table w-100 table-hover"
                 *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems"
             >
                 <!-- Invoice Date Column -->
