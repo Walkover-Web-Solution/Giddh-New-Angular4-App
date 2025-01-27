@@ -19,7 +19,6 @@ import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/hel
 import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
 
-
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
 @Component({
@@ -357,12 +356,12 @@ export class ImportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Download export file
+     * Download import file
      *
      * @param {*} url
      * @memberof ImportsComponent
      */
-    public downloadFile(url: any): void {
+    public downloadFile(url: string): void {
         if (url) {
             let fileName = url.substring(url.lastIndexOf('/') + 1);
             download(fileName, url, "");
