@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY, mergeMap } from "rxjs";
 import { Store } from "@ngrx/store";
 import { ToasterService } from "../services/toaster.service";
 import { BaseResponse } from "../models/api-models/BaseResponse";
@@ -195,7 +195,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
      */
     readonly getProjectProfit = this.effect((data: Observable<any>) => {
         return data.pipe(
-            switchMap((req) => {
+            mergeMap((req) => {
                 this.patchState({ projectProfitDetails: null });
                 return this.projectAccountingService.getProjectProfit(req).pipe(
                     tapResponse(

@@ -206,7 +206,7 @@
                                     <td class="position-relative text-center">
                                         <span class="editable-table-hide-element">
                                             <button mat-stroked-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
-                                            <i (click)="deleteEntry(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
+                                            <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
                                         </span>
                                     </td>
                                 </tr>

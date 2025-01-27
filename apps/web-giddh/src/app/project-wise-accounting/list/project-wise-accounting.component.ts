@@ -116,7 +116,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.componentStore.projectsList$.pipe(takeUntil(this.destroyed$)).subscribe(projectList => {
             if (projectList) {
                 this.totalResults = projectList.totalItems;
-                this.dataSource = this.addProfitAndLossKey(projectList.results);
+                this.dataSource = this.addDefaultProfitAndLoss(projectList.results);
             }
         });
 
@@ -139,10 +139,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.removeProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(deleteProject => {
-            if (deleteProject) {
+        this.componentStore.removeProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(deleteProjectUniqueName => {
+            if (deleteProjectUniqueName) {
                 this.dataSource = this.dataSource.filter((project) => {
-                    if (project?.uniqueName != deleteProject) {
+                    if (project?.uniqueName != deleteProjectUniqueName) {
                         return project;
                     }
                 });
@@ -160,7 +160,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @returns {ProjectDetails[]} - The updated project details with profit and loss key.
      * @memberof ProjectWiseAccountingListComponent
      */
-    private addProfitAndLossKey(response: ProjectDetails[]): ProjectDetails[] {
+    private addDefaultProfitAndLoss(response: ProjectDetails[]): ProjectDetails[] {
         return response.map(project => ({
             ...project,
             profitAndLoss: -1
@@ -271,6 +271,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 right: '0',
                 top: '0'
             },
+            disableClose: true,
             data: {
                 isCreateFlow: isCreateFlow,
                 project: {
@@ -307,24 +308,26 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public openDeleteProjectDialog(project: any): void {
-        const data: any = {
-            companyUniqueName: this.projectListRequest.companyUniqueName,
-            branchUniqueName: this.projectListRequest.branchUniqueName,
-            projectUniqueName: project.uniqueName
-        };
-        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
-                configuration: this.generalService.deleteConfiguration(this.localeData?.project_delete_confirmation_message, this.commonLocaleData)
-            }
+        if (project?.uniqueName) {
+            const data: any = {
+                companyUniqueName: this.projectListRequest.companyUniqueName,
+                branchUniqueName: this.projectListRequest.branchUniqueName,
+                projectUniqueName: project.uniqueName
+            };
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                width: '630px',
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.project_delete_confirmation_message?.replace('[PROJECT_NAME]', project.name), this.commonLocaleData)
+                }
 
-        });
+            });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
-            if (response === this.commonLocaleData?.app_yes) {
-                this.componentStore.deleteProject(data);
-            }
-        });
+            dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+                if (response === this.commonLocaleData?.app_yes) {
+                    this.componentStore.deleteProject(data);
+                }
+            });
+        }
     }
 
     /**
