@@ -382,6 +382,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.reverseChargeReportGetRequest.sortBy = "";
         this.reverseChargeReportGetRequest.from = "";
         this.reverseChargeReportGetRequest.to = "";
+        this.showNameSearch = false;
+        this.showInvoiceNoSearch = false;
+        this.showCountrySearch = false;
         this.searchedName.setValue(null);
         this.searchedInvoiceNo.setValue(null);
         this.searchedCountry.setValue(null);
