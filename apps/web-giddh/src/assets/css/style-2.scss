@@ -7173,7 +7173,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table.transactions-table,
-.tax-engine .transactions-list .zi-table.table-scroll {
+.tax-engine .transactions-list {
     table-layout: auto;
 }
 
@@ -7506,11 +7506,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     table-layout: fixed;
 }
 
-.zi-table {
-    border-bottom: 1px solid var(--color-dark-fog);
-    table-layout: fixed;
-}
-
 .tax-engine .table.reconciliations-table tbody > tr > td:first-child,
 .tax-engine .table.reconciliations-table thead > tr > th:first-child {
     padding: 13px 13px 13px 20px;
@@ -7518,15 +7513,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table thead:first-child tr:first-child th {
     border-top: 1px solid var(--color-table-primary-header-bar-border);
-}
-
-.list-column.expanded-list-column .zi-table tr td:first-of-type,
-.list-column.expanded-list-column .zi-table tr th:first-of-type {
-    padding-left: 20px;
-}
-
-.list-column.expanded-list-column .zi-table tr .bulk-selection-cell {
-    width: 40px;
 }
 
 .tax-engine .table.reconciliations-table thead > tr > th {
@@ -7538,11 +7524,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .table.reconciliations-table thead > tr > th {
     font-size: var(--font-size-15);
     padding: 13px;
-}
-
-.zi-table.table-hover tbody tr:hover td {
-    background-color: var(--color-dark-fog);
-    cursor: pointer;
 }
 
 .tax-engine .table tbody > tr > td,
@@ -7559,8 +7540,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .details .details-info,
-.warehouses > li div,
-.zi-table tbody td {
+.warehouses > li div {
     word-wrap: break-word;
 }
 
@@ -7593,17 +7573,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .reconciliation-accepted {
     color: var(--color-primary-tax-engine-reconciliation-accepted);
-}
-
-.zi-table.table thead > tr > th {
-    color: var(--color-primary-zi-table-table-thead-tr-th);
-    background: var(--color-white);
-    font-weight: 700;
-    font-size: var(--font-size-15);
-    text-transform: capitalize;
-    -webkit-font-smoothing: antialiased;
-    border-top: 1px solid var(--color-iron);
-    border-bottom: 1px solid var(--color-iron);
 }
 
 .transactions-overview {
@@ -9922,7 +9891,7 @@ span#HW_badge_cont:nth-child(3) {
           min-width: 300px;
         }
     }
-    
+
     .list-item {
         .entity-icon {
             padding: 4px;
@@ -12884,7 +12853,7 @@ hamburger-menu {
             float: right;
             max-width: 435px;
             margin-left: auto;
-            
+
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
                 border-radius: 0;
@@ -13914,4 +13883,8 @@ mat-list {
 
 .z-index-0 {
     z-index: 0;
+}
+
+.search-table {
+    min-width: 140px;
 }

@@ -45,7 +45,7 @@
                         <td mat-cell *matCellDef="let element">
                             <a
                                 href="javascript:;"
-                                [ngClass]="{ 'noclick': !element.voucherNumber && element.voucherType !== 'purchase' }"
+                                [ngClass]="!element.voucherNumber && element.voucherType !== 'purchase' ? 'noclick' : 'btn-link'"
                                 (click)="onSelectInvoice(element)"
                                 >{{ element.voucherNumber ? element.voucherNumber : "-" }}
                             </a>
@@ -107,16 +107,12 @@
             </div>
         </div>
         <ng-template #downloadOrSendMailModel>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <download-or-send-mail-invoice
-                        [selectedVoucher]="selectedInvoice"
-                        (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)"
-                        (downloadInvoiceEvent)="ondownloadInvoiceEvent($event)"
-                        (closeModelEvent)="closeDownloadOrSendMailPopup($event)"
-                    ></download-or-send-mail-invoice>
-                </div>
-            </div>
+            <download-or-send-mail-invoice
+                [selectedVoucher]="selectedInvoice"
+                (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)"
+                (downloadInvoiceEvent)="ondownloadInvoiceEvent($event)"
+                (closeModelEvent)="closeDownloadOrSendMailPopup($event)"
+            ></download-or-send-mail-invoice>
         </ng-template>
     </div>
 </ng-container>

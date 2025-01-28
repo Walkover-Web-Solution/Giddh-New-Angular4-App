@@ -69,6 +69,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public isAttachment: boolean = false;
     /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 0;
+    /** Holds invoice enum */
     public invoicesEnum: string = InvoicesEnum.Invoices;
 
     constructor(

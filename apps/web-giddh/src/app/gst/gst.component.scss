@@ -1,5 +1,4 @@
 .return-body .main-wrapper {
-    background-color: var(--color-gst-primary-background-color);
     padding: 0;
     border-right: 1px solid transparent;
 }
@@ -400,6 +399,10 @@ hr {
     padding-left: 0;
     padding-bottom: 10px;
     color: inherit;
+}
+.seperate-border {
+    background: var(--color-gst-primary-background-color);
+    height: 10px;
 }
 /*responsive*/
 @media screen and (max-width: 768px) {

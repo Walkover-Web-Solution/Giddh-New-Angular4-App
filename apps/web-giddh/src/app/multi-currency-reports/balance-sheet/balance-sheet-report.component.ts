@@ -114,10 +114,13 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Filters data based on the given request
      *
+     * @param {any} event - The filter date
      * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
-    public filterData(): void {
+    public filterData(event: any): void {
+        this.from = event.from;
+        this.to = event.to;
         this.componentStore.getMultiCurrencyReport(ReportType.BalanceSheet);
     }
     /**
