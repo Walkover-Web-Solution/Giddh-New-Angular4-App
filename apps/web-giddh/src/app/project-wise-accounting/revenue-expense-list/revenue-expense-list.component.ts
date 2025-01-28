@@ -138,7 +138,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
-                    this.defaultParamsValue.category = params.module === 'revenue' ? "income" : params.module;
+                    this.defaultParamsValue.category = params.module;
                     this.accountSearchRequest.group = this.defaultParamsValue.category === "income" ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
                 }),
@@ -153,6 +153,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     if (!this.accountSearchRequest.isLoading) {
                         this.searchAccount();
                     }
+                    this.getRevenueExpense();
                 }
             });
 
@@ -196,6 +197,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                 this.accountEntryListForm.get('entryList')['controls'].push(this.initEntryListForm(this.createAccountEntryForm.value));
                 this.totalResults += 1;
                 this.createAccountEntryForm.reset();
+                this.getRevenueExpense();
             }
         });
 
@@ -221,14 +223,25 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (entryDeleteSuccess) {
                 this.totalResults -= 1;
                 this.entryList.removeAt(entryDeleteSuccess.index);
+                this.getRevenueExpense();
             }
         });
 
         this.componentStore.entryUpdateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(entryUpdateSuccess => {
             if (entryUpdateSuccess) {
                 this.entryList.at(entryUpdateSuccess.index).get('defaultEntryUniqueName').patchValue(entryUpdateSuccess.entryUniqueName);
+                this.getRevenueExpense();
             }
         });
+    }
+
+    /**
+     * Get total revenue and expense 
+     *
+     * @memberof ActivityLogsComponent
+     */
+    public getRevenueExpense(): void {
+        this.componentStore.getTotalRevenueAndExpense(this.defaultParamsValue);
     }
 
     /**
@@ -582,7 +595,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.totalResults = 0;
         this.createAccountEntryForm.reset();
         this.accountSearchResponse = [];
-        const tab = event.tab.textLabel === this.localeData?.revenue ? "revenue" : event.tab.textLabel === this.localeData?.expense ? "expenses" : "profit-loss";
+        const tab = event.tab.textLabel === this.localeData?.revenue ? "income" : event.tab.textLabel === this.localeData?.expense ? "expenses" : "profit-loss";
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
 }
