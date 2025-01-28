@@ -143,13 +143,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
                     this.defaultParamsValue.category = params.module;
-                    this.accountSearchRequest.group = this.defaultParamsValue.category === ProjectWiseAccountingType.Income ? this.incomeGroup : this.expenseGroup;
+                    this.accountSearchRequest.group = this.defaultParamsValue.category === this.projectWiseAccountingType.Income ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
                 }),
                 takeUntil(this.destroyed$)
             )
             .subscribe(() => {
-                this.selectedTabIndex = this.defaultParamsValue.category === ProjectWiseAccountingType.Income ? 0 : this.defaultParamsValue.category === ProjectWiseAccountingType.Expenses ? 1 : 2;
+                this.selectedTabIndex = this.defaultParamsValue.category === this.projectWiseAccountingType.Income ? 0 : this.defaultParamsValue.category === this.projectWiseAccountingType.Expenses ? 1 : 2;
                 if (this.selectedTabIndex <= 1) {
                     if (!this.totalResults) {
                         this.getEntryList();
@@ -599,7 +599,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.totalResults = 0;
         this.createAccountEntryForm.reset();
         this.accountSearchResponse = [];
-        const tab = event.tab.textLabel === this.localeData?.revenue ? ProjectWiseAccountingType.Income : event.tab.textLabel === this.localeData?.expense ? ProjectWiseAccountingType.Expenses : ProjectWiseAccountingType.ProfitLoss;
+        const tab = event.tab.textLabel === this.localeData?.revenue ? this.projectWiseAccountingType.Income : event.tab.textLabel === this.localeData?.expense ? this.projectWiseAccountingType.Expenses : this.projectWiseAccountingType.ProfitLoss;
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
 }
