@@ -29,3 +29,9 @@ export interface ProjectDialogData {
     project: any;
     isCreateFlow: boolean;
 }
+
+export enum ProjectWiseAccountingType {
+    Income = 'income',
+    Expenses = 'expenses',
+    ProfitLoss = 'profit-loss'
+};

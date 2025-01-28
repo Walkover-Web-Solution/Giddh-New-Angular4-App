@@ -7,7 +7,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject, takeUntil, filter, tap, debounceTime, Observable, take } from 'rxjs';
 import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.store';
-import { DefaultParamType } from '../project-wise-accounting';
+import { DefaultParamType, ProjectWiseAccountingType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
@@ -97,8 +97,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     };
     /** Observable for fetching projects */
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
+    /** Observable for retrieve the total revenue and expense details for a project */
+    public totalRevenueAndExpense$: Observable<any> = this.componentStore.totalRevenueAndExpense$;
     /** Active index for current fields */
     public activeRowIndex: number = -1;
+    /** Enum representing the types of project-wise accounting */
+    public projectWiseAccountingType: typeof ProjectWiseAccountingType = ProjectWiseAccountingType;
 
     constructor(
         private generalService: GeneralService,
@@ -139,13 +143,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
                     this.defaultParamsValue.category = params.module;
-                    this.accountSearchRequest.group = this.defaultParamsValue.category === "income" ? this.incomeGroup : this.expenseGroup;
+                    this.accountSearchRequest.group = this.defaultParamsValue.category === ProjectWiseAccountingType.Income ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
                 }),
                 takeUntil(this.destroyed$)
             )
             .subscribe(() => {
-                this.selectedTabIndex = this.defaultParamsValue.category === "income" ? 0 : this.defaultParamsValue.category === "expenses" ? 1 : 2;
+                this.selectedTabIndex = this.defaultParamsValue.category === ProjectWiseAccountingType.Income ? 0 : this.defaultParamsValue.category === ProjectWiseAccountingType.Expenses ? 1 : 2;
                 if (this.selectedTabIndex <= 1) {
                     if (!this.totalResults) {
                         this.getEntryList();
@@ -595,7 +599,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         this.totalResults = 0;
         this.createAccountEntryForm.reset();
         this.accountSearchResponse = [];
-        const tab = event.tab.textLabel === this.localeData?.revenue ? "income" : event.tab.textLabel === this.localeData?.expense ? "expenses" : "profit-loss";
+        const tab = event.tab.textLabel === this.localeData?.revenue ? ProjectWiseAccountingType.Income : event.tab.textLabel === this.localeData?.expense ? ProjectWiseAccountingType.Expenses : ProjectWiseAccountingType.ProfitLoss;
         this.router.navigate(['pages', 'project-wise-accounting', tab, "list", this.defaultParamsValue.projectUniqueName]);
     }
 }

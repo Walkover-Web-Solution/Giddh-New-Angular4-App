@@ -46,7 +46,7 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
     entryList: null,
     isFetchingProfitAndLoss: false,
     profitAndLossData: null,
-    totalRevenueAndExpense: 0,
+    totalRevenueAndExpense: 0
 };
 
 @Injectable()

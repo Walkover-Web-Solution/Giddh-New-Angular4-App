@@ -248,6 +248,7 @@ export class ProjectAccountingService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
+    
     /**
     * Sends a GET request to retrieve the total revenue and expense details for a project.
     * @param model - An object containing the unique identifier of the project.
