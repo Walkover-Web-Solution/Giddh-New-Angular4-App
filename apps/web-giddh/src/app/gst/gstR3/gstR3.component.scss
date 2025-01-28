@@ -216,7 +216,7 @@ svg.icon.icon-xxlg {
 }
 
 .tax-engine .summary-content {
-    max-width: 930px;
+    max-width: 1085px;
     margin: 0 auto 30px;
     font-family: var(--font-regular);
 }
@@ -232,11 +232,6 @@ svg.icon.icon-xxlg {
 .table,
 address {
     margin-bottom: 20px;
-}
-
-.tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td {
-    border: 1px solid var(--color-table-primary-content-bar-border);
-    padding: 10px 30px 10px 10px;
 }
 
 .tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td:first-child {
@@ -264,10 +259,6 @@ address {
 table {
     border-collapse: collapse;
     border-spacing: 0;
-}
-
-.gstr-3b-report tr:hover {
-    background-color: var(--color-invoice-preview-giddh-table-tbody-tr-background-hover);
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
@@ -543,11 +534,6 @@ ul#dropdown-menu {
 
 .pd-r190 {
     padding-right: 190px;
-}
-
-.bg-thead {
-    background-color: var(--color-dark-fog);
-    color: var(--color-nero);
 }
 
 .bg-thead-dark {
