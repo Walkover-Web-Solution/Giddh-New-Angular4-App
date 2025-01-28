@@ -146,7 +146,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Hold true when voucher is downloading */
     public isVoucherDownloading: boolean = false;
     /** Hold true when voucher is download failed */
-    public isVoucherDownloadError: boolean = false;;
+    public isVoucherDownloadError: boolean = false;
     /** Holds true when File Uploading is in progress */
     public isFileUploading: boolean = false;
     /** True, if attachment upload is to be displayed */
