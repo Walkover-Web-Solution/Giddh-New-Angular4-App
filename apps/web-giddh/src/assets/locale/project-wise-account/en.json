@@ -1,8 +1,9 @@
 {
     "total_revenue": "Total Revenue",
+    "total_expense": "Total Expense",
     "select_account": "Select Account",
     "select_entry": "Select Entry",
-    "select_method":"Select Method",
+    "select_method": "Select Method",
     "enter_amount": "Enter amount",
     "create_project": "+ Create Project",
     "update_project": "Update Project",
@@ -14,6 +15,6 @@
     "expense": "Expense",
     "project_delete_confirmation_message": "Are you sure you want to delete [PROJECT_NAME] project?",
     "entry_delete_confirmation_message": "Are you sure you want to delete [ENTRY_NAME] entry?",
-    "percentage":"Percentage",
+    "percentage": "Percentage",
     "value": "Value"
 }
