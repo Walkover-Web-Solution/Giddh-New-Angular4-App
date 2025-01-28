@@ -24,8 +24,9 @@ export interface ProjectAccountingState {
     entrySearch: any;
     accountSearch: any;
     entryList: any;
-    isFetchingProfitAndLoss: boolean,
-    profitAndLossData: any
+    isFetchingProfitAndLoss: boolean;
+    profitAndLossData: any;
+    totalRevenueAndExpense: number;
 }
 
 export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
@@ -44,7 +45,8 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
     accountSearch: null,
     entryList: null,
     isFetchingProfitAndLoss: false,
-    profitAndLossData: null
+    profitAndLossData: null,
+    totalRevenueAndExpense: 0,
 };
 
 @Injectable()
@@ -76,6 +78,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
     public entryList$ = this.select((state) => state.entryList);
     public isFetchingProfitAndLoss$ = this.select((state) => state.isFetchingProfitAndLoss);
     public profitAndLossData$ = this.select((state) => state.profitAndLossData);
+    public totalRevenueAndExpense$ = this.select((state) => state.totalRevenueAndExpense);
 
     /**
      * Creates a new project and updates the state.
@@ -418,6 +421,33 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
         );
     });
 
+    /**
+     * Fetches total revenue and expense and updates the state.
+     */
+    readonly getTotalRevenueAndExpense = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ totalRevenueAndExpense: 0 });
+                return this.projectAccountingService.getTotalRevenueAndExpense(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({ totalRevenueAndExpense: res.body });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                this.patchState({ totalRevenueAndExpense: 0 });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ totalRevenueAndExpense: 0 });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
     /**
      * Lifecycle hook for component destroy

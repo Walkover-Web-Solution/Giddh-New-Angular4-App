@@ -41,7 +41,7 @@
                 />
             </div>
             <div>
-                <span>{{ localeData?.total_revenue }} : {{ totalResults }}</span>&nbsp;&nbsp;
+                <span>{{ defaultParamsValue.category === "income" ? localeData?.total_revenue : localeData?.total_expense }} : {{ totalRevenueAndExpense$ | async }}</span>&nbsp;&nbsp;
                 <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
                     {{ commonLocaleData?.app_back }}
                 </button>

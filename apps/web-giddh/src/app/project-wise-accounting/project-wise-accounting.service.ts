@@ -248,4 +248,20 @@ export class ProjectAccountingService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
+    /**
+    * Sends a GET request to retrieve the total revenue and expense details for a project.
+    * @param model - An object containing the unique identifier of the project.
+    * @returns An observable of the API response with the total revenue and expense details.
+    * @memberof ProjectAccountingService
+    */
+    public getTotalRevenueAndExpense(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNTING_API.GET_TOTAL_REVENUE_EXPENSES, model))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
 }

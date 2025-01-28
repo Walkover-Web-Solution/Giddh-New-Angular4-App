@@ -1,5 +1,6 @@
 {
     "total_revenue": "कुल राजस्व",
+    "total_expense": "कुल व्यय",
     "select_account": "खाता चुनें",
     "select_entry": "प्रविष्टि चुनें",
     "select_method": "विधि चुनें",
