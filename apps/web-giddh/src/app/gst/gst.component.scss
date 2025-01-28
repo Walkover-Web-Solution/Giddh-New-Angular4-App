@@ -400,6 +400,10 @@ hr {
     padding-bottom: 10px;
     color: inherit;
 }
+.seperate-border {
+    background: var(--color-gst-primary-background-color);
+    height: 10px;
+}
 /*responsive*/
 @media screen and (max-width: 768px) {
     .month-picker {
