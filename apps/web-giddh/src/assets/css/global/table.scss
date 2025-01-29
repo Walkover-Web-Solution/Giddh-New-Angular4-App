@@ -9,6 +9,7 @@
                         }
                     }
                 }
+
                 &:not(.no-strip) {
                     &:nth-of-type(odd) {
                         .mat-mdc-cell {
@@ -19,6 +20,7 @@
             }
         }
     }
+
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
@@ -90,6 +92,7 @@ aging-report {
 
 // This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
 $listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors here, separated by commas (,)
+
 .table-header-sticky {
     &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
         table {
@@ -124,10 +127,17 @@ $listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors
 }
 
 table {
-    tr {
-        th, td {
-            word-break: keep-all !important;
-            white-space: normal !important;
+    &.mat-mdc-table {
+        tr {
+            th,
+            td {
+                word-break: keep-all !important;
+                white-space: normal !important;
+
+                &:not(:first-child) {
+                    min-width: 140px;
+                }
+            }
         }
     }
 }
