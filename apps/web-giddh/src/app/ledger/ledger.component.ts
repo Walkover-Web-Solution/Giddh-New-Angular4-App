@@ -56,6 +56,8 @@ import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-lin
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
+import { reassignNavigationalArray } from './models/default-menus';
+import { DbService } from '../services/db.service';
 
 @Component({
     selector: 'ledger',
@@ -345,6 +347,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankList: any[] = [];
     /** Invoice Settings */
     public invoiceSettings: any;
+    public ledgerGridTotalColumns: number = 4;
+    public ledgerGridColumnsValue: number[] = [1, 2, 1]
 
     constructor(
         private store: Store<AppState>,
@@ -358,7 +362,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private warehouseActions: WarehouseActions,
         private cdRf: ChangeDetectorRef,
-        private breakPointObservar: BreakpointObserver,
         private modalService: BsModalService,
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
@@ -373,7 +376,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
-        private toasty: ToasterService
+        private toasty: ToasterService,
+        private breakpointObserver: BreakpointObserver,
+        private dbServices: DbService,
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -588,7 +593,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.breakPointObservar.observe([
+        this.breakpointObserver.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
@@ -1022,45 +1027,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.getBankTransactions();
             }
         };
-
-        this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.getBankTransactions();
-            }
-        });
-
-        /**
-         * When refresh bank api getting error then this code works
-         */
-        this.isBankRefreshingError$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.openInstitutionsDialog();
-            }
-        });
-
-        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body) {
-                if (response.body?.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
-                    this.isBankAccountConnected = true;
+        this.breakpointObserver.observe([
+            '(max-width: 1200px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result) {
+                if (result?.matches) {
+                    console.log("result", result);
+                    this.ledgerGridTotalColumns = 3
+                    this.ledgerGridColumnsValue = [1,1,1]
                 } else {
-                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
-                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
-                }
-            }
-        });
-
-        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isBankAccountConnected = false;
-            if (response?.body?.length) {
-                this.bankList = response.body;
-                if (response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
-                    this.isBankAccountConnected = true;
-                } else {
-                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
-                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
-                }
-                if (this.referenceNumber !== null) {
-                    this.openBankLinkDialog();
+                    this.ledgerGridTotalColumns = 4
+                    this.ledgerGridColumnsValue = [1,2,1]
                 }
             }
         });
