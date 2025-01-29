@@ -34,6 +34,8 @@ import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-
 import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -296,9 +298,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
     /** Holds images folder path */
     public imgPath: string = "";
+    public invoiceSettingForm: FormGroup;
+    public webhooks: InvoiceWebhooks[];
 
     constructor(
         private activatedRoute: ActivatedRoute,
+        private fb: FormBuilder,
         private router: Router,
         public dialog: MatDialog,
         private componentStore: VoucherComponentStore,
@@ -334,6 +339,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        this.invoiceSettingForm = this.fb.group({
+            purchaseBillSettings: this.fb.group({}), // Define controls if needed
+            invoiceSettings: this.createInvoiceSettingsForm(),
+            proformaSettings: this.createProformaSettingsForm(),
+            estimateSettings: this.createEstimateSettingsForm(),
+            webhooks: this.fb.array([]),
+            companyEmailSettings: this.createCompanyEmailSettingsForm(),
+            companyInventorySettings: this.createCompanyInventorySettingsForm()
+        });
+        console.log(this.invoiceSettingForm.value);
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
@@ -2452,4 +2467,117 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+
+    // Invoice Settings FormGroup
+    public createInvoiceSettingsForm(): FormGroup {
+        return this.fb.group({
+            autoMail: [false],
+            autoEntryAndInvoice: [false],
+            showSeal: [false],
+            autoPaid: [null],
+            autoGenerateVoucherFromEntry: [false],
+            branchInvoiceNumberPrefix: [null],
+            createPaymentEntry: [false],
+            email: [null],
+            emailVerified: [null],
+            autoEntryVoucherAndEmail: [false],
+            lockDate: [''],
+            useCustomInvoiceNumber: [false],
+            useCustomCreditNoteNumber: [false],
+            useCustomDebitNoteNumber: [false],
+            useCustomReceiptNumber: [false],
+            useCustomPaymentNumber: [false],
+            useCustomContraNumber: [false],
+            useCustomPurchaseNumber: [false],
+            defaultPaymentGateway: [''],
+            enableNarrationOnInvAndVoucher: [false],
+            voucherAddressManualEnabled: [false],
+            sendInvLinkOnSms: [false],
+            smsContent: [null],
+            autoDeleteEntries: [false],
+            gstEInvoiceEnable: [false],
+            gstEInvoiceGstin: [''],
+            gstEInvoiceUserName: [''],
+            gstEInvoiceUserPassword: [''],
+            salesRoundOff: [false],
+            purchaseRoundOff: [false],
+            debitNoteRoundOff: [false],
+            creditNoteRoundOff: [false],
+            autoWhatsAppInvoice: [true],
+            autoWhatsAppCreditNote: [true],
+            autoWhatsAppReceipt: [false],
+            autoWhatsAppDebitNote: [false],
+            autoWhatsAppPayment: [false],
+        });
+    }
+
+    // Proforma Settings FormGroup
+    public createProformaSettingsForm(): FormGroup {
+        return this.fb.group({
+            duePeriod: [null],
+            autoMail: [false],
+            autoEntryAndInvoice: [false],
+            showSeal: [false],
+            autoPaid: [''],
+            createPaymentEntry: [false],
+            email: [null],
+            emailVerified: [null],
+            headerName: [''],
+            autoChangeStatusOnExp: [null],
+            sendSms: [false],
+            enableProforma: [false],
+            autoWhatsApp: [false],
+        });
+    }
+
+    // Estimate Settings FormGroup
+    public createEstimateSettingsForm(): FormGroup {
+        return this.fb.group({
+            headerName: [''],
+            nextStepToEstimate: [''],
+            autoChangeStatusOnExp: [false],
+            sendSms: [null],
+            duePeriod: [null],
+            autoMail: [false],
+            enableEstimate: [false],
+            autoWhatsApp: [false],
+        });
+    }
+
+    // Company Email Settings FormGroup
+    public createCompanyEmailSettingsForm(): FormGroup {
+        return this.fb.group({
+            sendThroughSendgrid: [false],
+            sendThroughGmail: [false],
+        });
+    }
+
+
+    // Company Inventory Settings FormGroup
+    public createCompanyInventorySettingsForm(): FormGroup {
+        return this.fb.group({
+            manageInventory: [false],
+        });
+    }
+    public resetForm(): void {
+        this.invoiceSettingForm.reset();
+    }
+//     public  addWebhook(): void {
+//         this.webhooks.push(this.fb.group({
+//             entity: [''],
+//             operation: [''],
+//             triggerAt: [Date.now()],
+//             uniqueName: [''],
+//             url: ['']
+//         }));
+//     }
+
+//    public  removeWebhook(index: number): void {
+//         this.webhooks.removeAt(index);
+//     }
+
+    // Submit function
+    public onSubmit(): void {
+        console.log(this.invoiceSettingForm.value);
+    }
 }
