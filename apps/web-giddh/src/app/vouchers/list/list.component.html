@@ -4218,25 +4218,27 @@
         let-voucherType="voucherType"
         let-formControl="formControl"
     >
-        <div class="d-flex align-items-center column-gap1" [hidden]="show">
-            <span
-                class="cursor-pointer"
-                (click)="toggleSearch($event, fieldName, voucherType); activeSearchField = 'search' + fieldName"
-            >
-                <i class="icon-search icon-font-16"></i>
-            </span>
-            <span>{{ title }}</span>
-        </div>
-        <div [hidden]="!show">
-            <text-field
-                (click)="activeSearchField = 'search' + fieldName; $event.stopPropagation()"
-                [id]="'search' + fieldName"
-                [type]="'text'"
-                [placeholder]="commonLocaleData?.app_search"
-                [cssClass]="'form-control search-table mat-field-border'"
-                [autoFocus]="show"
-                [formControl]="formControl"
-            ></text-field>
+        <div class="search-table">
+            <div class="d-flex align-items-center column-gap1" [hidden]="show">
+                <span
+                    class="cursor-pointer"
+                    (click)="toggleSearch($event, fieldName, voucherType); activeSearchField = 'search' + fieldName"
+                >
+                    <i class="icon-search icon-font-16"></i>
+                </span>
+                <span>{{ title }}</span>
+            </div>
+            <div [hidden]="!show">
+                <text-field
+                    (click)="activeSearchField = 'search' + fieldName; $event.stopPropagation()"
+                    [id]="'search' + fieldName"
+                    [type]="'text'"
+                    [placeholder]="commonLocaleData?.app_search"
+                    [cssClass]="'form-control mat-field-border'"
+                    [autoFocus]="show"
+                    [formControl]="formControl"
+                ></text-field>
+            </div>
         </div>
     </ng-template>
     <!-- Universal Datepicker  -->

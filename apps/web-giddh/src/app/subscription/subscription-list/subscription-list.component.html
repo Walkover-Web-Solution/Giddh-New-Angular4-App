@@ -347,18 +347,20 @@
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div [hidden]="show">
-        <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
-    </div>
-    <div class="input-container" [hidden]="!show">
-        <text-field
-            [type]="'text'"
-            [placeholder]="getSearchFieldText(fieldName)"
-            [cssClass]="'form-control search-table mat-field-border'"
-            [formControl]="formControl"
-            [autoFocus]="show"
-        ></text-field>
+    <div class="search-table">
+        <div [hidden]="show">
+            <span> {{ title }}</span>
+            <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+        </div>
+        <div class="input-container" [hidden]="!show">
+            <text-field
+                [type]="'text'"
+                [placeholder]="getSearchFieldText(fieldName)"
+                [cssClass]="'form-control mat-field-border'"
+                [formControl]="formControl"
+                [autoFocus]="show"
+            ></text-field>
+        </div>
     </div>
 </ng-template>
 <!-- MoveCompany Modal -->
