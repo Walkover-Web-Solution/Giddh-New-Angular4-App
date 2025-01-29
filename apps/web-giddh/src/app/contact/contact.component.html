@@ -287,10 +287,10 @@
                                             <button
                                                 mat-menu-item
                                                 *ngIf="selectedAccountsList?.length > 0"
-                                                 (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
+                                                (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
                                                 aria-label="send bulk email"
                                             >
-                                              {{ localeData?.send_bulk_email }}
+                                                {{ localeData?.send_bulk_email }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -705,7 +705,7 @@
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button> -->
-                                     <button
+                                    <button
                                         mat-menu-item
                                         class="menu-table-item"
                                         (click)="openCustomEmailDialog(account, activeTab, false)"
@@ -1424,7 +1424,9 @@
                                     >
                                         {{ commonLocaleData?.app_pay_now }}
                                     </button>
-                                    <span *ngIf="account?.bankPaymentDetails && account?.country?.code !== 'IN'">-</span>
+                                    <span *ngIf="account?.bankPaymentDetails && account?.country?.code !== 'IN'"
+                                        >-</span
+                                    >
                                     <button
                                         mat-stroked-button
                                         *ngIf="!account?.bankPaymentDetails"
@@ -1606,25 +1608,27 @@
         let-fieldName="fieldName"
         let-formControl="formControl"
     >
-        <div class="align-items-center d-flex" [hidden]="show">
-            <button
-                mat-icon-button
-                aria-label="search"
-                (click)="toggleSearch(fieldName)"
-                class="customer-vendor-name-search-icon"
-            >
-                <span class="icon-search"></span>
-            </button>
-            <span> {{ title }}</span>
-        </div>
-        <div class="align-items-center d-flex pd-l14" [hidden]="!show">
-            <text-field
-                [type]="'text'"
-                [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control search-table'"
-                [formControl]="formControl"
-                [autoFocus]="show"
-            ></text-field>
+        <div class="search-table">
+            <div class="align-items-center d-flex" [hidden]="show">
+                <button
+                    mat-icon-button
+                    aria-label="search"
+                    (click)="toggleSearch(fieldName)"
+                    class="customer-vendor-name-search-icon"
+                >
+                    <span class="icon-search"></span>
+                </button>
+                <span> {{ title }}</span>
+            </div>
+            <div class="align-items-center d-flex pd-l14" [hidden]="!show">
+                <text-field
+                    [type]="'text'"
+                    [placeholder]="getSearchFieldText(fieldName)"
+                    [cssClass]="'form-control'"
+                    [formControl]="formControl"
+                    [autoFocus]="show"
+                ></text-field>
+            </div>
         </div>
     </ng-template>
 </ng-container>
