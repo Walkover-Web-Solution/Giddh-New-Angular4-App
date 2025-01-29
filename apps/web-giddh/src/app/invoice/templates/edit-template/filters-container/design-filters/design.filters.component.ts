@@ -192,6 +192,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             template[fieldName] = value;
         }
         template.copyFrom = cloneDeep(value);
+        
+        if (value === "tally_template") {
+            template.showSectionsInline  = true;
+        }
         this.selectedTemplateUniqueName = value;
         this._invoiceUiDataService.setCustomTemplate(cloneDeep(template));
     }
