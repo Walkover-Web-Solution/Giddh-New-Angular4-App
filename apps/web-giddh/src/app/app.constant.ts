@@ -23,6 +23,9 @@ export enum BranchHierarchyType {
     Tree = 'tree'
 };
 
+/** Date Regex for 'MMM D, YYYY' */
+export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 /** Regex for mobile number */
 export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
@@ -108,7 +111,7 @@ export enum OnBoardingType {
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
 /** Pagination count options */
-export const PAGE_SIZE_OPTIONS = [20, 50, 100];
+export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
@@ -628,3 +631,5 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
     'AE': 'ae',
     'GL': 'gl'
 };
+/** Gst utility download portal link */
+export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";

@@ -30,7 +30,7 @@
                         </button>
                     </div>
                     <button
-                        *ngIf="(!isCompany && !isConsolidatedBranch)"
+                        *ngIf="!isCompany && !isConsolidatedBranch"
                         aria-label="create warehouse"
                         mat-stroked-button
                         color="primary"
@@ -79,7 +79,7 @@
                                         </button>
                                         <button mat-menu-item (click)="confirmStatusUpdate(warehouse)">
                                             {{
-                                                branch?.isArchived
+                                                warehouse?.isArchived
                                                     ? commonLocaleData?.app_unarchive
                                                     : commonLocaleData?.app_archive
                                             }}

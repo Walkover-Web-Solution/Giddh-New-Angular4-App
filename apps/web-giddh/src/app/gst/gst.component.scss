@@ -1,37 +1,7 @@
 .return-body .main-wrapper {
-    background-color: var(--color-gst-primary-background-color);
     padding: 0;
     border-right: 1px solid transparent;
 }
-
-.return-content {
-    padding: 15px;
-    background-color: var(--color-white);
-}
-
-.btn-primary {
-    border-color: var(--color-common-secondary-border) !important;
-}
-.btn-primary.disabled,
-.btn-primary.disabled.active,
-.btn-primary.disabled:active,
-.btn-primary.disabled:focus,
-.btn-primary.disabled:hover,
-.btn-primary[disabled],
-.btn-primary[disabled].active,
-.btn-primary[disabled]:active,
-.btn-primary[disabled]:focus,
-.btn-primary[disabled]:hover,
-fieldset[disabled] .btn-primary,
-fieldset[disabled] .btn-primary.active,
-fieldset[disabled] .btn-primary:active,
-fieldset[disabled] .btn-primary:focus,
-fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
-.btn-primary.disabled,
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active,
-.btn-primary.active,
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
@@ -315,10 +285,6 @@ hr {
     content: none;
 }
 
-.rotate-90 {
-    transform: rotate(-90deg);
-}
-
 :focus {
     outline: none !important;
 }
@@ -433,6 +399,10 @@ hr {
     padding-left: 0;
     padding-bottom: 10px;
     color: inherit;
+}
+.seperate-border {
+    background: var(--color-gst-primary-background-color);
+    height: 10px;
 }
 /*responsive*/
 @media screen and (max-width: 768px) {

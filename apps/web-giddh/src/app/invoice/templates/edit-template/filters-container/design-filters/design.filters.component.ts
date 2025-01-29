@@ -192,6 +192,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             template[fieldName] = value;
         }
         template.copyFrom = cloneDeep(value);
+        
+        if (value === "tally_template") {
+            template.showSectionsInline  = true;
+        }
         this.selectedTemplateUniqueName = value;
         this._invoiceUiDataService.setCustomTemplate(cloneDeep(template));
     }
@@ -411,5 +415,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+    /**
+     * * This is used when the user changes the template.
+     */
+    public showMessage(): void{
+        this._toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
     }
 }
