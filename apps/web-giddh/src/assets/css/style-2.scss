@@ -12254,7 +12254,6 @@ body.prevent-body-scroll {
     fill: var(--color-toast-primary-text);
 }
 
-.mat-datepicker-toggle,
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
     color: var(--color-toast-primary-text) !important;
@@ -13883,4 +13882,19 @@ mat-list {
 
 .search-table {
     min-width: 140px;
+}
+
+.ledger-main {
+    .ledger-low {
+        giddh-datepicker {
+            .mat-datepicker-input {
+                position: absolute;
+            }
+
+            .mat-datepicker-toggle {
+                position: relative;
+                left: 75px;
+            }
+        }
+    }
 }

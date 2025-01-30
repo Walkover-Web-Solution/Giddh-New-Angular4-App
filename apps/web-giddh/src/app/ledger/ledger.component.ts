@@ -50,6 +50,7 @@ import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { DbService } from '../services/db.service';
 
 @Component({
     selector: 'ledger',
@@ -313,6 +314,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankTransactionsWithAccountName: any[] = [];
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Hold ledger grid total columns static value */
+    public ledgerGridTotalColumns: number = 4;
+    /** Hold ledger grid total columns value */
+    public ledgerGridColumnsValue: number[] = [1, 2, 1]
 
     constructor(
         private store: Store<AppState>,
@@ -326,7 +331,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private warehouseActions: WarehouseActions,
         private cdRf: ChangeDetectorRef,
-        private breakPointObservar: BreakpointObserver,
         private modalService: BsModalService,
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
@@ -337,7 +341,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private router: Router
+        private router: Router,
+        private breakpointObserver: BreakpointObserver,
+        private dbServices: DbService,
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -506,12 +512,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.breakPointObservar.observe([
+        this.breakpointObserver.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             if (this.isMobileScreen) {
                 this.arrangeLedgerTransactionsForMobile();
+            }
+        });
+        this.breakpointObserver.observe([
+            '(max-width: 1366px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result) {
+                if (result?.matches) {
+                    this.ledgerGridTotalColumns = 3
+                    this.ledgerGridColumnsValue = [1, 1, 1]
+                } else {
+                    this.ledgerGridTotalColumns = 4
+                    this.ledgerGridColumnsValue = [1, 2, 1]
+                }
             }
         });
         this.store.pipe(
