@@ -1028,7 +1028,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
         this.breakpointObserver.observe([
-            '(max-width: 1200px)'
+            '(max-width: 1366px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 if (result?.matches) {
