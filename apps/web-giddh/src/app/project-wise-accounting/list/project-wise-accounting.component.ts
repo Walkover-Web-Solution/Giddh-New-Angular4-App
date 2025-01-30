@@ -109,6 +109,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             if (searchedText || searchedText === '') {
                 this.isProductSearch = searchedText !== '';
                 this.projectListRequest.q = searchedText;
+                this.projectListRequest.page = 1;
                 this.getAllProjectList();
             }
         });
