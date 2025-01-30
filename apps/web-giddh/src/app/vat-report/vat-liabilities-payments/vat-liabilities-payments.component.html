@@ -149,12 +149,17 @@
                         <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
                     </table>
                     <div *ngIf="!dataSource.length && hasTaxNumber">
-                        <div *ngIf="connectToHMRCUrl" class="position-center position-absolute">
-                            <a mat-stroked-button color="primary" [href]="connectToHMRCUrl">
-                                {{ localeData?.connect_to_hmrc }}
-                            </a>
+                        <div *ngIf="connectToHMRCUrl || activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)" class="position-center position-absolute">
+                            <div class="text-center">
+                                <a [disabled]="activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)" mat-stroked-button color="primary" [href]="connectToHMRCUrl">
+                                    {{ localeData?.connect_to_hmrc }}
+                                </a>
+                            </div>
+                            <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                                (onUpgradePlan)="buyPlan($event)">
+                            </restricted-module-message>
                         </div>
-                        <div class="no-data" *ngIf="!connectToHMRCUrl" >
+                        <div class="no-data" *ngIf="!connectToHMRCUrl && !activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)" >
                             <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                         </div>
                     </div>
