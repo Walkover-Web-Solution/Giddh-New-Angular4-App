@@ -13883,18 +13883,3 @@ mat-list {
 .search-table {
     min-width: 140px;
 }
-
-.ledger-main {
-    .ledger-low {
-        giddh-datepicker {
-            .mat-datepicker-input {
-                position: absolute;
-            }
-
-            .mat-datepicker-toggle {
-                position: relative;
-                left: 75px;
-            }
-        }
-    }
-}
