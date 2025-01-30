@@ -7,7 +7,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, of, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, of as observableOf, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -36,7 +36,8 @@ import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForIn
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
-
+import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
+import { RestrictedModules } from '../../app.constant';
 export interface VoucherBalances {
     grandTotal: Number;
     totalDue?: Number;
@@ -298,9 +299,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
     /** Holds images folder path */
     public imgPath: string = "";
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
     public invoiceSettingForm: FormGroup;
     public webhooks: InvoiceWebhooks[];
+    public originalEmail: string;
+    public isEmailChanged: boolean = false;
+    public isGmailIntegrated: boolean;
+    public gmailAuthCodeUrl$: Observable<string> = null;
 
+    private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -318,6 +326,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions
     ) {
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (Object.keys(response)?.length) {
                 this.company.baseCurrency = response.baseCurrency;
@@ -339,17 +349,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
-        this.invoiceSettingForm = this.fb.group({
-            purchaseBillSettings: this.fb.group({}), // Define controls if needed
-            invoiceSettings: this.createInvoiceSettingsForm(),
-            proformaSettings: this.createProformaSettingsForm(),
-            estimateSettings: this.createEstimateSettingsForm(),
-            webhooks: this.fb.array([]),
-            companyEmailSettings: this.createCompanyEmailSettingsForm(),
-            companyInventorySettings: this.createCompanyInventorySettingsForm()
+        this.initForm();
+        this.invoiceSettingForm.get('autoPaid')?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(value => {
+            if (value !== null && value !== undefined) {
+                if (this.invoiceSettingForm.get('invoiceSetting.autoPaid').value) {
+                    return;
+                } else {
+                    this.invoiceSettingForm.get('invoiceSetting.autoGenerateVoucherFromEntry').patchValue(false);
+                }
+            }
         });
-        console.log(this.invoiceSettingForm.value);
-
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
@@ -695,6 +708,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getLedgersOfInvoice();
             }
         });
+    }
+
+    public initForm(): void {
+        this.invoiceSettingForm = this.fb.group({
+            purchaseBillSettings: this.fb.group({}), // Define controls if needed
+            invoiceSettings: this.createInvoiceSettingsForm(),
+            proformaSettings: this.createProformaSettingsForm(),
+            estimateSettings: this.createEstimateSettingsForm(),
+            webhooks: this.fb.array([]),
+            companyEmailSettings: this.createCompanyEmailSettingsForm(),
+            companyInventorySettings: this.createCompanyInventorySettingsForm()
+        });
+        console.log(this.invoiceSettingForm.value);
     }
 
     /**
@@ -2472,11 +2498,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public createInvoiceSettingsForm(): FormGroup {
         return this.fb.group({
             autoMail: [false],
+            duePeriod: [null],
             autoEntryAndInvoice: [false],
+            generateEinvoiceShowPopUp:[null],
             showSeal: [false],
             autoPaid: [null],
             autoGenerateVoucherFromEntry: [false],
             branchInvoiceNumberPrefix: [null],
+            invoiceNumberPrefix:[null],
+            initialInvoiceNumber:[null],
             createPaymentEntry: [false],
             email: [null],
             emailVerified: [null],
@@ -2486,6 +2516,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             useCustomCreditNoteNumber: [false],
             useCustomDebitNoteNumber: [false],
             useCustomReceiptNumber: [false],
+            autoWhatsAppReceipt: [null],
+            receiptNumberPrefix: [null],
+            initialReceiptNumber: [null],
+            branchReceiptNumberPrefix: [null],
+            autoMailReceipt: [null],
             useCustomPaymentNumber: [false],
             useCustomContraNumber: [false],
             useCustomPurchaseNumber: [false],
@@ -2505,7 +2540,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             creditNoteRoundOff: [false],
             autoWhatsAppInvoice: [true],
             autoWhatsAppCreditNote: [true],
-            autoWhatsAppReceipt: [false],
             autoWhatsAppDebitNote: [false],
             autoWhatsAppPayment: [false],
         });
@@ -2562,22 +2596,113 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public resetForm(): void {
         this.invoiceSettingForm.reset();
     }
-//     public  addWebhook(): void {
-//         this.webhooks.push(this.fb.group({
-//             entity: [''],
-//             operation: [''],
-//             triggerAt: [Date.now()],
-//             uniqueName: [''],
-//             url: ['']
-//         }));
-//     }
 
-//    public  removeWebhook(index: number): void {
-//         this.webhooks.removeAt(index);
-//     }
+    public onChangeEmail(email: string): void {
+        this.isEmailChanged = email !== this.originalEmail;
+    }
+    public deleteEmail(emailId: string) {
+        if (!emailId) {
+            return false;
+        } else {
+            let emailTodelete = cloneDeep(emailId);
+            emailTodelete = null;
+            this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
+        }
+    }
+
+    private getRedirectUrl(baseHref: string) {
+        return `${baseHref}pages/invoice/preview/settings`;
+    }
+
+    /**
+     * Open custom email dialog
+     *
+     * @param {string} voucherType
+     * @memberof InvoiceSettingComponent
+     */
+    public openCustomEmailDialog(voucherType: string): void {
+        this.dialog.open(TemplateFroalaComponent, {
+            data: voucherType,
+            width: 'var(--aside-pane-width)',
+            height: '70vh',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+    }
+
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  InvoiceSettingComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+    }
+    //     public  addWebhook(): void {
+    //         this.webhooks.push(this.fb.group({
+    //             entity: [''],
+    //             operation: [''],
+    //             triggerAt: [Date.now()],
+    //             uniqueName: [''],
+    //             url: ['']
+    //         }));
+    //     }
+
+    //    public  removeWebhook(index: number): void {
+    //         this.webhooks.removeAt(index);
+    //     }
 
     // Submit function
     public onSubmit(): void {
         console.log(this.invoiceSettingForm.value);
+    }
+    /**
+ * Handler for E-invoice authentication change
+ *
+ * @param {*} event Checkbox (ngModelChange) event
+ * @memberof InvoiceSettingComponent
+ */
+    public handleEInvoiceChange(event: any): void {
+        if (!event) {
+            // E-Invoice unchecked reset the credentials
+            this.invoiceSettingForm.get('invoiceSetting.gstEInvoiceGstin')?.patchValue('');
+            this.invoiceSettingForm.get('invoiceSetting.gstEInvoiceUserName')?.patchValue('');
+            this.invoiceSettingForm.get('invoiceSetting.gstEInvoiceUserPassword')?.patchValue('');
+        } else {
+            this.fetchCompanyGstDetails();
+        }
+    }
+
+    /**
+ * Auto-fills the GST number field for E-invoice
+ *
+ * @private
+ * @memberof InvoiceSettingComponent
+ */
+    private fetchCompanyGstDetails(): void {
+        let branches = [];
+        let currentBranch;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response && response.length) {
+                branches = response;
+
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    currentBranch = branches.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    currentBranch = branches.find(branch => !branch.parentBranch);
+                }
+                if (currentBranch && currentBranch.addresses) {
+                    const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+                    if (defaultAddress) {
+                        this.invoiceSettingForm.get('invoiceSetting.gstEInvoiceGstin')?.patchValue(defaultAddress.taxNumber);
+                    }
+                }
+            }
+        });
     }
 }
