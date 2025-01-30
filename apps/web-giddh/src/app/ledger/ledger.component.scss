@@ -12,6 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transform: translateX(-45%);
         }
         .ledger-row {
             $columns: 50;
