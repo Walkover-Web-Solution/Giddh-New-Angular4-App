@@ -322,6 +322,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerGridColumnsValue: number[] = [1, 2, 1]
     /** Observable for post balance success response */
     public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
+    public isManualChange: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -553,9 +554,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.ledgerGridColumnsValue = [1, 1, 1]
                 } else if (result.breakpoints[mediumScreen]) {
                     this.ledgerGridTotalColumns = 8;
-                    this.ledgerGridColumnsValue = [2, 3, 3]
+                    this.ledgerGridColumnsValue = [3, 3, 2]
                 } else {
-                    this.ledgerGridTotalColumns = 4
+                    this.ledgerGridTotalColumns = 8
                     this.ledgerGridColumnsValue = [1, 2, 1]
                 }
             }
@@ -2651,7 +2652,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onChangeEntryDate(item: any): void {
         if (item && item.entryDate) {
             if (typeof item.entryDate !== 'string') {
-                item.entryDate = dayjs(item.entryDate).format(GIDDH_DATE_FORMAT);
+                item.entryDate = this.isManualChange ? dayjs(item.entryDate).format(GIDDH_DATE_FORMAT_MM_DD_YYYY) : dayjs(item.entryDate).format(GIDDH_DATE_FORMAT);
             }
         }
     }

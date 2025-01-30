@@ -12,6 +12,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transform: translateX(-45%);
+        }
+        .checked {
+            display: contents;
         }
         .ledger-row {
             $columns: 50;
