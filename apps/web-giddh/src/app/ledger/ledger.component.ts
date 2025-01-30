@@ -50,7 +50,6 @@ import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
-import { DbService } from '../services/db.service';
 
 @Component({
     selector: 'ledger',
@@ -342,8 +341,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private router: Router,
-        private breakpointObserver: BreakpointObserver,
-        private dbServices: DbService,
+        private breakpointObserver: BreakpointObserver
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
