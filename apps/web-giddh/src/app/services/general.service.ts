@@ -2187,5 +2187,17 @@ export class GeneralService {
         const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
+
+    /**
+     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     *
+     * @param {string} text - The string containing placeholders.
+     * @param {string[]} args - The list of values to replace the placeholders.
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof GeneralService
+     */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
 }
 

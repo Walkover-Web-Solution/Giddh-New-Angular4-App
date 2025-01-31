@@ -51,6 +51,14 @@ import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesActions } from '../../actions/sales/sales.action';
 
+interface SubscriptionErrorFlags {
+    isObligationExpired: boolean;
+    isLiabilitiesExpired: boolean;
+    isSubscriptionRenewalExpired: boolean;
+    isSubscriptionEnded: boolean;
+    isTransactionLimitExceeded: boolean;
+};
+
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -260,6 +268,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Tracks the visibility of error messages related to subscription and plan. */
+    public hideErrorMessage: SubscriptionErrorFlags = {
+        isObligationExpired: false,
+        isLiabilitiesExpired: false,
+        isSubscriptionRenewalExpired: false,
+        isSubscriptionEnded: false,
+        isTransactionLimitExceeded: false
+    }
+    public days = 10;
+    /** True if active country is UK */
+    public isUKCompany = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -774,6 +793,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
                 }
                 this.activeCompany = res;
+                this.isUKCompany = res?.country === "United Kingdom";
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
@@ -1271,6 +1291,37 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
+     * Navigates to obligation
+     *
+     * @memberof HeaderComponent
+     */
+    public goToObligation() {
+        this.router.navigate(['pages/vat-report/obligations']);
+    }
+
+    /**
+     * Navigates to liabilities
+     *
+     * @memberof HeaderComponent
+     */
+    public goToLiabilities() {
+        this.router.navigate(['pages/vat-report/liabilities']);
+    }
+
+    /**
+     * Replaces placeholders in the given text with the provided arguments.
+     * Placeholders are denoted as `[placeholder]` and replaced sequentially.
+     *
+     * @param {string} text
+     * @param {string[]} args 
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof HeaderComponent
+     */
+    public getExpiredMessage(text: string = "", ...args: string[]): string {
+        return this.generalService.replacePlaceholders(text, ...args);
+    }
+
+    /**
      * This will use for go to branch mode
      *
      * @memberof HeaderComponent
@@ -1765,21 +1816,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionEndNote(): string {
         let text = this.localeData?.subscription_end_note;
-        if (this.planVersion === 2) {
-            text = text
-                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-                ?.replace("[PLAN_DURATION_UNIT]", '')
-                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
-        } else {
-            text = text
-                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
-        }
-        return text;
+        return this.getExpiredMessage(
+            text,
+            this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
+            this.planVersion === 2 ? '' : this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
+            this.subscribedPlan?.planDetails?.name,
+            this.subscribedPlan?.expiry
+        ) ?? "";
     }
+
 
     /**
      * This will return plan ended note
@@ -1788,18 +1833,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        let text = "";
         if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && !this.isCurrentSubscriptionTrialOrCancelled) {
-            text = this.localeData?.subscription_expire_renewal_message;
-        } else {
-            text = this.localeData?.subscription_ended_note
-                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+            return this.localeData?.subscription_expire_renewal_message ?? "";
         }
-        return text;
+        return this.getExpiredMessage(
+            this.localeData?.subscription_ended_note,
+            this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
+            this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
+            this.subscribedPlan?.planDetails?.name,
+            this.subscribedPlan?.expiry
+        ) ?? "";
     }
+
     /**
      * This will return plan transactions ended note
      *
@@ -1821,14 +1866,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getPlanExpiredNote(): string {
-        let text = this.localeData?.plan_expired_note;
-        text = text
-            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
-        return text;
+        return this.getExpiredMessage(
+            this.localeData?.plan_expired_note,
+            this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
+            this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
+            this.subscribedPlan?.planDetails?.name,
+            this.subscribedPlan?.expiry
+        ) ?? "";
     }
+
 
     /**
      * This will return transaction limit crossed note
