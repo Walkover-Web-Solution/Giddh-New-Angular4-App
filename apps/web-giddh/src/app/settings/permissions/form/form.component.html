@@ -6,8 +6,8 @@
             <div>
                 <input-field [label]="isLblShow ? localeData?.unique_name_email_label : ''" [type]="'text'"
                     [name]="'emailId'" formControlName="emailId"
-                    [placeholder]="localeData?.unique_name_email_placeholder"
-                    [readonly]="userdata?.uniqueName" [disabled]="isUserRestricted"></input-field>
+                    [placeholder]="localeData?.unique_name_email_placeholder" [readonly]="userdata?.uniqueName"
+                    [disabled]="isUserRestricted"></input-field>
             </div>
             <div>
                 <reactive-dropdown-field [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''" [name]="'roles'"
