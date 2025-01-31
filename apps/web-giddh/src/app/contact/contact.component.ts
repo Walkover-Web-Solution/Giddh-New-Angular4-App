@@ -249,6 +249,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True for only once when get route response */
+    public hasNavigated: boolean = false;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -688,8 +690,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
-            this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-            this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+            if (!this.hasNavigated) {
+                this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
+                this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+                this.hasNavigated = true;
+            }
         }
     }
 

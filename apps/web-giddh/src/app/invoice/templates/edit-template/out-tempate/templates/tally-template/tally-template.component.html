@@ -2,6 +2,14 @@
 <html id="default" lang="en">
     <head>
         <title></title>
+        <style>
+            :root {
+                --custom-font-size: 14px;
+            }
+            * {
+                font-size: var(--custom-font-size) !important;
+            }
+        </style>
     </head>
 
     <body
@@ -13,7 +21,8 @@
             'padding-bottom': inputTemplate.bottomMargin + 'px',
             'padding-right': inputTemplate.rightMargin + 'px',
             'padding-left': inputTemplate.leftMargin + 'px',
-            'font-size': inputTemplate.fontDefault + 'px'
+            'font-size': inputTemplate.fontDefault + 'px',
+            '--custom-font-size': inputTemplate.fontDefault + 'px'
         }"
     >
     <div>
@@ -40,10 +49,9 @@
                     <tbody>
                         <tr>
                             <td class="padding-0 border-none">
-                                <table>
+                                <table class="mr-t1">
                                     <tr>
-                                        <td class="border-none" width="33%"></td>
-                                        <td class="border-none" width="33%">
+                                        <td class="border-none" width="33%" colspan="100%">
                                             <ng-container
                                                 *ngIf="
                                                     fieldsAndVisibility.header.formNameInvoice?.label &&
@@ -53,9 +61,8 @@
                                                 <h1
                                                     *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display"
                                                     class="text-center"
-                                                    style="font-size: 22px !important"
                                                 >
-                                                    <strong class="strong">
+                                                    <strong class="strong" style="font-size: calc(var(--custom-font-size) + 4px) !important">
                                                         {{
                                                             fieldsAndVisibility.header.formNameTaxInvoice?.display
                                                                 ? fieldsAndVisibility.header.formNameTaxInvoice?.label
@@ -64,9 +71,6 @@
                                                     </strong>
                                                 </h1>
                                             </ng-container>
-                                        </td>
-                                        <td class="border-none text-right" width="33%">
-                                            <!-- This will show typeOfInvoice (Original	for	Recipient) in PDF -->
                                         </td>
                                     </tr>
                                     <tr *ngIf="fieldsAndVisibility.footer.displayExportMessage?.display">
@@ -158,7 +162,7 @@
                                                                 </td>
                                                                 <td
                                                                     class="padding-0 border-none"
-                                                                    *ngIf=" fieldsAndVisibility.header.companyName?.display ||
+                                                                    *ngIf="fieldsAndVisibility.header.companyName?.display ||
                                                                         fieldsAndVisibility?.header?.showCompanyAddress?.display ||
                                                                         fieldsAndVisibility.header.gstin?.display
                                                                     "
@@ -169,7 +173,7 @@
                                                                         </strong>
                                                                     </h2>
 
-                                                                    <p class="margin-0"  *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display">
+                                                                    <p class="margin-0" *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display">
                                                                         Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2,
                                                                         Old Palasia, Near Greater Kailash Hospital,
                                                                         Indore 452001(M. P.)
