@@ -1980,6 +1980,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
+            this.ledgerService.GetLedgerBalance({
+                payload: _.cloneDeep(this.advanceSearchRequest.dataToSend), accountUniqueName: this.advanceSearchRequest.accountUniqueName,
+                from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
+                count: this.advanceSearchRequest.count, branchUniqueName: this.advanceSearchRequest.branchUniqueName, accountCurrency: this.trxRequest.accountCurrency
+            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                console.log("OK", response);
+            });
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
                 if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {

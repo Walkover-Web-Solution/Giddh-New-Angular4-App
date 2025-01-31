@@ -234,17 +234,18 @@ export class TransactionsResponse implements ITransactions {
 }
 
 export class TransactionsRequest {
-    public q: string = '';
-    public page: number = 0;
+    public q?: string = '';
+    public page?: number = 0;
     public count: number = PAGINATION_LIMIT;
     public accountUniqueName: string = '';
     public from: string = '';
     public to: string = '';
-    public sort: string = 'asc';
-    public reversePage: boolean = false;
+    public sort?: string = 'asc';
+    public reversePage?: boolean = false;
     public accountCurrency: boolean = false;
     public branchUniqueName?: string;
     public paginationToken?: string = '';
+    public payload?: any;
 }
 
 export interface ReconcileRequest {
