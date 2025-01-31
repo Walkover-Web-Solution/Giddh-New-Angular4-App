@@ -526,14 +526,24 @@ export class LedgerService {
             model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
-        return this.http.get(url).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = model;
-                data.queryString = { model };
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        if (model.payload) {
+            return this.http.post(url, model.payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        } else {
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    data.queryString = { model };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        }
     }
 
     /**
