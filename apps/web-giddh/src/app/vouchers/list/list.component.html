@@ -2576,63 +2576,821 @@
                         <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
                     </div>
                     <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting> -->
-                    <form [formGroup]="invoiceSettingForm">
+                    <form [formGroup]="settingForm">
                         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4">
-                            <!-- general-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 0">
-                                <ng-template mat-tab-label>
-                                    <i class="icon-chat2"></i>
-                                    General
-                                </ng-template>
-                                <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">
+                            <div
+                                validateSectionPermission
+                                [hasPermission]="hasInvoiceSettingPermissions"
+                                validateSubscription
+                            >
+                                <!-- general-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 0">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-chat2"></i>
                                         General
-                                        <span class="text-gray font-12"
-                                            >(These settings will be applicable on Estimates, Proforma and
-                                            Invoices)</span
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            General
+                                            <span class="text-gray font-12"
+                                                >(These settings will be applicable on Estimates, Proforma and
+                                                Invoices)</span
+                                            >
+                                        </h4>
+                                        <div>
+                                            <mat-slide-toggle
+                                                name="enableNarrationOnInvAndVoucher"
+                                                formControlName="enableNarrationOnInvAndVoucher"
+                                                class="disable-toggle slide-toggle"
+                                                color="primary"
+                                            >
+                                                Show Narration on Ledger
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div>
+                                            <mat-slide-toggle
+                                                name="voucherAddressManualEnabled"
+                                                formControlName="voucherAddressManualEnabled"
+                                                class="disable-toggle slide-toggle"
+                                                color="primary"
+                                            >
+                                                Add Address Manually on Voucher
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- general-content-end -->
+                                <!-- email-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 0">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-mail"></i>
+                                        Email
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            Email/SMS
+                                            <span class="text-gray font-12"
+                                                >(These settings will be applicable on Estimates, Proforma and
+                                                Invoices)</span
+                                            >
+                                        </h4>
+                                        <div
+                                            class="d-flex column-gap1 align-items-center mb-3"
+                                            formGroupName="invoiceSettings"
                                         >
-                                    </h4>
-                                    <div>
+                                            <input-field
+                                                [name]="'invoiceEmail'"
+                                                [label]="'From Email'"
+                                                [placeholder]="'ravinder@walkover.in'"
+                                                [type]="'text'"
+                                                formControlName="email"
+                                                class="settings-field"
+                                                [matSuffixIcon]="
+                                                    settingForm.get('invoiceSettings.emailVerified').value
+                                                        ? 'icon-tick'
+                                                        : 'icon-info'
+                                                "
+                                                (onChange)="
+                                                    onChangeEmail(settingForm.get('invoiceSettings.email').value)
+                                                "
+                                                [tooltipText]="
+                                                    settingForm.get('invoiceSettings.emailVerified').value
+                                                        ? 'verified'
+                                                        : 'unverified'
+                                                "
+                                                [readonly]="settingForm.get('invoiceSettings.emailVerified').value"
+                                            ></input-field>
+                                            <button
+                                                *ngIf="!settingForm.get('invoiceSettings.emailVerified').value"
+                                                mat-stroked-button
+                                                [disabled]="
+                                                    !isEmailChanged &&
+                                                    (!settingForm.get('invoiceSettings.email').value ||
+                                                        settingForm.get('invoiceSettings.email').value?.length < 4)
+                                                "
+                                                (click)="
+                                                    verifyEmail(
+                                                        settingForm.get('invoiceSettings.email').value,
+                                                        'invoice'
+                                                    )
+                                                "
+                                            >
+                                                Verify
+                                            </button>
+                                            <span
+                                                class="text-success"
+                                                *ngIf="settingForm.get('invoiceSettings.emailVerified').value"
+                                            >
+                                                Verified
+                                            </span>
+                                            <button
+                                                mat-stroked-button
+                                                class="mat-icon-md-btn"
+                                                [ngClass]="{
+                                                    'delete-icon-opacity':
+                                                        !settingForm.get('invoiceSettings.email').value ||
+                                                        settingForm.get('invoiceSettings.email').value?.length < 4,
+                                                    'cursor-pointer': !(
+                                                        !settingForm.get('invoiceSettings.email').value ||
+                                                        settingForm.get('invoiceSettings.email').value?.length < 4
+                                                    )
+                                                }"
+                                                (click)="
+                                                    !(
+                                                        !settingForm.get('invoiceSettings.email').value ||
+                                                        settingForm.get('invoiceSettings.email').value?.length < 4
+                                                    )
+                                                        ? deleteEmail(settingForm.get('invoiceSettings.email').value)
+                                                        : ''
+                                                "
+                                            >
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                        </div>
+                                        <span
+                                            formGroupName="companyEmailSettings"
+                                            class="d-flex column-gap10 align-baseline mr-5"
+                                        >
+                                        <!-- //Toggle yha pr form control ka issue hatayege to chl jayega -->
+                                            <mat-slide-toggle
+                                                formControlName="sendThroughGmail"
+                                                name="sendThroughGmail"
+                                                [disabled]="!isGmailIntegrated"
+                                                class="disable-toggle slide-toggle"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            Send email through Gmail
+                                            <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
+                                                <a [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
+                                            </span>
+                                        </span>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- email-content-end -->
+                                <!-- estimate-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 0">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-estimate1"></i>
+                                        Estimate
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="estimateSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">Estimate/Quotation</h4>
+                                        <div class="d-flex column-gap1 mb-3">
+                                            <input-field
+                                                [name]="'name'"
+                                                [label]="'Heading Name'"
+                                                [placeholder]="'ESTIMATE'"
+                                                [type]="'text'"
+                                                formControlName="headerName"
+                                                class="settings-field d-block"
+                                            ></input-field>
+                                            <input-field
+                                                [name]="'name'"
+                                                [label]="'Default expiry days'"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                                [maxlength]="3"
+                                                decimalDigitsDirective
+                                                formControlName="duePeriod"
+                                                class="settings-field d-block"
+                                                [matSuffix]="'days'"
+                                            ></input-field>
+                                        </div>
+                                        <label for="">Next step to Estimate</label>
+                                        <mat-radio-group
+                                            formControlName="nextStepToEstimate"
+                                            aria-label="Select an option"
+                                            class="mt-2 mb-3"
+                                        >
+                                            <mat-radio-button value="1" color="primary">Proforma</mat-radio-button>
+                                            <mat-radio-button value="2" color="primary">Invoice</mat-radio-button>
+                                        </mat-radio-group>
                                         <mat-slide-toggle
-                                            name="enableNarrationOnInvAndVoucher"
-                                            formControlName="enableNarrationOnInvAndVoucher"
-                                            class="disable-toggle slide-toggle"
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoChangeStatusOnExp"
+                                        >
+                                            Auto change status (on expiry)
+                                        </mat-slide-toggle>
+                                        <div class="d-flex">
+                                            <mat-slide-toggle
+                                                name=""
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="autoMail"
+                                            >
+                                                Auto mail when generated
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('estimate')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="autoWhatsApp"
+                                        >
+                                            Send estimate via whatsapp
+                                        </mat-slide-toggle>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- estimate-content-end -->
+                                <!-- proforma-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 0">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-sales-order"></i>
+                                        Proforma
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="proformaSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">Proforma Invoice</h4>
+                                        <div class="d-flex column-gap1 mb-3">
+                                            <input-field
+                                                [name]="'name'"
+                                                [label]="'Heading Name'"
+                                                [placeholder]="'PROFORMA'"
+                                                [type]="'text'"
+                                                formControlName="headerName"
+                                                class="settings-field d-block"
+                                            ></input-field>
+                                            <input-field
+                                                [name]="'name'"
+                                                [label]="'Default expiry days'"
+                                                [placeholder]="'00'"
+                                                [maxlength]="3"
+                                                decimalDigitsDirective
+                                                formControlName="duePeriod"
+                                                [type]="'text'"
+                                                class="settings-field d-block"
+                                                [matSuffix]="'days'"
+                                            ></input-field>
+                                        </div>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoChangeStatusOnExp"
+                                        >
+                                            Auto change status (on expiry)
+                                        </mat-slide-toggle>
+                                        <div class="d-flex">
+                                            <mat-slide-toggle
+                                                name="autoMail"
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="autoMail"
+                                            >
+                                                Auto mail when updated/generated
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('proforma')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="autoWhatsApp"
+                                        >
+                                            Send proforma via whatsapp
+                                        </mat-slide-toggle>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- proforma-content-end -->
+                                <!-- invoice-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 0">
+                                    <ng-template mat-tab-label>
+                                        <div class="voucher-svg">
+                                            <svg
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M16.2426 4.00113L16.2497 2.00002H21.8924L21.8995 7.6498L19.8984 7.65687L19.8913 5.41534L15.5285 9.77819L14.1142 8.36398L18.4771 4.00113H16.2426Z"
+                                                />
+                                                <path
+                                                    d="M19 19.1787V9.17865H21V19.1787C21 20.2787 20.1 21.1787 19 21.1787H5C3.9 21.1787 3 20.2787 3 19.1787V5.17865C3 4.07865 3.9 3.17865 5 3.17865H15V5.17865H5V19.1787H19Z"
+                                                />
+                                                <path d="M7 17.1787H14V15.1787H7V17.1787Z" />
+                                                <path d="M7 13.1787H17V11.1787H7V13.1787Z" />
+                                            </svg>
+                                        </div>
+                                        Invoice
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">Invoice</h4>
+                                        <div class="d-flex column-gap1 mb-3">
+                                            <input-field
+                                                [name]="'name'"
+                                                [label]="'Default expiry days'"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                                class="settings-field d-block mb-3"
+                                                maxlength="3"
+                                                formControlName="duePeriod"
+                                                decimalDigitsDirective
+                                                [matSuffix]="'days'"
+                                            ></input-field>
+                                            <giddh-datepicker
+                                                type="text"
+                                                (keydown.enter)="$event.preventDefault()"
+                                                [label]="'Invoice Lock Date'"
+                                                [placeholder]="'DD-MM-YYYY'"
+                                                formControlName="lockDate"
+                                                name="voucherDate"
+                                                [showToggleIcon]="false"
+                                                [appearance]="'outline'"
+                                                class="settings-field d-block"
+                                            >
+                                            </giddh-datepicker>
+                                        </div>
+                                        <mat-slide-toggle
+                                            name="invoiceStatusPayment"
+                                            class="disable-toggle slide-toggle d-block my-3"
+                                            formControlName="showSeal"
+                                            color="primary"
+                                            checked
+                                        >
+                                            Show seal according to status of payment
+                                        </mat-slide-toggle>
+                                        <div class="d-flex">
+                                            <mat-slide-toggle
+                                                name="invoiceAutomail"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoMail"
+                                            >
+                                                Auto mail when create and update
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('sales')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+                                        <div class="mb-3 d-flex align-items-center column-gap15">
+                                            <mat-slide-toggle
+                                                name=""
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="useCustomInvoiceNumber"
+                                            >
+                                                Custom Invoice#
+                                            </mat-slide-toggle>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomInvoiceNumber').value"
+                                                [name]="'branch'"
+                                                [label]="'Branch Prefix'"
+                                                [placeholder]="'Branch Prefix'"
+                                                formControlName="branchInvoiceNumberPrefix"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomInvoiceNumber').value"
+                                                [name]="'sub'"
+                                                [label]="'Sub Prefix'"
+                                                formControlName="invoiceNumberPrefix"
+                                                [placeholder]="'Sub Prefix'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomInvoiceNumber').value"
+                                                [name]="'no'"
+                                                [label]="'Initial No.'"
+                                                formControlName="initialInvoiceNumber"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                        </div>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoDeleteEntries"
+                                        >
+                                            Auto Delete entries when deleting their invoice
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="salesRoundOff"
+                                        >
+                                            Apply round off on sales/cash voucher
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name="autoPaid"
+                                            aria-label="generate voucher"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoPaid"
+                                        >
+                                            Run Auto-paid for all the accounts
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoGenerateVoucherFromEntry"
+                                        >
+                                            Automatically generate voucher for the entries present in the ledger
+                                        </mat-slide-toggle>
+                                        <div
+                                            class="mb-3 d-flex align-items-center column-gap15"
+                                            *ngIf="activeCompany?.countryV2?.alpha2CountryCode === 'IN'"
+                                        >
+                                            <mat-slide-toggle
+                                                name=""
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="gstEInvoiceEnable"
+                                                (change)="handleEInvoiceChange($event)"
+                                                [disabled]="
+                                                    activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
+                                                        restrictedModules.EInvoice
+                                                    )
+                                                "
+                                            >
+                                                E-invoicing Authentication
+                                            </mat-slide-toggle>
+                                            <ng-container
+                                                *ngIf="settingForm.get('invoiceSettings.gstEInvoiceEnable').value"
+                                            >
+                                                <input-field
+                                                    [name]="'userName'"
+                                                    [label]="'Username'"
+                                                    formControlName="gstEInvoiceUserName"
+                                                    [placeholder]="'Username'"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                                <input-field
+                                                    [name]="'password'"
+                                                    [label]="'Password'"
+                                                    [placeholder]="'Password'"
+                                                    formControlName="gstEInvoiceUserPassword"
+                                                    [type]="'password'"
+                                                ></input-field>
+                                                <input-field
+                                                    [name]="'password'"
+                                                    [label]="'GSTIN'"
+                                                    [placeholder]="'GSTIN'"
+                                                    formControlName="gstEInvoiceGstin"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                            </ng-container>
+                                            <span class="pd-l1">
+                                                <restricted-module-message
+                                                    [restrictedModule]="restrictedModules.EInvoice"
+                                                    (onUpgradePlan)="buyPlan($event)"
+                                                >
+                                                </restricted-module-message>
+                                            </span>
+                                        </div>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="generateEinvoiceShowPopUp"
+                                        >
+                                            Enable confirmation pop-up to create E-Invoice
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="autoWhatsAppInvoice"
+                                        >
+                                            Send invoice via whatsapp
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block"
                                             color="primary"
                                         >
-                                            Show Narration on Ledger
+                                            Generate E-way bill with creation of E-invoice
                                         </mat-slide-toggle>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                     </div>
-                                    <div>
+                                </mat-tab>
+                                <!-- invoice-content-end -->
+                                <!-- receipt-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 0">
+                                    <ng-template mat-tab-label>
+                                        <div class="voucher-svg">
+                                            <svg
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
+                                                />
+                                                <path
+                                                    d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
+                                                />
+                                                <path d="M7 18H14V16H7V18Z" />
+                                            </svg>
+                                        </div>
+                                        Receipt
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">Receipt</h4>
+                                        <div class="mb-3 d-flex align-items-center column-gap15">
+                                            <mat-slide-toggle
+                                                name=""
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="useCustomReceiptNumber"
+                                            >
+                                                Custom Invoice#
+                                            </mat-slide-toggle>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomReceiptNumber').value"
+                                                [name]="'branch'"
+                                                [label]="'Branch Prefix'"
+                                                [placeholder]="'Branch Prefix'"
+                                                formControlName="branchReceiptNumberPrefix"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomReceiptNumber').value"
+                                                [name]="'sub'"
+                                                [label]="'Sub Prefix'"
+                                                formControlName="receiptNumberPrefix"
+                                                [placeholder]="'Sub Prefix'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomReceiptNumber').value"
+                                                [name]="'no'"
+                                                [label]="'Initial No.'"
+                                                formControlName="initialReceiptNumber"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                        </div>
+                                        <div class="d-flex">
+                                            <mat-slide-toggle
+                                                name=""
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="autoMailReceipt"
+                                            >
+                                                Auto mail when updated/generated
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('receipt')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
                                         <mat-slide-toggle
-                                            name="voucherAddressManualEnabled"
-                                            formControlName="voucherAddressManualEnabled"
-                                            class="disable-toggle slide-toggle"
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="autoWhatsAppReceipt"
+                                        >
+                                            Send receipt via whatsapp
+                                        </mat-slide-toggle>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- receipt-content-end -->
+                                <!-- debit-note-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 1">
+                                    <ng-template mat-tab-label>
+                                        <div class="voucher-svg">
+                                            <svg
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
+                                                />
+                                                <path
+                                                    d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
+                                                />
+                                                <path d="M7 18H14V16H7V18Z" />
+                                            </svg>
+                                        </div>
+                                        Debit Note
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">Debit Note</h4>
+                                        <div class="mb-3 d-flex align-items-center column-gap15">
+                                            <mat-slide-toggle
+                                                name=""
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="useCustomDebitNoteNumber"
+                                            >
+                                                Custom Invoice#
+                                            </mat-slide-toggle>
+                                            <input-field
+                                                *ngIf="
+                                                    settingForm.get('invoiceSettings.useCustomDebitNoteNumber').value
+                                                "
+                                                [name]="'branch'"
+                                                [label]="'Branch Prefix'"
+                                                [placeholder]="'Branch Prefix'"
+                                                [type]="'text'"
+                                                formControlName="branchDebitNoteNumberPrefix"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="
+                                                    settingForm.get('invoiceSettings.useCustomDebitNoteNumber').value
+                                                "
+                                                [name]="'sub'"
+                                                [label]="'Sub Prefix'"
+                                                [placeholder]="'Sub Prefix'"
+                                                formControlName="debitNoteNumberPrefix"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="
+                                                    settingForm.get('invoiceSettings.useCustomDebitNoteNumber').value
+                                                "
+                                                [name]="'no'"
+                                                [label]="'Initial No.'"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                                formControlName="initialDebitNoteNumber"
+                                            ></input-field>
+                                        </div>
+                                        <mat-slide-toggle
+                                            name="voucher"
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="debitNoteRoundOff"
+                                        >
+                                            Apply round off on debit note voucher
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name="voucher"
+                                            formControlName="autoWhatsAppDebitNote"
+                                            class="disable-toggle slide-toggle d-block"
                                             color="primary"
                                         >
-                                            Add Address Manually on Voucher
+                                            Send debit note via whatsapp
                                         </mat-slide-toggle>
+
+                                        <div class="d-flex column-gap1 mb-3">
+                                            <mat-slide-toggle
+                                                name="voucher"
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="autoMailDebitNote"
+                                            >
+                                                Auto mail when generated
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('debit note')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                     </div>
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
-                            <!-- general-content-end -->
-                            <!-- email-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 0">
+                                </mat-tab>
+                                <!-- debit-note-content-end -->
+                                <!-- credit-note-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 1">
+                                    <ng-template mat-tab-label>
+                                        <div class="voucher-svg">
+                                            <svg
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
+                                                />
+                                                <path
+                                                    d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
+                                                />
+                                                <path d="M7 18H14V16H7V18Z" />
+                                            </svg>
+                                        </div>
+                                        Credit Note
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">Credit Note</h4>
+                                        <div class="mb-3 d-flex align-items-center column-gap15">
+                                            <mat-slide-toggle
+                                                name=""
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="useCustomCreditNoteNumber"
+                                            >
+                                                Custom Invoice#
+                                            </mat-slide-toggle>
+                                            <input-field
+                                                *ngIf="
+                                                    settingForm.get('invoiceSettings.useCustomCreditNoteNumber').value
+                                                "
+                                                [name]="'branch'"
+                                                [label]="'Branch Prefix'"
+                                                [placeholder]="'Branch Prefix'"
+                                                [type]="'text'"
+                                                formControlName="branchCreditNoteNumberPrefix"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="
+                                                    settingForm.get('invoiceSettings.useCustomCreditNoteNumber').value
+                                                "
+                                                [name]="'sub'"
+                                                [label]="'Sub Prefix'"
+                                                [placeholder]="'Sub Prefix'"
+                                                formControlName="creditNoteNumberPrefix"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="
+                                                    settingForm.get('invoiceSettings.useCustomCreditNoteNumber').value
+                                                "
+                                                [name]="'no'"
+                                                [label]="'Initial No.'"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                                formControlName="initialCreditNoteNumber"
+                                            ></input-field>
+                                        </div>
+                                        <mat-slide-toggle
+                                            name="voucher"
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="creditNoteRoundOff"
+                                        >
+                                            Apply round off on credit note voucher
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name="voucher"
+                                            formControlName="autoWhatsAppCreditNote"
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                        >
+                                            Send credit note via whatsapp
+                                        </mat-slide-toggle>
+
+                                        <div class="d-flex column-gap1 mb-3">
+                                            <mat-slide-toggle
+                                                name="voucher"
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="autoMailCreditNote"
+                                            >
+                                                Auto mail when generated
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('credit note')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- credit-note-content-end -->
+                            </div>
+                            <!-- integration-content-start -->
+                            <mat-tab *ngIf="activeTabGroup === 2">
                                 <ng-template mat-tab-label>
                                     <i class="icon-mail"></i>
-                                    Email
+                                    Integration
                                 </ng-template>
                                 <div class="tabs-box-content py-3">
                                     <h4 class="font-16 border-bottom pb-2 mb-3">
-                                        Email/SMS
+                                        Integration
                                         <span class="text-gray font-12"
-                                            >(These settings will be applicable on Estimates, Proforma and
-                                            Invoices)</span
+                                            >(These settings will be applicable on Purchase Order and Bill)</span
                                         >
                                     </h4>
                                     <div
                                         class="d-flex column-gap1 align-items-center mb-3"
-                                        formGroupName="invoiceSettings"
+                                        formGroupName="purchaseBillSettings"
                                     >
                                         <input-field
                                             [name]="'invoiceEmail'"
@@ -2642,39 +3400,41 @@
                                             formControlName="email"
                                             class="settings-field"
                                             [matSuffixIcon]="
-                                                invoiceSettingForm.get('invoiceSettings.emailVerified').value
+                                                settingForm.get('purchaseBillSettings.emailVerified').value
                                                     ? 'icon-tick'
                                                     : 'icon-info'
                                             "
                                             (onChange)="
-                                                onChangeEmail(invoiceSettingForm.get('invoiceSettings.email').value)
+                                                onChangeEmail(settingForm.get('purchaseBillSettings.email').value)
                                             "
                                             [tooltipText]="
-                                                invoiceSettingForm.get('invoiceSettings.emailVerified').value
+                                                settingForm.get('purchaseBillSettings.emailVerified').value
                                                     ? 'verified'
                                                     : 'unverified'
                                             "
-                                            [readonly]="invoiceSettingForm.get('invoiceSettings.emailVerified').value"
+                                            [readonly]="settingForm.get('purchaseBillSettings.emailVerified').value"
                                         ></input-field>
                                         <button
-                                            *ngIf="!invoiceSettingForm.get('invoiceSettings.emailVerified').value"
+                                            *ngIf="!settingForm.get('purchaseBillSettings.emailVerified').value"
                                             mat-stroked-button
                                             [disabled]="
                                                 !isEmailChanged &&
-                                                (!invoiceSettingForm.get('invoiceSettings.email').value ||
-                                                    invoiceSettingForm.get('invoiceSettings.email').value?.length < 4)
+                                                (!settingForm.get('purchaseBillSettings.email').value ||
+                                                    settingForm.get('purchaseBillSettings.email').value?.length < 4 ||
+                                                    settingForm.get('purchaseBillSettings.emailVerified').value)
+                                            "
+                                            (click)="
+                                                verifyEmail(
+                                                    settingForm.get('purchaseBillSettings.email').value,
+                                                    'purchase'
+                                                )
                                             "
                                         >
-                                            <span
-                                                *ngIf="!invoiceSettingForm.get('invoiceSettings.emailVerified').value"
-                                                class="text-success"
-                                            >
-                                                Verify
-                                            </span>
+                                            Verify
                                         </button>
                                         <span
                                             class="text-success"
-                                            *ngIf="invoiceSettingForm.get('invoiceSettings.emailVerified').value"
+                                            *ngIf="settingForm.get('purchaseBillSettings.emailVerified').value"
                                         >
                                             Verified
                                         </span>
@@ -2683,19 +3443,19 @@
                                             class="mat-icon-md-btn"
                                             [ngClass]="{
                                                 'delete-icon-opacity':
-                                                    !invoiceSettingForm.get('invoiceSettings.email').value ||
-                                                    invoiceSettingForm.get('invoiceSettings.email').value?.length < 4,
+                                                    !settingForm.get('purchaseBillSettings.email').value ||
+                                                    settingForm.get('purchaseBillSettings.email').value?.length < 4,
                                                 'cursor-pointer': !(
-                                                    !invoiceSettingForm.get('invoiceSettings.email').value ||
-                                                    invoiceSettingForm.get('invoiceSettings.email').value?.length < 4
+                                                    !settingForm.get('purchaseBillSettings.email').value ||
+                                                    settingForm.get('purchaseBillSettings.email').value?.length < 4
                                                 )
                                             }"
                                             (click)="
                                                 !(
-                                                    !invoiceSettingForm.get('invoiceSettings.email').value ||
-                                                    invoiceSettingForm.get('invoiceSettings.email').value?.length < 4
+                                                    !settingForm.get('purchaseBillSettings.email').value ||
+                                                    settingForm.get('purchaseBillSettings.email').value?.length < 4
                                                 )
-                                                    ? deleteEmail(invoiceSettingForm.get('invoiceSettings.email').value)
+                                                    ? deleteEmail(settingForm.get('purchaseBillSettings.email').value)
                                                     : ''
                                             "
                                         >
@@ -2706,6 +3466,7 @@
                                         formGroupName="companyEmailSettings"
                                         class="d-flex column-gap10 align-baseline mr-5"
                                     >
+                                       {{isGmailIntegrated}}
                                         <mat-slide-toggle
                                             formControlName="sendThroughGmail"
                                             name="sendGmail"
@@ -2722,657 +3483,6 @@
                                     <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                 </div>
                             </mat-tab>
-                            <!-- email-content-end -->
-                            <!-- estimate-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 0">
-                                <ng-template mat-tab-label>
-                                    <i class="icon-estimate1"></i>
-                                    Estimate
-                                </ng-template>
-                                <div class="tabs-box-content py-3" formGroupName="estimateSettings">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">Estimate/Quotation</h4>
-                                    <div class="d-flex column-gap1 mb-3">
-                                        <input-field
-                                            [name]="'name'"
-                                            [label]="'Heading Name'"
-                                            [placeholder]="'ESTIMATE'"
-                                            [type]="'text'"
-                                            formControlName="headerName"
-                                            class="settings-field d-block"
-                                        ></input-field>
-                                        <input-field
-                                            [name]="'name'"
-                                            [label]="'Default expiry days'"
-                                            [placeholder]="'00'"
-                                            [type]="'text'"
-                                            [maxlength]="3"
-                                            decimalDigitsDirective
-                                            formControlName="duePeriod"
-                                            class="settings-field d-block"
-                                            [matSuffix]="'days'"
-                                        ></input-field>
-                                    </div>
-                                    <label for="">Next step to Estimate</label>
-                                    <mat-radio-group
-                                        formControlName="nextStepToEstimate"
-                                        aria-label="Select an option"
-                                        class="mt-2 mb-3"
-                                    >
-                                        <mat-radio-button value="1" color="primary">Proforma</mat-radio-button>
-                                        <mat-radio-button value="2" color="primary">Invoice</mat-radio-button>
-                                    </mat-radio-group>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block mb-3"
-                                        color="primary"
-                                        formControlName="autoChangeStatusOnExp"
-                                    >
-                                        Auto change status (on expiry)
-                                    </mat-slide-toggle>
-                                    <div class="d-flex">
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="autoMail"
-                                        >
-                                            Auto mail when generated
-                                        </mat-slide-toggle>
-                                        <a
-                                            href="javascript:;"
-                                            class="cursor-pointer"
-                                            (click)="openCustomEmailDialog('estimate')"
-                                            >{{ commonLocaleData?.app_custom_email }}</a
-                                        >
-                                    </div>
-
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                        formControlName="autoWhatsApp"
-                                    >
-                                        Send estimate via whatsapp
-                                    </mat-slide-toggle>
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
-                            <!-- estimate-content-end -->
-                            <!-- proforma-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 0">
-                                <ng-template mat-tab-label>
-                                    <i class="icon-sales-order"></i>
-                                    Proforma
-                                </ng-template>
-                                <div class="tabs-box-content py-3" formGroupName="proformaSettings">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">Proforma Invoice</h4>
-                                    <div class="d-flex column-gap1 mb-3">
-                                        <input-field
-                                            [name]="'name'"
-                                            [label]="'Heading Name'"
-                                            [placeholder]="'PROFORMA'"
-                                            [type]="'text'"
-                                            formControlName="headerName"
-                                            class="settings-field d-block"
-                                        ></input-field>
-                                        <input-field
-                                            [name]="'name'"
-                                            [label]="'Default expiry days'"
-                                            [placeholder]="'00'"
-                                            [maxlength]="3"
-                                            decimalDigitsDirective
-                                            formControlName="duePeriod"
-                                            [type]="'text'"
-                                            class="settings-field d-block"
-                                            [matSuffix]="'days'"
-                                        ></input-field>
-                                    </div>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block mb-3"
-                                        color="primary"
-                                        formControlName="autoChangeStatusOnExp"
-                                    >
-                                        Auto change status (on expiry)
-                                    </mat-slide-toggle>
-                                    <div class="d-flex">
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="autoMail"
-                                        >
-                                            Auto mail when updated/generated
-                                        </mat-slide-toggle>
-                                        <a
-                                            href="javascript:;"
-                                            class="cursor-pointer"
-                                            (click)="openCustomEmailDialog('invoice')"
-                                            >{{ commonLocaleData?.app_custom_email }}</a
-                                        >
-                                    </div>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                        formControlName="autoWhatsApp"
-                                    >
-                                        Send proforma via whatsapp
-                                    </mat-slide-toggle>
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
-                            <!-- proforma-content-end -->
-                            <!-- invoice-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 0">
-                                <ng-template mat-tab-label>
-                                    <div class="voucher-svg">
-                                        <svg
-                                            width="32"
-                                            height="32"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M16.2426 4.00113L16.2497 2.00002H21.8924L21.8995 7.6498L19.8984 7.65687L19.8913 5.41534L15.5285 9.77819L14.1142 8.36398L18.4771 4.00113H16.2426Z"
-                                            />
-                                            <path
-                                                d="M19 19.1787V9.17865H21V19.1787C21 20.2787 20.1 21.1787 19 21.1787H5C3.9 21.1787 3 20.2787 3 19.1787V5.17865C3 4.07865 3.9 3.17865 5 3.17865H15V5.17865H5V19.1787H19Z"
-                                            />
-                                            <path d="M7 17.1787H14V15.1787H7V17.1787Z" />
-                                            <path d="M7 13.1787H17V11.1787H7V13.1787Z" />
-                                        </svg>
-                                    </div>
-                                    Invoice
-                                </ng-template>
-                                <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">Invoice</h4>
-                                    <div class="d-flex column-gap1 mb-3">
-                                        <input-field
-                                            [name]="'name'"
-                                            [label]="'Default expiry days'"
-                                            [placeholder]="'00'"
-                                            [type]="'text'"
-                                            class="settings-field d-block mb-3"
-                                            maxlength="3"
-                                            formControlName="duePeriod"
-                                            decimalDigitsDirective
-                                            [matSuffix]="'days'"
-                                        ></input-field>
-                                        <giddh-datepicker
-                                            type="text"
-                                            (keydown.enter)="$event.preventDefault()"
-                                            [label]="'Invoice Lock Date'"
-                                            [placeholder]="'DD-MM-YYYY'"
-                                            formControlName="lockDate"
-                                            name="voucherDate"
-                                            [showToggleIcon]="false"
-                                            [appearance]="'outline'"
-                                            class="settings-field d-block"
-                                        >
-                                        </giddh-datepicker>
-                                    </div>
-                                    <mat-slide-toggle
-                                        name="invoiceStatusPayment"
-                                        class="disable-toggle slide-toggle d-block my-3"
-                                        formControlName="showSeal"
-                                        color="primary"
-                                        checked
-                                    >
-                                        Show seal according to status of payment
-                                    </mat-slide-toggle>
-                                    <div class="d-flex">
-                                        <mat-slide-toggle
-                                            name="invoiceAutomail"
-                                            class="disable-toggle slide-toggle d-block mb-3"
-                                            color="primary"
-                                            formControlName="autoMail"
-                                        >
-                                            Auto mail when create and update
-                                        </mat-slide-toggle>
-                                        <a
-                                            href="javascript:;"
-                                            class="cursor-pointer"
-                                            (click)="openCustomEmailDialog('sales')"
-                                            >{{ commonLocaleData?.app_custom_email }}</a
-                                        >
-                                    </div>
-                                    <div class="mb-3 d-flex align-items-center column-gap15">
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="useCustomInvoiceNumber"
-                                        >
-                                            Custom Invoice#
-                                        </mat-slide-toggle>
-                                        <input-field
-                                            *ngIf="
-                                                invoiceSettingForm.get('invoiceSettings.useCustomInvoiceNumber').value
-                                            "
-                                            [name]="'branch'"
-                                            [label]="'Branch Prefix'"
-                                            [placeholder]="'Branch Prefix'"
-                                            formControlName="branchInvoiceNumberPrefix"
-                                            [type]="'text'"
-                                        ></input-field>
-                                        <input-field
-                                            *ngIf="
-                                                invoiceSettingForm.get('invoiceSettings.useCustomInvoiceNumber').value
-                                            "
-                                            [name]="'sub'"
-                                            [label]="'Sub Prefix'"
-                                            formControlName="invoiceNumberPrefix"
-                                            [placeholder]="'Sub Prefix'"
-                                            [type]="'text'"
-                                        ></input-field>
-                                        <input-field
-                                            *ngIf="
-                                                invoiceSettingForm.get('invoiceSettings.useCustomInvoiceNumber').value
-                                            "
-                                            [name]="'no'"
-                                            [label]="'Initial No.'"
-                                            formControlName="initialInvoiceNumber"
-                                            [placeholder]="'00'"
-                                            [type]="'tel'"
-                                        ></input-field>
-                                    </div>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block mb-3"
-                                        color="primary"
-                                        formControlName="autoDeleteEntries"
-                                    >
-                                        Auto Delete entries when deleting their invoice
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block mb-3"
-                                        color="primary"
-                                        formControlName="salesRoundOff"
-                                    >
-                                        Apply round off on sales/cash voucher
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name="autoPaid"
-                                        aria-label="generate voucher"
-                                        class="disable-toggle slide-toggle d-block mb-3"
-                                        color="primary"
-                                        formControlName="autoPaid"
-                                    >
-
-                                        Run Auto-paid for all the accounts
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block mb-3"
-                                        color="primary"
-                                        formControlName="autoGenerateVoucherFromEntry"
-                                    >
-                                        Automatically generate voucher for the entries present in the ledger
-                                    </mat-slide-toggle>
-                                    <div
-                                        class="mb-3 d-flex align-items-center column-gap15"
-                                        *ngIf="(activeCompany$ | async)?.countryV2?.alpha2CountryCode === 'IN'"
-                                    >
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="gstEInvoiceEnable"
-                                            (change)="handleEInvoiceChange($event)"
-                                            [disabled]="
-                                                (
-                                                    activeCompany$ | async
-                                                )?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
-                                                    restrictedModules.EInvoice
-                                                )
-                                            "
-                                        >
-                                            <!-- (ngModelChange)="
-                                                        invoiceSetting.gstEInvoiceEnable
-                                                            ? null
-                                                            : (invoiceSetting.generateEinvoiceShowPopUp = false)
-                                                    " -->
-                                            E-invoicing Authentication
-                                        </mat-slide-toggle>
-                                        <ng-container
-                                            *ngIf="invoiceSettingForm.get('invoiceSettings.gstEInvoiceEnable').value"
-                                        >
-                                            <input-field
-                                                [name]="'userName'"
-                                                [label]="'Username'"
-                                                formControlName="gstEInvoiceUserName"
-                                                [placeholder]="'Username'"
-                                                [type]="'text'"
-                                            ></input-field>
-                                            <input-field
-                                                [name]="'password'"
-                                                [label]="'Password'"
-                                                [placeholder]="'Password'"
-                                                formControlName="gstEInvoiceUserPassword"
-                                                [type]="'password'"
-                                            ></input-field>
-                                            <input-field
-                                                [name]="'password'"
-                                                [label]="'GSTIN'"
-                                                [placeholder]="'GSTIN'"
-                                                formControlName="gstEInvoiceGstin"
-                                                [type]="'text'"
-                                            ></input-field>
-                                        </ng-container>
-                                        <span class="pd-l1">
-                                            <restricted-module-message
-                                                [restrictedModule]="restrictedModules.EInvoice"
-                                                (onUpgradePlan)="buyPlan($event)"
-                                            >
-                                            </restricted-module-message>
-                                        </span>
-                                    </div>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                        formControlName="generateEinvoiceShowPopUp"
-                                    >
-                                        Enable confirmation pop-up to create E-Invoice
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                        formControlName="autoWhatsAppInvoice"
-                                    >
-                                        Send invoice via whatsapp
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Generate E-way bill with creation of E-invoice
-                                    </mat-slide-toggle>
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
-                            <!-- invoice-content-end -->
-                            <!-- receipt-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 0">
-                                <ng-template mat-tab-label>
-                                    <div class="voucher-svg">
-                                        <svg
-                                            width="32"
-                                            height="32"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
-                                            />
-                                            <path
-                                                d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
-                                            />
-                                            <path d="M7 18H14V16H7V18Z" />
-                                        </svg>
-                                    </div>
-                                    Receipt
-                                </ng-template>
-                                <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">Receipt</h4>
-                                    <div class="mb-3 d-flex align-items-center column-gap15">
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="useCustomReceiptNumber"
-                                        >
-                                            Custom Invoice#
-                                        </mat-slide-toggle>
-                                        <input-field
-                                            *ngIf="
-                                                invoiceSettingForm.get('invoiceSettings.useCustomReceiptNumber').value
-                                            "
-                                            [name]="'branch'"
-                                            [label]="'Branch Prefix'"
-                                            [placeholder]="'Branch Prefix'"
-                                            formControlName="branchReceiptNumberPrefix"
-                                            [type]="'text'"
-                                        ></input-field>
-                                        <input-field
-                                            *ngIf="
-                                                invoiceSettingForm.get('invoiceSettings.useCustomReceiptNumber').value
-                                            "
-                                            [name]="'sub'"
-                                            [label]="'Sub Prefix'"
-                                            formControlName="receiptNumberPrefix"
-                                            [placeholder]="'Sub Prefix'"
-                                            [type]="'text'"
-                                        ></input-field>
-                                        <input-field
-                                            *ngIf="
-                                                invoiceSettingForm.get('invoiceSettings.useCustomReceiptNumber').value
-                                            "
-                                            [name]="'no'"
-                                            [label]="'Initial No.'"
-                                            formControlName="initialReceiptNumber"
-                                            [placeholder]="'00'"
-                                            [type]="'tel'"
-                                        ></input-field>
-                                    </div>
-                                    <div class="d-flex">
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="autoMailReceipt"
-                                        >
-                                            Auto mail when updated/generated
-                                        </mat-slide-toggle>
-                                        <a
-                                            href="javascript:;"
-                                            class="cursor-pointer"
-                                            (click)="openCustomEmailDialog('receipt')"
-                                            >{{ commonLocaleData?.app_custom_email }}</a
-                                        >
-                                    </div>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                        formControlName="autoWhatsAppReceipt"
-                                    >
-                                        Send receipt via whatsapp
-                                    </mat-slide-toggle>
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
-                            <!-- receipt-content-end -->
-                            <!-- debit-note-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 1">
-                                <ng-template mat-tab-label>
-                                    <div class="voucher-svg">
-                                        <svg
-                                            width="32"
-                                            height="32"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
-                                            />
-                                            <path
-                                                d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
-                                            />
-                                            <path d="M7 18H14V16H7V18Z" />
-                                        </svg>
-                                    </div>
-                                    Debit Note
-                                </ng-template>
-                                <div class="tabs-box-content py-3">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">Debit Note</h4>
-                                    <div class="mb-3 d-flex align-items-center column-gap15">
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                        >
-                                            Custom Invoice#
-                                        </mat-slide-toggle>
-                                        <input-field
-                                            [name]="'branch'"
-                                            [label]="'Branch Prefix'"
-                                            [placeholder]="'Branch Prefix'"
-                                            [type]="'text'"
-                                            class=""
-                                        ></input-field>
-                                        <input-field
-                                            [name]="'sub'"
-                                            [label]="'Sub Prefix'"
-                                            [placeholder]="'Sub Prefix'"
-                                            [type]="'text'"
-                                            class=""
-                                        ></input-field>
-                                        <input-field
-                                            [name]="'no'"
-                                            [label]="'Initial No.'"
-                                            [placeholder]="'00'"
-                                            [type]="'tel'"
-                                            class=""
-                                        ></input-field>
-                                    </div>
-                                    <mat-slide-toggle
-                                        name="voucher"
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Apply round off on debit note voucher
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name="voucher"
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Send debit note via whatsapp
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name="voucher"
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Auto mail when generated : Custom Email
-                                    </mat-slide-toggle>
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
-                            <!-- debit-note-content-end -->
-                            <!-- credit-note-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 1">
-                                <ng-template mat-tab-label>
-                                    <div class="voucher-svg">
-                                        <svg
-                                            width="32"
-                                            height="32"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
-                                            />
-                                            <path
-                                                d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
-                                            />
-                                            <path d="M7 18H14V16H7V18Z" />
-                                        </svg>
-                                    </div>
-                                    Credit Note
-                                </ng-template>
-                                <div class="tabs-box-content py-3">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">Credit Note</h4>
-                                    <div class="mb-3 d-flex align-items-center column-gap15">
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                        >
-                                            Custom Invoice#
-                                        </mat-slide-toggle>
-                                        <input-field
-                                            [name]="'branch'"
-                                            [label]="'Branch Prefix'"
-                                            [placeholder]="'Branch Prefix'"
-                                            [type]="'text'"
-                                        ></input-field>
-                                        <input-field
-                                            [name]="'sub'"
-                                            [label]="'Sub Prefix'"
-                                            [placeholder]="'Sub Prefix'"
-                                            [type]="'text'"
-                                        ></input-field>
-                                        <input-field
-                                            [name]="'no'"
-                                            [label]="'Initial No.'"
-                                            [placeholder]="'00'"
-                                            [type]="'tel'"
-                                        ></input-field>
-                                    </div>
-                                    <mat-slide-toggle
-                                        name="voucher"
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Apply round off on credit note voucher
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name="voucher"
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Send credit note via whatsapp
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name="voucher"
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Auto mail when generated : Custom Email
-                                    </mat-slide-toggle>
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
-                            <!-- credit-note-content-end -->
-                            <!-- integration-content-start -->
-                            <mat-tab *ngIf="activeTabGroup === 2">
-                                <ng-template mat-tab-label>
-                                    <i class="icon-mail"></i>
-                                    Integration
-                                </ng-template>
-                                <div class="tabs-box-content py-3">
-                                    <h4 class="font-16 border-bottom pb-2 mb-3">
-                                        Integration
-                                        <span class="text-gray font-12"
-                                            >(These settings will be applicable on Purchase Order and Bill)</span
-                                        >
-                                    </h4>
-                                    <div class="d-flex column-gap1 align-items-center mb-3">
-                                        <input-field
-                                            [name]="'name'"
-                                            [label]="'From Email'"
-                                            [placeholder]="'ravinder@walkover.in'"
-                                            [type]="'text'"
-                                            class="settings-field"
-                                        ></input-field>
-                                        <span class="text-success">Verified</span>
-                                        <button mat-stroked-button class="mat-icon-md-btn">
-                                            <i class="icon-trash"></i>
-                                        </button>
-                                    </div>
-                                    <mat-slide-toggle name="" class="disable-toggle slide-toggle" color="primary">
-                                        Send email through Gmail
-                                    </mat-slide-toggle>
-                                    Integrate Gmail
-                                    <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                                </div>
-                            </mat-tab>
                             <!-- integration-content-end -->
                             <!-- purchase-order-content-start -->
                             <mat-tab *ngIf="activeTabGroup === 2">
@@ -3380,7 +3490,7 @@
                                     <i class="icon-sales-order"></i>
                                     Pur.Order
                                 </ng-template>
-                                <div class="tabs-box-content py-3">
+                                <div class="tabs-box-content py-3" formGroupName="purchaseBillSettings">
                                     <h4 class="font-16 border-bottom pb-2 mb-3">Purchase Order</h4>
                                     <div class="d-flex column-gap1 mb-3">
                                         <input-field
@@ -3389,20 +3499,25 @@
                                             [placeholder]="'00'"
                                             [type]="'text'"
                                             class="settings-field d-block"
+                                            maxlength="3"
+                                            formControlName="poDuePeriod"
+                                            decimalDigitsDirective
                                             [matSuffix]="'days'"
                                         ></input-field>
                                     </div>
                                     <mat-slide-toggle
-                                        name=""
+                                        name="changePOStatusOnExpiry"
                                         class="disable-toggle slide-toggle d-block mb-3"
                                         color="primary"
+                                        formControlName="changePOStatusOnExpiry"
                                     >
                                         Auto change status (on expiry)
                                     </mat-slide-toggle>
                                     <mat-slide-toggle
-                                        name=""
+                                        name="poAutoWhatsApp"
                                         class="disable-toggle slide-toggle d-block mb-3"
                                         color="primary"
+                                        formControlName="poAutoWhatsApp"
                                     >
                                         Send purchase order via whatsapp
                                     </mat-slide-toggle>
@@ -3411,20 +3526,35 @@
                                             name=""
                                             class="disable-toggle slide-toggle d-block"
                                             color="primary"
+                                            formControlName="useCustomPONumber"
                                         >
-                                            Custom Purchase Order#
+                                            Custom Invoice#
                                         </mat-slide-toggle>
                                         <input-field
-                                            [name]="'branch'"
-                                            [label]="'Initial No.'"
-                                            [placeholder]="'Branch Prefix'"
+                                            *ngIf="settingForm.get('purchaseBillSettings.useCustomPONumber').value"
+                                            [name]="'sub'"
+                                            [label]="'Sub Prefix'"
+                                            formControlName="poNumberPrefix"
+                                            [placeholder]="'Sub Prefix'"
                                             [type]="'text'"
-                                            class="text-right"
                                         ></input-field>
-                                        <input-field [name]="'sub'" [label]="'Prefix'" [type]="'text'"></input-field>
+                                        <input-field
+                                            *ngIf="settingForm.get('purchaseBillSettings.useCustomPONumber').value"
+                                            [name]="'no'"
+                                            [label]="'Initial No.'"
+                                            formControlName="initialPONumber"
+                                            [placeholder]="'00'"
+                                            [type]="'text'"
+                                        ></input-field>
                                     </div>
-                                    <div class="mb-3 d-flex align-items-center column-gap15">
-                                        Custom Email Template Custom Email
+                                    <div class="d-flex column-gap1 mb-3">
+                                        {{ commonLocaleData?.app_custom_email_template }}
+                                        <a
+                                            href="javascript:;"
+                                            class="cursor-pointer"
+                                            (click)="openCustomEmailDialog('purchase order')"
+                                            >{{ commonLocaleData?.app_custom_email }}</a
+                                        >
                                     </div>
                                     <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                 </div>
@@ -3447,7 +3577,7 @@
                                     </div>
                                     Pur. Bill
                                 </ng-template>
-                                <div class="tabs-box-content py-3">
+                                <div class="tabs-box-content py-3" formGroupName="purchaseBillSettings">
                                     <h4 class="font-16 border-bottom pb-2 mb-3">Purchase Bill</h4>
                                     <giddh-datepicker
                                         type="text"
@@ -3455,48 +3585,62 @@
                                         [label]="'Bill Lock Date'"
                                         [placeholder]="'DD-MM-YYYY'"
                                         name="voucherDate"
+                                        formControlName="lockDate"
                                         [showToggleIcon]="false"
                                         [appearance]="'outline'"
                                         class="settings-field d-block mb-3"
                                     >
                                     </giddh-datepicker>
                                     <mat-slide-toggle
-                                        name=""
+                                        name="enableNarration"
                                         class="disable-toggle slide-toggle d-block mb-3"
                                         color="primary"
+                                        formControlName="enableNarration"
                                     >
                                         Show narration to ledger
                                     </mat-slide-toggle>
                                     <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block mb-3"
-                                        color="primary"
-                                    >
-                                        Send purchase bill via whatsapp
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name=""
+                                        name="enableVoucherDownload"
+                                        formControlName="enableVoucherDownload"
                                         class="disable-toggle slide-toggle d-block mb-3"
                                         color="primary"
                                     >
                                         Enable Voucher Download
                                     </mat-slide-toggle>
                                     <mat-slide-toggle
-                                        name=""
+                                        name="autoWhatsApp"
                                         class="disable-toggle slide-toggle d-block mb-3"
                                         color="primary"
+                                        formControlName="autoWhatsApp"
                                     >
-                                        Apply round off on purchase voucher
+                                        Send purchase bill via whatsapp
                                     </mat-slide-toggle>
-                                    <mat-slide-toggle
-                                        name=""
-                                        class="disable-toggle slide-toggle d-block"
-                                        color="primary"
-                                    >
-                                        Allow system generated number for Bill and Debit note
-                                    </mat-slide-toggle>
-                                    <div class="mb-3 d-flex align-items-center column-gap15">
-                                        Custom Email Template Custom Email
+                                    <ng-container formGroupName="invoiceSettings">
+                                        <mat-slide-toggle
+                                            name="purchaseRoundOff"
+                                            formControlName="purchaseRoundOff"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                        >
+                                            Apply round off on purchase voucher
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name="generateAutoPurchaseNumber"
+                                            formControlName="generateAutoPurchaseNumber"
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                        >
+                                            Allow system generated number for Bill and Debit note
+                                        </mat-slide-toggle>
+                                    </ng-container>
+                                    <div class="d-flex column-gap1 mb-3">
+                                        {{ commonLocaleData?.app_custom_email_template }}
+                                        <a
+                                            href="javascript:;"
+                                            class="cursor-pointer"
+                                            (click)="openCustomEmailDialog('purchase')"
+                                            >{{ commonLocaleData?.app_custom_email }}</a
+                                        >
                                     </div>
                                     <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                 </div>
@@ -3523,35 +3667,74 @@
                                     </div>
                                     Payment
                                 </ng-template>
-                                <div class="tabs-box-content py-3">
+                                <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
                                     <h4 class="font-16 border-bottom pb-2 mb-3">Payment</h4>
                                     <div class="mb-3 d-flex align-items-center column-gap15">
                                         <mat-slide-toggle
                                             name=""
                                             class="disable-toggle slide-toggle d-block"
                                             color="primary"
+                                            formControlName="useCustomPaymentNumber"
                                         >
                                             Custom Invoice#
                                         </mat-slide-toggle>
                                         <input-field
+                                            *ngIf="settingForm.get('invoiceSettings.useCustomPaymentNumber').value"
                                             [name]="'branch'"
                                             [label]="'Branch Prefix'"
                                             [placeholder]="'Branch Prefix'"
+                                            formControlName="branchPaymentNumberPrefix"
                                             [type]="'text'"
                                         ></input-field>
                                         <input-field
+                                            *ngIf="settingForm.get('invoiceSettings.useCustomPaymentNumber').value"
                                             [name]="'sub'"
                                             [label]="'Sub Prefix'"
+                                            formControlName="paymentNumberPrefix"
                                             [placeholder]="'Sub Prefix'"
                                             [type]="'text'"
                                         ></input-field>
                                         <input-field
+                                            *ngIf="settingForm.get('invoiceSettings.useCustomPaymentNumber').value"
                                             [name]="'no'"
                                             [label]="'Initial No.'"
+                                            formControlName="initialPaymentNumber"
                                             [placeholder]="'00'"
-                                            [type]="'tel'"
+                                            [type]="'text'"
                                         ></input-field>
                                     </div>
+                                    <div class="d-flex">
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block"
+                                            color="primary"
+                                            formControlName="autoMailPayment"
+                                        >
+                                            Auto mail when updated/generated
+                                        </mat-slide-toggle>
+                                        <a
+                                            href="javascript:;"
+                                            class="cursor-pointer"
+                                            (click)="openCustomEmailDialog('payment')"
+                                            >{{ commonLocaleData?.app_custom_email }}</a
+                                        >
+                                    </div>
+                                    <mat-slide-toggle
+                                        name=""
+                                        class="disable-toggle slide-toggle d-block"
+                                        color="primary"
+                                        formControlName="autoWhatsAppPayment"
+                                    >
+                                        Send receipt via whatsapp
+                                    </mat-slide-toggle>
+                                    <mat-slide-toggle
+                                        name=""
+                                        class="disable-toggle slide-toggle d-block"
+                                        color="primary"
+                                        formControlName="createPaymentEntry"
+                                    >
+                                        Create payment entry
+                                    </mat-slide-toggle>
                                     <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                 </div>
                             </mat-tab>

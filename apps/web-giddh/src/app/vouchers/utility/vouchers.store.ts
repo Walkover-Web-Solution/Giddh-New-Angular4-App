@@ -1,3 +1,4 @@
+import { AuthenticationService } from './../../services/authentication.service';
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { select, Store } from "@ngrx/store";
@@ -75,6 +76,7 @@ export interface VoucherState {
     updateAttachmentInVoucherIsSuccess: boolean;
     cancelEInvoiceInProgress: boolean;
     cancelEInvoiceIsSuccess: boolean;
+    saveGmailAuthCodeIsSuccess: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -132,7 +134,8 @@ const DEFAULT_STATE: VoucherState = {
     uploadFileIsSuccess: null,
     updateAttachmentInVoucherIsSuccess: null,
     cancelEInvoiceInProgress: null,
-    cancelEInvoiceIsSuccess: null
+    cancelEInvoiceIsSuccess: null,
+    saveGmailAuthCodeIsSuccess: null
 };
 
 @Injectable()
@@ -147,6 +150,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private commonService: CommonService,
         private accountService: AccountService,
         private searchService: SearchService,
+        private authenticationService: AuthenticationService
     ) {
         super(DEFAULT_STATE);
     }
@@ -203,9 +207,10 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public updateAttachmentInVoucherIsSuccess$ = this.select((state) => state.updateAttachmentInVoucherIsSuccess);
     public cancelEInvoiceInProgress$ = this.select((state) => state.cancelEInvoiceInProgress);
     public cancelEInvoiceIsSuccess$ = this.select((state) => state.cancelEInvoiceIsSuccess);
+    public saveGmailAuthCodeIsSuccess$ = this.select((state) => state.saveGmailAuthCodeIsSuccess);
 
-
-
+    public hasInvoiceSettingPermissions$: Observable<any> = this.select(this.store.select(state => state.invoice.hasInvoiceSettingPermissions), (response) => response);
+    public isGmailIntegrated$: Observable<any> = this.select(this.store.select(state => state.settings.isGmailIntegrated), (response) => response);
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
@@ -1662,6 +1667,37 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 updateAttachmentInVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly saveGmailAuthCode = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ saveGmailAuthCodeIsSuccess: null });
+                return this.authenticationService.saveGmailAuthCode(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === "success") {
+                                return this.patchState({
+                                    saveGmailAuthCodeIsSuccess: res,
+                                });
+                            } else {
+                                this.toaster.showSnackBar('error',res?.message, res?.code);
+                                return this.patchState({
+                                    saveGmailAuthCodeIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                saveGmailAuthCodeIsSuccess: null
                             });
                         }
                     ),
