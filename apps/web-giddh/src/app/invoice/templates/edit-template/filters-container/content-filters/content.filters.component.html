@@ -1227,7 +1227,8 @@
                             *ngIf="
                                 customTemplate.sections['table'].data['item'].display &&
                                 customTemplate.sections['table'].data['showDescriptionInRows'] &&
-                                customTemplate.templateType !== 'thermal_template'
+                                customTemplate.templateType !== 'thermal_template' &&
+                                customTemplate.templateType !== 'tally_template'
                             "
                         >
                             <td class="pb-3" colspan="2">
