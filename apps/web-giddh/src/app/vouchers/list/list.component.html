@@ -2670,7 +2670,7 @@
                                                         settingForm.get('invoiceSettings.email').value?.length < 4)
                                                 "
                                                 (click)="
-                                                    verifyEmail(
+                                                    verfiyEmail(
                                                         settingForm.get('invoiceSettings.email').value,
                                                         'invoice'
                                                     )
@@ -2708,21 +2708,16 @@
                                                 <i class="icon-trash"></i>
                                             </button>
                                         </div>
-                                        <span
-                                            formGroupName="companyEmailSettings"
-                                            class="d-flex column-gap10 align-baseline mr-5"
-                                        >
-                                        <!-- //Toggle yha pr form control ka issue hatayege to chl jayega -->
+                                        <span formGroupName="companyEmailSettings" class="d-flex align-baseline mr-5">
                                             <mat-slide-toggle
                                                 formControlName="sendThroughGmail"
                                                 name="sendThroughGmail"
-                                                [disabled]="!isGmailIntegrated"
                                                 class="disable-toggle slide-toggle"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
                                             Send email through Gmail
-                                            <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
+                                            <span class="ml-5 integrated-email" *ngIf="!isGmailIntegrated">
                                                 <a [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
                                             </span>
                                         </span>
@@ -2765,8 +2760,10 @@
                                             aria-label="Select an option"
                                             class="mt-2 mb-3"
                                         >
-                                            <mat-radio-button value="1" color="primary">Proforma</mat-radio-button>
-                                            <mat-radio-button value="2" color="primary">Invoice</mat-radio-button>
+                                            <mat-radio-button color="primary" value="proforma"
+                                                >Proforma</mat-radio-button
+                                            >
+                                            <mat-radio-button color="primary" value="invoice">Invoice</mat-radio-button>
                                         </mat-radio-group>
                                         <mat-slide-toggle
                                             name=""
@@ -2776,9 +2773,17 @@
                                         >
                                             Auto change status (on expiry)
                                         </mat-slide-toggle>
-                                        <div class="d-flex">
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoWhatsApp"
+                                        >
+                                            {{ getWhatsappSettingLabel("estimate") }}
+                                        </mat-slide-toggle>
+                                        <div class="d-flex align-items-center">
                                             <mat-slide-toggle
-                                                name=""
+                                                name="autoMail"
                                                 class="disable-toggle slide-toggle d-block"
                                                 color="primary"
                                                 formControlName="autoMail"
@@ -2787,20 +2792,11 @@
                                             </mat-slide-toggle>
                                             <a
                                                 href="javascript:;"
-                                                class="cursor-pointer"
+                                                class="cursor-pointer ml-3"
                                                 (click)="openCustomEmailDialog('estimate')"
                                                 >{{ commonLocaleData?.app_custom_email }}</a
                                             >
                                         </div>
-
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="autoWhatsApp"
-                                        >
-                                            Send estimate via whatsapp
-                                        </mat-slide-toggle>
                                         <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                     </div>
                                 </mat-tab>
@@ -2842,7 +2838,15 @@
                                         >
                                             Auto change status (on expiry)
                                         </mat-slide-toggle>
-                                        <div class="d-flex">
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoWhatsApp"
+                                        >
+                                            {{ getWhatsappSettingLabel("proforma") }}
+                                        </mat-slide-toggle>
+                                        <div class="d-flex align-items-center">
                                             <mat-slide-toggle
                                                 name="autoMail"
                                                 class="disable-toggle slide-toggle d-block"
@@ -2853,19 +2857,11 @@
                                             </mat-slide-toggle>
                                             <a
                                                 href="javascript:;"
-                                                class="cursor-pointer"
+                                                class="cursor-pointer ml-3"
                                                 (click)="openCustomEmailDialog('proforma')"
                                                 >{{ commonLocaleData?.app_custom_email }}</a
                                             >
                                         </div>
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="autoWhatsApp"
-                                        >
-                                            Send proforma via whatsapp
-                                        </mat-slide-toggle>
                                         <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                     </div>
                                 </mat-tab>
@@ -2928,10 +2924,10 @@
                                         >
                                             Show seal according to status of payment
                                         </mat-slide-toggle>
-                                        <div class="d-flex">
+                                        <div class="mb-3 d-flex align-items-center">
                                             <mat-slide-toggle
                                                 name="invoiceAutomail"
-                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                class="disable-toggle slide-toggle d-block"
                                                 color="primary"
                                                 formControlName="autoMail"
                                             >
@@ -2939,7 +2935,7 @@
                                             </mat-slide-toggle>
                                             <a
                                                 href="javascript:;"
-                                                class="cursor-pointer"
+                                                class="cursor-pointer ml-3"
                                                 (click)="openCustomEmailDialog('sales')"
                                                 >{{ commonLocaleData?.app_custom_email }}</a
                                             >
@@ -2987,12 +2983,20 @@
                                             Auto Delete entries when deleting their invoice
                                         </mat-slide-toggle>
                                         <mat-slide-toggle
-                                            name=""
+                                            name="salesRoundOff"
                                             class="disable-toggle slide-toggle d-block mb-3"
                                             color="primary"
                                             formControlName="salesRoundOff"
                                         >
                                             Apply round off on sales/cash voucher
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name="autoWhatsAppInvoice"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoWhatsAppInvoice"
+                                        >
+                                            {{ getWhatsappSettingLabel("invoice") }}
                                         </mat-slide-toggle>
                                         <mat-slide-toggle
                                             name="autoPaid"
@@ -3012,7 +3016,7 @@
                                             Automatically generate voucher for the entries present in the ledger
                                         </mat-slide-toggle>
                                         <div
-                                            class="mb-3 d-flex align-items-center column-gap15"
+                                            class="mb-3 d-flex align-items-center"
                                             *ngIf="activeCompany?.countryV2?.alpha2CountryCode === 'IN'"
                                         >
                                             <mat-slide-toggle
@@ -3064,7 +3068,7 @@
                                         </div>
                                         <mat-slide-toggle
                                             name=""
-                                            class="disable-toggle slide-toggle d-block"
+                                            class="disable-toggle slide-toggle d-block mb-3"
                                             color="primary"
                                             formControlName="generateEinvoiceShowPopUp"
                                         >
@@ -3072,11 +3076,11 @@
                                         </mat-slide-toggle>
                                         <mat-slide-toggle
                                             name=""
-                                            class="disable-toggle slide-toggle d-block"
+                                            class="disable-toggle slide-toggle d-block mb-3"
                                             color="primary"
                                             formControlName="autoWhatsAppInvoice"
                                         >
-                                            Send invoice via whatsapp
+                                            {{ getWhatsappSettingLabel("invoice") }}
                                         </mat-slide-toggle>
                                         <mat-slide-toggle
                                             name=""
@@ -3146,9 +3150,17 @@
                                                 [type]="'text'"
                                             ></input-field>
                                         </div>
-                                        <div class="d-flex">
+                                        <mat-slide-toggle
+                                            name=""
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoWhatsAppReceipt"
+                                        >
+                                            {{ getWhatsappSettingLabel("receipt") }}
+                                        </mat-slide-toggle>
+                                        <div class="d-flex align-items-center">
                                             <mat-slide-toggle
-                                                name=""
+                                                name="autoMailReceipt"
                                                 class="disable-toggle slide-toggle d-block"
                                                 color="primary"
                                                 formControlName="autoMailReceipt"
@@ -3157,19 +3169,11 @@
                                             </mat-slide-toggle>
                                             <a
                                                 href="javascript:;"
-                                                class="cursor-pointer"
+                                                class="cursor-pointer ml-3"
                                                 (click)="openCustomEmailDialog('receipt')"
                                                 >{{ commonLocaleData?.app_custom_email }}</a
                                             >
                                         </div>
-                                        <mat-slide-toggle
-                                            name=""
-                                            class="disable-toggle slide-toggle d-block"
-                                            color="primary"
-                                            formControlName="autoWhatsAppReceipt"
-                                        >
-                                            Send receipt via whatsapp
-                                        </mat-slide-toggle>
                                         <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                     </div>
                                 </mat-tab>
@@ -3251,13 +3255,13 @@
                                             class="disable-toggle slide-toggle d-block"
                                             color="primary"
                                         >
-                                            Send debit note via whatsapp
+                                            {{ getWhatsappSettingLabel("debit note") }}
                                         </mat-slide-toggle>
 
-                                        <div class="d-flex column-gap1 mb-3">
+                                        <div class="d-flex column-gap1 align-items-center">
                                             <mat-slide-toggle
                                                 name="voucher"
-                                                class="disable-toggle slide-toggle d-block"
+                                                class="disable-toggle slide-toggle d-block mb-3"
                                                 color="primary"
                                                 formControlName="autoMailDebitNote"
                                             >
@@ -3351,13 +3355,13 @@
                                             class="disable-toggle slide-toggle d-block"
                                             color="primary"
                                         >
-                                            Send credit note via whatsapp
+                                            {{ getWhatsappSettingLabel("credit note") }}
                                         </mat-slide-toggle>
 
-                                        <div class="d-flex column-gap1 mb-3">
+                                        <div class="d-flex column-gap1 align-items-center">
                                             <mat-slide-toggle
                                                 name="voucher"
-                                                class="disable-toggle slide-toggle d-block"
+                                                class="disable-toggle slide-toggle d-block mb-3"
                                                 color="primary"
                                                 formControlName="autoMailCreditNote"
                                             >
@@ -3381,17 +3385,14 @@
                                     <i class="icon-mail"></i>
                                     Integration
                                 </ng-template>
-                                <div class="tabs-box-content py-3">
+                                <div class="tabs-box-content py-3" formGroupName="purchaseBillSettings">
                                     <h4 class="font-16 border-bottom pb-2 mb-3">
                                         Integration
                                         <span class="text-gray font-12"
                                             >(These settings will be applicable on Purchase Order and Bill)</span
                                         >
                                     </h4>
-                                    <div
-                                        class="d-flex column-gap1 align-items-center mb-3"
-                                        formGroupName="purchaseBillSettings"
-                                    >
+                                    <div class="d-flex column-gap1 align-items-center mb-3">
                                         <input-field
                                             [name]="'invoiceEmail'"
                                             [label]="'From Email'"
@@ -3462,15 +3463,10 @@
                                             <i class="icon-trash"></i>
                                         </button>
                                     </div>
-                                    <span
-                                        formGroupName="companyEmailSettings"
-                                        class="d-flex column-gap10 align-baseline mr-5"
-                                    >
-                                       {{isGmailIntegrated}}
+                                    <div class="d-flex column-gap10 align-baseline mr-5">
                                         <mat-slide-toggle
                                             formControlName="sendThroughGmail"
                                             name="sendGmail"
-                                            [disabled]="!isGmailIntegrated"
                                             class="disable-toggle slide-toggle"
                                             color="primary"
                                         >
@@ -3479,7 +3475,7 @@
                                         <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
                                             <a [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
                                         </span>
-                                    </span>
+                                    </div>
                                     <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                 </div>
                             </mat-tab>
@@ -3519,7 +3515,7 @@
                                         color="primary"
                                         formControlName="poAutoWhatsApp"
                                     >
-                                        Send purchase order via whatsapp
+                                        {{ getWhatsappSettingLabel("purchase order") }}
                                     </mat-slide-toggle>
                                     <div class="mb-3 d-flex align-items-center column-gap15">
                                         <mat-slide-toggle
@@ -3613,7 +3609,7 @@
                                         color="primary"
                                         formControlName="autoWhatsApp"
                                     >
-                                        Send purchase bill via whatsapp
+                                        {{ getWhatsappSettingLabel("purchase bill") }}
                                     </mat-slide-toggle>
                                     <ng-container formGroupName="invoiceSettings">
                                         <mat-slide-toggle
@@ -3725,7 +3721,7 @@
                                         color="primary"
                                         formControlName="autoWhatsAppPayment"
                                     >
-                                        Send receipt via whatsapp
+                                        {{ getWhatsappSettingLabel("payment") }}
                                     </mat-slide-toggle>
                                     <mat-slide-toggle
                                         name=""

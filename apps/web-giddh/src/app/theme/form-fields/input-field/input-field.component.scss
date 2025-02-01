@@ -2,12 +2,19 @@
     padding-left: 30px !important;
     margin-top: 1px;
 }
+
+.suffix-icon {
+    right: 0px;
+    top: 15px;
+}
+
 .text-field-container {
     input {
         border: 0 !important;
         background-color: transparent;
     }
 }
+
 /*--- mobile-number-field ---*/
 .iti {
     input[type="tel"] {
