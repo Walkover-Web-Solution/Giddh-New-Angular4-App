@@ -8,8 +8,8 @@
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideGstSidebarMenuState>
         <div class="help-aside-body">
             <div class="gst-menu-items">
-                <ul *ngIf="showGstMenus">
-                    <li>
+                <mat-list role="list" *ngIf="showGstMenus">
+                    <mat-list-item role="listitem">
                         <a
                             class="d-block clearfix"
                             routerLinkActive
@@ -21,8 +21,8 @@
                             <span><i class="icon-dashboard-new"></i></span>
                             <span>{{ localeData?.dashboard }}</span>
                         </a>
-                    </li>
-                    <li
+                    </mat-list-item>
+                    <mat-list-item role="listitem"
                         [ngClass]="{
                             'disabled': !activeCompanyGstNumber || !isMonthSelected,
                             'active': selectedGstModule === GstReport.Gstr3b
@@ -41,8 +41,8 @@
                             <span><i class="icon-GSTR"></i></span>
                             <span>{{ localeData?.gstr3b_summary }}</span>
                         </a>
-                    </li>
-                    <li
+                    </mat-list-item>
+                    <mat-list-item role="listitem"
                         [ngClass]="{
                             'disabled': !activeCompanyGstNumber,
                             'active': selectedGstModule === GstReport.Gstr1
@@ -60,8 +60,8 @@
                             <span><i class="icon-GSTR"></i></span>
                             <span>{{ localeData?.gstr1_label }}</span>
                         </a>
-                    </li>
-                    <li
+                    </mat-list-item>
+                    <mat-list-item role="listitem"
                         [ngClass]="{
                             'disabled': !activeCompanyGstNumber || !isMonthSelected,
                             'active': selectedGstModule === GstReport.Gstr2
@@ -79,10 +79,10 @@
                             <span><i class="icon-GSTR"></i></span>
                             <span>{{ localeData?.gstr2_label }}</span>
                         </a>
-                    </li>
-                </ul>
-                <ul>
-                    <li *ngIf="showGstMenus">
+                    </mat-list-item>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item role="listitem" *ngIf="showGstMenus">
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/invoice/ewaybill']"
@@ -94,8 +94,8 @@
                             <span><i class="icon-eway-bill-new"></i></span>
                             <span>{{ localeData?.eway_bill }}</span>
                         </a>
-                    </li>
-                    <li>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/reports/reverse-charge']"
@@ -107,8 +107,8 @@
                             <span><i class="icon-reverse-charge"></i></span>
                             <span>{{ localeData?.reverse_charge }}</span>
                         </a>
-                    </li>
-                    <li>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -120,8 +120,8 @@
                             <span><i class="icon-settings-cog"></i></span>
                             <span>{{ localeData?.manage_tax }}</span>
                         </a>
-                    </li>
-                    <li *ngIf="showGstMenus">
+                    </mat-list-item>
+                    <mat-list-item role="listitem" *ngIf="showGstMenus">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -135,8 +135,8 @@
                             /></span>
                             <span>{{ localeData?.unit_mapping }}</span>
                         </a>
-                    </li>
-                    <li *ngIf="showTaxMenus">
+                    </mat-list-item>
+                    <mat-list-item role="listitem" *ngIf="showTaxMenus">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -149,8 +149,8 @@
                             <span><i class="icon-vat1"></i></span>
                             <span>{{ localeData?.vat_report }}</span>
                         </a>
-                    </li>
-                    <li *ngIf="showTaxMenus && isZimbabweCompany">
+                    </mat-list-item>
+                    <mat-list-item role="listitem" *ngIf="showTaxMenus && isZimbabweCompany">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -163,9 +163,9 @@
                             <span><i class="icon-balance-sheet-new"></i></span>
                             <span>{{ localeData?.liability_report }}</span>
                         </a>
-                    </li>
+                    </mat-list-item>
                     <ng-container *ngIf="showTaxMenus && isUKCompany">
-                        <li>
+                        <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
                                 class="d-block clearfix"
@@ -178,8 +178,8 @@
                                 <span><i class="icon-vat1"></i></span>
                                 <span>{{ localeData.vat_liabilities }}</span>
                             </a>
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
                                 class="d-block clearfix"
@@ -192,8 +192,8 @@
                                 <span><i class="icon-vat1"></i></span>
                                 <span>{{ localeData.vat_payments }}</span>
                             </a>
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
                                 class="d-block clearfix"
@@ -205,9 +205,9 @@
                                 <span><i class="icon-vat1"></i></span>
                                 <span>{{ localeData?.vat_obligations }}</span>
                             </a>
-                        </li>
+                        </mat-list-item>
                     </ng-container>
-                    <li *ngIf="!isConsolidatedBranch">
+                    <mat-list-item role="listitem" *ngIf="!isConsolidatedBranch">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -219,8 +219,8 @@
                             <span><i class="icon-warehouse1"></i></span>
                             <span>{{ taxTypeSidebarLabel }}</span>
                         </a>
-                    </li>
-                    <li *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)">
+                    </mat-list-item>
+                    <mat-list-item role="listitem" *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -232,8 +232,8 @@
                             <span><i class="icon-settings-cog"></i></span>
                             <span>{{ localeData?.with_held_setting }}</span>
                         </a>
-                    </li>
-                    <li *ngIf="(isCompany || isConsolidatedBranch) && showGstMenus">
+                    </mat-list-item>
+                    <mat-list-item role="listitem" *ngIf="(isCompany || isConsolidatedBranch) && showGstMenus">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -245,8 +245,8 @@
                             <span><i class="icon-settings-cog"></i></span>
                             <span>{{ localeData?.gst_setting }}</span>
                         </a>
-                    </li>
-                    <li *ngIf="showGstMenus">
+                    </mat-list-item>
+                    <mat-list-item role="listitem" *ngIf="showGstMenus">
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/gstfiling/filing-status']"
@@ -258,9 +258,9 @@
                             <span><i class="icon-GSTR"></i></span>
                             <span>{{ localeData?.filing_status }}</span>
                         </a>
-                    </li>
+                    </mat-list-item>
                     <ng-container *ngIf="showSalesTaxMenus && isUSCompany">
-                        <li>
+                        <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/manage-tax-authority']"
@@ -272,8 +272,8 @@
                                 <span><i class="icon-settings-cog"></i></span>
                                 <span>{{ localeData?.manage_tax_authority }}</span>
                             </a>
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/reports/tax-authority']"
@@ -285,8 +285,8 @@
                                 <span><i class="icon-reports"></i></span>
                                 <span>{{ commonLocaleData?.app_tax_authority }}</span>
                             </a>
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/reports/rate-wise']"
@@ -298,8 +298,8 @@
                                 <span><i class="icon-reports"></i></span>
                                 <span>{{ localeData?.rate_wise }}</span>
                             </a>
-                        </li>
-                        <li>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/reports/account-wise']"
@@ -311,9 +311,9 @@
                                 <span><i class="icon-reports"></i></span>
                                 <span>{{ localeData?.account_wise }}</span>
                             </a>
-                        </li>
+                        </mat-list-item>
                     </ng-container>
-                </ul>
+                </mat-list>
             </div>
         </div>
     </div>

@@ -6,10 +6,7 @@
 >
     <div class="modal-header">
         <h4 mat-dialog-title class="font-16">{{ commonLocaleData?.app_send_email }}</h4>
-        <button mat-icon-button mat-dialog-close type="button"
-            class="close d-flex justify-content-center align-items-center">
-            <i class="icon-cross icon-font-16"></i>
-        </button>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
     </div>
     <mat-dialog-content>
         <giddh-page-loader *ngIf="sendEmailInProgress$ | async"></giddh-page-loader>
