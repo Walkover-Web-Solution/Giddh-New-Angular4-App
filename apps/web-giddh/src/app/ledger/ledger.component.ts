@@ -866,7 +866,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.ledgerBalanceSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if(response){
+            if (response) {
                 Object.assign(this.ledgerTxnBalance, response);
             }
         });
