@@ -56,12 +56,13 @@ import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-lin
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
+import { LedgerComponentStore } from './ledger.store';
 
 @Component({
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
-    providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],
+    providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore, LedgerComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -345,6 +346,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankList: any[] = [];
     /** Invoice Settings */
     public invoiceSettings: any;
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
 
     constructor(
         private store: Store<AppState>,
@@ -373,7 +376,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
-        private toasty: ToasterService
+        private toasty: ToasterService,
+        private ledgerComponentStore: LedgerComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -854,10 +858,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             select(p => p.ledger.ledgerTransactionsBalance),
             takeUntil(this.destroyed$)
         ).subscribe((txnBalance: any) => {
-            if (txnBalance) {
+            if (txnBalance && !this.isAdvanceSearchImplemented) {
                 this.ledgerTxnBalance = txnBalance;
                 this.lc.calculateReckonging(txnBalance);
                 this.cdRf.detectChanges();
+            }
+        });
+
+        this.ledgerBalanceSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if(response){
+                Object.assign(this.ledgerTxnBalance, response);
             }
         });
 
@@ -1422,7 +1432,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.closingBalanceBeforeReconcile = null;
         this.generateEInvoice = null;
         if (this.trxRequest?.accountUniqueName) {
-            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            if (!this.isAdvanceSearchImplemented) {
+                this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            } else {
+                this.ledgerComponentStore.GetLedgerBalance({
+                    payload: _.cloneDeep(this.advanceSearchRequest.dataToSend), accountUniqueName: this.advanceSearchRequest.accountUniqueName,
+                    from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
+                    count: this.advanceSearchRequest.count, branchUniqueName: this.advanceSearchRequest.branchUniqueName, accountCurrency: this.trxRequest.accountCurrency
+                });
+            }
             this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
         }
     }
@@ -1980,12 +1998,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
-            this.ledgerService.GetLedgerBalance({
+            this.ledgerComponentStore.GetLedgerBalance({
                 payload: _.cloneDeep(this.advanceSearchRequest.dataToSend), accountUniqueName: this.advanceSearchRequest.accountUniqueName,
                 from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
                 count: this.advanceSearchRequest.count, branchUniqueName: this.advanceSearchRequest.branchUniqueName, accountCurrency: this.trxRequest.accountCurrency
-            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                console.log("OK", response);
             });
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
