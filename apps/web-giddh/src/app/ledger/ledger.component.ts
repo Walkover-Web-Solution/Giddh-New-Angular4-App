@@ -50,6 +50,7 @@ import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { LedgerComponentStore } from './ledger.store';
 
 @Component({
     selector: 'ledger',
@@ -67,6 +68,7 @@ import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/c
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
+    providers: [LedgerComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -313,6 +315,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankTransactionsWithAccountName: any[] = [];
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.componentStore.select(state => state.ledgerBalance);
 
     constructor(
         private store: Store<AppState>,
@@ -337,7 +341,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private router: Router
+        private router: Router,
+        private componentStore: LedgerComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -761,10 +766,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             select(p => p.ledger.ledgerTransactionsBalance),
             takeUntil(this.destroyed$)
         ).subscribe((txnBalance: any) => {
-            if (txnBalance) {
+            if (txnBalance && !this.isAdvanceSearchImplemented) {
                 this.ledgerTxnBalance = txnBalance;
                 this.lc.calculateReckonging(txnBalance);
                 this.cdRf.detectChanges();
+            }
+        });
+
+        this.ledgerBalanceSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if(response){
+                Object.assign(this.ledgerTxnBalance, response);
             }
         });
 
@@ -1258,7 +1269,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.closingBalanceBeforeReconcile = null;
         this.generateEInvoice = null;
         if (this.trxRequest?.accountUniqueName) {
-            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            if (!this.isAdvanceSearchImplemented) {
+                this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            } else {
+                this.componentStore.GetLedgerBalance({
+                    payload: _.cloneDeep(this.advanceSearchRequest.dataToSend), accountUniqueName: this.advanceSearchRequest.accountUniqueName,
+                    from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
+                    count: this.advanceSearchRequest.count, branchUniqueName: this.advanceSearchRequest.branchUniqueName, accountCurrency: this.trxRequest.accountCurrency
+                });
+            }
             this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
         }
     }
@@ -1807,12 +1826,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
-            this.ledgerService.GetLedgerBalance({
+            this.componentStore.GetLedgerBalance({
                 payload: _.cloneDeep(this.advanceSearchRequest.dataToSend), accountUniqueName: this.advanceSearchRequest.accountUniqueName,
                 from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
                 count: this.advanceSearchRequest.count, branchUniqueName: this.advanceSearchRequest.branchUniqueName, accountCurrency: this.trxRequest.accountCurrency
-            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                console.log("OK", response);
             });
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
