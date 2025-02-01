@@ -181,6 +181,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     public isConsolidatedBranch: boolean;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -213,6 +215,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
+        this.isTaxRestrictedModule = this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
         this.isSalesTaxRateWise = SalesTaxReport.TaxWise === this.salesTaxReportType;
         this.isSalesTaxAccountWise = SalesTaxReport.AccountWise === this.salesTaxReportType;
         this.isVatReport = this.moduleType === "VAT_REPORT";
