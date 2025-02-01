@@ -101,9 +101,9 @@
                     </table>
                     <section *ngIf="!tableDataSource?.length">
                         <div *ngIf="getFormControl('taxNumber').value">
-                            <div *ngIf="connectToHMRCUrl || activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)" class="position-center position-absolute">
+                            <div *ngIf="connectToHMRCUrl || isTaxRestrictedModule" class="position-center position-absolute">
                                 <div class="text-center">
-                                    <a [disabled]="activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)" mat-stroked-button color="primary" [href]="connectToHMRCUrl">
+                                    <a [disabled]="isTaxRestrictedModule" mat-stroked-button color="primary" [href]="connectToHMRCUrl">
                                         {{ localeData?.connect_to_hmrc }}
                                     </a>
                                 </div>
@@ -111,7 +111,7 @@
                                     (onUpgradePlan)="buyPlan($event)">
                                 </restricted-module-message>
                             </div>
-                            <div class="no-data"  *ngIf="!connectToHMRCUrl && !activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)">
+                            <div class="no-data"  *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
                                 <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                             </div>
                         </div>

@@ -87,6 +87,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -103,6 +105,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
                 this.activeCompany = activeCompany;
+                this.isTaxRestrictedModule = activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
             }
         });
     }
@@ -161,7 +164,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
-                if (!this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling)) {
+                if (!this.isTaxRestrictedModule) {
                     this.getURLHMRCAuthorization();
                 }
             }

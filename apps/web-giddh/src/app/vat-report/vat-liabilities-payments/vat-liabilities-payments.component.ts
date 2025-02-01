@@ -88,6 +88,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -103,6 +105,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                this.isTaxRestrictedModule = activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
             }
         });
@@ -175,7 +178,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                 if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
-                if (!this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling)) {
+                if (!this.isTaxRestrictedModule) {
                     this.getURLHMRCAuthorization();
                 }
             }

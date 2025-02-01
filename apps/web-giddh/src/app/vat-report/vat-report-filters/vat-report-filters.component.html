@@ -59,11 +59,11 @@
         <div *ngIf="isUKCompany">
             <div class="text-right">
                 <a mat-stroked-button color="primary" [href]="connectToHMRCUrl"
-                    [disabled]="!connectToHMRCUrl || activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling) && connectToHMRCUrl">
-                    <ng-container *ngIf="connectToHMRCUrl || activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)">
+                    [disabled]="!connectToHMRCUrl || isTaxRestrictedModule">
+                    <ng-container *ngIf="connectToHMRCUrl || isTaxRestrictedModule">
                         {{ localeData?.connect_to_hmrc }}
                     </ng-container>
-                    <ng-container *ngIf="!connectToHMRCUrl && !activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)">
+                    <ng-container *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
                         {{ localeData?.connected_to_hmrc }}
                     </ng-container>
                 </a>
