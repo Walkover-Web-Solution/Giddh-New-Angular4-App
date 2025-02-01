@@ -516,7 +516,7 @@ export class LedgerService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
     }
 
-    public GetLedgerBalance(model: TransactionsRequest): Observable<BaseResponse<any, any>> {
+    public GetLedgerBalance(model: TransactionsRequest, payload: any = null): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_BALANCE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
@@ -526,14 +526,24 @@ export class LedgerService {
             model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
-        return this.http.get(url).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = model;
-                data.queryString = { model };
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        if (payload) {
+            return this.http.post(url, payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        } else {
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    data.queryString = { model };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        }
     }
 
     /**
