@@ -5,8 +5,6 @@ import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { LedgerService } from "../services/ledger.service";
 
-
-
 export interface LedgerState {
     ledgerBalance: any;
 }
@@ -29,11 +27,11 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
      *
      * @memberof LedgerComponentStore
      */
-    readonly GetLedgerBalance = this.effect((data: Observable<any>) => {
+    readonly getLedgerBalance = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ledgerBalance: null });
-                return this.ledgerService.GetLedgerBalance(req).pipe(
+                return this.ledgerService.GetLedgerBalance(req.trxRequest, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

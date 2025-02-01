@@ -2831,7 +2831,7 @@
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">
-                            <div class="col-sm-6 col-xs-12 stat-block">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>
                                         {{ localeData?.total_transactions }}
@@ -2871,48 +2871,50 @@
                                     </span>
                                 </div>
                             </div>
-                            <!-- <div class="col-sm-3 col-xs-12 stat-block">
-                                <div class="ledger-state-box">
-                                    <h1>{{ localeData?.opening_balance }}</h1>
-                                    <h2 class="digit-blue d-flex">
-                                        <amount-field
-                                            [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
-                                            [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                            [currencyCode]="ledgerTxnBalance?.currencyCode"
-                                        >
-                                        </amount-field>
-                                        &nbsp;
-                                        {{
-                                            ledgerTxnBalance?.forwardedBalance?.amount > 0
-                                                ? ledgerTxnBalance?.forwardedBalance?.type === "DEBIT"
-                                                    ? localeData?.dr
-                                                    : localeData?.cr
-                                                : ""
-                                        }}
-                                    </h2>
+                            <ng-container *ngIf="!isAdvanceSearchImplemented">
+                                <div class="col-sm-3 col-xs-12 stat-block">
+                                    <div class="ledger-state-box">
+                                        <h1>{{ localeData?.opening_balance }}</h1>
+                                        <h2 class="digit-blue d-flex">
+                                            <amount-field
+                                                [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
+                                                [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                [currencyCode]="ledgerTxnBalance?.currencyCode"
+                                            >
+                                            </amount-field>
+                                            &nbsp;
+                                            {{
+                                                ledgerTxnBalance?.forwardedBalance?.amount > 0
+                                                    ? ledgerTxnBalance?.forwardedBalance?.type === "DEBIT"
+                                                        ? localeData?.dr
+                                                        : localeData?.cr
+                                                    : ""
+                                            }}
+                                        </h2>
 
-                                    <h2
-                                        class="digit-blue font-12 sub-total d-inline-flex"
-                                        *ngIf="isLedgerAccountAllowsMultiCurrency"
-                                    >
-                                        <amount-field
-                                            [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
-                                            [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                            [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
+                                        <h2
+                                            class="digit-blue font-12 sub-total d-inline-flex"
+                                            *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         >
-                                        </amount-field>
-                                        &nbsp;
-                                        {{
-                                            ledgerTxnBalance?.convertedForwardedBalance?.amount > 0
-                                                ? ledgerTxnBalance?.forwardedBalance?.type === "DEBIT"
-                                                    ? localeData?.dr
-                                                    : localeData?.cr
-                                                : ""
-                                        }}
-                                    </h2>
+                                            <amount-field
+                                                [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
+                                                [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
+                                            >
+                                            </amount-field>
+                                            &nbsp;
+                                            {{
+                                                ledgerTxnBalance?.convertedForwardedBalance?.amount > 0
+                                                    ? ledgerTxnBalance?.forwardedBalance?.type === "DEBIT"
+                                                        ? localeData?.dr
+                                                        : localeData?.cr
+                                                    : ""
+                                            }}
+                                        </h2>
+                                    </div>
                                 </div>
-                            </div> -->
-                            <div class="col-sm-6 col-xs-12 stat-block">
+                            </ng-container>
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
@@ -3064,67 +3066,69 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-sm-3 col-xs-12 stat-block">
-                                <div class="ledger-state-box">
-                                    <h1>{{ localeData?.closing_balance }}</h1>
-                                    <div class="d-flex flex-column justify-content-between">
-                                        <h2 class="digit-blue d-inline-flex">
-                                            <span
-                                                class="d-flex"
-                                                [matTooltip]="
-                                                    ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
-                                                        ? lc.ledgerUnderStandingObj.balanceText.dr
-                                                        : lc.ledgerUnderStandingObj.balanceText.cr
-                                                "
-                                            >
-                                                <amount-field
-                                                    [amount]="ledgerTxnBalance?.closingBalance?.amount"
-                                                    [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance?.currencyCode"
+                            <ng-container *ngIf="!isAdvanceSearchImplemented">
+                                <div class="col-sm-3 col-xs-12 stat-block">
+                                    <div class="ledger-state-box">
+                                        <h1>{{ localeData?.closing_balance }}</h1>
+                                        <div class="d-flex flex-column justify-content-between">
+                                            <h2 class="digit-blue d-inline-flex">
+                                                <span
+                                                    class="d-flex"
+                                                    [matTooltip]="
+                                                        ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
+                                                            ? lc.ledgerUnderStandingObj.balanceText.dr
+                                                            : lc.ledgerUnderStandingObj.balanceText.cr
+                                                    "
                                                 >
-                                                </amount-field>
-                                                &nbsp;
-                                                {{
-                                                    ledgerTxnBalance?.closingBalance?.amount > 0
-                                                        ? ledgerTxnBalance?.closingBalance?.type === "DEBIT"
-                                                            ? localeData?.dr
-                                                            : localeData?.cr
-                                                        : ""
-                                                }}
-                                            </span>
-                                        </h2>
-                                        <h2
-                                            class="digit-blue font-12 d-flex"
-                                            *ngIf="isLedgerAccountAllowsMultiCurrency"
-                                        >
-                                            <span
-                                                class="d-flex"
-                                                [matTooltip]="
-                                                    ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
-                                                        ? lc.ledgerUnderStandingObj.balanceText.dr
-                                                        : lc.ledgerUnderStandingObj.balanceText.cr
-                                                "
-                                                matTooltipClass="tooltip-black"
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.closingBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.currencyCode"
+                                                    >
+                                                    </amount-field>
+                                                    &nbsp;
+                                                    {{
+                                                        ledgerTxnBalance?.closingBalance?.amount > 0
+                                                            ? ledgerTxnBalance?.closingBalance?.type === "DEBIT"
+                                                                ? localeData?.dr
+                                                                : localeData?.cr
+                                                            : ""
+                                                    }}
+                                                </span>
+                                            </h2>
+                                            <h2
+                                                class="digit-blue font-12 d-flex"
+                                                *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
-                                                <amount-field
-                                                    [amount]="ledgerTxnBalance?.convertedClosingBalance?.amount"
-                                                    [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
+                                                <span
+                                                    class="d-flex"
+                                                    [matTooltip]="
+                                                        ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
+                                                            ? lc.ledgerUnderStandingObj.balanceText.dr
+                                                            : lc.ledgerUnderStandingObj.balanceText.cr
+                                                    "
+                                                    matTooltipClass="tooltip-black"
                                                 >
-                                                </amount-field>
-                                                &nbsp;
-                                                {{
-                                                    ledgerTxnBalance?.convertedClosingBalance?.amount > 0
-                                                        ? ledgerTxnBalance?.convertedClosingBalance?.type === "DEBIT"
-                                                            ? localeData?.dr
-                                                            : localeData?.cr
-                                                        : ""
-                                                }}
-                                            </span>
-                                        </h2>
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.convertedClosingBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
+                                                    >
+                                                    </amount-field>
+                                                    &nbsp;
+                                                    {{
+                                                        ledgerTxnBalance?.convertedClosingBalance?.amount > 0
+                                                            ? ledgerTxnBalance?.convertedClosingBalance?.type === "DEBIT"
+                                                                ? localeData?.dr
+                                                                : localeData?.cr
+                                                            : ""
+                                                    }}
+                                                </span>
+                                            </h2>
+                                        </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </ng-container>
                         </div>
                     </section>
                 </div>
