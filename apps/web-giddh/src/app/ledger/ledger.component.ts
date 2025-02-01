@@ -25,7 +25,6 @@ import { AdvanceSearchRequest } from '../models/interfaces/advance-search-reques
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
-import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
@@ -56,6 +55,7 @@ import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-lin
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
+import { ToasterService } from '../services/toaster.service';
 
 @Component({
     selector: 'ledger',
@@ -345,6 +345,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankList: any[] = [];
     /** Invoice Settings */
     public invoiceSettings: any;
+    /** Hold ledger grid total columns static value */
+    public ledgerGridTotalColumns: number = 4;
+    /** Hold ledger grid total columns value */
+    public ledgerGridColumnsValue: number[] = [1, 2, 1]
 
     constructor(
         private store: Store<AppState>,
@@ -358,7 +362,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private warehouseActions: WarehouseActions,
         private cdRf: ChangeDetectorRef,
-        private breakPointObservar: BreakpointObserver,
         private modalService: BsModalService,
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
@@ -373,7 +376,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
-        private toasty: ToasterService
+        private breakpointObserver: BreakpointObserver
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -588,12 +591,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.breakPointObservar.observe([
+        this.breakpointObserver.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             if (this.isMobileScreen) {
                 this.arrangeLedgerTransactionsForMobile();
+            }
+        });
+        this.breakpointObserver.observe([
+            '(max-width: 1366px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result) {
+                if (result?.matches) {
+                    this.ledgerGridTotalColumns = 3
+                    this.ledgerGridColumnsValue = [1, 1, 1]
+                } else {
+                    this.ledgerGridTotalColumns = 4
+                    this.ledgerGridColumnsValue = [1, 2, 1]
+                }
             }
         });
         this.store.pipe(
