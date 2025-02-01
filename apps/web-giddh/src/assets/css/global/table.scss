@@ -155,9 +155,16 @@ table {
 
             th,
             td {
-                word-break: keep-all !important;
-                white-space: normal !important;
+                width: fit-content;
+                max-width: 135px !important;
+            }
+            .content-ellipsis-td {
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
         }
     }
+}
+.table-date-width {
+    width: 100px;
 }
