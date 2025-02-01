@@ -1435,10 +1435,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (!this.isAdvanceSearchImplemented) {
                 this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
             } else {
-                this.ledgerComponentStore.GetLedgerBalance({
-                    payload: _.cloneDeep(this.advanceSearchRequest.dataToSend), accountUniqueName: this.advanceSearchRequest.accountUniqueName,
-                    from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                    count: this.advanceSearchRequest.count, branchUniqueName: this.advanceSearchRequest.branchUniqueName, accountCurrency: this.trxRequest.accountCurrency
+                this.ledgerComponentStore.getLedgerBalance({
+                    payload: this.advanceSearchRequest.dataToSend, trxRequest: this.trxRequest
                 });
             }
             this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
@@ -1998,10 +1996,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
-            this.ledgerComponentStore.GetLedgerBalance({
-                payload: _.cloneDeep(this.advanceSearchRequest.dataToSend), accountUniqueName: this.advanceSearchRequest.accountUniqueName,
-                from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                count: this.advanceSearchRequest.count, branchUniqueName: this.advanceSearchRequest.branchUniqueName, accountCurrency: this.trxRequest.accountCurrency
+            this.ledgerComponentStore.getLedgerBalance({
+                payload: this.advanceSearchRequest.dataToSend, trxRequest: this.trxRequest
             });
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
