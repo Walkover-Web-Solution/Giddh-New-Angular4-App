@@ -131,8 +131,8 @@ table {
         tr {
             th,
             td {
-                width: fit-content !important;
-                max-width: 155px !important;
+                width: fit-content;
+                max-width: 135px !important;
             }
             .content-ellipsis-td {
                 text-overflow: ellipsis;
@@ -142,5 +142,5 @@ table {
     }
 }
 .table-date-width {
-    width: 125px !important;
+    width: 100px;
 }
