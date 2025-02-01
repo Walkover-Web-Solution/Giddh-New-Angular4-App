@@ -379,7 +379,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
-        private toasty: ToasterService,
         private ledgerComponentStore: LedgerComponentStore,
         private breakpointObserver: BreakpointObserver
     ) {
