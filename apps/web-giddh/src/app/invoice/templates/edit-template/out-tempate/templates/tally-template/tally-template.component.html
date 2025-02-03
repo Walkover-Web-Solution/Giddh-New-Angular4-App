@@ -105,18 +105,18 @@
                                         >
                                             <table>
                                                 <tr>
-                                                    <td class="border-none padding-0" width="90px">IRN</td>
+                                                    <td class="border-none padding-0" width="95px">IRN</td>
                                                     <td class="border-none padding-0" style="word-break: break-all">
                                                         :
                                                         def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="border-none padding-0" width="90px">Ack No</td>
+                                                    <td class="border-none padding-0" width="95px">Ack No</td>
                                                     <td class="border-none padding-0">: 152410022936999</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="border-none padding-0" width="90px">Ack Date</td>
+                                                    <td class="border-none padding-0" width="95px">Ack Date</td>
                                                     <td class="border-none padding-0">: {{ getTodayDate(true) }} 10:08:00</td>
                                                 </tr>
                                             </table>
@@ -205,6 +205,23 @@
                                                         </table>
                                                     </td>
                                                 </tr>
+                                                <tr *ngIf="fieldsAndVisibility.header.customerName?.display">
+                                                    <td class="border-none border-bottom">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.customerName
+                                                                            ?.label || "Customer Name"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">
+                                                                    <strong class="strong"> : Green Soft Solutions</strong>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
                                                 <tr *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
                                                     <td class="border-none border-bottom">
                                                         <p class="font-11">
@@ -212,10 +229,6 @@
                                                                 fieldsAndVisibility.header.shippingAddress?.label ||
                                                                     "Consignee (Ship to)"
                                                             }}
-                                                        </p>
-
-                                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                                            <strong class="strong"> Green Soft Solutions </strong>
                                                         </p>
 
                                                         <p>5 A.B. Road</p>
@@ -230,7 +243,7 @@
                                                                     fieldsAndVisibility.header.shippingGstin?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.shippingGstin
                                                                             ?.label || "GSTIN"
@@ -244,7 +257,7 @@
                                                                     fieldsAndVisibility.header.shippingState?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.shippingState
                                                                             ?.label || "State Name"
@@ -254,7 +267,7 @@
                                                             </tr>
 
                                                             <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility?.header?.attentionTo
                                                                             ?.label || "Contact person"
@@ -270,7 +283,7 @@
                                                                     fieldsAndVisibility.header.customerEmail?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     E-mail
                                                                 </td>
                                                                 <td class="border-none padding-0">
@@ -284,7 +297,7 @@
                                                                         ?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     Contact
                                                                 </td>
                                                                 <td class="border-none padding-0">: +91 901212XXXX</td>
@@ -300,11 +313,6 @@
                                                                     "Buyer (Bill to)"
                                                             }}
                                                         </p>
-
-                                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                                            <strong class="strong"> Green Soft Solutions </strong>
-                                                        </p>
-
                                                         <p>5 A.B. Road</p>
                                                         <p>Indore (M.P.) 452000, Madhya Pradesh</p>
                                                         <p *ngIf="fieldsAndVisibility.header.shippingState?.display">
@@ -315,7 +323,7 @@
                                                             <tr
                                                                 *ngIf="fieldsAndVisibility.header.billingGstin?.display"
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.billingGstin
                                                                             ?.label || "GSTIN"
@@ -327,7 +335,7 @@
                                                             <tr
                                                                 *ngIf="fieldsAndVisibility.header.billingState?.display"
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.billingState
                                                                             ?.label || "State Name"
@@ -342,7 +350,7 @@
                                                                         ?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0 vertical-align-bottom" width="90px">
+                                                                <td class="border-none padding-0 vertical-align-bottom" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.displayPlaceOfSupply
                                                                             ?.label || "Place Of Supply"
@@ -354,7 +362,7 @@
                                                             </tr>
 
                                                             <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility?.header?.attentionTo
                                                                             ?.label || "Contact person"
@@ -370,7 +378,7 @@
                                                                     fieldsAndVisibility.header.customerEmail?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     E-mail
                                                                 </td>
                                                                 <td class="border-none padding-0">
@@ -384,7 +392,7 @@
                                                                         ?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     Contact
                                                                 </td>
                                                                 <td class="border-none padding-0">: +91 901212XXXX</td>
