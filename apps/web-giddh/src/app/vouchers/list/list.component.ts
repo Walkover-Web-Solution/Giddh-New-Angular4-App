@@ -2961,9 +2961,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (!setting) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             } else {
+                this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
+                if (!this.isEInvoiceEnabled) {
+                    this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "einvoicestatus");
+                } else {
+                    if (!this.displayedColumns?.includes("einvoicestatus")) {
+                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
+                    }
+                    if (!this.displayedColumnsCredit?.includes("einvoicestatus")) {
+                        this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "einvoicestatus");
+                    }
+                }
                 this.settingResponse = setting;
                 if (setting && setting.invoiceSettings) {
-                    this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
                     this.settingForm.patchValue({
                         purchaseBillSettings: setting.purchaseBillSettings || {},
                         invoiceSettings: setting.invoiceSettings || {},
@@ -3002,12 +3013,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = setting.invoiceSettings.salesRoundOff;
-
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
-                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
-                    }
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = setting.invoiceSettings.purchaseRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
