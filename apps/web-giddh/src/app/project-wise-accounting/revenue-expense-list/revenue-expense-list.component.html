@@ -21,7 +21,7 @@
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
             <mat-tab [label]="localeData?.profit_and_loss">
-                <div class="pd-15" *ngIf="defaultParamsValue?.projectUniqueName">
+                <div class="pd-15" *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
                     <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
             </mat-tab>
@@ -59,7 +59,7 @@
                         <th class="text-left">{{ commonLocaleData?.app_amount }}</th>
                         <th class="text-left">{{ commonLocaleData?.app_action }}</th>
                     </tr>
-                    <tr [formGroup]="createAccountEntryForm">
+                    <tr *ngIf="!isCompany" [formGroup]="createAccountEntryForm">
                         <td>
                             <reactive-dropdown-field
                                 [label]="commonLocaleData?.app_select_account"

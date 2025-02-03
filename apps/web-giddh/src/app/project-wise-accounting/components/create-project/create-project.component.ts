@@ -45,9 +45,6 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
         this.initCreateProjectForm();
         this.componentStore.saveProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((project) => {
             if (project) {
-                if (!this.inputData?.isCreateFlow) {
-                    project.name = this.createProjectForm.get('projectName')?.value;
-                }
                 this.sendResponse(project);
             }
         });

@@ -2,10 +2,11 @@ export interface ProjectRequestType {
     companyUniqueName: string;
     branchUniqueName: string;
     sort: 'asc' | 'desc' | '';
-    sortBy: 'NAME' | 'ARCHIVE_STATUS' | 'STATUS' | string;
+    sortBy: 'NAME' | 'STATUS' | string;
     page: number;
     count: number;
-    q: string;
+    searchQuery: string;
+    queryColumn: string;
 }
 export interface DefaultParamType {
     companyUniqueName: string,
@@ -34,4 +35,9 @@ export enum ProjectWiseAccountingType {
     Income = 'income',
     Expenses = 'expenses',
     ProfitLoss = 'profit-loss'
+};
+
+export enum ProjectStatusType {
+    Closed = 'CLOSED',
+    InProgress = 'IN_PROGRESS'
 };
