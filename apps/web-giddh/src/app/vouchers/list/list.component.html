@@ -177,7 +177,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -225,7 +225,7 @@
                                 >
                                     Estimate Date
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -495,7 +495,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -881,7 +881,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -929,7 +929,7 @@
                                 >
                                     {{ commonLocaleData?.app_invoice_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -1260,8 +1260,8 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select content-ellipsis-td">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -1309,7 +1309,7 @@
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -1317,7 +1317,7 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.linked_invoice }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element">
                                     {{ element?.referenceVoucher?.number ?? "" }}
                                 </td>
                             </ng-container>
@@ -1589,8 +1589,8 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select content-ellipsis-td">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    <div class="cursor-pointer  content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
