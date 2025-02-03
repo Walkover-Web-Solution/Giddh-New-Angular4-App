@@ -31,7 +31,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         return this._selectedCompany;
     }
     /** This will hold project unique name */
-    @Input() projectUniqueName: string;
+    @Input() projectUniqueName: string = null;
     /** Observable to track the profit loss loading */
     public isFetchingProfitAndLoss$: Observable<boolean> = this.componentStore.isFetchingProfitAndLoss$;
     /**

@@ -160,6 +160,9 @@
                 <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
                     <span class="icon-refresh"></span>
                 </a>
+                <button class="ml-1" *ngIf="backButtonForProjectWiseAccounting" [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
+                    {{ commonLocaleData?.app_back }}
+                </button>
                 <div class="ml-1">
                     <trial-balance-export-csv
                         *ngIf="tbExportCsv"

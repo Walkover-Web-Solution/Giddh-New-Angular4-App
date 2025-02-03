@@ -6,7 +6,7 @@ import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.store';
-import { ProjectDetails, ProjectRequestType } from '../project-wise-accounting';
+import { ProjectDetails, ProjectRequestType, ProjectStatusType } from '../project-wise-accounting';
 import { GeneralService } from '../../services/general.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
@@ -17,6 +17,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'project-wise-accounting',
@@ -26,7 +27,7 @@ import { cloneDeep } from '../../lodash-optimized';
 })
 export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** This allows direct interaction with the referenced DOM element through its `nativeElement` property */
-    @ViewChild('productSearch', { static: true }) public productSearch: ElementRef;
+    @ViewChild('projectSearch', { static: true }) public projectSearch: ElementRef;
     /** Holds table sorting reference */
     @ViewChild(MatSort) sortBy: MatSort;
     /** Directive to get reference of element */
@@ -54,9 +55,12 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** ReplaySubject to handle component's lifecycle */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** If true, the project search box is displayed */
-    public showProductSearch: boolean = false;
+    public isShowSearchBox: any = {
+        name: false,
+        status: false
+    };
     /** This will use for displayed table columns */
-    public displayedColumns: string[] = ['sno', 'name', 'archive_status', 'status', 'symbol', 'action'];
+    public displayedColumns: string[] = ['sno', 'name', 'status', 'symbol', 'action'];
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
@@ -75,11 +79,22 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    public isProductSearch: boolean = false;
+    /** True, if search filter is applied */
+    public isSearch: boolean = false;
     /** Getter for the 'name' form control from the companyListForm. */
     public get projectName(): FormControl {
-        return this.companyListForm.get('projectName') as FormControl
+        return this.companyListForm.get('projectName') as FormControl;
     }
+    /** Getter for the 'status' form control from the companyListForm. */
+    public get projectStatus(): FormControl {
+        return this.companyListForm.get('status') as FormControl;
+    }
+    /** Holds company branches */
+    public branches: Array<any>;
+    /** True if is company */
+    public isCompany: boolean = false;
+    /** Enum representing the types of project-wise accounting status type */
+    public projectStatusType: typeof ProjectStatusType = ProjectStatusType;
 
     constructor(
         public dialog: MatDialog,
@@ -107,9 +122,22 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.getAllProjectList();
         this.companyListForm.get('projectName').valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((searchedText) => {
             if (searchedText || searchedText === '') {
-                this.isProductSearch = searchedText !== '';
-                this.projectListRequest.q = searchedText;
+                this.isSearch = searchedText !== '';
+                this.projectListRequest.queryColumn = 'NAME';
+                this.projectListRequest.searchQuery = searchedText;
                 this.projectListRequest.page = 1;
+                this.projectStatus.reset();
+                this.getAllProjectList();
+            }
+        });
+
+        this.companyListForm.get('status').valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((searchedText) => {
+            if (searchedText || searchedText === '') {
+                this.isSearch = searchedText !== '';
+                this.projectListRequest.queryColumn = 'STATUS';
+                this.projectListRequest.searchQuery = searchedText;
+                this.projectListRequest.page = 1;
+                this.projectName.reset();
                 this.getAllProjectList();
             }
         });
@@ -151,6 +179,50 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 this.changeDetection.detectChanges();
             }
         });
+
+        this.componentStore.saveProjectSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.body) {
+                this.handleProjectResponse(response);
+                this.changeDetection.detectChanges();
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
+            if (branchList) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList?.length > 1;
+                if (!this.isCompany) {
+                    this.projectListRequest.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+                }
+                this.branches = [];
+                branchList.forEach((branch) => {
+                    this.branches.push({
+                        label: branch?.name,
+                        value: branch?.uniqueName
+                    });
+                });
+            }
+        });
+    }
+
+    /**
+     * Handles project creation and updates within the data source.
+     *
+     * @param {*} response - The response object containing project details.
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public handleProjectResponse(response: any): void {
+        if (response?.isCreateFlow) {
+            response.body["profitAndLoss"] = -1;
+            this.totalResults += 1;
+            this.dataSource = [response.body, ...this.dataSource];
+        } else {
+            this.dataSource.forEach((project) => {
+                if (project.uniqueName === response.body.uniqueName) {
+                    project.name = response.body.name;
+                    project.status = response.body.status;
+                }
+            });
+        }
     }
 
     /**
@@ -175,7 +247,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public initCompanyListForm(): void {
         this.companyListForm = this.fb.group({
-            projectName: ['']
+            projectName: [''],
+            status: ['']
         });
     }
 
@@ -197,11 +270,12 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.projectListRequest = {
             companyUniqueName: this.activeCompany.uniqueName,
             branchUniqueName: this.generalService.currentBranchUniqueName ?? this.activeCompany.uniqueName,
-            sort: 'asc',
-            sortBy: 'NAME',
+            sort: 'desc',
+            sortBy: 'STATUS',
             page: 1,
             count: PAGINATION_LIMIT,
-            q: ''
+            searchQuery: '',
+            queryColumn: 'STATUS'
         }
     }
 
@@ -218,16 +292,20 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toggles the visibility of the product search box and focuses on the input if visible.
+     * Toggles the visibility of the project search box and focuses on the input if visible.
      *
-     * @param {boolean} setBox - Whether to show the product search box.
+     * @param {boolean} setBox - Whether to show the project search box.
      * @memberof ProjectWiseAccountingListComponent
      */
-    public showProductSearchBox(setBox: boolean): void {
-        this.showProductSearch = setBox;
+    public showSearchBox(columnName: string, setBox: boolean): void {
+        this.isShowSearchBox = {
+            name: false,
+            status: false
+        };
+        this.isShowSearchBox[columnName] = setBox;
         setTimeout(() => {
-            if (this.showProductSearch) {
-                this.productSearch?.nativeElement.focus();
+            if (this.isShowSearchBox[columnName]) {
+                this.projectSearch?.nativeElement.focus();
             }
         }, 200);
         this.changeDetection.detectChanges();
@@ -285,18 +363,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
-            if (response) {
-                if (isCreateFlow) {
-                    response["profitAndLoss"] = -1;
-                    this.totalResults += 1;
-                    this.dataSource = [response, ...this.dataSource];
-                } else {
-                    this.dataSource.forEach((project) => {
-                        if (project.uniqueName === response.uniqueName) {
-                            project.name = response.name;
-                        }
-                    });
-                }
+            if (response?.body) {
+                this.handleProjectResponse(response);
                 this.changeDetection.detectChanges();
             }
         });
@@ -401,5 +469,38 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
+    }
+
+    /**
+     * To reset applied filter
+     *
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public resetFilter(): void {
+        this.isSearch = false;
+        this.projectListRequest.searchQuery = '';
+        this.projectListRequest.queryColumn = 'STATUS';
+        this.getAllProjectList();
+        this.companyListForm.reset();
+    }
+
+    /**
+     * Toggles the status of a project between "Closed" and "In Progress".
+     * @param {*} project
+     * 
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public convertToClosedOrInProgress(project: any): void {
+        this.componentStore.createNewProject({
+            request: {
+                data: {
+                    projectUniqueName: project.uniqueName,
+                    companyUniqueName: this.projectListRequest.companyUniqueName,
+                    branchUniqueName: this.projectListRequest.branchUniqueName,
+                },
+                isCreateFlow: false,
+            },
+            payload: { status: project.status === this.projectStatusType.Closed ? this.projectStatusType.InProgress : this.projectStatusType.Closed }
+        });
     }
 }

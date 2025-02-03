@@ -50,6 +50,7 @@ import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -111,7 +112,8 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         AmountFieldComponentModule,
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        MatButtonModule
     ],
 })
 export class FinancialReportsModule {

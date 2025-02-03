@@ -30,6 +30,7 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
 import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     declarations: [
@@ -65,7 +66,8 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         NoDataModule,
         FinancialReportsModule,
         MatProgressSpinnerModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        MatMenuModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

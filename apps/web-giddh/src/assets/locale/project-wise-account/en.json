@@ -7,14 +7,15 @@
     "enter_amount": "Enter amount",
     "create_project": "+ Create Project",
     "update_project": "Update Project",
-    "product_name": "Product Name",
-    "enter_product_name": "Enter Product Name",
-    "search_product": "Search Product",
+    "project_name": "Project Name",
+    "enter_project_name": "Enter Project Name",
+    "search_project": "Search Project",
     "profit_and_loss": "Profit and Loss",
     "revenue": "Revenue",
     "expense": "Expense",
     "project_delete_confirmation_message": "Are you sure you want to delete [PROJECT_NAME] project?",
     "entry_delete_confirmation_message": "Are you sure you want to delete [ENTRY_NAME] entry?",
     "percentage": "Percentage",
-    "value": "Value"
+    "value": "Value",
+    "search_status":"Search Status"
 }
