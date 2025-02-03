@@ -39,7 +39,7 @@
                     <!-- Tax Number Column -->
                     <ng-container matColumnDef="taxNumber">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.taxNumber }}</td>
+                        <td mat-cell *matCellDef="let element" [matTooltip]="element?.taxNumber" matTooltipPosition="above">{{ element?.taxNumber }}</td>
                     </ng-container>
 
                     <!-- Name Column -->
