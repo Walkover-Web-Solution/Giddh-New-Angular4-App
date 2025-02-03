@@ -215,12 +215,12 @@
                     <div
                         class="form-group"
                         *ngIf="
-                            (customTemplate?.templateType === 'gst_template_a' ||
+                            ((customTemplate?.templateType === 'gst_template_a' ||
                                 customTemplate?.templateType === 'gst_template_e' ||
-                                customTemplate?.templateType === 'tally_template' ||
                                 customTemplate?.templateType === 'thermal_template') &&
                             voucherType === 'sales' &&
-                            customTemplate.sections['header'].data['showCompanyAddress']
+                            customTemplate.sections['header'].data['showCompanyAddress'])
+                            || customTemplate?.templateType === 'tally_template'
                         "
                     >
                         <input
@@ -308,7 +308,7 @@
                         </span>
                     </div>
                     <!-- <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div> -->
-                    <div *ngIf="voucherType === 'sales' || voucherType === ''">
+                    <div *ngIf="voucherType === 'sales' || voucherType === '' || customTemplate?.templateType === 'tally_template' ">
                         <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
                             <input
                                 type="checkbox"
@@ -1795,10 +1795,10 @@
                         <tr
                             *ngIf="
                                 (customTemplate?.templateType === 'gst_template_a' ||
-                                    customTemplate?.templateType === 'tally_template' ||
                                     customTemplate?.templateType === 'gst_template_e') &&
                                 voucherType === 'sales' &&
-                                customTemplate.sections['table'].data['totalQuantity']
+                                customTemplate.sections['table'].data['totalQuantity'] ||
+                                customTemplate?.templateType === 'tally_template'
                             "
                         >
                             <td class="pb-3">
@@ -1890,9 +1890,9 @@
                         <div
                             class="form-group"
                             *ngIf="
-                                customTemplate?.templateType === 'tally_template' &&
-                                voucherType === 'sales' &&
-                                customTemplate.sections['footer'].data['taxBifurcation']
+                                customTemplate?.templateType === 'tally_template' ||
+                                (voucherType === 'sales' &&
+                                customTemplate.sections['footer'].data['taxBifurcation'])
                             "
                         >
                             <div class="form-group">
@@ -2147,6 +2147,7 @@
                             customTemplate?.templateType === 'thermal_template' &&
                             voucherType === 'sales' &&
                             customTemplate.sections['table'].data['totalQuantity']
+                            || customTemplate?.templateType === 'tally_template'
                         "
                         class="clearfix mr-t2"
                     >
