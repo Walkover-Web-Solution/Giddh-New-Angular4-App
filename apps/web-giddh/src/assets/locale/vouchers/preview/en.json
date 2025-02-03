@@ -293,7 +293,7 @@
     "voucher_created": "Voucher created for [VALUE]",
     "revision_history": "Revision History",
     "download_po_filename": "purchase-order.pdf",
-  "general": "General",
+    "general": "General",
     "general_settings_applicable": "(These settings will be applicable on Estimates, Proforma and Invoices)",
     "narration_on_mobile": "Show Narration on Ledger",
     "add_address_manually_on_voucher": "Add Address Manually on Voucher",

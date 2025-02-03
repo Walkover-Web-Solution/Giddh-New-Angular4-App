@@ -154,7 +154,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private accountService: AccountService,
         private searchService: SearchService,
         private authenticationService: AuthenticationService,
-        private purchaseOrderService:PurchaseOrderService
+        private purchaseOrderService: PurchaseOrderService
     ) {
         super(DEFAULT_STATE);
     }
@@ -1681,6 +1681,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    /**
+     * This will be use for save gmail auth code
+     *
+     * @memberof VoucherComponentStore
+     */
     readonly saveGmailAuthCode = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -1712,6 +1717,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    /**
+     * This will be use for cancel einvoice
+     *
+     * @memberof VoucherComponentStore
+     */
     readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -1747,6 +1757,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    /**
+     * This will be use for for verify purchase email address
+     *
+     * @memberof VoucherComponentStore
+     */
     readonly verifyPurchaseEmail = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -1778,5 +1793,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
+
+    /**
+     * Lifecycle hook for component destroy
+     *
+     * @memberof VoucherComponentStore
+     */
+    public ngOnDestroy(): void {
+        super.ngOnDestroy();
+    }
 
 }

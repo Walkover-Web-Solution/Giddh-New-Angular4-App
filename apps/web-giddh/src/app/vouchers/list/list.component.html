@@ -2661,7 +2661,7 @@
                                                     (onChange)="
                                                         onChangeEmail(settingForm.get('invoiceSettings.email').value)
                                                     "
-                                                    [tooltipText]="
+                                                    [suffixTooltipText]="
                                                         settingForm.get('invoiceSettings.emailVerified').value
                                                             ? localeData?.verified
                                                             : localeData?.unverified
@@ -3072,77 +3072,74 @@
                                                     localeData?.automatically_generate_voucher_for_the_entries_present_in_the_ledger
                                                 }}
                                             </mat-slide-toggle>
-                                            <div
-                                                class="mb-3 d-flex align-items-center column-gap15"
-                                                *ngIf="activeCompany?.countryV2?.alpha2CountryCode === 'IN'"
-                                            >
-                                                <mat-slide-toggle
-                                                    aria-label="gst invoice"
-                                                    name="gstEInvoiceEnable"
-                                                    class="disable-toggle slide-toggle d-block"
-                                                    color="primary"
-                                                    formControlName="gstEInvoiceEnable"
-                                                    (change)="handleEInvoiceChange($event)"
-                                                    [disabled]="
-                                                        activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
-                                                            restrictedModules.EInvoice
-                                                        )
-                                                    "
-                                                >
-                                                    {{ localeData?.e_invoice_authentication_label }}
-                                                </mat-slide-toggle>
+                                            <div *ngIf="activeCompany?.countryV2?.alpha2CountryCode === 'IN'">
+                                                <div class="mb-3 d-flex align-items-center column-gap15">
+                                                    <mat-slide-toggle
+                                                        aria-label="gst invoice"
+                                                        name="gstEInvoiceEnable"
+                                                        class="disable-toggle slide-toggle d-block"
+                                                        color="primary"
+                                                        formControlName="gstEInvoiceEnable"
+                                                        (change)="handleEInvoiceChange($event)"
+                                                    >
+                                                        {{ localeData?.e_invoice_authentication_label }}
+                                                    </mat-slide-toggle>
+                                                    <ng-container
+                                                        *ngIf="
+                                                            settingForm.get('invoiceSettings.gstEInvoiceEnable').value
+                                                        "
+                                                    >
+                                                        <input-field
+                                                            [name]="'userName'"
+                                                            [label]="localeData?.e_invoice_username_label"
+                                                            formControlName="gstEInvoiceUserName"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'password'"
+                                                            [label]="localeData?.e_invoice_password_label"
+                                                            formControlName="gstEInvoiceUserPassword"
+                                                            [type]="'password'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'password'"
+                                                            [label]="localeData?.e_invoice_gstin_label"
+                                                            formControlName="gstEInvoiceGstin"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                    </ng-container>
+                                                </div>
                                                 <ng-container
                                                     *ngIf="settingForm.get('invoiceSettings.gstEInvoiceEnable').value"
                                                 >
-                                                    <input-field
-                                                        [name]="'userName'"
-                                                        [label]="localeData?.e_invoice_username_label"
-                                                        formControlName="gstEInvoiceUserName"
-                                                        [type]="'text'"
-                                                    ></input-field>
-                                                    <input-field
-                                                        [name]="'password'"
-                                                        [label]="localeData?.e_invoice_password_label"
-                                                        formControlName="gstEInvoiceUserPassword"
-                                                        [type]="'password'"
-                                                    ></input-field>
-                                                    <input-field
-                                                        [name]="'password'"
-                                                        [label]="localeData?.e_invoice_gstin_label"
-                                                        formControlName="gstEInvoiceGstin"
-                                                        [type]="'text'"
-                                                    ></input-field>
+                                                    <mat-slide-toggle
+                                                        aria-label="generate einvoice"
+                                                        name="generateEinvoiceShowPopUp"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="generateEinvoiceShowPopUp"
+                                                    >
+                                                        {{ localeData?.enable_confirmation_pop_up_to_create_e_invoice }}
+                                                    </mat-slide-toggle>
+                                                    <mat-slide-toggle
+                                                        aria-label="generate eway bill"
+                                                        name="generateAutoEWayBill"
+                                                        class="disable-toggle slide-toggle d-block"
+                                                        color="primary"
+                                                        formControlName="generateAutoEWayBill"
+                                                    >
+                                                        {{ localeData?.generate_e_way_bill }}
+                                                    </mat-slide-toggle>
                                                 </ng-container>
-                                                <span class="pd-l1">
+                                                <div class="pd-l1">
                                                     <restricted-module-message
                                                         [restrictedModule]="restrictedModules.EInvoice"
                                                         (onUpgradePlan)="buyPlan($event)"
                                                     >
                                                     </restricted-module-message>
-                                                </span>
+                                                </div>
                                             </div>
-                                            <ng-container
-                                                *ngIf="settingForm.get('invoiceSettings.gstEInvoiceEnable').value"
-                                            >
-                                                <mat-slide-toggle
-                                                    aria-label="generate einvoice"
-                                                    name="generateEinvoiceShowPopUp"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                    formControlName="generateEinvoiceShowPopUp"
-                                                >
-                                                    {{ localeData?.enable_confirmation_pop_up_to_create_e_invoice }}
-                                                </mat-slide-toggle>
-                                                <mat-slide-toggle
-                                                    aria-label="generate eway bill"
-                                                    name="generateAutoEWayBill"
-                                                    class="disable-toggle slide-toggle d-block"
-                                                    color="primary"
-                                                    formControlName="generateAutoEWayBill"
-                                                >
-                                                    {{ localeData?.generate_e_way_bill }}
-                                                </mat-slide-toggle>
-                                            </ng-container>
+
                                             <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                         </div>
                                     </mat-tab>
@@ -3478,7 +3475,7 @@
                                                 (onChange)="
                                                     onChangeEmail(settingForm.get('purchaseBillSettings.email').value)
                                                 "
-                                                [tooltipText]="
+                                                [suffixTooltipText]="
                                                     settingForm.get('purchaseBillSettings.emailVerified').value
                                                         ? localeData?.verified
                                                         : localeData?.unverified
