@@ -18,7 +18,7 @@ import { MULTI_CURRENCY_MODULES, VoucherTypeEnum } from "../utility/vouchers.con
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
-import { FormControl } from "@angular/forms";
+import { FormControl, Validators } from "@angular/forms";
 import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
@@ -320,6 +320,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
     public settingForm: FormGroup;
     public webhookIsValidate: boolean = false;
     public settingResponse: any;
@@ -331,6 +333,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         entity: 'invoice'
     };
     public isLockDateSet: boolean = false;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
@@ -350,6 +353,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private settingsIntegrationActions: SettingsIntegrationActions,
         private commonActions: CommonActions
     ) {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
 
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -437,7 +441,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.verifyEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.initSettingObj();
+                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
         });
 
@@ -2613,7 +2617,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /**
  * verfiy Email
  */
-    public verfiyEmail(emailId: string, voucherType: string) {
+    public verifyEmail(emailId: string, voucherType: string) {
         let email = new RegExp(/[a-z0-9!#$%&'*+=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
         if (email.test(emailId)) {
             if (voucherType === 'purchase') {
@@ -2715,7 +2719,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             autoEntryAndInvoice: [false],
             generateEinvoiceShowPopUp: [false],
             showSeal: [true],
-            autoPaid: ["runtime"],
+            autoPaid: [null],
             autoGenerateVoucherFromEntry: [true],
             autoMailDebitNote: [true],
             autoMailCreditNote: [true],
@@ -2785,11 +2789,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             autoMail: [true],
             autoEntryAndInvoice: [false],
             showSeal: [true],
-            autoPaid: ["never"],
+            autoPaid: [null],
             createPaymentEntry: [false],
             email: [null],
             emailVerified: [null],
-            headerName: ["PROFORMA"],
+            headerName: [null, Validators.required],
             autoChangeStatusOnExp: [false],
             sendSms: [null],
             enableProforma: [false],
@@ -2801,8 +2805,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     // Estimate Settings FormGroup
     public createEstimateSettingsForm(): FormGroup {
         return this.fb.group({
-            headerName: ["ESTIMATE"],
-            nextStepToEstimate: ["invoice"],
+            headerName: [null, Validators.required],
+            nextStepToEstimate: [null, Validators.required],
             autoChangeStatusOnExp: [false],
             sendSms: [false],
             duePeriod: [null],
@@ -2824,7 +2828,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     // Company Inventory Settings FormGroup
     public createCompanyInventorySettingsForm(): FormGroup {
         return this.fb.group({
-            manageInventory: [null],
+            manageInventory: [null]
         });
     }
 
