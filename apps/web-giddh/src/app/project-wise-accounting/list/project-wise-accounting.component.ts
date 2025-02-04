@@ -119,7 +119,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initCompanyListForm();
-        this.getAllProjectList();
         this.companyListForm.get('projectName').valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((searchedText) => {
             if (searchedText || searchedText === '') {
                 this.isSearch = searchedText !== '';
@@ -189,7 +188,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
 
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
             if (branchList) {
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList?.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
                 if (!this.isCompany) {
                     this.projectListRequest.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
                 }
@@ -211,7 +210,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public handleProjectResponse(response: any): void {
-        if (response?.isCreateFlow) {
+        if (response.isCreateFlow) {
             response.body["profitAndLoss"] = -1;
             this.totalResults += 1;
             this.dataSource = [response.body, ...this.dataSource];
@@ -277,6 +276,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             searchQuery: '',
             queryColumn: 'STATUS'
         }
+        this.getAllProjectList();
     }
 
     /**
