@@ -2703,16 +2703,7 @@
                                                             settingForm.get('invoiceSettings.email').value?.length < 4
                                                         )
                                                     }"
-                                                    (click)="
-                                                        !(
-                                                            !settingForm.get('invoiceSettings.email').value ||
-                                                            settingForm.get('invoiceSettings.email').value?.length < 4
-                                                        )
-                                                            ? deleteEmail(
-                                                                  settingForm.get('invoiceSettings.email').value
-                                                              )
-                                                            : ''
-                                                    "
+                                                     (click)="shouldDeleteEmail('invoice') && deleteEmail(settingForm.get('invoiceSettings.email').value)"
                                                 >
                                                     <i class="icon-trash"></i>
                                                 </button>
@@ -2758,11 +2749,10 @@
                                                     [type]="'text'"
                                                     formControlName="headerName"
                                                     [required]="true"
-                                                    [ngClass]="{
-                                                        'error-box':
-                                                            settingForm?.get('estimateSettings.headerName')?.dirty &&
-                                                            settingForm?.get('estimateSettings.headerName')?.errors
-                                                    }"
+                                                    [showError]="
+                                                        settingForm?.get('estimateSettings.headerName')?.dirty &&
+                                                        settingForm?.get('estimateSettings.headerName')?.errors
+                                                    "
                                                     class="settings-field d-block"
                                                 ></input-field>
                                                 <input-field
@@ -2771,7 +2761,7 @@
                                                     [placeholder]="'00'"
                                                     [type]="'text'"
                                                     [maxlength]="3"
-                                                    decimalDigitsDirective
+                                                    [allowDigitsOnly]="true"
                                                     formControlName="duePeriod"
                                                     class="settings-field d-block"
                                                     [matSuffix]="commonLocaleData?.app_days"
@@ -2809,7 +2799,7 @@
                                                 color="primary"
                                                 formControlName="autoWhatsApp"
                                             >
-                                                {{ getWhatsappSettingLabel("estimate") }}
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.estimate) }}
                                             </mat-slide-toggle>
                                             <div class="d-flex align-items-center">
                                                 <mat-slide-toggle
@@ -2824,7 +2814,7 @@
                                                 <a
                                                     href="javascript:;"
                                                     class="cursor-pointer ml-3"
-                                                    (click)="openCustomEmailDialog('estimate')"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.estimate)"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
@@ -2851,18 +2841,17 @@
                                                     formControlName="headerName"
                                                     [required]="true"
                                                     class="settings-field d-block"
-                                                    [ngClass]="{
-                                                        'error-box':
-                                                            settingForm?.get('proformaSettings.headerName')?.dirty &&
-                                                            settingForm?.get('proformaSettings.headerName')?.errors
-                                                    }"
+                                                    [showError]="
+                                                        settingForm?.get('proformaSettings.headerName')?.dirty &&
+                                                        settingForm?.get('proformaSettings.headerName')?.errors
+                                                    "
                                                 ></input-field>
                                                 <input-field
                                                     [name]="'name'"
                                                     [label]="localeData?.default_expiry_day"
                                                     [placeholder]="'00'"
                                                     [maxlength]="3"
-                                                    decimalDigitsDirective
+                                                    [allowDigitsOnly]="true"
                                                     formControlName="duePeriod"
                                                     [type]="'text'"
                                                     class="settings-field d-block"
@@ -2885,7 +2874,7 @@
                                                 color="primary"
                                                 formControlName="autoWhatsApp"
                                             >
-                                                {{ getWhatsappSettingLabel("proforma") }}
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.proforma) }}
                                             </mat-slide-toggle>
                                             <div class="d-flex align-items-center">
                                                 <mat-slide-toggle
@@ -2900,7 +2889,7 @@
                                                 <a
                                                     href="javascript:;"
                                                     class="cursor-pointer ml-3"
-                                                    (click)="openCustomEmailDialog('proforma')"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.proforma)"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
@@ -2943,7 +2932,7 @@
                                                     class="settings-field d-block mb-3"
                                                     maxlength="3"
                                                     formControlName="duePeriod"
-                                                    decimalDigitsDirective
+                                                    [allowDigitsOnly]="true"
                                                     [matSuffix]="commonLocaleData?.app_days"
                                                 ></input-field>
                                                 <giddh-datepicker
@@ -2982,7 +2971,7 @@
                                                 <a
                                                     href="javascript:;"
                                                     class="cursor-pointer ml-3"
-                                                    (click)="openCustomEmailDialog('sales')"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.sales)"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
@@ -3214,7 +3203,7 @@
                                                 color="primary"
                                                 formControlName="autoWhatsAppReceipt"
                                             >
-                                                {{ getWhatsappSettingLabel("receipt") }}
+                                                {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.receipt) }}
                                             </mat-slide-toggle>
                                             <div class="d-flex align-items-center">
                                                 <mat-slide-toggle
@@ -3229,7 +3218,7 @@
                                                 <a
                                                     href="javascript:;"
                                                     class="cursor-pointer ml-3"
-                                                    (click)="openCustomEmailDialog('receipt')"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.receipt)"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
@@ -3310,7 +3299,7 @@
                                                 class="disable-toggle slide-toggle d-block mb-3"
                                                 color="primary"
                                             >
-                                                {{ getWhatsappSettingLabel("debit note") }}
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.debitNote) }}
                                             </mat-slide-toggle>
                                             <mat-slide-toggle
                                                 aria-label="debit note round off"
@@ -3334,7 +3323,7 @@
                                                 <a
                                                     href="javascript:;"
                                                     class="cursor-pointer ml-3"
-                                                    (click)="openCustomEmailDialog('debit note')"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.debitNote)"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
@@ -3425,7 +3414,7 @@
                                                 class="disable-toggle slide-toggle d-block mb-3"
                                                 color="primary"
                                             >
-                                                {{ getWhatsappSettingLabel("credit note") }}
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.creditNote) }}
                                             </mat-slide-toggle>
                                             <div class="d-flex align-items-center mb-3">
                                                 <mat-slide-toggle
@@ -3440,7 +3429,7 @@
                                                 <a
                                                     href="javascript:;"
                                                     class="cursor-pointer ml-3"
-                                                    (click)="openCustomEmailDialog('credit note')"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.creditNote)"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
@@ -3495,7 +3484,7 @@
                                                 (click)="
                                                     verifyEmail(
                                                         settingForm.get('purchaseBillSettings.email').value,
-                                                        'purchase'
+                                                        voucherTypeEnum.purchase
                                                     )
                                                 "
                                             >
@@ -3519,16 +3508,7 @@
                                                         settingForm.get('purchaseBillSettings.email').value?.length < 4
                                                     )
                                                 }"
-                                                (click)="
-                                                    !(
-                                                        !settingForm.get('purchaseBillSettings.email').value ||
-                                                        settingForm.get('purchaseBillSettings.email').value?.length < 4
-                                                    )
-                                                        ? deleteEmail(
-                                                              settingForm.get('purchaseBillSettings.email').value
-                                                          )
-                                                        : ''
-                                                "
+                                                (click)="shouldDeleteEmail() && deleteEmail(settingForm.get('purchaseBillSettings.email').value)"
                                             >
                                                 <i class="icon-trash"></i>
                                             </button>
@@ -3572,7 +3552,7 @@
                                                 class="settings-field d-block"
                                                 maxlength="3"
                                                 formControlName="poDuePeriod"
-                                                decimalDigitsDirective
+                                                [allowDigitsOnly]="true"
                                                 [matSuffix]="commonLocaleData?.app_days"
                                             ></input-field>
                                         </div>
@@ -3716,7 +3696,7 @@
                                             <a
                                                 href="javascript:;"
                                                 class="cursor-pointer"
-                                                (click)="openCustomEmailDialog('purchase')"
+                                                (click)="openCustomEmailDialog(voucherTypeEnum.purchase)"
                                                 >{{ commonLocaleData?.app_custom_email }}</a
                                             >
                                         </div>
@@ -3795,7 +3775,7 @@
                                             <a
                                                 href="javascript:;"
                                                 class="cursor-pointer ml-3"
-                                                (click)="openCustomEmailDialog('payment')"
+                                                (click)="openCustomEmailDialog(voucherTypeEnum.payment)"
                                                 >{{ commonLocaleData?.app_custom_email }}</a
                                             >
                                         </div>
@@ -3806,8 +3786,9 @@
                                             aria-label="auto whatsapp payment"
                                             formControlName="autoWhatsAppPayment"
                                         >
-                                            {{ getWhatsappSettingLabel("payment") }}
+                                            {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.payment) }}
                                         </mat-slide-toggle>
+                                        <!--  Confirmed with Kriti that she was not aware of this setting due to the comment.
                                         <mat-slide-toggle
                                             name="createPaymentEntry"
                                             class="disable-toggle slide-toggle d-block mb-3"
@@ -3816,7 +3797,7 @@
                                             formControlName="createPaymentEntry"
                                         >
                                             Create payment entry
-                                        </mat-slide-toggle>
+                                        </mat-slide-toggle> -->
                                         <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                     </div>
                                 </mat-tab>
