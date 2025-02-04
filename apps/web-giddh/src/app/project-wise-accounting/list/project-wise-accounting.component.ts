@@ -478,10 +478,11 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public resetFilter(): void {
         this.isSearch = false;
+        this.companyListForm.reset();
         this.projectListRequest.searchQuery = '';
         this.projectListRequest.queryColumn = 'STATUS';
+        this.projectListRequest.branchUniqueName = '';
         this.getAllProjectList();
-        this.companyListForm.reset();
     }
 
     /**
