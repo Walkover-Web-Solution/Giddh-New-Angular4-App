@@ -1796,6 +1796,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = accountUniqueName;
         this.search("");
+        this.universalDate$.pipe(take(1)).subscribe(date => {
+            if (date) {
+                this.selectedDateRangeUi = dayjs(date[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(date[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
         this.getTransactionData();
     }
 
