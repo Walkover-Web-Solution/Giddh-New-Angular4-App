@@ -369,7 +369,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.queryParams = params;
             }
 
-            if (params.code) {
+            if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
         });
@@ -993,6 +993,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
                 }
+
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
@@ -2603,7 +2604,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
  * @memberof VoucherListComponent
  */
     public getRedirectUrl(): string {
-        if (this.urlVoucherType === 'purchase') {
+        if (this.urlVoucherType === VoucherTypeEnum.purchase) {
             return AppUrl + 'pages/purchase-management/purchase/settings';
         } else {
             return AppUrl + 'pages/invoice/preview/settings';
@@ -2694,6 +2695,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Send voucher type for payment and receipt whatsapp option.
+     *
+     * @param {string} voucherType
+     * @returns {boolean}
+     * @memberof VoucherListComponent
+     */
+    public getWhatsappPaymentReceiptSettingLabel(voucherType: string): string {
+        return this.commonLocaleData?.app_send_payment_receipt_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
+    }
+
+    /**
      * Auto-fills the GST number field for E-invoice
      *
      * @private
@@ -2744,7 +2756,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (!emailId) {
             return false;
         } else {
-            if (this.urlVoucherType === 'purchase') {
+            if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                 this.updateSettingsEmail(null);
                 return true;
             } else {
@@ -3000,7 +3012,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         companyEmailSettings: setting.companyEmailSettings || {},
                         companyInventorySettings: setting.companyInventorySettings || {}
                     });
-                    if (this.urlVoucherType === 'purchase') {
+                    if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                         if (!this.settingForm.get('purchaseBillSettings.enableVoucherDownload').value) {
                             this.settingForm.get('purchaseBillSettings.enableVoucherDownload').patchValue(false);
                         }
@@ -3056,7 +3068,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.formToSave.invoiceSettings = cloneDeep(this.settingForm.get('invoiceSettings').value);
         this.formToSave.estimateSettings = cloneDeep(this.settingForm.get('estimateSettings').value);
         this.formToSave.proformaSettings = cloneDeep(this.settingForm.get('proformaSettings').value);
-        if (this.urlVoucherType === 'purchase') {
+        if (this.urlVoucherType === VoucherTypeEnum.purchase) {
             this.formToSave.purchaseBillSettings = cloneDeep(this.settingForm.get('purchaseBillSettings').value);
             delete this.formToSave.purchaseBillSettings.invoiceSettings;
             if (this.formToSave.purchaseBillSettings.lockDate instanceof Date) {
@@ -3099,5 +3111,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         }
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
+    }
+
+    /**
+   *This will be use for validation for delete email
+   *
+   * @return {*}  {boolean}
+   * @memberof VoucherListComponent
+   */
+    public shouldDeleteEmail(voucherType?: string): boolean {
+        const email = voucherType === 'invoice ' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
+        return email && email.length >= 4;
     }
 }

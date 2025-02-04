@@ -159,6 +159,6 @@
             [attr.aria-label]="label || placeholder"
         >
         </i>
-        <i *ngIf="matSuffixIcon && suffixTooltipText"   matSuffixIcon [matTooltip]="suffixTooltipText"  matTooltipPosition="above"  [ngClass]="matSuffixIcon" class="position-absolute suffix-icon"></i>
+      <i matSuffixIcon [matTooltip]="suffixTooltipText"  matTooltipPosition="above" *ngIf="matSuffixIcon" [ngClass]="matSuffixIcon"matSuffix ></i>
     </mat-form-field>
 </div>
