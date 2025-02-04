@@ -291,7 +291,7 @@
             <li
                 [hidden]="templateUISectionVisibility.print"
                 (click)="onChangeVisibility('print')"
-                *ngIf="customTemplate.templateType !== 'thermal_template'"
+                *ngIf="customTemplate.templateType !== 'thermal_template' && customTemplate.templateType !== 'tally_template'"
                 class="d-flex align-items-center"
             >
                 <i class="icon-print_settings"></i> <label>Edit print setting</label>
