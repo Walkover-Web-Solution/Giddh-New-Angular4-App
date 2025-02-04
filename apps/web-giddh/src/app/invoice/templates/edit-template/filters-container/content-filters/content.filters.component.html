@@ -384,7 +384,7 @@
                         </div>
                     </div>
                     <!--   .....this is for other voucher type -->
-                    <ng-container *ngIf="voucherType != 'sales'">
+                    <ng-container *ngIf="voucherType != 'sales' && customTemplate?.templateType !== 'tally_template'">
                         <div *ngIf="fieldsAndVisibility.header.voucherDate" class="form-group">
                             <input
                                 type="checkbox"
