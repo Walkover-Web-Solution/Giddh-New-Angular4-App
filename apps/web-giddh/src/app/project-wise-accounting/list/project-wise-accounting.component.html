@@ -36,11 +36,11 @@
           </button>
         </div>
         <div class="pull-right">
-          <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">{{ localeData?.create_project }}</button>
+          <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ {{ localeData?.create_project }}</button>
         </div>
       </div>
       <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!(isFetchingProjects$ | async) && !(totalResults || isSearch)">
-        <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">{{ localeData?.create_project }}</button>
+        <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ {{ localeData?.create_project }}</button>
       </div>
       <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="totalResults || isSearch">
         <table
@@ -131,13 +131,13 @@
                   <i class="icon-dots-three-vertical"></i>
               </span>
               <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="openCreateProjectDialog(false, element)">
+                  <button *ngIf="!isCompany" mat-menu-item (click)="openCreateProjectDialog(false, element)">
                       {{ commonLocaleData?.app_edit }}
                   </button>
                   <button mat-menu-item (click)="openDeleteProjectDialog(element)">
                       {{ commonLocaleData?.app_delete }}
                   </button>
-                  <button mat-menu-item (click)="convertToClosedOrInProgress(element)">
+                  <button *ngIf="!isCompany" mat-menu-item (click)="convertToClosedOrInProgress(element)">
                       {{ element.status === projectStatusType.Closed ? commonLocaleData?.app_payment_status?.open : commonLocaleData?.app_close }}
                   </button>
               </mat-menu>
