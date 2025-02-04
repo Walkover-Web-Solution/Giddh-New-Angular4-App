@@ -16,7 +16,7 @@
         [tbExportXLS]="false"
         [plBsExportXLS]="projectUniqueName ? false : true"
         [showLabels]="true"
-        [backButtonForProjectWiseAccounting]="projectUniqueName ? true : false"
+        [backToProjectWiseAccounting]="projectUniqueName ? true : false"
     ></financial-filter>
     <div *ngIf="(showLoader | async) || (isFetchingProfitAndLoss$ | async)">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>

@@ -26,7 +26,7 @@
               <dropdown-field
                   [label]="commonLocaleData?.app_branch"
                   [options]="branches"
-                  (selectedOption)="projectListRequest.branchUniqueName = $event.value ;isSearch = true ; getAllProjectList()"
+                  (selectedOption)="projectListRequest.branchUniqueName = $event?.value ;isSearch = true ; getAllProjectList()"
                   (onClear)="projectListRequest.branchUniqueName = ''; isSearch = false; getAllProjectList()"
                   [placeholder]="commonLocaleData?.app_select_branch"
               ></dropdown-field>
