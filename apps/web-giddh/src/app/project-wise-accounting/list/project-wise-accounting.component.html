@@ -6,29 +6,43 @@
 >
 
  <hamburger-menu></hamburger-menu>
-  <div *ngIf="(isFetchingProjects$ | async) && !totalResults && !isProductSearch">
+  <div *ngIf="(isFetchingProjects$ | async) && !totalResults && !isSearch">
     <giddh-page-loader></giddh-page-loader>
   </div>
    <div class="project clearfix section-center position-relative overflow-visible pd-2">
-      <div class="d-flex align-items-center justify-content-space-between section-center" *ngIf="totalResults || isProductSearch">
-        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-            <input
-              matInput
-              type="text"
-              name="selectedDateRange"
-              aria-label="Select date range"
-              [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-              class="giddh-datepicker date-range-picker"
-            />
+      <div class="d-flex align-items-center justify-content-space-between section-center" *ngIf="totalResults || isSearch">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+          <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+              <input
+                matInput
+                type="text"
+                name="selectedDateRange"
+                aria-label="Select date range"
+                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                class="giddh-datepicker date-range-picker"
+              />
+          </div>
+          <div *ngIf="isCompany" class="mr-l1">
+              <dropdown-field
+                  [label]="commonLocaleData?.app_branch"
+                  [options]="branches"
+                  (selectedOption)="projectListRequest.branchUniqueName = $event?.value ;isSearch = true ; getAllProjectList()"
+                  (onClear)="projectListRequest.branchUniqueName = ''; isSearch = false; getAllProjectList()"
+                  [placeholder]="commonLocaleData?.app_select_branch"
+              ></dropdown-field>
+          </div>
+          <button *ngIf="(projectName.value?.length || projectStatus.value?.length)" mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
+              <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+          </button>
         </div>
         <div class="pull-right">
           <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">{{ localeData?.create_project }}</button>
         </div>
       </div>
-      <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!(isFetchingProjects$ | async) && !(totalResults || isProductSearch)">
+      <div class="min-height d-flex align-items-center justify-content-center" *ngIf="!(isFetchingProjects$ | async) && !(totalResults || isSearch)">
         <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">{{ localeData?.create_project }}</button>
       </div>
-      <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="totalResults || isProductSearch">
+      <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="totalResults || isSearch">
         <table
           mat-table
           matSort
@@ -52,16 +66,16 @@
                 mat-sort-header
                 class="max-width-150 td-search-box"
             >
-                <div [hidden]="showProductSearch">
-                  <i class="icon-search" (click)="$event.stopPropagation(); showProductSearchBox(true)"></i>
-                  <span>{{ localeData?.product_name }}</span>
+                <div [hidden]="isShowSearchBox?.name">
+                  <i class="icon-search" (click)="$event.stopPropagation(); showSearchBox('name', true)"></i>
+                  <span>{{ localeData?.project_name }}</span>
                 </div>
 
-                <div [hidden]="!showProductSearch" (click)="$event.stopPropagation()" (clickOutside)="showProductSearchBox(false)">
+                <div [hidden]="!isShowSearchBox?.name" (click)="$event.stopPropagation()" (clickOutside)="showSearchBox('name', false)">
                     <text-field
                         [type]="'text'"
-                        [placeholder]="commonLocaleData?.app_search"
-                        [label]="localeData?.search_product"
+                        [placeholder]="localeData?.search_project"
+                        [label]="localeData?.search_project"
                         [cssClass]="'form-control search-table'"
                         [formControl]="projectName"
                         [autoFocus]="show"
@@ -75,14 +89,28 @@
 
           <!-- Status Column -->
           <ng-container matColumnDef="status">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef class="sortable-header-justify-center">{{ commonLocaleData?.app_status }}</th>
-            <td mat-cell *matCellDef="let element">{{element.status}}</td>
-          </ng-container>
+            <th mat-header-cell 
+                mat-sort-header 
+                *matHeaderCellDef class="max-width-150 td-search-box"
+            >
+                <div [hidden]="isShowSearchBox?.status">
+                  <i class="icon-search" (click)="$event.stopPropagation(); showSearchBox('status', true)"></i>
+                  <span>{{ commonLocaleData?.app_status }}</span>
+                </div>
 
-            <!-- Archived Column -->
-          <ng-container matColumnDef="archive_status">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ commonLocaleData?.app_archived }}</th>
-            <td mat-cell *matCellDef="let element">{{element.archiveStatus}}</td>
+                <div [hidden]="!isShowSearchBox?.status" (click)="$event.stopPropagation()" (clickOutside)="showSearchBox('status', false)">
+                    <text-field
+                        [type]="'text'"
+                        [placeholder]="localeData?.search_status"
+                        [label]="localeData?.search_status"
+                        [cssClass]="'form-control search-table'"
+                        [formControl]="projectStatus"
+                        [autoFocus]="show"
+                    >
+                    </text-field>
+                </div>
+              </th>
+            <td mat-cell *matCellDef="let element">{{element.status}}</td>
           </ng-container>
 
           <!-- Symbol Column -->
@@ -97,17 +125,29 @@
 
           <!-- Action Column -->
           <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef class="text-center">{{ commonLocaleData?.app_archived }}</th>
-            <td mat-cell *matCellDef="let element" class="text-center">
-              <span class="cursor-pointer" (click)="openCreateProjectDialog(false, element)" ><i class="icon-edit mr-r2"></i></span>
-              <span class="cursor-pointer"><i (click)="openDeleteProjectDialog(element)" class="icon-trash"></i></span>
+            <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_action }}</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              <span [matMenuTriggerFor]="menu" class="cursor-pointer">
+                  <i class="icon-dots-three-vertical"></i>
+              </span>
+              <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="openCreateProjectDialog(false, element)">
+                      {{ commonLocaleData?.app_edit }}
+                  </button>
+                  <button mat-menu-item (click)="openDeleteProjectDialog(element)">
+                      {{ commonLocaleData?.app_delete }}
+                  </button>
+                  <button mat-menu-item (click)="convertToClosedOrInProgress(element)">
+                      {{ element.status === projectStatusType.Closed ? commonLocaleData?.app_payment_status?.open : commonLocaleData?.app_close }}
+                  </button>
+              </mat-menu>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <div class="no-data" *ngIf="!totalResults && isProductSearch">
+        <div class="no-data" *ngIf="!totalResults && isSearch">
           <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
         </div>
         <mat-paginator

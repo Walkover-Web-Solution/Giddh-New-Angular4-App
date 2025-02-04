@@ -15,6 +15,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'revenue-expense-list',
@@ -103,6 +104,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public activeRowIndex: number = -1;
     /** Enum representing the types of project-wise accounting */
     public projectWiseAccountingType: typeof ProjectWiseAccountingType = ProjectWiseAccountingType;
+    /** True if is company */
+    public isCompany: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -235,6 +238,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (entryUpdateSuccess) {
                 this.entryList.at(entryUpdateSuccess.index).get('defaultEntryUniqueName').patchValue(entryUpdateSuccess.entryUniqueName);
                 this.getRevenueExpense();
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
             }
         });
     }
