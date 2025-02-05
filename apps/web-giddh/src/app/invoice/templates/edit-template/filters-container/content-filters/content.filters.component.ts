@@ -345,4 +345,19 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.signatureImgAttached = false;
         }
     }
+
+    /**
+     * Change voucher number or date based on Invoice number or date
+     * 
+     * @param event
+     */
+    public handleInvoiceDateNumberChange(isDate: boolean = true): void {
+        if (isDate) {
+            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+            this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+        } else {
+            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+            this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
+        }
+    }
 }
