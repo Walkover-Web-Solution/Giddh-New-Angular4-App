@@ -2045,6 +2045,7 @@
                                 mat-stretch-tabs="false"
                                 mat-align-tabs="start"
                                 class="tabs-box-wrap pt-3 px-4"
+                                [selectedIndex]="selectedInnerTabIndex"
                             >
                                 <div
                                     validateSectionPermission
@@ -2237,7 +2238,7 @@
                                                 aria-label="Select an option"
                                                 class="mt-2 mb-3"
                                             >
-                                                <mat-radio-button color="primary" value="proforma">{{
+                                                <mat-radio-button color="primary" value="salesorder">{{
                                                     localeData?.proforma
                                                 }}</mat-radio-button>
                                                 <mat-radio-button color="primary" value="invoice">{{
@@ -2512,6 +2513,7 @@
                                                 {{ localeData?.run_auto_paid_for_all_the_accounts }}
                                             </mat-slide-toggle>
                                             <mat-slide-toggle
+                                                *ngIf="settingForm.get('invoiceSettings.autoPaid').value"
                                                 aria-label="auto generate voucher from entry"
                                                 name="autoGenerateVoucherFromEntry"
                                                 class="disable-toggle slide-toggle d-block mb-3"
