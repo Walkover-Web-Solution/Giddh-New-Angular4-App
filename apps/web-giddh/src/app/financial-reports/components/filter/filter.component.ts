@@ -46,8 +46,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
     /** True, when expand all operation is performed */
     @Input() public expandAll: boolean;
-    /** Controls the visibility of the back button for project-wise accounting.  */
-    @Input() public backToProjectWiseAccounting: boolean = false;
+    /** Controls the visibility of the button and branch fitter for project wise accounting.  */
+    @Input() public isProjectWiseAccounting: boolean = false;
     @Output()
     public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
     public showClearSearch: boolean;
