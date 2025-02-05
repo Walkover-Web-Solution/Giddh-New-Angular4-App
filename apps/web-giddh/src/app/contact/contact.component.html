@@ -632,7 +632,7 @@
                             [matTooltip]="account.name"
                             matTooltipPosition="above"
                         >
-                            <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
+                            <div class="customer-name-filed cursor-pointer pd-r2 content-ellipsis-td" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         color="primary"
@@ -643,7 +643,7 @@
                                         (change)="selectAccount($event, account)"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="content-ellipsis-td">{{ account.name }}</span>
                                 </div>
 
                                 <button
@@ -990,7 +990,7 @@
                             [matTooltip]="account.name"
                             matTooltipPosition="above"
                         >
-                            <div class="vendor-name-field cursor-pointer pd-r2 content-ellipsis-td" (dblclick)="trigger?.openMenu()">
+                            <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
@@ -1001,7 +1001,7 @@
                                         [(ngModel)]="account.isSelected"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="content-ellipsis-td">{{ account.name }}</span>
                                 </div>
                                 <button
                                     mat-icon-button
