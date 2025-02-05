@@ -188,7 +188,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         giddhBalanceDecimalPlaces: 0
     };
     /** True, if user has enable GST E-invoice */
-    public isEInvoiceEnabled: boolean = null;;
+    public isEInvoiceEnabled: boolean = null;
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
@@ -476,7 +476,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
                 }
-
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
 
                 if (this.activeTabGroup === -1) {

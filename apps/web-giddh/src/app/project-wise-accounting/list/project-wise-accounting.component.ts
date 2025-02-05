@@ -9,7 +9,7 @@ import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.
 import { ProjectDetails, ProjectRequestType, ProjectStatusType } from '../project-wise-accounting';
 import { GeneralService } from '../../services/general.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatSort, Sort } from "@angular/material/sort";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -40,7 +40,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public dataSource: ProjectDetails[] = [];
     /** Holds the request parameters from the URL */
     public projectListRequest: ProjectRequestType;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Hold active company */
     public activeCompany: any;
@@ -80,7 +80,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** Holds company branches */
     public branches: Array<any>;
     /** True if is company */
-    public isCompany: boolean = false;
+    public isCompany: boolean = true;
     /** Enum representing the types of project-wise accounting status type */
     public projectStatusType: typeof ProjectStatusType = ProjectStatusType;
     /** Hold broadcast event */
@@ -100,6 +100,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private modalService: BsModalService
     ) {
+        this.componentStore.patchState({ isFetchingProjects: true });
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -514,7 +515,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.projectStatus.reset();
         this.projectListRequest.searchQuery = '';
         this.projectListRequest.queryColumn = 'STATUS';
-        this.projectListRequest.branchUniqueName = '';
         this.getAllProjectList();
     }
 

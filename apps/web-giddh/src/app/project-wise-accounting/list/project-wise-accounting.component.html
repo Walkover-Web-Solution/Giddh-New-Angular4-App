@@ -23,14 +23,14 @@
               />
           </div>
           <div *ngIf="isCompany" class="mr-l1">
-              <dropdown-field
+              <reactive-dropdown-field
                   [label]="commonLocaleData?.app_branch"
                   [options]="branches"
-                  (selectedOption)="projectListRequest.branchUniqueName = $event?.value ;isSearch = true ; getAllProjectList()"
+                  (selectedOption)="projectListRequest.branchUniqueName = $event?.value; isSearch = true; getAllProjectList()"
                   (onClear)="projectListRequest.branchUniqueName = ''; isSearch = false; getAllProjectList()"
-                  [defaultValue]="activeCompany?.name"
+                  [labelValue]="activeCompany?.name"
                   [placeholder]="commonLocaleData?.app_select_branch"
-              ></dropdown-field>
+              ></reactive-dropdown-field>
           </div>
           <button *ngIf="(projectName.value?.length || projectStatus.value?.length)" mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
               <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
@@ -142,13 +142,13 @@
                   <i class="icon-dots-three-vertical"></i>
               </span>
               <mat-menu #menu="matMenu">
-                  <button *ngIf="!isCompany" mat-menu-item (click)="openCreateProjectDialog(false, element)">
+                  <button mat-menu-item (click)="openCreateProjectDialog(false, element)">
                       {{ commonLocaleData?.app_edit }}
                   </button>
                   <button mat-menu-item (click)="openDeleteProjectDialog(element)">
                       {{ commonLocaleData?.app_delete }}
                   </button>
-                  <button *ngIf="!isCompany" mat-menu-item (click)="convertToClosedOrInProgress(element)">
+                  <button mat-menu-item (click)="convertToClosedOrInProgress(element)">
                       {{ element.status === projectStatusType.Closed ? commonLocaleData?.app_payment_status?.open : commonLocaleData?.app_close }}
                   </button>
               </mat-menu>
