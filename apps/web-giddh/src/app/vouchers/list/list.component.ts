@@ -167,6 +167,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     ];
     /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 2;
+    /** Holds active inner selected Tab Index  */
+    public selectedInnerTabIndex: number;
     /** Holds universal date */
     public universalDate: any;
     /** Holds advance Filters keys */
@@ -367,7 +369,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
+                this.selectedInnerTabIndex = 4;
             }
+
 
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
@@ -402,17 +406,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.isGmailIntegrated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isGmailIntegrated = response;
-            if (!this.isGmailIntegrated) {
-                this.settingForm.get('companyEmailSettings.sendThroughGmail')?.disable();
-                this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.disable();
-            } else {
-                this.settingForm.get('companyEmailSettings.sendThroughGmail')?.enable();
-                this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.enable();
-            }
-        });
-
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.activeCompany = response;
@@ -438,8 +431,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        this.initSettingObj();
 
         this.componentStore.verifyEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -496,6 +487,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getLedgersOfInvoice();
                 }
             }
+            this.componentStore.isGmailIntegrated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isGmailIntegrated = response;
+                if (!this.isGmailIntegrated) {
+                    this.settingForm.get('companyEmailSettings.sendThroughGmail')?.disable();
+                    this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.disable();
+                } else {
+                    this.settingForm.get('companyEmailSettings.sendThroughGmail')?.enable();
+                    this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.enable();
+                }
+            });
         });
 
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -2583,16 +2584,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will return page url
- *
- * @returns {string}
- * @memberof VoucherListComponent
- */
+     * This will return page url
+     *
+     * @returns {string}
+     * @memberof VoucherListComponent
+     */
     public getRedirectUrl(): string {
         if (this.urlVoucherType === VoucherTypeEnum.purchase) {
             return AppUrl + 'pages/purchase-management/purchase/settings';
         } else {
-            return AppUrl + 'pages/invoice/preview/settings';
+            return AppUrl + 'pages/vouchers/preview/sales/settings';
         }
     }
 
@@ -2972,9 +2973,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public initSettingObj(): void {
         this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(setting => {
-            if (!setting) {
-                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-            } else {
+            if (setting && setting.invoiceSettings) {
                 this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
                 if (!this.isEInvoiceEnabled) {
                     this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
@@ -2988,41 +2987,39 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.settingResponse = setting;
-                if (setting && setting.invoiceSettings) {
-                    this.settingForm.patchValue({
-                        purchaseBillSettings: setting.purchaseBillSettings || {},
-                        invoiceSettings: setting.invoiceSettings || {},
-                        proformaSettings: setting.proformaSettings || {},
-                        estimateSettings: setting.estimateSettings || {},
-                        companyEmailSettings: setting.companyEmailSettings || {},
-                        companyInventorySettings: setting.companyInventorySettings || {}
-                    });
-                    if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                        if (!this.settingForm.get('purchaseBillSettings.enableVoucherDownload').value) {
-                            this.settingForm.get('purchaseBillSettings.enableVoucherDownload').patchValue(false);
-                        }
-                        if (!this.settingForm.get('invoiceSettings.purchaseRoundOff').value) {
-                            this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
-                        }
+                this.settingForm.patchValue({
+                    purchaseBillSettings: setting.purchaseBillSettings || {},
+                    invoiceSettings: setting.invoiceSettings || {},
+                    proformaSettings: setting.proformaSettings || {},
+                    estimateSettings: setting.estimateSettings || {},
+                    companyEmailSettings: setting.companyEmailSettings || {},
+                    companyInventorySettings: setting.companyInventorySettings || {}
+                });
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    if (!this.settingForm.get('purchaseBillSettings.enableVoucherDownload').value) {
+                        this.settingForm.get('purchaseBillSettings.enableVoucherDownload').patchValue(false);
+                    }
+                    if (!this.settingForm.get('invoiceSettings.purchaseRoundOff').value) {
+                        this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
+                    }
 
-                        if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
-                            this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
-                        }
-                        this.originalEmail = cloneDeep(setting.purchaseBillSettings.email);
-                    } else {
-                        this.originalEmail = cloneDeep(setting.invoiceSettings.email);
+                    if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
+                        this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
+                    }
+                    this.originalEmail = cloneDeep(setting.purchaseBillSettings.email);
+                } else {
+                    this.originalEmail = cloneDeep(setting.invoiceSettings.email);
 
-                        this.settingForm.get('invoiceSettings.autoPaid')?.setValue(
-                            this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
+                    this.settingForm.get('invoiceSettings.autoPaid')?.setValue(
+                        this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
+                    );
+
+                    if (setting.companyEmailSettings) {
+                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
+                            cloneDeep(setting.companyEmailSettings.sendThroughGmail)
                         );
-
-                        if (setting.companyEmailSettings) {
-                            this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
-                                cloneDeep(setting.companyEmailSettings.sendThroughGmail)
-                            );
-                        } else {
-                            this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
-                        }
+                    } else {
+                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
                     }
                 }
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
@@ -3038,6 +3035,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.applyRoundOff = true;
                 }
+            } else if (!setting) {
+                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
         });
     }
@@ -3049,6 +3048,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public onSubmit(): void {
+        if (this.settingForm.get('invoiceSettings.autoPaid').value) {
+            this.settingForm.get('invoiceSettings.autoPaid').patchValue('runtime');
+        } else {
+            this.settingForm.get('invoiceSettings.autoPaid').patchValue('never');
+        }
         this.formToSave = cloneDeep(this.settingResponse);
         this.formToSave.invoiceSettings = cloneDeep(this.settingForm.get('invoiceSettings').value);
         this.formToSave.estimateSettings = cloneDeep(this.settingForm.get('estimateSettings').value);
@@ -3089,13 +3093,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
 
-            if (this.formToSave.invoiceSettings.autoPaid) {
-                this.formToSave.invoiceSettings.autoPaid = 'runtime';
-            } else {
-                this.formToSave.invoiceSettings.autoPaid = 'never';
-            }
         }
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
+        setTimeout(() => {
+            this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        }, 50);
     }
 
     /**
