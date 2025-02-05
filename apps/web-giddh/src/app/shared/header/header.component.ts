@@ -258,6 +258,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public broadcast: any;
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
+    /** Hold broadcast event for project wise accounting */
+    public projectBroadcast: any;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Holds true if plan is either trial or cancelled */
@@ -519,6 +521,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.broadcast.onmessage = (event) => {
             if (event?.data?.activeCompany !== undefined && event?.data?.activeCompany !== null) {
                 this.getCurrentCompanyData();
+            }
+        };
+
+        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
+        this.projectBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                this.gotToBranchTab();
             }
         };
 
