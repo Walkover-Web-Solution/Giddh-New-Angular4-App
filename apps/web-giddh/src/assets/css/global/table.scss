@@ -150,12 +150,9 @@ table {
             }
         }
     }
-}
 
-table {
     &.mat-mdc-table {
         tr {
-
             th,
             td {
                 word-break: keep-all !important;

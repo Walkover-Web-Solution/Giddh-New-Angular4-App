@@ -189,7 +189,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** True, if user has enable GST E-invoice */
     public isEInvoiceEnabled: boolean = null;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
     public totalResults: number = 0;
