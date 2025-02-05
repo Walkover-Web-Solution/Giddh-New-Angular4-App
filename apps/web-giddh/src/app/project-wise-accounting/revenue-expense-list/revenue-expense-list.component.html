@@ -51,13 +51,13 @@
         </giddh-page-loader>
         <div class="table-responsive mt-5" *ngIf="!(isFetchingProjects$ | async)">
             <table class="table entry-table editable-table">
-                <thead>
+                <thead *ngIf="!isCompany || totalResults">
                     <tr>
                         <th class="text-left">{{ commonLocaleData?.app_select_account }}</th>
                         <th class="text-left">{{ localeData?.select_entry }}</th>
                         <th class="text-left">{{ commonLocaleData?.app_select_method }}</th>
                         <th class="text-left">{{ commonLocaleData?.app_amount }}</th>
-                        <th class="text-left">{{ commonLocaleData?.app_action }}</th>
+                        <th *ngIf="!isCompany" class="text-left">{{ commonLocaleData?.app_action }}</th>
                     </tr>
                     <tr *ngIf="!isCompany" [formGroup]="createAccountEntryForm">
                         <td>
@@ -141,6 +141,7 @@
                                 <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry?.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
                                     <td>
                                         <reactive-dropdown-field
+                                            [readonly]="isCompany"
                                             [label]="commonLocaleData?.app_select_account"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry?.get('account')?.value"
@@ -159,7 +160,8 @@
                                     </td>
                                     <td>
                                         <reactive-dropdown-field
-                                            (click)="currentEntry(entry?.get('accountUniqueName')?.value)"
+                                            [readonly]="isCompany"
+                                            (click)="!isCompany && currentEntry(entry?.get('accountUniqueName')?.value)"
                                             [label]="localeData?.select_entry"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry?.get('entry')?.value"
@@ -179,6 +181,7 @@
 
                                     <td>
                                         <reactive-dropdown-field
+                                            [readonly]="isCompany"
                                             [label]="commonLocaleData?.app_select_method"
                                             [placeholder]="commonLocaleData?.app_select"
                                             [labelValue]="entry?.get('calculationMethod')?.value"
@@ -192,6 +195,7 @@
                                     </td>
                                     <td>
                                         <input-field
+                                            [readonly]="isCompany"
                                             [name]="'amount'"
                                             [type]="'number'"
                                             [label]="commonLocaleData?.app_amount"
@@ -203,7 +207,7 @@
                                         >
                                         </input-field>
                                     </td>
-                                    <td class="position-relative text-center">
+                                    <td *ngIf="!isCompany" class="position-relative text-center">
                                         <span class="editable-table-hide-element">
                                             <button mat-stroked-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
@@ -216,7 +220,7 @@
                     <tr>
                         <td colspan="100%">
                             <div class="no-data" *ngIf="!totalResults">
-                                <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+                                <no-data [primaryMessage]="isCompany ? localeData?.no_entries_found : commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
                             </div>
                         </td>
                     </tr>
