@@ -2147,7 +2147,7 @@
                             customTemplate?.templateType === 'thermal_template' &&
                             voucherType === 'sales' &&
                             customTemplate.sections['table'].data['totalQuantity']
-                            || customTemplate?.templateType === 'tally_template'
+                            && customTemplate?.templateType !== 'tally_template'
                         "
                         class="clearfix mr-t2"
                     >
@@ -2168,7 +2168,7 @@
                                 class="form-control thanks-input-inline"
                                 hasFocus
                                 #totalQuantity="hasFocus"
-                                [disabled]="!fieldsAndVisibility.table.totalQuantity?.display"
+                                [disabled]="!fieldsAndVisibility.table.quantity?.display"
                                 (keyup)="onFieldChange(null, null, null)"
                                 [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].label"
                                 placeholder="Total Quantity"
