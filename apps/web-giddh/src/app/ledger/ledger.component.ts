@@ -456,14 +456,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public pageChanged(event: any): void {
         if (typeof event === 'string') {
-            this.trxRequest.paginationToken = event;
-        }
-        if (this.isAdvanceSearchImplemented) {
-            this.trxRequest.paginationToken = ''; //Reset ledger pagination token 
-            this.advanceSearchRequest.page = event.page;
-            this.getAdvanceSearchTxn();
-        } else {
-            this.getTransactionData();
+            if (this.isAdvanceSearchImplemented) {
+                this.advanceSearchRequest.paginationToken = event;
+                this.getAdvanceSearchTxn();
+            } else {
+                this.trxRequest.paginationToken = event;
+                this.getTransactionData();
+            }
         }
     }
 
@@ -1592,6 +1591,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = accountUniqueName;
         this.search("");
+        this.universalDate$.pipe(take(1)).subscribe(date => {
+            if (date) {
+                this.selectedDateRangeUi = dayjs(date[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(date[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
         this.getTransactionData();
     }
 
@@ -1804,8 +1808,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * closeAdvanceSearchPopup
      */
-    public closeAdvanceSearchPopup(event) {
+    public closeAdvanceSearchPopup(event: any) {
         this.advanceSearchDialogRef?.close();
+        this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
@@ -2201,12 +2206,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.todaySelected) {
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
-                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName)
+                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
         this.cdRf.detectChanges();

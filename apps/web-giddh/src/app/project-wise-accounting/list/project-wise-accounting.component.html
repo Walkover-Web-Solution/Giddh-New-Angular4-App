@@ -23,14 +23,14 @@
               />
           </div>
           <div *ngIf="isCompany" class="mr-l1">
-              <dropdown-field
+              <reactive-dropdown-field
                   [label]="commonLocaleData?.app_branch"
                   [options]="branches"
-                  (selectedOption)="projectListRequest.branchUniqueName = $event?.value ;isSearch = true ; getAllProjectList()"
+                  (selectedOption)="projectListRequest.branchUniqueName = $event?.value; isSearch = true; getAllProjectList()"
                   (onClear)="projectListRequest.branchUniqueName = ''; isSearch = false; getAllProjectList()"
-                  [defaultValue]="activeCompany?.name"
+                  [labelValue]="activeCompany?.name"
                   [placeholder]="commonLocaleData?.app_select_branch"
-              ></dropdown-field>
+              ></reactive-dropdown-field>
           </div>
           <button *ngIf="(projectName.value?.length || projectStatus.value?.length)" mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
               <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
@@ -49,7 +49,7 @@
                 color="primary"
                 (click)="gotToBranchTab()"
             >
-                {{ localeData?.go_to_branch }}
+                -------  {{ localeData?.go_to_branch }}
             </button>
         </div>
       </div>

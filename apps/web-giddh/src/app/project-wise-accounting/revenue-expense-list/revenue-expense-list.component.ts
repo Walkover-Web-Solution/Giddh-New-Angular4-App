@@ -10,7 +10,7 @@ import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.
 import { DefaultParamType, ProjectWiseAccountingType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
@@ -125,6 +125,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.initCreateAccountEntryForm();
         this.initAccountEntryListForm();
+        this.componentStore.patchState({ isFetchingProjects: true });
         this.componentStore.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
