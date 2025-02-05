@@ -44,7 +44,7 @@
 <script type="text/javascript">
     var companyUniqueName = getQueryStringValue("companyUniqueName");
     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
+    var giddhDomainUrl = URL_PROTOCOL + `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
     var domainName = whiteLabel?.giddhWhiteLabel?.domainName || "Giddh.com";
     var search = "";
     var status = getQueryStringValue("status");
@@ -55,7 +55,7 @@
 
     function getApi() {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
+        this.giddhDomainUrl = URL_PROTOCOL + `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
         if (whiteLabel) {
             apiBaseUrl = `https://${whiteLabel?.giddhWhiteLabel?.apiDomainName}/`;
         } else {
