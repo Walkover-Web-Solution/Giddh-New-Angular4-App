@@ -109,65 +109,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toogles the search field
-     *
-     * @param {string} fieldName Field name to toggle
-     * @memberof ProjectWiseAccountingListComponent
-     */
-    public toggleSearch(fieldName: string): void {
-        if (fieldName === "name") {
-            this.isShowSearchBox.name = true;
-        } else if (fieldName === "status") {
-            this.isShowSearchBox.status = true;
-        }
-    }
-
-    /**
-    * Returns the placeholder for the current searched field
-    *
-    * @param {string} fieldName Field name for which placeholder is required
-    * @returns {string} Placeholder text
-    * @memberof ProjectWiseAccountingListComponent
-    */
-    public getSearchFieldText(fieldName: string): string {
-        if (fieldName === "name" || fieldName === "status") {
-            return fieldName === "name" ? this.localeData?.search_project : this.localeData?.search_status;;
-        }
-        return "";
-    }
-
-    /**
-     * Click outside handler for Name field search
-     *
-     * @param {*} event Click outside event
-     * @param {*} element Focused element
-     * @param {string} searchedFieldName Name of the field through which search is to be performed
-     * @return {*}  {void}
-     * @memberof ProjectWiseAccountingListComponent
-     */
-    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        if (searchedFieldName === "name") {
-            if (this.projectName?.value) {
-                return;
-            }
-            if (this.generalService.childOf(event.target, element)) {
-                return;
-            } else {
-                this.isShowSearchBox.name = false;
-            }
-        } else if (searchedFieldName === "status") {
-            if (this.projectStatus?.value) {
-                return;
-            }
-            if (this.generalService.childOf(event.target, element)) {
-                return;
-            } else {
-                this.isShowSearchBox.status = false;
-            }
-        }
-    }
-
-    /**
      * Lifecycle hook for component initialization.
      *
      * @memberof ProjectWiseAccountingListComponent
@@ -263,6 +204,65 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    /**
+     * Toogles the search field
+     *
+     * @param {string} fieldName Field name to toggle
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public toggleSearch(fieldName: string): void {
+        if (fieldName === "name") {
+            this.isShowSearchBox.name = true;
+        } else if (fieldName === "status") {
+            this.isShowSearchBox.status = true;
+        }
+    }
+
+    /**
+    * Returns the placeholder for the current searched field
+    *
+    * @param {string} fieldName Field name for which placeholder is required
+    * @returns {string} Placeholder text
+    * @memberof ProjectWiseAccountingListComponent
+    */
+    public getSearchFieldText(fieldName: string): string {
+        if (fieldName === "name" || fieldName === "status") {
+            return fieldName === "name" ? this.localeData?.search_project : this.localeData?.search_status;;
+        }
+        return "";
+    }
+
+    /**
+     * Click outside handler for Name field search
+     *
+     * @param {*} event Click outside event
+     * @param {*} element Focused element
+     * @param {string} searchedFieldName Name of the field through which search is to be performed
+     * @return {*}  {void}
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === "name") {
+            if (this.projectName?.value) {
+                return;
+            }
+            if (this.generalService.childOf(event.target, element)) {
+                return;
+            } else {
+                this.isShowSearchBox.name = false;
+            }
+        } else if (searchedFieldName === "status") {
+            if (this.projectStatus?.value) {
+                return;
+            }
+            if (this.generalService.childOf(event.target, element)) {
+                return;
+            } else {
+                this.isShowSearchBox.status = false;
+            }
+        }
     }
 
     /**
