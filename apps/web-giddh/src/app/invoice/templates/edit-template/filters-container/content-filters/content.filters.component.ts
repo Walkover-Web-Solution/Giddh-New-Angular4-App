@@ -348,8 +348,9 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
 
     /**
      * Change voucher number or date based on Invoice number or date
-     * 
-     * @param event
+     *
+     * @param {boolean} [isDate=true] True, if date is changed
+     * @memberof ContentFilterComponent
      */
     public handleInvoiceDateNumberChange(isDate: boolean = true): void {
         if (isDate) {
