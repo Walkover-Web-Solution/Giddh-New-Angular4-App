@@ -533,8 +533,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.referenceNumber = response;
-                this.setupGocardlessMessageListener();
+                this.referenceNumber = response
             }
         });
     }
@@ -1087,6 +1086,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 if (this.referenceNumber !== null) {
                     this.openBankLinkDialog();
+                }
+            }
+        });
+
+        window.addEventListener('message', event => {
+            if (this.router.url === '/pages/ledger/'+ this.lc.accountUnq) {
+                if (event && event.data === "GOCARDLESS") {
+                    if (this.referenceNumber) {
+                        this.componentStore.getRequisition(this.referenceNumber);
+                    }
                 }
             }
         });
