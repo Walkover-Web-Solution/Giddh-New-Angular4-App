@@ -15,6 +15,7 @@ import { InstitutionsListComponent } from '../../../shared/bank-integration/inst
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'bank-accounts',
@@ -64,6 +65,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef,
         private homeComponentStore: HomeComponentStore,
+        private router: Router,
         public dialog: MatDialog,
         private generalService: GeneralService,
         private componentStore: BankIntegrationComponentStore
@@ -123,11 +125,22 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.openBankLinkDialog();
             }
         });
+
+        window.addEventListener('message', event => {
+              console.log('bank-account',event, this.router.url);
+              if (this.router.url === '/pages/home') {
+                if (event && event.data === "GOCARDLESS") {
+                    if (this.referenceNumber) {
+                        this.componentStore.getRequisition(this.referenceNumber);
+                    }
+                }
+            }
+        });
     }
 
     /**
      * This will get all accounts of giddh
-     * 
+     *
      * @memberof BankAccountsComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 200, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -162,9 +175,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
     /**
      * Retrieves the translated bank name by replacing a placeholder in the localized string
-     * 
-     * @param bankName 
-     * @returns 
+     *
+     * @param bankName
+     * @returns
      */
     private getBankTranslateName(bankName: string): string {
         return this.localeData?.in_bank?.replace("[BANK_NAME]", bankName);
@@ -207,14 +220,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
-                this.setupGocardlessMessageListener();
             }
         });
 
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
-     * 
+     *
      * @memberof BankAccountsComponent
      */
     public setupGocardlessMessageListener(): void {
@@ -222,7 +234,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             if (event && event.data === "GOCARDLESS") {
                 if (this.referenceNumber) {
                     this.componentStore.getRequisition(this.referenceNumber);
-                    window.removeEventListener('message', messageHandler);
+                    // window.removeEventListener('message', messageHandler);
                 }
             }
         };
@@ -231,7 +243,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
     /**
     * This will open the dialog to link a bank
-    * 
+    *
     * @memberof BankAccountsComponent
     */
     public openBankLinkDialog(): void {
@@ -240,5 +252,5 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             panelClass: ['mat-dialog-md'],
             disableClose: true
         });
-    }   
+    }
 }

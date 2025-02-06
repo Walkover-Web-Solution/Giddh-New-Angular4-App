@@ -128,13 +128,12 @@ export class BankIntegrationComponent implements OnInit {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
-                this.setupGocardlessMessageListener();
             }
         });
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
-     * 
+     *
      * @memberof BankIntegrationComponent
      */
     public setupGocardlessMessageListener(): void {
@@ -228,6 +227,7 @@ export class BankIntegrationComponent implements OnInit {
             }
         };
         window.addEventListener('message', event => {
+            console.log('bank-int', event, this.router.url);
             if (this.router.url === '/pages/settings/integration/payment') {
                 if (event && event.data === "GOCARDLESS") {
                     if (this.referenceNumber) {
