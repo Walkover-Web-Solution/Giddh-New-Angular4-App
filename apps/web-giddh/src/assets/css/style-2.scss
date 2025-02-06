@@ -13888,3 +13888,9 @@ mat-list {
 .search-table {
     min-width: 140px;
 }
+
+[mat-sort-header].cdk-program-focused {
+    .mat-sort-header-container {
+        border-bottom: none !important;
+    }
+}
