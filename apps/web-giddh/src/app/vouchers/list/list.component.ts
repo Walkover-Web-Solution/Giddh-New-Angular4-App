@@ -168,7 +168,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 2;
     /** Holds active inner selected Tab Index  */
-    public selectedInnerTabIndex: number;
+    public selectedInnerTabIndex: number = 0;
     /** Holds universal date */
     public universalDate: any;
     /** Holds advance Filters keys */
@@ -366,6 +366,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.activeCompany = response;
+            }
+        });
+
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
@@ -406,14 +412,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.activeCompany = response;
-            }
-        });
-
         this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.valueChanges.pipe(
-            debounceTime(700),
+            debounceTime(300),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(value => {
