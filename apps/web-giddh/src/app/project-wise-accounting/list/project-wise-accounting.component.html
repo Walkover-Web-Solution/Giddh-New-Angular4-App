@@ -6,11 +6,11 @@
 >
 
  <hamburger-menu></hamburger-menu>
-  <div *ngIf="(isFetchingProjects$ | async) && !totalResults && !isSearch">
+  <div *ngIf="(isFetchingProjects$ | async) && !totalResults && !isSearch && !(isShowSearchBox.name || isShowSearchBox.status)">
     <giddh-page-loader></giddh-page-loader>
   </div>
    <div class="project clearfix section-center position-relative overflow-visible pd-2">
-      <div class="d-flex align-items-center justify-content-space-between section-center" *ngIf="totalResults || isSearch">
+      <div class="d-flex align-items-center justify-content-space-between section-center" *ngIf="totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status">
         <div class="d-flex flex-row justify-content-center align-items-center">
           <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
               <input
@@ -49,13 +49,13 @@
                 color="primary"
                 (click)="gotToBranchTab()"
             >
-                -------  {{ localeData?.go_to_branch }}
+              {{ localeData?.go_to_branch }}
             </button>
         </div>
       </div>
-      <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="totalResults || isSearch">
+      <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status">
         <table
-          *ngIf="!(isCompany && !totalResults && !(projectName.value?.length || projectStatus.value?.length))"
+          *ngIf="(!isCompany || totalResults || projectName.value?.length || projectStatus.value?.length || isShowSearchBox.name || isShowSearchBox.status)"
           mat-table
           matSort
           [dataSource]="dataSource"
@@ -157,9 +157,10 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-        <div class="no-data" *ngIf="!totalResults && isSearch">
-          <div class="d-flex justify-content-center align-items-center">
+        </table> 
+        <div class="no-data" *ngIf="!(isFetchingProjects$ | async) && !totalResults">
+          <no-data *ngIf="(projectName.value?.length || projectStatus.value?.length)" [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+          <div *ngIf="!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)" class="d-flex justify-content-center align-items-center">
             <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
             <button
                 mat-stroked-button
