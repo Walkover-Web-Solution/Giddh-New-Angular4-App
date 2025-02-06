@@ -458,6 +458,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
+                if (params?.voucherType === VoucherTypeEnum.purchase && this.settingResponse.invoiceSettings) {
+                    this.settingForm.patchValue({
+                        purchaseBillSettings: this.settingResponse.purchaseBillSettings || {},
+                        invoiceSettings: this.settingResponse.invoiceSettings || {},
+                        proformaSettings: this.settingResponse.proformaSettings || {},
+                        estimateSettings: this.settingResponse.estimateSettings || {},
+                        companyEmailSettings: this.settingResponse.companyEmailSettings || {},
+                        companyInventorySettings: this.settingResponse.companyInventorySettings || {}
+                    });
+                }
                 if (this.isEInvoiceEnabled === null) {
                     this.initSettingObj();
                 }
@@ -3109,9 +3119,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         }
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
-        setTimeout(() => {
-            this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        }, 50);
     }
 
     /**
