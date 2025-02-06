@@ -629,7 +629,7 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="localeData?.customer"
-                            [matTooltip]="account.name"
+                            [matTooltip]="account?.name"
                             matTooltipPosition="above"
                         >
                             <div class="customer-name-filed cursor-pointer pd-r2 content-ellipsis-td" (dblclick)="trigger?.openMenu()">
@@ -987,7 +987,7 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
-                            [matTooltip]="account.name"
+                            [matTooltip]="account?.name"
                             matTooltipPosition="above"
                         >
                             <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
