@@ -1091,6 +1091,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
+            console.log('ledger', event, this.router.url);
             if (this.router.url === '/pages/ledger/'+ this.lc.accountUnq) {
                 if (event && event.data === "GOCARDLESS") {
                     if (this.referenceNumber) {

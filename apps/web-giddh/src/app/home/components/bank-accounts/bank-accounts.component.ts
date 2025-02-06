@@ -126,7 +126,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
 
-          window.addEventListener('message', event => {
+        window.addEventListener('message', event => {
+              console.log('bank-account',event, this.router.url);
               if (this.router.url === '/pages/home') {
                 if (event && event.data === "GOCARDLESS") {
                     if (this.referenceNumber) {

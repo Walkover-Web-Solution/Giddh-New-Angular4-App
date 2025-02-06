@@ -203,7 +203,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -391,6 +391,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         };
         window.addEventListener('message', event => {
+            console.log('setting-inte', event, this.router.url);
             if (this.router.url === '/pages/settings/integration/payment') {
                 if (event && event.data === "GOCARDLESS") {
                     if (this.referenceNumber) {
