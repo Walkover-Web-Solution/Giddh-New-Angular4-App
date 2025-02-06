@@ -128,6 +128,7 @@ export class BankIntegrationComponent implements OnInit {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
+                this.setupGocardlessMessageListener();
             }
         });
     }
@@ -138,7 +139,7 @@ export class BankIntegrationComponent implements OnInit {
      */
     public setupGocardlessMessageListener(): void {
         const messageHandler = (event) => {
-             if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
+            if (event && event.data === "GOCARDLESS") {
                 if (this.referenceNumber) {
                     this.componentStore.getRequisition(this.referenceNumber);
                     window.removeEventListener('message', messageHandler);
@@ -227,9 +228,8 @@ export class BankIntegrationComponent implements OnInit {
             }
         };
         window.addEventListener('message', event => {
-            console.log('bank-int', event, this.router.url);
             if (this.router.url === '/pages/settings/integration/payment') {
-                 if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
+                if (event && event.data === "GOCARDLESS") {
                     if (this.referenceNumber) {
                         this.componentStore.getRequisition(this.referenceNumber);
                     }

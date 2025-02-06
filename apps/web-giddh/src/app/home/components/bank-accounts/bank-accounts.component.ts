@@ -15,7 +15,6 @@ import { InstitutionsListComponent } from '../../../shared/bank-integration/inst
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'bank-accounts',
@@ -65,7 +64,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef,
         private homeComponentStore: HomeComponentStore,
-        private router: Router,
         public dialog: MatDialog,
         private generalService: GeneralService,
         private componentStore: BankIntegrationComponentStore
@@ -123,17 +121,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.openBankLinkDialog();
-            }
-        });
-
-        window.addEventListener('message', event => {
-              console.log('bank-account',event, this.router.url);
-              if (this.router.url === '/pages/home') {
-                 if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
-                    if (this.referenceNumber) {
-                        this.componentStore.getRequisition(this.referenceNumber);
-                    }
-                }
             }
         });
     }
@@ -207,7 +194,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         let data = {
             localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData
+            commonLocaleData: this.commonLocaleData,
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
@@ -220,6 +207,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
+                this.setupGocardlessMessageListener();
             }
         });
 
@@ -231,10 +219,10 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      */
     public setupGocardlessMessageListener(): void {
         const messageHandler = (event) => {
-             if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
+            if (event && event.data === "GOCARDLESS") {
                 if (this.referenceNumber) {
                     this.componentStore.getRequisition(this.referenceNumber);
-                    // window.removeEventListener('message', messageHandler);
+                    window.removeEventListener('message', messageHandler);
                 }
             }
         };
