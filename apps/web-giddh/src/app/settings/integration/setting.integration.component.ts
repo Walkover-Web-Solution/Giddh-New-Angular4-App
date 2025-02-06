@@ -203,8 +203,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
 
     constructor(
         private router: Router,
