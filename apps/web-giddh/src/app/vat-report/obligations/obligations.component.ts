@@ -78,7 +78,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** Observable to store the Tax Number */
     public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
     /** True if current company or branch has tax number */
-    public hasTaxNumber: boolean = false;
+    public hasTaxNumber: boolean | null = null;
     /** Observable to store the HMRC portal url */
     public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
     /** Observable to store the data of obligation */

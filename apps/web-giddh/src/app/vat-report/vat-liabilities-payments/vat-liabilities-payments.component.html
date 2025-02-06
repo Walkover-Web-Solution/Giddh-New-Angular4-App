@@ -163,7 +163,7 @@
                             <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                         </div>
                     </div>
-                    <div *ngIf="!hasTaxNumber" class="no-data no-report">
+                    <div *ngIf="hasTaxNumber === false" class="no-data no-report">
                         <h1>{{ localeData?.no_vrn_available }}</h1>
                     </div>
                 </div>

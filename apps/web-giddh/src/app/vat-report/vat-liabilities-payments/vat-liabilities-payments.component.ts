@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { merge, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -75,7 +75,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** True if current company or branch has tax number */
-    public hasTaxNumber: boolean = false;
+    public hasTaxNumber: boolean | null = null;
     /** Holds current branch information */
     private currentBranch: any = {};
     /** Hold true in production environment */
