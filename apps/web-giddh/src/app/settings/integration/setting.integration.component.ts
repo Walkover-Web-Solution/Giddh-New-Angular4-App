@@ -203,6 +203,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
 
     constructor(
         private router: Router,
@@ -391,9 +393,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         };
         window.addEventListener('message', event => {
-            console.log('setting-inte', event, this.router.url);
             if (this.router.url === '/pages/settings/integration/payment') {
-                 if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
+                if (event && event.data === "GOCARDLESS") {
                     if (this.referenceNumber) {
                         this.componentStore.getRequisition(this.referenceNumber);
                     }
