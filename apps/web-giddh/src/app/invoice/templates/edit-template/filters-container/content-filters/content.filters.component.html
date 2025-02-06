@@ -314,10 +314,10 @@
                                 type="checkbox"
                                 name="invoiceDateCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].display"
-                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="handleInvoiceDateNumberChange(true); onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Invoice Date
+                            {{ customTemplate?.templateType === 'tally_template' && voucherType !== 'sales' ? "Voucher Date" : "Invoice Date" }}
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -328,7 +328,7 @@
                                     class="form-control"
                                     name="invoiceDate"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].label"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="handleInvoiceDateNumberChange(true); onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceDate'].display"
                                 />
                                 <ng-container
@@ -351,21 +351,21 @@
                                 type="checkbox"
                                 name="invoiceNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].display"
-                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="handleInvoiceDateNumberChange(false); onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Invoice Number
+                            {{ customTemplate?.templateType === 'tally_template' && voucherType !== 'sales' ? "Voucher Number" : "Invoice Number" }}
                             <div class="ml-3">
                                 <input
                                     type="text"
-                                    hasFocus
+                                    hasFocus    
                                     #invoiceNo="hasFocus"
                                     [class.error-box]="contentForm?.controls['invoiceNo']?.errors?.maxlength"
                                     [maxlength]="customTemplate.templateType === 'thermal_template' ? 14 : 15"
                                     class="form-control"
                                     name="invoiceNo"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="handleInvoiceDateNumberChange(false); onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceNumber'].display"
                                 />
                                 <ng-container
