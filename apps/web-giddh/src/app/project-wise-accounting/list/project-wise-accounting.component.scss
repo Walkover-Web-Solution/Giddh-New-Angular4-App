@@ -1,10 +1,12 @@
 .project {
     max-width: var(--center-content-max-width);
+
     .giddh-table {
         border: 1px solid var(--color-table-primary-content-bar-border) !important;
     }
 }
-.min-height{
+
+.min-height {
     min-height: calc(100vh - 145px);
 }
 
@@ -14,4 +16,19 @@
     justify-content: center;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.project-search-icon {
+    top: 2px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    .mat-mdc-icon-button .mat-mdc-button-touch-target {
+        width: 25px !important;
+        height: 25px !important;
+    }
 }

@@ -10,11 +10,12 @@ import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.
 import { DefaultParamType, ProjectWiseAccountingType } from '../project-wise-accounting';
 import { cloneDeep } from '../../lodash-optimized';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PAGE_SIZE_OPTIONS } from '../../vouchers/utility/vouchers.const';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'revenue-expense-list',
@@ -103,6 +104,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public activeRowIndex: number = -1;
     /** Enum representing the types of project-wise accounting */
     public projectWiseAccountingType: typeof ProjectWiseAccountingType = ProjectWiseAccountingType;
+    /** True if is company */
+    public isCompany: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -122,6 +125,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.initCreateAccountEntryForm();
         this.initAccountEntryListForm();
+        this.componentStore.patchState({ isFetchingProjects: true });
         this.componentStore.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
@@ -235,6 +239,12 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (entryUpdateSuccess) {
                 this.entryList.at(entryUpdateSuccess.index).get('defaultEntryUniqueName').patchValue(entryUpdateSuccess.entryUniqueName);
                 this.getRevenueExpense();
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
             }
         });
     }

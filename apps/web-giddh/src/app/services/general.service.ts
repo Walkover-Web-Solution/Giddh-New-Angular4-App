@@ -2202,7 +2202,7 @@ export class GeneralService {
         if (!url) return url;
         const updatedModel = {
             ...model,
-            companyUniqueName: model.companyUniqueName ?? this.companyUniqueName
+            companyUniqueName: model?.companyUniqueName ?? this.companyUniqueName
         };
         url = this.config.apiUrl + url;
         return Object.keys(updatedModel).reduce((updatedUrl, key) => {

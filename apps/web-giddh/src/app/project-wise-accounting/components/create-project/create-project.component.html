@@ -12,7 +12,7 @@
         </div>
 
         <!-- Dialog Body -->
-        <div class="dialog-body pd-3">
+        <div class="dialog-body pd-t15">
             <div *ngIf="isSavingProject$ | async">
                 <giddh-page-loader></giddh-page-loader>
             </div>
@@ -29,8 +29,8 @@
                     <input-field 
                         [type]="'text'"
                         [name]="'projectName'" 
-                        [placeholder]="localeData.enter_product_name"
-                        [label]="localeData.product_name"
+                        [placeholder]="localeData.enter_project_name"
+                        [label]="localeData.project_name"
                         formControlName="projectName"
                         [required]="true"
                     ></input-field>
