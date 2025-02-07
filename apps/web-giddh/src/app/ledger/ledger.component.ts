@@ -1900,9 +1900,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             this.hideUpdateLedgerModal();
-            this.ledgerComponentStore.getLedgerBalance({
-                payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
-            });
             this.entryManipulated();
             if (this.isAdvanceSearchImplemented) {
                 this.createLedgerBalance();
