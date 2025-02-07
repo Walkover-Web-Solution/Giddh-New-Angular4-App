@@ -1712,8 +1712,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             this.hideUpdateLedgerModal();
-            this.createLedgerBalance();
             this.entryManipulated();
+            if (this.isAdvanceSearchImplemented) {
+                this.createLedgerBalance();
+            }
         });
     }
 
