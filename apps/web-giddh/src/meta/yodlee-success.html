@@ -57,7 +57,7 @@
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
         if (whiteLabel) {
-            apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomainName}/`;
+            apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomain}/`;
         } else {
             switch (window.location.hostname) {
                 case "localhost":

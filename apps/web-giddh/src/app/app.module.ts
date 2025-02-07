@@ -129,14 +129,14 @@ if (whiteLabelConfig) {
         {
             provide: ServiceConfig,
             useValue: {
-                apiUrl: `${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+                apiUrl: `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
                 appUrl: `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
                 PORTAL_URL: `${whiteLabelConfig.body.giddhWhiteLabel.portalDomain}/` || Configuration.PORTAL_URL,
                 OTP_WIDGET_ID: `${whiteLabelConfig.body.otpWidgetIdWeb}` || Configuration.OTP_WIDGET_ID,
                 OTP_TOKEN_AUTH: `${whiteLabelConfig.body.otpWidgetTokenWeb}` || Configuration.OTP_TOKEN_AUTH,
                 GOOGLE_CLIENT_ID: `${whiteLabelConfig.body.googleClientId}` || Configuration.GOOGLE_CLIENT_ID,
                 GOOGLE_CLIENT_SECRET: `${whiteLabelConfig.body.googleClientSecret}` || Configuration.GOOGLE_CLIENT_SECRET,
-                ApiUrl: `${whiteLabelConfig.body.giddhWhiteLabel.apiDomainName}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+                ApiUrl: `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
                 AppUrl: `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
                 OTP_WIDGET_ID_NEW: `${whiteLabelConfig.body.otpWidgetIdElectron}` || '33686b716134333831313239',
                 OTP_TOKEN_AUTH_NEW: `${whiteLabelConfig.body.otpWidgetTokenElectron}` || '205968TmXguUAwoD633af103P1',
