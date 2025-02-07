@@ -140,7 +140,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)) // Active company data
         ])
             .pipe(
-                debounceTime(200),
+                debounceTime(500),
                 filter(([params, activeCompany]) => !!(params.uniqueName && activeCompany)),
                 tap(([params, activeCompany]) => {
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
@@ -185,7 +185,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.entrySearch$.pipe(takeUntil(this.destroyed$)).subscribe(entrySearchResponse => {
+        this.componentStore.entrySearch$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe(entrySearchResponse => {
             if (entrySearchResponse) {
                 const accountUniqueName = entrySearchResponse.accountUniqueName;
                 this.accountAndEntryList[accountUniqueName].nextPageAvailable = entrySearchResponse.body.nextPageAvailable;
