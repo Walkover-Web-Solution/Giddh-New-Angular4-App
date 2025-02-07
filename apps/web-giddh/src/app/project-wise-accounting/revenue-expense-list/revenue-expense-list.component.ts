@@ -400,7 +400,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public searchAccount(query: string = '', page: number = 1): void {
-        if (this.accountSearchRequest.q !== query) {
+        if (page === 1) {
             this.accountSearchResponse = [];
         }
         this.accountSearchRequest.q = query;
@@ -420,7 +420,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public searchEntry(query: string = '', page: number = 1, accountUniqueName: string): void {
-        if (this.entrySearchRequest.q !== query && this.accountAndEntryList[accountUniqueName]) {
+        if (page === 1 && this.accountAndEntryList[accountUniqueName]) {
             this.accountAndEntryList[accountUniqueName].data = [];
         }
         this.entrySearchRequest.q = query;
