@@ -81,7 +81,10 @@
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 // Access domainName directly from the parsed object
                 const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
-
+                // Get the logo URL from whiteLabelConfig, with a fallback to the default logo
+                const logoUrl = whiteLabelConfig?.body?.giddhWhiteLabel?.logo || "./assets/images/giddh-big-logo.svg";
+                // Set the logo src immediately when the script runs
+                document.getElementById("dynamic-logo").src = logoUrl;
                 // Create a new preconnect link element
                 const preconnectLink = document.createElement("link");
                 preconnectLink.rel = "preconnect";
@@ -108,7 +111,7 @@
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">
             <h1>
-                <img src="./assets/images/giddh-big-logo.svg" width="150" />
+                <img id="dynamic-logo" width="150" />
             </h1>
             <div class="loading-dots">
                 <div class="loading-dots-dot"></div>
