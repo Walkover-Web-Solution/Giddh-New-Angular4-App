@@ -75,7 +75,6 @@ import { ToasterService } from '../services/toaster.service';
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    providers: [LedgerComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
