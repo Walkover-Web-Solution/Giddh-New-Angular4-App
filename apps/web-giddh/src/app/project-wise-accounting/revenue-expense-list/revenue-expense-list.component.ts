@@ -140,12 +140,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)) // Active company data
         ])
             .pipe(
-                debounceTime(200),
+                debounceTime(500),
                 filter(([params, activeCompany]) => !!(params.uniqueName && activeCompany)),
                 tap(([params, activeCompany]) => {
                     this.defaultParamsValue.projectUniqueName = params.uniqueName;
                     this.defaultParamsValue.companyUniqueName = activeCompany.uniqueName;
                     this.defaultParamsValue.branchUniqueName = this.generalService.currentBranchUniqueName ?? activeCompany.uniqueName;
+                    this.accountSearchResponse = [];
                     this.defaultParamsValue.category = params.module;
                     this.accountSearchRequest.group = this.defaultParamsValue.category === this.projectWiseAccountingType.Income ? this.incomeGroup : this.expenseGroup;
                     this.activeCompany = activeCompany;
@@ -165,7 +166,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.componentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
+        this.componentStore.accountSearch$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 accountSearchResponse.results?.forEach(result => {
@@ -185,7 +186,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.entrySearch$.pipe(takeUntil(this.destroyed$)).subscribe(entrySearchResponse => {
+        this.componentStore.entrySearch$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe(entrySearchResponse => {
             if (entrySearchResponse) {
                 const accountUniqueName = entrySearchResponse.accountUniqueName;
                 this.accountAndEntryList[accountUniqueName].nextPageAvailable = entrySearchResponse.body.nextPageAvailable;
