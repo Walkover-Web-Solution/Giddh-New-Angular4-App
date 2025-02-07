@@ -15,6 +15,20 @@
             })(window, document, "script", "dataLayer", "GTM-5MCXN7C");
         </script>
         <!-- End Google Tag Manager -->
+        <script type="text/javascript">
+            window.onload = function () {
+                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
+
+                // Get the logo URL from whiteLabelConfig, with a fallback to the default logo
+                const logoUrl = whiteLabelConfig?.body?.giddhWhiteLabel?.logo || "./assets/images/giddh-big-logo.svg";
+
+                // Find the logo element and update its src attribute
+                let logoElement = document.querySelector("#main-giddh-loader img");
+                if (logoElement) {
+                    logoElement.src = logoUrl;
+                }
+            };
+        </script>
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
         <script type="text/javascript">
@@ -55,11 +69,11 @@
             } catch (error) {
                 console.error(error);
             }
-           // Add preconnect for domainName extracted from cookie
+            // Add preconnect for domainName extracted from cookie
             window.onload = function () {
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 // Access domainName directly from the parsed object
-                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || 'https://apitest.giddh.com';
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
 
                 // Create a new preconnect link element
                 const preconnectLink = document.createElement("link");
