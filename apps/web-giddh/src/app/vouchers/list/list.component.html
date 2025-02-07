@@ -1959,7 +1959,7 @@
                                         href="javascript:;"
                                         class="btn-link-2"
                                         (click)="showVoucherPreview(element?.uniqueName)"
-                                        [matTooltip]="element?.voucherNumber" 
+                                        [matTooltip]="element?.voucherNumber"
                                         matTooltipPosition="above"
                                         >{{
                                             element?.voucherNumber
@@ -2130,9 +2130,9 @@
             <mat-tab
                 [label]="localeData?.tabs?.settings"
                 class="setting-svg"
-                *ngIf="activeTabGroup !== 3 && activeTabGroup !== 4 && !isCompany && !isConsolidatedBranch"
+                *ngIf="((activeTabGroup !== 3 && activeTabGroup !== 4 && !isCompany && !isConsolidatedBranch) || queryParams.tabIndex)"
             >
-                <ng-container *ngIf="activeModule === 'settings'">
+                <ng-container *ngIf="activeModule === 'settings' || queryParams.tabIndex">
                     <ng-container *ngIf="voucherApiVersion === 1">
                         <div class="pd-t15" *ngIf="voucherType !== 'purchase'">
                             <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
