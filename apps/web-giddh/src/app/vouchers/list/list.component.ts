@@ -495,17 +495,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
                 }
+                this.componentStore.isGmailIntegrated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isGmailIntegrated = response;
+                    if (!this.isGmailIntegrated) {
+                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.disable();
+                        this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.disable();
+                    } else {
+                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.enable();
+                        this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.enable();
+                    }
+                });
             }
-            this.componentStore.isGmailIntegrated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.isGmailIntegrated = response;
-                if (!this.isGmailIntegrated) {
-                    this.settingForm.get('companyEmailSettings.sendThroughGmail')?.disable();
-                    this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.disable();
-                } else {
-                    this.settingForm.get('companyEmailSettings.sendThroughGmail')?.enable();
-                    this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.enable();
-                }
-            });
         });
 
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
