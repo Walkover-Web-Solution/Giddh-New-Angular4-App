@@ -140,6 +140,7 @@ if (whiteLabelConfig) {
                 AppUrl: `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
                 OTP_WIDGET_ID_NEW: `${whiteLabelConfig.body.otpWidgetIdElectron}` || '33686b716134333831313239',
                 OTP_TOKEN_AUTH_NEW: `${whiteLabelConfig.body.otpWidgetTokenElectron}` || '205968TmXguUAwoD633af103P1',
+                RAZORPAY_KEY: `${whiteLabelConfig.body.razorpayPaymentDetails.keyId}` || Configuration.RAZORPAY_KEY,
                 _
             }
         },
