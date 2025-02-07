@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: 2;
     /** True if permission form has unsaved changes */
     public hasUnsavedChanges: boolean = true;
     /** Returns true if form is dirty else false */
@@ -96,7 +96,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.voucherApiVersion === 2;
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 if (params['type'] === 'integration' && params['referrer']) {
