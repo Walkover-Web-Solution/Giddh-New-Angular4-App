@@ -166,9 +166,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         ["payment"]
     ];
     /** Holds active selected Tab Index  */
-    public selectedTabIndex: number = 0;
+    public selectedTabIndex: number;
     /** Holds active inner selected Tab Index  */
-    public selectedInnerTabIndex: number = 0;
+    public selectedInnerTabIndex: number;
     /** Holds universal date */
     public universalDate: any;
     /** Holds advance Filters keys */
@@ -331,6 +331,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public settingResponse: any;
     /** Hold request object for setting form to save */
     public formToSave: any;
+    /** Hold route params */
+    public isRouteApplied: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -1055,6 +1057,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 }
             }
+        }
+        if (!this.isRouteApplied && this.queryParams.tabIndex) {
+            this.isRouteApplied = true;
+            this.selectedTabIndex = this.queryParams.tabIndex;
         }
     }
     /**
