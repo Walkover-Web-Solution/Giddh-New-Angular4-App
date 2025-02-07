@@ -100,7 +100,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** True if get branches api has initiated once */
     private getBranchesInitiated: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: 2;
     /** Hold branch transfer mode  */
     public branchTransferMode: string = "";
     /** This will use for bootstrap modal refrence */
@@ -146,7 +146,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        // this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.add("inventory-v2");
         }

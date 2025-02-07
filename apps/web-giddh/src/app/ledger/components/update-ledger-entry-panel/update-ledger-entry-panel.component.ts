@@ -2598,7 +2598,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         stockUnitUniqueName: variantUnitRates[0].stockUnitUniqueName
                     };
                     // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
-                    const unitRates = this.generalService.voucherApiVersion === 1 ? stockDetails?.unitRates : variantUnitRates
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? variantUnitRates : stockDetails?.unitRates;
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     rate = defaultUnit.rate;
                     unitCode = defaultUnit.code;
