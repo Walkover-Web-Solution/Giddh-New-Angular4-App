@@ -166,7 +166,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         ["payment"]
     ];
     /** Holds active selected Tab Index  */
-    public selectedTabIndex: number = 2;
+    public selectedTabIndex: number = 0;
     /** Holds active inner selected Tab Index  */
     public selectedInnerTabIndex: number = 0;
     /** Holds universal date */
