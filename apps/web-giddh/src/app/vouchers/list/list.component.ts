@@ -416,17 +416,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(value => {
+
             if (value !== null && value !== undefined) {
                 if (this.settingForm.get('invoiceSettings.gstEInvoiceEnable').value) {
                     return;
                 } else {
                     this.settingForm.get('invoiceSettings.generateEinvoiceShowPopUp').patchValue(false);
-                }
-                if (this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
-                    this.restrictedModules.EInvoice)) {
-                    this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.disable();
-                } else {
-                    this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.enable();
                 }
             }
         });
@@ -505,6 +500,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.settingForm.get('purchaseBillSettings.sendThroughGmail')?.enable();
                     }
                 });
+                if (!this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
+                    this.restrictedModules.EInvoice)) {
+                    this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.enable();
+                } else {
+                    this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.disable();
+                }
             }
         });
 
