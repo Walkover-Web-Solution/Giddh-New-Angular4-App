@@ -416,9 +416,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Create ledger balance
      *
+     * @returns {void}
      * @memberof LedgerComponent
      */
-    public createLedgerBalance() {
+    public createLedgerBalance(): void {
         this.ledgerComponentStore.getLedgerBalance({
             payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
         });
