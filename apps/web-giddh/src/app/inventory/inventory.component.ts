@@ -100,7 +100,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** True if get branches api has initiated once */
     private getBranchesInitiated: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 2;
+    public voucherApiVersion: 1 | 2;
     /** Hold branch transfer mode  */
     public branchTransferMode: string = "";
     /** This will use for bootstrap modal refrence */
@@ -146,7 +146,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        // this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.add("inventory-v2");
         }
@@ -549,7 +549,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadBranchWithWarehouse(): void {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${ branch.name}`, value: branch?.uniqueName }));
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.name}`, value: branch?.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
         }
     }

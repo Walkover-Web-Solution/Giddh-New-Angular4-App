@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 2;
+    public voucherApiVersion: 1 | 2;
     /** True if permission form has unsaved changes */
     public hasUnsavedChanges: boolean = true;
     /** Returns true if form is dirty else false */
@@ -96,7 +96,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.voucherApiVersion === 2;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 if (params['type'] === 'integration' && params['referrer']) {
@@ -139,7 +139,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
-            }            
+            }
             if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
                 this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
@@ -166,7 +166,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
