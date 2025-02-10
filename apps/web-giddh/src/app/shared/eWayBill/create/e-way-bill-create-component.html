@@ -3,7 +3,6 @@
     [file]="'invoice/ewaybill'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
 >
     <div class="dialog-header">
         <span mat-dialog-title class="font-16">{{ localeData?.create_e_way_bill }}</span>
@@ -13,18 +12,6 @@
         <div>
             <form autocomplete="off" name="generateEwayBillform" [formGroup]="generateEwayBillform">
                 <div>
-                    <ng-container *ngIf="selectedInvoices.length">
-                        <div class="row mr-t1">
-                            <div class="col-6 d-flex column-gap15">
-                                <span>{{ commonLocaleData?.app_voucher_number }}</span>
-                                <a href="javascript:;" class="btn-link">{{ selectedInvoices[0]?.voucherNumber }}</a>
-                            </div>
-                            <div class="col-6 d-flex column-gap15 mr-b1">
-                                <span>{{ localeData?.amount }}: </span>
-                                <span>{{ selectedInvoices[0]?.grandTotal?.amountForAccount }}</span>
-                            </div>
-                        </div>
-                    </ng-container>
                     <!--part-A-->
                     <div class="text-center">
                         <strong>{{ localeData?.part_a }}</strong>
@@ -34,13 +21,11 @@
                             <input-field
                                 [name]="'toGstIn'"
                                 [type]="'text'"
-                                [minlength]="15"
-                                [maxlength]="15"
                                 [label]="localeData?.gstin_receiver_label"
                                 [placeholder]="localeData?.gstin_receiver_placeholder"
                                 formControlName="toGstIn"
-                                [disabled]="true"
-                                [readonly]="true"
+                                [disabled]="currentVoucher?.gstNumber"
+                                [readonly]="currentVoucher?.gstNumber"
                             >
                             </input-field>
                         </div>
@@ -188,6 +173,7 @@
                                 [label]="localeData?.transporter_doc_no_label"
                                 [maxlength]="15"
                                 formControlName="transDocNo"
+                                [required]="true"
                             >
                             </input-field>
                         </div>
@@ -201,6 +187,7 @@
                                 [appearance]="'outline'"
                                 class="settings-field d-block"
                                 formControlName="transDocDt"
+                                [required]="true"
                             ></giddh-datepicker>
                         </div>
                     </div>
@@ -216,6 +203,7 @@
                                 [minlength]="7"
                                 formControlName="vehNo"
                                 [showError]="vehicleNo.touched && vehicleNo?.invalid"
+                                [required]="true"
                             >
                             </input-field>
                             <small class="text-danger" *ngIf="vehicleNo.touched && vehicleNo?.invalid"
@@ -224,11 +212,11 @@
                         </div>
                     </div>
                     <div class="row clearfix d-flex justify-content-end column-gap15">
+                        {{generateEwayBillform.invalid}}
                         <button
                             mat-stroked-button
                             color="primary"
                             [disabled]="generateEwayBillform.invalid"
-                            [ladda]="isEwaybillGenerateInProcess$ | async"
                             (click)="onSubmitEwaybill()"
                         >
                             {{ localeData?.save_generate }}
@@ -242,11 +230,6 @@
         </div>
     </div>
 </ng-container>
-
-<!-- E-Way Bill Credentials -->
-<ng-template #eWayBillCredentials>
-    <e-way-bill-credentials-dialog> </e-way-bill-credentials-dialog>
-</ng-template>
 
 <!-- Account Aside Menu -->
 <ng-template #accountAsideMenu>
@@ -300,7 +283,6 @@
                             mat-stroked-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
-                            [ladda]="isGenarateTransporterInProcess$ | async"
                             (click)="generateTransporter()"
                             type="submit"
                         >
@@ -315,7 +297,6 @@
                             mat-stroked-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
-                            [ladda]="updateTransporterInProcess$ | async"
                             (click)="updateTransporter()"
                             type="submit"
                         >

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { EWayBillCreateComponent } from './create/e-way-bill-create-component';
-import { EWayBillComponent } from './e-way-bill/e-way-bill-component';
-import { EWayBillCredentialsComponent } from './e-way-bill-credentials-dialog/e-way-bill-credentials.component';
 import { HamburgerMenuModule } from '../header/components/hamburger-menu/hamburger-menu.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
@@ -19,9 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
-        EWayBillComponent,
-        EWayBillCreateComponent,
-        EWayBillCredentialsComponent
+        EWayBillCreateComponent
     ],
     imports: [
         TranslateDirectiveModule,
@@ -41,9 +37,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatButtonModule
     ],
     exports: [
-        EWayBillComponent,
-        EWayBillCreateComponent,
-        EWayBillCredentialsComponent
+        EWayBillCreateComponent
     ]
 })
 export class EWayBillModule { }

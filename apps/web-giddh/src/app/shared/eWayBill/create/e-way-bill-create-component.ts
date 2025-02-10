@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -9,8 +9,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../helpers/defaultDateFormat';
 import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
+import { EWayBillComponentStore } from '../eWayBill.store';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -18,8 +19,6 @@ import * as dayjs from 'dayjs';
     styleUrls: [`./e-way-bill-create-component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    /** EWay Bill Credentials template reference  */
-    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: TemplateRef<any>;
     /** Template reference for invoice removal confirmation dialog */
     @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: TemplateRef<any>;
     /** Template reference for account aside menu */
@@ -28,84 +27,22 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public generateEwayBillform: FormGroup;
     /** Form group for creating a new transporter */
     public generateNewTransporterForm: FormGroup;
-    /** Holds invoice number */
-    public invoiceNumber: string = '';
-    /** Holds billing GSTIN number */
-    public invoiceBillingGstinNo: string = null;
-    /** Holds generated bills */
-    public generateBill: any[] = [];
-    /** Observable indicating if e-Way Bill generation is in process */
-    public isEwaybillGenerateInProcess$: Observable<boolean>;
-    /** Observable indicating if e-Way Bill was generated successfully */
-    public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
-    /** Observable indicating if transporter generation is in process */
-    public isGenarateTransporterInProcess$: Observable<boolean>;
-    /** Observable indicating if transporter was generated successfully */
-    public isGenarateTransporterSuccessfully$: Observable<boolean>;
-    /** Observable indicating if transporter update is in process */
-    public updateTransporterInProcess$: Observable<boolean>;
-    /** Observable indicating if transporter update was successful */
-    public updateTransporterSuccess$: Observable<boolean>;
-    /** Observable indicating if a user was added successfully */
-    public isUserAddedSuccessfully$: Observable<boolean>;
-    /** Observable indicating if the logged-in user has access to e-Way Bill */
-    public isLoggedInUserEwayBill$: Observable<boolean>;
     /** Dropdown options for transporters */
     public transporterDropdown$: Observable<IOption[]>;
-    /** Flag for keydown class */
-    public keydownClassAdded: boolean = false;
-    /** Status of the component */
-    public status: boolean = true;
     /** Flag for transport edit mode */
     public transportEditMode: boolean = false;
-    /** Observable list of transporters */
-    public transporterList$: Observable<IEwayBillTransporter[]>;
-    /** Observable details of all transporters */
-    public transporterListDetails$: Observable<IAllTransporterDetails>;
     /** Details of all transporters */
     public transporterListDetails: IAllTransporterDetails;
     /** Transporter filter request */
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     /** Current transporter ID */
     public currenTransporterId: string;
-    /** Flag indicating if the user is logged in */
-    public isUserlogedIn: boolean;
-    /** Confirmation message for delete template */
-    public deleteTemplateConfirmationMessage: string;
-    /** Confirmation flag */
-    public confirmationFlag: string;
-    /** Flag for showing the clear button */
-    public showClear: boolean = false;
-    /** Selected invoices */
-    public selectedInvoices: any[] = [];
-    /** Supply type data */
-    public supplyType: any = [{}];
-    /** Flag for transport mode road */
-    public isTransModeRoad: boolean = false;
-    /** List of sub-supply types */
-    public SubsupplyTypesList: IOption[] = [];
-    /** List of supply types */
-    public SupplyTypesList: IOption[] = [];
-    /** Modified transporter document type */
-    public ModifiedTransporterDocType: IOption[] = [];
-    /** Transporter document type */
-    public TransporterDocType: any = [];
-    /** List of transaction types */
-    public transactionType: IOption[] = [];
     /** Subject for managing component destruction*/
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Giddh date format */
-    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Holds local JSON data */
     public localeData: any = {};
     /** Holds common JSON data */
     public commonLocaleData: any = {};
-    /** Selected subtype label */
-    public selectedSubType: string = "";
-    /** Selected document type label */
-    public selectedDocType: string = "";
-    /** Voucher details */
-    public voucherDetails: any;
     /** Getter for vehicle number form control */
     public get vehicleNo(): FormControl {
         return this.generateEwayBillform.get('vehNo') as FormControl;
@@ -123,22 +60,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private dialogRef: MatDialogRef<any>,
-        private invoiceService: InvoiceService,
+        private componentStore: EWayBillComponentStore,
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        @Inject(MAT_DIALOG_DATA) public currentVoucher: any
     ) {
-        this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
-        this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
-        this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
-        this.updateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterInProcess), takeUntil(this.destroyed$));
-        this.updateTransporterSuccess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterSuccess), takeUntil(this.destroyed$));
-        this.isGenarateTransporterSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$));
-        this.transporterListDetails$ = this.store.pipe(select(p => p.ewaybillstate.TransporterListDetails), takeUntil(this.destroyed$));
-        this.transporterList$ = this.store.pipe(select(p => p.ewaybillstate.TransporterList), takeUntil(this.destroyed$));
-        this.isLoggedInUserEwayBill$ = this.store.pipe(select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess), takeUntil(this.destroyed$));
-        this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
-        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : null;
+
     }
 
     /**
@@ -152,24 +80,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.initGenerateNewTransporterForm();
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = 10;
-        this.invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.status === 'success') {
-                this.isUserlogedIn = true;
-                if (res.body && res.body?.gstIn) {
-                    this.invoiceBillingGstinNo = res.body.gstIn;
-                    this.generateEwayBillform.get('toGstIn').patchValue(res.body.gstIn);
-                }
-            } else {
-                this.isUserlogedIn = false;
-            }
-        });
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.selectedInvoices = this.invoiceService.getSelectedInvoicesList;
 
-        this.transporterListDetails$.subscribe(op => {
+        this.componentStore.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
         })
-        this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(state => {
+
+        this.componentStore.transporterList$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.length) {
                 let transporterDropdown = null;
                 let transporterArr = null;
@@ -180,24 +97,20 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.transporterDropdown$ = of(transporterArr);
             }
         });
-        this.invoiceNumber = this.selectedInvoices?.length ? this.selectedInvoices[0]?.voucherNumber : '';
-        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : null;
-        if (this.invoiceBillingGstinNo) {
-            this.generateEwayBillform.get('toGstIn').patchValue(this.invoiceBillingGstinNo);
-        } else {
-            this.generateEwayBillform.get('toGstIn').patchValue('URP');
-        }
-        this.isEwaybillGeneratedSuccessfully$.subscribe(state => {
+
+        this.componentStore.isEwaybillGeneratedSuccessfully$.subscribe(state => {
             if (state) {
                 this.generateEwayBillform.reset();
             }
         });
-        this.updateTransporterSuccess$.subscribe(state => {
+
+        this.componentStore.updateTransporterSuccess$.subscribe(state => {
             if (state) {
                 this.generateNewTransporterForm.reset();
             }
         });
-        this.store.pipe(select(state => state.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$)).subscribe(state => {
+
+        this.componentStore.isGenarateTransporterSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state) {
                 this.clearTransportForm();
             }
@@ -212,16 +125,16 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     private initGenerateEwayBillForm(): void {
         this.generateEwayBillform = this.formBuilder.group({
-            toGstIn: [this.invoiceBillingGstinNo ?? null],
-            toPinCode: [this.voucherDetails?.account?.billingDetails?.pincode || null, Validators.required],
+            toGstIn: [this.currentVoucher?.gstNumber ?? null, Validators.required],
+            toPinCode: [this.currentVoucher?.pinCode || null, Validators.required],
             transName: [null, Validators.required],
-            transId: [null],
+            transId: [null, Validators.required],
             distance: [null, Validators.required],
-            transMode: [null],
-            vehType: [null],
-            transDocNo: [null],
-            transDocDt: [null],
-            vehNo: [null]
+            transMode: [null, Validators.required],
+            vehType: [null, Validators.required],
+            transDocNo: [null, Validators.required],
+            transDocDt: [null, Validators.required],
+            vehNo: [null, Validators.required]
         });
     }
 
@@ -263,34 +176,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public onSubmitEwaybill(): void {
-        if (this.isUserlogedIn) {
-            const formData = this.generateEwayBillform?.value;
-            Object.keys(formData).forEach(key => {
-                if (formData[key] === null || (typeof formData[key] === "string" && formData[key].trim() === "")) {
-                    delete formData[key];
-                }
-            });
-            delete formData['toGstIn'];
-            if (!!formData["transDocDt"]) {
-                formData["transDocDt"] = dayjs(formData["transDocDt"]).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
-            }
-            this.sendResponse(formData);
-        } else {
-            this.openEWayBillCredentialsDialog();
-        }
-        this.detectChanges();
-    }
-
-    /**
-     * Opens the transporter model dialog
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public openEWayBillCredentialsDialog(): void {
-        this.dialog.open(this.eWayBillCredentials, {
-            panelClass: "mat-dialog-md",
-            disableClose: true
-        });
+        const formData = this.generateEwayBillform?.value;
+        formData["transDocDt"] = dayjs(formData["transDocDt"]).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+        this.sendResponse(formData);
     }
 
     /**
@@ -300,11 +188,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public onResetGenerateBillForm(): void {
         Object.keys(this.generateEwayBillform.controls).forEach((key) => {
-            if (key !== 'toGstIn') {
+            if (key !== 'toGstIn' && key !== 'toPinCode') {
                 this.generateEwayBillform.get(key)?.reset(null);
             }
         });
-        this.generateEwayBillform.get('toPinCode').patchValue(this.voucherDetails?.account?.billingDetails?.pincode || null);
     }
 
     /**
@@ -430,45 +317,5 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterFilterRequest.sort = type;
         this.transporterFilterRequest.sortBy = columnName;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-    }
-
-    /**
-     * Callback for translation completion, initializes dropdown lists for subtypes, supply types, and document types
-     *
-     * @param {*} event The translation event
-     * @memberof EWayBillCreateComponent
-     */
-    public translationComplete(event: any): void {
-        if (event) {
-            this.SubsupplyTypesList = [
-                { value: '1', label: this.localeData?.subsupply_types_list?.supply },
-                { value: '3', label: this.localeData?.subsupply_types_list?.export },
-                { value: '4', label: this.localeData?.subsupply_types_list?.job_work },
-                { value: '9', label: this.localeData?.subsupply_types_list?.skd_ckd_lots }
-            ];
-
-            this.SupplyTypesList = [
-                { value: 'O', label: this.localeData?.supply_types_list?.inward },
-                { value: 'I', label: this.localeData?.supply_types_list?.outward }
-            ];
-
-            this.ModifiedTransporterDocType = [
-                { value: 'INV', label: this.localeData?.modified_transporter_doc_type?.invoice },
-                { value: 'BIL', label: this.localeData?.modified_transporter_doc_type?.bill_supply },
-                { value: 'CHL', label: this.localeData?.modified_transporter_doc_type?.delivery_challan }
-            ];
-
-            this.TransporterDocType = [
-                { value: 'INV', label: this.localeData?.modified_transporter_doc_type?.invoice },
-                { value: 'BIL', label: this.localeData?.modified_transporter_doc_type?.bill_supply },
-                { value: 'CHL', label: this.localeData?.modified_transporter_doc_type?.delivery_challan }
-            ];
-
-            this.transactionType = [
-                { value: '1', label: this.localeData?.transaction_type?.regular },
-                { value: '2', label: this.localeData?.transaction_type?.credit_notes },
-                { value: '3', label: this.localeData?.transaction_type?.delivery_challan }
-            ];
-        }
     }
 }

@@ -662,6 +662,8 @@ export class InvoiceService {
     }
 
     public setSelectedInvoicesList(invoiceList: any[]) {
+        console.log("invoiceList", invoiceList);
+        
         this.selectedInvoicesLists = invoiceList;
     }
 

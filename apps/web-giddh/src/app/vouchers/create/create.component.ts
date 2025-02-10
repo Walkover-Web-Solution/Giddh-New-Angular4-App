@@ -51,6 +51,7 @@ import { SettingsProfileActions } from "../../actions/settings/profile/settings.
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
+import { InvoiceService } from "../../services/invoice.service";
 
 @Component({
     selector: "create",
@@ -420,6 +421,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public queryParams: any = {};
     /** E-way bill dialog response */
     public eWayBillResponse: any = {};
+    /** current voucher pin code  */
+    public currentVoucherPin: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -532,6 +535,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
+        private invoiceService: InvoiceService
     ) {
 
     }
@@ -1871,13 +1875,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public selectAccount(event: any, isClear: boolean = false): void {
         this.useDefaultAccountDetails = true;
         if (isClear) {
+            this.currentVoucherPin = '';
             if (this.invoiceForm.controls["account"]?.get("customerName")?.value || this.invoiceForm.controls["account"]?.get("uniqueName")?.value) {
                 this.resetVoucherForm();
             }
         } else {
+            this.currentVoucherPin = event;
+            console.log("pin", event);
+
             this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
             this.activeEntryIndex = 0;
+
         }
         this.openAccountDropdown = false;
 
@@ -3511,9 +3520,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public openEwayBillDialog(): void {
         this.dialog?.closeAll();
+        console.log(this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode").value);
+
         const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
-            disableClose: true
+            disableClose: true,
+            data: { pinCode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode").value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("pincode").value, gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("taxNumber")?.value }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.eWayBillResponse = response;
@@ -3533,7 +3545,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
-            if (this.voucherType === "sales" && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+            console.log(this.hasStock);//&& !this.invoiceService.getSelectedInvoicesList?.length
+            if (this.voucherType === "sales" && !this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && !this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
                 this.openEwayBillDialog();
             } else {
                 this.saveVoucher();

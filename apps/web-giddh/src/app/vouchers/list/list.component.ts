@@ -1674,6 +1674,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
             // To get re-assign receipts voucher store
             if (voucher) {
+                console.log(voucher);
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(voucher?.account?.uniqueName, {
                     invoiceNumber: voucher?.voucherNumber,
                     voucherType: VoucherTypeEnum.sales,
@@ -1682,6 +1683,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 this.invoiceService.setSelectedInvoicesList([voucher]);
             } else if (this.selectedVouchers[0]?.account?.uniqueName) {
+                console.log(this.selectedVouchers);
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedVouchers[0]?.account?.uniqueName, {
                     invoiceNumber: this.selectedVouchers[0]?.voucherNumber,
                     voucherType: VoucherTypeEnum.sales,
@@ -1705,6 +1707,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public createEwayBill(): void {
         this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+            console.log(response);
             if (!response?.account?.billingDetails?.pincode) {
                 this.toasterService.showSnackBar("error", this.localeData?.pincode_required);
             } else {

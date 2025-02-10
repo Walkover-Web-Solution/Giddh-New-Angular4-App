@@ -1201,11 +1201,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public openEwayBillDialog(): void {
+    public openEwayBillDialog(event: any): void {
         this.dialog?.closeAll();
         const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
-            disableClose: true
+            disableClose: true,
+            data: { pinCode: event?.pinCode, gstNumber: event?.gstNumber }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.saveBlankTransaction(response);
@@ -1217,9 +1218,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public generateLedger() {
-        if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
-            this.openEwayBillDialog();
+    public generateLedger(event: any) {
+        console.log(event);
+
+        if (true) {
+            this.openEwayBillDialog(event);
         } else {
             this.saveBlankTransaction();
         }
@@ -3021,6 +3024,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
+                    pinCode: data.body.pinCode,
+                    gstNumber: data.body.gstNumber
                 };
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
