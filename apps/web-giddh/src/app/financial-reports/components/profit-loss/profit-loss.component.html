@@ -8,19 +8,20 @@
         #filter
         [selectedCompany]="selectedCompany"
         (onPropertyChanged)="filterData($event)"
-        [showLoader]="showLoader | async"
+        [showLoader]="(showLoader | async) || (isFetchingProfitAndLoss$ | async)"
         (seachChange)="searchChanged($event)"
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
         [tbExportCsv]="false"
         [tbExportXLS]="false"
-        [plBsExportXLS]="true"
+        [plBsExportXLS]="projectUniqueName ? false : true"
         [showLabels]="true"
+        [isProjectWiseAccounting]="projectUniqueName ? true : false"
     ></financial-filter>
-    <div *ngIf="showLoader | async">
+    <div *ngIf="(showLoader | async) || (isFetchingProfitAndLoss$ | async)">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
-    <div *ngIf="!(showLoader | async) && data">
+    <div *ngIf="!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && data">
         <profit-loss-grid
             #plGrid
             [search]="search"
@@ -32,7 +33,7 @@
             [cogsData]="cogsData"
         ></profit-loss-grid>
     </div>
-    <div *ngIf="!(showLoader | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
+    <div *ngIf="!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && !data" class="d-flex align-items-center justify-content-center tb-pl-bs-data">
         <div class="d-flex">
             <h2>{{ localeData?.no_data_found }}</h2>
         </div>
