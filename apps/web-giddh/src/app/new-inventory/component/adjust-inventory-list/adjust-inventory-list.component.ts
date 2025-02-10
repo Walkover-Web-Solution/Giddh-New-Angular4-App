@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AdjustInventoryListComponentStore } from './utility/adjust-inventory-list.store';
@@ -70,12 +70,10 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will use for subscription pagination logs object */
     public adjustInventoryListRequest: InventorytAdjustReportQueryRequest;
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds page size options */
-    public pageSizeOptions: any[] = [20,
-        50,
-        100];
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /* Hold list searching value */
     public inlineSearch: any = '';
     /** Form Group for Adjust Inventory form */

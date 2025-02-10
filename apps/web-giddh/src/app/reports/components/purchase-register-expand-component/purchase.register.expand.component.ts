@@ -619,7 +619,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Page Change event and Make API Call
+     * Handle page change event and make API call
      *
      * @param {*} event
      * @memberof PurchaseRegisterExpandComponent

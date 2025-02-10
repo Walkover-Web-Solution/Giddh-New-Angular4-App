@@ -14,9 +14,9 @@ import { AppState } from "../../store";
 import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
+import { MULTI_CURRENCY_MODULES, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { saveAs } from 'file-saver';
@@ -73,7 +73,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     /** Holds Table Display columns for Credit Voucher */
-    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'status'];
+    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'einvoicestatus', 'status'];
     /** Holds Table Display columns for Purchase Order Voucher */
     public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
     /** Holds Table Display columns for Purchase Bill Voucher */
@@ -115,7 +115,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public accountUniqueNameInput: FormControl = new FormControl(null);
     /** Holds Purchase Order Unique Name form control */
     public purchaseOrderUniqueNameInput: FormControl = new FormControl(null);
-    /** Holds true if searching is in progress */
+    /** True if searching is in progress */
     public isSearching: boolean = false;
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -184,9 +184,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         giddhBalanceDecimalPlaces: 0
     };
     /** True, if user has enable GST E-invoice */
-    public isEInvoiceEnabled: boolean;
+    public isEInvoiceEnabled: boolean = null;
     /** Holds page Size Options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
     public totalResults: number = 0;
     /** Holds Pending Total Results Count */
@@ -357,13 +357,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
+                if (this.isEInvoiceEnabled === null) {
+                    this.getInvoiceSettings();
+                }
                 if (this.queryParams.page) {
                     this.advanceFilters.page = this.queryParams.page;
                     this.advanceFilters.count = this.queryParams.count ?? this.pageSizeOptions[2];
                     this.advanceFilters.from = this.queryParams.from;
                     this.advanceFilters.to = this.queryParams.to;
                 }
-
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
 
                 if (this.activeTabGroup === -1) {
@@ -384,7 +386,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.getLedgersOfInvoice();
                 }
             }
-            this.getInvoiceSettings();
         });
 
 
@@ -1119,7 +1120,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Page Change event and Make API Call
+     * Handle page change event and make API call
      *
      * @param {*} event
      * @memberof VoucherListComponent
@@ -1253,14 +1254,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             } else {
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    } else if (!this.displayedColumns?.includes("einvoicestatus")) {
+                if (!this.isEInvoiceEnabled) {
+                    this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "einvoicestatus");
+                } else {
+                    if (!this.displayedColumns?.includes("einvoicestatus")) {
                         this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
                     }
+                    if (!this.displayedColumnsCredit?.includes("einvoicestatus")) {
+                        this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "einvoicestatus");
+                    }
+                }
+                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {

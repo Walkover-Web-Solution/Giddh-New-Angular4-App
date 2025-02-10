@@ -259,6 +259,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold broadcast event for project wise accounting */
+    public projectBroadcast: any;
     /** Holds true if plan is either trial or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
@@ -524,6 +526,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.broadcast.onmessage = (event) => {
             if (event?.data?.activeCompany !== undefined && event?.data?.activeCompany !== null) {
                 this.getCurrentCompanyData();
+            }
+        };
+
+        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
+        this.projectBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                this.gotToBranchTab();
             }
         };
 
