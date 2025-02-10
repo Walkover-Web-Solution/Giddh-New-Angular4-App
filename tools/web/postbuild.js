@@ -92,7 +92,7 @@ location /assets/ {
 
 # Redirect all other requests to PHP
 location / {
-    rewrite ^ /index.php$is_args$args;
+    try_files ^ /index.php$is_args$args;
 }
 
 location ~ \.(php|phar)(/.*)?$ {
