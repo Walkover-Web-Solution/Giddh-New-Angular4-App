@@ -156,7 +156,7 @@ table {
             th,
             td {
                 word-break: keep-all !important;
-                white-space: normal !important;
+                white-space: nowrap !important;
             }
         }
     }
