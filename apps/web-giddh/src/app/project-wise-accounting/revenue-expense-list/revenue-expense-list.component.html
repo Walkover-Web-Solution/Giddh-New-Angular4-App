@@ -53,10 +53,10 @@
             <table class="table entry-table editable-table">
                 <thead *ngIf="!isCompany || totalResults">
                     <tr>
-                        <th class="text-left">{{ localeData?.account }}</th>
+                        <th class="text-left">{{ commonLocaleData?.app_account }}</th>
                         <th class="text-left">{{ localeData?.entry }}</th>
                         <th class="text-left">{{ localeData?.method }}</th>
-                        <th class="text-left">{{ localeData?.amount }}</th>
+                        <th class="text-left">{{ commonLocaleData?.app_amount }}</th>
                         <th *ngIf="!isCompany" class="text-left">{{ commonLocaleData?.app_action }}</th>
                     </tr>
                     <tr *ngIf="!isCompany" [formGroup]="createAccountEntryForm">
