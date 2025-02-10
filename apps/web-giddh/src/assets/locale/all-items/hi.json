@@ -920,7 +920,8 @@
                 {
                     "label": "परियोजनावार लेखांकन",
                     "link": "/pages/project-wise-accounting/list",
-                    "icon": "icon-balance-sheet-new"
+                    "icon": "icon-balance-sheet-new",
+                    "description": "प्रत्येक परियोजना के वित्तीय विवरण को कुशलतापूर्वक ट्रैक, प्रबंधित और विश्लेषण करें।"
                 }
             ]
         },
