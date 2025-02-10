@@ -21,8 +21,6 @@
     "go_to_branch_information": "No project found. To add new project, switch to branch mode",
     "go_to_branch": " Go to branch",
     "no_entries_found":"No entries linked in the project. Switch branch to link entries.",
-    "account" : "Account",
     "entry": "Entry",
-    "method": "Method",
-    "amount": "Amount"
+    "method": "Method"
 }
