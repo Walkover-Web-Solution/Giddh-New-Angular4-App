@@ -13,7 +13,8 @@ export const Configuration = {
     'isElectron': isElectron,
     'APP_FOLDER': APP_FOLDER,
     'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET
+    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': RAZORPAY_KEY
 };
 
 /** Add Company business type*/
@@ -127,9 +128,6 @@ export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
-
-/** URL Protocol */
-export const URL_PROTOCOL = 'http://'
 
 /** Adjustment inventory */
 export enum AdjustmentInventory {

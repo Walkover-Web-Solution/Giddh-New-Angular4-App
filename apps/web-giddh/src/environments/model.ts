@@ -14,5 +14,6 @@ export interface Environment {
     GOOGLE_CLIENT_SECRET: string;
     OTP_WIDGET_ID: string;
     OTP_TOKEN_AUTH: string;
+    RAZORPAY_KEY: string;
     decorateModuleRef(modRef: NgModuleRef<any>): NgModuleRef<any>;
 }

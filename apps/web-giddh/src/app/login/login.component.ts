@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, OTP_PROVIDER_URL, URL_PROTOCOL } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -505,7 +505,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public async appleLogin(): Promise<void> {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomainName ? URL_PROTOCOL + `${whiteLabel.giddhWhiteLabel.apiDomainName}` : 'https://apitest.giddh.com';
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomainName ? `${whiteLabel.giddhWhiteLabel.apiDomainName}` : 'https://apitest.giddh.com';
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');

@@ -18,6 +18,7 @@ export const environment: Environment = {
     GOOGLE_CLIENT_SECRET: '',
     OTP_WIDGET_ID: '',
     OTP_TOKEN_AUTH: '',
+    RAZORPAY_KEY: '',
     /** Angular debug tools in the dev console
      * https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
      * @param modRef

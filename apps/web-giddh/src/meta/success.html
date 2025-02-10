@@ -34,6 +34,6 @@
 </div>
 <script type="text/javascript">
     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-    var giddhDomainUrl = `http://${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
+    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
     var domainName = whiteLabel?.giddhWhiteLabel?.domainName || 'Giddh.com';
 </script>

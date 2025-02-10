@@ -411,7 +411,7 @@ getApi: function () {
     } else {
         const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
         if (whiteLabelData) {
-       apiBaseUrl = `https://${whiteLabelData?.body?.giddhWhiteLabel?.apiDomainName}/`;
+       apiBaseUrl = `${whiteLabelData?.body?.giddhWhiteLabel?.apiDomainName}/`;
         } else {
              // Original logic based on hostname
             switch (window.location.hostname) {

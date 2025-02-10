@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 
 export interface IServiceConfigArgs {
     apiUrl: string;
-    appUrl:string
+    appUrl: string
     ApiUrl: string;
     AppUrl: string;
     PORTAL_URL: string;
