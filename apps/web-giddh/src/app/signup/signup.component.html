@@ -20,8 +20,8 @@
                     <div class="giddh-login">
                         <div class="giddh-login-inner">
                             <div class="logo-login">
-                                <a href="https://giddh.com" aria-label="giddh logo">
-                                    <img src="./assets/images/giddh-white-logo.svg" alt="giddh logo" width="141px" />
+                                <a [href]="giddhDomainUrl"  aria-label="brand-logo">
+                                    <img [src]="giddhLogoSrc" alt="brand-logo" width="141px" />
                                 </a>
                             </div>
                             <!-- dynamic content inserted -->
@@ -30,7 +30,7 @@
                                 <div class="form-wrapper" *ngIf="loginUsing">
                                     <!-- login with email form -->
                                     <form
-                                        
+
                                         name="verifyEmailForm"
                                         novalidate
                                         [formGroup]="emailVerifyForm"
@@ -127,7 +127,7 @@
                                     </form>
                                     <!-- form end/ -->
                                     <form
-                                        
+
                                         *ngIf="isSignupWithPasswordSuccess$ | async"
                                         id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm"

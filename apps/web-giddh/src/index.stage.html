@@ -57,11 +57,35 @@
             } catch (error) {
                 console.error(error);
             }
+            // Add preconnect for domainName extracted from cookie
+            window.onload = function () {
+                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
+                // Access domainName directly from the parsed object
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
+                const logoUrl = "./assets/images/giddh-big-logo.svg";
+
+                if (whiteLabelConfig) {
+                    // Remove the h1 tag containing the image
+                    const logoContainer = document.querySelector("#main-giddh-loader h1");
+                    if (logoContainer) {
+                        logoContainer.remove();
+                    }
+                } else {
+                    // If no whiteLabel object, set the logo as usual
+                    document.getElementById("dynamic-logo").src = logoUrl;
+                }
+                // Create a new preconnect link element
+                const preconnectLink = document.createElement("link");
+                preconnectLink.rel = "preconnect";
+                preconnectLink.href = apiDomain;
+
+                // Append the preconnect link to the head
+                document.head.appendChild(preconnectLink);
+            };
         </script>
         <link rel="preconnect" href="https://headway-widget.net" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://s3-ap-south-1.amazonaws.com" />
-        <link rel="preconnect" href="https://apitest.giddh.com" />
     </head>
     <body class="unresponsive">
         <!-- Google Tag Manager (noscript) -->
@@ -76,7 +100,7 @@
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">
             <h1>
-                <img src="./assets/images/giddh-big-logo.svg" width="150" />
+                <img id="dynamic-logo" width="150" />
             </h1>
             <div class="loading-dots">
                 <div class="loading-dots-dot"></div>

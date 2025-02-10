@@ -251,7 +251,7 @@
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
-                        "baseHref": "http://localhost:3000",
+                        "baseHref": "/",
                         "allowedCommonJsDependencies": [
                             "file-saver",
                             "ngrx-store-localstorage",
@@ -325,7 +325,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "http://localhost:3000",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -360,7 +360,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://stage.giddh.com/",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -395,7 +395,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://books.giddh.com/",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -430,7 +430,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://test.giddh.com/",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",

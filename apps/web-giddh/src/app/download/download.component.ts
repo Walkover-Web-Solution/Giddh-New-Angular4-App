@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { GeneralService } from '../services/general.service';
+import { ServiceConfig } from '../services/service.config';
 
 @Component({
     selector: 'download',
@@ -18,8 +20,12 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
+    /* Hold giddh domain url */
+    public giddhDomainUrl: string = '';
 
-    constructor(private route: ActivatedRoute) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private route: ActivatedRoute, private generalService: GeneralService) {
     }
 
     /**
@@ -28,8 +34,10 @@ export class DownloadComponent implements OnInit, OnDestroy {
      * @memberof DownloadBulkInvoiceComponent
      */
     public ngOnInit(): void {
-
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        this.giddhDomainUrl = this.serviceConfig.AppUrl ||  'https://books.giddh.com/';
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.url) {

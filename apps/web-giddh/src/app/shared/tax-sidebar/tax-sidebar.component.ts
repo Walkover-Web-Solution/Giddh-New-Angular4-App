@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, Inject } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Router } from '@angular/router';
 import { GstReport } from '../../gst/constants/gst.constant';
@@ -12,6 +12,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'tax-sidebar',
@@ -88,7 +89,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private gstReconcileService: GstReconcileService,
         private changeDetectionRef: ChangeDetectorRef,
-        private gstAction: GstReconcileActions
+        private gstAction: GstReconcileActions,
+        @Inject(ServiceConfig) private serviceConfig
     ) { }
 
     /**
@@ -161,7 +163,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.isMonthSelected = true;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**
@@ -229,7 +231,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     *
     * @memberof TaxSidebarComponent
     */
-   public selectTax(): void {        
+   public selectTax(): void {
         this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
     }
 

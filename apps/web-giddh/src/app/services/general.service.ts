@@ -364,9 +364,10 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
+        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
+            if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -2189,6 +2190,23 @@ export class GeneralService {
     public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
         const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
+    }
+
+    /**
+     * Retrieves the decoded white label data from the local storage.
+     *
+     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
+     *
+     * @throws {Error} If there is an error parsing the white label data from the local storage.
+     */
+    public getDecodedWhiteLabel(): any {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            console.error('Error parsing whiteLabel data from localStorage:', error);
+            return null;
+        }
     }
 
     /**
