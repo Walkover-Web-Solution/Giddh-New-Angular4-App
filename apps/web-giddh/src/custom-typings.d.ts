@@ -104,6 +104,7 @@ interface GlobalEnvironment {
     errlyticsNeeded: boolean;
     errlyticsKey: string;
     APP_FOLDER: string;
+    RAZORPAY_KEY: string;
 }
 
 interface Es6PromiseLoader {
