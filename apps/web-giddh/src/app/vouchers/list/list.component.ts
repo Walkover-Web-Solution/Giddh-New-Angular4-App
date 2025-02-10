@@ -966,6 +966,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getSelectedTabIndex(): void {
+
         if (!this.isCompany && !this.isConsolidatedBranch) {
             if (this.activeTabGroup === 0) {
                 if (this.voucherType === 'estimates' && this.activeModule === 'list') {
@@ -1006,13 +1007,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 0;
                 } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
+                } else if ((this.voucherType === this.voucherTypeEnum.receipt) && this.activeModule === 'settings') {
+                    this.selectedTabIndex = 2;
                 }
-
             } else if (this.activeTabGroup === 4) {
                 if (this.voucherType === 'payment' && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'pending') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === this.voucherTypeEnum.payment && this.activeModule === 'settings') {
+                    this.selectedTabIndex = 2;
                 }
             }
         } else {
@@ -1130,6 +1134,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = this.voucherTypeEnum.receipt;
                     activeModule = "pending";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = this.voucherTypeEnum.receipt;
+                    activeModule = "settings";
                 }
             } else if (this.activeTabGroup === 4) {
                 if (selectedTabIndex === 0) {
@@ -1138,6 +1145,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = this.voucherTypeEnum.payment;
                     activeModule = "pending";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = this.voucherTypeEnum.payment;
+                    activeModule = "settings";
                 }
             }
         } else {
