@@ -1059,7 +1059,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         }
         this.isRouteApplied = false;
-        if (!this.isRouteApplied && this.queryParams.tabIndex === '4') {
+        if (this.queryParams.tabIndex === '4') {
             this.isRouteApplied = true;
             this.selectedTabIndex = this.queryParams.tabIndex;
         }
