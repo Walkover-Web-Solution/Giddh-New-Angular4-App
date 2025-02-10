@@ -15,6 +15,24 @@
             })(window, document, "script", "dataLayer", "GTM-5MCXN7C");
         </script>
         <!-- End Google Tag Manager -->
+        <script type="text/javascript">
+            window.onload = function () {
+                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
+
+                const logoUrl = "./assets/images/giddh-big-logo.svg";
+
+                if (whiteLabelConfig) {
+                    // Remove the h1 tag containing the image
+                    const logoContainer = document.querySelector("#main-giddh-loader h1");
+                    if (logoContainer) {
+                        logoContainer.remove();
+                    }
+                } else {
+                    // If no whiteLabel object, set the logo as usual
+                    document.getElementById("dynamic-logo").src = logoUrl;
+                }
+            };
+        </script>
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
         <script type="text/javascript">
@@ -61,7 +79,7 @@
             window.onload = function () {
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 // Access domainName directly from the parsed object
-                const apiDomainName = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomainName || 'https://apitest.giddh.com';
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
                 const logoUrl = "./assets/images/giddh-big-logo.svg";
 
                 if (whiteLabelConfig) {
@@ -77,7 +95,7 @@
                 // Create a new preconnect link element
                 const preconnectLink = document.createElement("link");
                 preconnectLink.rel = "preconnect";
-                preconnectLink.href = `${apiDomainName}`;
+                preconnectLink.href = apiDomain;
 
                 // Append the preconnect link to the head
                 document.head.appendChild(preconnectLink);
