@@ -190,7 +190,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.mapFilters();
     }
 
-    public goBack() {
+    /**
+     * Redirect to gst filing return page
+     *
+     * @memberof ViewTransactionsComponent
+     */
+    public redirectToGstFilingReturn(): void {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
@@ -215,7 +220,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @memberof ViewTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
-        if (invoice.voucherType !== this.voucherTypeEnum.purchase) {
+        if (invoice?.voucherType !== this.voucherTypeEnum.purchase) {
             let downloadVoucherRequestObject;
             if (invoice && invoice.account) {
                 this.selectedInvoice = invoice;
@@ -397,7 +402,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             height: '80vh',
             width: '80vw',
             maxWidth: '800px',
-            disableClose: true
+            disableClose: true,
+            autoFocus: false
         });
     }
 }

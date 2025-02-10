@@ -169,14 +169,7 @@ export class GstComponent implements OnInit, OnDestroy {
             }
         });
         this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
-        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.activeCompanyGstNumber !== response) {
-                this.activeCompanyGstNumber = response;
-                this.loadTaxReport();
-            }
-        });
     }
-
     /**
      * Unsubscribes from subscription
      *
@@ -197,7 +190,7 @@ export class GstComponent implements OnInit, OnDestroy {
      * @param {*} date
      * @memberof GstComponent
      */
-    public periodChanged(date:  any): void {
+    public periodChanged(date: any): void {
         this.currentPeriod = {
             from: dayjs(date?.from).format(GIDDH_DATE_FORMAT),
             to: dayjs(date?.to).format(GIDDH_DATE_FORMAT)
@@ -221,7 +214,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
             }
         } else {
-            this.toasty.showSnackBar('warning',this.localeData?.gstin_required_error);
+            this.toasty.showSnackBar('warning', this.localeData?.gstin_required_error);
         }
         this.cdRf.detectChanges();
     }
@@ -248,17 +241,17 @@ export class GstComponent implements OnInit, OnDestroy {
 
     public emailSheet(isDownloadDetailSheet: boolean) {
         if (!this.isMonthSelected) {
-            return this.toasty.showSnackBar('error',this.localeData?.monthonly_required_error);
+            return this.toasty.showSnackBar('error', this.localeData?.monthonly_required_error);
         }
         if (!this.userEmail) {
-            return this.toasty.showSnackBar('error',this.localeData?.email_required_error);
+            return this.toasty.showSnackBar('error', this.localeData?.email_required_error);
         }
         let check = dayjs(this.selectedMonth, 'MM-YYYY');
         let monthToSend = check.format('MM') + '-' + check.format('YYYY');
         if (!monthToSend) {
-            this.toasty.showSnackBar('error',this.localeData?.month_required_error);
+            this.toasty.showSnackBar('error', this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
-            return this.toasty.showSnackBar('error',this.localeData?.gstin_unavailable_error);
+            return this.toasty.showSnackBar('error', this.localeData?.gstin_unavailable_error);
         } else {
             this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
             this.userEmail = '';
@@ -310,6 +303,7 @@ export class GstComponent implements OnInit, OnDestroy {
      */
     private loadTaxDetails(): void {
         this.isTaxApiInProgress = true;
+        this.activeCompanyGstNumber = "";
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 this.taxes = response.body?.map(tax => ({
@@ -322,6 +316,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 }
             }
             this.isTaxApiInProgress = false;
+            this.loadTaxReport();
         });
     }
 

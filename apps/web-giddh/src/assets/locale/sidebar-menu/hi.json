@@ -627,6 +627,11 @@
                             "tabIndex": 0
                         }
                     }
+                },
+                {
+                    "label": "परियोजनावार लेखांकन",
+                    "link": "/pages/project-wise-accounting/list",
+                    "icon": "icon-balance-sheet-new"
                 }
             ]
         }

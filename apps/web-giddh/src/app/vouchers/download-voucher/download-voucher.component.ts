@@ -7,7 +7,6 @@ import { saveAs } from 'file-saver';
 import { GeneralService } from '../../services/general.service';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
-
 @Component({
     selector: 'download-voucher',
     templateUrl: './download-voucher.component.html',
@@ -69,7 +68,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         this.componentStore.downloadVoucherFileResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
-                if (this.dataToSend.copyTypes?.length > 1 || this.downloadForm?.get('isAttachment').value) {
+                if ((this.dataToSend.copyTypes?.length || this.dataToSend.typeOfInvoice?.length) > 1 || this.downloadForm?.get('isAttachment').value) {
                     if (this.fileType === "base64") {
                         saveAs((this.generalService.base64ToBlob(response?.attachments[0]?.encodedData, '', 512)), response?.attachments[0]?.name);
                     } else {
@@ -106,13 +105,6 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
      */
     public downloadVouchers(): void {
         let voucherType = this.selectedItem && this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem?.voucherType;
-
-        this.dataToSend = {
-            copyTypes: this.invoiceType,
-            voucherType: voucherType,
-            uniqueName: this.selectedItem?.uniqueName
-        };
-
         let downloadOption = "";
         this.fileType = "pdf";
         if (this.downloadForm?.get('isAttachment').value) {
@@ -124,6 +116,21 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
             }
         } else {
             downloadOption = "VOUCHER";
+        }
+        if (this.generalService.voucherApiVersion === 2) {
+            this.dataToSend = {
+                copyTypes: this.invoiceType,
+                voucherType: voucherType,
+                uniqueName: this.selectedItem?.uniqueName
+            };
+        } else {
+            this.fileType = "pdf";
+            this.dataToSend = {
+                voucherNumber: [this.selectedItem.voucherNumber],
+                typeOfInvoice: this.invoiceType,
+                voucherType: this.inputData?.voucherType,
+                accountUniqueName: this.selectedItem.account.uniqueName
+            };
         }
         this.componentStore.downloadVoucherPdf({ model: this.dataToSend, type: downloadOption, fileType: this.fileType, voucherType: this.voucherType, isDownloadFromDialog: true });
     }

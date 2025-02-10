@@ -33,9 +33,12 @@
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.select_vendor : localeData?.select_customer"
-                                                formControlName="uniqueName" [name]="'account'"
-                                                [options]="voucherAccountResults$ | async" [showCreateNew]="true"
-                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                                formControlName="uniqueName" 
+                                                [name]="'account'"
+                                                [options]="voucherAccountResults$ | async" 
+                                                [showCreateNew]="true"
+                                                [enableDynamicSearch]="true" 
+                                                [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="!invoiceType.isPurchaseOrder && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isPaymentInvoice ? localeData?.add_customer : localeData?.add_vendor"
                                                 [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
@@ -811,6 +814,7 @@
                                                                     <reactive-dropdown-field
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
+                                                                        (keydown.enter)="$event.preventDefault()"
                                                                         [label]="commonLocaleData?.app_account"
                                                                         [placeholder]="localeData?.select_acc"
                                                                         formControlName="uniqueName"
@@ -1208,6 +1212,7 @@
                                                                             [readonly]="invoiceForm.get('isAdvanceReceipt')?.value"
                                                                             decimalDigitsDirective
                                                                             formControlName="amountForAccount"
+                                                                            (keydown.enter)="$event.preventDefault()"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
                                                                     <span

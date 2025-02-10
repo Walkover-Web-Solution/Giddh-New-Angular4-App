@@ -533,9 +533,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         if (response) {
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
-                if (response.data) {
+                if (response) {
                     this.isPdfAvailable = true;
-                    this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data, 'application/pdf', 512);
+                    this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data || response, 'application/pdf', 512);
                     const file = new Blob([this.selectedInvoice.blob], { type: 'application/pdf' });
                     this.attachedDocumentBlob = file;
                     URL.revokeObjectURL(this.pdfFileURL);
@@ -702,6 +702,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 getRequest = {
                     accountUniqueName: this.selectedInvoice?.vendor?.uniqueName,
                     poUniqueName: this.selectedInvoice?.uniqueName
+                };
+            }
+            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+                getRequest = {
+                    accountUniqueName: this.selectedInvoice.account?.uniqueName,
+                    voucherNumber: [this.selectedInvoice.voucherNumber],
+                    voucherType: this.voucherType,
+                    fileType: fileType
                 };
             }
             this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType, isDownloadFromDialog: false });
@@ -927,7 +935,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 currentInvoiceList.push(item);
             });
 
-            if ((this.isSearching && (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
+            if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.invoiceList = currentInvoiceList;
             } else {
                 this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];

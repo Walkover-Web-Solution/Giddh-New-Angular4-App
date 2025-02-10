@@ -4,7 +4,7 @@
 
     <div>
         <div *ngIf="hsnSummary" class="table-responsive">
-            <table mat-table [dataSource]="hsnSummary.data" class="transactions-table table zi-table">
+            <table mat-table [dataSource]="hsnSummary.data" class="transactions-table table">
                 <!-- HSN/SAC Column -->
                 <ng-container matColumnDef="hsn_sc">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_hsn_sac }}</th>

@@ -7,7 +7,7 @@
     <filter-multi-currency
         #filter
         (filterValue)="searchData($event)"
-        (onPropertyChanged)="filterData()"
+        (onPropertyChanged)="filterData($event)"
         (searchChange)="searchChanged($event)"
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"

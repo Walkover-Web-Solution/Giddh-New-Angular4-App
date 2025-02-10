@@ -127,7 +127,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
     /**
      * This will get all accounts of giddh
-     * 
+     *
      * @memberof BankAccountsComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 200, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -162,9 +162,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
     /**
      * Retrieves the translated bank name by replacing a placeholder in the localized string
-     * 
-     * @param bankName 
-     * @returns 
+     *
+     * @param bankName
+     * @returns
      */
     private getBankTranslateName(bankName: string): string {
         return this.localeData?.in_bank?.replace("[BANK_NAME]", bankName);
@@ -194,7 +194,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         let data = {
             localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData
+            commonLocaleData: this.commonLocaleData,
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
@@ -214,7 +214,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
     /**
      * This will add and Remove the listener immediately after triggering getRequisition
-     * 
+     *
      * @memberof BankAccountsComponent
      */
     public setupGocardlessMessageListener(): void {
@@ -231,7 +231,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
     /**
     * This will open the dialog to link a bank
-    * 
+    *
     * @memberof BankAccountsComponent
     */
     public openBankLinkDialog(): void {
@@ -240,5 +240,5 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             panelClass: ['mat-dialog-md'],
             disableClose: true
         });
-    }   
+    }
 }

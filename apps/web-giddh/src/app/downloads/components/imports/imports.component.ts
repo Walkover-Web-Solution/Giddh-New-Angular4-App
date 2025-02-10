@@ -357,12 +357,12 @@ export class ImportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Download export file
+     * Download import file
      *
      * @param {*} url
      * @memberof ImportsComponent
      */
-    public downloadFile(url: any): void {
+    public downloadFile(url: string): void {
         if (url) {
             let fileName = url.substring(url.lastIndexOf('/') + 1);
             download(fileName, url, "");

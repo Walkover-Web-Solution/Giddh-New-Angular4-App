@@ -68,7 +68,7 @@ report-filters,
         .mdc-notched-outline__notch {
             border-color: var(--color-fields-border) !important;
             border-left: none !important;
-        }          
+        }
     }
 
     .mat-form-field-appearance-outline {
@@ -284,7 +284,16 @@ giddh-datepicker,
     giddh-datepicker {
         .mat-mdc-form-field {
             min-width: 71px;
-            max-width: 100px;
+            max-width: 111px;
+        }
+        .mat-datepicker-input {
+            position: absolute;
+            margin-top: 12px;
+        }
+
+        .mat-datepicker-toggle {
+            position: relative;
+            left: 75px;
         }
     }
 }
@@ -640,7 +649,7 @@ input-field {
                 .mat-mdc-form-field-infix {
                     padding-left: 20px !important;
                 }
-            } 
+            }
             .mdc-text-field--outlined  {
                 .mdc-notched-outline {
                     .mdc-notched-outline__leading {
@@ -657,7 +666,7 @@ input-field {
         display: none !important;
     }
 
-    .mat-mdc-form-field,  
+    .mat-mdc-form-field,
     .mat-mdc-form-field input{
         background-color: var(--color-primary-input-bar-background) !important;
     }

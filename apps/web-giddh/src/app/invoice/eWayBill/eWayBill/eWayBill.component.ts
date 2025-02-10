@@ -179,7 +179,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
         // bind state sources
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
+            if (res && res.stateList) {
                 Object.keys(res.stateList).forEach(key => {
                     this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
                 });
