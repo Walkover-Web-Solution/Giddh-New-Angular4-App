@@ -559,11 +559,6 @@
                                     </a>
                                     <span
                                         class="bank-menu"
-                                        *ngIf="
-                                            lc.bankTransactionsDebitData?.length ||
-                                            lc.bankTransactionsCreditData?.length ||
-                                            bankAccount?.reLoginRequired
-                                        "
                                     >
                                         <button
                                             mat-icon-button
@@ -578,7 +573,6 @@
                                                 aria-label="bank"
                                                 mat-menu-item
                                                 (click)="getPlaidLinkToken(bankAccount?.itemId)"
-                                                *ngIf="bankAccount?.reLoginRequired"
                                             >
                                                 <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
                                             </button>

@@ -144,5 +144,7 @@
         "copied":"कॉपी केले...",
         "api_url":"API URL :",
         "heading":"टेली"
-    }
+    },
+    "click_here": "येथे क्लिक करा",
+    "account_deleted_successfully": "खाते यशस्वीरित्या हटवले"
 }
