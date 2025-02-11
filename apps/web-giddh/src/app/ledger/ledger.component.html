@@ -559,6 +559,11 @@
                                     </a>
                                     <span
                                         class="bank-menu"
+                                        *ngIf="
+                                            lc.bankTransactionsDebitData?.length ||
+                                            lc.bankTransactionsCreditData?.length ||
+                                            bankAccount?.reLoginRequired
+                                        "
                                     >
                                         <button
                                             mat-icon-button
@@ -573,6 +578,7 @@
                                                 aria-label="bank"
                                                 mat-menu-item
                                                 (click)="getPlaidLinkToken(bankAccount?.itemId)"
+                                                *ngIf="bankAccount?.reLoginRequired"
                                             >
                                                 <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
                                             </button>
@@ -1482,7 +1488,7 @@
                     </div>
                     <!-- endregion -->
                     <!-- region account table-->
-                    <p class="float-right">{{ bankAccount?.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
+<p class="float-right">{{ bankAccount?.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>                    
                     <div class="clearfix"></div>
                     <mat-grid-list
                         cols="2"
