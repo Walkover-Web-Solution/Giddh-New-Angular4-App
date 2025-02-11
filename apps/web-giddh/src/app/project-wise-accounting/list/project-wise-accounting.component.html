@@ -95,7 +95,8 @@
               </div>
             </th>
             <td mat-cell *matCellDef="let element">
-              <a [routerLink]="['/pages/project-wise-accounting', 'income', 'list', element.uniqueName]">{{element.name}}</a></td>
+              <a [routerLink]="['/pages/project-wise-accounting', 'income', 'list', element.uniqueName]">{{element.name}}</a>
+            </td>
           </ng-container>
 
           <!-- Status Column -->
@@ -220,7 +221,7 @@
   let-fieldName="fieldName"
   let-formControl="formControl"
 >
-  <div class="align-items-center d-flex" [hidden]="show">
+  <div class="align-items-center d-flex column-gap5" [hidden]="show">
       <button
           mat-icon-button
           aria-label="search"
@@ -231,7 +232,7 @@
       </button>
       <span> {{ title }}</span>
   </div>
-  <div class="align-items-center d-flex pd-l14" [hidden]="!show">
+  <div class="align-items-center d-flex" [hidden]="!show">
       <text-field
           [type]="'text'"
           [placeholder]="getSearchFieldText(fieldName)"
