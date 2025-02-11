@@ -459,7 +459,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
-                if (params?.voucherType === VoucherTypeEnum.purchase && this.settingResponse && this.settingResponse.invoiceSettings) {
+                if ((params?.voucherType === VoucherTypeEnum.purchase || params?.voucherType === VoucherTypeEnum.receipt || params?.voucherType === VoucherTypeEnum.payment || params?.voucherType === VoucherTypeEnum.sales) && this.settingResponse) {
                     this.settingForm.patchValue({
                         purchaseBillSettings: this.settingResponse.purchaseBillSettings || {},
                         invoiceSettings: this.settingResponse.invoiceSettings || {},
