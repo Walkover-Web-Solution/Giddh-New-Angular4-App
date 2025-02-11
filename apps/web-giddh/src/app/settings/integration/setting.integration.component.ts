@@ -397,8 +397,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         window.addEventListener('message', event => {
             if (this.router.url === '/pages/settings/integration/payment') {
                 if (event && event.data === "GOCARDLESS") {
-                    if (this.referenceNumber) {
-                        this.componentStore.getRequisition(this.referenceNumber);
+                    if (localStorage.getItem('referenceNo')) {
+                        this.componentStore.getRequisition(localStorage.getItem('referenceNo'));
                     }
                 }
             }
@@ -1221,9 +1221,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
-
+        localStorage.setItem('referenceNo', null);
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
+                localStorage.setItem('referenceNo', response);
                 this.referenceNumber = response;
             }
         });
