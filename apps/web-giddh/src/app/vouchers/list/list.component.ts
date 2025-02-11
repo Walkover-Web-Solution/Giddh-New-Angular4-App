@@ -384,7 +384,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedInnerTabIndex = 4;
             }
 
-
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
