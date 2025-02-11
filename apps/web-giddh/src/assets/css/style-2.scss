@@ -11491,35 +11491,38 @@ body {
         }
     }
 
-    .form-bg {
-        width: 100%;
-    }
+    // .form-bg {
+    //     width: 100%;
+    // }
 
-    .grp-col {
-        float: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
+    // .grp-col {
+    //     float: none !important;
+    //     width: 100% !important;
+    //     max-width: 100% !important;
+    // }
 
-    .grp-list .list-item {
-        display: inline-block;
-    }
+    // .grp-list .list-item {
+    //     display: inline-block;
+    // }
 
-    .col-wrapper {
-        white-space: initial;
-    }
+    // .col-wrapper {
+    //     white-space: initial;
+    //     width: 262px;
+    //     overflow-y: hidden;
+    // }
 
-    .col-wrapper:nth-child(2) {
-        margin-left: 0px;
-        width: 100%;
-    }
+    // .col-wrapper:nth-child(2) {
+    //     margin-left: 0px;
+    //     width: 100%;
+    // }
 
-    .grp-list {
-        padding: 0px;
-        background: var(--color-wild-sand);
-        width: 100%;
-        display: block;
-    }
+    // .grp-list {
+    //     padding: 0px;
+    //     background: var(--color-wild-sand);
+    //     width: 100%;
+    //     display: block;
+    //     overflow-y: hidden;
+    // }
 
     .users-last-list > li:last-child {
         height: inherit !important;
@@ -11535,8 +11538,8 @@ body {
     }
 
     .left-account-operation {
-        height: initial !important;
-        width: 100%;
+        // height: initial !important;
+        // width: 100%;
         background: var(--color-white);
     }
 
@@ -11700,66 +11703,66 @@ body {
         display: block;
     }
 
-    .form-bg {
-        width: 100%;
-    }
+    // .form-bg {
+    //     width: 100%;
+    // }
 
-    .grp-col {
-        float: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-    }
+    // .grp-col {
+    //     float: none !important;
+    //     width: 100% !important;
+    //     max-width: 100% !important;
+    //     height: auto !important;
+    // }
 
-    .grp-list .list-item {
-        display: inline-block;
-    }
+    // .grp-list .list-item {
+    //     display: inline-block;
+    // }
 
-    .col-wrapper {
-        white-space: initial;
-    }
+    // .col-wrapper {
+    //     white-space: initial;
+    // }
 
-    .col-wrapper:nth-child(2) {
-        margin-left: 0px;
-        width: 100%;
-    }
+    // .col-wrapper:nth-child(2) {
+    //     margin-left: 0px;
+    //     width: 100%;
+    // }
 
-    .grp-list {
-        padding: 10px 0px !important;
-        background: var(--color-wild-sand);
-        width: 100%;
-        display: block;
-    }
+    // .grp-list {
+    //     padding: 10px 0px !important;
+    //     background: var(--color-wild-sand);
+    //     width: 100%;
+    //     display: block;
+    // }
 
-    .users-last-list > li:last-child {
-        height: inherit !important;
-    }
+    // .users-last-list > li:last-child {
+    //     height: inherit !important;
+    // }
 
-    .xs-left {
-        text-align: left !important;
-    }
+    // .xs-left {
+    //     text-align: left !important;
+    // }
 
-    .customer-right-wrap .text-right.xs-left {
-        text-align: right !important;
-    }
+    // .customer-right-wrap .text-right.xs-left {
+    //     text-align: right !important;
+    // }
 
-    .form-box.form-bg {
-        height: auto !important;
-        min-height: auto;
-    }
+    // .form-box.form-bg {
+    //     height: auto !important;
+    //     min-height: auto;
+    // }
 
-    .left-account-operation {
-        height: initial !important;
-        width: 100% !important;
-    }
+    // .left-account-operation {
+    //     height: initial !important;
+    //     width: 100% !important;
+    // }
 
-    .users-last-list > li {
-        display: inline-block;
-    }
+//     .users-last-list > li {
+//         display: inline-block;
+//     }
 
-    .col-wrapper:first-child .grp-list {
-        padding-top: 0;
-    }
+//     .col-wrapper:first-child .grp-list {
+//         padding-top: 0;
+//     }
 
     .col-wrapper:nth-child(1) .master-list a {
         text-transform: uppercase;
@@ -11788,18 +11791,18 @@ body {
 
     .col-wrapper:nth-child(1) {
         background: transparent;
-        position: relative;
+        // position: relative;
     }
 
-    .grp-list:nth-child(2) {
-        background-color: var(--color-white);
-    }
+//     .grp-list:nth-child(2) {
+//         background-color: var(--color-white);
+//     }
 
-    .col-wrapper.left-account-operation:nth-child(3),
-    .col-wrapper.left-account-operation:nth-child(2),
-    .col-wrapper.left-account-operation:nth-child(4) {
-        border-top: 1px solid var(--color-iron);
-    }
+//     .col-wrapper.left-account-operation:nth-child(3),
+//     .col-wrapper.left-account-operation:nth-child(2),
+//     .col-wrapper.left-account-operation:nth-child(4) {
+//         border-top: 1px solid var(--color-iron);
+//     }
 
     .manage-account-popup.modal {
         background-color: var(--color-wild-sand);
