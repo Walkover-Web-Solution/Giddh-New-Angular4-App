@@ -1219,9 +1219,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public generateLedger(event: any) {
-        console.log(event);
-
-        if (true) {
+        if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
             this.openEwayBillDialog(event);
         } else {
             this.saveBlankTransaction();
@@ -3024,8 +3022,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
-                    pinCode: data.body.pinCode,
-                    gstNumber: data.body.gstNumber
+                    pinCode: data.body?.pinCode,
+                    gstNumber: data.body?.gstNumber
                 };
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));

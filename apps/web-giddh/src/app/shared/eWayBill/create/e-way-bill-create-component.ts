@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
-import { InvoiceService } from '../../../services/invoice.service';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../helpers/defaultDateFormat';
 import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
@@ -16,7 +15,8 @@ import { EWayBillComponentStore } from '../eWayBill.store';
 @Component({
     selector: 'app-e-way-bill-create',
     templateUrl: './e-way-bill-create-component.html',
-    styleUrls: [`./e-way-bill-create-component.scss`]
+    styleUrls: [`./e-way-bill-create-component.scss`],
+    providers: [EWayBillComponentStore]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Template reference for invoice removal confirmation dialog */
@@ -31,6 +31,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public transporterDropdown$: Observable<IOption[]>;
     /** Flag for transport edit mode */
     public transportEditMode: boolean = false;
+    /** Observable list of transporters */
+    public transporterList$: Observable<IEwayBillTransporter[]>;
     /** Details of all transporters */
     public transporterListDetails: IAllTransporterDetails;
     /** Transporter filter request */
@@ -43,6 +45,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Holds common JSON data */
     public commonLocaleData: any = {};
+    /** True, If From is valid */
+    public isFromInvalid: boolean = false;
     /** Getter for vehicle number form control */
     public get vehicleNo(): FormControl {
         return this.generateEwayBillform.get('vehNo') as FormControl;
@@ -66,7 +70,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         @Inject(MAT_DIALOG_DATA) public currentVoucher: any
     ) {
-
+        this.transporterList$ = this.componentStore.transporterList$;
     }
 
     /**
@@ -176,9 +180,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public onSubmitEwaybill(): void {
-        const formData = this.generateEwayBillform?.value;
-        formData["transDocDt"] = dayjs(formData["transDocDt"]).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
-        this.sendResponse(formData);
+        this.isFromInvalid = this.generateEwayBillform.invalid;
+        if (!this.isFromInvalid) {
+            const formData = this.generateEwayBillform?.value;
+            formData["transDocDt"] = dayjs(formData["transDocDt"]).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+            this.sendResponse(formData);
+        }
     }
 
     /**

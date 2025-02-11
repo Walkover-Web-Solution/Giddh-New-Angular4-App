@@ -26,6 +26,7 @@
                                 formControlName="toGstIn"
                                 [disabled]="currentVoucher?.gstNumber"
                                 [readonly]="currentVoucher?.gstNumber"
+                                [showError]="isFromInvalid && !generateEwayBillform.get('toGstIn').value"
                             >
                             </input-field>
                         </div>
@@ -38,6 +39,7 @@
                                 [label]="localeData?.pincode_receiver_label"
                                 [placeholder]="localeData?.pincode_receiver_placeholder"
                                 formControlName="toPinCode"
+                                [showError]="isFromInvalid && !generateEwayBillform.get('toPinCode').value"
                             >
                             </input-field>
                         </div>
@@ -57,8 +59,10 @@
                                 [required]="true"
                                 formControlName="transId"
                                 (selectedOption)="this.generateEwayBillform.get('transName').patchValue($event.label)"
+                                (onClear)="this.generateEwayBillform.get('transName').patchValue(null); this.generateEwayBillform.get('transId').patchValue(null)"
                                 [createNewText]="commonLocaleData?.app_create_new"
                                 (createOption)="openTransporterModel()"
+                                [showError]="isFromInvalid && !generateEwayBillform.get('transId').value"
                             >
                             </reactive-dropdown-field>
                         </div>
@@ -73,6 +77,7 @@
                                 [label]="commonLocaleData?.distance_km_label"
                                 formControlName="distance"
                                 [required]="true"
+                                [showError]="isFromInvalid && !generateEwayBillform.get('distance').value"
                             >
                             </input-field>
                         </div>
@@ -84,7 +89,7 @@
                     </div>
                     <div class="row d-flex">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{ localeData?.mode_of_transportation }}</label>
+                            <label [ngClass]="{ 'danger': isFromInvalid && !generateEwayBillform.get('transMode').value}">{{ localeData?.mode_of_transportation }}*</label>
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 pd-t15">
                             <ul class="list-icon-group list-style-none p-0 d-flex">
@@ -96,6 +101,7 @@
                                         name="transMode"
                                         value="1"
                                         formControlName="transMode"
+                                        (click)="generateEwayBillform.get('vehType').patchValue(null)"
                                     />
                                     <label for="transMode1"
                                         ><img alt="Road icon" src="assets/icon/4.svg" /> {{ commonLocaleData?.app_road
@@ -110,6 +116,7 @@
                                         name="transMode"
                                         value="2"
                                         formControlName="transMode"
+                                        (click)="generateEwayBillform.get('vehType').patchValue('R')"
                                     />
                                     <label for="transMode2"
                                         ><img alt="Railway icon" src="assets/icon/3.svg" /> {{
@@ -124,6 +131,7 @@
                                         name="transMode"
                                         value="3"
                                         formControlName="transMode"
+                                        (click)="generateEwayBillform.get('vehType').patchValue('R')"
                                     />
                                     <label for="transMode3"
                                         ><img alt="Airway icon" src="assets/icon/1.svg" /> {{ commonLocaleData?.app_air
@@ -138,6 +146,7 @@
                                         name="transMode"
                                         value="4"
                                         formControlName="transMode"
+                                        (click)="generateEwayBillform.get('vehType').patchValue('R')"
                                     />
                                     <label for="transMode4"
                                         ><img alt="Ship icon" src="assets/icon/2.svg" /> {{ commonLocaleData?.app_ship
@@ -149,7 +158,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3 col-lg-3 col-sm-12 mr-t15">
-                            <label>{{ localeData?.vehicle_type }}</label>
+                            <label [ngClass]="{ 'danger': isFromInvalid && !generateEwayBillform.get('vehType').value}">{{ localeData?.vehicle_type }}*</label>
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
                             <mat-radio-group name="vehicleType" formControlName="vehType">
@@ -174,6 +183,7 @@
                                 [maxlength]="15"
                                 formControlName="transDocNo"
                                 [required]="true"
+                                [showError]="isFromInvalid && !generateEwayBillform.get('transDocNo').value"
                             >
                             </input-field>
                         </div>
@@ -188,6 +198,8 @@
                                 class="settings-field d-block"
                                 formControlName="transDocDt"
                                 [required]="true"
+                                [cssClass]="'mat-field-border bdr form-control'"
+                                [showError]="isFromInvalid && !generateEwayBillform.get('transDocDt').value"
                             ></giddh-datepicker>
                         </div>
                     </div>
@@ -202,8 +214,8 @@
                                 [maxlength]="11"
                                 [minlength]="7"
                                 formControlName="vehNo"
-                                [showError]="vehicleNo.touched && vehicleNo?.invalid"
                                 [required]="true"
+                                [showError]="isFromInvalid && !generateEwayBillform.get('vehNo').value || vehicleNo.touched && vehicleNo?.invalid"
                             >
                             </input-field>
                             <small class="text-danger" *ngIf="vehicleNo.touched && vehicleNo?.invalid"
@@ -212,11 +224,9 @@
                         </div>
                     </div>
                     <div class="row clearfix d-flex justify-content-end column-gap15">
-                        {{generateEwayBillform.invalid}}
                         <button
                             mat-stroked-button
                             color="primary"
-                            [disabled]="generateEwayBillform.invalid"
                             (click)="onSubmitEwaybill()"
                         >
                             {{ localeData?.save_generate }}
