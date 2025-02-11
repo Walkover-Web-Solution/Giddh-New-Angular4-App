@@ -208,7 +208,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
     /** This will use for open window */
     public openedWindow: Window | null = null;
-    public reconnectBankResponse : any = null;
+    /** Hold reconnect bank response */
+    public reconnectBankResponse: any = null;
 
     constructor(
         private router: Router,
@@ -1490,6 +1491,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    /**
+     *
+         * This will be use for reconnect bank
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
     public reconnectBank(bank: any): void {
         this.reconnectBankResponse = bank;
         this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
@@ -1499,7 +1506,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     * This will be open window by url
     *
     * @param {string} url
-    * @memberof InstitutionsListComponent
+    * @memberof SettingIntegrationComponent
     */
     public openWindow(url: string): void {
         const width = 700;

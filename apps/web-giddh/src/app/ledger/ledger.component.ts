@@ -3108,7 +3108,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
     }
 
+    /**
+      * This will be use for redirect to bank integration page
+      *
+      * @memberof LedgerComponent
+      */
     public redirectToBankIntegration(): void {
-        this.router.navigate(['pages', 'settings', 'integration','payment']);
+        this.router.navigate(['pages', 'settings', 'integration', 'payment']);
     }
 }
