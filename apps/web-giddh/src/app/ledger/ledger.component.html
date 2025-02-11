@@ -1665,7 +1665,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -1673,21 +1673,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2674,7 +2659,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2724,7 +2709,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2763,7 +2748,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -2771,21 +2756,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2861,7 +2831,7 @@
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>
                                         {{ localeData?.total_transactions }}
@@ -2901,7 +2871,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div *ngIf="!isAdvanceSearchImplemented" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
                                     <h2 class="digit-blue d-flex">
@@ -2942,7 +2912,7 @@
                                     </h2>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
@@ -3094,7 +3064,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div *ngIf="!isAdvanceSearchImplemented" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.closing_balance }}</h1>
                                     <div class="d-flex flex-column justify-content-between">

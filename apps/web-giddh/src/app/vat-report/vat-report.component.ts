@@ -1,6 +1,6 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, TemplateRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
@@ -8,10 +8,9 @@ import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
-import * as dayjs from 'dayjs';
 import { saveAs } from "file-saver";
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
+import { RestrictedModules } from '../app.constant';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -35,8 +34,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /** this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     /** Hold uae main table displayed columns */
     public displayedColumns: string[] = ['number', 'name', 'aed_amt', 'vat_amt', 'adjustment'];
     /** Hold uae bottom table displayed columns */
@@ -71,6 +68,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public vatReportCurrencySymbol: string = 'P';
     /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
     public vatReportCurrencyMap: string[];
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private store: Store<AppState>,
@@ -79,7 +78,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
         private route: Router,
-        private breakpointObserver: BreakpointObserver,
         public settingsFinancialYearService: SettingsFinancialYearService
     ) { }
 
@@ -90,31 +88,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
                 this.isKenyaCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'KE';
-                if (this.isUKCompany) {
+                if (this.isUKCompany && !this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling)) {
                     this.getURLHMRCAuthorization();
                 }
             }
         });
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
-            
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
-                }
-            }
-        });
     }
 
     public ngOnDestroy() {
@@ -158,7 +137,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                             this.vatReport = res.body?.sections;
                             this.cdRef.detectChanges();
                         } else {
-                            this.toasty.errorToast(res.message);
+                            this.toasty.showSnackBar('error', res.message);
                         }
                     }
                 });
@@ -175,7 +154,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
                             this.cdRef.detectChanges();
                         } else {
-                            this.toasty.errorToast(res.message);
+                            this.toasty.showSnackBar('error', res.message);
                         }
                     }
                 });
@@ -207,7 +186,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' : '.xlsx'}`);
             } else {
                 this.toasty.clearAllToaster();
-                this.toasty.errorToast(res?.message);
+                this.toasty.showSnackBar('error', res?.message);
             }
         });
     }

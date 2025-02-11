@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -14,8 +14,9 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
+import { FormControl } from "@angular/forms";
+
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -23,11 +24,6 @@ import { Router } from '@angular/router';
 })
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
-    public inlineSearch: any = '';
-    @ViewChild('suppliersNameField', { static: true }) public suppliersNameField;
-    @ViewChild('invoiceNumberField', { static: true }) public invoiceNumberField;
-    @ViewChild('supplierCountryField', { static: true }) public supplierCountryField;
-
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
@@ -35,13 +31,15 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public showEntryDate = true;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public reverseChargeReportGetRequest: ReverseChargeReportGetRequest = {
         from: '',
         to: '',
         sort: '',
         sortBy: '',
         page: 1,
-        count: PAGINATION_LIMIT
+        count: this.pageSizeOptions[2]
     };
     public reverseChargeReportPostRequest: ReverseChargeReportPostRequest = {
         supplierName: '',
@@ -51,7 +49,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     };
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
-    public paginationLimit: number = PAGINATION_LIMIT;
     public timeout: any;
     public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public universalDate: any[] = [];
@@ -85,10 +82,37 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /* True, if mobile screen size is detected **/
-    public isMobileScreen: boolean = true;
     /** True if today selected */
     public todaySelected: boolean = false;
+    /** Holds display columns for mat table */
+    public displayedColumns: string[] = [
+        'index',
+        'entryDate',
+        'suppliersName',
+        'voucherType',
+        'invoiceNumber',
+        'supplierInvoiceDate',
+        'supplierCountry',
+        'taxableValue',
+        'taxRate',
+        'taxAmount'
+    ];
+    /** True, if name search field is to be shown in the filters */
+    public showNameSearch: boolean;
+    /** Holds searched name form control */
+    public searchedName: FormControl<string | null> = new FormControl<string | null>(null);
+    /** True, if Invoice No search field is to be shown in the filters */
+    public showInvoiceNoSearch: boolean;
+    /** Holds searched Invoice No form control */
+    public searchedInvoiceNo: FormControl<string | null> = new FormControl<string | null>(null);
+    /** True, if Country search field is to be shown in the filters */
+    public showCountrySearch: boolean;
+    /** Holds searched Country form control */
+    public searchedCountry: FormControl<string | null> = new FormControl<string | null>(null);
+    /** Holds Id of active search input field */
+    public activeSearchField: any = null;
+    /** True if searching is in progress */
+    public isSearching: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
@@ -100,7 +124,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private modalService: BsModalService,
-        private breakPointObservar: BreakpointObserver,
         private router: Router
     ) {
     }
@@ -118,25 +141,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             }
         });
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
-
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
-                }
-            }
-        });
-
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
@@ -214,26 +218,32 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             }
         });
 
-    }
-
-    /**
-     * This will put focus on selected search field
-     *
-     * @param {*} inlineSearch
-     * @memberof ReverseChargeReport
-     */
-    public focusOnColumnSearch(inlineSearch) {
-        this.inlineSearch = inlineSearch;
-
-        setTimeout(() => {
-            if (this.inlineSearch === 'suppliersName') {
-                this.suppliersNameField?.nativeElement.focus();
-            } else if (this.inlineSearch === 'invoiceNumber') {
-                this.invoiceNumberField?.nativeElement.focus();
-            } else if (this.inlineSearch === 'supplierCountry') {
-                this.supplierCountryField?.nativeElement.focus();
+        this.searchedName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.reverseChargeReportPostRequest.supplierName = search;
+                this.isSearching = true;
+                this.isSearchApplied();
+                this.getReverseChargeReport(true);
             }
-        }, 200);
+        });
+
+        this.searchedInvoiceNo.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.reverseChargeReportPostRequest.invoiceNumber = search;
+                this.isSearching = true;
+                this.isSearchApplied();
+                this.getReverseChargeReport(true);
+            }
+        });
+
+        this.searchedCountry.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search || search === '') {
+                this.reverseChargeReportPostRequest.supplierCountry = search;
+                this.isSearching = true;
+                this.isSearchApplied();
+                this.getReverseChargeReport(true);
+            }
+        });
     }
 
     /**
@@ -249,15 +259,16 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     }
 
     /**
-     * This function will change the page of vat report
+     * Handle page change
      *
      * @param {*} event
      * @memberof ReverseChargeReport
      */
     public pageChanged(event: any): void {
-        if (this.reverseChargeReportGetRequest.page != event.page) {
+        if (event) {
             this.reverseChargeReportResults.results = [];
-            this.reverseChargeReportGetRequest.page = event.page;
+            this.reverseChargeReportGetRequest.page = event.pageIndex + 1;
+            this.reverseChargeReportGetRequest.count = event.pageSize;
             this.getReverseChargeReport(false);
         }
     }
@@ -281,12 +292,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
-
-                    if(this.todaySelected) {
+                    if (this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
                         this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
-
                     this.cdRef.detectChanges();
                 } else {
                     this.toasty.errorToast(res.message);
@@ -312,26 +321,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     }
 
     /**
-     * This will sort the report
-     *
-     * @param {*} sortBy
-     * @memberof ReverseChargeReport
-     */
-    public sortReverseChargeList(sortBy): void {
-        let sort = "asc";
-
-        if (this.reverseChargeReportGetRequest.sortBy === sortBy) {
-            sort = (this.reverseChargeReportGetRequest.sort === "asc") ? "desc" : "asc";
-        } else {
-            sort = "asc";
-        }
-
-        this.reverseChargeReportGetRequest.sort = sort;
-        this.reverseChargeReportGetRequest.sortBy = sortBy;
-        this.getReverseChargeReport(true);
-    }
-
-    /**
      * This will filter the report by voucher type
      *
      * @param {string} voucherType
@@ -343,15 +332,35 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     }
 
     /**
-     * This function is used to check if filters are applied
+     * This function is used to check if date filters are applied
      *
      * @returns {boolean}
      * @memberof ReverseChargeReport
      */
-    public checkIfFiltersApplied(): boolean {
-        if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || (this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT)) || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) {
+    public isDateFilterApplied(): boolean {
+        if ((this.isSearchApplied() ||
+            this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT))
+            || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))
+        ) {
             return true;
         } else {
+            return false;
+        }
+    }
+
+    /**
+     * This function is used to check if date filters are applied
+     *
+     * @private
+     * @return {*}  {boolean}
+     * @memberof ReverseChargeReport
+     */
+    private isSearchApplied(): boolean {
+        if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType) {
+            this.isSearching = true;
+            return true;
+        } else {
+            this.isSearching = false;
             return false;
         }
     }
@@ -373,7 +382,14 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.reverseChargeReportGetRequest.sortBy = "";
         this.reverseChargeReportGetRequest.from = "";
         this.reverseChargeReportGetRequest.to = "";
-        if(!this.todaySelected) {
+        this.showNameSearch = false;
+        this.showInvoiceNoSearch = false;
+        this.showCountrySearch = false;
+        this.searchedName.setValue(null);
+        this.searchedInvoiceNo.setValue(null);
+        this.searchedCountry.setValue(null);
+        this.isSearching = false;
+        if (!this.todaySelected) {
             this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
             this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.reverseChargeReportGetRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -451,5 +467,72 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
+    }
+
+    /**
+     * Toogles the search field
+     *
+     * @param {string} fieldName Field name to toggle
+     * @memberof ReverseChargeReport
+     */
+    public toggleSearch(fieldName: string): void {
+        if (fieldName === "name") {
+            this.showNameSearch = true;
+        } else if (fieldName === "invoiceNo") {
+            this.showInvoiceNoSearch = true;
+        } else if (fieldName === "country") {
+            this.showCountrySearch = true;
+        }
+    }
+
+    /**
+     * Click outside handler for Name field search
+     *
+     * @param {*} event Click outside event
+     * @param {*} element Focused element
+     * @param {string} searchedFieldName Name of the field through which search is to be performed
+     * @return {*}  {void}
+     * @memberof ReverseChargeReport
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === "name") {
+            if (this.searchedName.value !== null && this.searchedName.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'invoiceNo') {
+            if (this.searchedInvoiceNo.value !== null && this.searchedInvoiceNo.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'country') {
+            if (this.searchedCountry.value !== null && this.searchedCountry.value !== '') {
+                return;
+            }
+        }
+
+        if (this.generalService.childOf(event?.target, element)) {
+            return;
+        } else {
+            if (searchedFieldName === "name") {
+                this.showNameSearch = false;
+            } else if (searchedFieldName === 'invoiceNo') {
+                this.showInvoiceNoSearch = false;
+            } else if (searchedFieldName === 'country') {
+                this.showCountrySearch = false;
+            }
+        }
+    }
+
+    /**
+     *  Handle Mat table sort event
+     *
+     * @param {*} event
+     * @memberof ReverseChargeReport
+     */
+    public sortChange(event: any): void {
+        if (event) {
+            this.reverseChargeReportGetRequest.sort = event.direction ? event.direction : 'asc';
+            this.reverseChargeReportGetRequest.sortBy = event.active;
+            this.getReverseChargeReport(true);
+        }
     }
 }

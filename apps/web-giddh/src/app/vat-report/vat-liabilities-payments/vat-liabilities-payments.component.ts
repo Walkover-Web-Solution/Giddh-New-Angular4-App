@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { merge, Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -75,7 +75,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** True if current company or branch has tax number */
-    public hasTaxNumber: boolean = false;
+    public hasTaxNumber: boolean | null = null;
     /** Holds current branch information */
     private currentBranch: any = {};
     /** Hold true in production environment */
@@ -86,6 +86,10 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public isLoading: boolean;
     /** Observable to store the HMRC portal url */
     public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -101,6 +105,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                this.isTaxRestrictedModule = activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
             }
         });
@@ -173,7 +178,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                 if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
-                this.getURLHMRCAuthorization();
+                if (!this.isTaxRestrictedModule) {
+                    this.getURLHMRCAuthorization();
+                }
             }
         });
 
@@ -191,6 +198,17 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = response;
             });
+    }
+
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  VatLiabilitiesPayments
+     */
+    public buyPlan(subscriptionId: string): void {
+        if (subscriptionId) {
+            this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
+        }
     }
     /**
     * Get Current company branches information

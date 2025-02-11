@@ -50,7 +50,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
@@ -210,7 +210,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** This will store screen size */
     public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** True if today selected */
@@ -249,6 +249,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True for only once when get route response */
+    public hasNavigated: boolean = false;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -688,8 +690,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
-            this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-            this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+            if (!this.hasNavigated) {
+                this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
+                this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+                this.hasNavigated = true;
+            }
         }
     }
 

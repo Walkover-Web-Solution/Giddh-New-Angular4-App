@@ -51,6 +51,7 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 import { saveAs } from 'file-saver';
 import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { LedgerComponentStore } from './ledger.store';
 
 @Component({
     selector: 'ledger',
@@ -68,6 +69,7 @@ import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/c
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
+    providers: [LedgerComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -316,6 +318,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Invoice Settings */
     public invoiceSettings: any;
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
 
     constructor(
         private store: Store<AppState>,
@@ -340,7 +344,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private router: Router
+        private router: Router,
+        private ledgerComponentStore: LedgerComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -400,6 +405,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.entryDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
 
         if (this.isAdvanceSearchImplemented) {
+            this.createLedgerBalance();
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
         } else {
             this.getTransactionData();
@@ -407,6 +413,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.pipe(take(1)).subscribe((data: AccountResponse) => {
             this.getBankTransactions();
+        });
+    }
+
+    /**
+     * Create ledger balance
+     *
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
+    public createLedgerBalance(): void {
+        this.ledgerComponentStore.getLedgerBalance({
+            payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
         });
     }
 
@@ -459,14 +477,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public pageChanged(event: any): void {
         if (typeof event === 'string') {
-            this.trxRequest.paginationToken = event;
-        }
-        if (this.isAdvanceSearchImplemented) {
-            this.trxRequest.paginationToken = ''; //Reset ledger pagination token 
-            this.advanceSearchRequest.page = event.page;
-            this.getAdvanceSearchTxn();
-        } else {
-            this.getTransactionData();
+            if (this.isAdvanceSearchImplemented) {
+                this.advanceSearchRequest.paginationToken = event;
+                this.getAdvanceSearchTxn();
+            } else {
+                this.trxRequest.paginationToken = event;
+                this.getTransactionData();
+            }
         }
     }
 
@@ -765,10 +782,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             select(p => p.ledger.ledgerTransactionsBalance),
             takeUntil(this.destroyed$)
         ).subscribe((txnBalance: any) => {
-            if (txnBalance) {
+            if (txnBalance && !this.isAdvanceSearchImplemented) {
                 this.ledgerTxnBalance = txnBalance;
                 this.lc.calculateReckonging(txnBalance);
                 this.cdRf.detectChanges();
+            }
+        });
+
+        this.ledgerBalanceSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response) {
+                Object.assign(this.ledgerTxnBalance, response);
             }
         });
 
@@ -1292,7 +1315,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.closingBalanceBeforeReconcile = null;
         this.generateEInvoice = null;
         if (this.trxRequest?.accountUniqueName) {
-            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            if (!this.isAdvanceSearchImplemented) {
+                this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            } else {
+                this.createLedgerBalance();
+            }
             this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
         }
     }
@@ -1634,6 +1661,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = accountUniqueName;
         this.search("");
+        this.universalDate$.pipe(take(1)).subscribe(date => {
+            if (date) {
+                this.selectedDateRangeUi = dayjs(date[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(date[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
         this.getTransactionData();
     }
 
@@ -1729,6 +1761,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             this.hideUpdateLedgerModal();
             this.entryManipulated();
+            if (this.isAdvanceSearchImplemented) {
+                this.createLedgerBalance();
+            }
         });
     }
 
@@ -1846,9 +1881,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * closeAdvanceSearchPopup
      */
-    public closeAdvanceSearchPopup(event) {
+    public closeAdvanceSearchPopup(event: any) {
         this.advanceSearchDialogRef?.close();
+        this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
+            this.createLedgerBalance();
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
                 if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
@@ -2243,12 +2280,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.todaySelected) {
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
-                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName)
+                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
         this.cdRf.detectChanges();
