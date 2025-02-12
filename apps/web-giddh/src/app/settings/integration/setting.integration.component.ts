@@ -375,6 +375,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.openWindow(response.link);
+                localStorage.setItem('refNo', response.reference);
                 this.referenceNumber = response.reference;
             }
         });
