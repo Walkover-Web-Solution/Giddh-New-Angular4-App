@@ -410,7 +410,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
-                this.componentStore.getRequisition(this.referenceNumber);
+                const referNo = localStorage.getItem('refNo');
+                setTimeout(() => {
+                    if (referNo) {
+                        this.componentStore.getRequisition(referNo);
+                    }
+                }, 30);
             }
         };
 
@@ -422,7 +427,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.reconnectBankResponse?.institutionId) {
+                if (this.reconnectBankResponse && this.reconnectBankResponse.institutionId) {
                     this.componentStore.createEndUserAgreementByInstitutionId(this.reconnectBankResponse.institutionId);
                 } else {
                     this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
@@ -1193,6 +1198,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1238,6 +1246,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
             }
         });
