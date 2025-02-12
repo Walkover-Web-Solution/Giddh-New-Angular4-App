@@ -15,7 +15,7 @@ import { InstitutionsListComponent } from '../../../shared/bank-integration/inst
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
-import { Router } from '@angular/router';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'bank-accounts',
@@ -58,6 +58,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public bankAccountUniqueNames: any[] = []
     /** Holds selected bank unique name */
     private selectedBankUniqueName: string;
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
 
     constructor(
         private store: Store<AppState>,
@@ -65,7 +67,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef,
         private homeComponentStore: HomeComponentStore,
-        private router: Router,
         public dialog: MatDialog,
         private generalService: GeneralService,
         private componentStore: BankIntegrationComponentStore
@@ -126,15 +127,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
 
-          window.addEventListener('message', event => {
-              if (this.router.url === '/pages/home') {
-                if (event && event.data === "GOCARDLESS") {
-                    if (this.referenceNumber) {
-                        this.componentStore.getRequisition(this.referenceNumber);
-                    }
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo');
+                if (referNo !== null && referNo !== undefined) {
+                    setTimeout(() => {
+                        this.componentStore.getRequisition(referNo);
+                    }, 100);
                 }
             }
-        });
+        };
     }
 
     /**
@@ -192,6 +195,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -218,28 +224,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.referenceNumber = response;
+                localStorage.setItem('refNo', response);
+                this.referenceNumber = cloneDeep(response);
             }
         });
 
     }
-    /**
-     * This will add and Remove the listener immediately after triggering getRequisition
-     *
-     * @memberof BankAccountsComponent
-     */
-    public setupGocardlessMessageListener(): void {
-        const messageHandler = (event) => {
-            if (event && event.data === "GOCARDLESS") {
-                if (this.referenceNumber) {
-                    this.componentStore.getRequisition(this.referenceNumber);
-                    // window.removeEventListener('message', messageHandler);
-                }
-            }
-        };
-        window.addEventListener('message', messageHandler);
-    }
-
     /**
     * This will open the dialog to link a bank
     *

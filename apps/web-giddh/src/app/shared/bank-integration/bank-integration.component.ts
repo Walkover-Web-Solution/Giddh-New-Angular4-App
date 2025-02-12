@@ -212,6 +212,18 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             }
         };
 
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo');
+                if (referNo !== null && referNo !== undefined) {
+                    setTimeout(() => {
+                        this.componentStore.getRequisition(referNo);
+                    }, 100);
+                }
+            }
+        };
+
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.loadPaymentData();
@@ -223,16 +235,6 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
                 this.loadPaymentData();
             }
         });
-
-        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
-        this.callBackBroadcast.onmessage = (event) => {
-            if (event?.data?.success) {
-                const referNo = localStorage.getItem('refNo');
-                if (referNo !== null && referNo !== undefined) {
-                    this.componentStore.getRequisition(referNo);
-                }
-            }
-        }
 
     }
     private loadDefaultBankAccountsSuggestions(): void {
