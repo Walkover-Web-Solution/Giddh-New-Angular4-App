@@ -1178,6 +1178,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1223,6 +1226,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
+                localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
             }
         });
