@@ -155,8 +155,12 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
-                const referNo = localStorage.getItem('refNo') || localStorage.getItem('referenceNo');
-                this.componentStore.getRequisition(referNo);
+                const referNo = localStorage.getItem('refNo');
+                setTimeout(() => {
+                    if (referNo) {
+                        this.componentStore.getRequisition(referNo);
+                    }
+                }, 30);
             }
         };
     }
@@ -202,7 +206,6 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.openWindow(response.link);
-                localStorage.setItem('referenceNo', response.reference);
                 this.referenceNumber = response.reference;
             }
         });
@@ -265,7 +268,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
 
         this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.reconnectBankResponse.institutionId) {
+                if (this.reconnectBankResponse && this.reconnectBankResponse.institutionId) {
                     this.componentStore.createEndUserAgreementByInstitutionId(this.reconnectBankResponse.institutionId);
                 } else {
                     this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
@@ -520,7 +523,6 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         if (window.localStorage) {
             localStorage.removeItem('refNo');
-            localStorage.removeItem('referenceNo');
         }
         this.destroyed$.next(true);
         this.destroyed$.complete();
