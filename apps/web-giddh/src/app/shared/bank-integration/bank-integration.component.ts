@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
-import { isEmpty } from '../../lodash-optimized';
+import { cloneDeep, isEmpty } from '../../lodash-optimized';
 import { BankIntegrationComponentStore } from "./utility/bank-integration.store";
 import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
 import { ToasterService } from "../../services/toaster.service";
@@ -29,7 +29,7 @@ import { ServiceConfig } from "../../services/service.config";
     providers: [BankIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BankIntegrationComponent implements OnInit {
+export class BankIntegrationComponent implements OnInit, OnDestroy {
     public isIciciBankSupportedCountry: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -97,6 +97,8 @@ export class BankIntegrationComponent implements OnInit {
     public openedWindow: Window | null = null;
     /** Hold reconnect bank response */
     public reconnectBankResponse: any = null;
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
 
     /** @ignore */
     constructor(
@@ -138,7 +140,8 @@ export class BankIntegrationComponent implements OnInit {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.referenceNumber = response;
+                localStorage.setItem('refNo', response);
+                this.referenceNumber = cloneDeep(response);
                 this.setupGocardlessMessageListener();
             }
         });
@@ -149,15 +152,13 @@ export class BankIntegrationComponent implements OnInit {
      * @memberof BankIntegrationComponent
      */
     public setupGocardlessMessageListener(): void {
-        const messageHandler = (event) => {
-            if (event && event.data === "GOCARDLESS") {
-                if (this.referenceNumber) {
-                    this.componentStore.getRequisition(this.referenceNumber);
-                    window.removeEventListener('message', messageHandler);
-                }
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo') || localStorage.getItem('referenceNo');
+                this.componentStore.getRequisition(referNo);
             }
         };
-        window.addEventListener('message', messageHandler);
     }
 
     /**
@@ -201,6 +202,7 @@ export class BankIntegrationComponent implements OnInit {
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.openWindow(response.link);
+                localStorage.setItem('referenceNo', response.reference);
                 this.referenceNumber = response.reference;
             }
         });
@@ -508,5 +510,19 @@ export class BankIntegrationComponent implements OnInit {
         const height = 900;
 
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
+    }
+
+    /**
+     * This will be use for component destroy
+     *
+     * @memberof BankIntegrationComponent
+     */
+    public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+            localStorage.removeItem('referenceNo');
+        }
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
