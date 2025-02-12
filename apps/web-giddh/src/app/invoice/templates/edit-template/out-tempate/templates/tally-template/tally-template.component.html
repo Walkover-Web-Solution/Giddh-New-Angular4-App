@@ -488,10 +488,12 @@
                                                         <ng-container
                                                             *ngIf="fieldsAndVisibility.header.invoiceNumber?.display"
                                                         >
-                                                            <span>{{
-                                                                fieldsAndVisibility.header.invoiceNumber?.label ||
-                                                                    "Invoice No."
-                                                            }}</span>
+                                                            <ng-container *ngIf="voucherType === 'sales'; else voucherNo">
+                                                                {{ fieldsAndVisibility.header.invoiceNumber?.label || "Invoice No." }}
+                                                            </ng-container>
+                                                            <ng-template #voucherNo>
+                                                                {{ fieldsAndVisibility.header.voucherNumber?.label || "Voucher No." }}
+                                                            </ng-template>
                                                             <p class="margin-0">
                                                                 <strong class="strong">{{ getTodayDate(false, true) + "-1" }}</strong>
                                                             </p>
@@ -501,10 +503,14 @@
                                                         <ng-container
                                                             *ngIf="fieldsAndVisibility.header.invoiceDate?.display"
                                                         >
-                                                            <span>{{
-                                                                fieldsAndVisibility.header.invoiceDate?.label ||
-                                                                    "Invoice Date"
-                                                            }}</span>
+                                                            <span>
+                                                                <ng-container *ngIf="voucherType === 'sales'; else voucherDate">
+                                                                    {{ fieldsAndVisibility.header.invoiceDate?.label || "Invoice Date" }}
+                                                                </ng-container>
+                                                                <ng-template #voucherDate>
+                                                                    {{ fieldsAndVisibility.header.voucherDate?.label || "Voucher Date" }}
+                                                                </ng-template>
+                                                            </span>
                                                             <p class="margin-0">
                                                                 <strong class="strong">{{ getTodayDate(false) }}</strong>
                                                             </p>
