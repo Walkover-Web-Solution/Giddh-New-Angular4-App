@@ -163,7 +163,6 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                res.body && this.toasterService.showSnackBar('success', res.body);
                                 return this.patchState({
                                     deleteAccountSuccess: true
                                 });
