@@ -9,7 +9,6 @@ import { Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TabDirective } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { cloneDeep, isEmpty } from '../../lodash-optimized';
@@ -142,25 +141,8 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
-                this.setupGocardlessMessageListener();
             }
         });
-    }
-    /**
-     * This will add and Remove the listener immediately after triggering getRequisition
-     *
-     * @memberof BankIntegrationComponent
-     */
-    public setupGocardlessMessageListener(): void {
-        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
-        this.callBackBroadcast.onmessage = (event) => {
-            if (event?.data?.success) {
-                const referNo = localStorage.getItem('refNo');
-                    if (referNo !== null && referNo !== undefined) {
-                        this.componentStore.getRequisition(referNo);
-                    }
-            }
-        };
     }
 
     /**
@@ -246,6 +228,18 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         broadcast.onmessage = (event) => {
             if (event?.data) {
                 this.loadPaymentData();
+            }
+        };
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo');
+                if (referNo !== null && referNo !== undefined) {
+                    setTimeout(() => {
+                        this.componentStore.getRequisition(referNo);
+                    }, 100);
+                }
             }
         };
 
