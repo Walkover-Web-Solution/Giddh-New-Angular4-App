@@ -2,6 +2,7 @@
     "page_heading": "Vendor",
     "filter_toggle": "Enable / Disable Column",
     "customer": "Customer",
+    "name": "Name",
     "aging_report": "Aging Report",
     "vendor": "Vendor",
     "opening": "Opening",
