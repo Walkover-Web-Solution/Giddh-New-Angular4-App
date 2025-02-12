@@ -210,6 +210,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public openedWindow: Window | null = null;
     /** Hold reconnect bank response */
     public reconnectBankResponse: any = null;
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
 
     constructor(
         private router: Router,
@@ -404,15 +406,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loadPaymentData();
             }
         };
-        window.addEventListener('message', event => {
-            if (this.router.url === '/pages/settings/integration/payment') {
-                if (event && event.data === "GOCARDLESS") {
-                    if (localStorage.getItem('referenceNo')) {
-                        this.componentStore.getRequisition(localStorage.getItem('referenceNo'));
-                    }
-                }
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                this.componentStore.getRequisition(this.referenceNumber);
             }
-        });
+        };
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1236,11 +1236,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
-        localStorage.setItem('referenceNo', null);
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                localStorage.setItem('referenceNo', response);
-                this.referenceNumber = response;
+                this.referenceNumber = cloneDeep(response);
             }
         });
     }
