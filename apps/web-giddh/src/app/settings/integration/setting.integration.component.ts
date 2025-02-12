@@ -204,6 +204,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
 
     constructor(
         private router: Router,
@@ -394,13 +396,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loadPaymentData();
             }
         };
-        window.addEventListener('message', event => {
-            if (this.router.url === '/pages/settings/integration/payment') {
-                if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
-                        this.componentStore.getRequisition(this.referenceNumber);
-                }
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                this.componentStore.getRequisition(this.referenceNumber);
             }
-        });
+        };
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1219,10 +1221,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
-        localStorage.setItem('referenceNo', null);
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                localStorage.setItem('referenceNo', response);
                 this.referenceNumber = cloneDeep(response);
             }
         });
