@@ -1238,7 +1238,7 @@
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
-                                                                                txn.selectedAccount.name 
+                                                                                txn.selectedAccount.name
                                                                         }"
                                                                         class="text-ellipsis"
                                                                         *ngIf="!txn.showDropdown"
@@ -1518,7 +1518,7 @@
                     </div>
                     <!-- endregion -->
                     <!-- region account table-->
-                    <p class="float-right">{{ bankAccount?.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
+                    <p *ngIf="bankAccount?.gocardlessMessage" class="float-right">{{ bankAccount.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
                     <div class="clearfix"></div>
                     <mat-grid-list
                         cols="2"

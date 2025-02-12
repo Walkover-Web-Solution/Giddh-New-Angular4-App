@@ -354,6 +354,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
     public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
 
     constructor(
         private store: Store<AppState>,
@@ -549,26 +551,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.referenceNumber = response;
-                this.setupGocardlessMessageListener();
+                localStorage.setItem('refNo', response);
+                this.referenceNumber = cloneDeep(response);
             }
         });
-    }
-    /**
-     * This will add and Remove the listener immediately after triggering getRequisition
-     *
-     * @memberof LedgerComponent
-     */
-    public setupGocardlessMessageListener(): void {
-        const messageHandler = (event) => {
-            if (event && event.data === "GOCARDLESS") {
-                if (this.referenceNumber) {
-                    this.componentStore.getRequisition(this.referenceNumber);
-                    window.removeEventListener('message', messageHandler);
-                }
-            }
-        };
-        window.addEventListener('message', messageHandler);
     }
 
     public ngOnInit() {
@@ -578,6 +564,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo');
+                if (referNo !== null && referNo !== undefined) {
+                    setTimeout(() => {
+                        this.componentStore.getRequisition(referNo);
+                    }, 100);
+                }
+            }
+        };
+
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
@@ -1894,6 +1893,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
         document.querySelector('body').classList.remove('ledger-body');
         this.store.dispatch(this.ledgerActions.ResetLedger());
         this.destroyed$.next(true);
