@@ -156,11 +156,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 const referNo = localStorage.getItem('refNo');
-                setTimeout(() => {
-                    if (referNo) {
+                    if (referNo !== null && referNo !== undefined) {
                         this.componentStore.getRequisition(referNo);
                     }
-                }, 30);
             }
         };
     }
@@ -250,15 +248,6 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
                 this.loadPaymentData();
             }
         };
-        window.addEventListener('message', event => {
-            if (this.router.url === '/pages/settings/integration/payment') {
-                if (event && event.data === "GOCARDLESS") {
-                    if (this.referenceNumber) {
-                        this.componentStore.getRequisition(this.referenceNumber);
-                    }
-                }
-            }
-        });
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
