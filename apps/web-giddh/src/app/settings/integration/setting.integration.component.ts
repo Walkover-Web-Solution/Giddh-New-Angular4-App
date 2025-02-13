@@ -195,7 +195,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /**  Holds Mat Dialog reference */
     public removeGmailIntegrationDialogRef: MatDialogRef<any>;
     /** Holds Store Delete end user agreement  API success state as observable*/
-    public deleteEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
+    public deleteEndUseAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
     /** Holds true if current company country is gocardless supported country */
     public isGocardlessSupportedCountry: boolean;
     /** Hold reference number */
@@ -204,14 +204,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-    /** Holds Store Save payment provider company API success state as observable*/
-    public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
-    /** This will use for open window */
-    public openedWindow: Window | null = null;
-    /** Hold reconnect bank response */
-    public reconnectBankResponse: any = null;
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
 
@@ -377,14 +369,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.openWindow(response.link);
-                localStorage.setItem('refNo', response.reference);
-                this.referenceNumber = response.reference;
-            }
-        });
-
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }
@@ -426,14 +410,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.deleteEndUseAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.reconnectBankResponse && this.reconnectBankResponse.institutionId) {
-                    this.componentStore.createEndUserAgreementByInstitutionId(this.reconnectBankResponse.institutionId);
-                } else {
-                    this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
-                    this.loadPaymentData();
-                }
+                this.loadPaymentData();
             }
         });
     }
@@ -1498,30 +1477,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }
         });
-    }
-
-    /**
-     *
-         * This will be use for reconnect bank
-     * @param {*} bank
-     * @memberof SettingIntegrationComponent
-     */
-    public reconnectBank(bank: any): void {
-        this.reconnectBankResponse = bank;
-        this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
-    }
-
-    /**
-    * This will be open window by url
-    *
-    * @param {string} url
-    * @memberof SettingIntegrationComponent
-    */
-    public openWindow(url: string): void {
-        const width = 700;
-        const height = 900;
-
-        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
     }
 }
 

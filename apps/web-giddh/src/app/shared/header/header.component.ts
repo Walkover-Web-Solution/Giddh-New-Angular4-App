@@ -60,14 +60,6 @@ interface SubscriptionErrorFlags {
     isTransactionLimitExceeded: boolean;
 };
 
-interface SubscriptionErrorFlags {
-    isObligationExpired: boolean;
-    isLiabilitiesExpired: boolean;
-    isSubscriptionRenewalExpired: boolean;
-    isSubscriptionEnded: boolean;
-    isTransactionLimitExceeded: boolean;
-};
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
