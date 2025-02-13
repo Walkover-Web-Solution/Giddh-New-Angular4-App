@@ -1370,7 +1370,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
-     *
+     *  @param {any} event using for pinCode and gstNumber
+     *  @returns {void}
+     * 
      * @memberof LedgerComponent
      */
     public openEwayBillDialog(event: any): void {
@@ -1387,10 +1389,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Generates a ledger entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the blank transaction.
-     *
+     * @returns {void}
+     * 
      * @memberof LedgerComponent
      */
-    public generateLedger(event: any) {
+    public generateLedger(event: any): void {
         if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
             this.openEwayBillDialog(event);
         } else {

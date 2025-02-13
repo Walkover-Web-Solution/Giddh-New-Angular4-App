@@ -3508,7 +3508,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
-     *
+     * @param {any} event using for pinCode and gstNumber
+     * @returns {void}
+     * 
      * @memberof VoucherCreateComponent
      */
     public openEwayBillDialog(): void {
@@ -3516,7 +3518,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true,
-            data: { pinCode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode").value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("pincode").value, gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("taxNumber")?.value }
+            data: {
+                pinCode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode").value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("pincode").value,
+                gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("taxNumber")?.value
+            }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.eWayBillResponse = response;
