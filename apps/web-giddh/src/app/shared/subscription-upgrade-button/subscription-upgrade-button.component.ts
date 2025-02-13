@@ -12,7 +12,7 @@ import { select, Store } from '@ngrx/store';
 export class SubscriptionUpgradeButtonComponent implements OnDestroy {
     /** Type of restricted module to check */
     @Input() public restrictedModule: RestrictedModules;
-    /** Holds true if user module is restricted */
+    /** True if user module is restricted */
     @Input() public isUserRestricted: boolean = false;
     /** Flag to determine if component should use router navigation or emit event */
     @Input() public useRouterLink: boolean = false;

@@ -61,6 +61,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public branchList$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
 
     public isFetchingProjects$ = this.select((state) => state.isFetchingProjects);
     public projectsList$ = this.select((state) => state.projectsList);
@@ -91,7 +92,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({ isSavingProject: false, saveProjectSuccess: res.body });
+                                this.patchState({ isSavingProject: false, saveProjectSuccess: { body: res.body, isCreateFlow: req.request.isCreateFlow } });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
                                 this.patchState({ isSavingProject: false, saveProjectSuccess: null });

@@ -679,6 +679,7 @@
                         </h1>
                         <section id="eledgerwrap" class="mr-t2" [hidden]="!lc.showEledger || isBankTransactionLoading">
                             <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
+                                <p *ngIf="bankAccount?.gocardlessMessage" class="mt-1 mb-1">{{ bankAccount.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer ml-1" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
                                 <div class="d-flex align-items-start justify-content-between">
                                     <div class="clearfix ledger-top-header-left">
                                         <h3 class="ledger-main-head">
@@ -741,8 +742,8 @@
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
-                                                <mat-grid-tile colspan="1">
+                                            <mat-grid-list cols="{{ledgerGridTotalColumns}}" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
                                                     <mat-checkbox
                                                         color="primary"
                                                         id="select-all-entries-dr"
@@ -759,12 +760,12 @@
                                                         (change)="selectAllBankEntries($event, 'debit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
-                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}}>&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan={{ledgerGridColumnsValue[2]}}
                                                     >&nbsp;</mat-grid-tile
                                                 >
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-left-list" cols="4" rowHeight="50px">
+                                            <mat-grid-list id="ledger-transaction-left-list" cols={{ledgerGridTotalColumns}} rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
                                                         let item of lc.bankTransactionsDebitData;
@@ -785,9 +786,9 @@
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
-                                                            <mat-grid-tile colspan="1">
-                                                                <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span">
+                                                            <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
+                                                                <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
+                                                                    <span class="checkbox-span position-absolute">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -823,18 +824,20 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field pd-t1">
+                                                                   <span class="custom-input-field" [ngClass]="{'pd-l15': !(selectedBankTrxWhileHovering !==
+                                                                    txn?.id && !selectedDebitTransactionIds.has(txn?.id))}">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
                                                                             (datepickerState)="datepickerState($event)"
+                                                                            [showToggleIcon] = "true"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
                                                             </mat-grid-tile>
                                                             <mat-grid-tile
-                                                                colspan="2"
+                                                                colspan={{ledgerGridColumnsValue[1]}}
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
@@ -1003,7 +1006,7 @@
                                                                     position-relative
                                                                     top-position-fix-{{ i }}
                                                                 "
-                                                                colspan="1"
+                                                                colspan={{ledgerGridColumnsValue[2]}}
                                                             >
                                                                 <input
                                                                     matInput
@@ -1105,8 +1108,8 @@
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
-                                                <mat-grid-tile colspan="1">
+                                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
                                                     <mat-checkbox
                                                         color="primary"
                                                         id="select-all-entries-dr"
@@ -1123,12 +1126,12 @@
                                                         (change)="selectAllBankEntries($event, 'credit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
-                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}}>&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan={{ledgerGridColumnsValue[2]}}
                                                     >&nbsp;</mat-grid-tile
                                                 >
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-right-list" cols="4" rowHeight="50px">
+                                            <mat-grid-list id="ledger-transaction-right-list" cols={{ledgerGridTotalColumns}} rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
                                                         let item of lc.bankTransactionsCreditData;
@@ -1149,9 +1152,9 @@
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
-                                                            <mat-grid-tile colspan="1">
-                                                                <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span">
+                                                            <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
+                                                              <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
+                                                                    <span class="checkbox-span position-absolute">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -1187,18 +1190,20 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field pd-t1">
+                                                                   <span class="custom-input-field" [ngClass]="{'pd-l15': !(selectedBankTrxWhileHovering !==
+                                                                    txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
                                                                             (datepickerState)="datepickerState($event)"
+                                                                            [showToggleIcon] = "true"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
                                                             </mat-grid-tile>
                                                             <mat-grid-tile
-                                                                colspan="2"
+                                                                colspan={{ledgerGridColumnsValue[1]}}
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
@@ -1234,7 +1239,7 @@
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
-                                                                                txn.selectedAccount.name 
+                                                                                txn.selectedAccount.name
                                                                         }"
                                                                         class="text-ellipsis"
                                                                         *ngIf="!txn.showDropdown"
@@ -1362,7 +1367,7 @@
                                                                 class="no-right-border position-relative top-position-fix-{{
                                                                     i
                                                                 }}"
-                                                                colspan="1"
+                                                                colspan={{ledgerGridColumnsValue[2]}}
                                                             >
                                                                 <input
                                                                     matInput
@@ -1514,6 +1519,7 @@
                     </div>
                     <!-- endregion -->
                     <!-- region account table-->
+                    <p *ngIf="bankAccount?.gocardlessMessage" class="float-right">{{ bankAccount.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
                     <div class="clearfix"></div>
                     <mat-grid-list
                         cols="2"
@@ -1614,7 +1620,7 @@
                                                                   ")"
                                                                 : transactions?.particular?.name
                                                         }}</span>
-                                                        <span
+                                                        <!-- <span
                                                             class="download-invoice-ledger d-flex"
                                                             *ngIf="
                                                                 voucherApiVersion !== 2 &&
@@ -1623,8 +1629,8 @@
                                                             (click)="downloadFiles(transactions, 'ATTACHMENT', $event)"
                                                         >
                                                             <i class="icon-attachment pull-left"></i>
-                                                        </span>
-                                                        <span
+                                                        </span> -->
+                                                        <!-- <span
                                                             class="download-invoice-ledger d-flex"
                                                             *ngIf="
                                                                 voucherApiVersion !== 2 && transactions.voucherGenerated
@@ -1632,7 +1638,7 @@
                                                             (click)="downloadFiles(transactions, 'VOUCHER', $event)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
-                                                        </span>
+                                                        </span> -->
                                                         <span
                                                             class="download-invoice-ledger d-flex cursor-pointer"
                                                             *ngIf="
@@ -1863,7 +1869,7 @@
                                             }}
                                         </div>
 
-                                        <span
+                                        <!-- <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                             (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
@@ -1872,8 +1878,8 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
-                                        </span>
-                                        <span
+                                        </span> -->
+                                        <!-- <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                             (click)="downloadFiles(txn, 'VOUCHER', $event)"
@@ -1890,7 +1896,7 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
-                                        </span>
+                                        </span> -->
                                         <span
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
@@ -2344,7 +2350,7 @@
                                                         : localeData?.to_particular
                                             }}
                                         </div>
-                                        <span
+                                        <!-- <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                             (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
@@ -2353,8 +2359,8 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
-                                        </span>
-                                        <span
+                                        </span> -->
+                                        <!-- <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                             (click)="downloadFiles(txn, 'VOUCHER', $event)"
@@ -2371,7 +2377,7 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
-                                        </span>
+                                        </span> -->
                                         <span
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
@@ -2430,9 +2436,9 @@
                                 <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
                                     <div class="width-100" *ngIf="txn.type === 'CREDIT'">
                                         <div class="width-100 h-table ledger-main">
-                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
                                                 <mat-grid-tile
-                                                    colspan="1"
+                                                    colspan={{ledgerGridColumnsValue[0]}}
                                                     class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date"
                                                 >
@@ -2451,7 +2457,7 @@
                                                 </mat-grid-tile>
                                                 <mat-grid-tile
                                                     class="select2-parent select2-ledger new-entry-ledger"
-                                                    colspan="2"
+                                                    colspan={{ledgerGridColumnsValue[1]}}
                                                     [attr.data-title]="commonLocaleData?.app_particular"
                                                     (mousedown)="showNewLedgerEntryPopup(txn)"
                                                 >
@@ -2554,7 +2560,7 @@
                                                 </mat-grid-tile>
                                                 <mat-grid-tile
                                                     class="position-relative no-right-border"
-                                                    colspan="1"
+                                                    colspan={{ledgerGridColumnsValue[2]}}
                                                     [attr.data-title]="commonLocaleData?.app_amount"
                                                 >
                                                     <input
@@ -2853,11 +2859,11 @@
 
             <!-- region total section -->
             <!-- commented due to API  -->
-            <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable && !isAdvanceSearchImplemented">
+            <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>
                                         {{ localeData?.total_transactions }}
@@ -2897,7 +2903,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div *ngIf="!isAdvanceSearchImplemented" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
                                     <h2 class="digit-blue d-flex">
@@ -2938,7 +2944,7 @@
                                     </h2>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
@@ -3090,7 +3096,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div *ngIf="!isAdvanceSearchImplemented" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.closing_balance }}</h1>
                                     <div class="d-flex flex-column justify-content-between">

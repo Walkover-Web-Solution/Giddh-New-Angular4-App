@@ -121,6 +121,19 @@
                             </span>
                         </div>
                     </div>
+                    <ng-container *ngIf="bankAccount?.message">
+                            <div class="mt-2 mr-l1">
+                                <p class="error-message">
+                                    {{ bankAccount?.message }}
+                                    <a
+                                        class="cursor-pointer text-underline"
+                                        href="javascript:;"
+                                        (click)="reconnectBank(bankAccount)"
+                                        >{{ commonLocaleData?.app_click_here }}</a
+                                    >
+                                </p>
+                            </div>
+                        </ng-container>
                     <div class="font-15">
                         <ng-container *ngIf="bankAccount?.bankResource?.payor?.length > 0">
                             <div class="mt-2" *ngFor="

@@ -15,6 +15,7 @@ import { InstitutionsListComponent } from '../../../shared/bank-integration/inst
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'bank-accounts',
@@ -57,6 +58,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public bankAccountUniqueNames: any[] = []
     /** Holds selected bank unique name */
     private selectedBankUniqueName: string;
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
 
     constructor(
         private store: Store<AppState>,
@@ -123,11 +126,23 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.openBankLinkDialog();
             }
         });
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo');
+                if (referNo !== null && referNo !== undefined) {
+                    setTimeout(() => {
+                        this.componentStore.getRequisition(referNo);
+                    }, 100);
+                }
+            }
+        };
     }
 
     /**
      * This will get all accounts of giddh
-     * 
+     *
      * @memberof BankAccountsComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 200, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -162,9 +177,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
     /**
      * Retrieves the translated bank name by replacing a placeholder in the localized string
-     * 
-     * @param bankName 
-     * @returns 
+     *
+     * @param bankName
+     * @returns
      */
     private getBankTranslateName(bankName: string): string {
         return this.localeData?.in_bank?.replace("[BANK_NAME]", bankName);
@@ -180,6 +195,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -194,7 +212,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         let data = {
             localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData
+            commonLocaleData: this.commonLocaleData,
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
@@ -206,32 +224,15 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.referenceNumber = response;
-                this.setupGocardlessMessageListener();
+                localStorage.setItem('refNo', response);
+                this.referenceNumber = cloneDeep(response);
             }
         });
 
     }
     /**
-     * This will add and Remove the listener immediately after triggering getRequisition
-     * 
-     * @memberof BankAccountsComponent
-     */
-    public setupGocardlessMessageListener(): void {
-        const messageHandler = (event) => {
-            if (event && event.data === "GOCARDLESS") {
-                if (this.referenceNumber) {
-                    this.componentStore.getRequisition(this.referenceNumber);
-                    window.removeEventListener('message', messageHandler);
-                }
-            }
-        };
-        window.addEventListener('message', messageHandler);
-    }
-
-    /**
     * This will open the dialog to link a bank
-    * 
+    *
     * @memberof BankAccountsComponent
     */
     public openBankLinkDialog(): void {
@@ -240,5 +241,5 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             panelClass: ['mat-dialog-md'],
             disableClose: true
         });
-    }   
+    }
 }

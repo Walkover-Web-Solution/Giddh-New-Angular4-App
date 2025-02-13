@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, TemplateRef, Inject } from '@angular/core';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -14,6 +14,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { ReceiptService } from '../../../services/receipt.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
+import { ServiceConfig } from '../../../services/service.config';
 Chart.register(...registerables);
 
 
@@ -77,7 +78,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     /** Chart object */
     public chart: any;
 
-    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -90,7 +91,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         // img path
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
