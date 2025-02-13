@@ -51,5 +51,9 @@
     "quick_create": "Quick Create",
     "subscription": "Subscription",
     "obligation_expired": "Alert: VAT return due date is approaching in [REMAINING_DAY] days! Submit before the deadline to avoid penalties. Click here to submit.",
-    "liabilities_expired": "Alert: Your payment is due in [REMAINING_DAY] days! Settle it on time to avoid penalties. Click here to view."
+    "obligation_today_expired": "Alert: VAT return due date is today! Submit immediately to avoid penalties. Click here to submit.",
+    "obligation_expired_passed": "Alert: VAT return due date has passed! Submit immediately to minimize penalties. Click here to submit.",
+    "liabilities_expired": "Alert: Your payment is due in [REMAINING_DAY] days! Settle it on time to avoid penalties. Click here to view.",
+    "liabilities_today_expired": ">Alert: Your payment is due today! Settle it immediately to avoid penalties. Click here to view.",
+    "liabilities_expired_passed": "Alert: Your payment is overdue! Settle it now to minimize penalties. Click here to view."
 }
