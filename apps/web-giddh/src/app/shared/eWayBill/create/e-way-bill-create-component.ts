@@ -86,7 +86,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterFilterRequest.count = 10;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
-        this.componentStore.transporterListDetails$.subscribe(op => {
+        this.componentStore.transporterListDetails$.pipe(takeUntil(this.destroyed$)).subscribe(op => {
             this.transporterListDetails = op;
         })
 
@@ -102,13 +102,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.isEwaybillGeneratedSuccessfully$.subscribe(state => {
+        this.componentStore.isEwaybillGeneratedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state) {
                 this.generateEwayBillform.reset();
             }
         });
 
-        this.componentStore.updateTransporterSuccess$.subscribe(state => {
+        this.componentStore.updateTransporterSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state) {
                 this.generateNewTransporterForm.reset();
             }
@@ -320,9 +320,24 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @param {string} columnName The column to sort by
      * @memberof EWayBillCreateComponent
      */
-    public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    public sortButtonClicked(type: 'asc' | 'desc', columnName: string): void {
         this.transporterFilterRequest.sort = type;
         this.transporterFilterRequest.sortBy = columnName;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
+
+    /**
+     * Updates a specific field in the `generateEwayBillform` with the given value.
+     *
+     * @param {string} field - The name of the form control to update.
+     * @param {any} value - The new value to set for the form control.
+     * @memberof EWayBillCreateComponent
+     */
+    public updateField(field: string, value: number | string): void {
+        const control = this.generateEwayBillform.get(field);
+        if (control) {
+            control.patchValue(value);
+        }
+    }
+
 }

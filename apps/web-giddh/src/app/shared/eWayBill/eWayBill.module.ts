@@ -4,7 +4,6 @@ import { HamburgerMenuModule } from '../header/components/hamburger-menu/hamburg
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LaddaModule } from 'angular2-ladda';
 import { DeleteTemplateConfirmationModalModule } from '../../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
@@ -25,7 +24,6 @@ import { MatButtonModule } from '@angular/material/button';
         MatFormFieldModule,
         CommonModule,
         FormsModule,
-        LaddaModule,
         DeleteTemplateConfirmationModalModule,
         ReactiveFormsModule,
         GiddhDatepickerModule,

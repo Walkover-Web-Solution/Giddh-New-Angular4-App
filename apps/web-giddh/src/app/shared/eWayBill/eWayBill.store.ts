@@ -4,14 +4,9 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { Observable } from "rxjs";
 
+export interface EWayBillComponentState {}
 
-export interface EWayBillComponentState {
-
-}
-
-export const DEFAULT_E_WAY_BILL_STATE: EWayBillComponentState = {
-
-};
+export const DEFAULT_E_WAY_BILL_STATE: EWayBillComponentState = {}
 
 @Injectable()
 export class EWayBillComponentStore extends ComponentStore<EWayBillComponentState> implements OnDestroy {

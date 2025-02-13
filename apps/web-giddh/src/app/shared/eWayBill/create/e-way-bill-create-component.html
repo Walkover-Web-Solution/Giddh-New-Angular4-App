@@ -9,7 +9,7 @@
         <i mat-dialog-close class="icon-cross"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
-        <div>
+        <div *ngIf="generateEwayBillform">
             <form autocomplete="off" name="generateEwayBillform" [formGroup]="generateEwayBillform">
                 <div>
                     <!--part-A-->
@@ -21,6 +21,8 @@
                             <input-field
                                 [name]="'toGstIn'"
                                 [type]="'text'"
+                                [minlength]="15"
+                                [maxlength]="15"
                                 [label]="localeData?.gstin_receiver_label"
                                 [placeholder]="localeData?.gstin_receiver_placeholder"
                                 formControlName="toGstIn"
@@ -58,8 +60,8 @@
                                 [name]="'transporterName'"
                                 [required]="true"
                                 formControlName="transId"
-                                (selectedOption)="this.generateEwayBillform.get('transName').patchValue($event.label)"
-                                (onClear)="this.generateEwayBillform.get('transName').patchValue(null); this.generateEwayBillform.get('transId').patchValue(null)"
+                                (selectedOption)="$event && generateEwayBillform.get('transName').patchValue($event.label)"
+                                (onClear)="generateEwayBillform.get('transName').patchValue(null); generateEwayBillform.get('transId').patchValue(null)"
                                 [createNewText]="commonLocaleData?.app_create_new"
                                 (createOption)="openTransporterModel()"
                                 [showError]="isFromInvalid && !generateEwayBillform.get('transId').value"
@@ -101,7 +103,7 @@
                                         name="transMode"
                                         value="1"
                                         formControlName="transMode"
-                                        (click)="generateEwayBillform.get('vehType').patchValue(null)"
+                                        (click)="updateField('vehType', null)"
                                     />
                                     <label for="transMode1"
                                         ><img alt="Road icon" src="assets/icon/4.svg" /> {{ commonLocaleData?.app_road
@@ -116,7 +118,7 @@
                                         name="transMode"
                                         value="2"
                                         formControlName="transMode"
-                                        (click)="generateEwayBillform.get('vehType').patchValue('R')"
+                                        (click)="updateField('vehType', 'R')"
                                     />
                                     <label for="transMode2"
                                         ><img alt="Railway icon" src="assets/icon/3.svg" /> {{
@@ -131,7 +133,7 @@
                                         name="transMode"
                                         value="3"
                                         formControlName="transMode"
-                                        (click)="generateEwayBillform.get('vehType').patchValue('R')"
+                                        (click)="updateField('vehType', 'R')"
                                     />
                                     <label for="transMode3"
                                         ><img alt="Airway icon" src="assets/icon/1.svg" /> {{ commonLocaleData?.app_air
@@ -146,7 +148,7 @@
                                         name="transMode"
                                         value="4"
                                         formControlName="transMode"
-                                        (click)="generateEwayBillform.get('vehType').patchValue('R')"
+                                        (click)="updateField('vehType', 'R')"
                                     />
                                     <label for="transMode4"
                                         ><img alt="Ship icon" src="assets/icon/2.svg" /> {{ commonLocaleData?.app_ship
@@ -198,7 +200,6 @@
                                 class="settings-field d-block"
                                 formControlName="transDocDt"
                                 [required]="true"
-                                [cssClass]="'mat-field-border bdr form-control'"
                                 [showError]="isFromInvalid && !generateEwayBillform.get('transDocDt').value"
                             ></giddh-datepicker>
                         </div>
@@ -215,7 +216,7 @@
                                 [minlength]="7"
                                 formControlName="vehNo"
                                 [required]="true"
-                                [showError]="isFromInvalid && !generateEwayBillform.get('vehNo').value || vehicleNo.touched && vehicleNo?.invalid"
+                                [showError]="(isFromInvalid && !generateEwayBillform.get('vehNo').value) || (vehicleNo.touched && vehicleNo?.invalid)"
                             >
                             </input-field>
                             <small class="text-danger" *ngIf="vehicleNo.touched && vehicleNo?.invalid"

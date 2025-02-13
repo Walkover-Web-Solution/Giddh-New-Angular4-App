@@ -148,17 +148,16 @@
             [ngClass]="{ 'error-box': showError }"
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
-        <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
+        <i matPrefix *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
         <i 
             matSuffix 
             *ngIf="matSuffixIcon && !suffixTooltipText" 
             [ngClass]="matSuffixIcon" 
-            (click)="clickOnSuffixIcon()" 
+            (click)="!suffixTooltipText && clickOnSuffixIcon()"
             role="button"
             [attr.aria-label]="label || placeholder"
         >
         </i>
-        <i matSuffix [matTooltip]="suffixTooltipText"  matTooltipPosition="above" *ngIf="matSuffixIcon && suffixTooltipText" [ngClass]="matSuffixIcon"></i>
     </mat-form-field>
 </div>
