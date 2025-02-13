@@ -88,45 +88,53 @@
                 <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
             </div>
         </div>
-        <div class="d-flex column-gap1 align-items-center">
-            <div class="d-inline-flex align-items-center column-gap1">
-                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'"></watch-video>
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    aria-labelledby="button-triggers-manual"
-                    [matMenuTriggerFor]="downloadMenu"
-                >
-                    <i class="icon-download"></i>
-                    {{ commonLocaleData?.app_download }}
-                </button>
-                <mat-menu #downloadMenu="matMenu">
-                    <button mat-menu-item aria-label="download"  (click)="onDownloadSheetGSTR('main')">
-                        {{ localeData?.filing?.download_sheet }}
+        <div class="d-flex flex-column">
+            <div class="d-flex column-gap1 justify-content-end align-items-center">
+                <div class="d-inline-flex align-items-center column-gap1">
+                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'"></watch-video>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        aria-labelledby="button-triggers-manual"
+                        [matMenuTriggerFor]="downloadMenu"
+                    >
+                        <i class="icon-download"></i>
+                        {{ commonLocaleData?.app_download }}
                     </button>
-                    <button mat-menu-item aria-label="download" (click)="onDownloadSheetGSTR('error')">
-                        {{ localeData?.filing?.download_error_sheet }}
+                    <mat-menu #downloadMenu="matMenu">
+                        <button mat-menu-item aria-label="download"  (click)="onDownloadSheetGSTR('main')">
+                            {{ localeData?.filing?.download_sheet }}
+                        </button>
+                        <button mat-menu-item aria-label="download" (click)="onDownloadSheetGSTR('error')">
+                            {{ localeData?.filing?.download_error_sheet }}
+                        </button>
+                    </mat-menu>
+                </div>
+                <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [ngClass]="{ 'btn-success': gstAuthenticated }"
+                        (click)="!gstAuthenticated ? openSettingAsidePane($event, taxServiceEnum.TAXPRO) : ''"
+                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"               
+                    >
+                        {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
                     </button>
-                </mat-menu>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [disabled]="!gstAuthenticated"
+                        (click)="pullFromGstIn($event)"
+                        *ngIf="showTaxPro"
+                    >
+                        {{ localeData?.filing?.pull_from_gstn }}
+                    </button>
+                </div>
             </div>
-            <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    [ngClass]="{ 'btn-success': gstAuthenticated }"
-                    (click)="!gstAuthenticated ? openSettingAsidePane($event, taxServiceEnum.TAXPRO) : ''"               
-                >
-                    {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
-                </button>
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    [disabled]="!gstAuthenticated"
-                    (click)="pullFromGstIn($event)"
-                    *ngIf="showTaxPro"
-                >
-                    {{ localeData?.filing?.pull_from_gstn }}
-                </button>
+            <div class="d-flex justify-content-end filling-header-message">
+                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                    (onUpgradePlan)="buyPlan($event)">
+                </restricted-module-message>
             </div>
         </div>
     </div>

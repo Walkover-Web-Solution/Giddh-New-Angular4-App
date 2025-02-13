@@ -99,6 +99,10 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
+    /** It will show tooltip text in suffix icon */
+    @Input() public suffixTooltipText: string = "";
+    /** It will show Icon suffix in the text field */
+    @Input() public matSuffixIcon: string = "";
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
