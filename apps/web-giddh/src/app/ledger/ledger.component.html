@@ -494,7 +494,7 @@
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
                                         </a>
                                     </ng-container>
-                                    <ng-conatiner *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
+                                    <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
                                         <a
                                             *ngIf="isBankAccountConnected"
                                             aria-label="refresh-bank-transactions"
@@ -511,7 +511,7 @@
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
                                         </a>
                                         <a
-                                            *ngIf="isBankAccountConnected === false && !showBankLinkButton"
+                                            *ngIf="!showBankLinkButton"
                                             mat-button
                                             aria-label="connect-bank"
                                             id="connect-bank"
@@ -536,7 +536,7 @@
                                         >
                                             <i aria-hidden="true" class="icon-link font-16"></i>
                                         </a>
-                                    </ng-conatiner>
+                                    </ng-container>
                                     <a
                                         aria-label="show"
                                         mat-button

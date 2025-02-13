@@ -3,7 +3,7 @@ import { Observable, ReplaySubject } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
-import { take, takeUntil } from "rxjs/operators";
+import { take, takeUntil, tap } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -16,12 +16,13 @@ import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
 import { cloneDeep } from '../../../lodash-optimized';
+import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
 
 @Component({
     selector: 'bank-accounts',
     templateUrl: 'bank-accounts.component.html',
     styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
-    providers: [BankIntegrationComponentStore, HomeComponentStore]
+    providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore]
 })
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
@@ -44,7 +45,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     private bankMessage$: Observable<any> = this.homeComponentStore.select(state => state.bankMessage);
     /** Holds Store refresh bank loading as observable*/
     public isBankRefreshing$: Observable<any> = this.homeComponentStore.select(state => state.isBankRefreshing);
-   /** Holds Store requisition list on account link dialog gets open as observable*/
+    /** Holds Store requisition list on account link dialog gets open as observable*/
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
@@ -60,6 +61,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     private selectedBankUniqueName: string;
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
+    /** Holds the bank account which is not linked */
+    public unlinkBankList: any[] = [];
+    /** Holds list of connected banks */
+    private bankList: any[] = [];
+    /** True, if show bank link button is to show */
+    public showBankLinkButton: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -69,7 +76,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         private homeComponentStore: HomeComponentStore,
         public dialog: MatDialog,
         private generalService: GeneralService,
-        private componentStore: BankIntegrationComponentStore
+        private componentStore: BankIntegrationComponentStore,
+        private settingIntegrationComponentStore: SettingIntegrationComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -127,6 +135,14 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.showBankLinkButton = false;
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
@@ -139,6 +155,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         };
     }
+
 
     /**
      * This will get all accounts of giddh
@@ -201,6 +218,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     /**
     * This function will use for get institutions details
     *
@@ -209,7 +227,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     */
     public openInstitutionsDialog(bankAccount: any): void {
         this.selectedBankUniqueName = bankAccount?.uniqueName;
-
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,
@@ -228,18 +245,73 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.referenceNumber = cloneDeep(response);
             }
         });
-
     }
+
     /**
-    * This will open the dialog to link a bank
-    *
-    * @memberof BankAccountsComponent
-    */
-    public openBankLinkDialog(): void {
-        this.dialog.open(BankLinkComponent, {
-            data: { accountUniqueName: this.selectedBankUniqueName },
-            panelClass: ['mat-dialog-md'],
-            disableClose: true
+* This will get all connected bank accounts
+*
+* @memberof LedgerComponent
+*/
+    public getAllBankAccounts(accountUniqueName?: string): void {
+        // this.isBankAccountConnected = null;
+        this.showBankLinkButton = null;
+        this.selectedBankUniqueName = accountUniqueName;
+        this.settingIntegrationComponentStore.getAllBankAccounts();
+        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            // this.isBankAccountConnected = false;
+            if (response?.body?.length) {
+                this.bankList = response.body;
+                if (response.body.some(item => item.account?.uniqueName === this.selectedBankUniqueName)) {
+                    // this.isBankAccountConnected = true;
+                } else {
+                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
+                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
+                }
+                if (this.referenceNumber !== null) {
+                    this.openBankLinkDialog();
+                }
+            }
         });
+    }
+
+    /**
+    * This will link the connected bank accounts
+    *
+    * @memberof LedgerComponent
+    */
+    public linkBankAccount(): void {
+        let request = { bankAccountUniqueName: this.unlinkBankList[0]?.bankResource?.uniqueName };
+        let accountForm = {
+            accountNumber: this.unlinkBankList[0]?.bankResource?.accountNumber,
+            accountUniqueName: this.selectedBankUniqueName,
+            paymentAlerts: []
+        }
+        this.settingIntegrationComponentStore.updateAccount({ accountForm, request });
+    }
+
+    /**
+* This will open the dialog to link a bank
+*
+* @memberof LedgerComponent
+*/
+    public openBankLinkDialog(): void {
+        if (this.unlinkBankList.length === 1) {
+            this.linkBankAccount();
+        } else {
+            const data = {
+                bankList: this.bankList ?? [],
+                accountUniqueName: this.selectedBankUniqueName
+            }
+            const dialogRef = this.dialog.open(BankLinkComponent, {
+                data: data,
+                panelClass: ['mat-dialog-md'],
+                disableClose: true
+            });
+
+            dialogRef.afterClosed().pipe(take(1), tap(response => {
+                if (response) this.showBankLinkButton = false; this.referenceNumber = null;
+            })).subscribe();
+
+        }
     }
 }
