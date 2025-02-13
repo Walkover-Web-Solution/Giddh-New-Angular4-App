@@ -31,7 +31,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ledgerBalance: null });
-                return this.ledgerService.getLedgerBalance(req.trxRequest, req.payload).pipe(
+                return this.ledgerService.GetLedgerBalance(req.trxRequest, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

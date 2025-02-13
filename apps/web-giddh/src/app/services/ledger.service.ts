@@ -516,7 +516,7 @@ export class LedgerService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
     }
 
-    public getLedgerBalance(model: TransactionsRequest, payload: any = null): Observable<BaseResponse<any, any>> {
+    public GetLedgerBalance(model: TransactionsRequest, payload: any = null): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_BALANCE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
