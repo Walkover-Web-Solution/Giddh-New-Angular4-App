@@ -1316,19 +1316,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
      * Navigates to obligation
-     *
+     * 
+     * @returns {*} 
      * @memberof HeaderComponent
      */
-    public goToObligation() {
+    public goToObligation(): void {
         this.router.navigate(['pages/vat-report/obligations']);
     }
 
     /**
      * Navigates to liabilities
      *
+     * @returns {*}
      * @memberof HeaderComponent
      */
-    public goToLiabilities() {
+    public goToLiabilities(): void {
         this.router.navigate(['pages/vat-report/liabilities']);
     }
 
