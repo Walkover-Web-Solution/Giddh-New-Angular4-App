@@ -564,14 +564,12 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="
-        !hideAlertMessage.isSubscriptionEnded &&
+        *ngIf="!hideAlertMessage.isSubscriptionEnded &&
         subscribedPlan !== undefined &&
         subscribedPlan?.status !== 'expired' &&
         remainingSubscriptionDays !== false &&
         remainingSubscriptionDays <= 7 &&
-        isCurrentSubscriptionTrialOrCancelled
-        "
+        isCurrentSubscriptionTrialOrCancelled"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="white-row plan-issue d-flex justify-content-between">
