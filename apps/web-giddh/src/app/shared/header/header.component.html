@@ -569,11 +569,12 @@
     <div
         class="plan-wrapper"
         *ngIf="
-        !hideErrorMessage.isSubscriptionEnded &&
+        !hideAlertMessage.isSubscriptionEnded &&
         subscribedPlan !== undefined &&
         subscribedPlan?.status !== 'expired' &&
         remainingSubscriptionDays !== false &&
-        remainingSubscriptionDays <= 7
+        remainingSubscriptionDays <= 7 &&
+        isCurrentSubscriptionTrialOrCancelled
         "
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
@@ -584,13 +585,13 @@
                     localeData?.click_here
                 }}</a>
             </p>
-            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideErrorMessage.isSubscriptionEnded = true"></span>
+            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideAlertMessage.isSubscriptionEnded = true"></span>
         </div>
     </div>
 
     <div
         class="plan-wrapper"
-        *ngIf="!hideErrorMessage.isSubscriptionRenewalExpired && 
+        *ngIf="!hideAlertMessage.isSubscriptionRenewalExpired && 
         subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
@@ -601,13 +602,13 @@
                     {{ localeData?.click_here }}
                 </a>
             </p>
-            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideErrorMessage.isSubscriptionRenewalExpired = true"></span>
+            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideAlertMessage.isSubscriptionRenewalExpired = true"></span>
         </div>
     </div>
 
     <div
         class="plan-wrapper"
-        *ngIf="!hideErrorMessage.isTransactionLimitExceeded && 
+        *ngIf="!hideAlertMessage.isTransactionLimitExceeded && 
         subscribedPlan !== undefined && subscribedPlan.additionalCharges"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
@@ -618,39 +619,45 @@
                     localeData?.click_here
                 }}</a>
             </p>
-            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideErrorMessage.isTransactionLimitExceeded = true"></span>
+            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideAlertMessage.isTransactionLimitExceeded = true"></span>
         </div>
     </div>
 
     <div
         class="plan-wrapper"
-        *ngIf="!hideErrorMessage.isObligationExpired && isUKCompany"
-        [ngClass]="{ 'menu_open': true }"
+        *ngIf="!hideAlertMessage.isObligationExpired && isUKCompany && obligation"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <span class="icon-traingle-info"></span> {{ getExpiredMessage(localeData?.obligation_expired, days) }}
-                <a *ngIf="true" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select" (click)="goToObligation()">
+                <span class="icon-traingle-info"></span>
+                <span *ngIf="obligation.daysRemaining">{{ getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining) }}</span>
+                <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired">{{ localeData?.obligation_today_expired }}</span>
+                <span *ngIf="obligation.isExpired">{{ localeData?.obligation_expired_passed }}</span>
+                <a href="javascript:;" class="text-primary cursor-pointer" aria-label="get select" (click)="goToObligation()">
                     {{ localeData?.click_here }}
                 </a>
             </p>
-            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideErrorMessage.isObligationExpired = true"></span>
+            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideAlertMessage.isObligationExpired = true"></span>     
         </div>
     </div>
 
     <div
         class="plan-wrapper"
-        *ngIf="!hideErrorMessage.isLiabilitiesExpired && isUKCompany"
-        [ngClass]="{ 'menu_open': true }"
+        *ngIf="!hideAlertMessage.isLiabilitiesExpired && isUKCompany && liabilities"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <span class="icon-traingle-info"></span> {{ getExpiredMessage(localeData?.liabilities_expired, days) }}
-                <a *ngIf="true" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToLiabilities()">
+                <span class="icon-traingle-info"></span>
+                <span *ngIf="liabilities.daysRemaining"> {{ getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining) }}</span>
+                <span *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired">{{ localeData?.liabilities_today_expired }}</span>
+                <span *ngIf="liabilities.isExpired">{{ localeData?.liabilities_expired_passed }}</span>
+                <a href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToLiabilities()">
                     {{ localeData?.click_here }}
                 </a>
             </p>
-            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideErrorMessage.isLiabilitiesExpired = true"></span>
+            <span class="icon-cross mr-t05 cursor-pointer" (click)="hideAlertMessage.isLiabilitiesExpired = true"></span>
         </div>
     </div>
     <!--add and manage group account modal -->

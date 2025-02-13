@@ -3393,4 +3393,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public redirectToBankIntegration(): void {
         this.router.navigate(['pages', 'settings', 'integration', 'payment']);
     }
+
+    /**
+      * This will be use for redirect to bank integration page
+      *
+      * @memberof LedgerComponent
+      */
+    public redirectToBankIntegration(): void {
+        this.router.navigate(['pages', 'settings', 'integration', 'payment']);
+    }
 }

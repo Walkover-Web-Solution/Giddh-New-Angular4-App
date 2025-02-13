@@ -60,6 +60,14 @@ interface SubscriptionErrorFlags {
     isTransactionLimitExceeded: boolean;
 };
 
+interface SubscriptionErrorFlags {
+    isObligationExpired: boolean;
+    isLiabilitiesExpired: boolean;
+    isSubscriptionRenewalExpired: boolean;
+    isSubscriptionEnded: boolean;
+    isTransactionLimitExceeded: boolean;
+};
+
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -276,14 +284,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Holds true if plan is either trial or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** Tracks the visibility of error messages related to subscription and plan. */
-    public hideErrorMessage: SubscriptionErrorFlags = {
+    public hideAlertMessage: SubscriptionErrorFlags = {
         isObligationExpired: false,
         isLiabilitiesExpired: false,
         isSubscriptionRenewalExpired: false,
         isSubscriptionEnded: false,
         isTransactionLimitExceeded: false
     }
-    public days = 10;
+    /** Holds obligations alert message */
+    public obligation: any = null;
+    /** Holds liabilities alert message */
+    public liabilities: any = null;
     /** True if active country is UK */
     public isUKCompany = false;
 
@@ -811,7 +822,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
                 }
                 this.activeCompany = res;
-                this.isUKCompany = res?.country === "United Kingdom";
+                this.isUKCompany = res.country === "United Kingdom";
+                this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length > 0 ? res.obligationsAlert : null;
+                this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length > 0 ? res.liabilitiesAlert : null;
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
