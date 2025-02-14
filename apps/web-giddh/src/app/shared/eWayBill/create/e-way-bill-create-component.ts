@@ -87,11 +87,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
         this.componentStore.transporterListDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.transporterListDetails = response;
+            if (response) {
+                this.transporterListDetails = response;
+            }
         })
 
         this.componentStore.transporterList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.length) {
+            if (response?.length) {
                 let transporterDropdown = null;
                 let transporterArr = null;
                 transporterDropdown = response;
