@@ -86,15 +86,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterFilterRequest.count = 10;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
-        this.componentStore.transporterListDetails$.pipe(takeUntil(this.destroyed$)).subscribe(op => {
-            this.transporterListDetails = op;
+        this.componentStore.transporterListDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.transporterListDetails = response;
         })
 
-        this.componentStore.transporterList$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
-            if (state && state.length) {
+        this.componentStore.transporterList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.length) {
                 let transporterDropdown = null;
                 let transporterArr = null;
-                transporterDropdown = state;
+                transporterDropdown = response;
                 transporterArr = transporterDropdown.map(trans => {
                     return { label: trans.transporterName, value: trans.transporterId };
                 });
@@ -102,20 +102,20 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.isEwaybillGeneratedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
-            if (state) {
+        this.componentStore.isEwaybillGeneratedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
                 this.generateEwayBillform.reset();
             }
         });
 
-        this.componentStore.updateTransporterSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
-            if (state) {
+        this.componentStore.updateTransporterSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
                 this.generateNewTransporterForm.reset();
             }
         });
 
-        this.componentStore.isGenarateTransporterSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(state => {
-            if (state) {
+        this.componentStore.isGenarateTransporterSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
                 this.clearTransportForm();
             }
         });
@@ -334,10 +334,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public updateField(field: string, value: number | string): void {
-        const control = this.generateEwayBillform.get(field);
-        if (control) {
-            control.patchValue(value);
-        }
+        this.generateEwayBillform.get(field).patchValue(value);
     }
 
 }

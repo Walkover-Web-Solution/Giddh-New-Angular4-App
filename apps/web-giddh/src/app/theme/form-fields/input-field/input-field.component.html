@@ -155,6 +155,8 @@
             *ngIf="matSuffixIcon && !suffixTooltipText" 
             [ngClass]="matSuffixIcon" 
             (click)="!suffixTooltipText && clickOnSuffixIcon()"
+            [matTooltip]="suffixTooltipText ?? ''"
+            matTooltipPosition="above"
             role="button"
             [attr.aria-label]="label || placeholder"
         >
