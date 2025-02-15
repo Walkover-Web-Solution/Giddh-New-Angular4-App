@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } 
 import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -270,13 +270,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** Tracks the visibility of error messages related to subscription and plan. */
-    public hideAlertMessage: SubscriptionErrorFlags = {
-        isObligationExpired: false,
-        isLiabilitiesExpired: false,
-        isSubscriptionRenewalExpired: false,
-        isSubscriptionEnded: false,
-        isTransactionLimitExceeded: false
+    /** Tracks the visibility of alert messages related to subscription and plan. */
+    public showAlertMessage: SubscriptionErrorFlags = {
+        isObligationExpired: true,
+        isLiabilitiesExpired: true,
+        isSubscriptionRenewalExpired: true,
+        isSubscriptionEnded: true,
+        isTransactionLimitExceeded: true
     }
     /** Holds obligations alert message */
     public obligation: any = null;
@@ -325,7 +325,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private sanitizer: DomSanitizer,
         public dialog: MatDialog,
         private socialAuthService: AuthService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        private el: ElementRef,
+        private renderer: Renderer2
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -930,6 +932,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         })), takeUntil(this.destroyed$)).subscribe();
+
+        setTimeout(() => {
+            const liabilities = this.el.nativeElement.querySelectorAll('.liabilities');
+            liabilities.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToLiabilities();
+                });
+            });
+            const obligation = this.el.nativeElement.querySelectorAll('.obligations');
+            obligation.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToObligation();
+                });
+            });
+        }, 500);
+
     }
 
     public ngAfterViewChecked() {
