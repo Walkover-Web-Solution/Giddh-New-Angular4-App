@@ -144,5 +144,6 @@
         "copied":"Copied...",
         "api_url":"API URL : ",
         "heading":"Tally"
-    }
+    },
+    "account_deleted_successfully": "Account deleted successfully"
 }
