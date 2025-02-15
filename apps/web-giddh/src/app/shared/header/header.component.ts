@@ -288,7 +288,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Holds liabilities alert message */
     public liabilities: any = null;
     /** True if active country is UK */
-    public isUKCompany = false;
+    public isUKCompany: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -332,7 +332,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private socialAuthService: AuthService,
         private salesAction: SalesActions,
         @Inject(ServiceConfig) private serviceConfig,
-        private el: ElementRef,
+        private elementRef: ElementRef,
         private renderer: Renderer2
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
@@ -944,13 +944,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         })), takeUntil(this.destroyed$)).subscribe();
 
         setTimeout(() => {
-            const liabilities = this.el.nativeElement.querySelectorAll('.liabilities');
+            const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
             liabilities.forEach((link: HTMLElement) => {
                 this.renderer.listen(link, 'click', () => {
                     this.goToLiabilities();
                 });
             });
-            const obligation = this.el.nativeElement.querySelectorAll('.obligations');
+            const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
             obligation.forEach((link: HTMLElement) => {
                 this.renderer.listen(link, 'click', () => {
                     this.goToObligation();
