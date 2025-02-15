@@ -70,6 +70,8 @@ import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module'
 import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
 import { MatListModule } from '@angular/material/list';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
 
 @NgModule({
     declarations: [
@@ -147,7 +149,9 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
         TaxAuthorityModule,
         NgxMatSelectSearchModule,
         D3TreeChartModule,
-        BankIntegrationModule
+        BankIntegrationModule,
+        SerialNumberPipe,
+        NewConfirmModalModule
     ],
 })
 

@@ -650,6 +650,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
+                } else {
+                    this.isDefaultAccountsLoading = false;
                 }
             });
         } else {
@@ -734,6 +736,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (successCallback) {
                         successCallback(data.body.results);
                     }
+                } else {
+                    this.isDefaultStocksLoading = false;
                 }
             });
         } else {
@@ -794,6 +798,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
+                } else {
+                    this.isDefaultGroupsLoading = false;
                 }
             });
         } else {

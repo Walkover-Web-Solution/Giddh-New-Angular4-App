@@ -373,8 +373,8 @@
                 </div>
             </mat-tab>
 
-            <mat-tab 
-                [label]="localeData?.payment?.tab_heading" 
+            <mat-tab
+                [label]="localeData?.payment?.tab_heading"
                 *ngIf="iciciAllowedCompanies.includes(activeCompany?.uniqueName)
                        ||isPlaidSupportedCountry||isGocardlessSupportedCountry"
             >
@@ -418,12 +418,9 @@
                                 >
                             </li>
                             <li>
-                                <a
-                                    target="_blank"
-                                    class="btn link-color"
-                                    [href]="syncWithTallyHelpDocUrl"
-                                    >{{ localeData?.tally?.help_documentation }}</a
-                                >
+                                <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">{{
+                                    localeData?.tally?.help_documentation
+                                }}</a>
                             </li>
                         </ul>
                     </div>

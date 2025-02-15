@@ -308,32 +308,6 @@
                                     >
                                         {{ localeData?.manage_payment }}
                                     </button>
-                                    <button
-                                        *ngIf="
-                                            element?.isOwner &&
-                                            element?.companies &&
-                                            element?.companies?.length === 1 &&
-                                            element?.companyArchiveStatus === 'USER_ARCHIVED'
-                                        "
-                                        mat-menu-item
-                                        (click)="archiveCompany(element, 'UNARCHIVED')"
-                                        aria-label="details"
-                                    >
-                                        {{ commonLocaleData?.app_unarchive }}
-                                    </button>
-                                    <button
-                                        *ngIf="
-                                            element?.isOwner &&
-                                            element?.companies &&
-                                            element?.companies?.length === 1 &&
-                                            element?.companyArchiveStatus === 'UNARCHIVED'
-                                        "
-                                        mat-menu-item
-                                        (click)="archiveCompany(element, 'USER_ARCHIVED')"
-                                        aria-label="details"
-                                    >
-                                        {{ commonLocaleData?.app_archive }}
-                                    </button>
                                 </div>
                             </mat-menu>
                         </td>
@@ -373,18 +347,20 @@
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div [hidden]="show">
-        <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
-    </div>
-    <div class="input-container" [hidden]="!show">
-        <text-field
-            [type]="'text'"
-            [placeholder]="getSearchFieldText(fieldName)"
-            [cssClass]="'form-control search-table mat-field-border'"
-            [formControl]="formControl"
-            [autoFocus]="show"
-        ></text-field>
+    <div class="search-table">
+        <div [hidden]="show">
+            <span> {{ title }}</span>
+            <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+        </div>
+        <div class="input-container" [hidden]="!show">
+            <text-field
+                [type]="'text'"
+                [placeholder]="getSearchFieldText(fieldName)"
+                [cssClass]="'form-control mat-field-border'"
+                [formControl]="formControl"
+                [autoFocus]="show"
+            ></text-field>
+        </div>
     </div>
 </ng-template>
 <!-- MoveCompany Modal -->

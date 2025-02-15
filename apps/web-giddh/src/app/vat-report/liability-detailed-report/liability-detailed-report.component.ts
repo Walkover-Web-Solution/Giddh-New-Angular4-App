@@ -4,7 +4,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatDetailedReportRequest } from '../../models/api-models/Vat';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 
 @Component({
     selector: 'liability-detailed-report',
@@ -16,13 +16,15 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Vat Liability Detailed Report data */
     public vatLiabilityDetailedReport: any = {};
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Vat Liability Detailed Report request object */
     public vatLiabilityReportRequest: VatDetailedReportRequest = {
         from: '',
         to: '',
         taxNumber: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[2],
         section: '',
         currencyCode: 'BWP'
     };
@@ -104,9 +106,10 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
      * @memberof LiabilityDetailedReportComponent
      */
     public pageChanged(event: any): void {
-        if (event && this.vatLiabilityReportRequest.page !== event.page) {
+        if (event) {
+            this.vatLiabilityReportRequest.page = event.pageIndex + 1;
+            this.vatLiabilityReportRequest.count = event.pageSize;
             this.vatLiabilityDetailedReport.results = [];
-            this.vatLiabilityReportRequest.page = event.page;
             this.getVatLiabilityReport();
         }
     }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
@@ -13,9 +13,10 @@ import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAIN
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
 export class GeneralService {
@@ -88,7 +89,9 @@ export class GeneralService {
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private http: HttpClient
+        private http: HttpClient,
+        @Optional() @Inject(ServiceConfig)
+        private config: IServiceConfigArgs
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -2002,6 +2005,16 @@ export class GeneralService {
     }
 
     /**
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD-MM-YYYY).
+     *
+     * @param {string} value - The date string to be formatted.
+     * @returns {string} - The formatted date string.
+     */
+    public convertDateStringFormat(value: string): string {
+        return dayjs(value, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
     * This will be use for open window in center
     *
     * @param {string} url
@@ -2164,7 +2177,7 @@ export class GeneralService {
             }
         );
     }
-    
+
     /**
      * Round a Number to Company Decimal Places
      *
@@ -2176,6 +2189,26 @@ export class GeneralService {
     public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
         const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
+    }
+
+    /**
+     * Replaces placeholders in a URL with corresponding values from a model object.
+     * @param url - The URL containing placeholders like `:key`.
+     * @param model - An object containing key-value pairs to replace in the URL.
+     * @returns The formatted URL with placeholders replaced.
+     * @memberof GeneralService
+     */
+    public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
+        if (!url) return url;
+        const updatedModel = {
+            ...model,
+            companyUniqueName: model?.companyUniqueName ?? this.companyUniqueName
+        };
+        url = this.config.apiUrl + url;
+        return Object.keys(updatedModel).reduce((updatedUrl, key) => {
+            const placeholder = `:${key}`;
+            return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
+        }, url);
     }
 }
 

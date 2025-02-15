@@ -1,10 +1,18 @@
-<div class="text-field-container" [ngClass]="{ 'readonly-field': readonly }">
+<div class="text-field-container" [ngClass]="{ 'readonly-field': readonly || disabled }">
     <mat-form-field
         [ngClass]="{ 'mat-form-field-invalid': showError, 'prefix-icon-field': matPrefixIcon }"
         [appearance]="appearance"
         [floatLabel]="floatLabel"
     >
-        <mat-label>{{ label ? label : placeholder }}</mat-label>
+        <mat-label>
+            {{ label || placeholder }}
+            <i
+                *ngIf="showLabelIcon"
+                [class]="labelIconClass"
+                [matTooltip]="labelIconTooltip"
+                matTooltipPosition="above"
+            ></i>
+        </mat-label>
         <input
             matInput
             [name]="name"
@@ -142,5 +150,6 @@
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
+        <i matSuffixIcon [matTooltip]="suffixTooltipText"  matTooltipPosition="above" *ngIf="matSuffixIcon" [ngClass]="matSuffixIcon"matSuffix ></i>
     </mat-form-field>
 </div>

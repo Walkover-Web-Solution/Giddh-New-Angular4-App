@@ -3,8 +3,9 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GeneralService } from '../../services/general.service';
-import { PAGE_SIZE_OPTIONS, VoucherTypeEnum } from '../utility/vouchers.const';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { GIDDH_DATE_FORMAT_TIME } from '../../shared/helpers/defaultDateFormat';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 
 @Component({
     selector: 'app-history-dialog',
@@ -21,12 +22,12 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     public voucherVersionsResponse$: Observable<any> = this.componentStore.voucherVersionsResponse$;
     /** Holds List of Version History */
     public versionHistory: any;
-    /** Holds page Size Options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Hold Pagination Information */
     public pagination: any = {
         page: 1,
-        count: this.pageSizeOptions[0]
+        count: this.pageSizeOptions[2]
     }
     /** Holds Date format with time global constant */
     public giddhDateFormatWithTime: string = GIDDH_DATE_FORMAT_TIME;
@@ -70,15 +71,17 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Handle Page Change event and Make API Call
+    * Handle page change event and make API call
     *
     * @param {*} event
     * @memberof HistoryDialogComponent
     */
     public handlePageChange(event: any): void {
-        this.pagination.count = event.pageSize;
-        this.pagination.page = event.pageIndex + 1;
-        this.getVoucherVersions();
+        if (event) {
+            this.pagination.count = event.pageSize;
+            this.pagination.page = event.pageIndex + 1;
+            this.getVoucherVersions();
+        }
     }
 
     /**

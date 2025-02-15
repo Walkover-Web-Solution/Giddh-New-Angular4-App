@@ -82,6 +82,12 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public label: string;
     /** Holds Mat Input Value */
     @Input() public defaultValue: any;
+    /** True if need to show label icon */
+    @Input() public showLabelIcon: boolean = false;
+    /** Label icon class which show to specific icon */
+    @Input() public labelIconClass: string = "fa fa-info-circle";
+    /** Label icon tooltip */
+    @Input() public labelIconTooltip: string = null;
     /** Emits on change event */
     @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
     /** ngModel of input */
@@ -93,6 +99,10 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
+    /** It will show tooltip text in suffix icon */
+    @Input() public suffixTooltipText: string = "";
+    /** It will show Icon suffix in the text field */
+    @Input() public matSuffixIcon: string = "";
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,

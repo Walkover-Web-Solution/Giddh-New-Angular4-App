@@ -35,6 +35,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public name: any = "";
     /** True if field is readonly */
     @Input() public readonly: boolean;
+    /** True if field is disabled */
+    @Input() public disabled: boolean;
     /** True if field is autocomplete */
     @Input() public autocomplete: string = 'off';
     /** True if field is required */
@@ -115,12 +117,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.dynamicSearchedQuery.emit(search);
                 if (!search) {
                     this.onClear.emit({ label: "", value: "" });
+                    this.writeValue("");
                 }
             });
         } else {
             this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
                 if (!search) {
                     this.onClear.emit({ label: "", value: "" });
+                    this.writeValue("");
                 }
                 this.fieldFilteredOptions$ = this.filterOptions(String(search));
                 this.changeDetection.detectChanges();
@@ -156,6 +160,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
+        if (filteredOptions.length === 0) {
+            this.writeValue("");
+        }
         return of(filteredOptions);
     }
 
