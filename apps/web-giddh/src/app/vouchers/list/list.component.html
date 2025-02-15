@@ -143,7 +143,7 @@
                                         >{{ element?.voucherNumber ?? commonLocaleData?.app_not_available }}</a
                                     >
                                     <span class="d-block" *ngIf="element?.expiredDays !== null">
-                                        <small class="text-danger content-ellipsis-td" *ngIf="element?.expiredDays === 0">
+                                        <small class="text-danger text-ellipsis" *ngIf="element?.expiredDays === 0">
                                             {{ localeData?.expired_by_today }}
                                         </small>
                                     </span>
@@ -173,7 +173,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -270,7 +270,7 @@
                                     {{ commonLocaleData?.app_action }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div class="d-flex justify-content-between align-items-center column-gap5 content-ellipsis-td">
+                                    <div class="d-flex justify-content-between align-items-center column-gap5 text-ellipsis">
                                         <p>{{ element.action | titlecase }}</p>
                                         <ng-container *ngIf="element?.action !== 'invoiced'">
                                             <span
@@ -458,7 +458,7 @@
                                 <td mat-cell *matCellDef="let element">
                                     <a
                                         href="javascript:;"
-                                        class="btn-link-2 content-ellipsis-td"
+                                        class="btn-link-2 text-ellipsis"
                                         (click)="showVoucherPreview(element?.uniqueName)"
                                         [matTooltip]="element?.proformaNumber"
                                         matTooltipPosition="above"
@@ -491,7 +491,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -580,7 +580,7 @@
                                     {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'" class="content-ellipsis-td">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'" class="text-ellipsis">
                                         {{ element.status }}
                                     </div>
                                 </td>
@@ -590,7 +590,7 @@
                                     {{ commonLocaleData?.app_action }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div class="d-flex justify-content-between align-items-center column-gap5 content-ellipsis-td">
+                                    <div class="d-flex justify-content-between align-items-center column-gap5 text-ellipsis">
                                         <p>{{ element?.action | titlecase }}</p>
                                         <span
                                             [matMenuTriggerFor]="menu"
@@ -848,7 +848,7 @@
                                                 : commonLocaleData?.app_not_available
                                         }}</a
                                     >
-                                    <small class="text-danger d-block content-ellipsis-td" *ngIf="element?.overdueDays">
+                                    <small class="text-danger d-block text-ellipsis" *ngIf="element?.overdueDays">
                                         {{ element.overdueDays }}
                                     </small>
                                 </td>
@@ -877,7 +877,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -995,7 +995,7 @@
                                     {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div class="d-flex justify-content-between align-items-center column-gap5 content-ellipsis-td">
+                                    <div class="d-flex justify-content-between align-items-center column-gap5 text-ellipsis">
                                         <p>{{ element.balanceStatus | titlecase }}</p>
                                         <span
                                             [matMenuTriggerFor]="menu"
@@ -1224,7 +1224,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     <a
                                         href="javascript:;"
                                         class="btn-link-2"
@@ -1257,7 +1257,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -1538,7 +1538,7 @@
                                     (clickOutside)="handleClickOutside($event, invoiceNo, 'creditNoteNumber')"
                                     width="15%"
                                 >
-                                    <div class="d-flex align-items-center column-gap5 content-ellipsis-td">
+                                    <div class="d-flex align-items-center column-gap5 text-ellipsis">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
@@ -1553,7 +1553,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     <a
                                         href="javascript:;"
                                         class="btn-link-2"
@@ -1586,7 +1586,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer content-ellipsis-td" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -1832,7 +1832,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_particular }}</th>
-                                    <td mat-cell *matCellDef="let element" class="p-0 content-ellipsis-td">
+                                    <td mat-cell *matCellDef="let element" class="p-0 text-ellipsis">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>{{ transaction?.particular?.name }}</p>
                                             <p *ngIf="transaction?.inventory?.stock">
@@ -1845,7 +1845,7 @@
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
                                         {{ commonLocaleData?.app_amount }}
                                     </th>
-                                    <td mat-cell *matCellDef="let element" class="text-right p-0 content-ellipsis-td">
+                                    <td mat-cell *matCellDef="let element" class="text-right p-0 text-ellipsis">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>
                                                 <amount-field
@@ -1860,7 +1860,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="account">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_account }}</th>
-                                    <td mat-cell *matCellDef="let element" class="no-dbl-click-select content-ellipsis-td">
+                                    <td mat-cell *matCellDef="let element" class="no-dbl-click-select text-ellipsis">
                                         <div
                                             class="cursor-pointer"
                                             (dblclick)="!isCompany && (element.showAccountDetails = true)"
@@ -1914,7 +1914,7 @@
                                         matTooltipPosition="above"
                                         [matTooltip]="element?.totalTooltipText"
                                     >
-                                        <span class="d-inline-flex content-ellipsis-td">
+                                        <span class="d-inline-flex text-ellipsis">
                                             <amount-field
                                                 [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
@@ -1926,7 +1926,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="description">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_description }}</th>
-                                    <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                    <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                         {{ element?.description ? (element.description | titlecase) : "-" }}
                                     </td>
                                 </ng-container>
@@ -2093,7 +2093,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" [matTooltip]="element?.voucherNumber" matTooltipPosition="above" class="no-dbl-click-select content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" [matTooltip]="element?.voucherNumber" matTooltipPosition="above" class="no-dbl-click-select text-ellipsis">
                                     <a
                                         href="javascript:;"
                                         class="btn-link-2"
@@ -2354,7 +2354,7 @@
                                     (clickOutside)="handleClickOutside($event, invoiceNo, 'billNumber')"
                                     width="15%"
                                 >
-                                    <div class="d-flex align-items-center column-gap5 content-ellipsis-td">
+                                    <div class="d-flex align-items-center column-gap5 text-ellipsis">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
@@ -2382,7 +2382,7 @@
                                                 : commonLocaleData?.app_not_available
                                         }}</a
                                     >
-                                    <div *ngIf="element?.dueDays !== null"  class="content-ellipsis-td">
+                                    <div *ngIf="element?.dueDays !== null"  class="text-ellipsis">
                                         <small class="text-danger" *ngIf="element?.dueDays > 0">
                                             {{ getOverdueDaysText(element.dueDays) }}
                                         </small>
@@ -2400,7 +2400,7 @@
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
                                     width="15%"
                                 >
-                                    <div class="d-flex align-items-center column-gap5 content-ellipsis-td">
+                                    <div class="d-flex align-items-center column-gap5 text-ellipsis">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
@@ -2457,7 +2457,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element?.purchaseOrderNumbers }}
                                 </td>
                             </ng-container>
@@ -3318,7 +3318,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td" [matTooltip]="element.voucherNumber" matTooltipPosition="above">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element.voucherNumber" matTooltipPosition="above">
                                     {{ element.voucherNumber }}
                                 </td>
                             </ng-container>
@@ -3353,7 +3353,7 @@
                                         </button>
                                     </mat-menu>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td" [matTooltip]="element.receiptType" matTooltipPosition="above">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element.receiptType" matTooltipPosition="above">
                                     {{ element.receiptType }}
                                 </td>
                             </ng-container>
@@ -3380,7 +3380,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td" [matTooltip]="element?.account?.customerName" matTooltipPosition="above">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element?.account?.customerName" matTooltipPosition="above">
                                     {{ element?.account?.customerName }}
                                 </td>
                             </ng-container>
@@ -3388,7 +3388,7 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.payment_mode_label }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element.paymentMode?.name }}
                                 </td>
                             </ng-container>
@@ -3396,7 +3396,7 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.invoice_no_label }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     <ng-container *ngIf="element.adjustments?.length > 0">
                                         <ng-container *ngFor="let adjustment of element.adjustments" [matTooltip]="adjustment?.voucherNumber" matTooltipPosition="above">
                                             {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
@@ -3621,7 +3621,7 @@
                                         </ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element.voucherNumber }}
                                 </td>
                             </ng-container>
@@ -3679,7 +3679,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <ng-container *ngIf="element.adjustments?.length > 0">
-                                        <ng-container *ngFor="let adjustment of element.adjustments" class="content-ellipsis-td">
+                                        <ng-container *ngFor="let adjustment of element.adjustments" class="text-ellipsis">
                                             {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
                                         </ng-container>
                                     </ng-container>
@@ -3846,7 +3846,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_particular }}</th>
-                                    <td mat-cell *matCellDef="let element" class="p-0 content-ellipsis-td">
+                                    <td mat-cell *matCellDef="let element" class="p-0 text-ellipsis">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>{{ transaction?.particular?.name }}</p>
                                             <p *ngIf="transaction?.inventory?.stock">
@@ -3940,7 +3940,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="description">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_description }}</th>
-                                    <td mat-cell *matCellDef="let element" class="content-ellipsis-td">
+                                    <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                         {{ element?.description ? (element.description | titlecase) : "-" }}
                                     </td>
                                 </ng-container>
