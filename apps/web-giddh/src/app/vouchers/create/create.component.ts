@@ -533,7 +533,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private proformaService: ProformaService,
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
-        private changeDetection: ChangeDetectorRef,
+        private changeDetection: ChangeDetectorRef
     ) {
        this.imgPath =  isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
@@ -3508,14 +3508,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
-     *
+     * @param {any} event using for pinCode and gstNumber
+     * @returns {void}
+     * 
      * @memberof VoucherCreateComponent
      */
     public openEwayBillDialog(): void {
         this.dialog?.closeAll();
         const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
-            disableClose: true
+            disableClose: true,
+            data: {
+                pinCode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode").value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("pincode").value,
+                gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("taxNumber")?.value
+            }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.eWayBillResponse = response;

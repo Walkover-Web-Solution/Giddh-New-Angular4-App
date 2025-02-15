@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { EWayBillCreateComponent } from './create/e-way-bill-create-component';
-import { EWayBillComponent } from './e-way-bill/e-way-bill-component';
-import { EWayBillCredentialsComponent } from './e-way-bill-credentials-dialog/e-way-bill-credentials.component';
 import { HamburgerMenuModule } from '../header/components/hamburger-menu/hamburger-menu.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LaddaModule } from 'angular2-ladda';
 import { DeleteTemplateConfirmationModalModule } from '../../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
@@ -19,9 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
-        EWayBillComponent,
-        EWayBillCreateComponent,
-        EWayBillCredentialsComponent
+        EWayBillCreateComponent
     ],
     imports: [
         TranslateDirectiveModule,
@@ -29,7 +24,6 @@ import { MatButtonModule } from '@angular/material/button';
         MatFormFieldModule,
         CommonModule,
         FormsModule,
-        LaddaModule,
         DeleteTemplateConfirmationModalModule,
         ReactiveFormsModule,
         GiddhDatepickerModule,
@@ -41,9 +35,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatButtonModule
     ],
     exports: [
-        EWayBillComponent,
-        EWayBillCreateComponent,
-        EWayBillCredentialsComponent
+        EWayBillCreateComponent
     ]
 })
 export class EWayBillModule { }
