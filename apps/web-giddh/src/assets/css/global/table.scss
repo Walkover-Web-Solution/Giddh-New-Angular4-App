@@ -158,13 +158,9 @@ table {
                 width: fit-content !important;
                 max-width: 194px !important;
             }
-            .content-ellipsis-td {
-                text-overflow: ellipsis;
-                overflow: hidden;
+            .table-date-width {
+                width: 125px !important;
             }
         }
     }
-}
-.table-date-width {
-    width: 125px !important;
 }
