@@ -378,7 +378,11 @@
                 *ngIf="iciciAllowedCompanies.includes(activeCompany?.uniqueName)
                        ||isPlaidSupportedCountry||isGocardlessSupportedCountry"
             >
+<<<<<<< HEAD
               <bank-integration></bank-integration>
+=======
+            <bank-integration></bank-integration>
+>>>>>>> 9e2a52dc9110cdd0b5a926a491eb42ed8da43018
             </mat-tab>
 
             <mat-tab [label]="localeData?.tally?.heading" *ngIf="voucherApiVersion === 2">
