@@ -17,6 +17,7 @@ import { BankIntegrationComponentStore } from '../../../shared/bank-integration/
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
+import { BankIntegrationPopupComponent } from '../../../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
 
 @Component({
     selector: 'bank-accounts',
@@ -67,7 +68,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     private bankList: any[] = [];
     /** True, if show bank link button is to show */
     public showBankLinkButton: boolean;
-
+    /** Holds Bank Integration Dialog Ref */
+    public bankIntegrationDialogRef: any;
+    public isDirectlyIntegrated: boolean = false;
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
@@ -110,6 +113,19 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         };
 
+        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.bankList = response.body;
+                this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
+                const referNo = localStorage.getItem('refNo');
+                if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
+                    this.getLinkBankAccount();
+                } else {
+                    this.getBank();
+                }
+            }
+        });
+
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
@@ -131,7 +147,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         })
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.openBankLinkDialog();
+                this.getAllBanks();
+                this.isDirectlyIntegrated = true;
+                this.componentStore.setState(state => ({
+                    ...state,
+                    requisitionList: null
+                }));
             }
         });
 
@@ -154,6 +175,37 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 }
             }
         };
+    }
+
+    public getBank(): void {
+        if (!this.unlinkBankList?.length) {
+            this.openInstitutionsDialog();
+        } else if (this.unlinkBankList?.length === 1) {
+            this.linkBankAccount();
+        } else if (this.unlinkBankList?.length > 1) {
+            this.bankIntegrationDialogRef = this.dialog.open(BankIntegrationPopupComponent, {
+                data: {
+                    commonLocaleData: this.commonLocaleData,
+                    localeData: this.localeData
+                },
+                width: '600px',
+                disableClose: true
+            });
+            this.bankIntegrationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response === 'integrate') {
+                    this.bankIntegrationDialogRef?.close();
+                    this.openInstitutionsDialog();
+                } else if (response === 'link') {
+                    this.bankIntegrationDialogRef?.close();
+                    this.getLinkBankAccount();
+                } else if (response === 'close') {
+                    this.bankIntegrationDialogRef?.close();
+                } else {
+                    this.bankIntegrationDialogRef?.close();
+                }
+                this.changeDetectionRef.detectChanges();
+            });
+        }
     }
 
 
@@ -225,12 +277,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     * @param {*} element
     * @memberof BankAccountsComponent
     */
-    public openInstitutionsDialog(bankAccount: any): void {
-        this.selectedBankUniqueName = bankAccount?.uniqueName;
+    public openInstitutionsDialog(): void {
         let data = {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,
         }
+        console.log('ins');
+
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
             width: 'var(--aside-pane-width)',
@@ -248,36 +301,19 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     /**
-* This will get all connected bank accounts
-*
-* @memberof LedgerComponent
-*/
-    public getAllBankAccounts(accountUniqueName?: string): void {
-        // this.isBankAccountConnected = null;
+    * This will get all connected bank accounts
+    *
+    * @memberof BankAccountsComponent
+    */
+    public getAllBankAccounts(): void {
         this.showBankLinkButton = null;
-        this.selectedBankUniqueName = accountUniqueName;
         this.settingIntegrationComponentStore.getAllBankAccounts();
-        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            // this.isBankAccountConnected = false;
-            if (response?.body?.length) {
-                this.bankList = response.body;
-                if (response.body.some(item => item.account?.uniqueName === this.selectedBankUniqueName)) {
-                    // this.isBankAccountConnected = true;
-                } else {
-                    this.showBankLinkButton = response.body.some(bank => Object.keys(bank.account).length === 0);
-                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
-                }
-                if (this.referenceNumber !== null) {
-                    this.openBankLinkDialog();
-                }
-            }
-        });
     }
 
     /**
     * This will link the connected bank accounts
     *
-    * @memberof LedgerComponent
+    * @memberof BankAccountsComponent
     */
     public linkBankAccount(): void {
         let request = { bankAccountUniqueName: this.unlinkBankList[0]?.bankResource?.uniqueName };
@@ -290,11 +326,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     /**
-* This will open the dialog to link a bank
-*
-* @memberof LedgerComponent
-*/
-    public openBankLinkDialog(): void {
+    * This will open the dialog to link a bank
+    *
+    * @memberof BankAccountsComponent
+    */
+    public openBankLinkDialog(bankAccount: any): void {
+        // console.log(bankAccount, this.unlinkBankList);
+        this.selectedBankUniqueName = bankAccount?.uniqueName;
+        this.getAllBankAccounts();
+    }
+
+    public getLinkBankAccount(): void {
         if (this.unlinkBankList.length === 1) {
             this.linkBankAccount();
         } else {
@@ -307,11 +349,18 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 panelClass: ['mat-dialog-md'],
                 disableClose: true
             });
-
             dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response) this.showBankLinkButton = false; this.referenceNumber = null;
+                if (response === 'closeDialog') {
+                    dialogRef?.close();
+                } else {
+                    if (response) this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                }
             })).subscribe();
-
         }
     }
+
+    public getAllBanks(): void {
+        this.settingIntegrationComponentStore.getAllBankAccounts();
+    }
+
 }

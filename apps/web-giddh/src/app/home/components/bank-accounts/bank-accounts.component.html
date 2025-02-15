@@ -36,24 +36,13 @@
                         >
                             <p class="bank-name d-flex">
                                 {{ bankaccount.name }}&nbsp;
-                                <span
-                                    class="d-flex column-gap1"
+                                <i
                                     *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
-                                >
-                                    <i
-                                        class="icon-plus text-primary cursor-pointer font-12"
-                                        [matTooltip]="localeData?.connect_bank"
-                                        matTooltipPosition="below"
-                                        (click)="openInstitutionsDialog(bankaccount)"
-                                    ></i>
-                                    <i
-                                        *ngIf="bankaccount?.accountBankTransactionTotal"
-                                        class="icon-link text-primary cursor-pointer font-16"
-                                        [matTooltip]="localeData?.link_bank"
-                                        matTooltipPosition="below"
-                                        (click)="getAllBankAccounts(bankaccount?.uniqueName)"
-                                    ></i>
-                                </span>
+                                    class="icon-plus text-primary cursor-pointer font-12"
+                                    [matTooltip]="localeData?.connect_bank"
+                                    matTooltipPosition="below"
+                                    (click)="openBankLinkDialog(bankaccount)"
+                                ></i>
                             </p>
                             <p class="bank-balance" [ngClass]="{ 'width-86': reLoginRequired }">
                                 <span>{{ localeData?.in_giddh }}</span>
