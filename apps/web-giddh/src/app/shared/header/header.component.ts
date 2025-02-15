@@ -808,8 +808,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.activeCompany = res;
                 this.isUKCompany = res.country === "United Kingdom";
-                this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length > 0 ? res.obligationsAlert : null;
-                this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length > 0 ? res.liabilitiesAlert : null;
+                this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length ? res.obligationsAlert : null;
+                this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length ? res.liabilitiesAlert : null;
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
