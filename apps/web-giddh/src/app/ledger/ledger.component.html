@@ -763,8 +763,8 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                                <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
-                                                                    <span class="checkbox-span position-absolute">
+                                                                <div class="d-flex align-items-center column-gap5">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -800,14 +800,12 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                   <span class="custom-input-field" [ngClass]="{'pd-l15': !(selectedBankTrxWhileHovering !==
-                                                                    txn?.id && !selectedDebitTransactionIds.has(txn?.id))}">
+                                                                    <span class="custom-input-field pd-t1">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
                                                                             (datepickerState)="datepickerState($event)"
-                                                                            [showToggleIcon] = "true"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
@@ -1128,8 +1126,8 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                              <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
-                                                                    <span class="checkbox-span position-absolute">
+                                                                <div class="d-flex align-items-center column-gap5">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -1165,14 +1163,12 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                   <span class="custom-input-field" [ngClass]="{'pd-l15': !(selectedBankTrxWhileHovering !==
-                                                                    txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
+                                                                    <span class="custom-input-field pd-t1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
                                                                             (datepickerState)="datepickerState($event)"
-                                                                            [showToggleIcon] = "true"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
