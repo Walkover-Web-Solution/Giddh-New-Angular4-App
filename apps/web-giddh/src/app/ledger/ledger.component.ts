@@ -360,6 +360,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds Bank Integration Dialog Ref */
     public bankIntegrationDialogRef: any;
     public isDirectlyIntegrated: boolean = false;
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
 
     constructor(
         private store: Store<AppState>,
@@ -389,7 +391,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
         private ledgerComponentStore: LedgerComponentStore,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private toasty: ToasterService
     ) {
         localStorage.setItem('refNo', null);
         this.lc = new LedgerVM();
@@ -3435,10 +3438,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for redirect to bank integration page
-     *
-     * @memberof LedgerComponent
-     */
+      * This will be use for redirect to bank integration page
+      *
+      * @memberof LedgerComponent
+      */
     public redirectToBankIntegration(): void {
         this.router.navigate(['pages', 'settings', 'integration', 'payment']);
     }
