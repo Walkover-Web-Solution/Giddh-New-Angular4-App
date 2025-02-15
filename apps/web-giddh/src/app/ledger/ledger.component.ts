@@ -348,12 +348,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankList: any[] = [];
     /** Invoice Settings */
     public invoiceSettings: any;
-    /** Observable for post balance success response */
-    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
     /** Hold ledger grid total columns static value */
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
     public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
 
@@ -384,8 +384,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
-        private ledgerComponentStore: LedgerComponentStore,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private ledgerComponentStore: LedgerComponentStore
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -618,11 +618,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.arrangeLedgerTransactionsForMobile();
             }
         });
+        const mediumScreen: string = "(max-width: 1536px)";
+        const smallScreen: string = "(max-width: 1366px)";
         this.breakpointObserver.observe([
-            '(max-width: 1366px)'
+            smallScreen, mediumScreen
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result) {
-                if (result?.matches) {
+            if (result?.matches) {
+                if (result.breakpoints[mediumScreen]) {
+                    this.ledgerGridTotalColumns = 5
+                    this.ledgerGridColumnsValue = [1, 2, 2]
+                } else if (result.breakpoints[smallScreen]) {
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
                 } else {
