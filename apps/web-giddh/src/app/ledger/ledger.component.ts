@@ -537,11 +537,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.arrangeLedgerTransactionsForMobile();
             }
         });
+        const mediumScreen: string = "(max-width: 1536px)";
+        const smallScreen: string = "(max-width: 1366px)";
         this.breakpointObserver.observe([
-            '(max-width: 1366px)'
+            smallScreen, mediumScreen
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result) {
-                if (result?.matches) {
+            if (result?.matches) {
+                if (result.breakpoints[mediumScreen]) {
+                    this.ledgerGridTotalColumns = 5
+                    this.ledgerGridColumnsValue = [1, 2, 2]
+                } else if (result.breakpoints[smallScreen]) {
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
                 } else {
