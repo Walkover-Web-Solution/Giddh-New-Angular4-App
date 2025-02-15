@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } 
 import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -276,12 +276,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Holds true if plan is either trial or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** Tracks the visibility of error messages related to subscription and plan. */
-    public hideAlertMessage: SubscriptionErrorFlags = {
-        isObligationExpired: false,
-        isLiabilitiesExpired: false,
-        isSubscriptionRenewalExpired: false,
-        isSubscriptionEnded: false,
-        isTransactionLimitExceeded: false
+    public showAlertMessage: SubscriptionErrorFlags = {
+        isObligationExpired: true,
+        isLiabilitiesExpired: true,
+        isSubscriptionRenewalExpired: true,
+        isSubscriptionEnded: true,
+        isTransactionLimitExceeded: true
     }
     /** Holds obligations alert message */
     public obligation: any = null;
@@ -331,7 +331,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         public dialog: MatDialog,
         private socialAuthService: AuthService,
         private salesAction: SalesActions,
-        @Inject(ServiceConfig) private serviceConfig
+        @Inject(ServiceConfig) private serviceConfig,
+        private el: ElementRef,
+        private renderer: Renderer2
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
@@ -815,8 +817,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.activeCompany = res;
                 this.isUKCompany = res.country === "United Kingdom";
-                this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length > 0 ? res.obligationsAlert : null;
-                this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length > 0 ? res.liabilitiesAlert : null;
+                this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length ? res.obligationsAlert : null;
+                this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length ? res.liabilitiesAlert : null;
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
@@ -852,7 +854,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.router.navigate(['/login']);
                 } else {
                     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ?  `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;;
+                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
@@ -940,6 +942,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         })), takeUntil(this.destroyed$)).subscribe();
+
+        setTimeout(() => {
+            const liabilities = this.el.nativeElement.querySelectorAll('.liabilities');
+            liabilities.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToLiabilities();
+                });
+            });
+            const obligation = this.el.nativeElement.querySelectorAll('.obligations');
+            obligation.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToObligation();
+                });
+            });
+        }, 500);
+
     }
 
     public ngAfterViewChecked() {
