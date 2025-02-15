@@ -360,8 +360,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds Bank Integration Dialog Ref */
     public bankIntegrationDialogRef: any;
     public isDirectlyIntegrated: boolean = false;
-    /** Observable for post balance success response */
-    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
 
     constructor(
         private store: Store<AppState>,
