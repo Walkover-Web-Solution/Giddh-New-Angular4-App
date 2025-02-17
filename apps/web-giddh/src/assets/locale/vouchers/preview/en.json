@@ -73,6 +73,8 @@
     "bill_no": "Bill No.",
     "bill_date": "Bill Date",
     "po_number": "Purchase Order",
+    "linked_order": "Linked Orders",
+    "order_no": "Order No.",
     "balance_due": "Balance Due",
     "due_date": "Due Date",
     "cr_note_no": "Cr Note No.",
