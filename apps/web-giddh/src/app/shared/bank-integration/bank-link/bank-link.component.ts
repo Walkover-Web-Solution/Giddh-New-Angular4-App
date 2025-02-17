@@ -128,6 +128,11 @@ export class BankLinkComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * This will be use for when close the dialog
+     *
+     * @memberof BankLinkComponent
+     */
     public closeDialog(): void {
         this.dialogRef.close('closeDialog');
     }

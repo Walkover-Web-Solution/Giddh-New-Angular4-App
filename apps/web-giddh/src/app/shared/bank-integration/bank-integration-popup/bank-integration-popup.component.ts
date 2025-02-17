@@ -10,7 +10,7 @@ import { IOption } from '../../../theme/ng-select/option.interface';
     templateUrl: './bank-integration-popup.component.html'
 })
 
-export class BankIntegrationPopupComponent implements OnInit, OnDestroy {
+export class BankIntegrationDialogComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -24,7 +24,7 @@ export class BankIntegrationPopupComponent implements OnInit, OnDestroy {
     /**
      * Initializes the component
      *
-     * @memberof BankIntegrationPopupComponent
+     * @memberof BankIntegrationDialogComponent
      */
     public ngOnInit(): void {
         this.commonLocaleData = this.inputData?.commonLocaleData;
@@ -34,7 +34,7 @@ export class BankIntegrationPopupComponent implements OnInit, OnDestroy {
     /**
      * This will use for close dialog
      *
-     * @memberof BankIntegrationPopupComponent
+     * @memberof BankIntegrationDialogComponent
      */
     public closeDialog(): void {
         this.dialogRef.close('close');
@@ -43,7 +43,7 @@ export class BankIntegrationPopupComponent implements OnInit, OnDestroy {
     /**
      *This will be use for link bank account
      *
-     * @memberof BankIntegrationPopupComponent
+     * @memberof BankIntegrationDialogComponent
      */
     public linkBank(): void {
         this.dialogRef.close('link');
@@ -52,7 +52,7 @@ export class BankIntegrationPopupComponent implements OnInit, OnDestroy {
     /**
      * This will be use for integrate new bank account
      *
-     * @memberof BankIntegrationPopupComponent
+     * @memberof BankIntegrationDialogComponent
      */
     public integrateBank(): void {
         this.dialogRef.close('integrate');
@@ -61,7 +61,7 @@ export class BankIntegrationPopupComponent implements OnInit, OnDestroy {
     /**
     * Releases memory
     *
-    * @memberof BankIntegrationPopupComponent
+    * @memberof BankIntegrationDialogComponent
     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
