@@ -521,7 +521,8 @@ export class LedgerService {
         let url = this.config.apiUrl + LEDGER_API.GET_BALANCE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
             ?.replace(':from', model.from)?.replace(':to', model.to)
-            ?.replace(':accountCurrency', model.accountCurrency?.toString());
+            ?.replace(':accountCurrency', model.accountCurrency?.toString())
+            ?.replace(':q', model.q?.toString() ?? '');
         if (model.branchUniqueName) {
             model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
