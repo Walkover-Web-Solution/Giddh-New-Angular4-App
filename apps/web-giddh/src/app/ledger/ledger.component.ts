@@ -1,4 +1,4 @@
-import { BankIntegrationPopupComponent } from './../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
+import { BankIntegrationDialogComponent } from './../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -64,7 +64,7 @@ import { ServiceConfig } from '../services/service.config';
     selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
-    providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore, LedgerComponentStore],
+    providers: [LedgerComponentStore, BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -359,6 +359,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public callBackBroadcast: any;
     /** Holds Bank Integration Dialog Ref */
     public bankIntegrationDialogRef: any;
+    /** Holds if use directly integrated bank account*/
     public isDirectlyIntegrated: boolean = false;
 
     constructor(
@@ -563,6 +564,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will be use for when use update account and get response
+     *
+     * @memberof LedgerComponent
+     */
     public updateAccountResponse(): void {
         this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -1080,10 +1086,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.isBankRefreshing$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if (this.isBankAccount) {
-                    this.getAllBankAccounts(this.lc.accountUnq);
-                }
+            if (response && this.isBankAccount) {
+                this.getAllBankAccounts(this.lc.accountUnq);
             }
         });
 
@@ -1104,18 +1108,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 const referNo = localStorage.getItem('refNo');
-                if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
+                if (this.isDirectlyIntegrated && referNo) {
                     this.getLinkBankAccount();
                 }
             }
         });
 
         window.addEventListener('message', event => {
-            if (this.router.url === '/pages/ledger/' + this.lc.accountUnq) {
-                if (event && event.data === "GOCARDLESS") {
-                    if (this.referenceNumber) {
-                        this.componentStore.getRequisition(this.referenceNumber);
-                    }
+            if (this.router.url === `/pages/ledger/${this.lc.accountUnq}`) {
+                if (event && event.data === "GOCARDLESS" && this.referenceNumber) {
+                    this.componentStore.getRequisition(this.referenceNumber);
                 }
             }
         });
@@ -3376,7 +3378,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else if (this.unlinkBankList?.length === 1) {
             this.linkBankAccount();
         } else if (this.unlinkBankList?.length > 1) {
-            this.bankIntegrationDialogRef = this.dialog.open(BankIntegrationPopupComponent, {
+            this.bankIntegrationDialogRef = this.dialog.open(BankIntegrationDialogComponent, {
                 data: {
                     commonLocaleData: this.commonLocaleData,
                     localeData: this.localeData
@@ -3390,6 +3392,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else if (response === 'link') {
                     this.getLinkBankAccount();
                 } else if (response === 'close') {
+                    this.bankIntegrationDialogRef?.close();
+                } else {
                     this.bankIntegrationDialogRef?.close();
                 }
             });

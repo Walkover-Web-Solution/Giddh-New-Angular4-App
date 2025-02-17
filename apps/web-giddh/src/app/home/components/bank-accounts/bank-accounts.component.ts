@@ -17,7 +17,7 @@ import { BankIntegrationComponentStore } from '../../../shared/bank-integration/
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
-import { BankIntegrationPopupComponent } from '../../../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
+import { BankIntegrationDialogComponent } from '../../../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
 
 @Component({
     selector: 'bank-accounts',
@@ -70,7 +70,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public showBankLinkButton: boolean;
     /** Holds Bank Integration Dialog Ref */
     public bankIntegrationDialogRef: any;
+    /** Holds if user directly integrate to bank account */
     public isDirectlyIntegrated: boolean = false;
+
     constructor(
         private store: Store<AppState>,
         private contactService: ContactService,
@@ -183,20 +185,18 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         } else if (this.unlinkBankList?.length === 1) {
             this.linkBankAccount();
         } else if (this.unlinkBankList?.length > 1) {
-            this.bankIntegrationDialogRef = this.dialog.open(BankIntegrationPopupComponent, {
+            this.bankIntegrationDialogRef = this.dialog.open(BankIntegrationDialogComponent, {
                 data: {
                     commonLocaleData: this.commonLocaleData,
                     localeData: this.localeData
                 },
-                width: '600px',
+                panelClass: ['mat-dialog-sm'],
                 disableClose: true
             });
             this.bankIntegrationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                 if (response === 'integrate') {
-                    this.bankIntegrationDialogRef?.close();
                     this.openInstitutionsDialog();
                 } else if (response === 'link') {
-                    this.bankIntegrationDialogRef?.close();
                     this.getLinkBankAccount();
                 } else if (response === 'close') {
                     this.bankIntegrationDialogRef?.close();
@@ -282,8 +282,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,
         }
-        console.log('ins');
-
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
             width: 'var(--aside-pane-width)',
@@ -316,8 +314,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     * @memberof BankAccountsComponent
     */
     public linkBankAccount(): void {
-        let request = { bankAccountUniqueName: this.unlinkBankList[0]?.bankResource?.uniqueName };
-        let accountForm = {
+        const request = { bankAccountUniqueName: this.unlinkBankList[0]?.bankResource?.uniqueName };
+        const accountForm = {
             accountNumber: this.unlinkBankList[0]?.bankResource?.accountNumber,
             accountUniqueName: this.selectedBankUniqueName,
             paymentAlerts: []
@@ -331,11 +329,15 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     * @memberof BankAccountsComponent
     */
     public openBankLinkDialog(bankAccount: any): void {
-        // console.log(bankAccount, this.unlinkBankList);
         this.selectedBankUniqueName = bankAccount?.uniqueName;
         this.getAllBankAccounts();
     }
 
+    /**
+     * This will be yse get bank account by its unique name
+     *
+     * @memberof BankAccountsComponent
+     */
     public getLinkBankAccount(): void {
         if (this.unlinkBankList.length === 1) {
             this.linkBankAccount();
@@ -359,6 +361,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will be use for get all bank accounts
+     *
+     * @memberof BankAccountsComponent
+     */
     public getAllBanks(): void {
         this.settingIntegrationComponentStore.getAllBankAccounts();
     }
