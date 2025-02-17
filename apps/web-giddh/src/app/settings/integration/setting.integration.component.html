@@ -378,7 +378,7 @@
                 *ngIf="iciciAllowedCompanies.includes(activeCompany?.uniqueName)
                        ||isPlaidSupportedCountry||isGocardlessSupportedCountry"
             >
-              <bank-integration></bank-integration>
+            <bank-integration></bank-integration>
             </mat-tab>
 
             <mat-tab [label]="localeData?.tally?.heading" *ngIf="voucherApiVersion === 2">
@@ -418,12 +418,9 @@
                                 >
                             </li>
                             <li>
-                                <a
-                                    target="_blank"
-                                    class="btn link-color"
-                                    [href]="syncWithTallyHelpDocUrl"
-                                    >{{ localeData?.tally?.help_documentation }}</a
-                                >
+                                <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">{{
+                                    localeData?.tally?.help_documentation
+                                }}</a>
                             </li>
                         </ul>
                     </div>
