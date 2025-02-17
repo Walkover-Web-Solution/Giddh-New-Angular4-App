@@ -50,10 +50,10 @@
     "notifications": "सूचनाएं",
     "quick_create": "त्वरित निर्माण",
     "subscription": "सदस्यता",
-    "obligation_expired": "चेतावनी: वैट रिटर्न की नियत तारीख [REMAINING_DAY] दिनों में आ रही है! दंड से बचने के लिए समय सीमा से पहले जमा करें। <a href='javascript:;' class='obligations text-primary cursor-pointer'> यहां क्लिक करें </a> जमा करने के लिए।",
-    "obligation_today_expired": "चेतावनी: वैट रिटर्न की नियत तारीख आज है! दंड से बचने के लिए तुरंत जमा करें। <a href='javascript:;' class='obligations text-primary cursor-pointer'> यहां क्लिक करें </a> जमा करने के लिए।",
-    "obligation_expired_passed": "चेतावनी: वैट रिटर्न की नियत तारीख निकल चुकी है! दंड को कम करने के लिए तुरंत जमा करें। <a href='javascript:;' class='obligations text-primary cursor-pointer'> यहां क्लिक करें </a> जमा करने के लिए।",
-    "liabilities_expired": "चेतावनी: आपका भुगतान [REMAINING_DAY] दिनों में देय है! दंड से बचने के लिए समय पर भुगतान करें। <a href='javascript:;' class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।",
-    "liabilities_today_expired": "चेतावनी: आपका भुगतान आज देय है! दंड से बचने के लिए तुरंत भुगतान करें। <a href='javascript:;' class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।",
-    "liabilities_expired_passed": "चेतावनी: आपका भुगतान ओवरड्यू हो चुका है! दंड को कम करने के लिए अभी भुगतान करें। <a href='javascript:;' class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।"
+    "obligation_expired": "चेतावनी: वैट रिटर्न की नियत तारीख [REMAINING_DAY] दिनों में आ रही है! दंड से बचने के लिए समय सीमा से पहले जमा करें। <a class='obligations text-primary cursor-pointer'> यहां क्लिक करें </a> जमा करने के लिए।",
+    "obligation_today_expired": "चेतावनी: वैट रिटर्न की नियत तारीख आज है! दंड से बचने के लिए तुरंत जमा करें। <a class='obligations text-primary cursor-pointer'> यहां क्लिक करें </a> जमा करने के लिए।",
+    "obligation_expired_passed": "चेतावनी: वैट रिटर्न की नियत तारीख निकल चुकी है! दंड को कम करने के लिए तुरंत जमा करें। <a class='obligations text-primary cursor-pointer'> यहां क्लिक करें </a> जमा करने के लिए।",
+    "liabilities_expired": "चेतावनी: आपका भुगतान [REMAINING_DAY] दिनों में देय है! दंड से बचने के लिए समय पर भुगतान करें। <a class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।",
+    "liabilities_today_expired": "चेतावनी: आपका भुगतान आज देय है! दंड से बचने के लिए तुरंत भुगतान करें। <a class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।",
+    "liabilities_expired_passed": "चेतावनी: आपका भुगतान ओवरड्यू हो चुका है! दंड को कम करने के लिए अभी भुगतान करें। <a class='liabilities text-primary cursor-pointer'> यहां क्लिक करें </a> देखने के लिए।"
 }

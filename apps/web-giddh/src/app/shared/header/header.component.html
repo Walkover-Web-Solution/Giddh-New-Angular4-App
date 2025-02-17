@@ -574,7 +574,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info"></i> {{ getSubscriptionEndNote() }}
+                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndNote() }}
                 <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="go to plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
@@ -591,7 +591,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info"></i> {{ getSubscriptionEndedNote() }}
+                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndedNote() }}
                 <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToSelectPlan()">
                     {{ localeData?.click_here }}
                 </a>
@@ -608,7 +608,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info"></i> {{ getSubscriptionTransactionEndedNote() }}
+                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionTransactionEndedNote() }}
                 <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="get plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
@@ -624,7 +624,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info"></i>
+                <i class="icon-traingle-info font-15 mr-r1"></i>
                 <span *ngIf="obligation.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"></span>
                 <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired" [innerHTML]="localeData?.obligation_today_expired"></span>
                 <span *ngIf="obligation.isExpired" [innerHTML]="localeData?.obligation_expired_passed"></span>
@@ -640,7 +640,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info"></i>
+                <i class="icon-traingle-info font-15 mr-r1"></i>
                 <span *ngIf="liabilities.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"></span>
                 <span *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired" [innerHTML]="localeData?.liabilities_today_expired"></span>
                 <span *ngIf="liabilities.isExpired" [innerHTML]="localeData?.liabilities_expired_passed"></span>

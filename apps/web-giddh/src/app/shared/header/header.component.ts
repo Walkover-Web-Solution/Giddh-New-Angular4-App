@@ -814,6 +814,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
                 this.checkIfCompanyTcsTdsApplicable();
+                setTimeout(() => {
+                    const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
+                    liabilities.forEach((link: HTMLElement) => {
+                        this.renderer.listen(link, 'click', () => {
+                            this.goToLiabilities();
+                        });
+                    });
+                    const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
+                    obligation.forEach((link: HTMLElement) => {
+                        this.renderer.listen(link, 'click', () => {
+                            this.goToObligation();
+                        });
+                    });
+                }, 500);
             }
         });
     }
@@ -932,22 +946,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         })), takeUntil(this.destroyed$)).subscribe();
-
-        setTimeout(() => {
-            const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
-            liabilities.forEach((link: HTMLElement) => {
-                this.renderer.listen(link, 'click', () => {
-                    this.goToLiabilities();
-                });
-            });
-            const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
-            obligation.forEach((link: HTMLElement) => {
-                this.renderer.listen(link, 'click', () => {
-                    this.goToObligation();
-                });
-            });
-        }, 500);
-
     }
 
     public ngAfterViewChecked() {
