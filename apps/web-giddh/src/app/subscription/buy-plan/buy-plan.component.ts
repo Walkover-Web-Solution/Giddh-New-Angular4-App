@@ -1552,6 +1552,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.generalActions.openSideMenu(true));
         document.body?.classList?.remove("plan-page");
         this.broadcast?.close();
         this.callBackBroadcast?.close();
