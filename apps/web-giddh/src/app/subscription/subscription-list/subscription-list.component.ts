@@ -651,7 +651,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.body?.classList?.remove("subscription-page");
-        this.store.dispatch(this.generalActions.openSideMenu(true));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
