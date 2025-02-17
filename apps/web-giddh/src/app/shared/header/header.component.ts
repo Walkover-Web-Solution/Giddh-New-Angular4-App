@@ -1260,6 +1260,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public backToCompany(): void {
+        this.expandSidebar(true);
         this.router.navigate(['/pages', 'home']);
     }
 
