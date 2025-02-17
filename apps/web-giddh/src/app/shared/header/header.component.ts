@@ -816,9 +816,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
                 this.checkIfCompanyTcsTdsApplicable();
-                setTimeout(() => {
-
-                }, 500);
             }
         });
     }
