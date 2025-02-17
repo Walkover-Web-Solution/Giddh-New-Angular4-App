@@ -291,7 +291,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public autoGenerateVoucherFromEntryStatus: boolean;
     public bankAccount: any = {
         reLoginRequired: false,
-        itemId: ''
+        itemId: '',
+        gocardlessMessage: ''
     };
     /** True if ledger account belongs to sundry debtor/creditor */
     private isSundryDebtorCreditor: boolean = false;
@@ -989,6 +990,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
                         this.bankTransactionsResponse.page = res.body.page;
                         this.bankAccount.reLoginRequired = res.body.reLoginRequired;
+                        this.bankAccount.gocardlessMessage = res.body.message;
                         this.bankAccount.itemId = res.body.itemId;
                         this.zone.runOutsideAngular(() => {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
@@ -3104,5 +3106,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getPlaidLinkToken(itemId?: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
+    }
+
+    /**
+      * This will be use for redirect to bank integration page
+      *
+      * @memberof LedgerComponent
+      */
+    public redirectToBankIntegration(): void {
+        this.router.navigate(['pages', 'settings', 'integration', 'payment']);
     }
 }

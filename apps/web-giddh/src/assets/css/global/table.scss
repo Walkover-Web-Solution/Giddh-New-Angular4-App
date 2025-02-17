@@ -155,8 +155,11 @@ table {
         tr {
             th,
             td {
-                word-break: keep-all !important;
-                white-space: nowrap !important;
+                width: fit-content !important;
+                max-width: 194px !important;
+            }
+            .table-date-width {
+                width: 125px !important;
             }
         }
     }
