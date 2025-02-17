@@ -194,13 +194,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             this.bankIntegrationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                if (response === 'integrate') {
-                    this.openInstitutionsDialog();
-                } else if (response === 'link') {
-                    this.getLinkBankAccount();
-                } else if (response === 'close') {
-                    this.bankIntegrationDialogRef?.close();
-                } else {
+                if (response) {
+                    if (response === 'integrate') {
+                        this.openInstitutionsDialog();
+                    } else if (response === 'link') {
+                        this.getLinkBankAccount();
+                    }
                     this.bankIntegrationDialogRef?.close();
                 }
                 this.changeDetectionRef.detectChanges();
