@@ -152,4 +152,13 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * This will be use for close dialog
+     *
+     * @memberof InstitutionsListComponent
+     */
+    public closeDialog(): void {
+        this.dialogRef.close();
+    }
 }
