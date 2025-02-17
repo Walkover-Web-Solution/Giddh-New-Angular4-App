@@ -2655,10 +2655,9 @@
                         <div class="w-100">
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'">
                                         <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
                                             <span
-                                                *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
                                                 matTooltipClass="tooltip-black"
@@ -2677,7 +2676,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
+                                    <tr class="total-col" *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2706,10 +2705,9 @@
                             </table>
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'">
                                         <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
                                             <span
-                                                *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
                                                 matTooltipClass="tooltip-black"
@@ -2727,7 +2725,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col" *ngIf="!isAdvanceSearchImplemented">
+                                    <tr class="total-col" *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2849,7 +2847,7 @@
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">
-                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>
                                         {{ localeData?.total_transactions }}
@@ -2889,7 +2887,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div *ngIf="!isAdvanceSearchImplemented" class="col-3 stat-block">
+                            <div *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
                                     <h2 class="digit-blue d-flex">
@@ -2930,7 +2928,7 @@
                                     </h2>
                                 </div>
                             </div>
-                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented ? 'col-6': 'col-3'">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
@@ -3082,7 +3080,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="!isAdvanceSearchImplemented" class="col-3 stat-block">
+                            <div *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.closing_balance }}</h1>
                                     <div class="d-flex flex-column justify-content-between">
