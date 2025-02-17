@@ -64,7 +64,7 @@
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
-                                <div class="d-flex align-items-center column-gap15">
+                                <div class="d-flex align-items-center justify-content-end column-gap5 w-50">
                                     <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'"></watch-video>
                                     <div class="search-list position-relative" [formGroup]="searchForm"
                                         *ngIf="!currentUser?.isTempUser">

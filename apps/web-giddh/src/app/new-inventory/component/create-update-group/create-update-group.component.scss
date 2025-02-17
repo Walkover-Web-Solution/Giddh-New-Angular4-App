@@ -17,7 +17,7 @@
         }
     }
     .input-width {
-        width: auto;
+        width: unset;
         min-width: 530px;
         display: inline-block;
     }
@@ -25,7 +25,7 @@
         width: 530px;
         min-height: 48px;
         .input-min-width {
-            min-width: 50%;
+            min-width: 50%; 
         }
     }
 }
@@ -77,4 +77,15 @@
 
 .back-left {
     line-height: 32px;
+}
+@media (max-width: 1024px) {
+    .create-group-page {
+        .input-width {
+            width: unset;
+            min-width: 426px;
+        }
+        .inline-multiple-input-width {
+            width: 426px;
+        }
+    }
 }
