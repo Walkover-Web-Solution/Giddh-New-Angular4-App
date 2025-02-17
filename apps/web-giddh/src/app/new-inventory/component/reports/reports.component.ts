@@ -19,12 +19,14 @@ import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
+import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
     selector: 'app-reports',
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [InventoryComponentStore]
 })
 export class ReportsComponent implements OnInit {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
@@ -135,6 +137,18 @@ export class ReportsComponent implements OnInit {
     public isCompany: boolean;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will use for stock report voucher types column check values */
+    public newColumns: any[] = [];
+    /** Custom fields request */
+    public customFieldsVariantRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'variant'
+    };
+    /** Discounts list Observable */
+    public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
+    /** This will use for stock report dynamic column check values */
+    public dynamicColumns = [];
 
     constructor(
         public route: ActivatedRoute,
@@ -144,13 +158,15 @@ export class ReportsComponent implements OnInit {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private commonAction: CommonActions
+        private commonAction: CommonActions,
+        private inventoryStore: InventoryComponentStore
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
+        this.getCustomFields();
 
         this.currentUrl = this.router.url;
 
@@ -187,6 +203,19 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public ngOnInit(): void {
+        this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const results = response.map(result => {
+                    return {
+                        label: result.fieldName,
+                        value: result.uniqueName,
+                        checked: false,
+                        type: result.fieldType
+                    }
+                }) || [];
+                this.newColumns = results;
+            }
+        });
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -312,6 +341,15 @@ export class ReportsComponent implements OnInit {
                 this.translationComplete(true);
             }
         });
+    }
+
+    /**
+     * This will be use for get custom fields
+     *
+     * @memberof ReportsComponent
+     */
+    public getCustomFields(): void {
+        this.inventoryStore.getCustomFields(this.customFieldsVariantRequest);
     }
 
     /**
@@ -599,6 +637,22 @@ export class ReportsComponent implements OnInit {
             if (colSpan !== 0) {
                 this.tableHeaderColumns.push(key);
                 this.headerColumns[key].colSpan = colSpan;
+            }
+        });
+    }
+
+    /**
+     * This will use for show hide main table headers from dynamic columns with new columns
+     *
+     * @param {*} event
+     * @memberof ReportsComponent
+     */
+    public getCustomiseDynamicHeaderColumns(event: any): void {
+        this.dynamicColumns = event;
+        this.newColumns.forEach(newCol => {
+            const matchingDynamicCol = this.dynamicColumns.find(dynamicCol => dynamicCol.value === newCol.value);
+            if (matchingDynamicCol) {
+                newCol.checked = matchingDynamicCol.checked;
             }
         });
     }

@@ -66,6 +66,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
+    /** Emits the selected filters */
+    @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
     /** This will use for instance of warehouses Dropdown */
@@ -146,6 +148,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public isVariantSelected: boolean = false;
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
+    /** Holds dynamic columns list for customised columns */
+    public dynamicColumns: any[] = [];
 
     constructor(
         public dialog: MatDialog,
@@ -310,6 +314,17 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
         this.isFilterActive();
+    }
+
+    /**
+ * This will be used for filtering the display dynamic columns
+ *
+ * @memberof ReportFiltersComponent
+ */
+    public setDisplayDynamicColumns(columns: string[]): void {
+        this.dynamicColumns = columns;
+        this.selectedDynamicColumns.emit(this.dynamicColumns);
+        this.changeDetection.detectChanges();
     }
 
     /**
