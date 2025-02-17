@@ -284,6 +284,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public liabilities: any = null;
     /** True if active country is UK */
     public isUKCompany: boolean = false;
+    /** Holds true if lister is added on error message */
+    public isErrorMessageListenerAdded: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -815,21 +817,33 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.checkIfCompanyTcsTdsApplicable();
                 setTimeout(() => {
-                    const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
-                    liabilities.forEach((link: HTMLElement) => {
-                        this.renderer.listen(link, 'click', () => {
-                            this.goToLiabilities();
-                        });
-                    });
-                    const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
-                    obligation.forEach((link: HTMLElement) => {
-                        this.renderer.listen(link, 'click', () => {
-                            this.goToObligation();
-                        });
-                    });
+
                 }, 500);
             }
         });
+    }
+
+    /**
+     * Add click listener on error message
+     *
+     * @memberof HeaderComponent
+     */
+    public addListenerErrorMessage(): void {
+        if (!this.isErrorMessageListenerAdded) {
+            this.isErrorMessageListenerAdded = true;
+            const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
+            liabilities.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToLiabilities();
+                });
+            });
+            const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
+            obligation.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToObligation();
+                });
+            });
+        }
     }
 
 

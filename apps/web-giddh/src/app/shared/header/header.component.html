@@ -622,7 +622,7 @@
         *ngIf="showAlertMessage.isObligationExpired && isUKCompany && obligation"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue d-flex justify-content-between">
+        <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
                 <i class="icon-traingle-info font-15 mr-r1"></i>
                 <span *ngIf="obligation.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"></span>
@@ -638,7 +638,7 @@
         *ngIf="showAlertMessage.isLiabilitiesExpired && isUKCompany && liabilities"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue d-flex justify-content-between">
+        <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
                 <i class="icon-traingle-info font-15 mr-r1"></i>
                 <span *ngIf="liabilities.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"></span>
