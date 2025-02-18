@@ -645,12 +645,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
             smallScreen, mediumScreen
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result?.matches) {
-                if (result.breakpoints[mediumScreen]) {
-                    this.ledgerGridTotalColumns = 5
-                    this.ledgerGridColumnsValue = [1, 2, 2]
-                } else if (result.breakpoints[smallScreen]) {
+                if (result.breakpoints[smallScreen]) {
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
+                } else if (result.breakpoints[mediumScreen]) {
+                    this.ledgerGridTotalColumns = 8;
+                    this.ledgerGridColumnsValue = [2, 3, 3]
                 } else {
                     this.ledgerGridTotalColumns = 4
                     this.ledgerGridColumnsValue = [1, 2, 1]
