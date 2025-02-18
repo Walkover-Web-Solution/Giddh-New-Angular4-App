@@ -89,10 +89,19 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     public saveSelectedColumns(): void {
         setTimeout(() => {
             this.filteredDisplayColumns();
-            let saveColumnReq = {
-                module: this.moduleType,
-                columns: this.displayedColumns
+            let saveColumnReq;
+            if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
+                saveColumnReq = {
+                    module: this.moduleType,
+                    reportFilterColumns: this.dynamicColumns
+                }
+            } else {
+                saveColumnReq = {
+                    module: this.moduleType,
+                    columns: this.displayedColumns
+                }
             }
+
             this.commonService.saveSelectedTableColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.isLoading.emit(false);
@@ -124,9 +133,13 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public filteredDisplayColumns(): void {
-        this.displayedColumns = this.customiseColumns
-            .filter(col => col.checked)
-            .map(col => col.value);
+        if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
+            this.displayedColumns = this.customiseColumns
+                .filter(col => col.checked)
+                .map(col => col.value);
+        } else {
+            this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
+        }
         this.selectedColumns.emit(this.displayedColumns);
         this.selectedDynamicColumns.emit(this.dynamicColumns);
         this.changeDetection.detectChanges();
@@ -142,19 +155,15 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response && response.body && response.status === 'success') {
-                    if (response.body.reportFilterColumns) {
-                        const displayColumnsSet = new Set(response.body.reportFilterColumns.map(col => col.value));
-
-                        // Update existing customiseColumns list
+                    if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
+                        if (response.body.reportFilterColumns) {
+                            this.dynamicColumns = response.body.reportFilterColumns;
+                        }
+                    }
+                } else {
+                    if (response?.body?.columns) {
+                        const displayColumnsSet = new Set(response.body.columns);
                         this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
-
-                        // Identify new columns that are not in customiseColumns
-                        const newColumns = response.body.reportFilterColumns.filter(col =>
-                            !this.customiseColumns.some(existingCol => existingCol.value === col.value)
-                        );
-                        this.dynamicColumns = cloneDeep(newColumns);
-                        // Append only new columns
-                        this.customiseColumns = [...this.customiseColumns, ...newColumns];
                     }
                 }
                 this.filteredDisplayColumns();

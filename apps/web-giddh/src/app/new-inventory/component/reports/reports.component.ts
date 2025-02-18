@@ -137,7 +137,7 @@ export class ReportsComponent implements OnInit {
     public isCompany: boolean;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will use for stock report voucher types column check values */
+    /** This will use for stock report column check values */
     public newColumns: any[] = [];
     /** Custom fields request */
     public customFieldsVariantRequest: any = {
@@ -145,9 +145,9 @@ export class ReportsComponent implements OnInit {
         count: 0,
         moduleUniqueName: 'variant'
     };
-    /** Discounts list Observable */
+    /** Custom Fields list Observable */
     public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
-    /** This will use for stock report dynamic column check values */
+    /** This will use for report dynamic column check values */
     public dynamicColumns = [];
 
     constructor(
@@ -166,7 +166,6 @@ export class ReportsComponent implements OnInit {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
-        this.getCustomFields();
 
         this.currentUrl = this.router.url;
 
@@ -203,19 +202,6 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public ngOnInit(): void {
-        this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                const results = response.map(result => {
-                    return {
-                        label: result.fieldName,
-                        value: result.uniqueName,
-                        checked: false,
-                        type: result.fieldType
-                    }
-                }) || [];
-                this.newColumns = results;
-            }
-        });
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -228,6 +214,22 @@ export class ReportsComponent implements OnInit {
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
+            if (this.reportType === InventoryReportType.stock || this.reportType === InventoryReportType.variant) {
+                this.getCustomFields();
+                this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response) {
+                        const results = response.map(result => {
+                            return {
+                                label: result.fieldName,
+                                value: result.uniqueName,
+                                checked: false,
+                                type: result.fieldType
+                            }
+                        }) || [];
+                        this.newColumns = results;
+                    }
+                });
+            }
             if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
                 this.moduleType = 'FIXED_ASSETS';
             } else {
@@ -648,13 +650,12 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public getCustomiseDynamicHeaderColumns(event: any): void {
-        this.dynamicColumns = event;
-        this.newColumns.forEach(newCol => {
-            const matchingDynamicCol = this.dynamicColumns.find(dynamicCol => dynamicCol.value === newCol.value);
-            if (matchingDynamicCol) {
-                newCol.checked = matchingDynamicCol.checked;
-            }
-        });
+        if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
+            // Updating displayColumns based on API response order
+            this.displayedColumns = event
+                .filter(item => item.checked) // Keep only checked items
+                .map(item => item.value); // Extract values in API order
+        }
     }
 
     /**

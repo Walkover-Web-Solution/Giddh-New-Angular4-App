@@ -325,6 +325,88 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.dynamicColumns = columns;
         this.selectedDynamicColumns.emit(this.dynamicColumns);
         this.changeDetection.detectChanges();
+
+        /* This will use for table header from customise columns for export table */
+        this.stockReportRequestExport = {
+            ...this.stockReportRequestExport,
+            showStockName: false,
+            showGroupName: false,
+            showUnitName: false,
+            showOpeningStockQty: false,
+            showOpeningStockValue: false,
+            showInwardsQty: false,
+            showInwardsValue: false,
+            showOutwardsQty: false,
+            showOutwardsValue: false,
+            showClosingStockQty: false,
+            showClosingStockValue: false,
+            showVariantName: false,
+            showDate: false,
+            showAccountUniqueName: false,
+            showRate: false,
+            showValue: false
+        }
+
+        /* for column value filter selected common */
+        this.dynamicColumns?.forEach(column => {
+            if (column?.value === 'inward_quantity') {
+                this.stockReportRequestExport.showInwardsQty = true;
+            }
+            else if (column?.value === 'outward_quantity') {
+                this.stockReportRequestExport.showOutwardsQty = true;
+            }
+            /* for value filter selected in item, variant & group */
+            if (InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.group) {
+                if (column?.value === 'group_name') {
+                    this.stockReportRequestExport.showGroupName = true;
+                }
+                else if (column?.value === 'opening_quantity') {
+                    this.stockReportRequestExport.showOpeningStockQty = true;
+                }
+                else if (column?.value === 'opening_amount') {
+                    this.stockReportRequestExport.showOpeningStockValue = true;
+                }
+                else if (column?.value === 'inward_amount') {
+                    this.stockReportRequestExport.showInwardsValue = true;
+                }
+                else if (column?.value === 'outward_amount') {
+                    this.stockReportRequestExport.showOutwardsValue = true;
+                }
+                else if (column?.value === 'closing_quantity') {
+                    this.stockReportRequestExport.showClosingStockQty = true;
+                }
+                else if (column?.value === 'closing_amount') {
+                    this.stockReportRequestExport.showClosingStockValue = true;
+                }
+            }
+            /* for value filter selected in item, variant & transaction */
+            if ((InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.transaction) && column?.value === 'stock_name') {
+                this.stockReportRequestExport.showStockName = true;
+            }
+            /* for value filter selected in item & variant both */
+            if ((InventoryReportType.stock || InventoryReportType.variant) && column?.value === 'unit_name') {
+                this.stockReportRequestExport.showUnitName = true;
+            }
+            /* for value filter selected in variant & transaction both */
+            if ((InventoryReportType.variant || InventoryReportType.transaction) && column?.value === 'variant_name') {
+                this.stockReportRequestExport.showVariantName = true;
+            }
+            /* for value filter selected in Transaction */
+            if (InventoryReportType.transaction) {
+                if (column?.value === 'entry_date') {
+                    this.stockReportRequestExport.showDate = true;
+                }
+                else if (column?.value === 'account_name') {
+                    this.stockReportRequestExport.showAccountUniqueName = true;
+                }
+                else if (column?.value === 'rate') {
+                    this.stockReportRequestExport.showRate = true;
+                }
+                else if (column?.value === 'transaction_val') {
+                    this.stockReportRequestExport.showValue = true;
+                }
+            }
+        });
     }
 
     /**
@@ -475,7 +557,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private emitFilters(): void {
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
+        let mappedDynamicValues = [];
+        if (this.moduleName === 'ITEM_WISE_REPORT' || this.moduleName === 'VARIANT_WISE_REPORT') {
+            mappedDynamicValues = this.dynamicColumns.map(column => column.value);
+        } else {
+            mappedDynamicValues = this.displayedColumns;
+        }
+        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: mappedDynamicValues, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
     }
 
     /**

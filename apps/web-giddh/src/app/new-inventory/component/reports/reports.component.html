@@ -699,11 +699,13 @@
                                 </th>
                                 <td
                                     [data-title]="column?.label"
-                                    class="text-left word-wrap cursor-pointer report-td-column"
+                                    class="word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
                                 >
-                                    {{ element[column] ?? "-" }}
+                                    <ng-container *ngFor="fields; of: element?.customFields">
+                                        {{ fields?.value }}
+                                    </ng-container>
                                 </td>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="tableHeaderColumns"></tr>

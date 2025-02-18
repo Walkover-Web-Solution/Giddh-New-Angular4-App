@@ -1,18 +1,20 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InventoryModuleName } from '../../inventory.enum';
 import { PAGINATION_LIMIT } from '../../../app.constant';
+import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
     selector: 'bulk-stock',
     templateUrl: './bulk-stock-edit.component.html',
-    styleUrls: ['./bulk-stock-edit.component.scss']
+    styleUrls: ['./bulk-stock-edit.component.scss'],
+    providers: [InventoryComponentStore]
 })
 
 export class BulkStockEditComponent implements OnInit, OnDestroy {
@@ -134,9 +136,19 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         sacNo: true,
         skuCode: false,
         archive: true,
-        taxes: false
+        taxes: false,
+        customFields: false
     };
-
+    /** This will use for report custom fields column check values */
+    public newColumns: any[] = [];
+    /** Custom Fields list Observable */
+    public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
+    /** Custom fields request */
+    public customFieldsVariantRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'variant'
+    };
 
     constructor(
         private route: ActivatedRoute,
@@ -144,7 +156,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryAction: InventoryAction,
         private dailog: MatDialog,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private inventoryStore: InventoryComponentStore
     ) {
         this.initBulkStockForm();
     }
@@ -180,7 +193,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             if (params?.type) {
                 this.hideShowColumnList = [];
                 this.resetSearch();
-                
+
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
                 /** Holds list of all hide show column common in inventory type*/
                 let commonHideShowColumnList = [
@@ -348,6 +361,21 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
             }
         });
+
+        this.getCustomFields();
+        this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const results = response.map(result => {
+                    return {
+                        label: result.fieldName,
+                        value: result.uniqueName,
+                        checked: false,
+                        type: result.fieldType
+                    }
+                }) || [];
+                this.newColumns = results;
+            }
+        });
         // this.getStockGroups();
         // this.getTaxes();
     }
@@ -406,7 +434,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             sacNo: [controlValue.sacNo, Validators.required],
             skuCode: [controlValue.skuCode, Validators.required],
             archive: [controlValue.archive, Validators.required],
-            taxes: [controlValue.taxes, Validators.required]
+            taxes: [controlValue.taxes, Validators.required],
+            customFields: [controlValue.customFields]
         })
     }
 
@@ -502,7 +531,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         if (!(this.tableHeadInput[key] && this.searchString && this.searchStringKey)) {
             this.tableHeadInput[key] = !this.tableHeadInput[key];
         }
-        
+
     }
 
     /**
@@ -812,6 +841,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     public setDisplayColumns(columns: any): void {
+        // this.hideShowColumnList = columns
+        //     .filter(item => item.checked) // Keep only checked items
+        //     .map(item => item.value); // Extract values in API order
+        // console.log('a', this.hideShowColumnList);
+        columns = columns?.map(column => column?.value);
         if (columns.includes('variant_name') && columns.includes('stock_name') && columns.includes('purchase_rate') && columns.includes('stock_group_name') && columns.includes('sac') && columns.includes('archive') && columns.includes('hsn') && columns.includes('stock_unit') && columns.includes('stock_unit') && columns.includes('sales_rate') && columns.includes('fixed_asset_rate')) {
             this.tableHeaderShowHide.variantName = true;
             this.tableHeaderShowHide.stockName = true;
@@ -850,8 +884,18 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             this.tableHeaderShowHide.skuCode = columns?.includes('sku');
             this.tableHeaderShowHide.archive = columns?.includes('archive');
             this.tableHeaderShowHide.taxes = columns?.includes('tax');
+            this.tableHeaderShowHide.customFields = columns?.includes('customFields');
         }
         this.cdr.detectChanges();
+    }
+
+    /**
+     * This will be use for get custom fields
+     *
+     * @memberof BulkStockEditComponent
+     */
+    public getCustomFields(): void {
+        this.inventoryStore.getCustomFields(this.customFieldsVariantRequest);
     }
 
     /**
