@@ -288,3 +288,10 @@ inventory-master {
         background-color: var(--color-white);
     }
 }
+.advance-filter-button {
+    &.mat-mdc-button {
+        .mat-mdc-button-persistent-ripple {
+            display: none;
+        }
+    }
+}
