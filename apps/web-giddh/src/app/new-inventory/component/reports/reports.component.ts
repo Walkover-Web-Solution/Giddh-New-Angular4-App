@@ -147,8 +147,6 @@ export class ReportsComponent implements OnInit {
     };
     /** Custom Fields list Observable */
     public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
-    /** This will use for report dynamic column check values */
-    public dynamicColumns = [];
 
     constructor(
         public route: ActivatedRoute,

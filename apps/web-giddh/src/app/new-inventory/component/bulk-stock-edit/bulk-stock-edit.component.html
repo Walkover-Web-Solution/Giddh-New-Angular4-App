@@ -510,8 +510,7 @@
                                                 <h3>{{ localeData?.fixed_asset_tax_inclusive }}</h3>
                                             </th>
                                             <ng-container
-                                                *ngFor="let column of newColumns"
-                                                [matColumnDef]="column?.value"
+                                                *ngFor="let row of newColumns"
                                             >
                                                 <th >
                                                     {{ column?.label }}
