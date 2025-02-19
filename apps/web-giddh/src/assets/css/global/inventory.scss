@@ -288,6 +288,7 @@ inventory-master {
         background-color: var(--color-white);
     }
 }
+// Removed background-color from mat-madc-button-persistent-ripple
 .advance-filter-button {
     &.mat-mdc-button {
         .mat-mdc-button-persistent-ripple {
