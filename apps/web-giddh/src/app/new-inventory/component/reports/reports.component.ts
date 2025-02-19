@@ -562,6 +562,20 @@ export class ReportsComponent implements OnInit {
     }
 
     /**
+     * This will be use get custom fields value according to columns
+     *
+     * @param {*} element
+     * @param {string} uniqueName
+     * @return {*}  {string}
+     * @memberof ReportsComponent
+     */
+    public getCustomFieldValue(element: any, uniqueName: string): string {
+        const field = element?.customFields?.find((cf: any) => cf.uniqueName === uniqueName);
+        if (field) {
+            return field.value;
+        }
+    }
+    /**
     * This function will change the page of activity logs
     *
     * @param {*} event
@@ -649,10 +663,9 @@ export class ReportsComponent implements OnInit {
      */
     public getCustomiseDynamicHeaderColumns(event: any): void {
         if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
-            // Updating displayColumns based on API response order
             this.displayedColumns = event
-                .filter(item => item.checked) // Keep only checked items
-                .map(item => item.value); // Extract values in API order
+                .filter(item => item?.checked)
+                .map(item => item?.value);
         }
     }
 

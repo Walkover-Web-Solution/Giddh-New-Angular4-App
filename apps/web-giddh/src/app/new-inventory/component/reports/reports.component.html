@@ -639,7 +639,7 @@
 
                             <ng-container matColumnDef="entity_group_name">
                                 <th
-                                    class="text-right"
+                                    class="text-right top-header-columns"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['entity_group_name'].colSpan"
@@ -648,7 +648,7 @@
                             <!-- Opening Stock group -->
                             <ng-container matColumnDef="opening_stock">
                                 <th
-                                    class="text-right"
+                                    class="text-right top-header-columns"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['opening_stock'].colSpan"
@@ -660,7 +660,7 @@
                             <!-- Inwards group -->
                             <ng-container matColumnDef="inwards">
                                 <th
-                                    class="text-right"
+                                    class="text-right top-header-columns"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['inwards'].colSpan"
@@ -672,7 +672,7 @@
                             <!-- Outwards group -->
                             <ng-container matColumnDef="outwards">
                                 <th
-                                    class="text-right"
+                                    class="text-right top-header-columns"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['outwards'].colSpan"
@@ -684,7 +684,7 @@
                             <!-- Closing Stock group -->
                             <ng-container matColumnDef="closing_stock">
                                 <th
-                                    class="text-right"
+                                    class="text-right top-header-columns"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['closing_stock'].colSpan"
@@ -692,23 +692,27 @@
                                     {{ localeData?.reports?.closing_stock }}
                                 </th>
                             </ng-container>
-                            <ng-container *ngFor="let column of newColumns" [matColumnDef]="column?.value">
-                                <th class="report-th-column" mat-header-cell *matHeaderCellDef>
-                                    {{ column?.label }}
-                                </th>
-                                <td
-                                    [data-title]="column?.label"
-                                    class="word-wrap cursor-pointer report-td-column"
-                                    mat-cell
-                                    *matCellDef="let element"
-                                >
-                                    <ng-container *ngFor="fields; of: element?.customFields">
-                                        {{ fields?.value }}
-                                    </ng-container>
-                                </td>
+                            <ng-container *ngIf="newColumns?.length">
+                                <ng-container *ngFor="let column of newColumns" [matColumnDef]="column?.value">
+                                    <th class="report-th-column" mat-header-cell *matHeaderCellDef>
+                                        {{ column?.label }}
+                                    </th>
+                                    <td
+                                        [data-title]="column?.label"
+                                        class="word-wrap cursor-pointer report-td-column"
+                                        mat-cell
+                                        *matCellDef="let element"
+                                    >
+                                        {{ getCustomFieldValue(element, column?.value) }}
+                                    </td>
+                                </ng-container>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="tableHeaderColumns"></tr>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr
+                                mat-header-row
+                                *matHeaderRowDef="displayedColumns; sticky: true"
+                                class="second-header-border"
+                            ></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>

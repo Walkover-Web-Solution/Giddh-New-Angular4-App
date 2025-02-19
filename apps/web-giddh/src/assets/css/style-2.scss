@@ -790,6 +790,21 @@ textarea {
     min-width: 170px;
 }
 
+.giddh-table {
+    thead {
+        tr {
+            .top-header-columns {
+                border: none !important;
+            }
+        }
+    }
+    .second-header-border {
+        th {
+            border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
+        }
+    }
+}
+
 .report-td-column {
     text-overflow: ellipsis !important;
     white-space: nowrap !important;

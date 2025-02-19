@@ -149,6 +149,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         count: 0,
         moduleUniqueName: 'variant'
     };
+    /** This will use for report custom fields column check values */
+    public tableHeaderDynamicColumns: any[] = [];
+    /** True if Api calling once time */
+    public isApiCalled: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -160,6 +164,20 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         private inventoryStore: InventoryComponentStore
     ) {
         this.initBulkStockForm();
+        this.getCustomFields();
+        this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const results = response.map(result => {
+                    return {
+                        label: result.fieldName,
+                        value: result.uniqueName,
+                        checked: false,
+                        type: result.fieldType
+                    }
+                }) || [];
+                this.newColumns = results;
+            }
+        });
     }
 
     /**
@@ -170,9 +188,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.searchInputObservableInitialize();
 
-        this.store.pipe(select(select => select.inventory.bulkStock), takeUntil(this.destroyed$)).subscribe((res: any) => {
+        this.store.pipe(
+            select(select => select.inventory.bulkStock),
+            takeUntil(this.destroyed$)
+        ).subscribe((res: any) => {
             if (res) {
                 this.isLoading = false;
+                this.isApiCalled = false;
                 const bulkStockForm = this.bulkStockData;
                 bulkStockForm.clear();
                 this.setPaginationData(res);
@@ -191,39 +213,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
-                this.resetSearch();
 
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.getBulkStockList({
-                    inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
-                        "search": "",
-                        "searchBy": "",
-                        "filterBy": "",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }));
-
+                this.resetSearch();
             }
         });
 
-        this.getCustomFields();
-        this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                const results = response.map(result => {
-                    return {
-                        label: result.fieldName,
-                        value: result.uniqueName,
-                        checked: false,
-                        type: result.fieldType
-                    }
-                }) || [];
-                this.newColumns = results;
-            }
-        });
         // this.getStockGroups();
         // this.getTaxes();
     }
@@ -647,17 +643,19 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.advanceSearchData = null;
         this.hideTableHeadInput();
         this.isLoading = true;
-        this.store.dispatch(this.inventoryAction.getBulkStockList({
-            inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
-                "search": "",
-                "searchBy": "",
-                "filterBy": "",
-                "sortBy": "",
-                "sort": "",
-                "expression": "GREATER_THAN",
-                "rate": 0
-            }
-        }));
+        if (this.isApiCalled) {
+            this.store.dispatch(this.inventoryAction.getBulkStockList({
+                inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
+                    "search": "",
+                    "searchBy": "",
+                    "filterBy": "",
+                    "sortBy": "",
+                    "sort": "",
+                    "expression": "GREATER_THAN",
+                    "rate": 0
+                }
+            }));
+        }
 
     }
 
@@ -685,24 +683,17 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     public setDisplayColumns(columns: any): void {
-        // Ensure columns is an array and extract values with their checked state
+        setTimeout(() => {
         const columnMap = {};
         columns?.forEach(column => {
             columnMap[column.value] = column.checked;
         });
         this.hideShowColumnList = columns
-        console.log("Available Columns", columns, this.newColumns);
-        const newColumns = columns.map(col => {
-            const customField = this.newColumns.find(cf => cf.value === col.value);
-            if (customField) {
-                return { ...col, checked: customField.checked };
-            }
-            return col;
-        });
-        console.log(newColumns);
-
-        this.newColumns = newColumns;
-        // Map of expected keys in tableHeaderShowHide to the actual API values
+        const checkedValuesSet = new Set(
+            columns.filter(column => column.checked).map(column => column.value)
+        );
+        const filteredNewColumns = this.newColumns.filter(newCol => checkedValuesSet.has(newCol.value));
+        this.tableHeaderDynamicColumns = filteredNewColumns;
         const fieldMapping = {
             variantName: "variant_name",
             variantUniqueName: "variant_unique_name",
@@ -729,13 +720,25 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             sacNo: "sac",
             skuCode: "sku",
             archive: "archive",
-            taxes: "tax"
+            taxes: "tax",
+            customFields: "customFields"
         };
 
-        // Update tableHeaderShowHide based on the checked property
         Object.keys(fieldMapping).forEach(key => {
             this.tableHeaderShowHide[key] = columnMap[fieldMapping[key]] || false;
         });
+            this.store.dispatch(this.inventoryAction.getBulkStockList({
+                inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
+                    "search": "",
+                    "searchBy": "",
+                    "filterBy": "",
+                    "sortBy": "",
+                    "sort": "",
+                    "expression": "GREATER_THAN",
+                    "rate": 0
+                }
+            }));
+        }, 100);
         this.cdr.detectChanges();
     }
 

@@ -51,7 +51,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     public displayedColumns: string[] = [];
     /** Emits the selected filters */
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
-
+    /** Get checked columns length */
+    get checkedColumnsCount(): boolean {
+        return this.dynamicColumns.filter(col => col?.checked).length == 2;
+    }
     constructor(
         private changeDetection: ChangeDetectorRef,
         private commonService: CommonService,
@@ -156,6 +159,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             .subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
+                        this.dynamicColumns = [];
                         if (response.body.reportFilterColumns) {
                             this.dynamicColumns = response.body.reportFilterColumns;
                         }
