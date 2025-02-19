@@ -92,8 +92,6 @@
                         [accountUniqueName]="account?.uniqueName"
                         [isModalOpen]="account?.uniqueName === modalUniqueName"
                         [accInfo]="false"
-                        [from]="from"
-                        [to]="to"
                         [closeOnEdit]="true"
                         (modalOpened)="handleModalOpened($event)"
                         (modalClosed)="hideModal(); accountDetailPopup?.hide()"

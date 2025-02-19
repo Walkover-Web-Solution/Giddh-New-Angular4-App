@@ -21,10 +21,6 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     public localeData: any = {};
     /** Holds the common JSON data */
     public commonLocaleData: any = {};
-    /** Start date of the selected financial year */
-    public from: string;
-    /** End date of the selected financial year */
-    public to: string;
     /** Observable for show loader state */
     public showLoader: Observable<boolean> = this.componentStore.inProgressReport$;
     /** Holds the profit and loss data */
@@ -203,13 +199,10 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
     /**
      * Filters the profit-loss data based on the provided request object.
      *
-     * @param {any} event - The filter date
      * @returns {void}
      * @memberof ProfitLossReportComponent
      */
-    public filterData(event: any): void {
-        this.from = event.from;
-        this.to = event.to;
+    public filterData(): void {
         this.componentStore.getMultiCurrencyReport(ReportType.ProfitLoss);
     }
 
