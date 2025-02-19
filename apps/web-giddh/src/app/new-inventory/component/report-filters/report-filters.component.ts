@@ -66,7 +66,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
-    /** Emits the selected filters */
+    /** Emits the selected custom fields filters */
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
@@ -149,7 +149,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Holds dynamic columns list for customised columns */
-    public dynamicColumns: any[] = [];
+    public dynamicCustomColumns: any[] = [];
 
     constructor(
         public dialog: MatDialog,
@@ -317,13 +317,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
- * This will be used for filtering the display dynamic columns
- *
- * @memberof ReportFiltersComponent
- */
+     * This will be used for filtering the display dynamic columns
+     *
+     * @memberof ReportFiltersComponent
+     */
     public setDisplayDynamicColumns(columns: string[]): void {
-        this.dynamicColumns = columns;
-        this.selectedDynamicColumns.emit(this.dynamicColumns);
+        this.dynamicCustomColumns = columns;
+        this.selectedDynamicColumns.emit(this.dynamicCustomColumns);
         this.changeDetection.detectChanges();
 
         /* This will use for table header from customise columns for export table */
@@ -348,7 +348,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         /* for column value filter selected common */
-        this.dynamicColumns?.forEach(column => {
+        this.dynamicCustomColumns?.forEach(column => {
             if (column?.value === 'inward_quantity') {
                 this.stockReportRequestExport.showInwardsQty = true;
             }
@@ -558,8 +558,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     private emitFilters(): void {
         let mappedDynamicValues = [];
-        if (this.moduleName === 'ITEM_WISE_REPORT' || this.moduleName === 'VARIANT_WISE_REPORT') {
-            mappedDynamicValues = this.dynamicColumns.map(column => column.value);
+        if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
+            mappedDynamicValues = this.dynamicCustomColumns.map(column => column.value);
         } else {
             mappedDynamicValues = this.displayedColumns;
         }
@@ -572,7 +572,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public isFilterActive(): void {
-        if (((this.isCompany|| this.isConsolidatedBranch) && this.selectedBranch?.length) || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
+        if (((this.isCompany || this.isConsolidatedBranch) && this.selectedBranch?.length) || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
             this.showClearFilter = true;
         } else {
             this.showClearFilter = false;

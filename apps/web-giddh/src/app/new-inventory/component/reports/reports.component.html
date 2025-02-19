@@ -692,8 +692,8 @@
                                     {{ localeData?.reports?.closing_stock }}
                                 </th>
                             </ng-container>
-                            <ng-container *ngIf="newColumns?.length">
-                                <ng-container *ngFor="let column of newColumns" [matColumnDef]="column?.value">
+                            <ng-container *ngIf="newCustomFieldsColumns?.length">
+                                <ng-container *ngFor="let column of newCustomFieldsColumns" [matColumnDef]="column?.value">
                                     <th class="report-th-column" mat-header-cell *matHeaderCellDef>
                                         {{ column?.label }}
                                     </th>

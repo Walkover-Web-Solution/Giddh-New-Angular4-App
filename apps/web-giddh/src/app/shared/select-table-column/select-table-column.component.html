@@ -40,7 +40,7 @@
             moduleType === 'INVENTORY_TABLE_REPORT'
         "
     >
-        <ng-container *ngFor="let item of dynamicColumns">
+        <ng-container *ngFor="let item of dynamicCustomColumns">
             <button
                 class="menu-buttons"
                 [ngClass]="{ 'disabled-button': item.checked && checkedColumnsCount }"

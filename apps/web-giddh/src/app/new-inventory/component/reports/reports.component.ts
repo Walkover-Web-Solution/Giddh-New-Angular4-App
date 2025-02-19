@@ -138,7 +138,7 @@ export class ReportsComponent implements OnInit {
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for stock report column check values */
-    public newColumns: any[] = [];
+    public newCustomFieldsColumns: any[] = [];
     /** Custom fields request */
     public customFieldsVariantRequest: any = {
         page: 0,
@@ -224,7 +224,7 @@ export class ReportsComponent implements OnInit {
                                 type: result.fieldType
                             }
                         }) || [];
-                        this.newColumns = results;
+                        this.newCustomFieldsColumns = results;
                     }
                 });
             }

@@ -140,7 +140,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         customFields: false
     };
     /** This will use for report custom fields column check values */
-    public newColumns: any[] = [];
+    public newCustomFieldsColumns: any[] = [];
     /** Custom Fields list Observable */
     public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
     /** Custom fields request */
@@ -151,7 +151,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     };
     /** This will use for report custom fields column check values */
     public tableHeaderDynamicColumns: any[] = [];
-    /** True if Api calling once time */
+    /** True if Api called once time */
     public isApiCalled: boolean = false;
 
     constructor(
@@ -175,7 +175,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                         type: result.fieldType
                     }
                 }) || [];
-                this.newColumns = results;
+                this.newCustomFieldsColumns = results;
             }
         });
     }
@@ -371,7 +371,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         if (!(this.tableHeadInput[key] && this.searchString && this.searchStringKey)) {
             this.tableHeadInput[key] = !this.tableHeadInput[key];
         }
-
     }
 
     /**
@@ -684,49 +683,49 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      */
     public setDisplayColumns(columns: any): void {
         setTimeout(() => {
-        const columnMap = {};
-        columns?.forEach(column => {
-            columnMap[column.value] = column.checked;
-        });
-        this.hideShowColumnList = columns
-        const checkedValuesSet = new Set(
-            columns.filter(column => column.checked).map(column => column.value)
-        );
-        const filteredNewColumns = this.newColumns.filter(newCol => checkedValuesSet.has(newCol.value));
-        this.tableHeaderDynamicColumns = filteredNewColumns;
-        const fieldMapping = {
-            variantName: "variant_name",
-            variantUniqueName: "variant_unique_name",
-            stockName: "stock_name",
-            stockUniqueName: "stock_unique_name",
-            stockGroupName: "stock_group_name",
-            stockGroupUniqueName: "stock_group_unique_name",
-            stockUnit: "stock_unit",
-            purchaseUnits: "purchase_unit",
-            purchaseAccountName: "purchases_account_name",
-            purchaseAccountUniqueName: "purchase_account_unique_name",
-            purchaseRate: "purchase_rate",
-            purchaseTaxInclusive: "purchase_tax_inclusive",
-            salesUnits: "sales_unit",
-            salesAccountName: "sales_account_name",
-            salesAccountUniqueName: "sales_account_unique_name",
-            salesRate: "sales_rate",
-            salesTaxInclusive: "sales_tax_inclusive",
-            fixedAssetUnits: "fixed_asset_units",
-            fixedAssetRate: "fixed_asset_rate",
-            fixedAssetAccountName: "fixed_asset_account_name",
-            fixedAssetAccountUniqueName: "fixed_asset_account_unique_name",
-            hsnNo: "hsn",
-            sacNo: "sac",
-            skuCode: "sku",
-            archive: "archive",
-            taxes: "tax",
-            customFields: "customFields"
-        };
+            const columnMap = {};
+            columns?.forEach(column => {
+                columnMap[column.value] = column.checked;
+            });
+            this.hideShowColumnList = columns
+            const checkedValuesSet = new Set(
+                columns.filter(column => column.checked).map(column => column.value)
+            );
+            const filterednewCustomFieldsColumns = this.newCustomFieldsColumns.filter(newCol => checkedValuesSet.has(newCol.value));
+            this.tableHeaderDynamicColumns = filterednewCustomFieldsColumns;
+            const fieldMapping = {
+                variantName: "variant_name",
+                variantUniqueName: "variant_unique_name",
+                stockName: "stock_name",
+                stockUniqueName: "stock_unique_name",
+                stockGroupName: "stock_group_name",
+                stockGroupUniqueName: "stock_group_unique_name",
+                stockUnit: "stock_unit",
+                purchaseUnits: "purchase_unit",
+                purchaseAccountName: "purchases_account_name",
+                purchaseAccountUniqueName: "purchase_account_unique_name",
+                purchaseRate: "purchase_rate",
+                purchaseTaxInclusive: "purchase_tax_inclusive",
+                salesUnits: "sales_unit",
+                salesAccountName: "sales_account_name",
+                salesAccountUniqueName: "sales_account_unique_name",
+                salesRate: "sales_rate",
+                salesTaxInclusive: "sales_tax_inclusive",
+                fixedAssetUnits: "fixed_asset_units",
+                fixedAssetRate: "fixed_asset_rate",
+                fixedAssetAccountName: "fixed_asset_account_name",
+                fixedAssetAccountUniqueName: "fixed_asset_account_unique_name",
+                hsnNo: "hsn",
+                sacNo: "sac",
+                skuCode: "sku",
+                archive: "archive",
+                taxes: "tax",
+                customFields: "customFields"
+            };
 
-        Object.keys(fieldMapping).forEach(key => {
-            this.tableHeaderShowHide[key] = columnMap[fieldMapping[key]] || false;
-        });
+            Object.keys(fieldMapping).forEach(key => {
+                this.tableHeaderShowHide[key] = columnMap[fieldMapping[key]] || false;
+            });
             this.store.dispatch(this.inventoryAction.getBulkStockList({
                 inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
                     "search": "",

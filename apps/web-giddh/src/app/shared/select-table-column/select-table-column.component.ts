@@ -20,7 +20,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     /** Holds default columns list for customised columns */
     @Input() public customiseColumns: any[] = [];
     /** Holds default columns list for customised columns */
-    @Input() public dynamicColumns: any[] = [];
+    @Input() public dynamicCustomColumns: any[] = [];
     /** Holds inventory type module  */
     @Input() public moduleType: string = "";
     /** Holds module name for customised columns */
@@ -49,11 +49,11 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
-    /** Emits the selected filters */
+    /** Emits the selected custom fields filters */
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
     /** Get checked columns length */
     get checkedColumnsCount(): boolean {
-        return this.dynamicColumns.filter(col => col?.checked).length == 2;
+        return this.dynamicCustomColumns.filter(col => col?.checked).length == 2;
     }
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -96,7 +96,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
                 saveColumnReq = {
                     module: this.moduleType,
-                    reportFilterColumns: this.dynamicColumns
+                    reportFilterColumns: this.dynamicCustomColumns
                 }
             } else {
                 saveColumnReq = {
@@ -136,7 +136,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public filteredDisplayColumns(): void {
-        if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
+        if (this.moduleType === InventoryModuleName.stock || this.moduleType === InventoryModuleName.variant || this.moduleType === InventoryModuleName.bulk) {
             this.displayedColumns = this.customiseColumns
                 .filter(col => col.checked)
                 .map(col => col.value);
@@ -144,7 +144,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
         }
         this.selectedColumns.emit(this.displayedColumns);
-        this.selectedDynamicColumns.emit(this.dynamicColumns);
+        this.selectedDynamicColumns.emit(this.dynamicCustomColumns);
         this.changeDetection.detectChanges();
     }
 
@@ -158,10 +158,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response && response.body && response.status === 'success') {
-                    if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
-                        this.dynamicColumns = [];
+                    if (this.moduleType === InventoryModuleName.stock || this.moduleType === InventoryModuleName.variant || this.moduleType === InventoryModuleName.bulk) {
+                        this.dynamicCustomColumns = [];
                         if (response.body.reportFilterColumns) {
-                            this.dynamicColumns = response.body.reportFilterColumns;
+                            this.dynamicCustomColumns = response.body.reportFilterColumns;
                         }
                     }
                 } else {
