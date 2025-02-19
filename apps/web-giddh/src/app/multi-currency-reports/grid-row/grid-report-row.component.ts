@@ -30,10 +30,6 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
     /** Search term for filtering results */
     @Input() public search: string;
-    /** Start date for filtering data (e.g., financial period) */
-    @Input() public from: string;
-    /** End date for filtering data (e.g., financial period) */
-    @Input() public to: string;
     /** Padding applied to the component view */
     @Input() public padding: string;
     /** True, if all items are expanded */
@@ -69,23 +65,6 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
     }
 
     /**
-     * Open the account ledger in a new tab or in Electron.
-     *
-     * @param {any} account - Selected account details
-     * @returns {void}
-     */
-    public entryClicked(account: any): void {
-        let url = `${location.href}?returnUrl=ledger/${encodeURIComponent(account?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-        if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = `${location.origin}${location.pathname}#./pages/ledger/${encodeURIComponent(account?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-            ipcRenderer.send('open-url', url);
-        } else {
-            (window as any).open(url);
-        }
-    }
-
-    /**
      * Load detailed account information and update the modal state.
      *
      * @param {any} account - Selected account details
@@ -104,7 +83,6 @@ export class GridReportRowComponent implements OnChanges, OnDestroy {
                     this.modalUniqueName = response.body?.uniqueName;
                 } else {
                     this.modalUniqueName = '';
-                    this.entryClicked(account);
                 }
                 this.changeDetectionRef.detectChanges();
             }

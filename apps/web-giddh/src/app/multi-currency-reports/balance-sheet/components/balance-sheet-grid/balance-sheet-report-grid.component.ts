@@ -41,10 +41,6 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
     @Input() public expandAll: boolean;
     /** Holds the search input text */
     @Input() public searchInput: string = '';
-    /** Holds the start date */
-    @Input() public from: string = '';
-    /** Holds the end date */
-    @Input() public to: string = '';
     /** Stores the last synchronization date */
     @Input() public lastSyncDate: string = '';
     /** Emits an event when the search input changes */

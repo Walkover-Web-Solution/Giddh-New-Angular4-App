@@ -37,10 +37,6 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
     public createNewAccountDialogRef: MatDialogRef<any>;
     /** The search query for filtering data */
     @Input() public search: string = '';
-    /** The start date for the data range */
-    @Input() public from: string = '';
-    /** The end date for the data range */
-    @Input() public to: string = '';
     /** The input search value for custom search */
     @Input() public searchInput: string = '';
     /** Padding left value for layout */

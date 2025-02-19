@@ -43,10 +43,6 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
     @Input() public padding: string;
     /** Flag to control the expand/collapse state for all groups */
     @Input() public expandAll: boolean;
-    /** Start date of the selected financial year */
-    @Input() public from: string = '';
-    /** End date of the selected financial year */
-    @Input() public to: string = '';
     /** Last synchronization date */
     @Input() public lastSyncDate: string = '';
     /** Event emitter to emit changes in the search term */

@@ -7,7 +7,7 @@
     <filter-multi-currency
         #filter
         (filterValue)="searchData($event)"
-        (onPropertyChanged)="filterData($event)"
+        (onPropertyChanged)="filterData()"
         (searchChange)="searchChanged($event)"
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
@@ -17,8 +17,6 @@
         <trial-balance-report-grid
             #tbGrid
             [search]="search"
-            [from]="from"
-            [to]="to"
             (searchChange)="searchChanged($event)"
             [expandAll]="expandAll"
             [data$]="reportDataList$ | async"

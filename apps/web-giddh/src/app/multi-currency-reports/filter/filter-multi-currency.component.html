@@ -40,6 +40,7 @@
                                     formControlName="shareCompanyList"
                                     multiple
                                     placeholder="{{ commonLocaleData?.app_select }}"
+                                    (closed)="sortSelectedCompaniesFirst()"
                                 >
                                     <mat-option
                                         *ngFor="let company of companyList"
@@ -57,8 +58,9 @@
                                 [labelValue]="getForm('selectCurrency')?.value ?? activeCompany?.baseCurrency"
                                 [options]="currencyList"
                                 formControlName="selectCurrency"
-                                (onClear)="getForm('selectCurrency')?.patchValue(activeCompany?.baseCurrency)"
+                                (onClear)="getForm('selectCurrency')?.patchValue(null)"
                                 [required]="true"
+                                [showError]="!getForm('selectCurrency')?.value && !getForm('shareCompanyList').value?.length"
                             >
                             </reactive-dropdown-field>
                         </div>

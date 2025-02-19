@@ -19,10 +19,6 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
     @Input() public padding: string;
     /** Holds the income statement data for the profit and loss report */
     @Input() public incomeStatement: any;
-    /** Start date of the selected period for the profit and loss report */
-    @Input() public from: string = '';
-    /** End date of the selected period for the profit and loss report */
-    @Input() public to: string = '';
     /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
     /** Minimum limit on which Trial balance viewport enables */
@@ -46,25 +42,6 @@ export class ProfitLossReportGridRowComponent implements OnChanges {
         }
         if (changes?.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
             this.changeDetectionRef.detectChanges();
-        }
-    }
-
-    /**
-     * Handles the click event on an account entry, opening the ledger page for that account.
-     * Opens the ledger page in a new window or in an Electron environment using IPC.
-     * 
-     * @param {any} acc - The account that was clicked.
-     * @returns {void}
-     * @memberof ProfitLossReportGridComponent
-     */
-    public entryClicked(acc: any): void {
-        let url = `${location.href}?returnUrl=ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-        if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = `${location.origin}${location.pathname}#./pages/ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-            ipcRenderer.send('open-url', url);
-        } else {
-            (window as any).open(url);
         }
     }
 
