@@ -332,7 +332,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
                             if (res && res.status === "success") {
                                 return this.patchState({ customFieldsSuccess: res.body.results });
                             } else {
-                                this.toaster.showSnackBar("error", res?.message);
+                                res?.message &&  this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({ customFieldsSuccess: null });
                             }
                         },

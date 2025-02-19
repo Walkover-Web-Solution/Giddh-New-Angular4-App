@@ -666,6 +666,7 @@ export class ReportsComponent implements OnInit {
             this.displayedColumns = event
                 .filter(item => item?.checked)
                 .map(item => item?.value);
+            this.getReport(false);
         }
     }
 
