@@ -78,7 +78,7 @@
 .back-left {
     line-height: 32px;
 }
-@media (max-width: 1024px) {
+@media screen and (max-width: 1024px) {
     .create-group-page {
         .input-width {
             width: unset;
