@@ -165,6 +165,9 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             if (filterRequestData) {
                 this.getForm('selectCurrency').patchValue(filterRequestData.request.reportCurrency);
                 this.getForm('shareCompanyList').patchValue(filterRequestData.request.companiesList.map(company => company.uniqueName));
+                setTimeout(() => {
+                    this.sortSelectedCompaniesFirst();
+                }, 0);
                 this.lastSyncDate.emit(filterRequestData.lastFetchedAt);
                 this.changeDetectionRef.detectChanges();
             }
@@ -176,6 +179,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      *
      * @param {string} controlName - Name of the form control
      * @returns {FormControl} The requested form control
+     * @memberof FilterMultiCurrencyComponent
      */
     public getForm(controlName: string): FormControl {
         return this.filterForm?.get(controlName) as FormControl;
@@ -184,6 +188,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * Cleanup resources on component destruction
      *
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -195,6 +200,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      *
      * @param {any} value - Selected date value
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public selectedDate(value: any): void {
         this.filterForm.controls['from'].setValue(dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT));
@@ -205,6 +211,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * Perform actions after the view is initialized
      *
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public ngAfterViewInit(): void {
         this.changeDetectionRef.detectChanges();
@@ -214,9 +221,10 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * Emit events to filter data
      *
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public filterData(): void {
-        this.onPropertyChanged.emit({ from: this.fromDate, to: this.toDate });
+        this.onPropertyChanged.emit();
         const a = this.search = '';
         this.searchChange.emit(a);
     }
@@ -225,10 +233,11 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * Handle form submission and emit filter values
      *
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public onSubmit(): void {
         this.isValidForm = this.filterForm.valid;
-        if (this.isValidForm) {
+        if (this.getForm('shareCompanyList').value.length) {
             const data = {
                 companiesList: [],
                 reportCurrency: ''
@@ -251,6 +260,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * Toggle the tags modal visibility
      *
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public toggleTagsModal(): void {
         this.createTagModal.toggle();
@@ -261,6 +271,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      *
      * @param {boolean} event - Event value
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public emitExpand(event: boolean): void {
         setTimeout(() => {
@@ -273,6 +284,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      *
      * @param {any} element - The target element for the datepicker
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -288,6 +300,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      * Hide the datepicker modal
      *
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -298,6 +311,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      *
      * @param {any} [value] - Selected date/range value
      * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -319,5 +333,21 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
         }
+    }
+
+    /**
+     * Sorts the company list by moving selected companies to the top.
+     *
+     * @returns {void}
+     * @memberof FilterMultiCurrencyComponent
+     */
+    public sortSelectedCompaniesFirst(): void {
+        const selectedCompaniesSet = new Set(this.filterForm.get('shareCompanyList')?.value || []);
+        this.companyList = this.companyList.sort((a, b) => {
+            const aChecked = selectedCompaniesSet.has(a.uniqueName) ? 1 : 0;
+            const bChecked = selectedCompaniesSet.has(b.uniqueName) ? 1 : 0;
+            return bChecked - aChecked; 
+        });
+        this.changeDetectionRef.detectChanges();
     }
 }
