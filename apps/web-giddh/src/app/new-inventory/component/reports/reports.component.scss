@@ -252,7 +252,7 @@ td {
     overflow: visible !important;
 
     &::before {
-        content: 'Opening';
+        content: 'Opening Stock';
         position: absolute;
         top: -50px;
         right: 0;
@@ -278,7 +278,7 @@ td {
     overflow: visible !important;
 
     &::before {
-        content: 'Outward';
+        content: 'Outwards';
         position: absolute;
         top: -50px;
         right: 0;
