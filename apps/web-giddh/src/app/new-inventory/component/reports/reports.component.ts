@@ -123,11 +123,6 @@ export class ReportsComponent implements OnInit {
     };
     /** Custom Fields list Observable */
     public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
-    groupedColumnKeys: string[] = [];
-    groupedColumns = [
-    ];
-    public firstHeaderRow = [];
-    public firstHeaderColumnNames: string[] = []; // Store extracted column names
     constructor(
         public route: ActivatedRoute,
         public router: Router,
