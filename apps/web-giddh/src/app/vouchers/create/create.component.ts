@@ -3926,6 +3926,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
+                            this.invoiceForm.get('uniqueName').patchValue(response.body?.number);
                             this.redirectToVoucherPreview();
                         }
                     } else {
