@@ -67,8 +67,6 @@ export class ReportsComponent implements OnInit {
     public dataSource = [];
     /** This will use for stock report displayed columns */
     public displayedColumns: any[] = [];
-    /** This will use for  table report header columns */
-    public tableHeaderColumns: any[] = [];
     /** This will use for stock report voucher types column check values */
     public customiseColumns = [];
     /** Hold From Date*/
@@ -111,29 +109,6 @@ export class ReportsComponent implements OnInit {
     public showContent: boolean = true;
     /** False if pull unitversal date  */
     public pullUniversalDate: boolean = true;
-    /** This will use for  table report header displayed all columns */
-    public headerColumns = {
-        entity_group_name: {
-            search: 'name',
-            colSpan: 0
-        },
-        opening_stock: {
-            search: 'opening',
-            colSpan: 0
-        },
-        inwards: {
-            search: 'inward',
-            colSpan: 0
-        },
-        outwards: {
-            search: 'outward',
-            colSpan: 0
-        },
-        closing_stock: {
-            search: 'closing',
-            colSpan: 0
-        },
-    }
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Observable to cancel api on reports api call */
@@ -148,7 +123,6 @@ export class ReportsComponent implements OnInit {
     };
     /** Custom Fields list Observable */
     public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
-
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -647,14 +621,6 @@ export class ReportsComponent implements OnInit {
      */
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
-        this.tableHeaderColumns = [];
-        Object.keys(this.headerColumns).forEach(key => {
-            const colSpan = this.calculateColSpan(this.headerColumns[key].search);
-            if (colSpan !== 0) {
-                this.tableHeaderColumns.push(key);
-                this.headerColumns[key].colSpan = colSpan;
-            }
-        });
     }
 
     /**
@@ -671,18 +637,6 @@ export class ReportsComponent implements OnInit {
             this.getReport(false);
         }
     }
-
-    /**
-     *This will use for calculating the col span
-     *
-     * @param {string} column
-     * @return {*}  {number}
-     * @memberof ReportsComponent
-     */
-    public calculateColSpan(column: string): number {
-        return this.displayedColumns?.filter(value => value?.includes(column))?.length;
-    }
-
 
     /**
      * This will use for get reports by unqiue name
