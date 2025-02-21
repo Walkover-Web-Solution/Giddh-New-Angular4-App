@@ -31,17 +31,17 @@
                                 aria-labelledby="button-basic2"
                             >
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
+                                    <!-- <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
                                         localeData?.cash_invoice
-                                    }}</a>
+                                    }}</a> -->
                                     <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/cash/create']">{{
                                         localeData?.cash_invoice
                                     }}</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
+                                    <!-- <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
                                         localeData?.sales_invoice
-                                    }}</a>
+                                    }}</a> -->
                                     <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/sales/create']">{{
                                         localeData?.sales_invoice
                                     }}</a>
@@ -452,8 +452,7 @@
                                                     class="download-file-text"
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type &&
-                                                        voucherApiVersion !== 2
+                                                        attachedDocumentType?.type
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -463,6 +462,7 @@
                                                             shouldShowUploadAttachment
                                                     }"
                                                 >
+                                                <!-- voucherApiVersion !== 2 -->
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="localeData?.download_attachment"
@@ -487,13 +487,13 @@
                                             <div
                                                 class="history-btn"
                                                 *ngIf="
-                                                    (voucherApiVersion !== 2 &&
-                                                        selectedItem?.voucherType === 'purchase') ||
+                                                        selectedItem?.voucherType === 'purchase' ||
                                                     (voucherApiVersion === 2 &&
                                                         selectedItem?.voucherType !== 'proformas' &&
                                                         selectedItem?.voucherType !== 'estimates')
                                                 "
                                             >
+                                            <!-- voucherApiVersion !== 2 && -->
                                                 <button
                                                     class="btn btn-primary history-button"
                                                     (click)="toggleActivityHistoryAsidePane()"

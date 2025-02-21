@@ -62,10 +62,9 @@
                                                             invoiceType !== 'sales' &&
                                                             invoiceType !== 'cash' &&
                                                             invoiceType !== 'purchase' &&
-                                                            (voucherApiVersion === 1 ||
-                                                                (voucherApiVersion === 2 &&
-                                                                    invoiceType !== 'debit note' &&
-                                                                    invoiceType !== 'credit note')))
+                                                            (
+                                                              invoiceType !== 'debit note' &&
+                                                              invoiceType !== 'credit note'))
                                                     "
                                                     [defaultValue]="invFormData.voucherDetails.customerName"
                                                     [createNewText]="customerNotFoundText"

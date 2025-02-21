@@ -982,7 +982,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openBaseAccountModal() {
-        if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
+        // this.voucherApiVersion !== 2 && 
+        if (this.vm.selectedLedger.voucherGenerated) {
             this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
             return;
         }
@@ -1102,9 +1103,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
 
-        if (this.voucherApiVersion !== 2) {
-            this.invoiceList = [];
-        }
+        // if (this.voucherApiVersion !== 2) {
+        //     this.invoiceList = [];
+        // }
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {

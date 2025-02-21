@@ -167,7 +167,6 @@
                                     [ItemHeight]="33"
                                 ></sh-select>
                                 <sh-select
-                                    *ngIf="voucherApiVersion !== 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [multiple]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
@@ -175,6 +174,7 @@
                                     [(ngModel)]="request.status"
                                     [ItemHeight]="33"
                                 ></sh-select>
+                                <!-- *ngIf="voucherApiVersion !== 2" -->
                             </div>
 
                             <div class="col-sm-4 col-md-4 pl-0"></div>
@@ -282,7 +282,6 @@
                                     [ItemHeight]="33"
                                 ></sh-select>
                                 <sh-select
-                                    *ngIf="voucherApiVersion !== 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [multiple]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
@@ -290,6 +289,7 @@
                                     [(ngModel)]="request.status"
                                     [ItemHeight]="33"
                                 ></sh-select>
+                                <!--  *ngIf="voucherApiVersion !== 2" -->
                             </div>
 
                             <div class="col-sm-4 col-md-4 pl-0"></div>
