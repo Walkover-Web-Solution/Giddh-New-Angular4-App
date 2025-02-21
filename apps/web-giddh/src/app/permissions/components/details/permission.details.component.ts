@@ -7,7 +7,7 @@ import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
-import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permission.utility';
+import { IPage, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
@@ -17,7 +17,7 @@ import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remo
 })
 
 export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-    public pageList: IPageStr[];
+    public pageList: any[];
     public newRole: any = {};
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public allRoles: any;
@@ -35,6 +35,8 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     public commonLocaleData: any = {};
     /* Holds Table column */
     public displayedColumns: string[] = ['admin', 'adminicon', 'view'];
+    /** Holds original page list */
+    private originalPageList: any[];
 
     constructor(private router: Router,
         private store: Store<AppState>,
@@ -67,7 +69,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
                 this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
             }
             this.newRole = permission.newRole;
-            this.pageList = permission.pages;
+            this.originalPageList = permission.pages;
         });
 
         // listener for add update role case
@@ -94,9 +96,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     * @memberof PermissionDetailsComponent
     */
     public ngAfterViewInit(): void {
-        this.pageList = this.pageList.map(item => {
-            return { label: item, value: item, additional: { isDisabled: this.checkForAlreadyExistInPageArray(String(item)) } }
-        });
+        this.checkExistsDataInPageResponse();
 
         if (this.roleObj?.scopes) {
             this.roleObj.scopes = this.roleObj?.scopes.map(item => {
@@ -135,11 +135,14 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             });
             pageObj.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
             this.roleObj?.scopes?.push(pageObj);
+            this.checkExistsDataInPageResponse();
+            this.pageName = null;
         }
     }
 
     public removePageFromScope(page: string) {
         this.roleObj.scopes.splice(this.roleObj.scopes?.findIndex((o: Scope) => o.name === page), 1);
+        this.checkExistsDataInPageResponse();
     }
 
     public checkForAlreadyExistInPageArray(page: string): boolean {
@@ -195,7 +198,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
 
         } else {
             // copy role scenario
-            response = this.generateUIFromExistedRole();;
+            response = this.generateUIFromExistedRole();
         }
 
         if (response) {
@@ -353,6 +356,20 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         } else {
             return res.permissions[0].isSelected = false;
         }
+    }
+
+    /**
+     * Checks if the page list already contains the current page. If not, adds it to the page list.//+
+     *
+     * @memberof PermissionDetailsComponent
+     */
+    public checkExistsDataInPageResponse(): void {
+        this.pageList = [];
+        this.originalPageList?.forEach(item => {
+            if (!this.checkForAlreadyExistInPageArray(String(item))) {
+                this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
+            }
+        });
     }
 
 }

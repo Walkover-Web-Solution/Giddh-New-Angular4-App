@@ -1,4 +1,4 @@
-<div [ngClass]="{'custom-input-field communication-input': !appearance }">
+<div [ngClass]="{'custom-input-field': !appearance }">
     <mat-form-field [floatLabel]="!appearance ? 'never' : null" class="w-100" [appearance]="appearance">
         <mat-chip-grid #matChipList>
             <mat-chip-row
@@ -8,10 +8,12 @@
                 (removed)="removeOption(indx)"
                 role="option"
             >
-                {{ chip }}
+            <span>
+                <span>{{chip}}</span>
                 <span matChipRemove>
                     <i class="icon-cross"></i>
                 </span>
+            </span>
             </mat-chip-row>
             <input
                 type="text"
@@ -30,10 +32,11 @@
                 matAutocompletePosition="auto"
                 class="select-multiple-field-input"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (clickOutside)="closeDropdownPanel($event)"
             />
         </mat-chip-grid>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
-            <mat-option [ngClass]="{'po-options-line': isPurchaseOrder }" *ngFor="let option of fieldFilteredOptions" [value]="option">
+            <mat-option (click)="(name === emailType.To || name === emailType.Cc || name === emailType.Bcc) && $event.stopPropagation()" [ngClass]="{'po-options-line': isPurchaseOrder }" *ngFor="let option of fieldFilteredOptions" [value]="option">
                 <ng-container *ngIf="!isPurchaseOrder">{{ option.label }}</ng-container>
                 <ng-container *ngIf="isPurchaseOrder">
                     <span class="po-option-label"> {{ option?.label }}</span>

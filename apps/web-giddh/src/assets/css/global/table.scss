@@ -1,10 +1,20 @@
 .mat-mdc-table {
-    &.table-strip {
+    &.table-striped {
         .mdc-data-table__content {
             .mat-mdc-row {
                 &:hover {
-                    .mat-mdc-cell {
-                        background-color: var(--color-table-row-hover-primary-background) !important;
+                    &:not(.no-hover) {
+                        .mat-mdc-cell {
+                            background-color: var(--color-drag-bottom-shadow) !important;
+                        }
+                    }
+                }
+
+                &:not(.no-strip) {
+                    &:nth-of-type(odd) {
+                        .mat-mdc-cell {
+                            background-color: var(--color-wild-sand) !important;
+                        }
                     }
                 }
             }
@@ -14,7 +24,7 @@
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
-            z-index: 9;
+            z-index: 9 !important;
         }
     }
 
@@ -81,7 +91,7 @@ aging-report {
 }
 
 // This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
-$listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors here, separated by commas (,)
+$listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors here, separated by commas (,)
 
 .table-header-sticky {
     &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
@@ -113,5 +123,44 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
 
     @media screen and (max-width: 992px) {
         width: fit-content;
+    }
+}
+
+// Add class editable-table to the table to make the form fields border invisible when the row is not active (hovered)
+table {
+    &.editable-table {
+        tbody {
+            tr {
+                &:not(.active-row) {
+                    td {
+                        mat-form-field {
+                            mat-label,
+                            .dropdown-bg,
+                            .mdc-notched-outline {
+                                visibility: hidden;
+                            }
+                        }
+                        .editable-table-hide-element {
+                            visibility: hidden;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+table {
+    &.mat-mdc-table {
+        tr {
+            th,
+            td {
+                width: fit-content !important;
+                max-width: 194px !important;
+            }
+            .table-date-width {
+                width: 125px !important;
+            }
+        }
     }
 }

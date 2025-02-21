@@ -33,8 +33,9 @@
         <ul class="design-tool">
             <li
                 [hidden]="templateUISectionVisibility.templates"
-                (click)="onChangeVisibility('templates')"
+                (click)="mode === 'update' ? showMessage() : onChangeVisibility('templates')"
                 class="d-flex align-items-center"
+                [ngClass]="{'cursor-disable': mode === 'update'}"
             >
                 <i class="icon-change_template"></i> <label>Change up to template</label>
             </li>

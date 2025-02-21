@@ -64,6 +64,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public showPrinterDialogWhenPageLoad: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /** True if consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -340,7 +342,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleEditMode() {
-        if (this.voucherApiVersion === 1) { 
+        if (this.voucherApiVersion === 1) {
             if (!this.showEditMode) {
                 this.selectedItemVoucher = this.selectedItem;
             } else {

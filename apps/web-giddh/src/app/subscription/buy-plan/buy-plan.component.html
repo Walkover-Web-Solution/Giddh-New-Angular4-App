@@ -3,6 +3,7 @@
     [file]="'subscription'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <div class="float-left w-100">
         <div class="buy-plan-wrapper pd-15 w-100">
@@ -884,26 +885,52 @@
                                 <div
                                     class="new-plan mt-4"
                                     *ngIf="
-                                        firstStepForm.get('duration')?.value === 'MONTHLY' &&
-                                        selectedPlan?.entityCode !== 'GBR'
+                                        filteredPaymentProviders?.length > 1 ||
+                                        (firstStepForm.get('duration')?.value === 'MONTHLY' &&
+                                            selectedPlan?.entityCode === 'IND')
                                     "
                                 >
                                     <mat-card class="outline-card">
                                         <mat-card-content>
-                                            <mat-radio-group
-                                                class="d-flex flex-column"
-                                                formControlName="razorpayAuthType"
-                                            >
-                                                <mat-radio-button color="primary" value="CARD">{{
-                                                    localeData?.credit_debit_card
-                                                }}</mat-radio-button>
-                                                <mat-radio-button
-                                                    color="primary"
-                                                    value="UPI"
-                                                    *ngIf="selectedPlan?.entityCode === 'IND'"
-                                                    >{{ localeData?.upi }}</mat-radio-button
+                                            <div class="form-group mb-1">
+                                                <reactive-dropdown-field
+                                                    [label]="localeData?.payment_provider"
+                                                    [placeholder]="localeData?.select_provider"
+                                                    [labelValue]="thirdStepForm.get('paymentProvider')?.value"
+                                                    [options]="filteredPaymentProviders"
+                                                    formControlName="paymentProvider"
+                                                    (onClear)="thirdStepForm.get('paymentProvider')?.patchValue(null)"
+                                                    [required]="
+                                                        !thirdStepForm.get('paymentProvider')?.value ? true : false
+                                                    "
+                                                       [showError]="
+                                                        isFormSubmitted && !thirdStepForm.get('paymentProvider')?.value
+                                                    "
                                                 >
-                                            </mat-radio-group>
+                                                </reactive-dropdown-field>
+                                            </div>
+                                            <ng-container
+                                                *ngIf="
+                                                    firstStepForm.get('duration')?.value === 'MONTHLY' &&
+                                                    selectedPlan?.entityCode === 'IND'
+                                                "
+                                            >
+                                                <mat-radio-group
+                                                    *ngIf="thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY'"
+                                                    class="d-flex flex-column"
+                                                    formControlName="razorpayAuthType"
+                                                >
+                                                    <mat-radio-button color="primary" value="CARD">{{
+                                                        localeData?.credit_debit_card
+                                                    }}</mat-radio-button>
+                                                    <mat-radio-button
+                                                        color="primary"
+                                                        value="UPI"
+                                                        *ngIf="selectedPlan?.entityCode === 'IND'"
+                                                        >{{ localeData?.upi }}</mat-radio-button
+                                                    >
+                                                </mat-radio-group>
+                                            </ng-container>
                                         </mat-card-content>
                                     </mat-card>
                                 </div>

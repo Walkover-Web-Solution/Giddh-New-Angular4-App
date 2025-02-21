@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import { GST_UTILITY_DOWNLOAD_LINK } from '../../../app.constant';
 @Component({
     selector: 'push-to-portal',
     templateUrl: './push-to-portal.component.html',
@@ -10,11 +11,10 @@ export class PushToPortalComponent {
     @Input() public localeData;
     /** This will emit the download excel  for gstr1 */
     @Output() public downloadExcel: EventEmitter<any> = new EventEmitter();
-    /** This will emit the cancel popup  hide */
-    @Output() public cancelCallBack: EventEmitter<any> = new EventEmitter();
     /** This will emit the download json  for gstr1 */
     @Output() public downloadJson: EventEmitter<any> = new EventEmitter();
-
+    /** Holds GST utility download link */
+    public gstUtilityDownloadLink: string = GST_UTILITY_DOWNLOAD_LINK;
     /**
      * This will use for download success sheet
      *
@@ -33,15 +33,5 @@ export class PushToPortalComponent {
     */
     public onDownloadJson(event: Event): void {
         this.downloadJson.emit(event);
-    }
-
-    /**
-     *This will emit the cancel popup  hide
-     *
-     * @param {Event} event
-     * @memberof PushToPortalComponent
-     */
-    public onCancel(event: Event): void {
-        this.cancelCallBack.emit(event);
     }
 }

@@ -26,6 +26,7 @@ import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { MatIconModule } from '@angular/material/icon';
         GiddhDateRangepickerModule,
         MatDatepickerModule,
         MatFormFieldModule,
-        MatIconModule
+        MatIconModule,
+        MatTooltipModule
     ],
 })
 export class HomeModule {

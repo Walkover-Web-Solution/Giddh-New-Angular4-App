@@ -7,7 +7,7 @@
                 <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_percent" [matSuffix]="'%'" class="d-block" [cssClass]="'text-right'" formControlName="percentage" [readonly]="discountForm.get('fixedValue')?.value > 0"></input-field>
                 <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_value" class="d-block mt-3" [cssClass]="'text-right'" formControlName="fixedValue" [readonly]="discountForm.get('percentage')?.value > 0"></input-field>
             </div>
-            <div class="discount-separator position-relative text-center my-2">
+            <div class="discount-separator position-relative text-center my-2" *ngIf="discountsList?.length">
                 <span class="discount-separator-msg">{{commonLocaleData?.app_and}}</span>
                 <div class="discount-separator-line"></div>
             </div>

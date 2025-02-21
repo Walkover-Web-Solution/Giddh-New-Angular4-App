@@ -12,6 +12,7 @@ import { OnboardingComponentStore } from './utility/onboarding.store';
 import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 
 
+
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
@@ -58,7 +59,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public voucherApiVersion: 1 | 2 = 2;
     /** Holds help documentation url for syncing with Tally */
     public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-    
+
     constructor(
         private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
@@ -67,7 +68,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentStore: OnboardingComponentStore
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
-    }
+    }  
 
     public ngOnInit() {
         this.voucherApiVersion = this._generalService.voucherApiVersion;
@@ -81,11 +82,11 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
-             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                 this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
-             }
-         });
-
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+            }
+        });
+        
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.accountAsideMenuState === "in") {

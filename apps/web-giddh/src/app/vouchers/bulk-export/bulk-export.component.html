@@ -14,6 +14,24 @@
     <div mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
         <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
+            <div class="pd-b1 mr-b15">
+                <mat-radio-group name="mergePdf" formControlName="mergePdf">
+                    <mat-radio-button
+                        color="primary"
+                        [value]="false"
+                        aria-label="Export as multiple PDFs in single zip file"
+                    >
+                        {{ localeData?.multiple_pdf }}
+                    </mat-radio-button>
+                    <mat-radio-button
+                        color="primary"
+                        [value]="true"
+                        aria-label="Export as single PDF"
+                    >
+                        {{ localeData?.single_pdf }}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
             <div
                 class="pd-b15 custom-mat-form-field"
                 [ngClass]="{
@@ -33,22 +51,26 @@
                         <mat-option value="TRANSPORT">{{ localeData?.invoice_copy_options?.transport }}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    (click)="exportVouchers(false)"
-                    [disabled]="!exportForm.get('copyTypes').value"
-                >
-                    {{ commonLocaleData?.app_download }}
-                </button>
+                <div class="text-right">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        (click)="exportVouchers(false)"
+                        [disabled]="!exportForm.get('copyTypes').value"
+                    >
+                        {{ commonLocaleData?.app_download }}
+                    </button>
+                </div>
             </div>
             <div
                 *ngIf="
                     inputData?.voucherType === 'receipt' ||
                     inputData?.voucherType === 'payment' ||
                     inputData?.voucherType === 'credit note' ||
-                    inputData?.voucherType === 'debit note'
+                    inputData?.voucherType === 'debit note' ||
+                    inputData?.voucherType === 'purchase'
                 "
+                class="text-right"
             >
                 <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.add_multiple_email }}</mat-label>

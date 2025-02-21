@@ -7,11 +7,11 @@
 >
     <div class="clearfix" *ngIf="!isMobileScreen">
         <div class="row">
-            <div class="col-xl-9 col-lg-12 col-md-12">
+            <div class="col-xl-10 col-lg-12 col-md-12">
                 <form
                     [formGroup]="filterForm"
                     (submit)="filterData()"
-                    class="form-inline financial-select-year"
+                    class="form-inline financial-select-year row-gap5"
                     name="fromToDateForm"
                     novalidate
                 >
@@ -19,9 +19,9 @@
                         <div
                             class="form-group mr-r15 linked-entities"
                             *ngIf="
-                                showLabels &&
+                                showLabels && !isProjectWiseAccounting &&
                                 currentCompanyBranches?.length > 2 &&
-                                currentOrganizationType === 'COMPANY'
+                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                             "
                         >
                             <div class="form-group">
@@ -43,7 +43,11 @@
                                             <a href="javascript:void(0)" class="list-item d-flex">
                                                 <span class="entity-icon">
                                                     <i
-                                                        class="icon-branch-icon pull-right"
+                                                        [ngClass]="{
+                                                            'icon-company-profile': option.consolidatedBranch,
+                                                            'icon-branch-icon': !option.consolidatedBranch
+                                                        }"
+                                                        class="pull-right"
                                                         *ngIf="!option.isCompany"
                                                         [tooltip]="commonLocaleData?.app_branch"
                                                     ></i>
@@ -111,7 +115,7 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!showLoader">
-                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
+                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="!isProjectWiseAccounting && tags?.length">
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <sh-select
                                 [options]="tags"
@@ -152,10 +156,13 @@
                     </div>
                 </form>
             </div>
-            <div class="col-xl-3 col-lg-12 col-md-12 download-data-icon">
+            <div class="col-xl-2 col-lg-12 col-md-12 download-data-icon">
                 <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
                     <span class="icon-refresh"></span>
                 </a>
+                <button class="ml-1" *ngIf="isProjectWiseAccounting" [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
+                    {{ commonLocaleData?.app_back }}
+                </button>
                 <div class="ml-1">
                     <trial-balance-export-csv
                         *ngIf="tbExportCsv"
@@ -199,7 +206,7 @@
             <div class="d-flex flex-column">
                 <div
                     class="form-group mr-r15 linked-entities"
-                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <div class="form-group mb-0">
                         <sh-select
@@ -219,7 +226,8 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon pull-right"
+                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
+                                                class="pull-right"
                                                 *ngIf="!option.isCompany"
                                                 [tooltip]="commonLocaleData?.app_branch"
                                             ></i>

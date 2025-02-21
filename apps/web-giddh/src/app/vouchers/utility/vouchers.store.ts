@@ -1,3 +1,5 @@
+import { PurchaseOrderService } from './../../services/purchase-order.service';
+import { AuthenticationService } from './../../services/authentication.service';
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { select, Store } from "@ngrx/store";
@@ -75,6 +77,8 @@ export interface VoucherState {
     updateAttachmentInVoucherIsSuccess: boolean;
     cancelEInvoiceInProgress: boolean;
     cancelEInvoiceIsSuccess: boolean;
+    saveGmailAuthCodeIsSuccess: any;
+    verifyEmailIsSuccess: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -132,7 +136,9 @@ const DEFAULT_STATE: VoucherState = {
     uploadFileIsSuccess: null,
     updateAttachmentInVoucherIsSuccess: null,
     cancelEInvoiceInProgress: null,
-    cancelEInvoiceIsSuccess: null
+    cancelEInvoiceIsSuccess: null,
+    saveGmailAuthCodeIsSuccess: null,
+    verifyEmailIsSuccess: null
 };
 
 @Injectable()
@@ -147,6 +153,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private commonService: CommonService,
         private accountService: AccountService,
         private searchService: SearchService,
+        private authenticationService: AuthenticationService,
+        private purchaseOrderService: PurchaseOrderService
     ) {
         super(DEFAULT_STATE);
     }
@@ -155,7 +163,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
     public getLastVouchersInProgress$ = this.select((state) => state.getLastVouchersInProgress);
     public discountsList$ = this.select((state) => state.discountsList);
-    public invoiceSettings$ = this.select((state) => state.invoiceSettings);
+    public voucherSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
     public stockVariants$ = this.select((state) => state.stockVariants);
@@ -203,9 +211,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public updateAttachmentInVoucherIsSuccess$ = this.select((state) => state.updateAttachmentInVoucherIsSuccess);
     public cancelEInvoiceInProgress$ = this.select((state) => state.cancelEInvoiceInProgress);
     public cancelEInvoiceIsSuccess$ = this.select((state) => state.cancelEInvoiceIsSuccess);
+    public saveGmailAuthCodeIsSuccess$ = this.select((state) => state.saveGmailAuthCodeIsSuccess);
+    public verifyEmailIsSuccess$ = this.select((state) => state.verifyEmailIsSuccess);
 
-
-
+    public hasInvoiceSettingPermissions$: Observable<any> = this.select(this.store.select(state => state.invoice.hasInvoiceSettingPermissions), (response) => response);
+    public isGmailIntegrated$: Observable<any> = this.select(this.store.select(state => state.settings.isGmailIntegrated), (response) => response);
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
@@ -225,6 +235,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public getLedgerDataInProcess$: Observable<any> = this.select(this.store.select(state => state.invoice.isGetAllLedgerDataInProgress), (response) => response);
     public isAccountUpdated$: Observable<any> = this.select(this.store.select(state => state.common.isAccountUpdated), (response) => response);
     public universalPendingDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public invoiceSettings$: Observable<any> = this.select(this.store.select(state => state.invoice.settings), (response) => response);
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -411,10 +422,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.ledgerService.removeAttachment(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                deleteAttachmentInProgress: false,
-                                deleteAttachmentIsSuccess: true
-                            });
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: false });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
@@ -1667,6 +1681,47 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    /**
+     * This will be use for save gmail auth code
+     *
+     * @memberof VoucherComponentStore
+     */
+    readonly saveGmailAuthCode = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ saveGmailAuthCodeIsSuccess: null });
+                return this.authenticationService.saveGmailAuthCode(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === "success") {
+                                return this.patchState({
+                                    saveGmailAuthCodeIsSuccess: res,
+                                });
+                            } else {
+                                this.toaster.showSnackBar('error', res?.message, res?.code);
+                                return this.patchState({
+                                    saveGmailAuthCodeIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                saveGmailAuthCodeIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * This will be use for cancel einvoice
+     *
+     * @memberof VoucherComponentStore
+     */
     readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -1701,5 +1756,51 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
+
+    /**
+     * This will be use for for verify purchase email address
+     *
+     * @memberof VoucherComponentStore
+     */
+    readonly verifyPurchaseEmail = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ verifyEmailIsSuccess: null });
+                return this.purchaseOrderService.updateSettingsEmail(req.getRequestObject, req.postRequestObject).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    verifyEmailIsSuccess: res
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    verifyEmailIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                verifyEmailIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Lifecycle hook for component destroy
+     *
+     * @memberof VoucherComponentStore
+     */
+    public ngOnDestroy(): void {
+        super.ngOnDestroy();
+    }
 
 }

@@ -581,6 +581,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public countryStates: any[] = [];
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
     /** This will hold if voucher date is manually changed */
@@ -885,6 +887,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -6957,7 +6965,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
                     const results = (res.body?.results || res.body?.items || res.body);
-                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));;
+                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
                     if (results?.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
@@ -9038,7 +9046,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.hsnNumber = cloneDeep(transaction.sacNumber);
                 transaction.sacNumber = null;
             } else {
-                transaction.sacNumber = cloneDeep(transaction.hsnNumber);;
+                transaction.sacNumber = cloneDeep(transaction.hsnNumber);
                 transaction.hsnNumber = null;
             }
             this.changeDetectorRef.detectChanges();

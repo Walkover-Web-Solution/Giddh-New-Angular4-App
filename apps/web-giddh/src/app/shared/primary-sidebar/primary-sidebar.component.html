@@ -218,7 +218,7 @@
                                                         >
                                                             <i [ngClass]="item.icon"></i>
                                                             {{ item?.label }}
-                                                            <ng-container *ngIf="currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch">
+                                                            <ng-container *ngIf="!isConsolidatedBranch && (currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch)">
                                                                 <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
                                                                     <strong
                                                                         class="ml-auto"
@@ -288,18 +288,16 @@
         </div>
     </ng-template>
 </ng-container>
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div *ngIf="accountAsideMenuState === 'in'">
+
+<!-- Generic aside menu account template open from cmd+k-->
+<ng-template #genericAsideMenuAccountTemplate>
     <generic-aside-menu-account
-        [class]="accountAsideMenuState"
-        [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleAccountAsidePane($event)"
-        (closeAccountModal)="closeAccountModal($event)"
+        (closeAsideEvent)="closeAccountAsidePane($event)"
+        (closeAccountModal)="closeAccountAsidePane($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
+        [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
         (addEvent)="addNewAccount($event)"
-        *ngIf="accountAsideMenuState === 'in'"
     >
     </generic-aside-menu-account>
-</div>
+</ng-template>

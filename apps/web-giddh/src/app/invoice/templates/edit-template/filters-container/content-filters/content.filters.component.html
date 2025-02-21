@@ -1108,6 +1108,15 @@
                                 </ng-container>
                             </td>
                         </tr>
+                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage && customTemplate.templateType === 'gst_template_a'">
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="variant-image"
+                                        [(ngModel)]="customTemplate.sections['table'].data['showVariantImage'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                                    Show stock/variant image</label>
+                            </td>
+                        </tr>
                         <tr
                             *ngIf="
                                 customTemplate.templateType !== 'thermal_template' && fieldsAndVisibility?.table.date

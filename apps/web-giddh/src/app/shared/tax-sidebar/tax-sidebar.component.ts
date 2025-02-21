@@ -62,6 +62,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public trnSupportedCountries: string[] = TRN_SUPPORTED_COUNTRIES;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Holds current date period for GST report */
     public currentPeriod: any = {};
     /** Observable to get current GST period  */
@@ -97,6 +99,11 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.getCurrentPeriod$ = this.store.pipe(select(store => store.gstR.currentPeriod), take(1));
 
         this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
@@ -207,13 +214,23 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 let taxes = response.body;
-                if (!this.activeCompanyGstNumber && taxes?.length === 1) {
+                if (!this.activeCompanyGstNumber && taxes?.length > 0) {
                     this.activeCompanyGstNumber = taxes[0];
+                    this.selectTax();
                 }
             }
 
             this.changeDetectionRef.detectChanges();
         });
+    }
+
+   /**
+    * Select tax handler
+    *
+    * @memberof TaxSidebarComponent
+    */
+   public selectTax(): void {        
+        this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
     }
 
     /**
@@ -257,7 +274,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     public navigateToGstR3B(type: string): void {
-        this.router.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
+        this.router.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: (this.isCompany || this.isConsolidatedBranch), selectedGst: this.activeCompanyGstNumber } });
     }
 
     /**

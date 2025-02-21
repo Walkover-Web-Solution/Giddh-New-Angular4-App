@@ -47,6 +47,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isHeaderProvided: boolean = true;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private toasterService: ToasterService,
@@ -101,6 +103,12 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      */
 
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
@@ -125,7 +133,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';

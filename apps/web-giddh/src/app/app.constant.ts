@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
-import { ajax } from 'rxjs/ajax';
 dayjs.extend(quarterOfYear) // use plugin
+import { CountryCodeService } from './services/country-code.service';
 
 export const Configuration = {
     'AppUrl': AppUrl,
@@ -23,6 +23,9 @@ export enum BranchHierarchyType {
     Tree = 'tree'
 };
 
+/** Date Regex for 'MMM D, YYYY' */
+export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 /** Regex for mobile number */
 export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
@@ -36,58 +39,14 @@ export const INTL_INPUT_OPTION = {
     separateDialCode: false,
     initialCountry: 'auto',
     geoIpLookup: (success: any, failure: any) => {
-        let countryCode = 'in';
-        const fetchIPApi = ajax({
-            url: MOBILE_NUMBER_SELF_URL,
-            method: 'GET',
-        });
-
-        fetchIPApi.subscribe({
-            next: (res: any) => {
-                if (res?.response?.ipAddress) {
-                    const fetchCountryByIpApi = ajax({
-                        url: MOBILE_NUMBER_IP_ADDRESS_URL + res.response.ipAddress,
-                        method: 'GET',
-                    });
-
-                    fetchCountryByIpApi.subscribe({
-                        next: (fetchCountryByIpApiRes: any) => {
-                            if (fetchCountryByIpApiRes?.response?.countryCode) {
-                                return success(fetchCountryByIpApiRes.response.countryCode);
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        error: (fetchCountryByIpApiErr) => {
-                            const fetchCountryByIpInfoApi = ajax({
-                                url: MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}/json`,
-                                method: 'GET',
-                            });
-
-                            fetchCountryByIpInfoApi.subscribe({
-                                next: (fetchCountryByIpInfoApiRes: any) => {
-                                    if (fetchCountryByIpInfoApiRes?.response?.country) {
-                                        return success(fetchCountryByIpInfoApiRes.response.country);
-                                    } else {
-                                        return success(countryCode);
-                                    }
-                                },
-                                error: (fetchCountryByIpInfoApiErr) => {
-                                    return success(countryCode);
-                                },
-                            });
-                        },
-                    });
-                } else {
-                    return success(countryCode);
-                }
-            },
-            error: (err) => {
-                return success(countryCode);
-            },
+        const countryCodeService = new CountryCodeService();
+        countryCodeService.getCountryCode().subscribe({
+            next: (countryCode: string) => success(countryCode),
+            error: () => success('in')
         });
     },
 };
+
 
 export const APP_DEFAULT_TITLE = '';
 export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
@@ -152,7 +111,7 @@ export enum OnBoardingType {
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
 /** Pagination count options */
-export const PAGE_SIZE_OPTIONS = [20, 50, 100];
+export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
@@ -672,3 +631,5 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
     'AE': 'ae',
     'GL': 'gl'
 };
+/** Gst utility download portal link */
+export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";

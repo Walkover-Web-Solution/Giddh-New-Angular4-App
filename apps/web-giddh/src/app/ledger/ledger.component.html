@@ -95,7 +95,7 @@
                                             mat-stroked-button
                                             color="warn"
                                             [disabled]="
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
                                             id="delete-ledger-mobile-view"
@@ -111,7 +111,7 @@
                                             aria-label="generate"
                                             mat-stroked-button
                                             [disabled]="
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
                                             class="btn btn-warning"
@@ -128,7 +128,8 @@
                                         aria-label="attachfile"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         class="btn btn-success mr-0 font-15"
                                         id="attach-file-mobile-view"
@@ -253,7 +254,8 @@
                                         aria-label="delete"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="delete-ledger"
@@ -269,7 +271,8 @@
                                         aria-label="generate"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         id="generate-invoice"
                                         class="d-flex align-items-center justify-content-center icon-button-width"
@@ -285,7 +288,8 @@
                                         aria-label="file"
                                         mat-stroked-button
                                         [disabled]="
-                                            currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            currentCompanyBranches?.length > 2
                                         "
                                         class="d-flex align-items-center justify-content-center icon-button-width"
                                         id="attach-file"
@@ -311,7 +315,7 @@
                                 *ngIf="
                                     showBranchSwitcher &&
                                     currentCompanyBranches?.length > 2 &&
-                                    currentOrganizationType === 'COMPANY' &&
+                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                     isMobileScreen
                                 "
                             >
@@ -333,7 +337,11 @@
                                                 <a href="javascript:void(0)" class="list-item d-flex" aria-label="list">
                                                     <span class="entity-icon">
                                                         <i
-                                                            class="icon-branch-icon pull-right"
+                                                            [ngClass]="{
+                                                                'icon-company-profile': option.consolidatedBranch,
+                                                                'icon-branch-icon': !option.consolidatedBranch
+                                                            }"
+                                                            class="pull-right"
                                                             *ngIf="!option.isCompany"
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                             matTooltipClass="tooltip-black"
@@ -397,7 +405,7 @@
                                     *ngIf="
                                         showBranchSwitcher &&
                                         currentCompanyBranches?.length > 2 &&
-                                        currentOrganizationType === 'COMPANY'
+                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                     "
                                 >
                                     <div class="form-group">
@@ -422,7 +430,11 @@
                                                     >
                                                         <span class="entity-icon">
                                                             <i
-                                                                class="icon-branch-icon pull-right"
+                                                                [ngClass]="{
+                                                                    'icon-company-profile': option.consolidatedBranch,
+                                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                                }"
+                                                                class="pull-right"
                                                                 *ngIf="!option.isCompany"
                                                                 [matTooltip]="commonLocaleData?.app_branch"
                                                                 matTooltipClass="tooltip-black"
@@ -513,7 +525,11 @@
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 || selectedDebitTransactionIds?.size > 0 || selectedCreditTransactionIds?.size > 0"
+                                        *ngIf="
+                                            entryUniqueNamesForBulkAction?.length > 0 ||
+                                            selectedDebitTransactionIds?.size > 0 ||
+                                            selectedCreditTransactionIds?.size > 0
+                                        "
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -639,6 +655,7 @@
                         </h1>
                         <section id="eledgerwrap" class="mr-t2" [hidden]="!lc.showEledger || isBankTransactionLoading">
                             <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
+                             <p *ngIf="bankAccount?.gocardlessMessage" class="mt-1 mb-1">{{ bankAccount.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer ml-1" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
                                 <div class="d-flex align-items-start justify-content-between">
                                     <div class="clearfix ledger-top-header-left">
                                         <h3 class="ledger-main-head">
@@ -646,10 +663,25 @@
                                         </h3>
                                     </div>
                                     <div class="d-flex align-items-center column-gap2">
-                                        <button mat-raised-button color="primary" type="button" aria-label="create bulk entry" *ngIf="transactionCountConvertToEntries > 0" (click)="saveBulkBankTransaction()">
-                                            <span>{{ transactionCountConvertToEntries }} - {{ localeData?.convert_to_entries }}</span>
+                                        <button
+                                            mat-raised-button
+                                            color="primary"
+                                            type="button"
+                                            aria-label="create bulk entry"
+                                            *ngIf="transactionCountConvertToEntries > 0"
+                                            (click)="openBulkBankTransactionConfirmationDialog()"
+                                        >
+                                            <span
+                                                >{{ transactionCountConvertToEntries }} -
+                                                {{ localeData?.convert_to_entries }}</span
+                                            >
                                         </button>
-                                        <button mat-stroked-button type="button" class="min-width-unset" aria-label="close">
+                                        <button
+                                            mat-stroked-button
+                                            type="button"
+                                            class="min-width-unset"
+                                            aria-label="close"
+                                        >
                                             <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
                                                 commonLocaleData?.app_close
                                             }}</span>
@@ -723,8 +755,9 @@
                                                         <div
                                                             class="ledger-row"
                                                             [ngClass]="{
-                                                                'compound-entry' :txn.id === lc.selectedBankTxnUniqueName,
-                                                                'highlighted-transaction' : txn?.selectedAccount?.name
+                                                                'compound-entry':
+                                                                    txn.id === lc.selectedBankTxnUniqueName,
+                                                                'highlighted-transaction': txn?.selectedAccount?.name
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
@@ -739,7 +772,9 @@
                                                                                 i
                                                                             "
                                                                             [checked]="
-                                                                                selectedDebitTransactionIds?.has(txn?.id)
+                                                                                selectedDebitTransactionIds?.has(
+                                                                                    txn?.id
+                                                                                )
                                                                             "
                                                                             [ngClass]="{
                                                                                 'd-none':
@@ -758,7 +793,9 @@
                                                                                 )
                                                                             "
                                                                             [disabled]="
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             "
                                                                         ></mat-checkbox>
@@ -785,18 +822,19 @@
                                                                         txn.showAccountDropdown = true
                                                                     "
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
+                                                                        class="text-ellipsis"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                 </div>
                                                                 <div
@@ -807,7 +845,7 @@
                                                                         showBankLedgerPopup(txn, item)
                                                                     "
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text':
@@ -815,11 +853,12 @@
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         *ngIf="!txn.showDropdown"
+                                                                        class="text-ellipsis"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
@@ -830,7 +869,8 @@
                                                                         [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
                                                                         [disabled]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [isPaginationEnabled]="true"
@@ -842,12 +882,15 @@
                                                                         [notFoundMsg]="noResultsFoundLabel"
                                                                         [showSearchSuggestion]="
                                                                             !(
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             )
                                                                         "
                                                                         [readonlyInput]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
@@ -972,7 +1015,8 @@
                                                                     [currentTxn]="lc.currentBlankTxn"
                                                                     [needToReCalculate]="needToReCalculate"
                                                                     [isReadOnly]="
-                                                                        currentOrganizationType === 'COMPANY' &&
+                                                                        (currentOrganizationType === 'COMPANY' ||
+                                                                            isConsolidatedBranch) &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -1074,8 +1118,9 @@
                                                         <div
                                                             class="ledger-row"
                                                             [ngClass]="{
-                                                                'compound-entry': txn.id === lc.selectedBankTxnUniqueName,
-                                                                'highlighted-transaction' : txn?.selectedAccount?.name
+                                                                'compound-entry':
+                                                                    txn.id === lc.selectedBankTxnUniqueName,
+                                                                'highlighted-transaction': txn?.selectedAccount?.name
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
@@ -1111,7 +1156,9 @@
                                                                                 )
                                                                             "
                                                                             [disabled]="
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             "
                                                                         ></mat-checkbox>
@@ -1138,18 +1185,19 @@
                                                                         txn.showAccountDropdown = true
                                                                     "
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
                                                                                 txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
+                                                                        class="text-ellipsis"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                 </div>
                                                                 <div
@@ -1157,7 +1205,7 @@
                                                                     class="w-100"
                                                                     (click)="txn.showDropdown = true"
                                                                 >
-                                                                    <span
+                                                                    <div
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
@@ -1165,11 +1213,12 @@
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         *ngIf="!txn.showDropdown"
+                                                                        class="text-ellipsis"
                                                                         >{{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</span
+                                                                        }}</div
                                                                     >
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
@@ -1180,7 +1229,8 @@
                                                                         [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
                                                                         [disabled]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         (selected)="
@@ -1199,12 +1249,15 @@
                                                                         [notFoundMsg]="noResultsFoundLabel"
                                                                         [showSearchSuggestion]="
                                                                             !(
-                                                                                currentOrganizationType === 'COMPANY' &&
+                                                                                (currentOrganizationType ===
+                                                                                    'COMPANY' ||
+                                                                                    isConsolidatedBranch) &&
                                                                                 currentCompanyBranches?.length > 2
                                                                             )
                                                                         "
                                                                         [readonlyInput]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
@@ -1320,7 +1373,8 @@
                                                                     [currentTxn]="lc.currentBlankTxn"
                                                                     [needToReCalculate]="needToReCalculate"
                                                                     [isReadOnly]="
-                                                                        currentOrganizationType === 'COMPANY' &&
+                                                                        (currentOrganizationType === 'COMPANY' ||
+                                                                            isConsolidatedBranch) &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -1435,6 +1489,7 @@
                     </div>
                     <!-- endregion -->
                     <!-- region account table-->
+                     <p *ngIf="bankAccount?.gocardlessMessage" class="float-right">{{ bankAccount.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
                     <div class="clearfix"></div>
                     <mat-grid-list
                         cols="2"
@@ -1527,7 +1582,7 @@
                                                             class="text-gray mr-r05"
                                                             >{{ localeData?.to }}</span
                                                         >
-                                                        <span class="mr-r15">{{
+                                                        <span class="mr-r15 text-ellipsis">{{
                                                             transactions?.inventory
                                                                 ? transactions?.particular?.name +
                                                                   " (" +
@@ -1612,7 +1667,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -1620,21 +1675,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2599,10 +2639,9 @@
                         <div class="w-100">
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'">
                                         <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
                                             <span
-                                                *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
                                                 matTooltipClass="tooltip-black"
@@ -2621,7 +2660,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2650,10 +2689,9 @@
                             </table>
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'">
                                         <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
                                             <span
-                                                *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'"
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
                                                 matTooltipClass="tooltip-black"
@@ -2671,7 +2709,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col">
+                                    <tr class="total-col" *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)">
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2710,7 +2748,7 @@
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
                             <giddh-ledger-paginator
-                                *ngIf="paginationObject.showPagination && !isAdvanceSearchImplemented"
+                                *ngIf="paginationObject.showPagination"
                                 [currentPage]="paginationObject.page"
                                 [commonLocaleData]="commonLocaleData"
                                 (pageChange)="pageChanged($event)"
@@ -2718,21 +2756,6 @@
                                 [previousPageToken]="paginationObject.prevToken"
                             >
                             </giddh-ledger-paginator>
-                            <pagination
-                                *ngIf="paginationObject.showPagination && isAdvanceSearchImplemented"
-                                [totalItems]="paginationObject.totalItems"
-                                [(ngModel)]="paginationObject.page"
-                                [maxSize]="5"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="paginationObject.itemsPerPage"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            >
-                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2808,7 +2831,7 @@
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>
                                         {{ localeData?.total_transactions }}
@@ -2848,7 +2871,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
                                     <h2 class="digit-blue d-flex">
@@ -2889,7 +2912,7 @@
                                     </h2>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6': 'col-3'">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
@@ -3041,7 +3064,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12 stat-block">
+                            <div *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)" class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.closing_balance }}</h1>
                                     <div class="d-flex flex-column justify-content-between">

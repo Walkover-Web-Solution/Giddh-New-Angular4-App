@@ -90,6 +90,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
+import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 
 @NgModule({
     declarations: [
@@ -140,7 +141,8 @@ import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/a
         BulkStockAdvanceFilterComponent,
         ExportInventoryMasterComponent,
         AdjustInventoryComponent,
-        AsideCreateNewReasonComponent
+        AsideCreateNewReasonComponent,
+        PreviewVariantImageComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -224,7 +226,8 @@ import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/a
         ReportFiltersComponent,
         MatDivider,
         BulkStockAdvanceFilterComponent,
-        AdjustInventoryComponent
+        AdjustInventoryComponent,
+        PreviewVariantImageComponent
     ]
 })
 export class NewInventoryModule { }

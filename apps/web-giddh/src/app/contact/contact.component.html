@@ -22,7 +22,7 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div class="header-content-sticky">
+                    <div class="header-content-sticky vendor-z-index">
                         <div
                             *ngIf="
                                 (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
@@ -63,7 +63,8 @@
                                             class="form-group mr-r15 pull-left linked-entities mb-0"
                                             name="currentBranch"
                                             *ngIf="
-                                                currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
+                                                currentCompanyBranches?.length > 2 &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                             "
                                         >
                                             <div>
@@ -87,7 +88,13 @@
                                                             >
                                                                 <span class="entity-icon">
                                                                     <i
-                                                                        class="icon-branch-icon pull-right"
+                                                                        class="pull-right"
+                                                                        [ngClass]="{
+                                                                            'icon-company-profile':
+                                                                                option?.consolidatedBranch,
+                                                                            'icon-branch-icon':
+                                                                                !option?.consolidatedBranch
+                                                                        }"
                                                                         *ngIf="!option.isCompany"
                                                                         tooltip="{{ commonLocaleData?.app_branch }}"
                                                                     ></i>
@@ -101,7 +108,9 @@
                                                                     <div class="item giddh-limit single-line-clamp">
                                                                         {{ option?.label || "-" }}
                                                                     </div>
-                                                                    <div class="item-unique giddh-limit single-line-clamp">
+                                                                    <div
+                                                                        class="item-unique giddh-limit single-line-clamp"
+                                                                    >
                                                                         {{ option?.name || "-" }}
                                                                     </div>
                                                                 </span>
@@ -275,6 +284,14 @@
                                             >
                                                 {{ localeData?.bulk_payment }}
                                             </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0"
+                                                (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
+                                                aria-label="send bulk email"
+                                            >
+                                                {{ localeData?.send_bulk_email }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </div>
@@ -331,7 +348,9 @@
                                 <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
-                                        <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_receipt }}</span>
+                                        <span *ngIf="activeTab === 'customer'">{{
+                                            commonLocaleData?.app_receipt
+                                        }}</span>
                                         <div>
                                             <span class="d-inline-flex number-total">
                                                 <amount-field
@@ -363,15 +382,15 @@
                                 </div>
                             </div>
                         </div>
-                            <div
-                                class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
-                                *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
-                            >
-                                <p (click)="showGiddhDatepicker($event)">
-                                    <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
-                                    <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                                </p>
-                            </div>
+                        <div
+                            class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
+                            *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
+                        >
+                            <p (click)="showGiddhDatepicker($event)">
+                                <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
+                                <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
+                            </p>
+                        </div>
                     </div>
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
                         <div class="pd-b2 mr-b1 overflow-visible">
@@ -591,7 +610,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_customer_name
+                                                    title: commonLocaleData?.app_name
                                                 }
                                             "
                                         ></ng-container>
@@ -610,6 +629,8 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="localeData?.customer"
+                            [matTooltip]="account?.name"
+                            matTooltipPosition="above"
                         >
                             <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
@@ -622,7 +643,7 @@
                                         (change)="selectAccount($event, account)"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="text-ellipsis">{{ account.name }}</span>
                                 </div>
 
                                 <button
@@ -686,6 +707,14 @@
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button> -->
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
                                 </mat-menu>
                             </div>
                         </td>
@@ -865,7 +894,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state" [matTooltip]="account?.state?.name" matTooltipPosition="above">
                             {{ account?.state?.name || "-" }}
                         </td>
                     </ng-container>
@@ -938,7 +967,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_vendor_name
+                                                    title: commonLocaleData?.app_name
                                                 }
                                             "
                                         ></ng-container>
@@ -958,6 +987,8 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
+                            [matTooltip]="account?.name"
+                            matTooltipPosition="above"
                         >
                             <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
@@ -970,7 +1001,7 @@
                                         [(ngModel)]="account.isSelected"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="text-ellipsis">{{ account.name }}</span>
                                 </div>
                                 <button
                                     mat-icon-button
@@ -1025,6 +1056,14 @@
                                         aria-label="record bill"
                                     >
                                         {{ commonLocaleData?.app_record_bill }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
                                     </button>
                                     <!-- <button
                                         mat-menu-item
@@ -1308,7 +1347,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state" [matTooltip]="account?.state?.name" matTooltipPosition="above">
                             {{ account?.state?.name || "-" }}
                         </td>
                     </ng-container>
@@ -1343,7 +1382,7 @@
                             {{ commonLocaleData?.app_action }}
                         </th>
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_action">
-                            <div class="d-flex column-gap15">
+                            <div class="d-flex column-gap15 justify-content-center">
                                 <button
                                     mat-stroked-button
                                     *ngIf="isGetAllIntegratedBankInProgress"
@@ -1363,16 +1402,12 @@
                                 </button>
                                 <button
                                     mat-stroked-button
-                                    *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
+                                    *ngIf="isPlaidSupportedCountry && !isGetAllIntegratedBankInProgress"
                                     class="btn-small min-width-150 contact-ipad-responsive"
                                     [routerLink]="['/pages/settings/integration/payment']"
                                     aria-label="bank"
                                 >
-                                    {{
-                                        isPlaidSupportedCountry
-                                            ? localeData?.connect_bank
-                                            : localeData?.connect_icici_bank
-                                    }}
+                                    {{ localeData?.connect_bank }}
                                 </button>
                             </div>
                             <ng-container
@@ -1382,7 +1417,7 @@
                                     !isIciciAccountPendingForApproval
                                 "
                             >
-                                <div class="d-flex column-gap15">
+                                <div class="d-flex column-gap15 justify-content-center">
                                     <button
                                         mat-stroked-button
                                         color="primary"
@@ -1393,6 +1428,9 @@
                                     >
                                         {{ commonLocaleData?.app_pay_now }}
                                     </button>
+                                    <span *ngIf="account?.bankPaymentDetails && account?.country?.code !== 'IN'"
+                                        >-</span
+                                    >
                                     <button
                                         mat-stroked-button
                                         *ngIf="!account?.bankPaymentDetails"
@@ -1574,25 +1612,27 @@
         let-fieldName="fieldName"
         let-formControl="formControl"
     >
-        <div class="align-items-center d-flex" [hidden]="show">
-            <button
-                mat-icon-button
-                aria-label="search"
-                (click)="toggleSearch(fieldName)"
-                class="customer-vendor-name-search-icon"
-            >
-                <span class="icon-search"></span>
-            </button>
-            <span> {{ title }}</span>
-        </div>
-        <div class="align-items-center d-flex pd-l14" [hidden]="!show">
-            <text-field
-                [type]="'text'"
-                [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control search-table'"
-                [formControl]="formControl"
-                [autoFocus]="show"
-            ></text-field>
+        <div class="search-table">
+            <div class="align-items-center d-flex" [hidden]="show">
+                <button
+                    mat-icon-button
+                    aria-label="search"
+                    (click)="toggleSearch(fieldName)"
+                    class="customer-vendor-name-search-icon"
+                >
+                    <span class="icon-search"></span>
+                </button>
+                <span> {{ title }}</span>
+            </div>
+            <div class="align-items-center d-flex pd-l14" [hidden]="!show">
+                <text-field
+                    [type]="'text'"
+                    [placeholder]="getSearchFieldText(fieldName)"
+                    [cssClass]="'form-control'"
+                    [formControl]="formControl"
+                    [autoFocus]="show"
+                ></text-field>
+            </div>
         </div>
     </ng-template>
 </ng-container>

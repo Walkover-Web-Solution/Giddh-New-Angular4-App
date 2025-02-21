@@ -256,6 +256,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold broadcast event for project wise accounting */
+    public projectBroadcast: any;
+    /** Holds true if plan is either trial or cancelled */
+    public isCurrentSubscriptionTrialOrCancelled: boolean = null;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -516,6 +522,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
+        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
+        this.projectBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                this.gotToBranchTab();
+            }
+        };
+
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
@@ -531,6 +544,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
@@ -761,6 +780,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
+                    this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
                 }
                 this.activeCompany = res;
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
@@ -1230,6 +1250,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public backToCompany(): void {
+        this.expandSidebar(true);
         this.router.navigate(['/pages', 'home']);
     }
 
@@ -1777,15 +1798,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        let text = this.localeData?.subscription_ended_note;
-        text = text
-            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+        let text = "";
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && !this.isCurrentSubscriptionTrialOrCancelled) {
+            text = this.localeData?.subscription_expire_renewal_message;
+        } else {
+            text = this.localeData?.subscription_ended_note
+                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+        }
         return text;
     }
-
     /**
      * This will return plan transactions ended note
      *

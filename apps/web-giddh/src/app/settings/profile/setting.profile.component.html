@@ -9,19 +9,17 @@
     <ng-container *ngIf="!(getCompanyProfileInProgress$ | async)">
         <!--Tabs of Company Profile-->
         <div class="settings-profile-tabs" *ngIf="!addressOnly">
-             <div class="row">
+            <div class="row">
                 <div class="col-lg-12 px-3 w-fit-content">
-                    <mat-tab-group 
-                        mat-stretch-tabs="false" 
-                        mat-align-tabs="start" 
+                    <mat-tab-group
+                        mat-stretch-tabs="false"
+                        mat-align-tabs="start"
                         animationDuration="0ms"
                         [selectedIndex]="activeTabIndex"
                         (selectedTabChange)="onTabChange($event)"
                         class="table-header-sticky"
                     >
-                        <mat-tab
-                            [label]="personalInformationTabHeading"
-                        >
+                        <mat-tab [label]="personalInformationTabHeading">
                             <personal-information
                                 (saveProfile)="handleSaveProfile($event)"
                                 [profileData]="companyProfileObj"
@@ -32,6 +30,7 @@
                             </personal-information>
                         </mat-tab>
                         <mat-tab
+                            *ngIf="!isConsolidatedBranch"
                             [label]="
                                 companyProfileObj?.taxType
                                     ? localeData?.address + companyProfileObj?.taxType
@@ -75,8 +74,8 @@
                 </div>
             </div>
         </div>
-        <div class="settings-profile-tabs" *ngIf="addressOnly">
-            <div class="profile-tab-container"  *ngIf="!(getCompanyProfileInProgress$ | async)">
+        <div class="settings-profile-tabs" *ngIf="addressOnly && !isConsolidatedBranch">
+            <div class="profile-tab-container" *ngIf="!(getCompanyProfileInProgress$ | async)">
                 <address-settings
                     [addresses]="addresses"
                     [(isAddressChangeInProgress)]="isAddressChangeInProgress"

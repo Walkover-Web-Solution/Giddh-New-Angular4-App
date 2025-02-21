@@ -261,7 +261,7 @@
                                     <button
                                         mat-stroked-button
                                         color="primary"
-                                        [hidden]="isCompany"
+                                        [hidden]="(isCompany || isConsolidatedBranch)"
                                         #submitButton
                                         (keyup)="keyUpOnSubmitButton($event)"
                                         (click)="saveEntry()"

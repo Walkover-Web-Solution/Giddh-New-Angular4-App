@@ -4,78 +4,159 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div class="dialog-header d-flex align-items-center form-header">
-        <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
+    <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
+        <h3 mat-dialog-title >{{ commonLocaleData?.app_custom_email_template }}</h3>
         <span mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></span>
     </div>
-    <mat-dialog-content class="dialog-body d-flex flex-column h-100">
-        <div class="overflow-auto">
-            <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
-                <div class="chip-gap">
-                    <div class="form-group position-relative">
-                        <select-multiple-fields
-                            [placeholder]="localeData?.select_to"
-                            [options]="toEmails"
-                            (selectedOption)="selectedToEmails = $event"
-                            [selectedValues]="selectedToEmails"
-                            [validations]="['email']"
-                            [name]="'to'"
-                            class="select-multiple-chiplist mb-3"
-                        ></select-multiple-fields>
-                        <div class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc')">{{
-                                localeData?.cc
-                            }}</a>
-                            <a class="btn-link" href="javascript:;" (click)="toggleBccCc('bcc')">{{
-                                localeData?.bcc
-                            }}</a>
+
+    <mat-dialog-content class="dialog-body d-flex flex-column">
+        <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
+            <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
+                <div
+                    class="form-group position-relative"
+                    (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)"
+                >
+                    <div class="d-flex border-bottom">
+                        <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{ localeData?.to }}</label>
+                        <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
+                            {{ allStaticEmails }}
+                            <span
+                                class="suffix-emails font-15 d-inline-block text-primary"
+                                *ngIf="hiddenEmailList.length"
+                                (click)="$event.stopPropagation(); clickedInsideEmail()"
+                                >{{ hiddenEmailList }}</span
+                            >
+                        </div>
+                        <div
+                            class="d-flex w-100"
+                            [ngClass]="{ 'flex-column': selectedToEmails.length }"
+                            *ngIf="!getTotalEmailsCount || clickedInsideEmailSection"
+                        >
+                            <select-multiple-fields
+                                [placeholder]="
+                                    !(getTotalEmailsCount || clickedInsideEmailSection) ? localeData?.recipients : ''
+                                "
+                                [options]="toEmails"
+                                (selectedOption)="selectedToEmails = $event"
+                                [selectedValues]="selectedToEmails"
+                                [validations]="['email']"
+                                [chipPrefix]="'@'"
+                                [autoFocus]="emailFocusStates.isTo"
+                                [name]="emailType.To"
+                                class="select-multiple-chiplist w-100"
+                            ></select-multiple-fields>
+                            <div
+                                *ngIf="clickedInsideEmailSection && !showCc && !showBcc"
+                                class="d-flex column-gap1 justify-content-end"
+                            >
+                                <a
+                                    class="btn-link"
+                                    href="javascript:;"
+                                    (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
+                                    >{{ localeData?.cc }}</a
+                                >
+                                <a
+                                    class="btn-link"
+                                    href="javascript:;"
+                                    (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
+                                    >{{ localeData?.bcc }}</a
+                                >
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="showCc">
-                        <select-multiple-fields
-                            [placeholder]="localeData?.select_cc"
-                            [options]="ccEmails"
-                            (selectedOption)="selectedCcEmails = $event"
-                            [selectedValues]="selectedCcEmails"
-                            [validations]="['email']"
-                            [name]="'cc'"
-                            class="select-multiple-chiplist mb-3"
-                        ></select-multiple-fields>
-                    </div>
-                    <div class="form-group" *ngIf="showBcc">
-                        <select-multiple-fields
-                            [placeholder]="localeData?.select_bcc"
-                            [options]="bccEmails"
-                            (selectedOption)="selectedBccEmails = $event"
-                            [selectedValues]="selectedBccEmails"
-                            [validations]="['email']"
-                            [name]="'bcc'"
-                            class="select-multiple-chiplist mb-3"
-                        ></select-multiple-fields>
-                    </div>
-                    <div class="form-group">
-                        <input
-                            type="text"
-                            #subjectInputField
-                            name="emailSubject"
-                            matInput
-                            formControlName="emailSubject"
-                            class="form-control border-bottom border-left-0 border-right-0 border-top-0"
-                            [placeholder]="localeData?.enter_subject_placeholder"
-                        />
+                </div>
+                <div
+                    class="form-group position-relative"
+                    *ngIf="showCc && clickedInsideEmailSection"
+                    (click)="setEmailFocus(emailType.Cc)"
+                >
+                    <div class="d-flex border-bottom">
+                        <label class="mr-r1">{{ localeData?.cc }}</label>
+                        <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedCcEmails.length }">
+                            <select-multiple-fields
+                                [options]="ccEmails"
+                                (selectedOption)="selectedCcEmails = $event"
+                                [selectedValues]="selectedCcEmails"
+                                [validations]="['email']"
+                                [chipPrefix]="'@'"
+                                [autoFocus]="emailFocusStates.isCc"
+                                [name]="emailType.Cc"
+                                class="select-multiple-chiplist w-100"
+                            ></select-multiple-fields>
+
+                            <div class="d-flex column-gap1 justify-content-end">
+                                <a
+                                    *ngIf="!showBcc"
+                                    class="btn-link"
+                                    href="javascript:;"
+                                    (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
+                                    >{{ localeData?.bcc }}</a
+                                >
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group editor-container">
-                    <textarea [froalaEditor]="froalaOptions" formControlName="html"></textarea>
+                <div
+                    class="form-group position-relative"
+                    *ngIf="showBcc && clickedInsideEmailSection"
+                    (click)="setEmailFocus(emailType.Bcc)"
+                >
+                    <div class="d-flex border-bottom">
+                        <label class="mr-r1">{{ localeData?.bcc }}</label>
+                        <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedBccEmails.length }">
+                            <select-multiple-fields
+                                [options]="bccEmails"
+                                (selectedOption)="selectedBccEmails = $event"
+                                [selectedValues]="selectedBccEmails"
+                                [validations]="['email']"
+                                [chipPrefix]="'@'"
+                                [autoFocus]="emailFocusStates.isBcc"
+                                [name]="emailType.Bcc"
+                                class="select-multiple-chiplist w-100"
+                            ></select-multiple-fields>
+
+                            <div class="d-flex column-gap1 justify-content-end">
+                                <a
+                                    *ngIf="!showCc"
+                                    class="btn-link"
+                                    href="javascript:;"
+                                    (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
+                                    >{{ localeData?.cc }}</a
+                                >
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
-        </div>
-        <div class="row position-sticky mt-1">
-            <div class="col-sm-4 pr-0">
-                <button aria-label="save" mat-stroked-button color="primary" type="button" (click)="onSubmit()">
-                    {{ commonLocaleData?.app_save }}
-                </button>
+                <div class="form-group">
+                    <input
+                        type="text"
+                        #subjectInputField
+                        name="emailSubject"
+                        matInput
+                        formControlName="emailSubject"
+                        class="form-control border-bottom border-left-0 border-right-0 border-top-0"
+                        [placeholder]="localeData?.subject"
+                    />
+                </div>
             </div>
+            <div class="form-group editor-container">
+                <textarea [froalaEditor]="froalaOptions" formControlName="html"></textarea>
+            </div>
+        </form>
+        <div mat-dialog-actions class="justify-content-start">
+            <button aria-label="save" mat-stroked-button color="primary" type="button" (click)="onSubmit('save')">
+                {{ commonLocaleData?.app_save }}
+            </button>
+            <button
+                *ngIf="inputData?.activeTab"
+                aria-label="save and send email"
+                mat-stroked-button
+                color="primary"
+                type="button"
+                (click)="onSubmit('send')"
+            >
+                {{ localeData?.save_and_send }}
+            </button>
         </div>
     </mat-dialog-content>
 </ng-container>

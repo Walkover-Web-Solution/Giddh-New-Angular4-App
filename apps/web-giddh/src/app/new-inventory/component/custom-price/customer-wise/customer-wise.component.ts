@@ -298,10 +298,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         additional: item
                     }
                 });
-                this.discountsList.unshift({
-                    label: this.localeData?.select_discount,
-                    value: null
-                });
             }
         });
 

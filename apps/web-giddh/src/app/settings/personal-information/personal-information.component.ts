@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil, pairwise, filter } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
@@ -63,8 +65,10 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     public region: string;
     /** Holds Portal Login Url */
     public portalLoginUrl: string = "";
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
-    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) {
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
         this.initProfileForm();
     }
 
@@ -74,6 +78,11 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : 'in';
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
@@ -91,43 +100,58 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.profileData && changes.profileData.currentValue !== changes.profileData.previousValue) {
-            let allowUpdate: boolean = false;
             if (this.profileData?.alias || this.profileData?.name) {
                 this.profileForm.patchValue(this.profileData);
                 this.portalLoginUrl = `${this.portalUrl}${this.profileData.portalDomain}/${this.region}/login`;
             }
 
             if (this.organizationType === 'COMPANY') {
-                this.profileForm?.get('name')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value && allowUpdate) {
-                        this.profileUpdated('name');
-                    }
+                this.profileForm?.get('name')?.valueChanges?.pipe(
+                    takeUntil(this.destroyed$),
+                    debounceTime(700),
+                    pairwise(), // Emits [previousValue, currentValue]
+                    filter(([prev, curr]) => prev !== curr) // Only proceed if values are different
+                ).subscribe(([prev, curr]) => {
+                    this.profileUpdated('name');
                 });
-                this.profileForm?.get('portalDomain')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value && allowUpdate) {
-                        this.profileUpdated('portalDomain');
-                    }
+
+                this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
+                    takeUntil(this.destroyed$),
+                    debounceTime(700),
+                    pairwise(),
+                    filter(([prev, curr]) => prev !== curr)
+                ).subscribe(([prev, curr]) => {
+                    this.profileUpdated('portalDomain');
                 });
-                this.profileForm?.get('nameAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value && allowUpdate) {
-                        this.profileUpdated('nameAlias');
-                    }
+
+                this.profileForm?.get('nameAlias')?.valueChanges?.pipe(
+                    takeUntil(this.destroyed$),
+                    debounceTime(700),
+                    pairwise(),
+                    filter(([prev, curr]) => prev !== curr)
+                ).subscribe(([prev, curr]) => {
+                    this.profileUpdated('nameAlias');
                 });
-                this.profileForm?.get('headQuarterAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value && allowUpdate) {
-                        this.profileUpdated('headQuarterAlias');
-                    }
+
+                this.profileForm?.get('headQuarterAlias')?.valueChanges?.pipe(
+                    takeUntil(this.destroyed$),
+                    debounceTime(700),
+                    pairwise(),
+                    filter(([prev, curr]) => prev !== curr)
+                ).subscribe(([prev, curr]) => {
+                    this.profileUpdated('headQuarterAlias');
                 });
             } else {
-                this.profileForm?.get('alias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
-                    if (value && allowUpdate) {
-                        this.profileUpdated('alias');
-                    }
+                this.profileForm?.get('alias')?.valueChanges?.pipe(
+                    takeUntil(this.destroyed$),
+                    debounceTime(700),
+                    pairwise(),
+                    filter(([prev, curr]) => prev !== curr)
+                ).subscribe(([prev, curr]) => {
+                    this.profileUpdated('alias');
                 });
             }
-            setTimeout(() => {
-                allowUpdate = true;
-            }, 1500);
+
         }
     }
 

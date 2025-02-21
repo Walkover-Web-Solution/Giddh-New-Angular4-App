@@ -33,9 +33,12 @@
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.select_vendor : localeData?.select_customer"
-                                                formControlName="uniqueName" [name]="'account'"
-                                                [options]="voucherAccountResults$ | async" [showCreateNew]="true"
-                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                                formControlName="uniqueName" 
+                                                [name]="'account'"
+                                                [options]="voucherAccountResults$ | async" 
+                                                [showCreateNew]="true"
+                                                [enableDynamicSearch]="true" 
+                                                [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="!invoiceType.isPurchaseOrder && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isPaymentInvoice ? localeData?.add_customer : localeData?.add_vendor"
                                                 [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
@@ -811,6 +814,7 @@
                                                                     <reactive-dropdown-field
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
+                                                                        (keydown.enter)="$event.preventDefault()"
                                                                         [label]="commonLocaleData?.app_account"
                                                                         [placeholder]="localeData?.select_acc"
                                                                         formControlName="uniqueName"
@@ -1121,27 +1125,25 @@
                                                                             (change)="handleQuantityBlur(transaction)"
                                                                             [type]="'text'"></text-field>
                                                                         <ng-container formGroupName="stockUnit">
-                                                                            <ng-container
-                                                                                *ngIf="activeEntryIndex !== entryIndex">
+                                                                            <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                                 <div class="wrap-td-data">
                                                                                     {{
                                                                                     transaction.get('stock.stockUnit.code')?.value
                                                                                     }}
                                                                                 </div>
                                                                             </ng-container>
-                                                                            <mat-select
-                                                                                *ngIf="activeEntryIndex === entryIndex"
-                                                                                formControlName="uniqueName"
-                                                                                [placeholder]="commonLocaleData?.app_select"
-                                                                                class="form-control mt-2 bg"
-                                                                                name="transactionUnit{{entryIndex}}">
-                                                                                <mat-option
-                                                                                    *ngFor="let unit of stockUnits[entryIndex] | async"
-                                                                                    [value]="unit.stockUnitUniqueName">{{
-                                                                                    unit.stockUnitCode }}</mat-option>
-                                                                            </mat-select>
+                                                                            <ng-container *ngIf="stockUnits[entryIndex] | async as resolvedStockUnits">
+                                                                                <mat-select *ngIf="activeEntryIndex === entryIndex" formControlName="uniqueName"
+                                                                                    [placeholder]="commonLocaleData?.app_select" class="form-control mt-2"
+                                                                                    (selectionChange)="selectUnit($event, transaction, resolvedStockUnits)"
+                                                                                    name="transactionUnit{{entryIndex}}">
+                                                                                    <mat-option *ngFor="let unit of resolvedStockUnits" [value]="unit.stockUnitUniqueName">
+                                                                                        {{ unit.stockUnitCode }}
+                                                                                    </mat-option>
+                                                                                </mat-select>
+                                                                            </ng-container>
                                                                         </ng-container>
-                                                                    </ng-container>
+                                                                        </ng-container>
                                                                 </td>
 
                                                                 <!-- Rate -->
@@ -1210,6 +1212,7 @@
                                                                             [readonly]="invoiceForm.get('isAdvanceReceipt')?.value"
                                                                             decimalDigitsDirective
                                                                             formControlName="amountForAccount"
+                                                                            (keydown.enter)="$event.preventDefault()"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
                                                                     <span
@@ -1247,7 +1250,7 @@
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value"
                                                                         [companyDecimalPlaces]="company.giddhBalanceDecimalPlaces"
-                                                                        [discountsList]="discountsList$ | async"
+                                                                        [discountsList]="(discountsList$ | async) ?? []"
                                                                         [commonLocaleData]="commonLocaleData"
                                                                         [selectedDiscountsList]="entry.get('discounts')?.value"
                                                                         [currency]="account.baseCurrencySymbol"

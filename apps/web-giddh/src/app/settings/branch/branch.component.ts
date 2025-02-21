@@ -137,6 +137,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector("body")?.classList?.add("setting-branch-body");
         this.getOnboardingForm();
         this.searchBranchQuery.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(query => {
             if (query !== undefined && query !== null) {
@@ -268,7 +269,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.branchToUpdate = {
                 name: branch.name,
                 alias: branch.name,
-                linkedEntities: branch.addresses || []
+                linkedEntities: branch.addresses || [],
+                parentBranchName: branch?.parentBranch?.name
             };
             this.toggleAsidePane();
         });
@@ -332,6 +334,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        document.querySelector("body")?.classList?.remove("setting-branch-body");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -440,30 +443,32 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public updateBranchInfo(branchDetails: any): void {
-        branchDetails.formValue.linkedEntity = branchDetails.formValue.linkedEntity || [];
-        this.isBranchChangeInProgress = true;
-        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity?.uniqueName,
-            isDefault: filteredEntity.isDefault,
-        }));
-        const requestObj = {
-            name: branchDetails.formValue.name,
-            alias: branchDetails.formValue.alias,
-            branchUniqueName: this.branchDetails?.uniqueName,
-            linkAddresses
-        };
-        this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.addressAsidePaneRef?.close();
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
-                this.toasterService.successToast(this.localeData?.branch_updated);
-            } else {
-                this.toasterService.errorToast(response?.message);
-            }
-            this.isBranchChangeInProgress = false;
-        }, () => {
-            this.isBranchChangeInProgress = false;
-        });
+        if (branchDetails) {
+            branchDetails.formValue.linkedEntity = branchDetails.formValue?.linkedEntity || [];
+            this.isBranchChangeInProgress = true;
+            const linkAddresses = branchDetails.addressDetails?.linkedEntities?.filter(entity => (branchDetails.formValue?.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
+                uniqueName: filteredEntity?.uniqueName,
+                isDefault: filteredEntity?.isDefault,
+            }));
+            const requestObj = {
+                name: branchDetails.formValue?.name,
+                alias: branchDetails.formValue?.alias,
+                branchUniqueName: this.branchDetails?.uniqueName,
+                linkAddresses
+            };
+            this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.addressAsidePaneRef?.close();
+                    this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+                    this.toasterService.successToast(this.localeData?.branch_updated);
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+                this.isBranchChangeInProgress = false;
+            }, () => {
+                this.isBranchChangeInProgress = false;
+            });
+        }
     }
 
     /**

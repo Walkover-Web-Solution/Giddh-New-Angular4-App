@@ -21,8 +21,8 @@ export class MobileRestrictedComponent {
         this.breakpointObserver.observe([
             '(min-width: 481px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.matches) {
-                this.router.navigate(['/home'])
+            if (result?.matches) {
+                this.router.navigate(['/home']);
             }
         });
     }

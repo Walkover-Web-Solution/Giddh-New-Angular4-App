@@ -128,9 +128,9 @@
                                     <div class="menu-dropdown-wrapper">
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex justify-content-between">
@@ -190,9 +190,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -253,9 +253,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -336,7 +336,7 @@
                                             class="mr-t2 mr-b05 align-items-center"
                                             *ngIf="
                                                 currentCompanyBranches?.length > 1 &&
-                                                currentOrganizationType === 'COMPANY'
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                             "
                                         >
                                             <span>{{ localeData?.go_to_branch_information }} </span>
@@ -351,9 +351,9 @@
                                         </div>
                                         <ng-container
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
@@ -575,7 +575,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="go to plan" (click)="goToSelectPlan()">{{
+                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="go to plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
@@ -590,9 +590,9 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get select " (click)="goToSelectPlan()">{{
-                    localeData?.click_here
-                }}</a>
+                <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToSelectPlan()">
+                    {{ localeData?.click_here }}
+                </a>
             </p>
         </div>
     </div>
@@ -605,7 +605,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionTransactionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get plan" (click)="goToSelectPlan()">{{
+                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="get plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>

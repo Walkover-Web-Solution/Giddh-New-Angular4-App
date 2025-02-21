@@ -41,6 +41,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public selectedCompany: CompanyResponse = null;
     /** Hold true if tag menu is open */
     public isTagMenuOpened: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -52,6 +54,12 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -150,7 +158,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                     if (organization) {
                         if (organization.type === OrganizationType.Branch) {
                             organizationIndex = 1;
-                        } else if (organization.type === OrganizationType.Company || !organization.type) {
+                        } else if ((organization.type === OrganizationType.Company || this.isConsolidatedBranch) || !organization.type) {
                             organizationIndex = 0;
                         }
                     }

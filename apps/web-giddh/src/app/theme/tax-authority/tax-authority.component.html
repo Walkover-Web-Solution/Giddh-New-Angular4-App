@@ -21,7 +21,7 @@
         </div>
         <div class="container-fluid ml-0" *ngIf="(taxAuthorityList$ | async)?.length && !(isLoading$ | async)">
             <div class="row">
-                <div class="col-12 px-0">
+                <div class="col-12 px-0 text-right">
                     <!-- Create Tax Authority Button When Tax authorities is present  -->
                     <button mat-raised-button color="primary" 
                         (click)="openCreateUpdateTaxAuthorityDialog()">

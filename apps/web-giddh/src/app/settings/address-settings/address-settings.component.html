@@ -1,5 +1,5 @@
-<div class="container-fluid" [ngClass]="{ 'setting-profile-container': !addressOnly }">
-    <div class="row">
+<div class="container-fluid overflow-visible" [ngClass]="{ 'setting-profile-container': !addressOnly }">
+    <div class="row overflow-visible">
         <div
             *ngIf="organizationType === 'COMPANY'"
             class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
@@ -17,23 +17,37 @@
                     <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </a>
             </div>
-            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()" aria-label="address">
+            <button
+                mat-stroked-button
+                color="primary"
+                type="button"
+                class="mr-0"
+                (click)="openAddAndManage()"
+                aria-label="address"
+            >
                 {{ localeData?.add_address }}
             </button>
         </div>
         <!-- branch profile element start -->
         <div
-            *ngIf="organizationType === 'BRANCH'"
+            *ngIf="organizationType === 'BRANCH' || isConsolidatedBranch"
             class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
         >
             <div class="font-15">{{ localeData?.address_list }}</div>
-            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()" aria-label="address">
+            <button
+                mat-stroked-button
+                color="primary"
+                type="button"
+                class="mr-0"
+                (click)="openAddAndManage()"
+                aria-label="address"
+            >
                 {{ localeData?.add_address }}
             </button>
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 overflow-visible">
-            <div class="table-responsive overflow-visible">
+            <div class="table-responsive table-header-sticky">
                 <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view">
                     <ng-container matColumnDef="no">
                         <th class="min-wid-check" width="2%" mat-header-cell *matHeaderCellDef>#</th>
@@ -169,62 +183,62 @@
                     </ng-container>
                     <ng-container matColumnDef="linked">
                         <th width="25%" class="td-search-box" mat-header-cell *matHeaderCellDef>
-                            <div  *ngIf="!hideLinkEntity">
+                            <div *ngIf="!hideLinkEntity">
                                 <span>{{ localeData?.linked_with }}</span>
                             </div>
                             <span *ngIf="hideLinkEntity">&nbsp;</span>
                         </th>
-                    <ng-container *ngIf="!hideLinkEntity">
-                        <td width="30%" class="linked-with" mat-cell *matCellDef="let element">
-                            <div class="d-flex wrap-linked-company">
-                                <div class="d-flex flex-column linked-with w-100">
-                                    <span *ngFor="let entity of element.linkedEntities" class="pb-1">
-                                        <i
-                                            [matTooltip]="commonLocaleData?.app_branch"
-                                            *ngIf="entity.isBranch"
-                                            class="icon-branch-icon mr-r05"
-                                        ></i>
-                                        <i
-                                            [matTooltip]="commonLocaleData?.app_warehouse"
-                                            *ngIf="entity.isWarehouse"
-                                            class="icon-warehouse-icon mr-r05"
-                                        ></i>
-                                        <span class="entity-alias"> {{ entity.name }} </span>
-                                    </span>
-                                </div>
+                        <ng-container *ngIf="!hideLinkEntity">
+                            <td width="30%" class="linked-with" mat-cell *matCellDef="let element">
+                                <div class="d-flex wrap-linked-company">
+                                    <div class="d-flex flex-column linked-with w-100">
+                                        <span *ngFor="let entity of element.linkedEntities" class="pb-1">
+                                            <i
+                                                [matTooltip]="commonLocaleData?.app_branch"
+                                                *ngIf="entity.isBranch"
+                                                class="icon-branch-icon mr-r05"
+                                            ></i>
+                                            <i
+                                                [matTooltip]="commonLocaleData?.app_warehouse"
+                                                *ngIf="entity.isWarehouse"
+                                                class="icon-warehouse-icon mr-r05"
+                                            ></i>
+                                            <span class="entity-alias"> {{ entity.name }} </span>
+                                        </span>
+                                    </div>
 
-                                <div class="ml-auto">
-                                    <div class="d-flex column-gap2">
-                                        <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
-                                            <i class="icon-edit font-14"></i
-                                        ></span>
-                                        <span class="cursor-pointer" (click)="showConfirmationModal(element)">
-                                            <i class="icon-trash"></i
-                                        ></span>
+                                    <div class="ml-auto">
+                                        <div class="d-flex column-gap2">
+                                            <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
+                                                <i class="icon-edit font-14"></i
+                                            ></span>
+                                            <span class="cursor-pointer" (click)="showConfirmationModal(element)">
+                                                <i class="icon-trash"></i
+                                            ></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </ng-container>
-                    <ng-container *ngIf="hideLinkEntity">
-                        <td width="30%" class="linked-with" mat-cell *matCellDef="let element">
-                            <div class="d-flex">
-                                <div class="ml-auto">
-                                    <div class="d-flex column-gap2">
-                                        <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
-                                            <i class="icon-edit font-14"></i
-                                        ></span>
-                                        <span class="cursor-pointer" (click)="showConfirmationModal(element)">
-                                            <i class="icon-trash"></i
-                                        ></span>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngIf="hideLinkEntity">
+                            <td width="30%" class="linked-with" mat-cell *matCellDef="let element">
+                                <div class="d-flex">
+                                    <div class="ml-auto">
+                                        <div class="d-flex column-gap2">
+                                            <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
+                                                <i class="icon-edit font-14"></i
+                                            ></span>
+                                            <span class="cursor-pointer" (click)="showConfirmationModal(element)">
+                                                <i class="icon-trash"></i
+                                            ></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
+                        </ng-container>
                     </ng-container>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
                     <ng-container *ngIf="!shouldShowLoader">
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </ng-container>
@@ -236,7 +250,7 @@
             </div>
         </div>
         <!-- branch profile element start -->
-        <div class="d-flex flex-column w-100" *ngIf="organizationType === 'BRANCH'">
+        <div class="d-flex flex-column w-100" *ngIf="organizationType === 'BRANCH' || isConsolidatedBranch">
             <div *ngFor="let address of addresses; index as addressIndex">
                 <div class="branch-profile-address-content col-md-12 mr-b15">
                     <div class="single-branch-detail mr-b15">
@@ -246,8 +260,10 @@
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber && address.address">
-                                        <br/>
+                                    <ng-container
+                                        *ngIf="showTaxColumn && address.taxType && address.taxNumber && address.address"
+                                    >
+                                        <br />
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
                                 </p>
@@ -312,10 +328,10 @@
 
 <!-- Create address part of Address Tab -->
 <ng-template #asideAccountAsidePane>
-<div [keyboardShortcut]="'esc'" (onShortcutPress)="closeAccountAsidePane()">
+    <div [keyboardShortcut]="'esc'" (onShortcutPress)="closeAccountAsidePane()">
         <create-address
             class="account-aside-menu-state transform-inherit"
-            [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
+            [companyName]="organizationType === 'BRANCH' || isConsolidatedBranch ? profileData?.companyName : ''"
             [currentOrganizationUniqueName]="currentOrganizationUniqueName"
             [showLoader]="isAddressChangeInProgress"
             (saveAddress)="saveAddress($event)"
@@ -366,10 +382,22 @@
                             <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>
                         <div class="d-flex justify-content-start column-gap1">
-                            <button mat-stroked-button color="primary" type="submit" (click)="onConfirmation()" [attr.aria-label]="commonLocaleData?.app_yes">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                type="submit"
+                                (click)="onConfirmation()"
+                                [attr.aria-label]="commonLocaleData?.app_yes"
+                            >
                                 {{ commonLocaleData?.app_yes }}
                             </button>
-                            <button mat-dialog-close mat-stroked-button type="submit" class="btn custom-btn" [attr.aria-label]="commonLocaleData?.app_no">
+                            <button
+                                mat-dialog-close
+                                mat-stroked-button
+                                type="submit"
+                                class="btn custom-btn"
+                                [attr.aria-label]="commonLocaleData?.app_no"
+                            >
                                 {{ commonLocaleData?.app_no }}
                             </button>
                         </div>

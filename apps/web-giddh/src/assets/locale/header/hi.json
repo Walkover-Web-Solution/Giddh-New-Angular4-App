@@ -3,6 +3,7 @@
 	"click_here": "यहाँ क्लिक करें",
 	"subscription_end_note": "आपकी [PLAN_DURATION] [PLAN_DURATION_UNIT] योजना - [PLAN_NAME] [EXPIRY_DATE] को समाप्त हो जाएगी। अपनी सदस्यता को अपग्रेड करने के लिए आवेदन करें।",
 	"subscription_ended_note": "आपकी [PLAN_DURATION] [PLAN_DURATION_UNIT] योजना - [PLAN_NAME] [EXPIRY_DATE] को समाप्त हो गई। अपनी सदस्यता को अपग्रेड करने के लिए आवेदन करें।",
+    "subscription_expire_renewal_message": "भुगतान प्रारंभ कर दिया गया है। सफल भुगतान प्रसंस्करण पर आपकी सदस्यता नवीनीकृत कर दी जाएगी।",
 	"subscription_transaction_limit_ended": "आपने अपनी निर्धारित योजना की लेन-देन सीमा पार कर ली है - [PLAN_NAME] ने [PLAN_START_DATE] को सदस्यता ली थी। गिद्ध के साथ अपना लेखा-जोखा जारी रखने के लिए, कृपया अपनी वर्तमान योजना को नवीनीकृत करें या किसी अन्य योजना पर स्विच करें। अधिक सहायता के लिए हमसे संपर्क करें।",
 	"ready_to_upgrade": "सदस्यता अपग्रेड करने के लिए तैयार",
 	"renew_plan": "नवीनीकरण योजना",

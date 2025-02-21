@@ -12,7 +12,7 @@ export class HttpWrapperService {
         private loaderService: LoaderService,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     public get = (
@@ -119,7 +119,7 @@ export class HttpWrapperService {
         if (sessionId) {
             options.headers["Session-Id"] = sessionId;
         }
-        
+
         options.headers["cache-control"] = "no-cache";
         if (!options.headers["Content-Type"]) {
             options.headers["Content-Type"] = "application/json";

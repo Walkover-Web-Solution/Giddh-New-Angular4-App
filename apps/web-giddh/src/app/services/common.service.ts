@@ -173,7 +173,6 @@ export class CommonService {
      */
     public uploadFile(postRequest: any, addVoucherVersion: boolean = false): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.UPLOAD_FILE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
-
         const formData: FormData = new FormData();
         formData.append('file', postRequest.file, postRequest.fileName);
 
@@ -184,7 +183,9 @@ export class CommonService {
         if (addVoucherVersion && this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-
+        if (postRequest.type) {
+            url += `?type=${postRequest.type}`;
+        }
         return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;
@@ -269,5 +270,4 @@ export class CommonService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
     }
-
 }

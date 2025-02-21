@@ -27,18 +27,26 @@
             </h3>
 
             <sh-select
-                [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                [disabled]="
+                    !isPettyCash &&
+                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                    branches?.length > 1
+                "
                 id="update-ledger-select-account"
                 *ngIf="openDropDown"
                 class="d-inline-block"
                 [placeholder]="commonLocaleData?.app_select_account"
                 [isPaginationEnabled]="true"
                 (scrollEnd)="handleScrollEnd()"
-                (dynamicSearchedQuery)="isAccountSearchData = true ; onSearchQueryChanged($event)"
+                (dynamicSearchedQuery)="isAccountSearchData = true; onSearchQueryChanged($event)"
                 [enableDynamicSearch]="true"
                 [notFoundMsg]="noResultsFoundLabel"
                 (onHide)="handleSuggestionHide()"
-                [class.disabled-ledger]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                [class.disabled-ledger]="
+                    !isPettyCash &&
+                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                    branches?.length > 1
+                "
                 name="accountUniqueName"
                 [(ngModel)]="baseAccountName$"
                 [showClear]="false"
@@ -134,14 +142,15 @@
                                                 [disabled]="
                                                     isEinvoiceGenerated ||
                                                     (!isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1)
                                                 "
                                                 [id]="'giddh-datepicker-left-' + i"
                                                 name="datess"
                                                 [(ngModel)]="vm.selectedLedger.entryDate"
                                                 (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                (dateSelected)="resetInvoiceList(); getInvoiceListsForCreditNote()"
+                                                (dateSelected)="resetInvoiceList();"
                                             ></giddh-datepicker>
                                         </td>
                                         <td
@@ -151,14 +160,7 @@
                                                 'other-account-entry':
                                                     isPettyCash && txn?.particular?.uniqueName === 'others'
                                             }"
-                                            class="
-                                                col-5
-                                                position-relative
-                                                select2-parent select2-ledger
-                                                d-flex
-                                                align-items-center
-                                                justify-content-between
-                                            "
+                                            class="col-5 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
@@ -176,18 +178,22 @@
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         [class.disabled-ledger]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         [isPaginationEnabled]="true"
                                                         (scrollEnd)="handleScrollEnd()"
-                                                        (dynamicSearchedQuery)="isAccountSearchData = true ; onSearchQueryChanged($event)"
+                                                        (dynamicSearchedQuery)="
+                                                            isAccountSearchData = true; onSearchQueryChanged($event)
+                                                        "
                                                         [enableDynamicSearch]="true"
                                                         [notFoundMsg]="noResultsFoundLabel"
                                                         (onHide)="handleSuggestionHide()"
@@ -347,7 +353,8 @@
                                                 [disabled]="
                                                     isEinvoiceGenerated ||
                                                     (!isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1)
                                                 "
                                                 [id]="'update-ledger-amount-dr-' + i"
@@ -472,7 +479,8 @@
                                                 [disabled]="
                                                     isEinvoiceGenerated ||
                                                     (!isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1)
                                                 "
                                                 [id]="'giddh-datepicker-right-' + i"
@@ -484,14 +492,7 @@
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             [id]="'credit-id-' + i"
-                                            class="
-                                                position-relative
-                                                col-5
-                                                select2-parent select2-ledger
-                                                d-flex
-                                                align-items-center
-                                                justify-content-between
-                                            "
+                                            class="position-relative col-5 select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                             [ngClass]="{
                                                 'other-account-entry':
                                                     isPettyCash && txn?.particular?.uniqueName === 'others'
@@ -513,18 +514,22 @@
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         [class.disabled-ledger]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         [isPaginationEnabled]="true"
                                                         (scrollEnd)="handleScrollEnd()"
-                                                        (dynamicSearchedQuery)="isAccountSearchData = true ; onSearchQueryChanged($event)"
+                                                        (dynamicSearchedQuery)="
+                                                            isAccountSearchData = true; onSearchQueryChanged($event)
+                                                        "
                                                         [enableDynamicSearch]="true"
                                                         [notFoundMsg]="noResultsFoundLabel"
                                                         (onHide)="handleSuggestionHide()"
@@ -537,7 +542,10 @@
                                                         [fixedValue]="txn.particular.name"
                                                         [showClear]="false"
                                                         [(ngModel)]="txn.particular.uniqueName"
-                                                        (blur)="txn.particular.uniqueName?.length && txn.particular.uniqueName = undefined"
+                                                        (blur)="
+                                                            txn.particular.uniqueName?.length &&
+                                                                (txn.particular.uniqueName = undefined)
+                                                        "
                                                         [ItemHeight]="67"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.by_select_accounts"
@@ -688,7 +696,8 @@
                                                 [disabled]="
                                                     isEinvoiceGenerated ||
                                                     (!isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1)
                                                 "
                                                 [id]="'update-ledger-amount-cr-' + i"
@@ -793,7 +802,9 @@
                         [(ngModel)]="isRcmEntry"
                         [disabled]="
                             isEinvoiceGenerated ||
-                            (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1)
+                            (!isPettyCash &&
+                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                branches?.length > 1)
                         "
                         (change)="changeRcmCheckboxState($event)"
                         class="mr-r1"
@@ -817,9 +828,13 @@
                                 <label class="font-12">{{ localeData?.select_variant }}</label>
                                 <sh-select
                                     id="update-ledger-select-variant"
-                                    [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                                    [disabled]="
+                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                        branches?.length > 1
+                                    "
                                     [class.disabled-ledger]="
-                                        currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                        branches?.length > 1
                                     "
                                     (selected)="variantChanged($event)"
                                     [placeholder]="localeData?.select_variant"
@@ -841,12 +856,12 @@
                                         [options]="warehouses"
                                         [disabled]="
                                             !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             branches?.length > 1
                                         "
                                         [class.disabled-ledger]="
                                             !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             branches?.length > 1
                                         "
                                         [doNotResetSelectedValues]="true"
@@ -880,7 +895,7 @@
                                         [disabled]="
                                             isEinvoiceGenerated ||
                                             (!isPettyCash &&
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 branches?.length > 1)
                                         "
                                         id="update-ledger-quantity"
@@ -903,7 +918,7 @@
                                         [disabled]="
                                             isEinvoiceGenerated ||
                                             (!isPettyCash &&
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 branches?.length > 1)
                                         "
                                         class="form-control text-right"
@@ -932,7 +947,7 @@
                                         [disabled]="
                                             isEinvoiceGenerated ||
                                             (!isPettyCash &&
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 branches?.length > 1)
                                         "
                                         id="update-ledger-price"
@@ -984,7 +999,9 @@
                                     matInput
                                     [disabled]="
                                         isEinvoiceGenerated ||
-                                        (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1)
+                                        (!isPettyCash &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            branches?.length > 1)
                                     "
                                     id="update-ledger-amount-receipt"
                                     *ngIf="isAdvanceReceipt"
@@ -1002,7 +1019,9 @@
                                     matInput
                                     [disabled]="
                                         isEinvoiceGenerated ||
-                                        (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1)
+                                        (!isPettyCash &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            branches?.length > 1)
                                     "
                                     id="update-ledger-amount"
                                     *ngIf="!isAdvanceReceipt"
@@ -1043,7 +1062,9 @@
 
                             <div
                                 [attr.disabled]="
-                                    !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                    !isPettyCash &&
+                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                    branches?.length > 1
                                         ? 'disabled'
                                         : null
                                 "
@@ -1063,7 +1084,7 @@
                                         [disabled]="
                                             isEinvoiceGenerated ||
                                             (!isPettyCash &&
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 branches?.length > 1)
                                         "
                                         [discountAccountsDetails]="vm.discountArray"
@@ -1116,7 +1137,9 @@
 
                             <div
                                 [attr.disabled]="
-                                    !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                    !isPettyCash &&
+                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                    branches?.length > 1
                                         ? 'disabled'
                                         : null
                                 "
@@ -1196,7 +1219,9 @@
                                     matInput
                                     [disabled]="
                                         isEinvoiceGenerated ||
-                                        (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1)
+                                        (!isPettyCash &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            branches?.length > 1)
                                     "
                                     type="text"
                                     id="update-ledger-total-amount"
@@ -1238,7 +1263,7 @@
                                             [disabled]="
                                                 isEinvoiceGenerated ||
                                                 (!isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     branches?.length > 1)
                                             "
                                             (change)="toggleOtherTaxesAsideMenu.emit(vm)"
@@ -1253,7 +1278,8 @@
                                                 href="javascript:void(0)"
                                                 class="text-gray"
                                                 (click)="
-                                                    (currentOrganizationType === 'COMPANY' && branches?.length === 1) ||
+                                                    ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                                        branches?.length === 1) ||
                                                     currentOrganizationType === 'BRANCH'
                                                         ? toggleOtherTaxesAsideMenu.emit(vm)
                                                         : ''
@@ -1300,7 +1326,9 @@
                                     matInput
                                     [disabled]="
                                         isEinvoiceGenerated ||
-                                        (!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1)
+                                        (!isPettyCash &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                            branches?.length > 1)
                                     "
                                     id="update-ledger-taxable-amount"
                                     type="text"
@@ -1322,10 +1350,14 @@
                                     [placeholder]="localeData?.itc_type"
                                     [options]="availableItcList"
                                     [disabled]="
-                                        !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                        !isPettyCash &&
+                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                        branches?.length > 1
                                     "
                                     [class.disabled-ledger]="
-                                        !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                        !isPettyCash &&
+                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                        branches?.length > 1
                                     "
                                 >
                                 </sh-select>
@@ -1343,7 +1375,9 @@
                                     class="form-control mat-field-border"
                                     [placeholder]="commonLocaleData?.app_description"
                                     [disabled]="
-                                        !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                        !isPettyCash &&
+                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                        branches?.length > 1
                                     "
                                 ></textarea>
                             </div>
@@ -1370,7 +1404,8 @@
                                         <i
                                             class="edit-adjustment icon-edit11"
                                             *ngIf="
-                                                (currentOrganizationType === 'COMPANY' && branches?.length === 1) ||
+                                                ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                                    branches?.length === 1) ||
                                                 currentOrganizationType === 'BRANCH'
                                             "
                                         ></i>
@@ -1391,7 +1426,7 @@
                                         <p class="info-text">
                                             {{
                                                 localeData?.adjustment_notes
-                                                    | replace: "[VOUCHER_NUMBER]":vm.selectedLedger?.voucherNumber
+                                                    | replace : "[VOUCHER_NUMBER]" : vm.selectedLedger?.voucherNumber
                                             }}
                                         </p>
                                     </div>
@@ -1459,7 +1494,8 @@
                                                     [disabled]="
                                                         isEinvoiceGenerated ||
                                                         (!isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1)
                                                     "
                                                     id="update-ledger-inclusive-tax"
@@ -1542,7 +1578,8 @@
                                                         [showClear]="false"
                                                         [class.disabled-ledger]="
                                                             !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
                                                         (selected)="getInvoiceListsData($event)"
@@ -1550,7 +1587,8 @@
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         [width]="'161px'"
@@ -1583,7 +1621,8 @@
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         id="update-ledger-invoice-number"
@@ -1635,7 +1674,8 @@
                                                         [forceClearReactive]="forceClear$ | async"
                                                         [class.disabled-ledger]="
                                                             !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
                                                         (selected)="creditNoteInvoiceSelected($event)"
@@ -1643,7 +1683,8 @@
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         [ItemHeight]="67"
@@ -1709,7 +1750,8 @@
                                                         [forceClearReactive]="forceClear$ | async"
                                                         [class.disabled-ledger]="
                                                             !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
                                                         (selected)="creditNoteInvoiceSelected($event)"
@@ -1717,7 +1759,8 @@
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
-                                                                currentOrganizationType === 'COMPANY' &&
+                                                                (currentOrganizationType === 'COMPANY' ||
+                                                                    isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
                                                         [ItemHeight]="67"
@@ -1828,7 +1871,8 @@
                                                     color="primary"
                                                     [disabled]="
                                                         !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1
                                                     "
                                                     id="update-ledger-sale"
@@ -1838,7 +1882,7 @@
                                                     (change)="handleVoucherAdjustment()"
                                                     >{{
                                                         localeData?.adjust_voucher
-                                                            | replace: "[VOUCHER_TYPE]":currentVoucherLabel
+                                                            | replace : "[VOUCHER_TYPE]" : currentVoucherLabel
                                                     }}</mat-checkbox
                                                 >
                                             </td>
@@ -1853,7 +1897,8 @@
                                                     color="primary"
                                                     [disabled]="
                                                         !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1
                                                     "
                                                     id="update-ledger-advance-receipt"
@@ -1874,7 +1919,8 @@
                                                     color="primary"
                                                     [disabled]="
                                                         !isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1
                                                     "
                                                     id="update-ledger-adjust-receipt"
@@ -1898,7 +1944,8 @@
                                                         matInput
                                                         [disabled]="
                                                             !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
                                                         type="text"
@@ -1918,7 +1965,8 @@
                                                         [cssClass]="'mat-field-border bdr form-control'"
                                                         [disabled]="
                                                             !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
                                                         id="update-ledger-cheque-clearance"
@@ -1939,7 +1987,8 @@
                                                         [isFilterEnabled]="true"
                                                         [class.disabled-ledger]="
                                                             !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
                                                         [placeholder]="commonLocaleData?.app_select_tag"
@@ -1947,7 +1996,8 @@
                                                         [multiple]="true"
                                                         [disabled]="
                                                             !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
                                                         name="tagNames"
@@ -1970,7 +2020,7 @@
                                             <span class="primary-color">
                                                 {{
                                                     localeData?.total_in_currency
-                                                        | replace: "[CURRENCY]":vm.baseCurrencyDetails?.code
+                                                        | replace : "[CURRENCY]" : vm.baseCurrencyDetails?.code
                                                 }}:
                                                 <span class="d-inline-flex">
                                                     <amount-field
@@ -2003,7 +2053,8 @@
                                                 [disabled]="
                                                     vm.isInvoiceGeneratedAlready ||
                                                     (!isPettyCash &&
-                                                        currentOrganizationType === 'COMPANY' &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                         branches?.length > 1) ||
                                                     (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                                     isAdjustReceiptSelected ||
@@ -2038,7 +2089,7 @@
                                         <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-color">
                                             {{
                                                 localeData?.total_in_currency
-                                                    | replace: "[CURRENCY]":vm.foreignCurrencyDetails?.code
+                                                    | replace : "[CURRENCY]" : vm.foreignCurrencyDetails?.code
                                             }}:
 
                                             <span class="d-inline-flex">
@@ -2080,7 +2131,8 @@
                                                     [disabled]="
                                                         isEinvoiceGenerated ||
                                                         (!isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
                                                             branches?.length > 1)
                                                     "
                                                     (blur)="exchangeRateChanged()"
@@ -2111,7 +2163,7 @@
                                             <input
                                                 [disabled]="
                                                     !isPettyCash &&
-                                                    currentOrganizationType === 'COMPANY' &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     branches?.length > 1
                                                 "
                                                 type="file"
@@ -2140,7 +2192,7 @@
                                         *ngIf="
                                             !(
                                                 !isPettyCash &&
-                                                currentOrganizationType === 'COMPANY' &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 branches?.length > 1
                                             )
                                         "
@@ -2172,7 +2224,12 @@
                 </div>
             </div>
         </div>
-        <p class="edit-message" *ngIf="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1">
+        <p
+            class="edit-message"
+            *ngIf="
+                !isPettyCash && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && branches?.length > 1
+            "
+        >
             {{ localeData?.toedit_switch_branch }}
         </p>
     </div>
@@ -2202,7 +2259,11 @@
                     <span class="pull-left">
                         <mat-checkbox
                             color="primary"
-                            [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                            [disabled]="
+                                !isPettyCash &&
+                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                branches?.length > 1
+                            "
                             id="tourist-scheme"
                             name="touristSchemeApplicable"
                             [(ngModel)]="vm.selectedLedger.touristSchemeApplicable"
@@ -2218,7 +2279,11 @@
                     <span class="nowrap">{{ localeData?.passport_number }} </span>
                     <input
                         matInput
-                        [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                        [disabled]="
+                            !isPettyCash &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                            branches?.length > 1
+                        "
                         id="update-ledger-passport-number"
                         type="text"
                         name="selectedLedger.passportNumber"

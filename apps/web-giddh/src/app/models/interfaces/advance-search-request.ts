@@ -11,6 +11,7 @@ export class AdvanceSearchRequest {
     public sort: string = 'asc';
     public branchUniqueName: string = '';
     public reversePage: boolean = false;
+    public paginationToken?: string = '';
 
     constructor() {
         this.dataToSend = new AdvanceSearchModel();

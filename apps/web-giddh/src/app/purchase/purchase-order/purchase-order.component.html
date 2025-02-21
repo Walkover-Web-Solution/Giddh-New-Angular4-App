@@ -11,14 +11,14 @@
             <div class="d-flex date-advance-search">
                 <div class="btn-wrapper">
                     <button
-                        *ngIf="!isCompany && voucherApiVersion === 1"
+                        *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                         class="btn btn-sky-blue desktop-view-btn"
                         [routerLink]="['/pages/purchase-management/purchase-order/new']"
                     >
                         {{ localeData?.new_order }}
                     </button>
                     <button
-                        *ngIf="!isCompany && voucherApiVersion === 2"
+                        *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                         class="btn btn-sky-blue desktop-view-btn"
                         [routerLink]="['/pages/vouchers/purchase-order/create']"
                     >
@@ -49,7 +49,7 @@
                     *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0"
                     class="more-toggle"
                 >
-                    <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
+                    <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group" dropdown #dp="bs-dropdown">
                         <button
                             dropdownToggle
                             type="button"
@@ -116,7 +116,7 @@
                 </button>
             </div>
             <div>
-                <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
+                <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group" dropdown #dp="bs-dropdown">
                     <button
                         dropdownToggle
                         type="button"
@@ -168,7 +168,7 @@
             </div>
             <div class="btn-wrapper">
                 <button
-                    *ngIf="!isCompany"
+                    *ngIf="(!isCompany && !isConsolidatedBranch)"
                     class="btn btn-sky-blue desktop-view-btn mr-0"
                     [routerLink]="['/pages/purchase-management/purchase-order/new']"
                 >
@@ -396,7 +396,7 @@
                             >
                                 <a
                                     [tooltip]="localeData?.convert_tobill"
-                                    *ngIf="item?.status === 'open' && !isCompany"
+                                    *ngIf="item?.status === 'open' && (!isCompany && !isConsolidatedBranch)"
                                     (click)="
                                         voucherApiVersion === 2
                                             ? openBulkConvert(purchaseBulkConvert, item)
@@ -412,14 +412,14 @@
                                     <span class="icon-envelope font-12"></span>
                                 </a>
                                 <a
-                                    *ngIf="!isCompany"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
                                     [tooltip]="commonLocaleData?.app_copy"
                                     [routerLink]="['/pages/purchase-management/purchase-order/new/' + item?.uniqueName]"
                                 >
                                     <span class="icon-copy-small font-15"></span>
                                 </a>
                                 <a
-                                    *ngIf="!isCompany"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
                                     [tooltip]="commonLocaleData?.app_delete"
                                     (click)="confirmDelete(item)"
                                 >
@@ -626,6 +626,7 @@
         [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName"
         [purchaseOrderUniqueName]="purchaseOrderUniqueName"
         [isCompany]="isCompany"
+        [isConsolidatedBranch]="isConsolidatedBranch"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     >

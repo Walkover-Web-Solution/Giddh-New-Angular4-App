@@ -82,7 +82,8 @@ export class LedgerService {
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
         }
         // tslint:disable-next-line:max-line-length
-        return this.http.get(url, null, { headers: { 'token':  request.paginationToken }}).pipe(map((res) => {
+        const options = request.paginationToken ? { headers: { 'token': request.paginationToken } } : null;
+        return this.http.get(url, null, options).pipe(map((res) => {
             let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
             data.request = request;
             return data;
@@ -220,11 +221,20 @@ export class LedgerService {
         }), catchError((e) => this.errorHandler.HandleCatch<ReconcileResponse[], string>(e, '', { accountUniqueName, from, to, chequeNumber })));
     }
 
-    public DownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
+    /**
+     * Downloads an attachment associated with a ledger entry.
+     *
+     * @param fileName - The name of the file to be downloaded.
+     * @param type - Optional. The type of the attachment. If not provided and voucherApiVersion is 2, the URL will be modified accordingly.
+     * @returns An Observable that emits a BaseResponse containing the DownloadLedgerAttachmentResponse and the original file name.
+     *          The response includes the downloaded attachment data and any relevant metadata.
+     */
+    public downloadAttachement(fileName: string, type?: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.DOWNLOAD_ATTACHMENT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':fileName', fileName);
-        if (this.generalService.voucherApiVersion === 2) {
+
+        if (this.generalService.voucherApiVersion === 2 && !type) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.get(url).pipe(
@@ -376,7 +386,7 @@ export class LedgerService {
                 catchError((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, { accountUniqueName })));
     }
 
-    public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, sortingOrder?: string, page?: number, count?, q?: string, branchUniqueName?: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
+    public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, sortingOrder?: string, page?: number, count?, q?: string, branchUniqueName?: string, paginationToken?: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let request = '';
 
@@ -400,8 +410,9 @@ export class LedgerService {
         if (branchUniqueName) {
             request = request.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? encodeURIComponent(branchUniqueName) : ''}`);
         }
+        const options = paginationToken ? { headers: { 'token': paginationToken } } : null;
         return this.http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model, options).pipe(
                 map((res) => {
                     let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res;
                     data.request = model;
@@ -505,24 +516,35 @@ export class LedgerService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
     }
 
-    public GetLedgerBalance(model: TransactionsRequest): Observable<BaseResponse<any, any>> {
+    public getLedgerBalance(model: TransactionsRequest, payload: any = null): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_BALANCE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
             ?.replace(':from', model.from)?.replace(':to', model.to)
-            ?.replace(':accountCurrency', model.accountCurrency?.toString());
+            ?.replace(':accountCurrency', model.accountCurrency?.toString())
+            ?.replace(':q', model.q?.toString() ?? '');
         if (model.branchUniqueName) {
             model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
-        return this.http.get(url).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = model;
-                data.queryString = { model };
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        if (payload) {
+            return this.http.post(url, payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        } else {
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    data.queryString = { model };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        }
     }
 
     /**

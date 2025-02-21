@@ -16,11 +16,11 @@
                             <div
                                 class="btn-group desktop-view-btn"
                                 dropdown
-                                *ngIf="!isCompany && selectedVoucher === 'sales'"
+                                *ngIf="(!isCompany && !isConsolidatedBranch) && selectedVoucher === 'sales'"
                                 [autoClose]="true"
                             >
                                 <button
-                                    *ngIf="!isCompany"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
                                     id="ddl-newinv"
                                     dropdownToggle
                                     type="button"
@@ -76,14 +76,14 @@
                             </div>
                             <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                                 <button
-                                    *ngIf="!isCompany && voucherApiVersion === 1"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('purchase')"
                                 >
                                     {{ localeData?.new_bill }}
                                 </button>
                                 <button
-                                    *ngIf="!isCompany && voucherApiVersion === 2"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/purchase/create']"
                                 >
@@ -92,14 +92,14 @@
                             </div>
                             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                 <button
-                                    *ngIf="!isCompany && voucherApiVersion === 1"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('credit note')"
                                 >
                                     {{ localeData?.new_cr_note }}
                                 </button>
                                 <button
-                                    *ngIf="!isCompany && voucherApiVersion === 2"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/credit-note/create']"
                                 >
@@ -108,14 +108,14 @@
                             </div>
                             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                 <button
-                                    *ngIf="!isCompany && voucherApiVersion === 1"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('debit note')"
                                 >
                                     {{ localeData?.new_dr_note }}
                                 </button>
                                 <button
-                                    *ngIf="!isCompany && voucherApiVersion === 2"
+                                    *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/debit-note/create']"
                                 >
@@ -178,7 +178,7 @@
                             >
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
-                            <div *ngIf="!isCompany" class="btn-group visible-center d-none" dropdown #dp="bs-dropdown">
+                            <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group visible-center d-none" dropdown #dp="bs-dropdown">
                                 <button
                                     dropdownToggle
                                     type="button"
@@ -274,7 +274,7 @@
                                     (voucherApiVersion === 2 && selectedItems?.length > 0)
                                 "
                             >
-                                <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
+                                <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group" dropdown #dp="bs-dropdown">
                                     <button
                                         dropdownToggle
                                         type="button"
@@ -401,11 +401,11 @@
                                     <div
                                         class="btn-group"
                                         dropdown
-                                        *ngIf="!isCompany && selectedVoucher === 'sales'"
+                                        *ngIf="(!isCompany && !isConsolidatedBranch) && selectedVoucher === 'sales'"
                                         [autoClose]="true"
                                     >
                                         <button
-                                            *ngIf="!isCompany"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
                                             id="ddl-newinv-invoice"
                                             dropdownToggle
                                             type="button"
@@ -462,14 +462,14 @@
                                     </div>
                                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                         <button
-                                            *ngIf="!isCompany && voucherApiVersion === 1"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('credit note')"
                                         >
                                             {{ localeData?.new_cr_note }}
                                         </button>
                                         <button
-                                            *ngIf="!isCompany && voucherApiVersion === 2"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                             class="btn btn-sky-blue m-0"
                                             [routerLink]="['/pages/vouchers/credit-note/create']"
                                         >
@@ -478,14 +478,14 @@
                                     </div>
                                     <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                         <button
-                                            *ngIf="!isCompany && voucherApiVersion === 1"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('debit note')"
                                         >
                                             {{ localeData?.new_dr_note }}
                                         </button>
                                         <button
-                                            *ngIf="!isCompany && voucherApiVersion === 2"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                             class="btn btn-sky-blue m-0"
                                             [routerLink]="['/pages/vouchers/debit-note/create']"
                                         >
@@ -524,7 +524,7 @@
                                     </button>
                                     <div *ngIf="selectedItems?.length === 1">
                                         <div
-                                            *ngIf="!isCompany"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
                                             class="btn-group"
                                             dropdown
                                             triggers="mouseover"
@@ -604,7 +604,7 @@
                                 </button>
                                 <div *ngIf="selectedItems?.length === 1">
                                     <div
-                                        *ngIf="!isCompany"
+                                        *ngIf="(!isCompany && !isConsolidatedBranch)"
                                         class="btn-group"
                                         dropdown
                                         triggers="mouseover"
@@ -1235,7 +1235,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
+                                                *ngIf="(!isCompany && !isConsolidatedBranch) && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1345,13 +1345,13 @@
                                                                 {{ commonLocaleData?.app_send_email }}
                                                             </a>
                                                         </li>
-                                                        <li *ngIf="!isCompany" [routerLink]="['/pages/proforma-invoice/invoice/purchase/' +
+                                                        <li *ngIf="(!isCompany && !isConsolidatedBranch)" [routerLink]="['/pages/proforma-invoice/invoice/purchase/' +
                                                             item?.account?.uniqueName + '/' + item?.uniqueName + '/copy']">
                                                             <a class="cursor-pointer" href="javascript:;" aria-label="copy">
                                                                 {{ commonLocaleData?.app_copy }}
                                                             </a>
                                                         </li>
-                                                        <li *ngIf="!isCompany" (click)="deletePurchaseBill(item?.uniqueName)">
+                                                        <li *ngIf="(!isCompany && !isConsolidatedBranch)" (click)="deletePurchaseBill(item?.uniqueName)">
                                                             <a class="cursor-pointer" href="javascript:;" aria-label="trash">
                                                                 {{ commonLocaleData?.app_delete }}
                                                             </a>
@@ -1540,7 +1540,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
+                                                *ngIf="(!isCompany && !isConsolidatedBranch) && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1989,6 +1989,7 @@
                         (closeEvent)="invoicePreviewClosed()"
                         (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
                         [isCompany]="isCompany"
+                        [isConsolidatedBranch]="isConsolidatedBranch"
                         (processPaymentEvent)="performActionPopup($event)"
                         [voucherType]="selectedVoucher"
                         (updateVoucherAction)="onPerformAction(null, $event)"

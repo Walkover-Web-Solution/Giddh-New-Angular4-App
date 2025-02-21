@@ -24,7 +24,7 @@
                         [routerLink]="node?.link"
                         routerLinkActive="active"
                         [ngClass]="{
-                            'hide-node': node.onlyBranchMode && isCompany,
+                            'hide-node': node.onlyBranchMode && (isCompany || isConsolidatedBranch),
                             'active': !node?.link && node.hiddenLink.includes(currentUrl),
                             'mr-t1': (node.name == localeData?.sidebar?.warehouse_balance)
                         }"
@@ -33,7 +33,7 @@
                             class="w-100 d-inline-flex"
                             [ngClass]="{ 'align-items-start': (node.name == localeData?.sidebar?.warehouse_balance),
                                          'align-items-center': !(node.name == localeData?.sidebar?.warehouse_balance)}"
-                            *ngIf="!(node.onlyBranchMode && isCompany)"
+                            *ngIf="!(node.onlyBranchMode && (isCompany || isConsolidatedBranch))"
                             (click)="toggleAsidePane($event, node)"
                         >
                             <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="icon" />

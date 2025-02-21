@@ -15,7 +15,10 @@
                     <div class="row">
                         <div class="d-flex flex-wrap align-items-center w-100 mb-3 column-gap15">
                             <div
-                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                                *ngIf="
+                                    currentCompanyBranches?.length > 2 &&
+                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                "
                                 class="branch-width"
                             >
                                 <dropdown-field
@@ -161,7 +164,9 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchSenderRecieverContainer
-                            (clickOutside)="handleClickOutside($event, searchSenderRecieverContainer, 'Sender/Reciever')"
+                            (clickOutside)="
+                                handleClickOutside($event, searchSenderRecieverContainer, 'Sender/Reciever')
+                            "
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -382,18 +387,20 @@
         </div>
     </ng-template>
     <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-        <div [hidden]="show">
-            <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
-            <span> {{ title }}</span>
-        </div>
-        <div class="input-container" [hidden]="!show">
-            <text-field
-                [type]="'text'"
-                [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control search-table mat-field-border'"
-                [formControl]="formControl"
-                [autoFocus]="show"
-            ></text-field>
+        <div class="search-table">
+            <div [hidden]="show">
+                <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+                <span> {{ title }}</span>
+            </div>
+            <div class="input-container" [hidden]="!show">
+                <text-field
+                    [type]="'text'"
+                    [placeholder]="getSearchFieldText(fieldName)"
+                    [cssClass]="'form-control mat-field-border'"
+                    [formControl]="formControl"
+                    [autoFocus]="show"
+                ></text-field>
+            </div>
         </div>
     </ng-template>
     <!-- Date Picker  -->

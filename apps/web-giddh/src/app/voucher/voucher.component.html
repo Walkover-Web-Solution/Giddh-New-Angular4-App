@@ -3655,7 +3655,7 @@
                                             <button
                                                 mat-stroked-button
                                                 color="primary"
-                                                *ngIf="!isCompany"
+                                                *ngIf="(!isCompany && !isConsolidatedBranch)"
                                                 [disabled]="
                                                     isFileUploading ||
                                                     !hasVoucherEntry ||
@@ -3681,13 +3681,13 @@
                                                     isMobileNumberInvalid
                                                 "
                                                 (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
-                                                *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
+                                                *ngIf="(!isCompany && !isConsolidatedBranch) && isCustomerSelected && !isPendingVoucherType"
                                             >
                                                 {{ generateInvoiceText }}
                                                 {{ localeData?.and_update_acc }}
                                             </button>
                                             <div
-                                                *ngIf="!isCompany"
+                                                *ngIf="(!isCompany && !isConsolidatedBranch)"
                                                 class="d-inline-flex"
                                                 [isDisabled]="
                                                     !hasVoucherEntry ||
@@ -3708,7 +3708,7 @@
                                                     {{ generateInvoiceText }}
                                                 </button>
                                             </div>
-                                            <ng-container *ngIf="!isCompany">
+                                            <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                 <mat-menu
                                                     #dropdownMenu="matMenu"
                                                     class="bottom-dropdown-menu"
@@ -3769,7 +3769,7 @@
                                         <!-- region proforma/estimates -->
                                         <span
                                             class="d-flex column-gap15"
-                                            *ngIf="!isCompany && (isProformaInvoice || isEstimateInvoice)"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch) && (isProformaInvoice || isEstimateInvoice)"
                                         >
                                             <div
                                                 class="d-inline-flex column-gap15"
@@ -3779,7 +3779,7 @@
                                                 "
                                             >
                                                 <button
-                                                    *ngIf="!isCompany"
+                                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
                                                     mat-stroked-button
                                                     [disabled]="
                                                         !hasVoucherEntry ||
@@ -3841,7 +3841,7 @@
                                             {{ commonLocaleData?.app_cancel }}
                                         </button>
                                         <button
-                                            *ngIf="!isCompany"
+                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
                                             mat-stroked-button
                                             color="primary"
                                             [disabled]="

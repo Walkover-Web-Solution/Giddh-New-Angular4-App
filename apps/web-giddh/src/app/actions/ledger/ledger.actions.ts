@@ -230,7 +230,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.ADVANCE_SEARCH),
             switchMap((action: CustomActions) => this.ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from,
-                action.payload.to, '', action.payload.page, action.payload.count, action.payload.q, action.payload.branchUniqueName)),
+                action.payload.to, '', action.payload.page, action.payload.count, action.payload.q, action.payload.branchUniqueName, action.payload.paginationToken)),
             map(response => {
                 return this.advanceSearchResponse(response);
             })));
@@ -376,7 +376,7 @@ export class LedgerActions {
             ofType(LEDGER.GET_LEDGER_BALANCE),
             switchMap((action: CustomActions) => {
                 let req: any = action.payload;
-                return this.ledgerService.GetLedgerBalance(req);
+                return this.ledgerService.getLedgerBalance(req);
             }), map(res => this.validateResponse<any, any>(res, {
                 type: LEDGER.GET_LEDGER_BALANCE_RESPONSE,
                 payload: res
@@ -566,10 +566,10 @@ export class LedgerActions {
         };
     }
 
-    public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, page?: number, count?: number, q?: string, branchUniqueName?: string): CustomActions {
+    public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, page?: number, count?: number, q?: string, branchUniqueName?: string, paginationToken?: string): CustomActions {
         return {
             type: LEDGER.ADVANCE_SEARCH,
-            payload: { model, accountUniqueName, from, to, page, count, q, branchUniqueName }
+            payload: { model, accountUniqueName, from, to, page, count, q, branchUniqueName, paginationToken }
         };
     }
 
@@ -683,7 +683,7 @@ export class LedgerActions {
     public GetLedgerBalance(request: any): CustomActions {
         return {
             type: LEDGER.GET_LEDGER_BALANCE,
-            payload: { from: request.from, to: request.to, accountUniqueName: request.accountUniqueName, accountCurrency: request.accountCurrency, branchUniqueName: request.branchUniqueName }
+            payload: { q: request.q, from: request.from, to: request.to, accountUniqueName: request.accountUniqueName, accountCurrency: request.accountCurrency, branchUniqueName: request.branchUniqueName }
         };
     }
 

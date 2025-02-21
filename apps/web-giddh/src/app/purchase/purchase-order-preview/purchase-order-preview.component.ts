@@ -34,6 +34,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public purchaseOrderUniqueName: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /** True if consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */

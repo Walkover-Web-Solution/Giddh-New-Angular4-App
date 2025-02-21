@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AdjustInventoryListComponentStore } from './utility/adjust-inventory-list.store';
@@ -17,7 +17,7 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 @Component({
@@ -70,12 +70,10 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will use for subscription pagination logs object */
     public adjustInventoryListRequest: InventorytAdjustReportQueryRequest;
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds page size options */
-    public pageSizeOptions: any[] = [20,
-        50,
-        100];
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /* Hold list searching value */
     public inlineSearch: any = '';
     /** Form Group for Adjust Inventory form */
@@ -112,6 +110,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public inventoryType: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private generalService: GeneralService,
@@ -155,6 +155,12 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 this.adjustInventoryListRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.adjustInventoryListRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAllAdjustReports(false);
+            }
+        });
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
@@ -212,7 +218,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',

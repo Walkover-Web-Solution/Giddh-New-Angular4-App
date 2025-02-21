@@ -1,88 +1,66 @@
 <div class="list-filter">
-    <div class="pull-right">
-        <div class="btn-toolbar"></div>
-    </div>
-
-    <!-- region gstr1 -->
-    <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
-        <div class="wrap-GSTR-1-title col-lg-4 col-sm-8 col-12 xs-mb-1">
-            <a href="javascript:void(0);" [routerLink]="['/gstfiling']" aria-label="back img" class="ember-view">
-                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img" />
+    <!-- GSTR1 -->
+    <div class="list-style d-flex justify-content-between align-items-center flex-wrap column-gap1 row-gap15" *ngIf="selectedGst === GstReport.Gstr1">
+        <div class="wrap-GSTR-1-title">
+            <a [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
+                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
             </a>
             <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img" />
 
             <div class="text-middle nav-top">
-                <div class="text-middle head head-font-weight">
+                <div class="text-middle head head-font-weight d-flex align-items-center column-gap1">
                     {{ localeData?.gstr1_label }}
-                    <div *ngIf="showDate" class="btn-group dropdown d-inline-block" dropdown [autoClose]="false"
-                        #monthWise="bs-dropdown" (clickOutside)="monthWise?.hide()" [attachOutsideOnClick]="true">
-                        <button id="button-nested" dropdownToggle type="button"
-                            class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
-                            aria-controls="dropdown-nested">
-                            <ng-container>
-                                {{ visibleSelectMonth }}
-                            </ng-container>
-                            <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                            <li role="menuitem">
-                                <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
-                                    <bs-datepicker-inline name="fromDate" (click)="$event.stopPropagation()"
-                                        (bsValueChange)="periodChanged($event); monthWise.hide()" [bsConfig]="{
-                                            startView: 'month',
-                                            dateInputFormat: 'MM/YYYY',
-                                            adaptivePosition: true,
-                                            minMode: 'month'
-                                        }" [ngModelOptions]="{ standalone: true }">
-                                    </bs-datepicker-inline>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="datepicker-header" *ngIf="!showDate">
-                        <ng-container *ngIf="isMonthSelected">
-                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                        </ng-container>
-                        <ng-container *ngIf="!isMonthSelected">
-                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                            {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container>
-                    </div>
+                     <div *ngIf="showDate">
+                        <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
+                     </div>
                 </div>
                 <div class="font-xs text-middle normal">{{ localeData?.outward_supplies_details }}</div>
             </div>
         </div>
 
-        <div class="col-lg-8 col-sm-4 col-12">
-            <ul class="list-inline list-middle download-drop-down">
+        <div class="flex-grow-1">
+            <ul class="list-inline d-flex column-gap1 align-items-center justify-content-end w-100">
                 <li>
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
                 </li>
-                <li>
-                    <button type="button" class="btn btn-sky-blue mr-0 error-button gstr-button"
-                        (click)="onDownloadSheetGSTR('error')">
+                <li class="d-flex column-gap1 align-items-center">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        (click)="onDownloadSheetGSTR('error')"
+                    >
                         {{ localeData?.filing?.errors }}
                     </button>
-                    <button type="button" class="btn btn-sky-blue mr-0 gstr-button" (click)="pushToPortalModal?.show()">
+                    <button 
+                        mat-stroked-button
+                        color="primary"
+                        (click)="openPushToPortalDialog()">
                         <i class="icon-download"></i>
                         {{ commonLocaleData?.app_download }}
                     </button>
                 </li>
 
-                <li>
-                    <div *ngIf="isCompany && showGstFiling">
-                        <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated"
-                            (click)="pullFromGstIn($event)" *ngIf="showTaxPro">
-                            {{ localeData?.filing?.pull_from_gstn }}
-                        </button>
-                        <button class="btn btn-primary authenticate-btn pull-right"
-                            [ngClass]="{ 'btn-success': gstAuthenticated }"
-                            (click)="toggleSettingAsidePane($event, 'TAXPRO')"
-                            [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)">
-                            {{
+                <li class="d-flex column-gap1 align-items-center" *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [disabled]="!gstAuthenticated"
+                        (click)="pullFromGstIn($event)"
+                        *ngIf="showTaxPro"
+                    >
+                        {{ localeData?.filing?.pull_from_gstn }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [ngClass]="{ 'btn-success': gstAuthenticated }"
+                        (click)="openSettingAsidePane($event, taxServiceEnum.TAXPRO)"
+                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
+                    >
+                        {{
                             gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate
-                            }}
-                        </button>
-                    </div>
+                        }}
+                    </button>
                 </li>
             </ul>
             <span class="pull-right filling-header-message" *ngIf="isCompany && showGstFiling">
@@ -92,123 +70,126 @@
             </span>
         </div>
     </div>
-    <!-- endregion -->
 
-    <!-- region gstr2 -->
-    <div class="list-style" *ngIf="selectedGst === GstReport.Gstr2">
-        <a href="javascript:void(0);" aria-label="back img" id="ember1210" class="ember-view"
-            [routerLink]="['/gstfiling']">
-            <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img" />
-        </a>
-        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img" />
-
-        <div class="text-middle nav-top">
-            <div class="text-middle head-font-weight">
-                {{ localeData?.gstr2_label }}
-                <div *ngIf="showDate" class="btn-group dropdown d-inline-block" dropdown [autoClose]="false"
-                    #monthWise="bs-dropdown" (clickOutside)="monthWise?.hide()" [attachOutsideOnClick]="true">
-                    <button id="button-nested" dropdownToggle type="button"
-                        class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
-                        aria-controls="dropdown-nested">
-                        <ng-container>
-                            {{ visibleSelectMonth }}
-                        </ng-container>
-                        <span class="caret"></span>
-                    </button>
-                    <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                        <li role="menuitem">
-                            <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
-                                <bs-datepicker-inline name="fromDate" (click)="$event.stopPropagation()"
-                                    (bsValueChange)="periodChanged($event); monthWise.hide()" [bsConfig]="{
-                                        startView: 'month',
-                                        dateInputFormat: 'MM/YYYY',
-                                        adaptivePosition: true,
-                                        minMode: 'month'
-                                    }" [ngModelOptions]="{ standalone: true }">
-                                </bs-datepicker-inline>
-                            </a>
-                        </li>
-                    </ul>
+    <!-- GSTR2 -->
+    <div class="list-style d-flex justify-content-between align-items-center" *ngIf="selectedGst === GstReport.Gstr2">
+        <div>
+            <a href="javascript:;" aria-label="back img"  id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
+                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
+            </a>
+            <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img"  />
+            <div class="text-middle nav-top">
+                <div class="text-middle head-font-weight d-flex align-items-center column-gap1">
+                    {{ localeData?.gstr2_label }}
+                    <div *ngIf="showDate">
+                        <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
+                     </div>
                 </div>
-                <div class="datepicker-header" *ngIf="!showDate">
-                    <ng-container *ngIf="isMonthSelected">
-                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                    </ng-container>
-                    <ng-container *ngIf="!isMonthSelected">
-                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                        {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container>
-                </div>
+                <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
             </div>
-            <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
         </div>
-
-        <div class="pull-right btn-wrapper-filling-header">
-            <div class="btn-group d-inline-flex align-items-center" dropdown #dropdown="bs-dropdown">
-                <span class="pull-left">
+        <div class="d-flex flex-column">
+            <div class="d-flex column-gap1 justify-content-end align-items-center">
+                <div class="d-inline-flex align-items-center column-gap1">
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'"></watch-video>
-                </span>
-                <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue">
-                    <i class="icon-download"></i>
-                    {{ commonLocaleData?.app_download }}
-                </button>
-                <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                    aria-labelledby="button-triggers-manual">
-                    <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download"
-                            (click)="onDownloadSheetGSTR('main')">{{
-                            localeData?.filing?.download_sheet
-                            }}</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download"
-                            (click)="onDownloadSheetGSTR('error')">{{
-                            localeData?.filing?.download_error_sheet
-                            }}</a>
-                    </li>
-                </ul>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        aria-labelledby="button-triggers-manual"
+                        [matMenuTriggerFor]="downloadMenu"
+                    >
+                        <i class="icon-download"></i>
+                        {{ commonLocaleData?.app_download }}
+                    </button>
+                    <mat-menu #downloadMenu="matMenu">
+                        <button mat-menu-item aria-label="download"  (click)="onDownloadSheetGSTR('main')">
+                            {{ localeData?.filing?.download_sheet }}
+                        </button>
+                        <button mat-menu-item aria-label="download" (click)="onDownloadSheetGSTR('error')">
+                            {{ localeData?.filing?.download_error_sheet }}
+                        </button>
+                    </mat-menu>
+                </div>
+                <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [ngClass]="{ 'btn-success': gstAuthenticated }"
+                        (click)="!gstAuthenticated ? openSettingAsidePane($event, taxServiceEnum.TAXPRO) : ''"
+                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"               
+                    >
+                        {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [disabled]="!gstAuthenticated"
+                        (click)="pullFromGstIn($event)"
+                        *ngIf="showTaxPro"
+                    >
+                        {{ localeData?.filing?.pull_from_gstn }}
+                    </button>
+                </div>
             </div>
-            <div *ngIf="isCompany && showGstFiling" class="d-inline-flex">
-                <button class="btn btn-primary pull-right" [ngClass]="{ 'btn-success': gstAuthenticated }"
-                    (click)="!gstAuthenticated ? toggleSettingAsidePane($event, 'TAXPRO') : ''">
-                    {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
-                </button>
-                <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated"
-                    (click)="pullFromGstIn($event)" *ngIf="showTaxPro">
-                    {{ localeData?.filing?.pull_from_gstn }}
-                </button>
+            <div class="d-flex justify-content-end filling-header-message">
+                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                    (onUpgradePlan)="buyPlan($event)">
+                </restricted-module-message>
             </div>
         </div>
     </div>
-    <!-- endregion -->
 </div>
 
-<div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-<gst-aside-menu *ngIf="GstAsidePaneState === 'in'" [selectedService]="selectedService" [returnType]="selectedGst"
-    [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)"
-    (fileGst)="fileGstReturnV2()" (cancelConfirmationEvent)="cancelConfirmationModel?.show()"
-    (fileGstComplete)="closeAsidePane()" [localeData]="localeData"
-    [commonLocaleData]="commonLocaleData"></gst-aside-menu>
+<!-- Authentication Dialog -->
+<ng-template #asideAuthentication>
+    <gst-aside-menu
+        [selectedService]="selectedService"
+        [returnType]="selectedGst"
+        (fileGst)="fileGstReturnV2()"
+        (cancelConfirmationEvent)="openCancelConfirmationDialog()"
+        (closeAsideEvent)="asideAuthenticationDialogRef?.close()"
+        (fileGstComplete)="asideAuthenticationDialogRef?.close()"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    ></gst-aside-menu>
+</ng-template>
 
-<!-- region cancel confirmation modal -->
-<div bsModal #cancelConfirmationModel="bs-modal" class="modal z-index-for-aside fade" role="dialog"
-    [config]="{ ignoreBackdropClick: true }">
-    <div class="modal-dialog modal-md second">
-        <div class="modal-content">
-            <confirm-modal [body]="localeData?.filing?.cancel_title"
-                (successCallBack)="cancelConfirmationModel.hide(); toggleSettingAsidePane(null)"
-                (cancelCallBack)="cancelConfirmationModel.hide()"></confirm-modal>
-        </div>
-    </div>
-</div>
-<!--push to portal modal -->
-<div bsModal #pushToPortalModal="bs-modal" class="modal z-index-for-aside fade" role="dialog"
-    [config]="{ ignoreBackdropClick: true }">
-    <div class="modal-dialog modal-md second push-to-portal-modal">
-        <div class="modal-content">
-            <push-to-portal [localeData]="localeData" (cancelCallBack)="pushToPortalModal?.hide()"
-                (downloadExcel)="onDownloadSheetGSTR('main')"
-                (downloadJson)="onDownloadJsonGSTR('main')"></push-to-portal>
-        </div>
-    </div>
-</div>
-<!-- endregion -->
+<!-- Region Cancel Confirmation Dialog -->
+<ng-template #cancelConfirmationDialog>
+    <confirm-modal
+        [body]="localeData?.filing?.cancel_title"
+        (successCallBack)="cancelConfirmationDialogRef?.close(); asideAuthenticationDialogRef?.close()"
+        (cancelCallBack)="cancelConfirmationDialogRef?.close()"
+    ></confirm-modal>
+</ng-template>
+
+<!-- Push to portal Dialog -->
+<ng-template #pushToPortalDialog>
+    <push-to-portal
+        [localeData]="localeData"
+        (downloadExcel)="onDownloadSheetGSTR('main')"
+        (downloadJson)="onDownloadJsonGSTR('main')"
+    ></push-to-portal>
+</ng-template>
+
+<!-- Define the ng-template -->
+<ng-template #monthSelectionDatePicker>
+    <input 
+        matInput 
+        [matDatepicker]="picker" 
+        [placeholder]="date?.value ?? '--'" 
+        autocomplete="off"
+        (focus)="picker?.open()" 
+        (click)="picker?.open()"
+        class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer" 
+        name="date" 
+        readonly
+    />
+    <mat-datepicker 
+        (monthSelected)="setMonthAndYear($event, picker)" 
+        [startView]="'multi-year'"
+        [startAt]="startAt" 
+        #picker
+    >
+    </mat-datepicker>
+</ng-template>

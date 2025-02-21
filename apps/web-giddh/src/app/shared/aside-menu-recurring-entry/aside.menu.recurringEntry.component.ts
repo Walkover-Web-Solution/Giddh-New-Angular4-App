@@ -35,6 +35,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     @Input() public invoice: RecurringInvoice;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /** True if consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     @Output() public closeAsideEvent: EventEmitter<RecurringInvoice> = new EventEmitter(true);
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

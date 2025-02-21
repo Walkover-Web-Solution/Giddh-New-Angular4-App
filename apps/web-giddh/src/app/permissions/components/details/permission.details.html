@@ -33,19 +33,23 @@
             <div class="row mr-b2">
                 <div class="col-sm-12 form-inline">
                     <div class="form-group custom-select position-relative bg-transparent mr-r15">
-                        <dropdown-field
-                            [placeholder]="localeData?.option_select_pages"
-                            [readonly]="newRole?.isFixed"
+                        <reactive-dropdown-field
+                            [label]="localeData?.select_pages"
+                            [placeholder]="localeData?.select_pages"
+                            [options]="pageList"
                             [required]="true"
                             [name]="'pageName'"
-                            [options]="pageList"
-                            (selectedOption)="pageName = $event?.value"
-                        ></dropdown-field>
+                            [labelValue]="pageName"
+                            (selectedOption)="$event && (pageName = $event.value)"
+                            [showError]="!pageName"
+                            [readonly]="newRole?.isFixed"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group">
                         <button
                             mat-stroked-button
-                            color="primary"                            
+                            color="primary"
                             (click)="addNewPage(pageName)"
                             [disabled]="!pageName"
                         >

@@ -369,6 +369,8 @@ export interface ILedgerAdvanceSearchResponse {
     creditTotal: number;
     debitTransactions: DebitTransaction[];
     creditTransactions: any[];
+    prevToken?: string;
+    nextToken?: string;
 }
 
 export interface Inventory {

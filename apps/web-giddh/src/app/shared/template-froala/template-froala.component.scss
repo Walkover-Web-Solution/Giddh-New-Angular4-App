@@ -1,5 +1,5 @@
 .form-header {
-    height: 40px !important;
+    z-index: 1;
 }
 
 .chiplist-section {
@@ -10,4 +10,11 @@
 
 .form-control {
     border-radius: 0;
+}
+
+.suffix-emails {
+    background-color: var(--color-common-secondary-background-for-all-components);
+    border-radius: 6px;
+    padding: 2px 4px;
+    box-shadow: inset 0 0 0 1px var(--color-warning);
 }

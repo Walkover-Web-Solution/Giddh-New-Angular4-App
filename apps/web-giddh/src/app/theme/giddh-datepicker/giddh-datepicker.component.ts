@@ -64,6 +64,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
+    /** This is used to show change date */
+    public inputChange: any = '';
 
     constructor(
         private adapter: DateAdapter<any>,
@@ -80,7 +82,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.value) {
+            if (response?.value) {
                 this.adapter.setLocale(response?.value);
             }
         });
@@ -103,7 +105,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = (typeof(event?.value) === "object") ? dayjs(event?.value).toDate() : dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
+        let selectedDate = (typeof (event?.value) === "object" && event?.value !== null) ? dayjs(event?.value).toDate() : dayjs(this.inputChange, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
     }
@@ -163,7 +165,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public writeValue(value: any): void {
         if (value) {
             this.innerValue = value;
-            this.calendarDate = (typeof(value) === "object") ? dayjs(value).toDate() : dayjs(value, GIDDH_DATE_FORMAT).toDate();
+            this.calendarDate = (typeof (value) === "object") ? dayjs(value).toDate() : dayjs(value, GIDDH_DATE_FORMAT).toDate();
             this.changeDetectorRef.detectChanges();
         } else {
             this.innerValue = "";
@@ -190,5 +192,18 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      */
     public registerOnTouched(fn: any): void {
         this.onTouchedCallback = fn;
+    }
+
+     /**
+     * Get current value on input
+     *
+     * @param event
+     */
+    public dateInputChange(event: Event): void {
+        if (event) {
+            const inputElement = event.target as HTMLInputElement;
+            const inputValue = inputElement.value;
+            this.inputChange = inputValue;
+        }
     }
 }
