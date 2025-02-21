@@ -480,7 +480,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public pageChanged(event: any): void {
         if (typeof event === 'string') {
-            if (this.isAdvanceSearchImplemented) {
+            if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
                 this.advanceSearchRequest.paginationToken = event;
                 this.getAdvanceSearchTxn();
             } else {
