@@ -34,7 +34,7 @@
                             class="single-bank-detail"
                             *cdkVirtualFor="let bankaccount of bankAccounts"
                         >
-                            <p class="bank-name d-flex">
+                            <p class="bank-name d-flex align-items-center">
                                 {{ bankaccount.name }}&nbsp;
                                 <i
                                     *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
