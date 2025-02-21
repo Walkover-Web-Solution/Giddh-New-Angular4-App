@@ -417,10 +417,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Create ledger balance
      *
-     * @returns {void}
+     * @param {boolean} [resetSearch=false]
      * @memberof LedgerComponent
      */
-    public createLedgerBalance(): void {
+    public createLedgerBalance(resetSearch: boolean = false): void {
+        if (resetSearch) {
+            // Reset Search in case of Advance Search
+            this.searchText = '';
+            this.trxRequest.q = '';
+        }
         this.ledgerComponentStore.getLedgerBalance({
             payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
         });
@@ -475,7 +480,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public pageChanged(event: any): void {
         if (typeof event === 'string') {
-            if (this.isAdvanceSearchImplemented) {
+            if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
                 this.advanceSearchRequest.paginationToken = event;
                 this.getAdvanceSearchTxn();
             } else {
@@ -1845,7 +1850,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
-            this.createLedgerBalance();
+            this.createLedgerBalance(true);
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
                 if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
