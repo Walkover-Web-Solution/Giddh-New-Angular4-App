@@ -991,7 +991,15 @@
                                                         "
                                                         [defaultValue]="
                                                             isUpdateMode && branchTransferCreateEditForm.get('destinations.0.warehouse.name')?.value
-                                                                ? branchTransferCreateEditForm.get('destinations.0.warehouse.name').value 
+                                                                ? branchTransferCreateEditForm.get('destinations.0.warehouse.name').value : 
+                                                                destinationWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'destinations.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length === 1
+                                                                    ? branchTransferCreateEditForm.get(
+                                                                        'destinations.0.warehouse.name'
+                                                                    ).value
                                                                     : ''
                                                         "
                                                     >
