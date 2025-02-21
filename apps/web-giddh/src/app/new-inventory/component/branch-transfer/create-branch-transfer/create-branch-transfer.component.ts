@@ -1140,7 +1140,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
                 this.resetDestinationWarehouses(0);
                 this.resetSourceWarehouses(0);
-
                 setTimeout(() => {
                     this.isDefaultLoad = false;
                 }, 1000);
@@ -1318,7 +1317,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
         if (data && data.length > 0) {
             data.forEach(res => {
-                if (res && !res.isCompany && !res.isConsolidatedBranch ) {
+                if (res && !res.isCompany && !res.isConsolidatedBranch) {
                     res.warehouses?.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
@@ -1662,11 +1661,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
             if (sourcesArray && sourceFormGroup && sourceFormGroup.get('uniqueName')?.value) {
                 // Update source warehouses
-                this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                let initSource = false;
+                if (!this.isUpdateMode) {
+                    initSource = true;
+                    this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                }
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
                     this.allWarehouses[sourceFormGroup.get('uniqueName').value]?.forEach(key => {
                         if (destinationsArray && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || '')) {
+                            if (!initSource && this.senderWarehouses[sourceFormGroup.get('uniqueName').value].length) {
+                                initSource = true;
+                                this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                            }
                             this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value]?.push({ label: key.name, value: key?.uniqueName });
                         }
                     });
@@ -1713,11 +1720,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
             if (sourceFormGroup && sourceFormGroup.get('uniqueName').value) {
                 // Update source warehouses
-                this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                let initSource = false;
+                if (!this.isUpdateMode) {
+                    initSource = true;
+                    this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                }
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
                     this.allWarehouses[sourceFormGroup.get('uniqueName').value].forEach(key => {
                         if (destinationsFormGroup && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || ''))) {
+                            if (!initSource && this.senderWarehouses[sourceFormGroup.get('uniqueName').value].length) {
+                                initSource = true;
+                                this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                            }
                             this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
@@ -1775,13 +1790,21 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             }
             if (destinationsArray && destinationsFormGroup && destinationsFormGroup.get('uniqueName').value) {
                 // Update Destination warehouses
-                this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
+                let initDestination = false;
+                if (!this.isUpdateMode) {
+                    initDestination = true;
+                    this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
+                }
                 if (this.allWarehouses[destinationsFormGroup.get('uniqueName').value] && this.allWarehouses[destinationsFormGroup.get('uniqueName').value].length > 0) {
 
                     this.allWarehouses[destinationsFormGroup.get('uniqueName').value].forEach(key => {
 
                         if (key?.uniqueName !== sourcesWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (sourcesWarehouseFormGroup.get('taxNumber')?.value || '')) {
+                            if (!initDestination && this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value].length) {
+                                initDestination = true;
+                                this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
+                            }
                             this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
@@ -1827,12 +1850,20 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
             if (destinationsFormGroup && destinationsFormGroup.get('uniqueName').value) {
                 // Update Destination warehouses
-                this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
 
+                let initDestination = false;
+                if (!this.isUpdateMode) {
+                    initDestination = true;
+                    this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
+                }
                 if (this.allWarehouses[destinationsFormGroup.get('uniqueName').value] && this.allWarehouses[destinationsFormGroup.get('uniqueName').value].length > 0) {
                     this.allWarehouses[destinationsFormGroup.get('uniqueName').value].forEach(key => {
                         if (sourceFormGroup && sourcesWarehouseFormGroup && key?.uniqueName !== sourceFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (sourcesWarehouseFormGroup.get('taxNumber')?.value || ''))) {
+                            if (!initDestination && this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value].length) {
+                                initDestination = true;
+                                this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
+                            }
                             this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value]?.push({ label: key.name, value: key?.uniqueName });
                         }
                     });
