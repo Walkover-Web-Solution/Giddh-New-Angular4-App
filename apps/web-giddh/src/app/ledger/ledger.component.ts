@@ -420,7 +420,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @returns {void}
      * @memberof LedgerComponent
      */
-    public createLedgerBalance(): void {
+    public createLedgerBalance(resetSearch: boolean = false): void {
+        if (resetSearch) {
+            // Reset Search in case of Advance Search
+            this.searchText = '';
+            this.trxRequest.q = '';
+        }
         this.ledgerComponentStore.getLedgerBalance({
             payload: this.advanceSearchRequest.dataToSend, trxRequest: { ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }
         });
@@ -1845,7 +1850,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
-            this.createLedgerBalance();
+            this.createLedgerBalance(true);
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
                 if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
