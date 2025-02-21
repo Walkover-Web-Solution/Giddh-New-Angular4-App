@@ -330,7 +330,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res && res.status === "success") {
-                                return this.patchState({ customFieldsSuccess: res.body.results });
+                                return this.patchState({ customFieldsSuccess: res.body?.results });
                             } else {
                                 res?.message &&  this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({ customFieldsSuccess: null });

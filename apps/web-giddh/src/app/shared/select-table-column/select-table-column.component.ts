@@ -52,9 +52,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     /** Emits the selected custom fields filters */
     @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
     /** Get checked columns length */
-    get checkedColumnsCount(): boolean {
+    public get checkedColumnsCount(): boolean {
         return this.dynamicCustomColumns.filter(col => col?.checked).length == 2;
     }
+
     constructor(
         private changeDetection: ChangeDetectorRef,
         private commonService: CommonService,
@@ -93,7 +94,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         setTimeout(() => {
             this.filteredDisplayColumns();
             let saveColumnReq;
-            if (this.moduleType === 'ITEM_WISE_REPORT' || this.moduleType === 'VARIANT_WISE_REPORT' || this.moduleType === 'INVENTORY_TABLE_REPORT') {
+            const moduleType = ['ITEM_WISE_REPORT', 'VARIANT_WISE_REPORT', 'INVENTORY_TABLE_REPORT'].includes(this.moduleType);
+            if (moduleType) {
                 saveColumnReq = {
                     module: this.moduleType,
                     reportFilterColumns: this.dynamicCustomColumns

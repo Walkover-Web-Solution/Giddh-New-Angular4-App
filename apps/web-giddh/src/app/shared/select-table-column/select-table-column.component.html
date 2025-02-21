@@ -33,13 +33,7 @@
             </button>
         </ng-container>
     </ng-container>
-    <ng-container
-        *ngIf="
-            moduleType === 'ITEM_WISE_REPORT' ||
-            moduleType === 'VARIANT_WISE_REPORT' ||
-            moduleType === 'INVENTORY_TABLE_REPORT'
-        "
-    >
+    <ng-container *ngIf="['ITEM_WISE_REPORT', 'VARIANT_WISE_REPORT', 'INVENTORY_TABLE_REPORT'].includes(moduleType)">
         <ng-container *ngFor="let item of dynamicCustomColumns">
             <button
                 class="menu-buttons"
