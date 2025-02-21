@@ -387,7 +387,8 @@
                                 {{ voucherApiVersion === 2 ? payment?.account?.name : payment?.baseAccountName }}
                             </td>
                             <td class="pl-0" [attr.data-title]="localeData?.payment_mode_label">
-                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                <ng-container>
+                                    <!-- *ngIf="voucherApiVersion !== 2" -->
                                     <div *ngFor="let paymentMode of payment?.particularNames?.split(',')">
                                         {{ paymentMode }}
                                     </div>
@@ -402,7 +403,8 @@
                                 *ngIf="payment?.invoices || payment?.adjustments?.length"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >
-                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                <ng-container>
+                                    <!-- *ngIf="voucherApiVersion !== 2" -->
                                     <div *ngFor="let invoice of payment?.invoices?.split(',')">{{ invoice }}</div>
                                 </ng-container>
                                 <ng-container *ngIf="voucherApiVersion === 2">

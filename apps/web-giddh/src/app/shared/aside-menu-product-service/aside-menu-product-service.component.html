@@ -26,9 +26,9 @@
                         mat-stroked-button
                         color="primary"
                         class="mb-2"
-                        *ngIf="voucherApiVersion !== 2"
                         (click)="toggleStockPane()"
                     >
+                    <!-- *ngIf="voucherApiVersion !== 2" -->
                         {{ commonLocaleData?.app_add_product }}
                     </button>
                     <button
@@ -62,7 +62,8 @@
             </div>
         </div>
 
-        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
+        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
+            <!-- && voucherApiVersion !== 2 -->
             <sales-create-stock
                 [autoFocusInChild]="autoFocusInChild"
                 (closeAsideEvent)="closeAsidePane($event)"

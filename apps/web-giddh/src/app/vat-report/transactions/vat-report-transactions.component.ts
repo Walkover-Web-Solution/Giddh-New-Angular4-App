@@ -173,7 +173,8 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
-        const uniqueName = (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName;
+        const uniqueName =  invoice.voucherUniqueName;
+        (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName
         if (invoice.voucherType === VoucherTypeEnum.purchase) {
             if (uniqueName) {
                 if (this.voucherApiVersion !== 2) {
