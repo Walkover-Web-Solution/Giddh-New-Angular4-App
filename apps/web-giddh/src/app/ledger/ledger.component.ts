@@ -417,7 +417,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Create ledger balance
      *
-     * @returns {void}
+     * @param {boolean} [resetSearch=false]
      * @memberof LedgerComponent
      */
     public createLedgerBalance(resetSearch: boolean = false): void {
