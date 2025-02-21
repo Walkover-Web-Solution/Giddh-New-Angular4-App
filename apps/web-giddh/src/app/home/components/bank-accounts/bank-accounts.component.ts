@@ -171,7 +171,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.callBackBroadcast = new BroadcastChannel("call-back-subscriptiy367on");
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 const referNo = localStorage.getItem('refNo');
