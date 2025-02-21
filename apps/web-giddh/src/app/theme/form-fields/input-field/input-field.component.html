@@ -148,12 +148,12 @@
             [ngClass]="{ 'error-box': showError }"
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
-        <i matPrefix *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
+        <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
-        <i 
-            matSuffix 
-            *ngIf="matSuffixIcon && !suffixTooltipText" 
-            [ngClass]="matSuffixIcon" 
+        <i
+            matSuffixIcon
+            *ngIf="matSuffixIcon && !suffixTooltipText"
+            [ngClass]="matSuffixIcon"
             (click)="!suffixTooltipText && clickOnSuffixIcon()"
             [matTooltip]="suffixTooltipText ?? ''"
             matTooltipPosition="above"
