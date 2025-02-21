@@ -246,55 +246,30 @@ td {
         }
     }
 }
-
-.opening-column {
-    position: relative !important;
+@mixin column-header($label) {
     overflow: visible !important;
 
     &::before {
-        content: 'Opening Stock';
+        content: $label;
         position: absolute;
         top: -50px;
         right: 0;
         transform: translateY(50%);
     }
+}
+
+.opening-column {
+    @include column-header("Opening Stock");
 }
 
 .inward-column {
-    position: relative !important;
-    overflow: visible !important;
-
-    &::before {
-        content: 'Inwards';
-        position: absolute;
-        top: -50px;
-        right: 0;
-        transform: translateY(50%);
-    }
+    @include column-header("Inwards");
 }
 
 .outward-column {
-    position: relative !important;
-    overflow: visible !important;
-
-    &::before {
-        content: 'Outwards';
-        position: absolute;
-        top: -50px;
-        right: 0;
-        transform: translateY(50%);
-    }
+    @include column-header("Outward");
 }
 
 .closing-column {
-    position: relative !important;
-    overflow: visible !important;
-
-    &::before {
-        content: 'Closing Stock';
-        position: absolute;
-        top: -50px;
-        right: 0;
-        transform: translateY(50%);
-    }
+    @include column-header("Closing Stock");
 }

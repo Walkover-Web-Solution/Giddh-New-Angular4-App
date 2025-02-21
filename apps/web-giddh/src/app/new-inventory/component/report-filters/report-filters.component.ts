@@ -557,7 +557,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private emitFilters(): void {
-        let mappedDynamicValues = [];
+        let mappedDynamicValues: string[] = [];
         if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
             mappedDynamicValues = this.dynamicCustomColumns.map(column => column.value);
         } else {

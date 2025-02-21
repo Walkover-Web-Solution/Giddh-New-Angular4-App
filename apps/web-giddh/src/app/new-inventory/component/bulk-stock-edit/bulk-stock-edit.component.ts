@@ -687,7 +687,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             columns?.forEach(column => {
                 columnMap[column.value] = column.checked;
             });
-            this.hideShowColumnList = columns
+            this.hideShowColumnList = columns;
             const checkedValuesSet = new Set(
                 columns.filter(column => column.checked).map(column => column.value)
             );
