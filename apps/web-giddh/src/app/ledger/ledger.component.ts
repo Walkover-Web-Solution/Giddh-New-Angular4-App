@@ -1123,14 +1123,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        window.addEventListener('message', event => {
-            if (this.router.url === `/pages/ledger/${this.lc.accountUnq}`) {
-                if (event && event.data === "GOCARDLESS" && this.referenceNumber) {
-                    this.componentStore.getRequisition(this.referenceNumber);
-                }
-            }
-        });
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -2935,7 +2927,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
                     this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response) {
+                        if (response && this.router.url === `/pages/ledger/${this.lc.accountUnq}`) {
                             this.getAllBankAccounts();
                             this.isDirectlyIntegrated = true;
                             this.componentStore.setState(state => ({
@@ -3385,9 +3377,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public openBankLinkDialog(): void {
         if (!this.unlinkBankList?.length) {
             this.openInstitutionsDialog();
-        } else if (this.unlinkBankList?.length === 1) {
+        } else if (this.unlinkBankList?.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
-        } else if (this.unlinkBankList?.length > 1) {
+        } else if (this.unlinkBankList?.length > 1 || this.isBankAccountConnected) {
             this.bankIntegrationDialogRef = this.dialog.open(BankIntegrationDialogComponent, {
                 data: {
                     commonLocaleData: this.commonLocaleData,
@@ -3415,7 +3407,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getLinkBankAccount(): void {
-        if (this.unlinkBankList.length === 1) {
+        if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
             const data = {
