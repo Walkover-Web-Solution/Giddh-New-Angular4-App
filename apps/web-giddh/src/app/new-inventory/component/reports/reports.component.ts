@@ -199,7 +199,7 @@ export class ReportsComponent implements OnInit {
                                 checked: false,
                                 type: result.fieldType
                             }
-                        }) || [];
+                        });
                         this.newCustomFieldsColumns = results;
                     }
                 });
@@ -546,11 +546,10 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public getCustomFieldValue(element: any, uniqueName: string): string {
-        const field = element?.customFields?.find((cf: any) => cf.uniqueName === uniqueName);
-        if (field) {
-            return field.value;
-        }
+        const field = element?.customFields?.find((customField: any) => customField?.uniqueName === uniqueName);
+        return field?.value ?? null;
     }
+
     /**
     * This function will change the page of activity logs
     *
