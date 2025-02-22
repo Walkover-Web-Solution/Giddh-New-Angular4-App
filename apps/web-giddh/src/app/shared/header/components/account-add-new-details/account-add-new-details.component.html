@@ -375,7 +375,7 @@
                                         <div class="form-group mr-b05">
                                             <label for="pinCodeNum" class="d-block">{{
                                                 zipCodeSupportedCountryList.includes(
-                                                    activeCompany.countryV2.alpha2CountryCode
+                                                    activeCompany.countryV2?.alpha2CountryCode
                                                 )
                                                     ? commonLocaleData?.app_zip_code
                                                     : commonLocaleData?.app_pin_code
@@ -389,7 +389,7 @@
                                                 name="pinCodeNum"
                                                 [placeholder]="
                                                     zipCodeSupportedCountryList.includes(
-                                                        activeCompany.countryV2.alpha2CountryCode
+                                                        activeCompany.countryV2?.alpha2CountryCode
                                                     )
                                                         ? commonLocaleData?.app_enter_zip_code
                                                         : commonLocaleData?.app_enter_pin_code
