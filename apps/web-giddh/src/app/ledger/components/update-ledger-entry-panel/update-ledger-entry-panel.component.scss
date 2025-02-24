@@ -313,6 +313,10 @@ p.edit-message {
         font-size: var(--font-size-15);
     }
 }
+
+.read-only {
+    background-color: var(--color-primary-input-bar-background) !important;
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
@@ -431,7 +435,7 @@ p.edit-message {
             width: 185px;
             margin-top: 5px;
         }
-    } 
+    }
     .currency-convertor {
         float: right;
         display: block;

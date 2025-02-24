@@ -79,6 +79,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Keyboard command label */
+    @Input() public showKeyboardCommand: string = '';
 
     constructor(private cdr: ChangeDetectorRef
     ) {

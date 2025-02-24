@@ -25,49 +25,66 @@
             >
                 {{ (baseAccount$ | async)?.name }} {{ commonLocaleData?.app_ac }}
             </h3>
-
-            <sh-select
-                [disabled]="
+            <select-field
+                [readonly]="
                     !isPettyCash &&
                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                     branches?.length > 1
                 "
+                [ngClass]="{
+                    'read-only':
+                        !isPettyCash &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                        branches?.length > 1
+                }"
                 id="update-ledger-select-account"
                 *ngIf="openDropDown"
                 class="d-inline-block"
+                [cssClass]="'form-control mat-field-border text-left'"
                 [placeholder]="commonLocaleData?.app_select_account"
                 [isPaginationEnabled]="true"
                 (scrollEnd)="handleScrollEnd()"
                 (dynamicSearchedQuery)="isAccountSearchData = true; onSearchQueryChanged($event)"
                 [enableDynamicSearch]="true"
-                [notFoundMsg]="noResultsFoundLabel"
-                (onHide)="handleSuggestionHide()"
-                [class.disabled-ledger]="
-                    !isPettyCash &&
-                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                    branches?.length > 1
-                "
+                (onClear)="handleSuggestionHide()"
                 name="accountUniqueName"
-                [(ngModel)]="baseAccountName$"
-                [showClear]="false"
+                [scrollableElementId]="'baseAccount'"
                 [options]="searchResults"
+                [defaultValue]="baseAccountName$"
             >
-                <ng-template #optionTemplate let-option="option">
-                    <ng-container *ngIf="!option.additional?.stock">
-                        <a href="javascript:void(0)" (click)="changeBaseAccount(option)" class="bd-rb">
-                            <div class="item">{{ option?.label }}</div>
-                            <div class="item-unique font-12">{{ option.additional?.uniqueName }}</div>
-                        </a>
-                    </ng-container>
-                    <ng-container *ngIf="option.additional?.stock">
-                        <a href="javascript:void(0)" (click)="changeBaseAccount(option)" class="bd-rb">
-                            <div class="item">{{ option?.label }}</div>
-                            <div class="item-unique font-12">{{ option.additional?.uniqueName }}</div>
-                            <div class="item-stock">Stock: {{ option.additional?.stock.name }}</div>
-                        </a>
-                    </ng-container>
-                </ng-template>
-            </sh-select>
+                 <ng-template #optionTemplate let-option="option">
+                                                            <ng-container *ngIf="!option.additional?.stock">
+                                                                <a href="javascript:;" class="d-block py-2" (click)="changeBaseAccount(option)">
+                                                                    <div class="option-label pt-2">
+                                                                        {{ option?.label | titlecase }}
+                                                                    </div>
+                                                                    <div class="option-value pb-2">
+                                                                        {{ option.additional?.uniqueName }}
+                                                                    </div>
+                                                                </a>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="option.additional?.stock">
+                                                                <a href="javascript:;" class="flex-column" (click)="changeBaseAccount(option)">
+                                                                    <div class="option-label" >
+                                                                        {{ option?.label | titlecase }}
+                                                                        <span *ngIf="option?.additional?.stock">
+                                                                            ({{
+                                                                                option?.additional?.stock?.name
+                                                                                    | titlecase
+                                                                            }})
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="option-value">
+                                                                        {{ option.additional?.uniqueName }}
+                                                                    </div>
+                                                                    <div class="option-value-stock font-12">
+                                                                        {{ commonLocaleData?.app_stock }}:
+                                                                        {{ option.additional?.stock?.uniqueName }}
+                                                                    </div>
+                                                                </a>
+                                                            </ng-container>
+                                                        </ng-template>
+            </select-field>
         </div>
         <!-- endregion -->
 
@@ -150,7 +167,7 @@
                                                 name="datess"
                                                 [(ngModel)]="vm.selectedLedger.entryDate"
                                                 (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                (dateSelected)="resetInvoiceList();"
+                                                (dateSelected)="resetInvoiceList()"
                                             ></giddh-datepicker>
                                         </td>
                                         <td
@@ -171,86 +188,76 @@
                                                         "
                                                         >{{ localeData?.to }}</span
                                                     >
-                                                    <sh-select
+                                                    <select-field
                                                         [id]="'debit-select-' + i"
-                                                        [notFoundLink]="true"
-                                                        (noResultsClicked)="showQuickAccountModal()"
-                                                        [disabled]="
+                                                        [cssClass]="'form-control'"
+                                                        [showCreateNew]="true"
+                                                        [showKeyboardCommand]="commonLocaleData?.app_alt_c"
+                                                        [createNewText]=" commonLocaleData?.app_create_new"
+                                                        (createOption)="showQuickAccountModal()"
+                                                        [readonly]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
                                                                 (currentOrganizationType === 'COMPANY' ||
                                                                     isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
-                                                        [class.disabled-ledger]="
-                                                            isEinvoiceGenerated ||
-                                                            (!isPettyCash &&
-                                                                (currentOrganizationType === 'COMPANY' ||
-                                                                    isConsolidatedBranch) &&
-                                                                branches?.length > 1)
-                                                        "
+                                                        [ngClass]="{
+                                                            'read-only':
+                                                                isEinvoiceGenerated ||
+                                                                (!isPettyCash &&
+                                                                    (currentOrganizationType === 'COMPANY' ||
+                                                                        isConsolidatedBranch) &&
+                                                                    branches?.length > 1)
+                                                        }"
                                                         [isPaginationEnabled]="true"
                                                         (scrollEnd)="handleScrollEnd()"
                                                         (dynamicSearchedQuery)="
                                                             isAccountSearchData = true; onSearchQueryChanged($event)
                                                         "
                                                         [enableDynamicSearch]="true"
-                                                        [notFoundMsg]="noResultsFoundLabel"
-                                                        (onHide)="handleSuggestionHide()"
-                                                        (keydown)="keydownPressed($event)"
                                                         [options]="searchResults"
                                                         #dbtSelect
                                                         (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                        [fixedValue]="txn.particular.name"
-                                                        (selected)="selectAccount($event, txn, dbtSelect)"
+                                                        (selectedOption)="selectAccount($event, txn, dbtSelect)"
                                                         (onClear)="selectAccount($event, txn, dbtSelect, true)"
                                                         [showClear]="false"
-                                                        [(ngModel)]="txn.particular.uniqueName"
-                                                        [ItemHeight]="67"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.to_select_accounts"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <ng-container *ngIf="!option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item bd-rb">
-                                                                    <div class="item">{{ option.label }}</div>
-                                                                    <div class="item-unique">
+                                                                <a href="javascript:;" class="d-block py-2">
+                                                                    <div class="option-label pt-2">
+                                                                        {{ option?.label | titlecase }}
+                                                                    </div>
+                                                                    <div class="option-value pb-2">
                                                                         {{ option.additional?.uniqueName }}
                                                                     </div>
                                                                 </a>
                                                             </ng-container>
                                                             <ng-container *ngIf="option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item bd-rb">
-                                                                    <div class="item">{{ option.label }}</div>
-                                                                    <div class="item-unique">
+                                                                <a href="javascript:;" class="flex-column">
+                                                                    <div class="option-label">
+                                                                        {{ option?.label | titlecase }}
+                                                                        <span *ngIf="option?.additional?.stock">
+                                                                            ({{
+                                                                                option?.additional?.stock?.name
+                                                                                    | titlecase
+                                                                            }})
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="option-value">
                                                                         {{ option.additional?.uniqueName }}
                                                                     </div>
-                                                                    <div class="item-stock">
+                                                                    <div class="option-value-stock font-12">
                                                                         {{ commonLocaleData?.app_stock }}:
-                                                                        {{ option.additional?.stock.name }}
+                                                                        {{ option.additional?.stock?.uniqueName }}
                                                                     </div>
                                                                 </a>
                                                             </ng-container>
                                                         </ng-template>
-                                                        <ng-template #notFoundLinkTemplate>
-                                                            <a
-                                                                id="createNewId"
-                                                                [ngClass]="{ 'active': keydownClassAdded }"
-                                                                class="notfound-option"
-                                                                [keyboardShortcut]="'alt+c'"
-                                                                (onShortcutPress)="toggleAsidePaneOpen()"
-                                                            >
-                                                                <span [ngClass]="{ 'active': keydownClassAdded }">{{
-                                                                    commonLocaleData?.app_create_new
-                                                                }}</span>
-                                                                <span
-                                                                    [ngClass]="{ 'active': keydownClassAdded }"
-                                                                    class="pull-right"
-                                                                    >{{ commonLocaleData?.app_alt_c }}</span
-                                                                >
-                                                            </a>
-                                                        </ng-template>
-                                                    </sh-select>
+                                                    </select-field>
                                                 </div>
                                             </ng-template>
 
@@ -507,95 +514,81 @@
                                                         "
                                                         >{{ localeData?.by }}</span
                                                     >
-                                                    <sh-select
-                                                        [id]="'credit-select-' + i"
-                                                        [notFoundLink]="true"
-                                                        (noResultsClicked)="showQuickAccountModal()"
-                                                        [disabled]="
+                                                          <select-field
+                                                           [id]="'credit-select-' + i"
+                                                        [cssClass]="'form-control'"
+                                                        [showCreateNew]="true"
+                                                        [showKeyboardCommand]="commonLocaleData?.app_alt_c"
+                                                        [createNewText]=" commonLocaleData?.app_create_new"
+                                                        (createOption)="showQuickAccountModal()"
+                                                        [readonly]="
                                                             isEinvoiceGenerated ||
                                                             (!isPettyCash &&
                                                                 (currentOrganizationType === 'COMPANY' ||
                                                                     isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
-                                                        [class.disabled-ledger]="
-                                                            isEinvoiceGenerated ||
-                                                            (!isPettyCash &&
-                                                                (currentOrganizationType === 'COMPANY' ||
-                                                                    isConsolidatedBranch) &&
-                                                                branches?.length > 1)
-                                                        "
+                                                        [ngClass]="{
+                                                            'read-only':
+                                                                isEinvoiceGenerated ||
+                                                                (!isPettyCash &&
+                                                                    (currentOrganizationType === 'COMPANY' ||
+                                                                        isConsolidatedBranch) &&
+                                                                    branches?.length > 1)
+                                                        }"
                                                         [isPaginationEnabled]="true"
                                                         (scrollEnd)="handleScrollEnd()"
                                                         (dynamicSearchedQuery)="
                                                             isAccountSearchData = true; onSearchQueryChanged($event)
                                                         "
                                                         [enableDynamicSearch]="true"
-                                                        [notFoundMsg]="noResultsFoundLabel"
-                                                        (onHide)="handleSuggestionHide()"
-                                                        (keydown)="keydownPressed($event)"
                                                         [options]="searchResults"
                                                         #crdSelect
                                                         (click)="addBlankTrx('CREDIT', txn, $event)"
-                                                        (selected)="selectAccount($event, txn, crdSelect)"
+                                                        (selectedOption)="selectAccount($event, txn, crdSelect)"
                                                         (onClear)="selectAccount($event, txn, crdSelect, true)"
-                                                        [fixedValue]="txn.particular.name"
-                                                        [showClear]="false"
-                                                        [(ngModel)]="txn.particular.uniqueName"
-                                                        (blur)="
+                                                        [defaultValue]="txn.particular.name"
+                                                        [placeholder]="localeData?.by_select_accounts"
+                                                          (blur)="
                                                             txn.particular.uniqueName?.length &&
                                                                 (txn.particular.uniqueName = undefined)
                                                         "
-                                                        [ItemHeight]="67"
-                                                        [defaultValue]="txn.particular.name"
-                                                        [placeholder]="localeData?.by_select_accounts"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <ng-container *ngIf="!option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item bd-rb">
-                                                                    <div class="item">{{ option.label }}</div>
-                                                                    <div class="item-unique">
+                                                                <a href="javascript:;" class="d-block py-2">
+                                                                    <div class="option-label pt-2">
+                                                                        {{ option?.label | titlecase }}
+                                                                    </div>
+                                                                    <div class="option-value pb-2">
                                                                         {{ option.additional?.uniqueName }}
                                                                     </div>
                                                                 </a>
                                                             </ng-container>
-
                                                             <ng-container *ngIf="option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item bd-rb">
-                                                                    <div class="item">{{ option.label }}</div>
-                                                                    <div class="item-unique">
+                                                                <a href="javascript:;" class="flex-column">
+                                                                    <div class="option-label">
+                                                                        {{ option?.label | titlecase }}
+                                                                        <span *ngIf="option?.additional?.stock">
+                                                                            ({{
+                                                                                option?.additional?.stock?.name
+                                                                                    | titlecase
+                                                                            }})
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="option-value">
                                                                         {{ option.additional?.uniqueName }}
                                                                     </div>
-                                                                    <div class="item-stock">
+                                                                    <div class="option-value-stock font-12">
                                                                         {{ commonLocaleData?.app_stock }}:
-                                                                        {{ option.additional?.stock.name }}
+                                                                        {{ option.additional?.stock?.uniqueName }}
                                                                     </div>
                                                                 </a>
                                                             </ng-container>
                                                         </ng-template>
-
-                                                        <ng-template #notFoundLinkTemplate>
-                                                            <a
-                                                                id="createNewId2"
-                                                                [ngClass]="{ 'active': keydownClassAdded }"
-                                                                class="notfound-option"
-                                                                [keyboardShortcut]="'alt+c'"
-                                                                (onShortcutPress)="toggleAsidePaneOpen()"
-                                                            >
-                                                                <span [ngClass]="{ 'active': keydownClassAdded }">{{
-                                                                    commonLocaleData?.app_create_new
-                                                                }}</span>
-                                                                <span
-                                                                    [ngClass]="{ 'active': keydownClassAdded }"
-                                                                    class="pull-right"
-                                                                    >{{ commonLocaleData?.app_alt_c }}</span
-                                                                >
-                                                            </a>
-                                                        </ng-template>
-                                                    </sh-select>
+                                                    </select-field>
                                                 </div>
                                             </ng-template>
-
                                             <ng-template [ngIf]="txn?.isDiscount">
                                                 <input
                                                     matInput
