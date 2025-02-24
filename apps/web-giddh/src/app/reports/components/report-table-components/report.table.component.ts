@@ -29,6 +29,12 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
     public isTcsTdsApplicable: boolean;
     /** Stores the current branch unique name used for filtering */
     @Input() public currentBranchUniqueName: string;
+    @Input() tableData: any = [];
+    @Input() showColumName: any = {};
+    @Input() headerName: any = {};
+    @Input() clickRow: any = {};
+    /** This will use for displayed table columns */
+    public displayedColumns: string[] = [];
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -46,6 +52,27 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
+    }
+
+    ngOnChanges() {
+        console.log(this.clickRow);
+
+        this.displayedColumns = [];
+        // Iterate through the array
+        this.showColumName.forEach((item) => {
+            // Get the key (e.g., "colA", "colB", etc.)
+            const key = Object.keys(item)[0];
+
+            // Check if the value is true, then add the key to displayedColumns
+            if (item[key]) {
+                this.displayedColumns.push(key);
+            }
+        });
+    }
+
+    // Add this in your component (TypeScript)
+    isString(value: any): boolean {
+        return typeof value === 'string';
     }
 
     /**

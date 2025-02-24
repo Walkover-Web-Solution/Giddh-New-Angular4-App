@@ -57,6 +57,31 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    public clickRow = {
+        particular: true 
+    }
+    public showColumName = [
+        { particular: false },
+        { sales: false },
+        { returns: false },
+        { taxTotal: false },
+        { discountTotal: false },
+        { tcsTotal: false },
+        { tdsTotal: false },
+        { netSales: false },
+        { cumulative: false }
+    ];
+    public headerName = {
+        particular: "app_particular",
+        sales: "app_sales",
+        returns: "app_return",
+        taxTotal: "net_tax",
+        discountTotal: "net_discount",
+        tcsTotal: "net_tcs",
+        tdsTotal: "net_tds",
+        netSales: "net_sales",
+        cumulative: "app_cumulative"
+    }
 
     constructor(
         private router: Router,
@@ -120,7 +145,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -205,6 +230,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 index++;
             }
         });
+        this.showColum();
         return reportModelArray;
     }
 
@@ -231,7 +257,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.interval = params.interval;
                 this.selectedMonth = params.selectedMonth;
 
-                this.router.navigate(['pages' ,'reports', 'sales-register']);
+                this.router.navigate(['pages', 'reports', 'sales-register']);
             }
         });
 
@@ -269,6 +295,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
+        this.showColum();
     }
 
     public selectFinancialYearOption(v: IOption) {
@@ -484,5 +511,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this._toaster.errorToast(response?.message);
             }
         });
+    }
+
+    public showColum(): void {
+        this.showColumName.forEach((col)=>{
+            const key = Object.keys(col)[0];
+                if (this.salesRegisterTotal[key]) {
+                    col[key] = true;
+                }else{
+                    col[key] = false;
+                }
+        })
     }
 }
