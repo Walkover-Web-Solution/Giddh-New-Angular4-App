@@ -33,6 +33,9 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
     @Input() showColumName: any = {};
     @Input() headerName: any = {};
     @Input() clickRow: any = {};
+    @Input() totalCountColumnValue: any = {};
+    @Input() showTotalCountColumnValue: boolean = false;
+    @Input() showTotalPosition: boolean = false;
     /** This will use for displayed table columns */
     public displayedColumns: string[] = [];
     /** Subject to unsubscribe from subscriptions */
