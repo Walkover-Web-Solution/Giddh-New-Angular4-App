@@ -3314,6 +3314,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.openInstitutionsDialog();
                     } else if (response === 'link') {
                         this.getLinkBankAccount();
+                    } else if (response === 'closeDialog') {
+                        this.bankIntegrationDialogRef?.close();
                     }
                     this.bankIntegrationDialogRef?.close();
                 }
@@ -3340,7 +3342,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response) this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                if (response === 'closeDialog') {
+                    dialogRef?.close();
+                } else {
+                    if (response) this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                }
             })).subscribe();
         }
     }
