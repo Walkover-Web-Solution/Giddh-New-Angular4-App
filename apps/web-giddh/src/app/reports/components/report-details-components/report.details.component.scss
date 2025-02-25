@@ -156,3 +156,23 @@ ul#dropdown-nested li .caret {
         }
     }
 }
+
+.duration-dropdown {
+    width: 140px !important;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px;
+}
+
+.month-grid-menu {
+    min-width: 250px;
+}
+
+.mat-menu-item {
+    justify-content: center;
+    text-transform: capitalize;
+}

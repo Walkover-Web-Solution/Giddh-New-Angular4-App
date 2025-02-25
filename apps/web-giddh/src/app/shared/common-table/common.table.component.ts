@@ -1,14 +1,13 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { ReportsModel } from "../../../models/api-models/Reports";
 import { ReplaySubject } from 'rxjs';
 type ColumnDefinition = [string, boolean, boolean?];
 @Component({
-    selector: 'reports-table-component',
-    templateUrl: './report.table.component.html',
-    styleUrls: ['./report.table.component.scss']
+    selector: 'common-table-component',
+    templateUrl: './common.table.component.html',
+    styleUrls: ['./common.table.component.scss']
 })
 
-export class ReportsTableComponent implements OnInit, OnDestroy {
+export class CommonTableComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -123,11 +122,11 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
     /**
      * Emits an event when a clickable item is selected
      *
-     * @param {ReportsModel} item - The clicked item data
+     * @param {any} item - The clicked item data
      * @param {string} column - The column associated with the clicked item
      * @memberof CommonTableComponent
      */
-    public clickOnItem(item: ReportsModel, column: string): void {
+    public clickOnItem(item: any, column: string): void {
         this.clickOnItemEvent.emit({ columnName: column, item: item });
     }
 }
