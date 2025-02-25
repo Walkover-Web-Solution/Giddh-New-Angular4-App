@@ -1510,7 +1510,7 @@
                                                 />
                                             </div>
                                         </div>
-                                        <div
+                                        <!-- <div
                                             *ngIf="
                                                 item.voucherType === 'receipt' &&
                                                 item.subVoucher === 'ADVANCE_RECEIPT' &&
@@ -1531,7 +1531,7 @@
                                                     disabled
                                                 />
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">
@@ -1766,6 +1766,7 @@
                                                         [ItemHeight]="67"
                                                         [showClear]="false"
                                                     >
+                                                    <!-- *ngIf="voucherApiVersion !== 2" -->
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item sh-template">
                                                                 <div class="item">
@@ -2318,3 +2319,4 @@
         <attachments [selectedItem]="vm.selectedLedger"></attachments>
     </ng-template>
 </ng-container>
+                                            
