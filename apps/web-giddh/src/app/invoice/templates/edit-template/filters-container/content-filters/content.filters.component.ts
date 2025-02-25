@@ -116,6 +116,9 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 if (this.voucherType !== 'sales') {
                     this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
                     this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+                } else {
+                        this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+                        this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
                 }
             }
             this.assignImageSignature();
