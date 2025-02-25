@@ -1,5 +1,8 @@
 <div [ngClass]="{'custom-input-field': !appearance }">
     <mat-form-field [floatLabel]="!appearance ? 'never' : null" class="w-100" [appearance]="appearance">
+                <mat-label>
+            {{ label }}
+        </mat-label>
         <mat-chip-grid #matChipList>
             <mat-chip-row
                 *ngFor="let chip of chipList; let indx = index"
@@ -19,6 +22,7 @@
                 type="text"
                 matInput
                 [formControl]="searchFormControl"
+                [readonly]="readonly"
                 [placeholder]="placeholder"
                 [matAutocomplete]="auto"
                 [matChipInputFor]="matChipList"

@@ -21,6 +21,7 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -56,6 +57,7 @@
             [attr.min]="min"
             [attr.max]="max"
             *ngIf="allowDecimalDigitsOnly && !useMask"
+            (paste)="handlePaste($event)"
             [customDecimalPlaces]="customDecimalPlaces"
             decimalDigitsDirective
             #textField
@@ -72,6 +74,7 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -110,6 +113,7 @@
             [suffix]="suffix"
             [mask]="mask"
             [allowUnsupportedPrefix]="allowUnsupportedPrefix"
+            (paste)="handlePaste($event)"
             [validation]="false"
             *ngIf="!allowDigitsOnly && useMask"
             #textField
@@ -126,6 +130,7 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"

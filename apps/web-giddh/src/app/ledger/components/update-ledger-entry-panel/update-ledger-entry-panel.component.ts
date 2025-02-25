@@ -1004,6 +1004,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getInvoiceListsData(event: any): void {
+        this.vm.selectedLedger.voucher ={
+            name: event?.label,
+            shortCode: event?.value,
+        }
         if (this.voucherApiVersion === 2) {
             this.resetInvoiceList();
         }
