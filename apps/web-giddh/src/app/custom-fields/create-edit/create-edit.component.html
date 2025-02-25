@@ -104,20 +104,19 @@
                                 </div>
                             </div>
                             <div class="row mr-b15">
-                                <div class="col-8">
+                                <div class="col-8 custom-mat-form-field">
                                     <mat-form-field class="w-100" appearance="outline" class="w-100 no-bottom-space">
                                         <mat-label>{{ localeData?.modules_label }}</mat-label>
                                         <mat-select
                                             name="modules"
                                             [placeholder]="localeData?.modules_placeholder"
-                                            [(value)]="selectedModules"
+                                            [formControl]="selectedModules"
                                             [required]="true"
                                             [multiple]="true"
                                         >
                                             <mat-option
                                                 *ngFor="let module of fieldModules"
-                                                [value]="module?.uniqueName"
-                                                (click)="setModules(module)"
+                                                [value]="module"
                                                 >{{ module.name }}
                                             </mat-option>
                                         </mat-select>
