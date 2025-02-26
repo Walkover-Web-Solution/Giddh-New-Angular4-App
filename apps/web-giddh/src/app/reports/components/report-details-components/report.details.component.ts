@@ -20,6 +20,10 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { MatSelectChange } from '@angular/material/select';
+import { MatMenuTrigger } from '@angular/material/menu';
+type ColumnDefinition = [string, boolean, boolean?];
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -57,6 +61,28 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+    /**
+     * Configuration for table columns.
+     * 
+     * Each key represents a column, and its value is an array with the following structure:
+     * 
+     * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
+     * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
+     * [2] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     */
+    public columnDefinitions: Record<string, ColumnDefinition> = {
+        particular: ["app_particular", true, true],
+        sales: ["app_sales", true],
+        returns: ["app_return", false],
+        taxTotal: ["net_tax", false],
+        discountTotal: ["net_discount", false],
+        tcsTotal: ["net_tcs", false],
+        tdsTotal: ["net_tds", false],
+        netSales: ["net_sales", false],
+        cumulative: ["app_cumulative", false]
+    }
 
     constructor(
         private router: Router,
@@ -77,6 +103,12 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -120,7 +152,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -205,6 +237,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 index++;
             }
         });
+        this.showColum();
         return reportModelArray;
     }
 
@@ -231,7 +264,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.interval = params.interval;
                 this.selectedMonth = params.selectedMonth;
 
-                this.router.navigate(['pages' ,'reports', 'sales-register']);
+                this.router.navigate(['pages', 'reports', 'sales-register']);
             }
         });
 
@@ -269,6 +302,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
+        this.showColum();
     }
 
     public selectFinancialYearOption(v: IOption) {
@@ -484,5 +518,37 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this._toaster.errorToast(response?.message);
             }
         });
+    }
+
+    /**
+     * Updates the visibility of table columns based on specific conditions.
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public showColum(): void {
+        Object.entries(this.columnDefinitions).filter(([key]) => !['sales', 'particular'].includes(key)).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                if (['tcsTotal', 'tdsTotal'].includes(key)) {
+                    this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.salesRegisterTotal[key];
+                } else {
+                    this.columnDefinitions[key][1] = this.salesRegisterTotal[key];
+                }
+            }
+        });
+    }
+
+    /**
+     * Navigates to the detailed sales report page with query parameters.
+     *
+     * @param {ReportsModel} item - The report item containing date ranges and filters.
+     * @memberof CommonTableComponent
+     */
+    public goToDetailedSales(item: ReportsModel) {
+        let from = item.from;
+        let to = item.to;
+
+        if (from != null && to != null) {
+            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch?.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth } });
+        }
     }
 }
