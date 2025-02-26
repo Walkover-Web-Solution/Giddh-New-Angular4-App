@@ -386,14 +386,14 @@
                             </th>
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
-                                <div [hidden]="showPaymentSearchBar">
-                                    <!--  *ngIf="voucherApiVersion !== 2" -->
+                                <!-- <div [hidden]="showPaymentSearchBar">
                                     <i
                                         class="icon-search"
+                                        *ngIf="voucherApiVersion !== 2"
                                         (click)="searchBy(null, 'paymentMode', true)"
                                     ></i>
                                     <span>{{ localeData?.payment_mode_label }}</span>
-                                </div>
+                                </div> -->
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
                                     <input
                                         #paymentMode
@@ -411,14 +411,14 @@
                             </th>
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
-                                <div [hidden]="showInvoiceSearchBar">
-                                    <!-- *ngIf="voucherApiVersion !== 2" -->
+                                <!-- <div [hidden]="showInvoiceSearchBar">
                                     <i
                                         class="icon-search"
+                                        *ngIf="voucherApiVersion !== 2"
                                         (click)="searchBy(null, 'invoiceNumber', true)"
                                     ></i>
                                     <span>{{ localeData?.invoice_no_label }}</span>
-                                </div>
+                                </div> -->
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
                                     <input
                                         #invoiceNumber
@@ -531,12 +531,11 @@
                                 [ngClass]="{ 'pl-0': voucherApiVersion === 2 }"
                                 [attr.data-title]="localeData?.payment_mode_label"
                             >
-                                <!-- *ngIf="voucherApiVersion !== 2" -->
-                                <ng-container>
+                                <!-- <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
                                         {{ paymentMode }}
                                     </div>
-                                </ng-container>
+                                </ng-container> -->
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     {{ receipt?.paymentMode?.name }}
                                 </ng-container>
@@ -548,10 +547,9 @@
                                 *ngIf="receipt?.invoices || receipt?.adjustments?.length"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >
-                            <!-- *ngIf="voucherApiVersion !== 2" -->
-                                <ng-container>
+                                <!-- <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
-                                </ng-container>
+                                </ng-container> -->
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     <ng-container *ngIf="receipt.adjustments?.length > 0">
                                         <ng-container *ngFor="let adjustment of receipt.adjustments">

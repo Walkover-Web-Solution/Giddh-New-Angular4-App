@@ -190,16 +190,15 @@ export class LedgerActions {
                         this.store.dispatch(this.refreshLedger(true));
                     }
                      
-                    // this.generalService.voucherApiVersion !== 2 &&
-                    if (response.request.generateInvoice && !response?.body?.voucherGenerated) {
-                        let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
-                        let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
-                        invoiceGenModel.push({
-                            accountUniqueName: response.queryString.accountUniqueName,
-                            entries: [entryUniqueName]
-                        });
-                        return this.generateUpdatedLedgerInvoice(invoiceGenModel);
-                    }
+                    // if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response?.body?.voucherGenerated) {
+                    //     let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
+                    //     let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
+                    //     invoiceGenModel.push({
+                    //         accountUniqueName: response.queryString.accountUniqueName,
+                    //         entries: [entryUniqueName]
+                    //     });
+                    //     return this.generateUpdatedLedgerInvoice(invoiceGenModel);
+                    // }
                 }
                 return { type: 'EmptyAction' };
             })));
