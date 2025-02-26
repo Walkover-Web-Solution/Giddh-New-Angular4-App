@@ -528,6 +528,7 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
+
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -548,6 +549,8 @@ export class UpdateLedgerVm {
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
         const particularAccount = this.getParticularAccount();
         const ledgerAccount = this.getLedgerAccount(particularAccount);
+        console.log("called");
+
         if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();

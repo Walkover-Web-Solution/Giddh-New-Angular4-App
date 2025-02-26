@@ -122,12 +122,12 @@
                         <table class="width-100 card-table">
                             <thead class="hidden-xs">
                                 <tr class="thead-background1 row">
-                                    <th class="col-4 border-top-none">
+                                    <th class="col-3 border-top-none">
                                         <span class="cursor-pointer">
                                             {{ commonLocaleData?.app_date }}
                                         </span>
                                     </th>
-                                    <th class="col-5 border-top-none">{{ commonLocaleData?.app_particular }}</th>
+                                    <th class="col-6 border-top-none">{{ commonLocaleData?.app_particular }}</th>
 
                                     <th class="col-3 text-right border-top-none">
                                         {{ commonLocaleData?.app_amount }}
@@ -146,7 +146,7 @@
                                 >
                                     <ng-container *ngIf="txn.type === 'DEBIT'">
                                         <td
-                                            class="col-4 d-flex align-items-center custom-input-field"
+                                            class="col-3 d-flex align-items-center custom-input-field"
                                             [attr.data-title]="commonLocaleData?.app_date"
                                         >
                                             <giddh-datepicker
@@ -173,10 +173,10 @@
                                                 'other-account-entry':
                                                     isPettyCash && txn?.particular?.uniqueName === 'others'
                                             }"
-                                            class="col-5 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                            class="col-6 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
-                                                <div class="d-flex update-ledger-account">
+                                                <div class="d-flex update-ledger-account w-100">
                                                     <span
                                                         *ngIf="
                                                             (!dbtSelect.isOpen && txn?.particular?.uniqueName) ||
@@ -185,6 +185,7 @@
                                                         >{{ localeData?.to }}</span
                                                     >
                                                     <select-field
+                                                    class="w-100"
                                                         [id]="'debit-select-' + i"
                                                         [cssClass]="'form-control'"
                                                         [showCreateNew]="true"
@@ -456,12 +457,12 @@
                         <table class="width-100 card-table">
                             <thead class="xs-hidden">
                                 <tr class="thead-background1 row">
-                                    <th class="col-4 border-top-none">
+                                    <th class="col-3 border-top-none">
                                         <span class="cursor-pointer">
                                             {{ commonLocaleData?.app_date }}
                                         </span>
                                     </th>
-                                    <th class="col-5 border-top-none">{{ commonLocaleData?.app_particular }}</th>
+                                    <th class="col-6 border-top-none">{{ commonLocaleData?.app_particular }}</th>
                                     <th class="col-3 text-right border-top-none">{{ commonLocaleData?.app_amount }}</th>
                                 </tr>
                             </thead>
@@ -473,7 +474,7 @@
                                     <ng-container *ngIf="txn.type == 'CREDIT'">
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_date"
-                                            class="col-4 d-flex align-items-center custom-input-field"
+                                            class="col-3 d-flex align-items-center custom-input-field"
                                         >
                                             <giddh-datepicker
                                                 [showToggleIcon]="false"
@@ -493,14 +494,14 @@
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             [id]="'credit-id-' + i"
-                                            class="position-relative col-5 select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                            class="position-relative col-6 select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                             [ngClass]="{
                                                 'other-account-entry':
                                                     isPettyCash && txn?.particular?.uniqueName === 'others'
                                             }"
                                         >
                                             <ng-template [ngIf]="!txn?.isDiscount">
-                                                <div class="d-flex update-ledger-account">
+                                                <div class="d-flex update-ledger-account w-100">
                                                     <span
                                                         *ngIf="
                                                             (!crdSelect.isOpen && txn?.particular?.uniqueName) ||
@@ -511,6 +512,7 @@
                                                     <select-field
                                                         [id]="'credit-select-' + i"
                                                         [cssClass]="'form-control'"
+                                                        class="w-100"
                                                         [showCreateNew]="true"
                                                         [showKeyboardCommand]="commonLocaleData?.app_alt_c"
                                                         [createNewText]="commonLocaleData?.app_create_new"
@@ -875,7 +877,7 @@
                             <ng-template [ngIf]="vm.showNewEntryPanel && vm.stockTrxEntry">
                                 <div
                                     [ngClass]="{ width40: vm.stockTrxEntry }"
-                                    class="table-amount text-right pr-1 width-80"
+                                    class="text-right pr-1 width-80"
                                 >
                                     <input-field
                                         [cssClass]="'text-right'"
@@ -898,7 +900,7 @@
                                     </input-field>
                                 </div>
 
-                                <div class="width-115 custom-mat-form-field">
+                                <div class="w100 custom-mat-form-field">
                                     <mat-form-field appearance="outline">
                                         <mat-label>{{ commonLocaleData?.app_unit }}</mat-label>
                                         <mat-select
@@ -1198,10 +1200,9 @@
                             >
                                 <label class="font-16 mr-t05">=</label>
                             </div>
-
                             <div
-                                *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
-                                class="text-right table-amount mr-l1"
+                              [hidden]="!(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
+                                class="text-right table-amount"
                             >
                                 <input-field
                                     [readonly]="
@@ -1260,12 +1261,10 @@
                                         >
                                     </div>
 
-                                    <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="pl-1">
-                                        <!-- <label
-                                            >{{ commonLocaleData?.app_other_tax }} -->
+                                    <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="pl-1 position-relative">
                                         <a
                                             href="javascript:void(0)"
-                                            class="text-gray"
+                                            class="text-gray position-absolute edit-icon-position"
                                             (click)="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     branches?.length === 1) ||
@@ -1812,7 +1811,6 @@
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
-                                                <label class="default-color">{{ commonLocaleData?.app_number }}</label>
                                                 <input-field
                                                     [id]="'update-ledger-invoice-number'"
                                                     [type]="'text'"
@@ -2065,21 +2063,21 @@
                                                 </a>
                                             </li>
 
-                                            <li>
-                                                <input-field
-                                                    [type]="'text'"
-                                                    [id]="'update-ledger-price-input'"
-                                                    [cssClass]="'price-input'"
-                                                    [(ngModel)]="vm.selectedLedger.exchangeRate"
-                                                    [readonly]="
-                                                        isEinvoiceGenerated ||
-                                                        (!isPettyCash &&
-                                                            (currentOrganizationType === 'COMPANY' ||
-                                                                isConsolidatedBranch) &&
-                                                            branches?.length > 1)
-                                                    "
-                                                    (blur)="exchangeRateChanged()"
-                                                ></input-field>
+                                            <li class="d-flex align-items-baseline column-gap5">
+                                                <text-field
+                                                [type]="'text'"
+                                                [id]="'update-ledger-price-input'"
+                                                [cssClass]="'form-control mat-field-border'"
+                                                [(ngModel)]="vm.selectedLedger.exchangeRate"
+                                                [readonly]="
+                                                    isEinvoiceGenerated ||
+                                                    (!isPettyCash &&
+                                                        (currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
+                                                        branches?.length > 1)
+                                                "
+                                                (change)="exchangeRateChanged()"
+                                            ></text-field>
                                                 {{
                                                     vm.selectedCurrencyForDisplay === 0
                                                         ? vm.foreignCurrencyDetails?.code

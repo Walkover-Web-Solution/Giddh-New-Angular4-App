@@ -2,6 +2,11 @@
     padding: 0 4px;
 }
 
+.edit-icon-position {
+    top: -28px;
+    right: 0;
+}
+
 .height-30 {
     height: 30px;
 }
@@ -133,7 +138,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .total-detail-table .table-amount {
-    width: 100%;
+    min-width: 0;
 }
 
 .icon-box {

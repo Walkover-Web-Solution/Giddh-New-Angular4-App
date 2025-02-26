@@ -28,6 +28,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 import { LaddaModule } from 'angular2-ladda';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     declarations: [
@@ -61,6 +62,7 @@ import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module'
         MatExpansionModule,
         ReactiveFormsModule,
         FormFieldsModule,
+        MatMenuModule,
         AttachmentsModule,
         LaddaModule.forRoot({
             style: 'slide-left',

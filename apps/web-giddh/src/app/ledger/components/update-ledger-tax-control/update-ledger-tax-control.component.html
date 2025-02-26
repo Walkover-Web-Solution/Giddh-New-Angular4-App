@@ -1,62 +1,56 @@
-<span
-    class="position-relative custom-dropdown-ledger"
-    [ngClass]="{ 'open': showTaxPopup }"
-    [attachOutsideOnClick]="true"
-    (clickOutside)="toggleTaxPopup(false)"
->
-    <label *ngIf="showHeading"
-        >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
-        <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
-    >
-    <a id="tax" class="clearfix">
-        <div class="multi-select adjust">
-            <input
-                #taxInputElement
-                matInput
-                type="text"
-                id="update-ledger-tax"
-                [mask]="maskInput"
-                [rawInputValue]="formattedTotal"
-                [prefix]="prefixInput"
-                [suffix]="suffixInput"
-                name="formattedTotal"
-                class="form-control cursor-pointer text-right mat-field-border"
-                [(ngModel)]="formattedTotal"
-                [ngClass]="{ 'field-disabled': readonly }"
-                (focus)="!readonly ? handleInputFocus() : ''"
-                autocomplete="off"
-            />
-            <span class="caret"></span>
-        </div>
-    </a>
-    <div class="position-relative">
-        <ul
-            class="dropdown-menu pd update-ledger-tax-dropdown"
-            [ngStyle]="{ 'display': showTaxPopup ? 'block' : 'none' }"
-            (click)="$event.stopPropagation()"
-        >
-            <li *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
-                <label
-                    class="checkbox d-flex align-items-center width-100 m-0 pd-0"
-                    (click)="$event.stopPropagation()"
-                    [ngClass]="{ 'disabled-label': tax.isDisabled }"
-                    #taxLabel
-                >
-                    <mat-checkbox
-                        color="primary"
-                        class="pull-left"
-                        [id]="'update-ledger-tax-checkbox-' + i"
-                        [(ngModel)]="tax.isChecked"
-                        [disabled]="tax.isDisabled"
-                        (change)="change()"
+<span class="position-relative custom-dropdown-ledger custom-mat-form-field">
+    <mat-form-field appearance="outline" class="multi-select">
+        <mat-label *ngIf="showHeading">
+            {{ customHeading ? customHeading : commonLocaleData?.app_tax }}
+            <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup>
+        </mat-label>
+
+        <input
+            #taxInputElement
+            matInput
+            [matMenuTriggerFor]="taxControlMenu"
+            type="text"
+            id="update-ledger-tax"
+            [mask]="maskInput"
+            [rawInputValue]="formattedTotal"
+            [prefix]="prefixInput"
+            [suffix]="suffixInput"
+            name="formattedTotal"
+            [required]="isMandatory"
+            class="text-right total-tax-amount cursor-pointer"
+            [(ngModel)]="formattedTotal"
+            [ngClass]="{ 'field-disabled': readonly }"
+            (focus)="!readonly ? handleInputFocus() : ''"
+            autocomplete="off"
+        />
+    </mat-form-field>
+
+    <mat-menu #taxControlMenu="matMenu">
+        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
+            <div class="discount-checkbox-wrapper d-flex flex-column">
+                <ng-container *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
+                    <span
                         (click)="$event.stopPropagation()"
-                        (focusin)="taxLabelFocusing(taxLabel)"
-                        (focusout)="taxLabelBluring(taxLabel)"
-                    ></mat-checkbox>
-                    <span class="pull-left text-ellipsis">{{ tax.name }}</span>
-                </label>
-            </li>
-        </ul>
-    </div>
-    <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+                        class="d-flex align-items-center width-100 m-0 pd-0"
+                        [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                        #taxLabel
+                    >
+                        <mat-checkbox
+                            class="font-15"
+                            color="primary"
+                            [id]="'update-ledger-tax-checkbox-' + i"
+                            [(ngModel)]="tax.isChecked"
+                            [disabled]="tax.isDisabled"
+                            (change)="change()"
+                            (click)="$event.stopPropagation()"
+                            (focusin)="taxLabelFocusing(taxLabel)"
+                            (focusout)="taxLabelBluring(taxLabel)"
+                        ></mat-checkbox>
+                        <span class="pull-left text-ellipsis">{{ tax.name }}</span>
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+        <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+    </mat-menu>
 </span>
