@@ -448,11 +448,12 @@
                                                     ></a>
                                                 </span>
 
-                                                <span
+                                                <!-- <span
                                                     class="download-file-text"
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
                                                         attachedDocumentType?.type
+                                                        voucherApiVersion !== 2
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -462,7 +463,6 @@
                                                             shouldShowUploadAttachment
                                                     }"
                                                 >
-                                                <!-- voucherApiVersion !== 2 -->
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="localeData?.download_attachment"
@@ -471,7 +471,7 @@
                                                         aria-label="download"
                                                         ><i class="icon-download-circle"></i
                                                     ></a>
-                                                </span>
+                                                </span> -->
 
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a

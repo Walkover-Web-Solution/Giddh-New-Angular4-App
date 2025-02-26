@@ -2061,10 +2061,10 @@
             role="dialog"
             (onHidden)="closeAdvanceReceiptModal()"
         >
-        <div class="modal-dialog modal-xl">
+        <!-- <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <advance-receipt-adjustment-component
-                    *ngIf="showAdvanceReceiptAdjust"
+                    *ngIf="showAdvanceReceiptAdjust && voucherApiVersion !== 2"
                     #advanceReceiptComponent
                     [isUpdateMode]="isUpdateMode"
                     [depositAmount]="depositAmount"
@@ -2076,10 +2076,9 @@
                     [voucherForAdjustment]="voucherForAdjustment"
                     [adjustedVoucherType]="selectedVoucher"
                 >
-                <!-- && voucherApiVersion !== 2 -->
                 </advance-receipt-adjustment-component>
             </div>
-        </div>
+        </div> -->
         </div>
         <!-- end -->
         <ng-template #sendEmailModal>

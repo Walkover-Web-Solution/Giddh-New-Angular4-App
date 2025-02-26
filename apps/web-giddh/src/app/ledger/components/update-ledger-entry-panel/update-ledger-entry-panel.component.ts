@@ -982,11 +982,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openBaseAccountModal() {
-        // this.voucherApiVersion !== 2 && 
-        if (this.vm.selectedLedger.voucherGenerated) {
-            this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
-            return;
-        }
+        // if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
+        //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
+        //     return;
+        // }
         if (this.updateBaseAccount) {
             this.updateBaseAccount.show();
         }
