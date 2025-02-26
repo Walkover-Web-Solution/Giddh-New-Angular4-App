@@ -2689,6 +2689,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.vm.isInclusiveTax = true;
                     this.vm.grandTotal = this.vm.stockTrxEntry.inventory.quantity * this.vm.stockTrxEntry.inventory.rate;
                     this.vm.inventoryTotalChanged();
+                    this.changeDetectorRef.detectChanges();
                 } else {
                     this.vm.isInclusiveTax = false;
                     this.vm.onTxnAmountChange(txn);

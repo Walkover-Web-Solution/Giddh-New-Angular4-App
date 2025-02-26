@@ -528,6 +528,7 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
+        console.log("called");
 
         let fixDiscount = 0;
         let percentageDiscount = 0;

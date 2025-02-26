@@ -185,7 +185,7 @@
                                                         >{{ localeData?.to }}</span
                                                     >
                                                     <select-field
-                                                    class="w-100"
+                                                        class="w-100"
                                                         [id]="'debit-select-' + i"
                                                         [cssClass]="'form-control'"
                                                         [showCreateNew]="true"
@@ -875,10 +875,7 @@
                             [ngClass]="{ 'add-multicurrency': vm.isMultiCurrencyAvailable }"
                         >
                             <ng-template [ngIf]="vm.showNewEntryPanel && vm.stockTrxEntry">
-                                <div
-                                    [ngClass]="{ width40: vm.stockTrxEntry }"
-                                    class="text-right pr-1 width-80"
-                                >
+                                <div [ngClass]="{ width40: vm.stockTrxEntry }" class="text-right pr-1 width-80">
                                     <input-field
                                         [cssClass]="'text-right'"
                                         [label]="commonLocaleData?.app_quantity"
@@ -1201,7 +1198,7 @@
                                 <label class="font-16 mr-t05">=</label>
                             </div>
                             <div
-                              [hidden]="!(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
+                                [hidden]="!(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
                                 class="text-right table-amount"
                             >
                                 <input-field
@@ -1261,7 +1258,10 @@
                                         >
                                     </div>
 
-                                    <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="pl-1 position-relative">
+                                    <div
+                                        *ngIf="vm.selectedLedger.isOtherTaxesApplicable"
+                                        class="pl-1 position-relative"
+                                    >
                                         <a
                                             href="javascript:void(0)"
                                             class="text-gray position-absolute edit-icon-position"
@@ -1360,8 +1360,8 @@
                             <div class="col-12 col-sm-12">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
-                                <textarea
-                                    matInput
+                                    <textarea
+                                        matInput
                                         id="update-ledger-description"
                                         rows="3"
                                         matInput
@@ -1557,7 +1557,7 @@
                                     }}</mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div class="pd-1 mr-b05 mr-t05 advanced">
-                                    <table class="xs-table-block">
+                                    <table class="xs-table-block mb-1">
                                         <tr class="d-flex align-items-center flex-wrap">
                                             <td class="select2-parent pd-r1">
                                                 <div class="form-group mr-b05">
@@ -2048,7 +2048,7 @@
                                 <div class="d-flex w-100 mb-2 justify-content-between">
                                     <div class="w-100 d-flex pd-l15" *ngIf="vm.isMultiCurrencyAvailable">
                                         <ul class="list-inline d-flex font-15 currency-convertor">
-                                            <li>
+                                            <li class="d-flex align-items-center">
                                                 {{ commonLocaleData?.app_numbers?.one }}
                                                 {{
                                                     vm.selectedCurrencyForDisplay === 0
@@ -2057,7 +2057,7 @@
                                                 }}
                                             </li>
 
-                                            <li>
+                                            <li class="d-flex align-items-center">
                                                 <a href="javascript:void(0)" class="text-light">
                                                     <i class="icon-switch-icon"></i>
                                                 </a>
@@ -2065,19 +2065,19 @@
 
                                             <li class="d-flex align-items-baseline column-gap5">
                                                 <text-field
-                                                [type]="'text'"
-                                                [id]="'update-ledger-price-input'"
-                                                [cssClass]="'form-control mat-field-border'"
-                                                [(ngModel)]="vm.selectedLedger.exchangeRate"
-                                                [readonly]="
-                                                    isEinvoiceGenerated ||
-                                                    (!isPettyCash &&
-                                                        (currentOrganizationType === 'COMPANY' ||
-                                                            isConsolidatedBranch) &&
-                                                        branches?.length > 1)
-                                                "
-                                                (change)="exchangeRateChanged()"
-                                            ></text-field>
+                                                    [type]="'text'"
+                                                    [id]="'update-ledger-price-input'"
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [(ngModel)]="vm.selectedLedger.exchangeRate"
+                                                    [readonly]="
+                                                        isEinvoiceGenerated ||
+                                                        (!isPettyCash &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
+                                                            branches?.length > 1)
+                                                    "
+                                                    (change)="exchangeRateChanged()"
+                                                ></text-field>
                                                 {{
                                                     vm.selectedCurrencyForDisplay === 0
                                                         ? vm.foreignCurrencyDetails?.code
