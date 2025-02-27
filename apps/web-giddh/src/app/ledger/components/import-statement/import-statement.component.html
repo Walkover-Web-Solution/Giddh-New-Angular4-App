@@ -1,108 +1,264 @@
 <div id="import-statement-modal">
-    <div class="modal-header flex-row-reverse">
-        <button
-            aria-hidden="true"
-            class="close"
-            mat-dialog-close
-            [attr.aria-label]="inputData?.commonLocaleData?.app_close"
-        >
-            ×
-        </button>
-        <h3 class="unbold" mat-dialog-title>{{ inputData?.localeData?.import_page_heading }}</h3>
+    <div class="modal-header">
+        <h3 class="unbold" mat-dialog-title>{{ dialogStep === 'second' ? inputData?.localeData?.import_page_heading : Select_Account }}</h3>
+        <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
     </div>
-    <div class="modal-body">
-        <form name="importStatementForm" novalidate autocomplete="off">
-            <div class="pd-b2 clearfix browse-file-btn">
-                <label class="import-field-label file-upload-label"
-                    >{{ inputData?.localeData?.file }} <sup>*</sup></label
-                >
-                <label class="radio-inline p-0 browse-file-label">
-                    {{ inputData?.localeData?.choose_file }}
-                    <input
-                        type="file"
-                        name="file"
-                        class="form-control file-upload-field"
-                        (change)="onFileChange($event.target.files)"
-                        required
-                    />
-                </label>
-                <span class="path-name"> {{ selectedFile }} </span>
-            </div>
-            <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === 'pdf'">
-                <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
-                <mat-form-field appearance="fill" class="w-100 custom-input-field">
-                    <input
-                        matInput
-                        type="password"
-                        name="password"
-                        class="form-control mat-field-border"
-                        [(ngModel)]="postRequest.password"
-                    />
-                </mat-form-field>
-            </div>
-            <div
-                class="pd-b2 clearfix"
-                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
-            >
-                <label for="isHeaderProvided" class="import-field-label">{{
-                    inputData?.localeData?.header_provided
-                }}</label>
-                <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided">
-                    <span class="pull-left" *ngIf="postRequest.isHeaderProvided">{{
-                        inputData?.commonLocaleData?.app_yes
-                    }}</span>
-                    <span class="pull-right" *ngIf="!postRequest.isHeaderProvided">{{
-                        inputData?.commonLocaleData?.app_no
-                    }}</span>
-                </mat-slide-toggle>
-            </div>
-            <div
-                class="pd-b2 clearfix"
-                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
-            >
-                <label for="sameDebitCreditAmountColumn" class="import-field-label">{{
-                    inputData?.localeData?.same_debit_credit_column
-                }}</label>
-                <mat-slide-toggle
-                    color="primary"
-                    name="sameDebitCreditAmountColumn"
-                    [(ngModel)]="postRequest.sameDebitCreditAmountColumn"
-                >
-                    <span class="pull-left" *ngIf="postRequest.sameDebitCreditAmountColumn">{{
-                        inputData?.commonLocaleData?.app_yes
-                    }}</span>
-                    <span class="pull-right" *ngIf="!postRequest.sameDebitCreditAmountColumn">{{
-                        inputData?.commonLocaleData?.app_no
-                    }}</span>
-                </mat-slide-toggle>
-            </div>
-            <div class="modal-wrap mr-b5">
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    [disabled]="!postRequest.file"
-                    class="mr-t1 pull-left"
-                    (click)="importStatement()"
-                >
-                    {{ inputData?.localeData?.upload }}
-                </button>
-                <div class="pull-left mr-t1 d-flex sample-file-buttons">
+    <div class="modal-body p-0">
+        <div *ngIf="dialogStep === 'first'" class="row m-0">
+            <div class="col-md-6 p-0">
+                <div class="e-way-card" (click)="createEWayBill('second', 'voucher')">
+                    <div>
+                        <svg
+                            class="icon-link"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="50.919"
+                            height="50.932"
+                            viewBox="0 0 50.919 50.932"
+                        >
+                            <defs>
+                                <style>
+                                    .a {
+                                        fill: #adadad;
+                                        stroke: #adadad;
+                                        stroke-width: 0.75px;
+                                    }
+                                </style>
+                            </defs>
+                            <g transform="translate(-524.625 -254.944)">
+                                <g transform="translate(521.75 252.082)">
+                                    <g transform="translate(3.25 3.249)">
+                                        <g transform="translate(23.816 0)">
+                                            <path
+                                                class="a"
+                                                d="M158.315,17.985H143.088a.513.513,0,0,1-.513-.513V3.762a.513.513,0,0,1,.856-.381l15.227,13.71a.513.513,0,0,1-.343.894ZM143.6,16.959h13.378L143.6,4.914Z"
+                                                transform="translate(-142.575 -3.249)"
+                                            />
+                                        </g>
+                                        <g transform="translate(0 0.018)">
+                                            <path
+                                                class="a"
+                                                d="M37.8,53.507H8.772A5.453,5.453,0,0,1,3.25,48.139V8.725A5.453,5.453,0,0,1,8.772,3.356H27.578a.513.513,0,0,1,.513.513V17.048h14.72a.513.513,0,0,1,.513.513V28.171H42.3v-10.1H27.578a.513.513,0,0,1-.513-.513V4.382H8.772a4.427,4.427,0,0,0-4.5,4.343V48.139a4.427,4.427,0,0,0,4.5,4.343H37.8a4.479,4.479,0,0,0,4.4-3.474l1,.213A5.509,5.509,0,0,1,37.8,53.507Z"
+                                                transform="translate(-3.25 -3.356)"
+                                            />
+                                        </g>
+                                    </g>
+                                    <g transform="translate(30.85 27.542)">
+                                        <path
+                                            class="a"
+                                            d="M176,167.277a10.959,10.959,0,1,1,11.285-10.954A11.136,11.136,0,0,1,176,167.277Zm0-20.882a9.934,9.934,0,1,0,10.259,9.928A10.109,10.109,0,0,0,176,146.395Z"
+                                            transform="translate(-164.713 -145.369)"
+                                        />
+                                    </g>
+                                    <g transform="translate(37.371 37.982)">
+                                        <path
+                                            class="a"
+                                            d="M211.878,207.47h-8.5a.513.513,0,0,1,0-1.026h8.5a.513.513,0,1,1,0,1.026Z"
+                                            transform="translate(-202.862 -206.444)"
+                                        />
+                                    </g>
+                                    <g transform="translate(41.622 33.73)">
+                                        <path
+                                            class="a"
+                                            d="M228.244,191.1a.513.513,0,0,1-.513-.513v-8.5a.513.513,0,1,1,1.026,0v8.5A.513.513,0,0,1,228.244,191.1Z"
+                                            transform="translate(-227.731 -181.569)"
+                                        />
+                                    </g>
+                                    <g transform="translate(11.458 12.482)">
+                                        <path
+                                            class="a"
+                                            d="M61.584,58.289h-9.8a.513.513,0,1,1,0-1.026h9.8a.513.513,0,1,1,0,1.026Z"
+                                            transform="translate(-51.269 -57.263)"
+                                        />
+                                    </g>
+                                    <g transform="translate(11.458 18.583)">
+                                        <path
+                                            class="a"
+                                            d="M61.584,93.982h-9.8a.513.513,0,1,1,0-1.026h9.8a.513.513,0,1,1,0,1.026Z"
+                                            transform="translate(-51.269 -92.956)"
+                                        />
+                                    </g>
+                                    <g transform="translate(11.458 24.685)">
+                                        <path
+                                            class="a"
+                                            d="M73.862,129.676H51.782a.513.513,0,1,1,0-1.026h22.08a.513.513,0,0,1,0,1.026Z"
+                                            transform="translate(-51.269 -128.65)"
+                                        />
+                                    </g>
+                                    <g transform="translate(11.458 36.886)">
+                                        <path
+                                            class="a"
+                                            d="M66.949,201.058H51.782a.513.513,0,0,1,0-1.026H66.949a.513.513,0,0,1,0,1.026Z"
+                                            transform="translate(-51.269 -200.032)"
+                                        />
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                        <p>
+                            Import Voucher 
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex mr-b05">
                     <a
                         href="javascript:;"
-                        class="btn btn-sm btn-link pr-0 text-align-left mr-r1"
-                        (click)="downloadSampleFile()"
+                        class="btn btn-sm btn-link pr-0 text-align-left m-0 font-14 text-align-center"
+                        (click)="downloadSampleFile('voucher')"
                     >
-                        {{ inputData?.localeData?.download_sample_xls }}
+                    {{ inputData?.localeData?.download_sample_xls }}
                     </a>
                     <a
                         href="javascript:;"
-                        class="btn btn-sm btn-link pull-right text-align-left mr-r1"
-                        (click)="downloadSampleFile(true)"
+                        class="btn btn-sm btn-link pull-right text-align-left m-0 font-14 text-align-center"
+                        (click)="downloadSampleFile('voucher', true)"
                     >
-                        {{ inputData?.localeData?.download_sample_csv }}
+                    {{ inputData?.localeData?.download_sample_csv }}
                     </a>
                 </div>
             </div>
-        </form>
+            <div class="col-md-6 p-0">
+                <div class="e-way-card" (click)="createEWayBill('second', 'bank_statement')">
+                    <div>
+                        <svg
+                            class="icon-link"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="73.813"
+                            height="21.527"
+                            viewBox="0 0 73.813 21.527"
+                        >
+                            <defs>
+                                <style>
+                                    .a {
+                                        fill: #adadad;
+                                    }
+                                </style>
+                            </defs>
+                            <g transform="translate(-796 -267)">
+                                <path
+                                    class="a"
+                                    d="M65.429,137.371c.193-.023.385-.047.575-.082.121-.022.24-.05.36-.075.19-.041.38-.085.567-.136.124-.034.246-.071.368-.11q.271-.085.537-.184c.12-.045.24-.09.358-.139.178-.074.352-.154.526-.237.111-.053.223-.105.332-.163.184-.1.364-.2.543-.309.092-.056.186-.107.277-.165q.36-.231.7-.493c.025-.019.052-.036.077-.055l.006,0c.245.19.5.368.756.535.069.044.14.082.21.125.2.124.4.244.613.354.1.054.207.1.311.152.182.089.365.174.552.252.115.048.231.092.348.136.183.069.366.132.552.191.12.038.241.074.363.108.191.053.384.1.578.14.118.025.236.053.356.074.195.035.391.061.589.084h22.31A10.775,10.775,0,0,0,96.8,115.913H95.037c-.01-.023-.021-.045-.031-.069H92.4l.035.069H77.215a1.191,1.191,0,1,0,0,2.381H96.8a8.394,8.394,0,0,1,0,16.788H77.215a8.51,8.51,0,0,1-.861-.046,8.251,8.251,0,0,1-3.951-1.5A10.786,10.786,0,0,0,64.1,115.913H48.882l.035-.069h-2.61c-.01.023-.021.045-.031.069H44.512a10.774,10.774,0,0,0-1.384,21.458Zm-29.3-10.683a8.386,8.386,0,0,1,8.381-8.394H64.1a8.506,8.506,0,0,1,.861.046,8.273,8.273,0,0,1,4.885,2.255,8.368,8.368,0,0,1,.824,11.3,8.377,8.377,0,0,1-1.833-5.206,1.191,1.191,0,0,0-2.381,0,10.77,10.77,0,0,0,2.472,6.841,8.267,8.267,0,0,1-4.827,1.553H44.512A8.4,8.4,0,0,1,36.131,126.688Z"
+                                    transform="translate(762.25 151.156)"
+                                />
+                            </g>
+                        </svg>
+                        <p>
+                            Import Bank statement
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex mr-b05">
+                    <a
+                        href="javascript:;"
+                        class="btn btn-sm btn-link m-0 font-14 text-align-center"
+                        (click)="downloadSampleFile('bank_statement')"
+                    >
+                    {{ inputData?.localeData?.download_sample_xls }}
+                    </a>
+                    <a
+                        href="javascript:;"
+                        class="btn btn-sm btn-link m-0 font-14 text-align-center"
+                        (click)="downloadSampleFile('bank_statement', true)"
+                    >
+                    {{ inputData?.localeData?.download_sample_csv }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="dialogStep === 'second'" class="pd-2">
+            <form name="importStatementForm" novalidate autocomplete="off">
+                <div class="pd-b2 clearfix browse-file-btn">
+                    <label class="import-field-label file-upload-label"
+                        >{{ inputData?.localeData?.file }} <sup>*</sup></label
+                    >
+                    <label class="radio-inline p-0 browse-file-label">
+                        {{ inputData?.localeData?.choose_file }}
+                        <input
+                            type="file"
+                            name="file"
+                            class="form-control file-upload-field"
+                            (change)="onFileChange($event.target.files)"
+                            required
+                        />
+                    </label>
+                    <span> {{ selectedFile }} </span>
+                    <button (click)="createEWayBill('first', 'Select Account')">second</button>
+                </div>
+                <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === 'pdf'">
+                    <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
+                    <mat-form-field appearance="fill" class="w-100 custom-input-field">
+                        <input
+                            matInput
+                            type="password"
+                            name="password"
+                            class="form-control mat-field-border"
+                            [(ngModel)]="postRequest.password"
+                        />
+                    </mat-form-field>
+                </div>
+                <!-- <div
+                    class="pd-b2 clearfix"
+                    *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
+                >
+                    <label for="isHeaderProvided" class="import-field-label">{{
+                        inputData?.localeData?.header_provided
+                    }}</label>
+                    <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided">
+                        <span class="pull-left" *ngIf="postRequest.isHeaderProvided">{{
+                            inputData?.commonLocaleData?.app_yes
+                        }}</span>
+                        <span class="pull-right" *ngIf="!postRequest.isHeaderProvided">{{
+                            inputData?.commonLocaleData?.app_no
+                        }}</span>
+                    </mat-slide-toggle>
+                </div>
+                <div
+                    class="pd-b2 clearfix"
+                    *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
+                >
+                    <label for="sameDebitCreditAmountColumn" class="import-field-label">{{
+                        inputData?.localeData?.same_debit_credit_column
+                    }}</label>
+                    <mat-slide-toggle
+                        color="primary"
+                        name="sameDebitCreditAmountColumn"
+                        [(ngModel)]="postRequest.sameDebitCreditAmountColumn"
+                    >
+                        <span class="pull-left" *ngIf="postRequest.sameDebitCreditAmountColumn">{{
+                            inputData?.commonLocaleData?.app_yes
+                        }}</span>
+                        <span class="pull-right" *ngIf="!postRequest.sameDebitCreditAmountColumn">{{
+                            inputData?.commonLocaleData?.app_no
+                        }}</span>
+                    </mat-slide-toggle>
+                </div> -->
+                <div class="modal-wrap mr-b5">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [disabled]="!postRequest.file"
+                        class="mr-t1 pull-left"
+                        (click)="importStatement()"
+                    >
+                        {{ inputData?.localeData?.upload }}
+                    </button>
+                    <div class="pull-left mr-t1 d-flex sample-file-buttons">
+                        <a
+                            href="javascript:;"
+                            class="btn btn-sm btn-link pr-0 text-align-left mr-r1"
+                            (click)="downloadSampleFile(Select_Account)"
+                        >
+                            {{ inputData?.localeData?.download_sample_xls }}
+                        </a>
+                        <a
+                            href="javascript:;"
+                            class="btn btn-sm btn-link pull-right text-align-left mr-r1"
+                            (click)="downloadSampleFile(Select_Account, true)"
+                        >
+                            {{ inputData?.localeData?.download_sample_csv }}
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

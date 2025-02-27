@@ -12,11 +12,13 @@ import { AppState } from '../../../store';
 import { Router } from '@angular/router';
 import { SAMPLE_FILES_URL } from '../../../app.constant';
 import { saveAs } from 'file-saver';
+import { LedgerComponentStore } from '../../ledger.store';
 
 @Component({
     selector: 'import-statement',
     templateUrl: './import-statement.component.html',
     styleUrls: ['./import-statement.component.scss'],
+    providers: [LedgerComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -29,9 +31,12 @@ export class ImportStatementComponent implements OnDestroy {
     public postRequest: any = { file: '', password: '', isHeaderProvided: true, accountUniqueName: undefined, sameDebitCreditAmountColumn: undefined };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public dialogStep: string = "first";
+    public Select_Account: string = "Select Account";
 
     constructor(
         private ledgerService: LedgerService,
+        private ledgerComponentStore: LedgerComponentStore,
         public generalService: GeneralService,
         private toaster: ToasterService,
         private importExcelService: ImportExcelService,
@@ -41,6 +46,22 @@ export class ImportStatementComponent implements OnDestroy {
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>) {
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
+    }
+    ngOnInit() {
+        this.ledgerComponentStore.importStatementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((importSuccess)=>{
+            if(importSuccess){
+                console.log(importSuccess);
+                this.getDownload(importSuccess);
+            }
+        })
+    }
+    public getDownload(importSuccess){
+        this.ledgerService.setImportStatement(importSuccess.signedUrl, this.postRequest.file).pipe(takeUntil(this.destroyed$)).subscribe((importSuccess)=>{
+            if(importSuccess.statusCode){
+                console.log(importSuccess.statusCode);
+            }
+            console.log(importSuccess.statusCode);
+        });
     }
 
     /**
@@ -77,31 +98,33 @@ export class ImportStatementComponent implements OnDestroy {
      * @memberof ImportStatementComponent
      */
     public importStatement(): void {
-        this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
-        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
+        this.ledgerComponentStore.getImportStatement(this.selectedFile);
 
-        if (this.getRequest.entity === "pdf") {
-            this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === 'success') {
-                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
-                    this.dialogRef.close(true);
-                } else {
-                    this.toaster.showSnackBar("error", response?.message, response?.code);
-                }
-            });
-        } else {
-            this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
-            this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success" && response.body) {
-                    this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
-                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
-                    this.dialogRef.close(true);
-                    this.router.navigate(['/pages/import/banktransactions']);
-                } else {
-                    this.toaster.showSnackBar("error", response?.message, response?.code);
-                }
-            });
-        }
+        // this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
+        // this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
+
+        // if (this.getRequest.entity === "pdf") {
+        //     this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        //         if (response?.status === 'success') {
+        //             this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+        //             this.dialogRef.close(true);
+        //         } else {
+        //             this.toaster.showSnackBar("error", response?.message, response?.code);
+        //         }
+        //     });
+        // } else {
+        //     this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
+        //     this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        //         if (response?.status === "success" && response.body) {
+        //             this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
+        //             this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+        //             this.dialogRef.close(true);
+        //             this.router.navigate(['/pages/import/banktransactions']);
+        //         } else {
+        //             this.toaster.showSnackBar("error", response?.message, response?.code);
+        //         }
+        //     });
+        // }
     }
 
     /**
@@ -120,14 +143,26 @@ export class ImportStatementComponent implements OnDestroy {
      * @param {boolean} [isCsv=false]
      * @memberof ImportStatementComponent
      */
-    public async downloadSampleFile(isCsv: boolean = false) {
-        const fileUrl = SAMPLE_FILES_URL + `bank-transaction.${isCsv ? 'csv' : 'xlsx'}`;
-        const fileName = `bank-transaction-sample.${isCsv ? 'csv' : 'xlsx'}`;
+    public async downloadSampleFile(selectAccount: string, isCsv: boolean = false) {
+        const fileUrl = SAMPLE_FILES_URL + `${selectAccount === 'bank_statement' ? 'bank-transaction' : 'voucher'}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileName = `${selectAccount === 'bank_statement' ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? 'csv' : 'xlsx'}`;
+        console.log(selectAccount);
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
             saveAs(blob, fileName);
         } catch (e) {
             this.toaster.showSnackBar("error", this.inputData?.commonLocaleData?.app_something_went_wrong);
         }
+    }
+
+    /**
+     * Download sample files
+     *
+     * @param {boolean} [isCsv=false]
+     * @memberof ImportStatementComponent
+     */
+    public createEWayBill(event, selectAccount) {
+        this.dialogStep = event;
+        this.Select_Account = selectAccount;
     }
 }

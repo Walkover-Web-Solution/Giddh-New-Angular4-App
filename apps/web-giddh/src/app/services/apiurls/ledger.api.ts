@@ -54,5 +54,7 @@ export const LEDGER_API = {
     RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid',
 
     // Load stock variant
-    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants'
+    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants',
+
+    GET_DOWNLOAD_ATTACHMENT: "company/:companyUniqueName/imports/signed-url?fileName=:fileName"
 };

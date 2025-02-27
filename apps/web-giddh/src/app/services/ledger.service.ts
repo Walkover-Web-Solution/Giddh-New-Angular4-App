@@ -780,4 +780,26 @@ export class LedgerService {
             ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
         return this.http.get(url).pipe(map((res) => res.body), catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
+
+    public getDownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
+        return this.http.get(this.generalService.replaceUrlPlaceholders(LEDGER_API.GET_DOWNLOAD_ATTACHMENT, { fileName: fileName })).pipe(
+            map((res) => {
+                let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
+                data.request = fileName;
+                data.queryString = { fileName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
+    }
+
+    public setImportStatement(url: string, file: any): Observable<BaseResponse<any, any>> {
+        const formData: FormData = new FormData();
+        formData.append('file', file);
+        return this.http.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
 }
