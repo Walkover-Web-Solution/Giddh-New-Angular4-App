@@ -46,7 +46,6 @@ export class UpdateLedgerVm {
     public selectedTaxes: UpdateLedgerTaxData[] = [];
     public taxRenderData: ITaxControlData[] = [];
     public discountComponent: UpdateLedgerDiscountComponent;
-    public totalAmountChange: boolean = false;
     public ledgerUnderStandingObj = {
         accountType: '',
         text: {
@@ -386,7 +385,7 @@ export class UpdateLedgerVm {
     // FIXME: fix total calculation
     public generateGrandTotal() {
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-        let total = this.totalAmount - this.discountTrxTotal;
+        let total = cloneDeep(this.totalAmount) - this.discountTrxTotal;
         this.appliedTaxPerTotal = taxTotal;
         this.totalForTax = total;
         let particularAccount = this.getParticularAccount();
@@ -407,6 +406,7 @@ export class UpdateLedgerVm {
         }
         this.convertedTaxTrxTotal = this.calculateConversionRate(this.taxTrxTotal);
         this.convertedGrandTotal = this.calculateConversionRate(this.grandTotal);
+
         this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
     }
 
@@ -476,6 +476,8 @@ export class UpdateLedgerVm {
         }
 
         this.generateGrandTotal();
+        console.log("2");
+
         this.generateCompoundTotal();
     }
 
@@ -528,6 +530,8 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
+        console.log("called");
+
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -551,6 +555,7 @@ export class UpdateLedgerVm {
         if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
+
         } else {
             this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) / (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
         }
@@ -608,6 +613,7 @@ export class UpdateLedgerVm {
     public taxTrxUpdated(taxes: UpdateLedgerTaxData[]) {
         this.selectedTaxes = taxes;
         this.generateGrandTotal();
+        console.log("5");
         this.generateCompoundTotal();
     }
 

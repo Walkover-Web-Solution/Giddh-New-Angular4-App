@@ -98,7 +98,9 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
         DecimalDigitsModule,
         ClickOutsideModule,
         SelectModule.forRoot(),
-        NgxMaskModule.forRoot(),
+        NgxMaskModule.forRoot({
+            validation: false
+        }),
         AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot(),
         AmountFieldComponentModule,

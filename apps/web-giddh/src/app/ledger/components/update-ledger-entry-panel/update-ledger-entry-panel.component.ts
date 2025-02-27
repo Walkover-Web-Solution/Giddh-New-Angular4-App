@@ -447,11 +447,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        // this.totalAmountChanged$.pipe(debounceTime(500), takeUntil(this.destroyed$)).subscribe((response) => {
-        //     if (response) {
-        //         this.vm.inventoryTotalChanged();
-        //     }
-        // });
+        this.totalAmountChanged$.pipe(debounceTime(500), takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.vm.inventoryTotalChanged();
+            }
+        });
 
         // check if delete entry is success
         this.isDeleteTrxEntrySuccess$.subscribe(del => {
@@ -537,6 +537,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+
         if (changes['isPettyCash']) {
             this.isPettyCash = changes['isPettyCash'].currentValue;
         }
@@ -2576,6 +2578,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private assignStockDetails(event: IOption, txn: ILedgerTransactionItem, requestObject?: any): void {
+        console.log(event, txn);
+
         const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
         const accountUniqueName = event.additional?.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?

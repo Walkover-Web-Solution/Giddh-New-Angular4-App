@@ -1,30 +1,23 @@
-<span class="position-relative custom-dropdown-ledger custom-mat-form-field">
-    <mat-form-field appearance="outline" class="multi-select">
-        <mat-label *ngIf="showHeading">
-            {{ customHeading ? customHeading : commonLocaleData?.app_tax }}
-            <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup>
-        </mat-label>
-
-        <input
-            #taxInputElement
-            matInput
-            [matMenuTriggerFor]="taxControlMenu"
-            type="text"
-            id="update-ledger-tax"
-            [mask]="maskInput"
-            [rawInputValue]="formattedTotal"
-            [prefix]="prefixInput"
-            [suffix]="suffixInput"
-            name="formattedTotal"
-            [required]="isMandatory"
-            class="text-right total-tax-amount cursor-pointer"
-            [(ngModel)]="formattedTotal"
-            [ngClass]="{ 'field-disabled': readonly }"
-            (focus)="!readonly ? handleInputFocus() : ''"
-            autocomplete="off"
-        />
-    </mat-form-field>
-
+<span class="position-relative custom-dropdown-ledger">
+    <input-field
+        #taxInputElement
+        [label]="customHeading ? customHeading : commonLocaleData?.app_tax"
+        [matMenuTriggerFor]="taxControlMenu"
+        [type]="'text'"
+        [id]="'update-ledger-tax'"
+        [mask]="maskInput"
+        [useMask]="true"
+        [prefix]="prefixInput"
+        [suffix]="suffixInput"
+        name="formattedTotal"
+        [required]="isMandatory"
+        class="text-right total-tax-amount cursor-pointer"
+        [(ngModel)]="formattedTotal"
+        [ngClass]="{ 'field-disabled': readonly }"
+        [cssClass]="'text-right'"
+        (onFocus)="!readonly ? handleInputFocus() : ''"
+        [autocomplete]="'off'"
+    ></input-field>
     <mat-menu #taxControlMenu="matMenu">
         <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
             <div class="discount-checkbox-wrapper d-flex flex-column">
@@ -52,8 +45,8 @@
             </div>
         </div>
         <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
-         <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
-     </div>
+            <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+        </div>
         <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
     </mat-menu>
 </span>

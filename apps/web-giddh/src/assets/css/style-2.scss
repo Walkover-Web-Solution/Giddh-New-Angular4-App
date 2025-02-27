@@ -1184,14 +1184,6 @@ textarea {
         }
     }
 }
-
-.display-block {
-    display: block;
-}
-
-.display-none {
-    display: none;
-}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -9157,10 +9149,6 @@ button.ladda-button .ladda-label {
 
 .popover.adjustment-popover {
     margin: 0;
-}
-
-.create-new {
-    border-top: 1px solid var(--color-common-secondary-border);
 }
 
 @media (min-width: 564px) {

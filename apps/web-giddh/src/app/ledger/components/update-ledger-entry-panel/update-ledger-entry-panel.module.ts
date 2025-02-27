@@ -39,16 +39,13 @@ import { AsideMenuCreateTaxModule } from '../../../shared/aside-menu-create-tax/
         UpdateLedgerDiscountComponent
     ],
     imports: [
-        ModalModule.forChild(),
         ConfirmModalModule,
-        ShSelectModule,
         CommonModule,
         FormsModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         NumberToWordsModule,
         NgxMaskModule,
-        PopoverModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
         DecimalDigitsModule,
         ClickOutsideModule,

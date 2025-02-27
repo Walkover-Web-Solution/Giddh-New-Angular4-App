@@ -365,4 +365,16 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     public createNew(): void {
         this.createNewTax.emit();
     }
+
+    public validateField() {
+        setTimeout(() => {
+            if (!this.formattedTotal || this.formattedTotal.trim() === '') {
+                this.taxInputElement.nativeElement.classList.add('mat-form-field-invalid');
+            } else {
+                this.taxInputElement.nativeElement.classList.remove('mat-form-field-invalid');
+            }
+        }, 100);
+        console.log(this.taxInputElement.nativeElement);
+
+    }
 }
