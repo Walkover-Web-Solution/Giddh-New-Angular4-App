@@ -108,7 +108,7 @@
             [tableDataSource]="reportRespone"
             [columnDefinitions]="columnDefinitions"
             [tableSecondaryHeader]="salesRegisterTotal"
-            (clickOnItemEvent)="$event && goToDetailedSales($event.item)"
+            (handleClickEvent)="$event && goToDetailedSales($event.item)"
         ></giddh-table>
     </div>
 </ng-container>

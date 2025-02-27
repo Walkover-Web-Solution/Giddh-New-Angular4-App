@@ -30,9 +30,9 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
     /** Determines if the total count row should be displayed */
     public isShowSecondaryHeader: boolean = false;
     /** Holds the total count for each column */
-    @Input() tableFooterRow: Record<string, number | string> = {};
+    @Input() footerRow: Record<string, number | string> = {};
     /** Controls whether the total count appears at the top or bottom of the table */
-    public isShowFooterRow: boolean = false;
+    public showFooterRow: boolean = false;
     /** Emits click item event  */
     @Output() handleClickEvent: EventEmitter<any> = new EventEmitter();
     /** Holds the total count for visible column */
@@ -51,7 +51,7 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.isShowSecondaryHeader = !!Object.keys(this.tableSecondaryHeader).length;
-        this.isShowFooterRow = !!Object.keys(this.tableFooterRow).length;
+        this.showFooterRow = !!Object.keys(this.footerRow).length;
     }
 
     /**
