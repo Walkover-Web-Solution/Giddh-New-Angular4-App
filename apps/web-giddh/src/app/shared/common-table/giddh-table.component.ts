@@ -1,19 +1,19 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { ColumnDefinition } from './common.table.component.const';
+import { ColumnDefinition } from './giddh-table.component.const';
 @Component({
-    selector: 'common-table-component',
-    templateUrl: './common.table.component.html',
-    styleUrls: ['./common.table.component.scss']
+    selector: 'giddh-table',
+    templateUrl: './giddh-table.component.html',
+    styleUrls: ['./giddh-table.component.scss']
 })
 
-export class CommonTableComponent implements OnInit, OnDestroy {
+export class GiddhTableComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Holds the table data */
-    @Input() tableData: any = [];
+    @Input() tableDataSource: any[] = [];
     /**
      * Configuration for table columns.
      * 
@@ -21,17 +21,20 @@ export class CommonTableComponent implements OnInit, OnDestroy {
      * 
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
-     * [2] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
+     * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
      */
     @Input() columnDefinitions: Record<string, ColumnDefinition> = {};
     /** Holds the total count for each column */
-    @Input() columnTotalCounts: Record<string, number | string> = {};
+    @Input() tableSecondaryHeader: Record<string, number | string> = {};
     /** Determines if the total count row should be displayed */
-    @Input() isTotalCountVisible: boolean = false;
+    public isShowSecondaryHeader: boolean = false;
+    /** Holds the total count for each column */
+    @Input() tableFooterRow: Record<string, number | string> = {};
     /** Controls whether the total count appears at the top or bottom of the table */
-    @Input() isTotalCountAtTop: boolean = false;
+    public isShowFooterRow: boolean = false;
     /** Emits click item event  */
-    @Output() clickOnItemEvent: EventEmitter<any> = new EventEmitter();
+    @Output() handleClickEvent: EventEmitter<any> = new EventEmitter();
     /** Holds the total count for visible column */
     public topHeaderColumns: string[] = [];
     /** This will use for displayed table columns */
@@ -39,24 +42,27 @@ export class CommonTableComponent implements OnInit, OnDestroy {
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {}
+    constructor() { }
 
     /**
      * Initializes the component variables and settings
      *
-     * @memberof CommonTableComponent
+     * @memberof GiddhTableComponent
      */
-    public ngOnInit(): void {}
+    public ngOnInit(): void {
+        this.isShowSecondaryHeader = !!Object.keys(this.tableSecondaryHeader).length;
+        this.isShowFooterRow = !!Object.keys(this.tableFooterRow).length;
+    }
 
     /**
      * Determines if a column is clickable based on its definition
      *
      * @param {string} column - Column key
      * @returns {boolean} - True if the column is clickable, otherwise false
-     * @memberof CommonTableComponent
+     * @memberof GiddhTableComponent
      */
     public isClickableColumn(column: string): boolean {
-        return this.columnDefinitions?.[column]?.length >= 3 && this.columnDefinitions?.[column][2];
+        return this.columnDefinitions?.[column]?.[3];
     }
 
     /**
@@ -64,7 +70,7 @@ export class CommonTableComponent implements OnInit, OnDestroy {
      *
      * @param {string} column - Column key
      * @returns {string} - Localized or default header label
-     * @memberof CommonTableComponent
+     * @memberof GiddhTableComponent
      */
     public getHeaderLabel(column: string): string {
         const key = this.columnDefinitions?.[column]?.[0];
@@ -76,7 +82,7 @@ export class CommonTableComponent implements OnInit, OnDestroy {
      *
      * @param {string} column - Column key
      * @returns {string} - Trimmed column key
-     * @memberof CommonTableComponent
+     * @memberof GiddhTableComponent
      */
     public trimColumn(column: string): string {
         return column?.trim() ?? '';
@@ -85,34 +91,36 @@ export class CommonTableComponent implements OnInit, OnDestroy {
     /**
      * Updates displayed columns based on column definitions (runs on input changes)
      *
-     * @memberof CommonTableComponent
+     * @memberof GiddhTableComponent
      */
     public ngOnChanges(): void {
         this.topHeaderColumns = [];
         this.displayedColumns = [];
         Object.entries(this.columnDefinitions).forEach(([key, value]) => {
-            if (Array.isArray(value) && value.length >= 1 && value[1]) {
-                this.topHeaderColumns.push(key + ' ');
+            if (Array.isArray(value) && value?.[1]) {
+                if (this.isShowSecondaryHeader) {
+                    this.topHeaderColumns.push(key + ' ');
+                }
                 this.displayedColumns.push(key);
             }
         });
     }
 
-     /**
-     * Checks if a given value is a string
-     *
-     * @param {any} value - Value to check
-     * @returns {boolean} - True if value is a string, otherwise false
-     * @memberof CommonTableComponent
-     */
-     public isString(value: any): boolean {
-        return typeof value === 'string';
+    /**
+    * Checks if a given value is a string
+    *
+    * @param {any} value - Value to check
+    * @returns {boolean} - True if value is a number, otherwise false
+    * @memberof GiddhTableComponent
+    */
+    public isNumber(value: any): boolean {
+        return !isNaN(value);
     }
 
     /**
      * Unsubscribes from all the subscriptions
      *
-     * @memberof CommonTableComponent
+     * @memberof GiddhTableComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -124,9 +132,9 @@ export class CommonTableComponent implements OnInit, OnDestroy {
      *
      * @param {any} item - The clicked item data
      * @param {string} column - The column associated with the clicked item
-     * @memberof CommonTableComponent
+     * @memberof GiddhTableComponent
      */
-    public clickOnItem(item: any, column: string): void {
-        this.clickOnItemEvent.emit({ columnName: column, item: item });
+    public handleClick(item: any, column: string): void {
+        this.handleClickEvent.emit({ columnName: column, item: item });
     }
 }

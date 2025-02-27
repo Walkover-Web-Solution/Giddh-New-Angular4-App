@@ -21,7 +21,7 @@ import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
-import { ColumnDefinition } from '../../../shared/common-table/common.table.component.const';
+import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -68,18 +68,19 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * 
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
-     * [2] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
+     * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
      */
     public columnDefinitions: Record<string, ColumnDefinition> = {
-        particular: ["app_particular", true, true],
-        sales: ["app_sales", true],
-        returns: ["app_return", false],
-        taxTotal: ["net_tax", false],
-        discountTotal: ["net_discount", false],
-        tcsTotal: ["net_tcs", false],
-        tdsTotal: ["net_tds", false],
-        netSales: ["net_sales", false],
-        cumulative: ["app_cumulative", false]
+        particular: ["app_particular", true, "", true],
+        sales: ["app_sales", true, "text-right"],
+        returns: ["app_return", false, "text-right"],
+        taxTotal: ["net_tax", false, "text-right"],
+        discountTotal: ["net_discount", false, "text-right"],
+        tcsTotal: ["net_tcs", false, "text-right"],
+        tdsTotal: ["net_tds", false, "text-right"],
+        netSales: ["net_sales", false, "text-right"],
+        cumulative: ["app_cumulative", false, "text-right"]
     }
 
     constructor(
@@ -523,13 +524,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * @memberof ReportsDetailsComponent
      */
     public showColum(): void {
-        Object.entries(this.columnDefinitions).filter(([key]) => !['sales', 'particular'].includes(key)).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                if (['tcsTotal', 'tdsTotal'].includes(key)) {
-                    this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.salesRegisterTotal[key];
-                } else {
-                    this.columnDefinitions[key][1] = this.salesRegisterTotal[key];
-                }
+        Object.keys(this.columnDefinitions).filter((key) => !['sales', 'particular'].includes(key)).forEach((key) => {
+            if (['tcsTotal', 'tdsTotal'].includes(key)) {
+                this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.salesRegisterTotal[key];
+            } else {
+                this.columnDefinitions[key][1] = !!this.salesRegisterTotal[key];
             }
         });
     }
@@ -538,7 +537,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      * Navigates to the detailed sales report page with query parameters.
      *
      * @param {ReportsModel} item - The report item containing date ranges and filters.
-     * @memberof CommonTableComponent
+     * @memberof ReportsDetailsComponent
      */
     public goToDetailedSales(item: ReportsModel) {
         let from = item.from;
