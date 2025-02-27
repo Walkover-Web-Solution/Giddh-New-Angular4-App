@@ -476,8 +476,6 @@ export class UpdateLedgerVm {
         }
 
         this.generateGrandTotal();
-        console.log("2");
-
         this.generateCompoundTotal();
     }
 
@@ -530,8 +528,6 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
-        console.log("called");
-
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -613,7 +609,6 @@ export class UpdateLedgerVm {
     public taxTrxUpdated(taxes: UpdateLedgerTaxData[]) {
         this.selectedTaxes = taxes;
         this.generateGrandTotal();
-        console.log("5");
         this.generateCompoundTotal();
     }
 

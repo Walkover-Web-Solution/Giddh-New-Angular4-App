@@ -537,8 +537,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-
         if (changes['isPettyCash']) {
             this.isPettyCash = changes['isPettyCash'].currentValue;
         }
@@ -2578,8 +2576,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private assignStockDetails(event: IOption, txn: ILedgerTransactionItem, requestObject?: any): void {
-        console.log(event, txn);
-
         const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
         const accountUniqueName = event.additional?.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
