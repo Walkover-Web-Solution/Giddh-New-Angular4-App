@@ -29,6 +29,8 @@ import { AttachmentsModule } from '../../../theme/attachments/attachments.module
 import { LaddaModule } from 'angular2-ladda';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AsideMenuCreateTaxModule } from '../../../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 
 @NgModule({
     declarations: [
@@ -64,6 +66,8 @@ import { MatMenuModule } from '@angular/material/menu';
         FormFieldsModule,
         MatMenuModule,
         AttachmentsModule,
+        MatTabsModule,
+        AsideMenuCreateTaxModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

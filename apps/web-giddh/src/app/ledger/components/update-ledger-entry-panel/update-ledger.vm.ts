@@ -46,6 +46,7 @@ export class UpdateLedgerVm {
     public selectedTaxes: UpdateLedgerTaxData[] = [];
     public taxRenderData: ITaxControlData[] = [];
     public discountComponent: UpdateLedgerDiscountComponent;
+    public totalAmountChange: boolean = false;
     public ledgerUnderStandingObj = {
         accountType: '',
         text: {
@@ -406,7 +407,6 @@ export class UpdateLedgerVm {
         }
         this.convertedTaxTrxTotal = this.calculateConversionRate(this.taxTrxTotal);
         this.convertedGrandTotal = this.calculateConversionRate(this.grandTotal);
-
         this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
     }
 
@@ -528,8 +528,6 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
-        console.log("called");
-
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -550,8 +548,6 @@ export class UpdateLedgerVm {
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
         const particularAccount = this.getParticularAccount();
         const ledgerAccount = this.getLedgerAccount(particularAccount);
-        console.log("called");
-
         if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
