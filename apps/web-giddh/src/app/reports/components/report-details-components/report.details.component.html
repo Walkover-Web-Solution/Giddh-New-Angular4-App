@@ -23,7 +23,7 @@
     </div>
     <div class="container-fluid font-15 mr-t1">
         <div class="d-flex justify-content-between">
-            <div class="select-financial-year mr-b15 custom-mat-form-field">
+            <div class="d-flex mr-b15 custom-mat-form-field">
                 <div
                     *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                     class="mr-r15"
@@ -77,8 +77,8 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-menu #extraMenu="matMenu" class="month-grid-menu" xPosition="after" yPosition="below">
-                        <div class="month-grid">
+                    <mat-menu #extraMenu="matMenu" xPosition="after" yPosition="below">
+                        <div class="grid-columns-3 d-grid column-gap5 pd-1">
                           <button 
                             mat-menu-item 
                             *ngFor="let month of monthNames" 

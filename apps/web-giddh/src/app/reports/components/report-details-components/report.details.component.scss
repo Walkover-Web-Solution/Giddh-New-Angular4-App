@@ -1,94 +1,3 @@
-.width-160 {
-    width: 160px;
-}
-.width-170 {
-    width: 170px;
-}
-.radio-theme:before {
-    content: " ";
-    width: 14px;
-    height: 14px;
-    top: 0;
-    right: 0;
-}
-.radio-theme {
-    height: 14px;
-    width: 14px;
-}
-.radio-theme:checked:after {
-    content: " ";
-    left: 4px;
-    bottom: 4px;
-}
-.btn-group {
-    display: block;
-    width: 100%;
-    text-align: left;
-}
-.btn.dropdown-toggle {
-    width: 100%;
-    text-align: left;
-    border: 1px solid var(--color-secondary-input-bar-border);
-    padding-left: 7px !important;
-    color: var(--color-primary-input-bar-text);
-    background: var(--color-white);
-}
-.btn.dropdown-toggle .caret {
-    position: absolute;
-    right: 10px;
-    top: 14px;
-    color: var(--color-gray);
-    border-right: 6px solid transparent;
-    border-left: 6px solid transparent;
-    border-top: 6px dashed;
-}
-.report-dropdown li {
-    float: left;
-    width: 51px;
-}
-.report-dropdown {
-    min-width: 210px;
-    left: 100% !important;
-}
-ul#dropdown-nested li .caret {
-    float: right;
-    margin-top: 8px;
-}
-.report-dropdown {
-    left: 100% !important;
-}
-#dropdown-nested li .caret {
-    float: right;
-    margin-top: 8px;
-    transform: rotate(-94deg);
-    border-right: 6px solid transparent;
-    border-left: 6px solid transparent;
-    border-top: 6px dashed;
-    color: var(--color-gray);
-}
-.sales-register-menu {
-    min-width: 100%;
-}
-
-.list-inline > li {
-    display: inline-block;
-    padding-right: 5px;
-    padding-left: 5px;
-}
-.select-financial-year {
-    display: flex;
-    align-items: center;
-    max-width: 600px;
-    width: 100%;
-    .btn-group {
-        width: auto;
-    }
-    .inner-button {
-        width: 100%;
-        max-width: 300px;
-        margin-right: 15px;
-    }
-}
 .report-breadcrum {
     position: absolute !important;
     top: 0;
@@ -103,23 +12,6 @@ ul#dropdown-nested li .caret {
             a {
                 color: var(--color-giddh-blue);
             }
-        }
-    }
-}
-@media (max-width: 991px) {
-    #dropdown-nested {
-        position: absolute;
-        left: -141px;
-        li {
-            .caret {
-                transform: rotate(0deg);
-            }
-        }
-        .report-dropdown {
-            left: 0 !important;
-            width: 100%;
-            min-height: 120px;
-            top: 50px;
         }
     }
 }
@@ -143,36 +35,7 @@ ul#dropdown-nested li .caret {
         padding-right: 0px !important;
     }
 }
-@media (max-width: 575px) {
-    .select-financial-year {
-        flex-direction: column;
-        max-width: 100%;
-        width: 100%;
-        .inner-button {
-            width: 100%;
-            max-width: 100%;
-            margin-right: 0;
-            margin-bottom: 15px;
-        }
-    }
-}
 
 .duration-dropdown {
     width: 140px !important;
-}
-
-.month-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 8px;
-}
-
-.month-grid-menu {
-    min-width: 250px;
-}
-
-.mat-menu-item {
-    justify-content: center;
-    text-transform: capitalize;
 }

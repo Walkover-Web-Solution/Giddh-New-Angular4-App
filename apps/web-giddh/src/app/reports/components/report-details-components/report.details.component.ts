@@ -21,9 +21,7 @@ import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
-import { MatSelectChange } from '@angular/material/select';
-import { MatMenuTrigger } from '@angular/material/menu';
-type ColumnDefinition = [string, boolean, boolean?];
+import { ColumnDefinition } from '../../../shared/common-table/common.table.component.const';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -237,7 +235,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 index++;
             }
         });
-        this.showColum();
         return reportModelArray;
     }
 
@@ -302,7 +299,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
-        this.showColum();
     }
 
     public selectFinancialYearOption(v: IOption) {
@@ -447,6 +443,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.salesRegisterTotal.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
         this.salesRegisterTotal.interval = this.interval;
         this.salesRegisterTotal.selectedMonth = this.selectedMonth;
+        this.showColum();
     }
 
     /**

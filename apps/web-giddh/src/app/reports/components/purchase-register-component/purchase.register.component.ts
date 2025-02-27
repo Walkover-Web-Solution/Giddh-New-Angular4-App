@@ -21,7 +21,7 @@ import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
-type ColumnDefinition = [string, boolean, boolean?];
+import { ColumnDefinition } from '../../../shared/common-table/common.table.component.const';
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
@@ -239,7 +239,6 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 index++;
             }
         });
-        this.showColum();
         return reportModelArray;
     }
 
@@ -303,7 +302,6 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
-        this.showColum();
     }
 
     public selectFinancialYearOption(v: IOption) {
@@ -353,7 +351,6 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             });
             this.savePreferences();
         }
-        this.showColum();
     }
 
     public formatParticular(mdyTo, mdyFrom, index, monthNames) {
@@ -453,6 +450,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.purchaseRegisterTotal.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             this.purchaseRegisterTotal.interval = this.interval;
             this.purchaseRegisterTotal.selectedMonth = this.selectedMonth;
+            this.showColum();
         }
     }
 
