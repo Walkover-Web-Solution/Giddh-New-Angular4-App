@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-type ColumnDefinition = [string, boolean, boolean?];
+import { ColumnDefinition } from './common.table.component.const';
 @Component({
     selector: 'common-table-component',
     templateUrl: './common.table.component.html',
