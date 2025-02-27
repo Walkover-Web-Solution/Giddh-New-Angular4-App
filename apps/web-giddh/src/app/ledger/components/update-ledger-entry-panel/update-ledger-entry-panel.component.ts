@@ -52,7 +52,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
@@ -60,6 +60,11 @@ import { CommonService } from '../../../services/common.service';
 import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
+import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
+import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
+import { CompanyActions } from '../../../actions/company.actions';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -79,7 +84,8 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
             transition('in => out', animate('400ms ease-in-out')),
             transition('out => in', animate('400ms ease-in-out'))
         ]),
-    ]
+    ],
+    providers: [VoucherComponentStore]
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
@@ -293,9 +299,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAccountSearchData: boolean = true;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Boolean for tab screen or not  */
+    public isTabScreen: boolean = false;
+    /** Discount dialog ref */
+    public discountDialogRef: MatDialogRef<any>;
+    /** Discounts list Observable */
+    public discountsList$: Observable<any> = this.componentStore.discountsList$;
+    /** Template Reference for Create Tax aside menu */
+    @ViewChild("createTax") public createTax: TemplateRef<any>;
+    /** Create tax dialog ref  */
+    public taxAsideMenuRef: MatDialogRef<any>;
 
     constructor(
         private accountService: AccountService,
+        private breakPointObservar: BreakpointObserver,
+        private componentStore: VoucherComponentStore,
+        private settingsTaxesAction: SettingsTaxesActions,
+        private companyActions: CompanyActions,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
         private ledgerAction: LedgerActions,
@@ -314,7 +334,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private ledgerUtilityService: LedgerUtilityService,
         private invoiceAction: InvoiceActions
     ) {
-
+        this.breakPointObservar.observe([
+            '(max-width: 991px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isTabScreen = result.matches;
+        });
         this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
 
         this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
@@ -513,6 +537,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+
         if (changes['isPettyCash']) {
             this.isPettyCash = changes['isPettyCash'].currentValue;
         }
@@ -1004,6 +1030,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getInvoiceListsData(event: any): void {
+        this.vm.selectedLedger.voucher ={
+            name: event?.label,
+            shortCode: event?.value,
+        }
         if (this.voucherApiVersion === 2) {
             this.resetInvoiceList();
         }
@@ -2548,6 +2578,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private assignStockDetails(event: IOption, txn: ILedgerTransactionItem, requestObject?: any): void {
+        console.log(event, txn);
+
         const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
         const accountUniqueName = event.additional?.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
@@ -2693,5 +2725,57 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.changeDetectorRef.detectChanges();
             }
         });
+    }
+
+/**
+ * Shows create new discount dialog
+ *
+ * @memberof UpdateLedgerEntryPanelComponent
+ */
+    public showCreateDiscountDialog(): void {
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+
+        this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStore.getDiscountsList();
+
+                this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(discountsList => {
+                    if (discountsList) {
+                        this.vm.discountArray = discountsList;
+                        this.changeDetectorRef.detectChanges();
+                    }
+                });
+            }
+        });
+    }
+
+/**
+ * Shows create new tax dialog
+ *
+ * @memberof UpdateLedgerEntryPanelComponent
+ */
+    public showCreateTaxDialog(): void {
+        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
+        this.taxAsideMenuRef = this.dialog.open(this.createTax, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+/**
+ * Close tax modal
+ *
+ * @memberof UpdateLedgerEntryPanelComponent
+ */
+    public closeTaxModal(): void {
+        this.store.dispatch(this.companyActions.getTax());
+        this.taxAsideMenuRef.close();
     }
 }

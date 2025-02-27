@@ -6,6 +6,10 @@
     margin-right: 13px;
 }
 
+.create-new {
+    border-top: 1px solid var(--color-common-secondary-border);
+}
+
 .or-line::after {
     content: "";
     border-bottom: 1px solid var(--color-iron);

@@ -85,6 +85,8 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     private selectedTaxes: UpdateLedgerTaxData[] = [];
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Emitter for create new tax selected */
+    @Output() public createNewTax: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private generalService: GeneralService) {
 
@@ -353,5 +355,26 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      */
     public taxLabelBluring(taxLabel: HTMLElement): void {
         this.generalService.dropdownFocusOut(taxLabel);
+    }
+
+    /**
+     * Emits create new tax event
+     *
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public createNew(): void {
+        this.createNewTax.emit();
+    }
+
+    public validateField() {
+        setTimeout(() => {
+            if (!this.formattedTotal || this.formattedTotal.trim() === '') {
+                this.taxInputElement.nativeElement.classList.add('mat-form-field-invalid');
+            } else {
+                this.taxInputElement.nativeElement.classList.remove('mat-form-field-invalid');
+            }
+        }, 100);
+        console.log(this.taxInputElement.nativeElement);
+
     }
 }
