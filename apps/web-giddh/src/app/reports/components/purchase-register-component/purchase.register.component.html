@@ -109,7 +109,7 @@
             [tableDataSource]="reportRespone"
             [columnDefinitions]="columnDefinitions"
             [tableSecondaryHeader]="purchaseRegisterTotal"
-            (clickOnItemEvent)="$event && gotoDetailedPurchase($event.item)"
+            (handleClickEvent)="$event && gotoDetailedPurchase($event.item)"
         >
         </giddh-table>
     </div>

@@ -1,4 +1,5 @@
-<table mat-table [dataSource]="tableDataSource" class="giddh-table">
+<div class="table-responsive overflow-visible">
+    <table mat-table [dataSource]="tableDataSource" class="giddh-table">
     <!-- Header Row 1: Displays total count values for each column when enabled -->
     <ng-container *ngIf="isShowSecondaryHeader">
         <ng-container *ngFor="let column of topHeaderColumns" [matColumnDef]="column">
@@ -43,9 +44,9 @@
         </td>
 
         <!-- Footer Row: Displays total count values below data rows -->
-        <ng-container *ngIf="isShowFooterRow">
+        <ng-container *ngIf="showFooterRow">
             <td mat-footer-cell *matFooterCellDef class="p-0" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
-                {{ tableFooterRow?.[column] ?? ' ' }}
+                {{ footerRow?.[column] ?? ' ' }}
             </td>
         </ng-container>
     </ng-container>
@@ -54,7 +55,7 @@
     <ng-container *ngIf="isShowSecondaryHeader">
         <tr mat-header-row *matHeaderRowDef="topHeaderColumns"></tr>
     </ng-container>
-    
+
     <!-- Renders Header Row 2 (Column Names) -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
@@ -62,7 +63,8 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     <!-- Renders Footer Row (Total Count Row) if isTotalCountAtTop is false -->
-    <ng-container *ngIf="isShowFooterRow">
+    <ng-container *ngIf="showFooterRow">
         <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
     </ng-container>
-</table>
+    </table>
+</div>

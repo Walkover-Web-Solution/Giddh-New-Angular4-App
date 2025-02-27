@@ -22,6 +22,7 @@ import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
+
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
