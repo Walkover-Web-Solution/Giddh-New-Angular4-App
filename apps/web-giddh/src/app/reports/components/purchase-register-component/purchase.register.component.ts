@@ -21,7 +21,7 @@ import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
-import { ColumnDefinition } from '../../../shared/common-table/common.table.component.const';
+import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
@@ -71,18 +71,19 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * 
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
+     * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
      * [2] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
      */
     public columnDefinitions: Record<string, ColumnDefinition> = {
-        particular: ["app_particular", true, true],
-        purchase: ["app_purchase", true],
-        returns: ["app_return", false],
-        taxTotal: ["app_tax", false],
-        discountTotal: ["app_discount", false],
-        tcsTotal: ["app_tcs", false],
-        tdsTotal: ["app_tds", false],
-        netPurchase: ["app_net_purchase", false],
-        cumulative: ["app_cumulative", false]
+        particular: ["app_particular", true, "", true],
+        purchase: ["app_purchase", true, "text-right"],
+        returns: ["app_return", false, "text-right"],
+        taxTotal: ["app_tax", false, "text-right"],
+        discountTotal: ["app_discount", false, "text-right"],
+        tcsTotal: ["app_tcs", false, "text-right"],
+        tdsTotal: ["app_tds", false, "text-right"],
+        netPurchase: ["app_net_purchase", false, "text-right"],
+        cumulative: ["app_cumulative", false, "text-right"]
     }
 
     constructor(
@@ -515,13 +516,11 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterComponent
      */
     public showColum(): void {
-        Object.entries(this.columnDefinitions).filter(([key]) => !['purchase', 'particular'].includes(key)).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                if (['tcsTotal', 'tdsTotal'].includes(key)) {
-                    this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.purchaseRegisterTotal[key];
-                } else {
-                    this.columnDefinitions[key][1] = this.purchaseRegisterTotal[key];
-                }
+        Object.keys(this.columnDefinitions).filter((key) => !['purchase', 'particular'].includes(key)).forEach((key) => {
+            if (['tcsTotal', 'tdsTotal'].includes(key)) {
+                this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.purchaseRegisterTotal[key];
+            } else {
+                this.columnDefinitions[key][1] = !!this.purchaseRegisterTotal[key];
             }
         });
     }

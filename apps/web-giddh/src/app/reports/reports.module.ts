@@ -48,7 +48,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { MatSortModule } from '@angular/material/sort';
-import { CommonTableModule } from '../shared/common-table/common.table.module';
+import { GiddhTableModule } from '../shared/common-table/giddh.table.module';
 import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
@@ -113,7 +113,7 @@ import { MatSelectModule } from '@angular/material/select';
         MatInputModule,
         SerialNumberPipe,
         MatSortModule,
-        CommonTableModule,
+        GiddhTableModule,
         MatSelectModule
     ]
 })

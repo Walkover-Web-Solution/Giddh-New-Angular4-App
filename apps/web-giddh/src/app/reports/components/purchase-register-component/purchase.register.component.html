@@ -30,11 +30,11 @@
                     class="mr-r15"
                 >
                     <dropdown-field
-                        [name]="'companyName'"
-                        [label]="commonLocaleData?.app_company_name"
+                        [name]="'branchName'"
+                        [label]="commonLocaleData?.app_entity"
                         [placeholder]="commonLocaleData?.app_select_entity"
                         [options]="currentCompanyBranches"
-                        (selectedOption)="currentBranch.uniqueName =  $event?.value; handleBranchChange($event)"
+                        (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
                         [defaultValue]="currentBranch?.name"
                         [required]="true"
                     >
@@ -54,7 +54,7 @@
                 </div>
                 <div class="mr-r15">
                     <mat-form-field appearance="outline" class="duration-dropdown">
-                        <mat-label>Duration</mat-label>
+                        <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
                         <mat-select [value]="selectedType">
                             <mat-option (click)="populateRecords('monthly')" [value]="commonLocaleData?.app_duration?.monthly">
                                 {{ commonLocaleData?.app_duration?.monthly }}
@@ -65,7 +65,7 @@
                             <mat-option [value]="commonLocaleData?.app_duration?.weekly">
                                 <span 
                                     class="w-100 d-flex justify-content-between"
-                                    [matMenuTriggerFor]="extraMenu"
+                                    [matMenuTriggerFor]="monthMenu"
                                     (click)="$event.stopPropagation()"
                                 >
                                     <div class="w-50">
@@ -78,7 +78,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-menu #extraMenu="matMenu" xPosition="after" yPosition="below">
+                    <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
                         <div class="grid-columns-3 d-grid column-gap5 pd-1">
                           <button 
                             mat-menu-item 
@@ -102,17 +102,15 @@
                 {{ commonLocaleData?.app_export }}
             </button>
         </div>
-        <common-table-component
+        <giddh-table
             *ngIf="localeData"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
-            [tableData]="reportRespone"
+            [tableDataSource]="reportRespone"
             [columnDefinitions]="columnDefinitions"
-            [columnTotalCounts]="purchaseRegisterTotal"
-            [isTotalCountVisible]="true"
-            [isTotalCountAtTop]="true"
+            [tableSecondaryHeader]="purchaseRegisterTotal"
             (clickOnItemEvent)="$event && gotoDetailedPurchase($event.item)"
         >
-        </common-table-component>
+        </giddh-table>
     </div>
 </ng-container>
