@@ -21,7 +21,7 @@ export const GIDDH_DATEPICKER_FORMAT = {
 };
 
 export class PickDateAdapter extends NativeDateAdapter {
-    parse(value: any, parseFormat: Object): Date | null {
+    parse(value: any, parseFormat: string | any): Date | null {
         if (typeof value === 'string') {
             const parts = value.split('-');
             if (parts.length === 3) {
