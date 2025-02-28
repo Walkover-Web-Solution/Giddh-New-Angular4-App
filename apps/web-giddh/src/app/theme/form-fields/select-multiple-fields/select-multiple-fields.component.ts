@@ -58,6 +58,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private allowAddChip: boolean = true;
     /** Holds type of email */
     public emailType = EmailType;
+    /** True if field is read only */
+    @Input() public readonly: boolean = false;
+    /** Holds Mat Input Label */
+    @Input() public label: string;
 
     constructor(
         private changeDetection: ChangeDetectorRef

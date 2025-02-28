@@ -99,7 +99,9 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
         DecimalDigitsModule,
         ClickOutsideModule,
         SelectModule.forRoot(),
-        NgxMaskModule.forRoot(),
+        NgxMaskModule.forRoot({
+            validation: false
+        }),
         AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot(),
         AmountFieldComponentModule,
