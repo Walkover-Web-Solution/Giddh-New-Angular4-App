@@ -385,7 +385,7 @@ export class UpdateLedgerVm {
     // FIXME: fix total calculation
     public generateGrandTotal() {
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-        let total = cloneDeep(this.totalAmount) - this.discountTrxTotal;
+        let total = this.totalAmount - this.discountTrxTotal;
         this.appliedTaxPerTotal = taxTotal;
         this.totalForTax = total;
         let particularAccount = this.getParticularAccount();
