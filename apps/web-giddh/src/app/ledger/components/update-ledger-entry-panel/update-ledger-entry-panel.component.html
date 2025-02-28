@@ -1698,8 +1698,12 @@
                                     [prefix]="vm.selectedPrefixForCurrency"
                                     [suffix]="vm.selectedSuffixForCurrency"
                                     (focus)="hideDiscountTax()"
-                                    (onChange)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
-                                    [(ngModel)]="vm.totalAmount"
+                                    [ngModel]="vm.totalAmount"
+                                    (ngModelChange)="
+                                        vm.totalAmount = $event;
+                                        vm.updateFirstEntryAmount();
+                                        vm.inventoryAmountChanged()
+                                    "
                                 />
                                 <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
@@ -1877,7 +1881,7 @@
                                 <label class="font-16 mr-t05">=</label>
                             </div>
 
-                            <ng-template [ngIf] ="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
+                            <ng-template [ngIf]="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
                                 <div class="text-right table-amount">
                                     <input-field
                                         [readonly]="
@@ -1890,14 +1894,14 @@
                                         [type]="'text'"
                                         [cssClass]="'text-right'"
                                         [id]="'update-ledger-total-amount'"
-                                        (onChange)="vm.inventoryTotalChanged()"
                                         [name]="'update-ledger-total-amount'"
                                         [autocomplete]="'off'"
                                         [useMask]="true"
                                         [mask]="vm.inputMaskFormat"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        [(ngModel)]="vm.grandTotal"
+                                        [ngModel]="vm.grandTotal"
+                                        (ngModelChange)="vm.grandTotal = $event; vm.inventoryTotalChanged()"
                                     />
                                     <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
                                         <ng-container
