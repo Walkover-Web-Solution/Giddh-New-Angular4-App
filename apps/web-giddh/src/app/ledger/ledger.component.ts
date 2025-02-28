@@ -553,9 +553,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.ledgerGridColumnsValue = [1, 1, 1]
                 } else if (result.breakpoints[mediumScreen]) {
                     this.ledgerGridTotalColumns = 8;
-                    this.ledgerGridColumnsValue = [3, 3, 2]
+                    this.ledgerGridColumnsValue = [2, 3, 3]
                 } else {
-                    this.ledgerGridTotalColumns = 8
+                    this.ledgerGridTotalColumns = 4
                     this.ledgerGridColumnsValue = [1, 2, 1]
                 }
             }
