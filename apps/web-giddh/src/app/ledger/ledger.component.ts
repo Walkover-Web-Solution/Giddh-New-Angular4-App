@@ -361,7 +361,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public bankIntegrationDialogRef: any;
     /** Holds if use directly integrated bank account*/
     public isDirectlyIntegrated: boolean = false;
-    public isManualChange: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -2839,7 +2838,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onChangeEntryDate(item: any): void {
         if (item && item.entryDate) {
             if (typeof item.entryDate !== 'string') {
-                item.entryDate = this.isManualChange ? dayjs(item.entryDate).format(GIDDH_DATE_FORMAT_MM_DD_YYYY) : dayjs(item.entryDate).format(GIDDH_DATE_FORMAT);
+                item.entryDate = dayjs(item.entryDate).format(GIDDH_DATE_FORMAT);
             }
         }
     }
