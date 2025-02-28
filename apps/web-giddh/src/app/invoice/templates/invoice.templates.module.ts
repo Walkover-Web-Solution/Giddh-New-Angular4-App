@@ -19,6 +19,7 @@ import { InvoiceTemplatePreviewModelComponent } from './edit-template/modals/tem
 import { DesignFiltersContainerComponent } from './edit-template/filters-container/design-filters/design.filters.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import { DecimalDigitsModule } from '../../shared/helpers/directives/decimalDigi
         CollapseModule.forRoot(),
         HasFocusDirectiveModule,
         BsDropdownModule,
+        ShSelectModule,
         ModalModule,
         ClickOutsideModule,
         DecimalDigitsModule,
