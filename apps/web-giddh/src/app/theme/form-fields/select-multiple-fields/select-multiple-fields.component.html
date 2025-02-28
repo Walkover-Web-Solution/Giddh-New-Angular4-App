@@ -29,7 +29,7 @@
                 [name]="name"
                 #selectField
                 [autocomplete]="'off'"
-                matAutocompletePosition="auto"
+                [matAutocompletePosition]="autoCompletePosition"
                 class="select-multiple-field-input"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 (clickOutside)="closeDropdownPanel($event)"
