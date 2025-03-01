@@ -195,7 +195,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
         }
         this.breakPointObservar.observe([
-            "(max-width: 1366px)",
+            "(max-width: 1300px)",
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isTabScreen = result?.matches;
             console.log(result);
