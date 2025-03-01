@@ -22,6 +22,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { RestrictedModules } from '../../../app.constant';
+import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -115,6 +116,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public restrictedModules: any = RestrictedModules;
     /** Holds Tax Service Enum */
     public taxServiceEnum = TaxServiceEnum;
+    /** true, on responsive screen size */
+    public isTabScreen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -126,7 +129,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService,
         private router: Router,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -190,6 +194,12 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.navigateToOverview();
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
         }
+        this.breakPointObservar.observe([
+            "(max-width: 1366px)",
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isTabScreen = result?.matches;
+            console.log(result);
+        })
     }
 
     public pullFromGstIn(ev) {

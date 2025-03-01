@@ -68,8 +68,8 @@
                     </div>
 
                     <div class="d-flex column-gap1 align-items-center">
-                        <span>
-                            <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" [ngClass]="{'d-none': isSmallScreen}"></watch-video>
+                        <span *ngIf="!isSmallScreen">
+                            <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'"></watch-video>
                         </span>
                         <ul class="list-inline">
                             <li>
@@ -135,10 +135,8 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <span>
-                    <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pd-r15" [ngClass]="{'d-none': !isSmallScreen}"></watch-video>
-                </span>
+            <div *ngIf="isSmallScreen">
+                <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pd-r15"></watch-video>
             </div>
             <div class="scroll-y noscroll-x fill body scrollbox">
                 <!--Hide this feature (Approved by Shubhendra Sir )-->
