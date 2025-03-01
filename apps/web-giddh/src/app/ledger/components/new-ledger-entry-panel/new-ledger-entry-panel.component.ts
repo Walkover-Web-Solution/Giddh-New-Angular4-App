@@ -54,19 +54,7 @@ const NEW_LEDGER_ENTRIES = [
     selector: 'new-ledger-entry-panel',
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%,   0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {

@@ -5,7 +5,6 @@ import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
@@ -51,6 +50,7 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 import { saveAs } from 'file-saver';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { LedgerComponentStore } from './ledger.store';
+import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 @Component({
     selector: 'ledger',
@@ -74,7 +74,7 @@ import { LedgerComponentStore } from './ledger.store';
 
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', { static: false }) public updateledgercomponent: ElementViewContainerRef;
-    @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
+    @ViewChildren(ReactiveDropdownFieldComponent) public dropDowns: QueryList<ReactiveDropdownFieldComponent>;
     public imgPath: string = '';
     public lc: LedgerVM;
     public selectedInvoiceList: string[] = [];
@@ -1350,12 +1350,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (unAccountedTrx) {
             this.selectBlankTxn(unAccountedTrx);
-
-            this.dropDowns?.filter(dd => dd.idEl === unAccountedTrx.id)?.forEach(dd => {
-                setTimeout(() => {
-                    dd.show(null);
-                }, 0);
-            });
         } else {
             const currentlyAddedTransaction = this.lc.currentBlankTxn;
             if (currentlyAddedTransaction.inventory) {
@@ -1365,11 +1359,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let newTrx = this.lc.addNewTransaction(event.type);
             this.lc.blankLedger?.transactions.push(newTrx);
             this.selectBlankTxn(newTrx);
-            setTimeout(() => {
-                this.dropDowns?.filter(dd => dd.idEl === newTrx.id)?.forEach(dd => {
-                    dd.show(null);
-                });
-            }, 0);
+        }
+        this.closeAllAccountDropdown();
+        console.log(this.dropDowns.forEach(item => console.log(item)));
+        
+        if (event?.type === 'DEBIT') {
+            const debitDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+            console.log("debitDropdowns", debitDropdowns);
+            debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
+            // this.dropDowns.first?.openDropdownPanel();
+        } else {
+            const creditDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
+            console.log("creditDropdowns", creditDropdowns);
+            creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
+            // this.dropDowns.last?.openDropdownPanel();
         }
     }
 
@@ -1434,6 +1437,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
         this.selectBlankTxn(trx);
+        this.closeAllAccountDropdown();
         if (trx.particular) {
             this.lc.showNewLedgerPanel = true;
         } else {
@@ -2168,13 +2172,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         fileInput.click();
     }
 
-    public toggleAsidePane(event?, shSelectElement?: ShSelectComponent): void {
+    public toggleAsidePane(event?): void {
         if (event) {
             event.preventDefault();
         }
-        if (shSelectElement) {
-            this.closeActiveEntry(shSelectElement);
-        }
+
         this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
             position: {
                 right: '0',
@@ -2409,21 +2411,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
-    }
-
-    /**
-     * Closes the active incomplete entry in ledger if user
-     * presses the shortcut key 'Alt + C'
-     *
-     * @private
-     * @param {ShSelectComponent} shSelectElement Current Sh select element instance
-     * @memberof LedgerComponent
-     */
-    private closeActiveEntry(shSelectElement: ShSelectComponent): void {
-        if (shSelectElement) {
-            shSelectElement.hide();
-        }
-        this.hideBankLedgerPopup(true);
     }
 
     /**
@@ -3142,5 +3129,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
       */
     public redirectToBankIntegration(): void {
         this.router.navigate(['pages', 'settings', 'integration', 'payment']);
+    }
+
+    /**
+     * Close All Account Dropdown
+     *
+     * @memberof LedgerComponent
+     */
+    public closeAllAccountDropdown(): void {
+        this.dropDowns.forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
     }
 }

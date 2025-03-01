@@ -662,3 +662,14 @@ input-field {
         }
     }
 }
+
+reactive-dropdown-field {
+    .dropdown-without-label {
+        mat-form-field {
+            .mat-mdc-text-field-wrapper {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    }
+}

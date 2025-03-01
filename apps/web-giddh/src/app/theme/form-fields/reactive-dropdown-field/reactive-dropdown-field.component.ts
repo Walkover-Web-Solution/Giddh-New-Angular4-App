@@ -187,6 +187,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * This will use for close dropdown panel
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public closeDropdownPanel(): void {
+        this.trigger?.closePanel();
+    }
+
+    /**
      * Lifecycle hook for component destroy
      *
      * @memberof ReactiveDropdownFieldComponent
@@ -270,7 +279,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public createNewRecord(): void {
-        this.trigger?.closePanel();
+        this.closeDropdownPanel();
         this.createOption.emit(true);
     }
 

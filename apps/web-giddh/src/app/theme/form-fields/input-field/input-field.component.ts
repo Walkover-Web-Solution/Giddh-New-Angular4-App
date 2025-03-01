@@ -88,8 +88,15 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public labelIconClass: string = "fa fa-info-circle";
     /** Label icon tooltip */
     @Input() public labelIconTooltip: string = null;
+    /** It will show Icon prefix in the text field */
+    @Input() public matPrefixIcon: string = "";
+    /** It will show tooltip text in suffix icon */
+    @Input() public suffixTooltipText: string = "";
+    /** It will show Icon suffix in the text field */
+    @Input() public matSuffixIcon: string = "";
     /** Emits on change event */
     @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -97,12 +104,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
-    /** It will show Icon prefix in the text field */
-    @Input() public matPrefixIcon: string = "";
-    /** It will show tooltip text in suffix icon */
-    @Input() public suffixTooltipText: string = "";
-    /** It will show Icon suffix in the text field */
-    @Input() public matSuffixIcon: string = "";
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -247,5 +248,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public emitBlurEvent(): void {
         this.onChange.emit(this.value);
+    }
+
+    /**
+     * Emit true if suffix icon or text clicked
+     *
+     * @memberof InputFieldComponent
+     */
+    public handleSuffixClick(): void {
+        this.suffixClick.emit(true);
     }
 }
