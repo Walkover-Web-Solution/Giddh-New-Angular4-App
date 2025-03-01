@@ -3,22 +3,28 @@ import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ImportExcelService } from '../../../services/import-excel.service';
 import { CommonActions } from '../../../actions/common.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Router } from '@angular/router';
-import { SAMPLE_FILES_URL } from '../../../app.constant';
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, SAMPLE_FILES_URL } from '../../../app.constant';
 import { saveAs } from 'file-saver';
 import { LedgerComponentStore } from '../../ledger.store';
+import { cloneDeep } from '../../../lodash-optimized';
+import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
+import { OptionInterface } from '../../../models/api-models/Voucher';
+import { FormBuilder } from '@angular/forms';
+import { ProjectAccountingService } from '../../../project-wise-accounting/project-wise-accounting.service';
+import { DialogStepEnum, StatementType } from './import-statement.const';
 
 @Component({
     selector: 'import-statement',
     templateUrl: './import-statement.component.html',
     styleUrls: ['./import-statement.component.scss'],
-    providers: [LedgerComponentStore],
+    providers: [LedgerComponentStore, ProjectAccountingService, ProjectWiseAccountingComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -31,12 +37,36 @@ export class ImportStatementComponent implements OnDestroy {
     public postRequest: any = { file: '', password: '', isHeaderProvided: true, accountUniqueName: undefined, sameDebitCreditAmountColumn: undefined };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public dialogStep: string = "first";
-    public Select_Account: string = "Select Account";
+    /** Account data results Observable */
+    public voucherAccountResults$: Observable<OptionInterface[]> = observableOf(null);
+    /** Default result count for account searches */
+    public defaultCount = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
+    /** Constant for dialog steps type */
+    public dialogStepEnum = DialogStepEnum;
+    /** Constant for dialog steps type */
+    public dialogStep: DialogStepEnum = DialogStepEnum.First;
+    /** Constant for statement type */
+    public statementTypeEnum = StatementType;
+    /** Constant for statement type */
+    public selectStatement: StatementType = StatementType.Voucher;
+    /** Store signed url response */
+    public signedUrlResponse: any = {};
+    /** Request parameters for account searches */
+    public accountSearchRequest: any = {
+        count: this.defaultCount,
+        withStocks: false
+    };
+    /** Stores the search results for accounts */
+    public accountSearchResponse: any[] = [];
+    /** Stores account name */
+    public accountLabel: string = "";
+    /** Stores account unique name */
+    public accountUniqueName: string = "";
 
     constructor(
         private ledgerService: LedgerService,
         private ledgerComponentStore: LedgerComponentStore,
+        private componentStore: ProjectWiseAccountingComponentStore,
         public generalService: GeneralService,
         private toaster: ToasterService,
         private importExcelService: ImportExcelService,
@@ -44,23 +74,60 @@ export class ImportStatementComponent implements OnDestroy {
         private store: Store<AppState>,
         private router: Router,
         @Inject(MAT_DIALOG_DATA) public inputData,
+        private formBuilder: FormBuilder,
         public dialogRef: MatDialogRef<any>) {
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
+        if (!this.inputData?.accountUniqueName) {
+            this.searchAccount();
+        }
     }
-    ngOnInit() {
-        this.ledgerComponentStore.importStatementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((importSuccess)=>{
-            if(importSuccess){
-                console.log(importSuccess);
-                this.getDownload(importSuccess);
+
+    /**
+     *  Component lifecycle call stack
+     *
+     * @memberof ImportStatementComponent
+     */
+    public ngOnInit(): void {
+
+        this.ledgerComponentStore.signedUrlSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((importSuccess) => {
+            if (importSuccess) {
+                this.signedUrlResponse = importSuccess;
+                this.ledgerComponentStore.uploadVoucher({ url: importSuccess.signedUrl, file: this.postRequest.file });
             }
-        })
-    }
-    public getDownload(importSuccess){
-        this.ledgerService.setImportStatement(importSuccess.signedUrl, this.postRequest.file).pipe(takeUntil(this.destroyed$)).subscribe((importSuccess)=>{
-            if(importSuccess.statusCode){
-                console.log(importSuccess.statusCode);
+        });
+
+        this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
+            if (voucherResponse) {
+                    const params = {
+                        accountUniqueName: this.inputData?.accountUniqueName ?? this.accountUniqueName,
+                        subType: "VOUCHER",
+                        type: "ACCOUNT_WISE_VOUCHER_IMPORT",
+                        isHeaderProvided: this.postRequest.isHeaderProvided
+                    }
+                    this.ledgerService.importVoucher(params, this.signedUrlResponse).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                        if (response) {
+                            this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
+                            this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                            this.dialogRef.close(true);
+                            this.router.navigate(['/pages/import/banktransactions'], { queryParams: { entries: "voucher" } });
+                        }
+                    });
             }
-            console.log(importSuccess.statusCode);
+        });
+
+        this.componentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
+            if (accountSearchResponse) {
+                this.accountSearchRequest.count = accountSearchResponse.count;
+                accountSearchResponse.results?.forEach(result => {
+                    if (result?.uniqueName) {
+                        this.accountSearchResponse.push({
+                            value: result.uniqueName,
+                            label: result.name
+                        });
+                    }
+                });
+                this.accountSearchRequest.isLoading = false;
+            }
         });
     }
 
@@ -88,7 +155,6 @@ export class ImportStatementComponent implements OnDestroy {
             this.postRequest.file = null;
             return;
         }
-
         this.postRequest.file = file.item(0);
     }
 
@@ -98,33 +164,34 @@ export class ImportStatementComponent implements OnDestroy {
      * @memberof ImportStatementComponent
      */
     public importStatement(): void {
-        this.ledgerComponentStore.getImportStatement(this.selectedFile);
+        this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
+        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName ?? this.accountUniqueName;
+        if (this.getRequest.entity === "pdf") {
+            this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                    this.dialogRef.close(true);
+                } else {
+                    this.toaster.showSnackBar("error", response?.message, response?.code);
+                }
+            });
+        } else {
+            this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
+            this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success" && response.body) {
+                    this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
+                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                    this.dialogRef.close(true);
+                    this.router.navigate(['/pages/import/banktransactions'], { queryParams: { entries: "banktransactions" } });
+                } else {
+                    this.toaster.showSnackBar("error", response?.message, response?.code);
+                }
+            });
+        }
+    }
 
-        // this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
-        // this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
-
-        // if (this.getRequest.entity === "pdf") {
-        //     this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //         if (response?.status === 'success') {
-        //             this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
-        //             this.dialogRef.close(true);
-        //         } else {
-        //             this.toaster.showSnackBar("error", response?.message, response?.code);
-        //         }
-        //     });
-        // } else {
-        //     this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
-        //     this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //         if (response?.status === "success" && response.body) {
-        //             this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
-        //             this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
-        //             this.dialogRef.close(true);
-        //             this.router.navigate(['/pages/import/banktransactions']);
-        //         } else {
-        //             this.toaster.showSnackBar("error", response?.message, response?.code);
-        //         }
-        //     });
-        // }
+    public uploadFile() {
+        this.ledgerComponentStore.getSignedUrl(this.selectedFile);
     }
 
     /**
@@ -161,8 +228,53 @@ export class ImportStatementComponent implements OnDestroy {
      * @param {boolean} [isCsv=false]
      * @memberof ImportStatementComponent
      */
-    public createEWayBill(event, selectAccount) {
-        this.dialogStep = event;
-        this.Select_Account = selectAccount;
+    public selectStatementAccount(dialogStep: DialogStepEnum, selectStatement: StatementType) {
+        this.dialogStep = dialogStep;
+        this.selectStatement = selectStatement;
+    }
+
+    /**
+ * Searches for accounts based on the query and updates the account search results.
+ *
+ * @param {string} [query=''] The search query.
+ * @param {number} [page=1] The page number for paginated results.
+ * @memberof RevenueExpenseListComponent
+ */
+    public searchAccount(query: string = '', page: number = 1): void {
+        if (page === 1) {
+            this.accountSearchResponse = [];
+        }
+        this.accountSearchRequest.q = query;
+        this.accountSearchRequest.page = page;
+        this.accountSearchRequest.isLoading = true;
+
+        let requestObject = cloneDeep(this.accountSearchRequest);
+        delete requestObject.isLoading;
+        this.getProjectAccount(requestObject);
+    }
+
+    /**
+* Fetches the list of accounts associated with a project.
+*
+* @param {*} requestObject The request parameters for fetching accounts.
+* @memberof RevenueExpenseListComponent
+*/
+    public getProjectAccount(requestObject: any): void {
+        requestObject.count = this.defaultCount;
+        this.componentStore.getProjectAccount(requestObject);
+    }
+
+    /**
+ * Handles infinite scroll for account search by fetching the next page of results.
+ *
+ * @memberof RevenueExpenseListComponent
+ */
+    public handleSearchAccountScrollEnd(): void {
+        if (this.accountSearchRequest.isLoading) {
+            return;
+        }
+        if (this.defaultCount === this.accountSearchRequest.count) {
+            this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
+        }
     }
 }

@@ -1,11 +1,49 @@
 <!-- Review Field start-->
 <div class="review-data">
-    <div class="text-right">
-        <div class="action-btn">
-            <button class="btn btn-default" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
-            <button class="btn btn-success" [disabled]="!importDisable" [ladda]="isLoading" (click)="save()">
-                {{ commonLocaleData?.app_import }}
-            </button>
+    <div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div
+                    class="pd-b2 clearfix"
+                >
+                    <label for="isHeaderProvided" class="import-field-label">{{
+                        localeData?.header_provided
+                    }}</label>
+                    <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="importData.isHeaderProvided">
+                        <span class="pull-left" *ngIf="importData?.isHeaderProvided">{{
+                            commonLocaleData?.app_yes
+                        }}</span>
+                        <span class="pull-right" *ngIf="!importData?.isHeaderProvided">{{
+                            commonLocaleData?.app_no
+                        }}</span>
+                    </mat-slide-toggle>
+                </div>
+                <div 
+                    class="clearfix"
+                >
+                    <label for="sameDebitCreditAmountColumn" class="import-field-label">{{
+                        localeData?.same_debit_credit_column
+                    }}</label>
+                    <mat-slide-toggle
+                        color="primary"
+                        name="sameDebitCreditAmountColumn"
+                        [(ngModel)]="importData.sameDebitCreditAmountColumn"
+                    >
+                        <span class="pull-left" *ngIf="importData?.sameDebitCreditAmountColumn">{{
+                            commonLocaleData?.app_yes
+                        }}</span>
+                        <span class="pull-right" *ngIf="!importData?.sameDebitCreditAmountColumn">{{
+                            commonLocaleData?.app_no
+                        }}</span>
+                    </mat-slide-toggle>
+                </div>
+            </div>
+            <div class="action-btn">
+                <button class="btn btn-default" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+                <button class="btn btn-success" [disabled]="!importDisable" [ladda]="isLoading" (click)="save()">
+                    {{ commonLocaleData?.app_import }}
+                </button>
+            </div>
         </div>
     </div>
     <cdk-virtual-scroll-viewport [itemSize]="100">

@@ -18,6 +18,7 @@ import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         ScrollingModule,
         PaginationModule.forRoot(),
         SharedModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatSlideToggleModule
     ],
 })
 export class ImportExcelModule {

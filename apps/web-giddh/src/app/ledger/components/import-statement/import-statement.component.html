@@ -1,12 +1,12 @@
 <div id="import-statement-modal">
     <div class="modal-header">
-        <h3 class="unbold" mat-dialog-title>{{ dialogStep === 'second' ? inputData?.localeData?.import_page_heading : Select_Account }}</h3>
+        <h3 class="unbold" mat-dialog-title>{{ dialogStep === dialogStepEnum.Second ? inputData?.localeData?.import_page_heading : inputData?.commonLocaleData?.app_select_statement }}</h3>
         <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
     </div>
     <div class="modal-body p-0">
-        <div *ngIf="dialogStep === 'first'" class="row m-0">
+        <div *ngIf="dialogStep === dialogStepEnum.First" class="row m-0">
             <div class="col-md-6 p-0">
-                <div class="e-way-card" (click)="createEWayBill('second', 'voucher')">
+                <div class="e-way-card" (click)="selectStatementAccount(dialogStepEnum.Second, statementTypeEnum.Voucher)">
                     <div>
                         <svg
                             class="icon-link"
@@ -102,14 +102,14 @@
                 <div class="d-flex mr-b05">
                     <a
                         href="javascript:;"
-                        class="btn btn-sm btn-link pr-0 text-align-left m-0 font-14 text-align-center"
+                        class="btn btn-sm btn-link m-0 font-14 text-align-center"
                         (click)="downloadSampleFile('voucher')"
                     >
                     {{ inputData?.localeData?.download_sample_xls }}
                     </a>
                     <a
                         href="javascript:;"
-                        class="btn btn-sm btn-link pull-right text-align-left m-0 font-14 text-align-center"
+                        class="btn btn-sm btn-link m-0 font-14 text-align-center"
                         (click)="downloadSampleFile('voucher', true)"
                     >
                     {{ inputData?.localeData?.download_sample_csv }}
@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="col-md-6 p-0">
-                <div class="e-way-card" (click)="createEWayBill('second', 'bank_statement')">
+                <div class="e-way-card" (click)="selectStatementAccount(dialogStepEnum.Second, statementTypeEnum.BankStatement)">
                     <div>
                         <svg
                             class="icon-link"
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="dialogStep === 'second'" class="pd-2">
+        <div *ngIf="dialogStep === dialogStepEnum.Second" class="pd-2">
             <form name="importStatementForm" novalidate autocomplete="off">
                 <div class="pd-b2 clearfix browse-file-btn">
                     <label class="import-field-label file-upload-label"
@@ -181,7 +181,6 @@
                         />
                     </label>
                     <span> {{ selectedFile }} </span>
-                    <button (click)="createEWayBill('first', 'Select Account')">second</button>
                 </div>
                 <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === 'pdf'">
                     <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
@@ -195,7 +194,7 @@
                         />
                     </mat-form-field>
                 </div>
-                <!-- <div
+                <div
                     class="pd-b2 clearfix"
                     *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
                 >
@@ -211,7 +210,7 @@
                         }}</span>
                     </mat-slide-toggle>
                 </div>
-                <div
+                <!-- <div
                     class="pd-b2 clearfix"
                     *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
                 >
@@ -231,28 +230,49 @@
                         }}</span>
                     </mat-slide-toggle>
                 </div> -->
-                <div class="modal-wrap mr-b5">
+                <reactive-dropdown-field
+                    *ngIf="!inputData?.accountUniqueName"
+                    [label]="inputData?.commonLocaleData?.app_select_account"
+                    [placeholder]="inputData?.commonLocaleData?.app_select"
+                    [options]="accountSearchResponse"
+                    [enableDynamicSearch]="true"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleSearchAccountScrollEnd()"
+                    (dynamicSearchedQuery)="searchAccount($event)"
+                    (onClear)="accountUniqueName = null; accountLabel = null"
+                    (selectedOption)="accountUniqueName = $event?.value; accountLabel = $event?.label"
+                    [required]="true"
+                >
+                </reactive-dropdown-field>
+                <div>
                     <button
                         mat-stroked-button
                         color="primary"
-                        [disabled]="!postRequest.file"
-                        class="mr-t1 pull-left"
-                        (click)="importStatement()"
+                        [disabled]="!postRequest.file || !(inputData?.accountUniqueName || accountUniqueName)"
+                        class="mr-t1"
+                        (click)="selectStatement === statementTypeEnum.Voucher ? uploadFile() : importStatement()"
                     >
                         {{ inputData?.localeData?.upload }}
                     </button>
-                    <div class="pull-left mr-t1 d-flex sample-file-buttons">
+                    <button 
+                        mat-stroked-button 
+                        (click)="dialogStep = dialogStepEnum.First"
+                        class="mr-t1 mr-l1"
+                    >
+                        {{ inputData?.commonLocaleData?.app_back }}
+                    </button>
+                    <div class="d-flex d-inline-block mr-t1">
                         <a
                             href="javascript:;"
-                            class="btn btn-sm btn-link pr-0 text-align-left mr-r1"
-                            (click)="downloadSampleFile(Select_Account)"
+                            class="btn btn-sm btn-link m-0 font-14 pd-t15"
+                            (click)="downloadSampleFile(selectStatement)"
                         >
                             {{ inputData?.localeData?.download_sample_xls }}
                         </a>
                         <a
                             href="javascript:;"
-                            class="btn btn-sm btn-link pull-right text-align-left mr-r1"
-                            (click)="downloadSampleFile(Select_Account, true)"
+                            class="btn btn-sm btn-link m-0 font-14 pd-t15"
+                            (click)="downloadSampleFile(selectStatement, true)"
                         >
                             {{ inputData?.localeData?.download_sample_csv }}
                         </a>

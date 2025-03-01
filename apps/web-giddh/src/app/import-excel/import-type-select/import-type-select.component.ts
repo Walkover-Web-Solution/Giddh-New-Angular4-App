@@ -3,8 +3,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'import-type-select',
@@ -26,7 +28,8 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        public dialog: MatDialog,
     ) {
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
     }
@@ -35,6 +38,29 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
+            }
+        });
+    }
+
+    /**
+     * This will show the bank statement upload modal
+     *
+     * @memberof LedgerComponent
+     */
+    public showUploadBankStatementModal(): void {
+        let dialogRef = this.dialog.open(ImportStatementComponent, {
+            width: '630px',
+            data: {
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            },
+            role: 'alertdialog',
+            ariaLabel: 'import'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                console.log(response);
             }
         });
     }

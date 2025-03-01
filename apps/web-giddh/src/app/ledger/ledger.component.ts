@@ -51,6 +51,7 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 import { saveAs } from 'file-saver';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { LedgerComponentStore } from './ledger.store';
+import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting/project-wise-accounting.store';
 
 @Component({
     selector: 'ledger',
@@ -68,7 +69,7 @@ import { LedgerComponentStore } from './ledger.store';
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    providers: [LedgerComponentStore],
+    providers: [LedgerComponentStore, ProjectWiseAccountingComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 

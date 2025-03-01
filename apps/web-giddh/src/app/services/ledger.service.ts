@@ -1,4 +1,4 @@
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap, timeout } from 'rxjs/operators';
 import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, IUnpaidInvoiceListResponse, IVariant, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
@@ -14,17 +14,21 @@ import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
+import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
     private companyUniqueName: string;
+    private httpClient: HttpClient
 
     constructor(
         private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
+        public handler: HttpBackend,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private toaster: ToasterService) {
+        this.httpClient = new HttpClient(handler);
     }
 
     /**
@@ -781,7 +785,7 @@ export class LedgerService {
         return this.http.get(url).pipe(map((res) => res.body), catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
-    public getDownloadAttachement(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
+    public getSignedUrl(fileName: string): Observable<BaseResponse<DownloadLedgerAttachmentResponse, string>> {
         return this.http.get(this.generalService.replaceUrlPlaceholders(LEDGER_API.GET_DOWNLOAD_ATTACHMENT, { fileName: fileName })).pipe(
             map((res) => {
                 let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
@@ -792,10 +796,18 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
     }
 
-    public setImportStatement(url: string, file: any): Observable<BaseResponse<any, any>> {
-        const formData: FormData = new FormData();
-        formData.append('file', file);
-        return this.http.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(
+    public uploadVoucher(url: string, file: File): any {
+        return this.httpClient.put(url, file, {
+            observe: 'response',
+        }).pipe(
+            map((res) => res),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, ''))
+        );
+    }
+
+
+    public importVoucher(params: any, data: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.generalService.replaceUrlPlaceholders(LEDGER_API.IMPORT_VOUCHER, params), data).pipe(
             map((res) => {
                 let data: BaseResponse<string, string> = res;
                 return data;
