@@ -110,8 +110,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
-        // this.checkScreenSize();
-        // window.addEventListener('resize', this.checkScreenSize.bind(this))
     }
 
     public ngOnInit(): void {
@@ -247,7 +245,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
-       
+        this.breakPointObservar.observe([
+            "(max-width: 1023px)",
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isSmallScreen = result?.matches;
+            console.log(result);
+        });
     }
 
     /**
