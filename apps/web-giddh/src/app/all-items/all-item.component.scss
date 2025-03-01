@@ -74,7 +74,6 @@
         width: inherit;
     }
     .responsive-sub-items {
-        justify-content: start;
         row-gap: 20px;
         column-gap: 30px;
         padding: 0 15px;
@@ -178,6 +177,7 @@
             .main-item {
                 .sub-item-block {
                     .single-menu-item {
+                        width: 29%;
                         padding: 15px 10px;
                     }
                 }
