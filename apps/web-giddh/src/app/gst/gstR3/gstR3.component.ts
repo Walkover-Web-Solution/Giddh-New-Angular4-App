@@ -19,6 +19,7 @@ import { GeneralService } from '../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
     selector: 'file-gstr3',
@@ -86,6 +87,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public exemptValuesDisplayedColumns: string[] = ['supplyNature', 'interStateSupplies', 'intraStateSupplies'];
     /** Holds exempt values table data */
     public exemptValuesTableData: any[] = [];
+    /** true, on responsive screen size */
+    public isSmallScreen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -95,7 +98,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private generalService: GeneralService,
-        public modalService: BsModalService
+        public modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -106,6 +110,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
+        // this.checkScreenSize();
+        // window.addEventListener('resize', this.checkScreenSize.bind(this))
     }
 
     public ngOnInit(): void {
@@ -241,6 +247,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
+       
     }
 
     /**

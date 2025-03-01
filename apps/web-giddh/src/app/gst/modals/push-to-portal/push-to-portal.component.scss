@@ -31,3 +31,11 @@
         text-decoration: underline;
     }
 }
+@media screen and (min-width: 768px) {
+   .left-side {
+    width: 300px;
+   } 
+   .right-side {
+    width: 250px;
+   }
+}

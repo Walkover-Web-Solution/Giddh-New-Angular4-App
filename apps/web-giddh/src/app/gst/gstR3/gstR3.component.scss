@@ -619,3 +619,8 @@ ul#dropdown-menu {
         }
     }
 }
+@media screen and (min-width: 768px) {
+    .list-inline {
+        width: 126px;
+    }
+}
