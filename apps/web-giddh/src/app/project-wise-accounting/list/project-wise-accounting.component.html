@@ -100,9 +100,9 @@
 
           <!-- Status Column -->
           <ng-container matColumnDef="status">
-            <th mat-header-cell 
-                mat-sort-header 
-                *matHeaderCellDef 
+            <th mat-header-cell
+                mat-sort-header
+                *matHeaderCellDef
                 class="max-width-150"
                 #searchStatus
                 (clickOutside)="handleClickOutside($event, searchStatus, 'status')"
@@ -157,7 +157,7 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table> 
+        </table>
         <div class="no-data" *ngIf="!(isFetchingProjects$ | async) && !totalResults">
           <no-data *ngIf="(projectName.value?.length || projectStatus.value?.length)" [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
           <div *ngIf="!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)" class="d-flex justify-content-center align-items-center">

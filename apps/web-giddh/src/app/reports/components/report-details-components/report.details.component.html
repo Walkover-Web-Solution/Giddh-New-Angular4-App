@@ -62,7 +62,7 @@
                                 {{ commonLocaleData?.app_duration?.quarterly }}
                             </mat-option>
                             <mat-option [value]="commonLocaleData?.app_duration?.weekly">
-                                <span 
+                                <span
                                     class="w-100 d-flex justify-content-between"
                                     [matMenuTriggerFor]="monthMenu"
                                     (click)="$event.stopPropagation()"
@@ -79,9 +79,9 @@
                     </mat-form-field>
                     <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
                         <div class="grid-columns-3 d-grid column-gap5 pd-1">
-                          <button 
-                            mat-menu-item 
-                            *ngFor="let month of monthNames" 
+                          <button
+                            mat-menu-item
+                            *ngFor="let month of monthNames"
                             (click)="populateRecords('weekly', month)"
                             aria-label="Select month"
                           >
@@ -107,8 +107,9 @@
             [commonLocaleData]="commonLocaleData"
             [tableDataSource]="reportRespone"
             [columnDefinitions]="columnDefinitions"
-            [tableSecondaryHeader]="salesRegisterTotal"
             (handleClickEvent)="$event && goToDetailedSales($event.item)"
+            [searchOnColumn]="searchOnColumn"
+            [sortOnColumn]="sortOnColumn"
         ></giddh-table>
     </div>
 </ng-container>

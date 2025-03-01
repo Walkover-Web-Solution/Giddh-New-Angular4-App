@@ -1,6 +1,8 @@
-import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { ColumnDefinition } from './giddh-table.component.const';
+import { MatSort, Sort } from '@angular/material/sort';
+type searchOnColumn = [string, string]
 @Component({
     selector: 'giddh-table',
     templateUrl: './giddh-table.component.html',
@@ -8,6 +10,9 @@ import { ColumnDefinition } from './giddh-table.component.const';
 })
 
 export class GiddhTableComponent implements OnInit, OnDestroy {
+    /** Holds table sorting reference */
+    @ViewChild(MatSort) sortBy: MatSort;
+    @ViewChildren('searchRef') searchRefs: QueryList<ElementRef>;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -16,9 +21,9 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
     @Input() tableDataSource: any[] = [];
     /**
      * Configuration for table columns.
-     * 
+     *
      * Each key represents a column, and its value is an array with the following structure:
-     * 
+     *
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
@@ -33,6 +38,12 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
     @Input() footerRow: Record<string, number | string> = {};
     /** Controls whether the total count appears at the top or bottom of the table */
     public showFooterRow: boolean = false;
+    @Input() searchOnColumn: Record<string, searchOnColumn> = {};
+    @Input() sortOnColumn: string[] = [];
+    public columnSort: any={
+        sort: "",
+        sortBy: ""
+    }
     /** Emits click item event  */
     @Output() handleClickEvent: EventEmitter<any> = new EventEmitter();
     /** Holds the total count for visible column */
@@ -63,6 +74,22 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
      */
     public isClickableColumn(column: string): boolean {
         return this.columnDefinitions?.[column]?.[3];
+    }
+
+    public isSortOncolumn(column: string) {
+        return this.sortOnColumn.includes(column);
+    }
+
+        public sortChange(event: Sort): void {
+            if (event) {
+                console.log(event);
+                this.columnSort.sort = event.direction ? event.direction : 'asc';
+                this.columnSort.sortBy = event.active;
+            }
+        }
+
+    handleClickOutside(event: Event, searchElement: ElementRef, column: string) {
+        console.log('Clicked outside:', column, searchElement);
     }
 
     /**

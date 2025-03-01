@@ -22,6 +22,7 @@ import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
+type searchOnColumn = [string, string]
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -63,9 +64,9 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public isTcsTdsApplicable: boolean;
     /**
      * Configuration for table columns.
-     * 
+     *
      * Each key represents a column, and its value is an array with the following structure:
-     * 
+     *
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
@@ -82,6 +83,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         netSales: ["net_sales", false, "text-right"],
         cumulative: ["app_cumulative", false, "text-right"]
     }
+    public searchOnColumn: Record<string, searchOnColumn> = {
+        discountTotal: ["app_particular", "app_sales"],
+    }
+    public sortOnColumn: string[] = ["sales", "particular"];
+
 
     constructor(
         private router: Router,
