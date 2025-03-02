@@ -155,7 +155,6 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                console.log(res);
                                 return this.patchState({
                                     importVoucherSuccess: res.body
                                 });
