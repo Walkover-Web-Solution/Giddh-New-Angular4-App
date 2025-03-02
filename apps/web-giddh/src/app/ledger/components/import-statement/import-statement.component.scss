@@ -10,9 +10,7 @@
     color: var(--color-danger);
     top: 0px;
 }
-#import-statement-modal label.radio-inline.p-0 {
-    width: 287px;
-}
+
 .browse-file-btn {
     display: flex;
     align-items: flex-start;
@@ -54,38 +52,22 @@
     }
 }
 
-.e-way-card {
+.statement-card {
     div {
         height: 186px;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
         align-items: center;
         p {
-            text-align: center;
             color: var(--color-nero);
-            font-size: var(--font-size-15);
-            margin-top: 20px;
         }
     }
 }
 
-.e-way-card:hover div {
+.statement-card:hover div {
     background-color: var(--color-primary-popup-background-hover);
 }
-.e-way-card:hover .icon-link {
+
+.statement-card:hover .icon-link {
     .a {
         stroke-width: 0.75px;
     }
-}
-.modal-455 {
-    width: 455px;
-}
-
-.download-buttons {
-    display: flex;
-    justify-content: space-between; /* Align buttons to the left and right */
-    gap: 12px; /* Add space between buttons */
-    margin-bottom: 16px;
 }

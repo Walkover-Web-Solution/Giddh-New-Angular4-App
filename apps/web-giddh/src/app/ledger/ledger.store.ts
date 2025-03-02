@@ -9,12 +9,14 @@ export interface LedgerState {
     ledgerBalance: any;
     signedUrlSuccess: any;
     uploadVoucherSuccess: boolean;
+    importVoucherSuccess: any;
 }
 
 export const DEFAULT_LEDGER_STATE: LedgerState = {
     ledgerBalance: null,
     signedUrlSuccess: null,
-    uploadVoucherSuccess: false
+    uploadVoucherSuccess: false,
+    importVoucherSuccess: null
 };
 
 @Injectable()
@@ -27,6 +29,8 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
     }
     public signedUrlSuccess$ = this.select((state) => state.signedUrlSuccess);
     public uploadVoucherSuccess$ = this.select((state) => state.uploadVoucherSuccess);
+    public importVoucherSuccess$ = this.select((state) => state.importVoucherSuccess);
+
     /**
      * Get Ledger Balance
      *
@@ -66,6 +70,11 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
         );
     });
 
+    /**
+     * Upload voucher
+     *
+     * @memberof LedgerComponentStore
+     */
     readonly uploadVoucher= this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -97,6 +106,11 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
         );
     });
 
+    /**
+     * Get Signed Url response
+     *
+     * @memberof LedgerComponentStore
+     */
     readonly getSignedUrl= this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -104,10 +118,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                 return this.ledgerService.getSignedUrl(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            console.log(res);
-                            
                             if (res?.status === 'success') {
-                                console.log(res);
                                 return this.patchState({
                                     signedUrlSuccess: res.body
                                 });
@@ -122,6 +133,43 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 signedUrlSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     *  Import voucher
+     *
+     * @memberof LedgerComponentStore
+     */
+    readonly importVoucher = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ importVoucherSuccess: null });
+                return this.ledgerService.importVoucher(req.requestObject, req.signedUrlResponse).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                console.log(res);
+                                return this.patchState({
+                                    importVoucherSuccess: res.body
+                                });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                return this.patchState({
+                                    importVoucherSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                importVoucherSuccess: null
                             });
                         }
                     ),

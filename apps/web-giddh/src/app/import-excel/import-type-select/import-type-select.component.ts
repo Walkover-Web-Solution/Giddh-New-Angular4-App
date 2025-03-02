@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,7 +29,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private generalService: GeneralService,
-        public dialog: MatDialog,
+        public dialog: MatDialog
     ) {
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
     }
@@ -43,25 +43,18 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the bank statement upload modal
+     * This will show the voucher and bank statement upload modal
      *
-     * @memberof LedgerComponent
+     * @memberof ImportTypeSelectComponent
      */
-    public showUploadBankStatementModal(): void {
-        let dialogRef = this.dialog.open(ImportStatementComponent, {
+    public openVoucherAndBankStatementDialog(): void {
+        this.dialog.open(ImportStatementComponent, {
             width: '630px',
             data: {
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
             },
-            role: 'alertdialog',
-            ariaLabel: 'import'
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                console.log(response);
-            }
+            autoFocus: false
         });
     }
 
