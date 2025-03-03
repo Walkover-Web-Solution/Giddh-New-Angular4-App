@@ -14,7 +14,7 @@
         <div class="col-md-6 p-0">
             <div class="statement-card" (click)="selectStatementAccount(importStepEnum.Second, importStatementType.Voucher)">
                 <div class="cursor-pointer d-flex justify-content-center flex-column align-item-center">
-                    <i class="icon-import mr-r1 font-48 delete-icon-opacity"></i>
+                    <i class="icon-import mr-r1 icon-font-48 opacity-5"></i>
                     <p class="mr-t2 font-15 text-center">{{ inputData?.commonLocaleData?.app_import_voucher }}</p>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 (click)="selectStatementAccount(importStepEnum.Second, importStatementType.BankStatement)"
             >
                 <div class="cursor-pointer d-flex justify-content-center flex-column align-item-center">
-                    <i class="icon-balance-sheet-new mr-r1 font-48 delete-icon-opacity"></i>
+                    <i class="icon-balance-sheet-new mr-r1 icon-font-48 opacity-5"></i>
                     <p class="mr-t2 font-15 text-center">{{ inputData?.commonLocaleData?.app_import_bank_statement }}</p>
                 </div>
             </div>
@@ -75,7 +75,7 @@
     <div *ngIf="importStep === importStepEnum.Second" class="pd-2">
         <form name="importStatementForm" novalidate autocomplete="off">
             <div class="pd-b2 clearfix browse-file-btn">
-                <mat-label class="import-field-label file-upload-label"
+                <mat-label class="import-field-label align-bottom file-upload-label"
                     >{{ inputData?.commonLocaleData?.app_file }} <sup>*</sup></mat-label
                 >
                 <label class="radio-inline p-0 browse-file-label">
@@ -91,7 +91,7 @@
                 <span  class="path-name">{{ selectedFile }}</span>
             </div>
             <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === 'pdf'">
-                <mat-label class="import-field-label">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
+                <mat-label class="import-field-label align-bottom">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
                 <mat-form-field appearance="fill" class="w-100 custom-input-field">
                     <input
                         matInput
@@ -106,7 +106,7 @@
                 class="pd-b2 clearfix"
                 *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
             >
-                <label for="isHeaderProvided" class="import-field-label">{{
+                <label class="import-field-label align-bottom">{{
                     inputData?.localeData?.header_provided
                 }}</label>
                 <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided">
@@ -118,26 +118,6 @@
                     }}</span>
                 </mat-slide-toggle>
             </div>
-            <!-- <div
-                class="pd-b2 clearfix"
-                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
-            >
-                <label for="sameDebitCreditAmountColumn" class="import-field-label">{{
-                    inputData?.localeData?.same_debit_credit_column
-                }}</label>
-                <mat-slide-toggle
-                    color="primary"
-                    name="sameDebitCreditAmountColumn"
-                    [(ngModel)]="postRequest.sameDebitCreditAmountColumn"
-                >
-                    <span class="pull-left" *ngIf="postRequest.sameDebitCreditAmountColumn">{{
-                        inputData?.commonLocaleData?.app_yes
-                    }}</span>
-                    <span class="pull-right" *ngIf="!postRequest.sameDebitCreditAmountColumn">{{
-                        inputData?.commonLocaleData?.app_no
-                    }}</span>
-                </mat-slide-toggle>
-            </div> -->
             <reactive-dropdown-field
                 *ngIf="!inputData?.accountUniqueName"
                 [label]="inputData?.commonLocaleData?.app_select_account"

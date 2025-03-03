@@ -39,11 +39,11 @@ export class ImportStatementComponent implements OnDestroy {
     /** Default result count for account searches */
     public defaultCount = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
     /** Constant for dialog steps type */
-    public importStepEnum = ImportStepEnum;
+    public importStepEnum: typeof ImportStepEnum = ImportStepEnum;
     /** Constant for dialog steps type */
     public importStep: ImportStepEnum = ImportStepEnum.First;
     /** Constant for statement type */
-    public importStatementType = ImportStatementType;
+    public importStatementType: typeof ImportStatementType = ImportStatementType;
     /** Constant for statement type */
     public selectStatement: ImportStatementType = ImportStatementType.Voucher;
     /** Store signed url response */
@@ -212,8 +212,9 @@ export class ImportStatementComponent implements OnDestroy {
      * @memberof ImportStatementComponent
      */
     public async downloadSampleFile(selectAccount: string, isCsv: boolean = false) {
-        const fileUrl = SAMPLE_FILES_URL + `${selectAccount === this.importStatementType.BankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? 'csv' : 'xlsx'}`;
-        const fileName = `${selectAccount === this.importStatementType.BankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? 'csv' : 'xlsx'}`;
+        const isBankStatement = selectAccount === this.importStatementType.BankStatement;
+        const fileUrl = SAMPLE_FILES_URL + `${isBankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileName = `${isBankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
             saveAs(blob, fileName);
