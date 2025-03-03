@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <div class="pd-b2 clearfix">
-                <label class="import-field-label">{{ localeData?.header_provided }}</label>
+                <label class="import-field-label align-bottom">{{ localeData?.header_provided }}</label>
                 <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="importData.isHeaderProvided">
                     <span class="pull-left" *ngIf="importData?.isHeaderProvided">{{
                         commonLocaleData?.app_yes
@@ -14,7 +14,7 @@
                 </mat-slide-toggle>
             </div>
             <div class="clearfix">
-                <label class="import-field-label">{{
+                <label class="import-field-label align-bottom">{{
                     localeData?.same_debit_credit_column
                 }}</label>
                 <mat-slide-toggle
