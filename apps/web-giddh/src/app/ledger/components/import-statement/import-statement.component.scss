@@ -55,17 +55,14 @@
 .statement-card {
     div {
         height: 186px;
-
         p {
             color: var(--color-nero);
         }
     }
-
     &:hover {
         div {
             background-color: var(--color-primary-popup-background-hover);
         }
-
         .icon-link {
             a {
                 stroke-width: 0.75px;
