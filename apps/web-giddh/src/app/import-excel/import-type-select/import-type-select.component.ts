@@ -49,7 +49,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
      */
     public openVoucherAndBankStatementDialog(): void {
         this.dialog.open(ImportStatementComponent, {
-            width: '630px',
+            panelClass: ['mat-dialog-md'],
             data: {
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData

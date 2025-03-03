@@ -1,9 +1,9 @@
-export enum DialogStepEnum {
+export enum ImportStepEnum {
     First = 'First',
     Second = 'Second'
 };
 
-export enum StatementType {
+export enum ImportStatementType {
     Voucher = 'Voucher',
     BankStatement = 'Bank_statement'
 };

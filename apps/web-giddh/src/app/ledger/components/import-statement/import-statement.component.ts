@@ -14,16 +14,14 @@ import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, SAMPLE_FILES_URL } from '../..
 import { saveAs } from 'file-saver';
 import { LedgerComponentStore } from '../../ledger.store';
 import { cloneDeep } from '../../../lodash-optimized';
-import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
 import { OptionInterface } from '../../../models/api-models/Voucher';
-import { ProjectAccountingService } from '../../../project-wise-accounting/project-wise-accounting.service';
-import { DialogStepEnum, StatementType } from './import-statement.const';
+import { ImportStepEnum, ImportStatementType } from './import-statement.const';
 
 @Component({
     selector: 'import-statement',
     templateUrl: './import-statement.component.html',
     styleUrls: ['./import-statement.component.scss'],
-    providers: [LedgerComponentStore, ProjectAccountingService, ProjectWiseAccountingComponentStore],
+    providers: [LedgerComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -41,13 +39,13 @@ export class ImportStatementComponent implements OnDestroy {
     /** Default result count for account searches */
     public defaultCount = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
     /** Constant for dialog steps type */
-    public dialogStepEnum = DialogStepEnum;
+    public importStepEnum = ImportStepEnum;
     /** Constant for dialog steps type */
-    public dialogStep: DialogStepEnum = DialogStepEnum.First;
+    public importStep: ImportStepEnum = ImportStepEnum.First;
     /** Constant for statement type */
-    public statementTypeEnum = StatementType;
+    public importStatementType = ImportStatementType;
     /** Constant for statement type */
-    public selectStatement: StatementType = StatementType.Voucher;
+    public selectStatement: ImportStatementType = ImportStatementType.Voucher;
     /** Store signed url response */
     public signedUrlResponse: any = {};
     /** Request parameters for account searches */
@@ -65,7 +63,6 @@ export class ImportStatementComponent implements OnDestroy {
     constructor(
         private ledgerService: LedgerService,
         private ledgerComponentStore: LedgerComponentStore,
-        private componentStore: ProjectWiseAccountingComponentStore,
         public generalService: GeneralService,
         private toaster: ToasterService,
         private importExcelService: ImportExcelService,
@@ -86,7 +83,6 @@ export class ImportStatementComponent implements OnDestroy {
      * @memberof ImportStatementComponent
      */
     public ngOnInit(): void {
-
         this.ledgerComponentStore.signedUrlSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((importSuccess) => {
             if (importSuccess) {
                 this.signedUrlResponse = importSuccess;
@@ -115,7 +111,7 @@ export class ImportStatementComponent implements OnDestroy {
             }
         });
 
-        this.componentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
+        this.ledgerComponentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
                 accountSearchResponse.results?.forEach(result => {
@@ -216,8 +212,8 @@ export class ImportStatementComponent implements OnDestroy {
      * @memberof ImportStatementComponent
      */
     public async downloadSampleFile(selectAccount: string, isCsv: boolean = false) {
-        const fileUrl = SAMPLE_FILES_URL + `${selectAccount === this.statementTypeEnum.BankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? 'csv' : 'xlsx'}`;
-        const fileName = `${selectAccount === this.statementTypeEnum.BankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileUrl = SAMPLE_FILES_URL + `${selectAccount === this.importStatementType.BankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileName = `${selectAccount === this.importStatementType.BankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
             saveAs(blob, fileName);
@@ -227,13 +223,14 @@ export class ImportStatementComponent implements OnDestroy {
     }
 
     /**
-     * Download sample files
+     * Sets the current import step and selected statement.
      *
-     * @param {boolean} [isCsv=false]
+     * @param {ImportStepEnum} importStep The current step in the import process.
+     * @param {ImportStatementType} selectStatement The selected statement type.
      * @memberof ImportStatementComponent
      */
-    public selectStatementAccount(dialogStep: DialogStepEnum, selectStatement: StatementType) {
-        this.dialogStep = dialogStep;
+    public selectStatementAccount(importStep: ImportStepEnum, selectStatement: ImportStatementType): void {
+        this.importStep = importStep;
         this.selectStatement = selectStatement;
     }
 
@@ -253,7 +250,7 @@ export class ImportStatementComponent implements OnDestroy {
         this.accountSearchRequest.isLoading = true;
 
         let requestObject = cloneDeep(this.accountSearchRequest);
-        delete requestObject.isLoading;
+        requestObject.isLoading = undefined;
         this.getProjectAccount(requestObject);
     }
 
@@ -265,7 +262,7 @@ export class ImportStatementComponent implements OnDestroy {
     */
     public getProjectAccount(requestObject: any): void {
         requestObject.count = this.defaultCount;
-        this.componentStore.getProjectAccount(requestObject);
+        this.ledgerComponentStore.getProjectAccount(requestObject);
     }
 
     /**

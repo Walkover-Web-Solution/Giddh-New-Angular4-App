@@ -759,5 +759,11 @@
     "app_click_here": "Click here",
     "app_select_statement": "Select Statement",
     "app_import_voucher": "Import Voucher",
-    "app_import_bank_statement": "Import Bank Statement"
+    "app_import_bank_statement": "Import Bank Statement",
+    "app_upload": "Upload",
+    "app_file": "File",
+    "app_choose_file": "Choose File",
+    "app_password": "Password",
+    "app_sample_excel_file": "Sample Excel file",
+    "app_sample_csv_file": "Sample Csv file"
 }
