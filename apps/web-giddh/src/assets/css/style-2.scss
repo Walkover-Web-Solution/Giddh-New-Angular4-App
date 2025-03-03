@@ -3637,6 +3637,10 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-24) !important;
 }
 
+.icon-font-48 {
+    font-size: var(--font-size-48) !important;
+}
+
 .word-wrap {
     word-break: normal;
     white-space: nowrap;
@@ -12125,7 +12129,7 @@ body.prevent-body-scroll {
     min-height: 60px;
 }
 
-.delete-icon-opacity {
+.opacity-5 {
     opacity: 0.5;
 }
 
