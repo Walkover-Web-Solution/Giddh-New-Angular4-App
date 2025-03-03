@@ -41,10 +41,6 @@
     "groups": "Groups",
     "accounts": "Accounts",
     "import_page_heading": "Import Statement (PDF/CSV/EXCEL only)",
-    "upload": "Upload",
-    "file":"File",
-    "choose_file": "Choose File",
-    "password": "Password",
     "import_success": "File has been uploaded successfully.",
     "same_debit_credit_column": "Have same column for debit/credit amount?"
 }

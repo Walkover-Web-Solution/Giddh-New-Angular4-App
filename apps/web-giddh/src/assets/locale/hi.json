@@ -759,5 +759,11 @@
     "app_click_here": "यहाँ क्लिक करें",
     "app_select_statement": "विकल्प चुनें",
     "app_import_voucher": "वाउचर आयात करें",
-    "app_import_bank_statement": "बैंक स्टेटमेंट आयात करें"
+    "app_import_bank_statement": "बैंक स्टेटमेंट आयात करें",
+    "app_upload": "अपलोड",
+    "app_file": "फ़ाइल",
+    "app_choose_file": "फ़ाइल चुनें",
+    "app_password": "पासवर्ड",
+    "app_sample_excel_file": "नमूना एक्सेल फ़ाइल",
+    "app_sample_csv_file": "नमूना सीएसवी फ़ाइल"
 }

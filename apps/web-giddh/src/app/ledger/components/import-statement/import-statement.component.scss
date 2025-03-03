@@ -55,19 +55,18 @@
 .statement-card {
     div {
         height: 186px;
-        align-items: center;
         p {
             color: var(--color-nero);
         }
     }
-}
-
-.statement-card:hover div {
-    background-color: var(--color-primary-popup-background-hover);
-}
-
-.statement-card:hover .icon-link {
-    .a {
-        stroke-width: 0.75px;
+    &:hover {
+        div {
+            background-color: var(--color-primary-popup-background-hover);
+        }
+        .icon-link {
+            a {
+                stroke-width: 0.75px;
+            }
+        }
     }
 }

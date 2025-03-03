@@ -363,7 +363,7 @@ textarea {
 }
 
 .text-align-center {
-    text-align: center !important;
+    text-align: center;
 }
 
 .text-align-left {
@@ -3635,6 +3635,10 @@ input[type="checkbox"]:checked:after {
 
 .font-24 {
     font-size: var(--font-size-24) !important;
+}
+
+.font-48 {
+    font-size: var(--font-size-48) !important;
 }
 
 .word-wrap {
