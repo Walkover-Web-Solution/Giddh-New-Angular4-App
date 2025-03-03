@@ -5,6 +5,8 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'import-type-select',
@@ -26,7 +28,8 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        public dialog: MatDialog
     ) {
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
     }
@@ -36,6 +39,22 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
             if (response) {
                 this.branches = response || [];
             }
+        });
+    }
+
+    /**
+     * This will show the voucher and bank statement upload modal
+     *
+     * @memberof ImportTypeSelectComponent
+     */
+    public openVoucherAndBankStatementDialog(): void {
+        this.dialog.open(ImportStatementComponent, {
+            width: '630px',
+            data: {
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            },
+            autoFocus: false
         });
     }
 

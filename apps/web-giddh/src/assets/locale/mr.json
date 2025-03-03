@@ -757,5 +757,8 @@
     "app_no_access_limit_module": "तुम्हाला सध्या या मॉड्यूलमध्ये प्रवेश नाही. तुमची योजना कोणत्याही अडचणीशिवाय अनलॉक करण्यासाठी अपग्रेड करा",
     "app_upgrade": "अपग्रेड करा",
     "app_link_account": "दुवा खाते",
-    "app_click_here": "येथे क्लिक करा"
+    "app_click_here": "येथे क्लिक करा",
+    "app_select_statement": "विकल्प निवडा",
+    "app_import_voucher": "व्हाउचर आयात करा",
+    "app_import_bank_statement": "बँक स्टेटमेंट आयात करा"
 }

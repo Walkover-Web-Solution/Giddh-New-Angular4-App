@@ -759,5 +759,8 @@
     "app_no_access_limit_module": "You currently don't have access to this module. Upgrade your plan to unlock it without any hassle",
     "app_upgrade": "Upgrade",
     "app_link_account":"Link Account",
-    "app_click_here": "Click here"
+    "app_click_here": "Click here",
+    "app_select_statement": "Select Statement",
+    "app_import_voucher": "Import Voucher",
+    "app_import_bank_statement": "Import Bank Statement"
 }

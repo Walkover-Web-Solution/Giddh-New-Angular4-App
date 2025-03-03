@@ -14,17 +14,21 @@ import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
     private companyUniqueName: string;
+    private httpClient: HttpClient
 
     constructor(
         private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
+        public handler: HttpBackend,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private toaster: ToasterService) {
+        this.httpClient = new HttpClient(handler);
     }
 
     /**
@@ -779,5 +783,51 @@ export class LedgerService {
         const url = this.config.apiUrl + LEDGER_API.GET_STOCK_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
         return this.http.get(url).pipe(map((res) => res.body), catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
+
+    /**
+     * Get Signed Url response
+     *
+     * @param {string} fileName File name
+     * @memberof LedgerService
+     */
+    public getSignedUrl(fileName: string): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.generalService.replaceUrlPlaceholders(LEDGER_API.GET_DOWNLOAD_ATTACHMENT, { fileName: fileName })).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                data.request = "";
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, fileName, { fileName })));
+    }
+
+    /**
+     * Upload voucher
+     *
+     * @param {string} Url  Url to upload
+     * @param {File} File File upload
+     * @memberof LedgerService
+     */
+    public uploadVoucher(url: string, file: File): any {
+        return this.httpClient.put(url, file, { observe: 'response' }).pipe(
+            map((res) => res),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, ''))
+        );
+    }
+
+    /**
+     * Import voucher
+     *
+     * @param {any} params request url object
+     * @param {any} data Signed Url response
+     * @memberof LedgerService
+     */
+    public importVoucher(params: any, data: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.generalService.replaceUrlPlaceholders(LEDGER_API.IMPORT_VOUCHER, params), data).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }
