@@ -11,7 +11,6 @@ import { NgxMaskModule } from '../../../shared/helpers/directives/ngx-mask';
 import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
 import { ConfirmModalModule } from '../../../theme/confirm-modal/confirm-modal.module';
-import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { UpdateLedgerTaxControlComponent } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';

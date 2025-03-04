@@ -2771,6 +2771,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
  */
     public closeTaxModal(): void {
         this.store.dispatch(this.companyActions.getTax());
+        this.store.pipe((select(tax => tax.company && tax.company.taxes)), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.vm.taxRenderData = response
+            }
+        });
         this.taxAsideMenuRef.close();
     }
 }
