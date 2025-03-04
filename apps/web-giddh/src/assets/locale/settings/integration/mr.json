@@ -145,5 +145,9 @@
         "api_url":"API URL :",
         "heading":"टेली"
     },
-    "account_deleted_successfully": "खाते यशस्वीरित्या हटवले"
+    "account_deleted_successfully": "खाते यशस्वीरित्या हटवले",
+    "portal_information":"पोर्टल माहिती",
+    "portal_domain": "पोर्टल डोमेन",
+    "portal_url": "पोर्टल यूआरएल",
+	"payment_gateway": "प्रदानाची द्वारमार्गिका"
 }

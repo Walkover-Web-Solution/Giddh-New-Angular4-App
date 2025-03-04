@@ -145,5 +145,9 @@
         "api_url":"एपीआई यूआरएल:",
         "heading":"टेली"
     },
-    "account_deleted_successfully": "खाता सफलतापूर्वक हटा दिया गया"
+    "account_deleted_successfully": "खाता सफलतापूर्वक हटा दिया गया",
+    "portal_information":"पोर्टल की जानकारी",
+    "portal_domain": "पोर्टल डोमेन",
+    "portal_url": "पोर्टल यूआरएल",
+    "payment_gateway": "अदायगी रास्ता"
 }

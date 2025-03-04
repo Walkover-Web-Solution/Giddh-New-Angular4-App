@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                             <div *ngIf="activeTab === 'shopify'">
-                                <hamburger-menu [pageHeading]="'Shopify Integration'"></hamburger-menu>
+                                <hamburger-menu [pageHeading]="localeData?.setting_shopify_integration"></hamburger-menu>
                                 <div class="setting-container">
                                     <span class="video-link float-right mb-2 mr-t1">
                                         <watch-video
@@ -122,13 +122,13 @@
                                 </div>
                             </div>
                             <div *ngIf="activeTab === 'tally'">
-                                <hamburger-menu [pageHeading]="'Tally Integration'"></hamburger-menu>
+                                <hamburger-menu [pageHeading]="localeData?.setting_tally_integration"></hamburger-menu>
                                 <div class="setting-container">
                                     <tally-integration></tally-integration>
                                 </div>
                             </div>
                             <div *ngIf="activeTab === 'portal'">
-                                <hamburger-menu [pageHeading]="'Customer Portal'"></hamburger-menu>
+                                <hamburger-menu [pageHeading]="localeData?.setting_customer_portal_integration"></hamburger-menu>
                                 <div class="setting-container">
                                     <customer-portal></customer-portal>
                                 </div>
