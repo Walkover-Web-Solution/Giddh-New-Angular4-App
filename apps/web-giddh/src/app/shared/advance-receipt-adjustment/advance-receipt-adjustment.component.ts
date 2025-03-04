@@ -116,6 +116,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private paginationLimit: number = PAGINATION_LIMIT;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Stores the query parameters of the previous voucher search to compare with the current query and prevent redundant API calls. */
+    public previousVoucherQuery: string ;
 
     constructor(
         private store: Store<AppState>,
@@ -329,7 +331,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
                 requestObject.page = this.referenceVouchersCurrentPage;
                 this.referenceVouchersCurrentPage++;
-
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, this.paginationLimit);
             }
 
@@ -1053,6 +1054,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getInvoiceList(): void {
+        this.previousVoucherQuery = this.searchReferenceVoucher;
         let voucherType = (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
 
         if (this.voucherApiVersion === 2) {
