@@ -86,7 +86,13 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
         });
 
         this.selectedModules.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedModules => {
-            this.customFieldRequest.modules = selectedModules ?? [];
+            if (selectedModules) {
+                let modules: any[] = [];
+                this.selectedModules.value.forEach(uniqueName => {
+                    modules.push(this.fieldModules?.find(module => module.uniqueName === uniqueName));
+                });
+                this.customFieldRequest.modules = modules;
+            }
         })
     }
 
