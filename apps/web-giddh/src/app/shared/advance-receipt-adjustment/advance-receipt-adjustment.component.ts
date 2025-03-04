@@ -332,7 +332,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 requestObject.page = this.referenceVouchersCurrentPage;
                 this.referenceVouchersCurrentPage++;
                 
-                
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, this.paginationLimit);
             }
 
