@@ -10,6 +10,7 @@ import { SettingsDiscountService } from "apps/web-giddh/src/app/services/setting
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component";
 import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 /** Inteface for create payload for getAllDiscount API */
 export interface CustomerVendorDiscountBasic {
@@ -91,6 +92,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public showSaveDiscardButton: boolean = false;
     /** Holds list of stock/variant */
     public stockVariants: any[] = [];
+    /** true, on responsive screen size */
+    public isSmallScreen: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -100,7 +103,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         private settingsDiscountService: SettingsDiscountService,
         private formBuilder: UntypedFormBuilder,
         private changeDetectorRef: ChangeDetectorRef,
-        private scrollDispatcher: ScrollDispatcher
+        private scrollDispatcher: ScrollDispatcher,
+        private breakPointObservar: BreakpointObserver
     ) { }
 
     /**
@@ -150,6 +154,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList(true);
             }
+        });
+
+        this.breakPointObservar.observe([
+            "(max-width: 1023px)",
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isSmallScreen = result?.matches;
+            console.log(result);
         });
 
     }

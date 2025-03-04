@@ -174,14 +174,7 @@ table {
             display: none;
         }
     }
-}
-
-@media screen and (max-width: 1200px) {
-    .invoice-list {
-        .video-link {
-            top: 4px;
-            right: 4px;
-            width: 200px;
-        }
+    .new-cr-width {
+        width: 190px !important;
     }
 }
