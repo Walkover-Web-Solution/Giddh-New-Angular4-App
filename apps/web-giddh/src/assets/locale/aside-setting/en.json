@@ -32,7 +32,7 @@
       ],
       [
         {
-          "label": "Integration",
+          "label": "Bank Integration",
           "link": "/pages/settings/integration",
           "icon": "<i class='icon-integration1'></i>",
           "linked_pages": [
@@ -130,7 +130,7 @@
       ],
       [
         {
-          "label": "Integration",
+          "label": "Bank Integration",
           "link": "/pages/settings/integration",
           "icon": "<i class='icon-integration1'></i>",
           "linked_pages": [

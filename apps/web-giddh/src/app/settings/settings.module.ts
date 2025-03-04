@@ -74,6 +74,7 @@ import { TriggersComponent } from './triggers/triggers.component';
 import { ShopifyIntegrationComponent } from './shopify-integration/shopify.intergation.component';
 import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [
@@ -143,6 +144,7 @@ import { CustomerPortalComponent } from './customer-portal/customer.portal.compo
         MatSlideToggleModule,
         MatRadioModule,
         MatTooltipModule,
+        MatDividerModule,
         MatMenuModule,
         MatDatepickerModule,
         NgxPlaidLinkModule,

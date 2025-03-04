@@ -220,8 +220,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         });
 
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
-            console.log(response);
-
             if (response && response.portalDomain) {
                 this.profileForm.get('portalDomain').patchValue(response.portalDomain);
                 this.profileData.portalDomain = response.portalDomain;
