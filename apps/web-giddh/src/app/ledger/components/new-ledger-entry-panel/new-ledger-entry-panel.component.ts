@@ -121,7 +121,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedInvoices: string[] = [];
     @Output() public changeTransactionType: EventEmitter<any> = new EventEmitter();
     @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
-    @Output() public saveBlankLedger: EventEmitter<any> = new EventEmitter();
+    @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
@@ -887,7 +887,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 delete transaction?.isStock;
             }
         });
-        this.saveBlankLedger.emit(this.currentTxn?.selectedAccount);
+        this.saveBlankLedger.emit(true);
     }
 
     public resetPanel() {
