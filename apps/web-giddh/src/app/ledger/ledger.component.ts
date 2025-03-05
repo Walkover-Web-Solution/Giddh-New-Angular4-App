@@ -353,6 +353,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
     public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    /** Store ledger account response */
+    public ledgerAccountResponse: AccountResponse | AccountResponseV2;
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
+    /** Holds Bank Integration Dialog Ref */
+    public bankIntegrationDialogRef: any;
+    /** Holds if use directly integrated bank account*/
+    public isDirectlyIntegrated: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1382,9 +1392,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
+<<<<<<< HEAD
+     * 
+     *  @returns {void}
+=======
      *  @param {any} event using for pinCode and gstNumber
      *  @returns {void}
-     * 
+     *
+>>>>>>> 859cd160921365b0dfd305c4763c6b57bb7e8f10
      * @memberof LedgerComponent
      */
     public openEwayBillDialog(): void {
