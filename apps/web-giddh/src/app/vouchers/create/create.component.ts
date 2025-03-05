@@ -3528,8 +3528,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             panelClass: ['mat-dialog-md'],
             disableClose: true,
             data: {
-                pinCode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode").value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("pincode").value,
-                gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value || this.invoiceForm.controls["account"]?.get("shippingDetails").get("taxNumber")?.value
+                pincode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode")?.value,
+                gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value
             }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {

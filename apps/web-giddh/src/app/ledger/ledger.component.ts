@@ -353,6 +353,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
     public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    /** Store ledger account response */
+    public ledgerAccountResponse: AccountResponse | AccountResponseV2;
     /** Observable for post balance success response */
     public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
     /** Hold callback broadcast event */
@@ -605,6 +607,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+                this.ledgerAccountResponse = ledgerAccount;
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
                     this.enableAutopaid = true;
                     this.isSundryDebtorCreditor = true;
@@ -1389,17 +1392,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
-     *  @param {any} event using for pinCode and gstNumber
+     * 
      *  @returns {void}
-     *
      * @memberof LedgerComponent
      */
-    public openEwayBillDialog(event: any): void {
+    public openEwayBillDialog(): void {
         this.dialog?.closeAll();
         const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true,
-            data: { pinCode: event?.pinCode, gstNumber: event?.gstNumber }
+            data: { pincode: this.ledgerAccountResponse?.addresses?.[0]?.pincode, gstNumber: this.ledgerAccountResponse?.addresses?.[0]?.gstNumber }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.saveBlankTransaction(response);
@@ -1412,9 +1414,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public generateLedger(event: any): void {
+    public generateLedger(): void {
         if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
-            this.openEwayBillDialog(event);
+            this.openEwayBillDialog();
         } else {
             this.saveBlankTransaction();
         }
@@ -3254,8 +3256,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
-                    pinCode: data.body?.pinCode,
-                    gstNumber: data.body?.gstNumber
                 };
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
