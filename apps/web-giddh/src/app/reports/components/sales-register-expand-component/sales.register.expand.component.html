@@ -93,10 +93,22 @@
                     </button>
                 </div>
                 <div class="dis middle top-bar-content-right-side">
-                    <button mat-stroked-button color="primary" class="back-btn" (click)="gotoSalesRegister()">
+                    <button 
+                        mat-stroked-button
+                        class="mr-r1"
+                        [matTooltip]="commonLocaleData?.app_export"
+                        [matTooltipPosition]="'above'"
+                        (click)="gotoSalesRegister()"
+                    >
                         {{ commonLocaleData?.app_back }}
                     </button>
-                    <button mat-stroked-button color="primary" class="back-btn mr-l1" (click)="export()">
+                    <button
+                        mat-stroked-button
+                        (click)="export()"
+                        color="primary"
+                        [matTooltip]="commonLocaleData?.app_export"
+                        [matTooltipPosition]="'above'"
+                    >
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <select-table-column

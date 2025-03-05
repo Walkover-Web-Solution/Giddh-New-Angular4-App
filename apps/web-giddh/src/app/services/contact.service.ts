@@ -131,7 +131,7 @@ export class ContactService {
 
     /**
      * Refresh go-cardless bank transactions
-     * 
+     *
      * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
      * @memberof ContactService
      */
@@ -148,10 +148,10 @@ export class ContactService {
     }
 
     /**
-     * Send bulk email template to specified customers or vendors
-     * @param model Request payload containing customer/vendor unique names and template type
-     * @returns Observable<BaseResponse<any, string>> API response
-     */
+    * Send bulk email template to specified customers or vendors
+    * @param model Request payload containing customer/vendor unique names and template type
+    * @returns Observable<BaseResponse<any, string>> API response
+    */
     public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
         return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
             map((res) => {

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
@@ -27,6 +27,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 import { LaddaModule } from 'angular2-ladda';
+import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AsideMenuCreateTaxModule } from '../../../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 
 @NgModule({
     declarations: [
@@ -35,16 +39,13 @@ import { LaddaModule } from 'angular2-ladda';
         UpdateLedgerDiscountComponent
     ],
     imports: [
-        ModalModule.forChild(),
         ConfirmModalModule,
-        ShSelectModule,
         CommonModule,
         FormsModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         NumberToWordsModule,
         NgxMaskModule,
-        PopoverModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
         DecimalDigitsModule,
         ClickOutsideModule,
@@ -58,7 +59,12 @@ import { LaddaModule } from 'angular2-ladda';
         MatDialogModule,
         MatSelectModule,
         MatExpansionModule,
+        ReactiveFormsModule,
+        FormFieldsModule,
+        MatMenuModule,
         AttachmentsModule,
+        MatTabsModule,
+        AsideMenuCreateTaxModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

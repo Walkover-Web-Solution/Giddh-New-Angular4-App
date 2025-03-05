@@ -29,7 +29,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
-    /** Holds true if user module is restricted */
+    /** True if user module is restricted */
     public isUserRestricted: boolean = false;
     public email: string;
     public selectedPermission: string;
@@ -51,7 +51,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && Object.hasOwn(activeCompany.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
+            if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                 const module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );
@@ -78,7 +78,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
             this.closeModal();
             this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
             document.querySelector('body')?.classList?.remove('master-page');
-            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+            this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
         }
     }
 

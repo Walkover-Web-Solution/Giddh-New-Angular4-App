@@ -63,7 +63,7 @@
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
     <section class="account flex-nowrap" [ngClass]="{ 'd-none': !account.isVisible }">
-        <div class="row" (dblclick)="entryClicked(account)">
+        <div class="row">
             <div
                 class="col-4 account"
                 [ngStyle]="{ 'padding-left': padding + 20 + 'px' }"

@@ -42,10 +42,6 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     public expandAll: boolean;
     /** Holds the search text */
     public search: string;
-    /** Stores the start date of the range */
-    public from: string;
-    /** Stores the end date of the range */
-    public to: string;
     /** Stores the last sync date */
     public lastSyncDate: string = "";
     /** Subject to handle component destruction */
@@ -114,13 +110,10 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /**
      * Filters data based on the given request
      *
-     * @param {any} event - The filter date
      * @returns {void}
      * @memberof BalanceSheetReportComponent
      */
-    public filterData(event: any): void {
-        this.from = event.from;
-        this.to = event.to;
+    public filterData(): void {
         this.componentStore.getMultiCurrencyReport(ReportType.BalanceSheet);
     }
     /**

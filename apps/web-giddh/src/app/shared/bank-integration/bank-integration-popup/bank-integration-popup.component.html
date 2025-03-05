@@ -1,0 +1,24 @@
+<ng-container>
+    <div class="dialog-header d-flex align-items-center">
+        <h3>Bank Account</h3>
+        <button class="close" (click)="closeDialog()">×</button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="row m-0">
+            <div class="col-md-6 p-0 bank-link-card" (click)="integrateBank()">
+                <div>
+                    <img src="assets/images/create-new-report.svg" />
+                    <p>
+                        {{ commonLocaleData?.app_create_new }}
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6 p-0 bank-link-card" (click)="linkBank()">
+                <div>
+                    <img src="assets/images/link-button.svg" />
+                    <p>{{ commonLocaleData?.app_link_account }}</p>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+</ng-container>

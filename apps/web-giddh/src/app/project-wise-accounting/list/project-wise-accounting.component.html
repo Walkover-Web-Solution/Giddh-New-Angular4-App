@@ -220,7 +220,7 @@
   let-fieldName="fieldName"
   let-formControl="formControl"
 >
-  <div class="align-items-center d-flex" [hidden]="show">
+  <div class="align-items-center d-flex column-gap5" [hidden]="show">
       <button
           mat-icon-button
           aria-label="search"
@@ -231,7 +231,7 @@
       </button>
       <span> {{ title }}</span>
   </div>
-  <div class="align-items-center d-flex pd-l14" [hidden]="!show">
+  <div class="align-items-center d-flex" [hidden]="!show">
       <text-field
           [type]="'text'"
           [placeholder]="getSearchFieldText(fieldName)"

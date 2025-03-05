@@ -296,7 +296,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             return;
         }
         this.selectedInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
-        if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+        if (this.selectedInvoice && (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice)) {
             this.getVoucherVersions(this.selectedInvoice);
         }
         if (this.selectedInvoice && !this.isVoucherDownloading) {

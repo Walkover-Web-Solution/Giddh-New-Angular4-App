@@ -4,11 +4,9 @@
     "entry_date": "प्रवेश की तिथि",
     "suppliers_name": "आपूर्तिकर्ता का नाम",
     "suppliers_name_placeholder": "आपूर्तिकर्ता का नाम",
-    "name": "नाम",
     "suppliers_invoice_date": "चालान तिथि",
     "suppliers_country": "आपूर्तिकर्ता देश",
     "suppliers_country_placeholder": "आपूर्तिकर्ता देश",
-    "country_name": "देश",
     "total_taxable_value": "कुल कर योग्य मूल्य:",
     "total_tax_amount": "कुल कर राशि:"
 }

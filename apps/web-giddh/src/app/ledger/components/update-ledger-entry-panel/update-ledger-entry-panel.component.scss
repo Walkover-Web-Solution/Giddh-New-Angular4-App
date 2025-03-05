@@ -2,6 +2,11 @@
     padding: 0 4px;
 }
 
+.edit-icon-position {
+    top: -28px;
+    right: 0;
+}
+
 .height-30 {
     height: 30px;
 }
@@ -133,7 +138,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .total-detail-table .table-amount {
-    width: 100%;
+    min-width: 0;
 }
 
 .icon-box {
@@ -313,6 +318,10 @@ p.edit-message {
         font-size: var(--font-size-15);
     }
 }
+
+.read-only {
+    background-color: var(--color-primary-input-bar-background) !important;
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
@@ -330,13 +339,12 @@ p.edit-message {
         width: 100% !important;
         float: left;
         height: initial;
-        display: none;
     }
     .custom-tabs {
         display: block !important;
     }
-    .left-col-new.active,
-    .right-col-new.active {
+    .left-col-new,
+    .right-col-new {
         display: block !important;
     }
     .total-detail-table {
@@ -431,7 +439,7 @@ p.edit-message {
             width: 185px;
             margin-top: 5px;
         }
-    } 
+    }
     .currency-convertor {
         float: right;
         display: block;

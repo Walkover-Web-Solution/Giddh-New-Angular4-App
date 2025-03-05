@@ -20,6 +20,8 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 
 @Component({
     selector: 'purchase-register-component',
@@ -61,6 +63,29 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+    /**
+     * Configuration for table columns.
+     * 
+     * Each key represents a column, and its value is an array with the following structure:
+     * 
+     * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
+     * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
+     * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
+     * [2] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     */
+    public columnDefinitions: Record<string, ColumnDefinition> = {
+        particular: ["app_particular", true, "", true],
+        purchase: ["app_purchase", true, "text-right"],
+        returns: ["app_return", false, "text-right"],
+        taxTotal: ["app_tax", false, "text-right"],
+        discountTotal: ["app_discount", false, "text-right"],
+        tcsTotal: ["app_tcs", false, "text-right"],
+        tdsTotal: ["app_tds", false, "text-right"],
+        netPurchase: ["app_net_purchase", false, "text-right"],
+        cumulative: ["app_cumulative", false, "text-right"]
+    }
 
     constructor(
         private router: Router,
@@ -73,14 +98,20 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
         private ledgerService: LedgerService) {
-            this.breakPointObservar.observe([
-                '(max-width: 767px)'
-            ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                this.isMobileScreen = result.matches;
-            });
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     ngOnInit() {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -125,7 +156,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
@@ -236,7 +267,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.interval = params.interval;
                 this.selectedMonth = params.selectedMonth;
 
-                this.router.navigate(['pages' ,'reports', 'purchase-register']);
+                this.router.navigate(['pages', 'reports', 'purchase-register']);
             }
         });
 
@@ -249,7 +280,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears.map(response => {
+                this.financialOptions = activeCompany.financialYears?.map(response => {
                     if(response){
                         return { label: response.uniqueName, value: response.uniqueName };
                     }
@@ -261,11 +292,11 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
-                if(selectedFinancialYear){
-                this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                if (selectedFinancialYear) {
+                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
@@ -277,7 +308,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === v?.value);
+            let financialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -421,6 +452,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.purchaseRegisterTotal.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             this.purchaseRegisterTotal.interval = this.interval;
             this.purchaseRegisterTotal.selectedMonth = this.selectedMonth;
+            this.showColum();
         }
     }
 
@@ -477,5 +509,35 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this._toaster.errorToast(response?.message);
             }
         });
+    }
+
+    /**
+     * Updates the visibility of table columns based on specific conditions.
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public showColum(): void {
+        Object.keys(this.columnDefinitions).filter((key) => !['purchase', 'particular'].includes(key)).forEach((key) => {
+            if (['tcsTotal', 'tdsTotal'].includes(key)) {
+                this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.purchaseRegisterTotal[key];
+            } else {
+                this.columnDefinitions[key][1] = !!this.purchaseRegisterTotal[key];
+            }
+        });
+    }
+
+    /**
+     * Navigates to the detailed purchase report page with query parameters.
+     *
+     * @param {ReportsModel} item - The report item containing date ranges and filters.
+     * @memberof PurchaseRegisterComponent
+     */
+    public gotoDetailedPurchase(item: PurchaseReportsModel) {
+        let from = item.from;
+        let to = item.to;
+
+        if (from != null && to != null) {
+            this.router.navigate(['pages', 'reports', 'purchase-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth } });
+        }
     }
 }

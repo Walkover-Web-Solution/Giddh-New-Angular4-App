@@ -34,7 +34,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public allPermissions$: Observable<GetAllPermissionResponse[]>;
     /** Email id validation regex pattern */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
-    /** Holds true if user module is restricted */
+    /** True if user module is restricted */
     public isUserRestricted: boolean = false;
     /** Active company details */
     public activeCompany: any;
@@ -57,7 +57,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                if (activeCompany && Object.hasOwn(activeCompany.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
+                if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                     const module = activeCompany.moduleRestrictionStatus.find(
                         (module) => module?.moduleName === this.restrictedModules.Users
                     );
@@ -85,7 +85,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
             this.closeModal();
             this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
             document.querySelector('body')?.classList?.remove('master-page');
-            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+            this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
         }
     }
 

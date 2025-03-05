@@ -208,6 +208,7 @@
         "others": "अन्य"
     },
     "app_duration": {
+        "duration": "अवधि",
         "monthly": "मासिक",
         "quarterly": "तिमाही",
         "half_yearly": "अर्धवार्षिक",
@@ -753,5 +754,16 @@
     "app_send_voucher_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] वाउचर भेजें",
     "app_send_payment_receipt_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] वाउचर भेजें",
     "app_no_access_limit_module": "वर्तमान में आपके पास इस मॉड्यूल तक पहुंच नहीं है. बिना किसी परेशानी के इसे अनलॉक करने के लिए अपनी योजना को अपग्रेड करें",
-    "app_upgrade": "उन्नत करना"
+    "app_upgrade": "उन्नत करना",
+    "app_link_account": "खाते लिंक करें",
+    "app_click_here": "यहाँ क्लिक करें",
+    "app_select_statement": "विकल्प चुनें",
+    "app_import_voucher": "वाउचर आयात करें",
+    "app_import_bank_statement": "बैंक स्टेटमेंट आयात करें",
+    "app_upload": "अपलोड",
+    "app_file": "फ़ाइल",
+    "app_choose_file": "फ़ाइल चुनें",
+    "app_password": "पासवर्ड",
+    "app_sample_excel_file": "नमूना एक्सेल फ़ाइल",
+    "app_sample_csv_file": "नमूना सीएसवी फ़ाइल"
 }

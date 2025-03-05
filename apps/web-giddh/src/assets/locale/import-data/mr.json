@@ -39,5 +39,8 @@
     "is": "आहे",
     "are": "आहेत",
     "groups": "गट",
-    "accounts": "खाती"
+    "accounts": "खाती",
+    "import_page_heading": "आयात विवरण (फक्त PDF/CSV/EXCEL)",
+    "import_success": "फाईल यशस्वीरीत्या अपलोड केली गेली आहे.",
+    "same_debit_credit_column": "डेबिट/क्रेडिट रकमेकरिता समान स्तंभ आहे का?"
 }

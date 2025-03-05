@@ -31,10 +31,6 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
     public expandAll: boolean;
     /** Search query string for filtering data */
     public search: string;
-    /** Start date of the selected financial year */
-    public from: string;
-    /** End date of the selected financial year */
-    public to: string
     /** Subject used to track component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Observable for report data */
@@ -104,9 +100,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
-    public filterData(event: any): void {
-        this.from = event.from;
-        this.to = event.to;
+    public filterData(): void {
         this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
     }
 

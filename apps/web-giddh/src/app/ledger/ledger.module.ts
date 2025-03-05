@@ -60,6 +60,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
 import { MatIconModule } from '@angular/material/icon';
 import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/giddh-ledger-paginator.module';
+import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 
 @NgModule({
     declarations: [
@@ -98,7 +99,9 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
         DecimalDigitsModule,
         ClickOutsideModule,
         SelectModule.forRoot(),
-        NgxMaskModule.forRoot(),
+        NgxMaskModule.forRoot({
+            validation: false
+        }),
         AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot(),
         AmountFieldComponentModule,
@@ -134,7 +137,8 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
         FormFieldsModule,
         StockCreateEditModule,
         MatIconModule,
-        GiddhLedgerPaginatorModule
+        GiddhLedgerPaginatorModule,
+        BankIntegrationModule
     ]
 })
 export class LedgerModule {

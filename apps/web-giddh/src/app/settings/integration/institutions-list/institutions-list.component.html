@@ -1,6 +1,6 @@
 <div class="modal-header d-flex align-items-center">
     <h3>{{ localeData?.payment?.bank_list }}</h3>
-    <button class="close" mat-dialog-close>×</button>
+    <button class="close" (click)="closeDialog()">×</button>
 </div>
 <giddh-page-loader *ngIf="institutionsListInProgress$ | async"></giddh-page-loader>
 <mat-dialog-content class="institutions-dialog-body" *ngIf="!(institutionsListInProgress$ | async)">
@@ -27,8 +27,8 @@
                                 <mat-list-item
                                     class="p-0 border-bottom"
                                     >
-                                    <span 
-                                        class="list-item-underline-hover cursor-pointer" 
+                                    <span
+                                        class="list-item-underline-hover cursor-pointer"
                                         (click)="openGocardlessDialog(item)">{{ item.name }}</span>
                                 </mat-list-item>
                             </div>

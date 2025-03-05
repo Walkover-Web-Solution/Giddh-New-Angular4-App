@@ -147,5 +147,6 @@
         "copied":"कॉपी किया गया...",
         "api_url":"एपीआई यूआरएल:",
         "heading":"टेली"
-    }
+    },
+    "account_deleted_successfully": "खाता सफलतापूर्वक हटा दिया गया"
 }

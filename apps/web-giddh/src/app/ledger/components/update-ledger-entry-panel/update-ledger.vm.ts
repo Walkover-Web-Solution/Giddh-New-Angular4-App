@@ -476,6 +476,7 @@ export class UpdateLedgerVm {
         }
 
         this.generateGrandTotal();
+
         this.generateCompoundTotal();
     }
 
@@ -528,6 +529,7 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
+
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -551,6 +553,7 @@ export class UpdateLedgerVm {
         if (this.isAdvanceReceipt || this.isRcmEntry || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
+
         } else {
             this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) / (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
         }

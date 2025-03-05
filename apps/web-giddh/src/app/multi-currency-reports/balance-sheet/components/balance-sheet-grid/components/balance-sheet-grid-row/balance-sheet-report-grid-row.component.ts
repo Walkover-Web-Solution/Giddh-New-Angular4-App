@@ -15,10 +15,6 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
     @Input() public search: string;
     /** Holds the padding value for the row */
     @Input() public padding: string;
-    /** Start date for the data range */
-    @Input() public from: string = '';
-    /** End date for the data range */
-    @Input() public to: string = '';
     /** Indicates if all items should be expanded */
     @Input() public expandAll: boolean;
     /** Minimum limit at which the Trial Balance viewport is enabled */
@@ -43,24 +39,6 @@ export class BalanceSheetReportGridRowComponent implements OnChanges {
         }
         if (changes?.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
             this.changeDetectionRef.detectChanges();
-        }
-    }
-
-    /**
-     * Handles the click event on an entry and navigates to the corresponding ledger page
-     *
-     * @returns {void}
-     * @param {any} acc The account object clicked
-     * @memberof BalanceSheetReportGridRowComponent
-     */
-    public entryClicked(acc: any): void {
-        let url = `${location.href}?returnUrl=ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-        if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = `${location.origin}${location.pathname}#./pages/ledger/${encodeURIComponent(acc?.uniqueName)}/${encodeURIComponent(this.from)}/${encodeURIComponent(this.to)}`;
-            ipcRenderer.send('open-url', url);
-        } else {
-            (window as any).open(url);
         }
     }
 

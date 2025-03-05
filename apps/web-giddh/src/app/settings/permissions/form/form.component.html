@@ -10,10 +10,11 @@
                     [disabled]="isUserRestricted"></input-field>
             </div>
             <div>
-                <reactive-dropdown-field [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''" [name]="'roles'"
-                    [placeholder]="localeData?.role_name_placeholder" [options]="allRoles"
+                <reactive-dropdown-field [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''"
+                    [name]="'roles'" [placeholder]="localeData?.role_name_placeholder" [options]="allRoles"
                     formControlName="roleUniqueName" [labelValue]="isUserRestricted  ? '' : userdata?.roleName"
-                    [required]="true" [readonly]="isUserRestricted" [disabled]="isUserRestricted"></reactive-dropdown-field>
+                    [required]="true" [readonly]="isUserRestricted"
+                    [disabled]="isUserRestricted"></reactive-dropdown-field>
             </div>
             <!-- time span -->
             <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true"
@@ -167,7 +168,7 @@
             </button>
         </div>
     </div>
-    <restricted-module-message [restrictedModule]="restrictedModules.Users"
-        [isUserRestricted]="isUserRestricted" [useRouterLink]="true">
+    <restricted-module-message [restrictedModule]="restrictedModules.Users" [isUserRestricted]="isUserRestricted"
+        [useRouterLink]="true">
     </restricted-module-message>
 </form>

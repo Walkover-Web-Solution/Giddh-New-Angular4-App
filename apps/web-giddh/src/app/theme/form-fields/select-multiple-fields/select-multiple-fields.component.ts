@@ -42,6 +42,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public isPurchaseOrder: string = '';
     /** Holds module translation data */
     @Input() public localeData: any = {};
+    /** Holds autocomplete position */
+    @Input() public autoCompletePosition: string = 'auto';
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
@@ -58,6 +60,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private allowAddChip: boolean = true;
     /** Holds type of email */
     public emailType = EmailType;
+    /** True if field is read only */
+    @Input() public readonly: boolean = false;
+    /** Holds Mat Input Label */
+    @Input() public label: string;
 
     constructor(
         private changeDetection: ChangeDetectorRef
