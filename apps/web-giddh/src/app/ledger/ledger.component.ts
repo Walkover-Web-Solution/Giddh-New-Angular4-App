@@ -1392,14 +1392,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
-<<<<<<< HEAD
      * 
      *  @returns {void}
-=======
-     *  @param {any} event using for pinCode and gstNumber
-     *  @returns {void}
-     *
->>>>>>> 859cd160921365b0dfd305c4763c6b57bb7e8f10
      * @memberof LedgerComponent
      */
     public openEwayBillDialog(): void {
