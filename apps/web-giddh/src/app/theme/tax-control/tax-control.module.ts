@@ -13,7 +13,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ClickOutsideModule, VirtualScrollModule, NgxMaskModule.forRoot(),MatMenuModule, MatButtonModule, MatCheckboxModule,MatInputModule, MatFormFieldModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ClickOutsideModule,
+        VirtualScrollModule,
+        NgxMaskModule.forRoot(),
+        MatMenuModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatFormFieldModule
+    ],
     declarations: [TaxControlComponent],
     exports: [TaxControlComponent]
 })

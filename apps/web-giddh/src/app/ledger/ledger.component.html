@@ -2692,8 +2692,8 @@
                     [keyboardShortcut]="'esc'"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (onShortcutPress)="ledgerAsidePaneModal?.close()"
-                    (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+                    (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
+                    (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
                 >
                 </ledger-aside-pane>
             </ng-template>
@@ -2721,7 +2721,7 @@
                     [generateEInvoice]="generateEInvoice"
                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
                     (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
-                    (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
+                    (showQuickAccountModalFromUpdateLedger)="openLedgerAsidePaneDialog()"
                 ></update-ledger-entry-panel>
             </ng-template>
             <!-- update ledger entry popup -->
@@ -2820,7 +2820,7 @@
             onSearchQueryChanged($event)
         "
         (onClear)="selectAccount($event, txn, true, true)"
-        (createOption)="toggleAsidePane()"
+        (createOption)="openLedgerAsidePaneDialog()"
         [showOptionDivider]="true"
         [showMatLabel]="false"
         [showCaretIcon]="false" 

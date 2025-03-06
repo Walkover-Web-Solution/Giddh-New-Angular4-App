@@ -23,23 +23,9 @@
                     <div class="col-12">
                         <div class="modal-wrap">
                             <div class="form-group add-mailer">
-                                <!-- <label>{{ localeData?.share_with }}</label> -->
                                 <!--share account from-->
                                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
                                     <div class="input-group d-flex justify-content-between">
-                                        <!-- <mat-form-field appearance="fill" class="custom-input-field share-input-width">
-                                            <input
-                                                matInput
-                                                name="userEmail"
-                                                class="form-control"
-                                                type="email"
-                                                [(ngModel)]="email"
-                                                required
-                                                [placeholder]="commonLocaleData?.app_email_id"
-                                                class="form-control mat-field-border mt-0 border-radius-5"
-                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"
-                                            />
-                                        </mat-form-field> -->
                                         <input-field
                                             class="w-50"
                                             [type]="'email'"
@@ -63,7 +49,6 @@
                                                 {{ commonLocaleData?.app_share }}
                                             </button>
                                         </span>
-                                        <!-- /btn-account -->
                                     </div>
                                 </form>
                                 <!--shared with array-->
@@ -102,16 +87,6 @@
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
                             </div>
                             <div class="input-group d-flex justify-content-between mr-t15 mr-b15">
-                                <!-- <mat-form-field appearance="fill" class="custom-input-field share-input-width">
-                                    <input
-                                        #magicLinkInput
-                                        matInput
-                                        class="form-control dashed mat-field-border border-radius-5"
-                                        [readonly]="true"
-                                        type="text"
-                                        [(ngModel)]="magicLink"
-                                    />
-                                </mat-form-field> -->
                                 <input-field
                                     class="w-50"
                                     #magicLinkInput
@@ -136,9 +111,7 @@
                                         {{ commonLocaleData?.app_copy }}
                                     </button>
                                 </span>
-                                <!-- /btn-group -->
                             </div>
-                            <!-- /input-group -->
                             <small class="mr-t1 light-gray">{{ localeData?.share_note }}</small>
                         </div>
                     </div>

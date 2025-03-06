@@ -282,7 +282,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds if we need bank ledger popup to be hidden */
     private isHideBankLedgerPopup: boolean = false;
     /** Ledger aside pan modal */
-    private ledgerAsidePaneModal: any;
+    private ledgerAsidePaneDialogRef: any;
     /** Total pages for reference vouchers */
     public referenceVouchersTotalPages: number = 1;
     /** Returns true if account is selected else false */
@@ -1539,7 +1539,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.closeAllAccountDropdown();
 
-        setTimeout(()=> {
+        setTimeout(() => {
             if (event?.type === 'DEBIT') {
                 const debitDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
@@ -1548,7 +1548,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
             }
         }, 200)
-        
+
     }
 
     public downloadAttachedFile(fileName: string, e: Event) {
@@ -2359,12 +2359,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         fileInput.click();
     }
 
-    public toggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-
-        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
+    /**
+     * Open ledger aside pane
+     *
+     * @memberof LedgerComponent
+     */
+    public openLedgerAsidePaneDialog(): void {
+        this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, {
             position: {
                 right: '0',
                 top: '0',
@@ -2375,7 +2376,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'aside'
         });
 
-        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+        this.ledgerAsidePaneDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -2482,7 +2483,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.keydownClassAdded = true;
         } else if (e?.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
-            this.toggleAsidePane();
+            this.openLedgerAsidePaneDialog();
         } else {
             this.keydownClassAdded = false;
         }
