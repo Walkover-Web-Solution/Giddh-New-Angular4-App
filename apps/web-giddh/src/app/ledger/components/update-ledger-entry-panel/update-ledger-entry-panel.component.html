@@ -49,7 +49,7 @@
                 [name]="'accountUniqueName'"
                 [scrollableElementId]="'baseAccount'"
                 [options]="searchResults"
-                [defaultValue]="baseAccountName$ | aync"
+                [defaultValue]="baseAccountName"
             >
                 <ng-template #optionTemplate let-option="option">
                     <ng-container *ngIf="!option.additional?.stock">
@@ -2317,7 +2317,7 @@
                                                         [label]="commonLocaleData?.app_reference_invoice"
                                                         *ngIf="voucherApiVersion === 2"
                                                         [id]="'update-ledger-invoice-voucher-number'"
-                                                        [options]="invoiceList$ | async"
+                                                        [options]="invoiceList"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [defaultValue]="selectedInvoice"
                                                         [ngClass]="{
@@ -2348,7 +2348,7 @@
                                                         "
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" class="list-item sh-template">
+                                                            <a href="javascript:void(0)" class="list-item">
                                                                 <div class="option-label pt-2">
                                                                     {{
                                                                         (vm.selectedLedger?.voucher?.shortCode ===
@@ -2372,12 +2372,8 @@
                                                                     <span class="d-inline-flex">
                                                                         <amount-field
                                                                             [amount]="
-                                                                                voucherApiVersion === 2
-                                                                                    ? option.additional
-                                                                                          ?.unadjustedAmount
-                                                                                          ?.amountForAccount
-                                                                                    : option.additional?.balanceDue
-                                                                                          ?.amountForAccount
+                                                                                option.additional?.unadjustedAmount
+                                                                                    ?.amountForAccount
                                                                             "
                                                                         >
                                                                         </amount-field>
@@ -2612,8 +2608,11 @@
                                     </table>
                                     <select-multiple-fields
                                         [label]="commonLocaleData?.app_select_tag"
+                                        [showMatLabel]="true"
                                         [id]="'update-ledger-assign-tag'"
                                         [options]="tags"
+                                        [allowAddChip]="false"
+                                        [commonLocaleData]="commonLocaleData"
                                         [appearance]="'outline'"
                                         [ngClass]="{
                                             'read-only':
