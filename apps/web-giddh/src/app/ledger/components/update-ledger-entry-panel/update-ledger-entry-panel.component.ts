@@ -793,6 +793,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
+    /**
+     *This will select warehouse
+     *
+     * @param {*} event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public selectWarehouse(event: any): void {
+        this.selectedWarehouse = event?.value;
+        this.selectedWarehouseName = event?.label;
+    }
+
     public saveLedgerTransaction() {
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
@@ -861,12 +872,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // Update the warehouse details in update ledger flow
                 if (transaction?.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
+                    transaction.inventory.warehouse.name = this.selectedWarehouseName;
                 } else {
                     transaction.inventory.warehouse = { name: '', uniqueName: '' };
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
+                    transaction.inventory.warehouse.name = this.selectedWarehouseName;
                 }
             }
         });
+
         if (requestObj?.voucherAdjustments?.adjustments?.length > 0) {
             requestObj.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                 delete adjustment.balanceDue;
@@ -1835,8 +1849,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.handleAdvanceReceiptChange(true);
         if (this.isAdvanceReceipt) {
             this.vm.selectedLedger.voucher.shortCode = "advance-receipt";
+            this.vm.selectedLedger.voucher.name = this.commonLocaleData?.app_voucher_types?.advance_receipt;
         } else {
             this.vm.selectedLedger.voucher.shortCode = "rcpt";
+            this.vm.selectedLedger.voucher.name = this.commonLocaleData?.app_voucher_types?.receipt;
         }
         this.advanceReceiptRemoveDialogRef.close();
     }
@@ -2231,9 +2247,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
         this.vm.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
-
         if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher?.shortCode === 'rcpt' && this.isAdvanceReceipt) {
             this.vm.selectedLedger.voucher.shortCode = 'advance-receipt';
+            this.vm.selectedLedger.voucher.name = this.commonLocaleData?.app_voucher_types?.advance_receipt;
         }
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger?.voucher?.shortCode, this.commonLocaleData);
         this.makeAdjustmentCalculation();
