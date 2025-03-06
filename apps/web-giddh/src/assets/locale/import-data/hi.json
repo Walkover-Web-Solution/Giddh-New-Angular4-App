@@ -39,8 +39,5 @@
     "is": "है",
     "are": "हैं",
     "groups": "समूह",
-    "accounts": "खाता",
-    "import_page_heading": "आयात विवरण (केवल PDF/CSV/EXCEL)",
-    "import_success": "फाइल सफलतापूर्वक अपलोड कर दी गई है।",
-    "same_debit_credit_column": "क्या डेबिट/क्रेडिट राशि के लिए एक ही कॉलम है?"
+    "accounts": "खाता"
 }

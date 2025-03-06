@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
-                        <a class="text-link-2" (click)="openVoucherAndBankStatementDialog()" href="javascript:void(0);">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'entries']" href="javascript:void(0);">
                             <img src="assets/images/new/entries-import.svg" alt="entries import" />
                             <h2>{{ commonLocaleData?.app_import_type?.entries }}</h2>
                         </a>
@@ -35,6 +35,12 @@
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'stock']" href="javascript:void(0);">
                             <img src="assets/images/new/Inventory-13.svg" alt="inventory" />
                             <h2>{{ commonLocaleData?.app_import_type?.inventory }}</h2>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'voucher']" href="javascript:void(0);">
+                            <img src="assets/images/new/Inventory-13.svg" alt="inventory" />
+                            <h2>{{ commonLocaleData?.app_import_type?.voucher }}</h2>
                         </a>
                     </li>
                     <!-- <li *ngIf="!isBranch">

@@ -8,11 +8,13 @@ import { ImportExcelService } from '../../services/import-excel.service';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { CommonActions } from '../../actions/common.actions';
+import { LedgerComponentStore } from '../../ledger/ledger.store';
 
 @Component({
     selector: 'import-wizard',
     styleUrls: ['./import-wizard.component.scss'],
-    templateUrl: './import-wizard.component.html'
+    templateUrl: './import-wizard.component.html',
+    providers: [LedgerComponentStore]
 })
 
 export class ImportWizardComponent implements OnInit, OnDestroy {
@@ -35,6 +37,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Store signed url response */
+    public signedUrlResponse: any = {};
+    /** Store voucher response */
+    public voucherResponse: any = {};
 
     constructor(
         private router: Router,
@@ -43,6 +49,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         private cdRef: ChangeDetectorRef,
         private toaster: ToasterService,
         private store: Store<AppState>,
+        private ledgerComponentStore: LedgerComponentStore,
         private commonAction: CommonActions
     ) {
     }
@@ -90,7 +97,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         };
 
         this.store.pipe(select(state => state.common.importBankTransactions), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.mappedData = response;
                 this.step = 2;
             } else {
@@ -103,6 +110,52 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.ledgerComponentStore.signedUrlSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((importSuccess) => {
+            if (importSuccess) {
+                this.signedUrlResponse = importSuccess;
+                this.ledgerComponentStore.uploadVoucher({ url: importSuccess.signedUrl, file: this.voucherResponse.file });
+            }
+        });
+
+        this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
+            if (voucherResponse) {
+                const requestObject = {
+                    accountUniqueName: this.voucherResponse.accountUniqueName,
+                    subType: "VOUCHER",
+                    type: "ACCOUNT_WISE_VOUCHER_IMPORT",
+                    isHeaderProvided: this.voucherResponse.isHeaderProvided
+                }
+                this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
+            }
+        });
+
+        this.ledgerComponentStore.importVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.excelState.requestState = ImportExcelRequestStates.UploadFileSuccess;
+                this.excelState.importExcelData = { ...response, isHeaderProvided: this.voucherResponse.isHeaderProvided };
+
+                this.mappedData = {
+                    ...this.excelState.importExcelData,
+                    data: {
+                        items: this.excelState.importExcelData?.data?.items.map(column => {
+                            column.row = column.row.map((rowData, index) => {
+                                rowData.columnNumber = index?.toString();
+                                return rowData;
+                            });
+                            return column;
+                        }),
+                        numRows: 0,
+                        totalRows: 0
+                    }
+                };
+                this.dataChanged(this.excelState);
+            } else {
+                this.excelState.requestState = ImportExcelRequestStates.UploadFileError;
+                this.excelState.importExcelData = null;
+                this.dataChanged(this.excelState);
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -112,6 +165,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onFileUpload(data: any) {
+        if (this.entity === "voucher") {
+            this.voucherResponse = data;
+            this.ledgerComponentStore.getSignedUrl(this.voucherResponse.file.name);
+            return;
+        }
         this.isUploadInProgress = true;
         this.currentBranch = data.branchUniqueName;
         this.excelState.requestState = ImportExcelRequestStates.UploadFileInProgress;
@@ -134,7 +192,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
                             });
                             return p;
                         }),
-                        numRows: 0, 
+                        numRows: 0,
                         totalRows: 0
                     }
                 };
@@ -205,7 +263,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     private getImportType(): string {
         let importType = "";
 
-        switch(this.entity) {
+        switch (this.entity) {
             case "master":
                 importType = "MASTER_IMPORT";
                 break;
@@ -213,14 +271,14 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             case "entries":
                 importType = "ENTRIES_IMPORT";
                 break;
-                
+
             case "stock":
                 importType = "INVENTORY_IMPORT";
                 break;
 
             case "banktransactions":
                 importType = "BANK_TRANSACTIONS_IMPORT";
-                break;    
+                break;
         }
 
         return importType;
