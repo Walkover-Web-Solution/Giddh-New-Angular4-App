@@ -128,7 +128,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
-    
+
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
 
@@ -688,7 +688,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
             if (this.discountControl) {
-            this.discountControl.change();
+                this.discountControl.change();
             }
 
             if (this.taxControll) {
@@ -1034,7 +1034,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.taxControll && this.taxControll.showTaxPopup) {
             this.taxControll.showTaxPopup = false;
         }
-        if (this.selectMultipleFieldsRef){
+        if (this.selectMultipleFieldsRef) {
             this.selectMultipleFieldsRef?.closePanel();
         }
     }

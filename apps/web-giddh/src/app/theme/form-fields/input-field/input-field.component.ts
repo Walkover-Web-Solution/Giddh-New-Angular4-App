@@ -94,8 +94,13 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public suffixTooltipText: string = "";
     /** It will show Icon suffix in the text field */
     @Input() public matSuffixIcon: string = "";
+    /** Emits event when content is pasted */
+    @Output() public onPaste: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits event when content is focus */
+    @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
     /** Emits on change event */
     @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits on suffix icon click */
     @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** ngModel of input */
     public ngModel: any;
@@ -249,6 +254,25 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     public emitBlurEvent(): void {
         this.onChange.emit(this.value);
     }
+
+    /**
+     * Handles paste event to process pasted content
+     *
+     * @param {ClipboardEvent} event
+     */
+    public handlePaste(event: Clipboard): void {
+        this.onPaste.emit(event);
+    }
+
+/**
+ * Handles focus event to process content
+ *
+ * @param {ClipboardEvent} event
+ */
+    public handleFocus(event: Clipboard): void {
+        this.onFocus.emit(event);
+    }
+
 
     /**
      * Emit true if suffix icon or text clicked

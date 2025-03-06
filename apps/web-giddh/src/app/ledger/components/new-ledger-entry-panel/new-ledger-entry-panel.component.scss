@@ -24,7 +24,7 @@
     .basic-detail {
         .d-grid {
             --field-width: 200px;
-            --label: 30px; /* Set the label width here */
+            --label: 30px;
             --small-field-division: 1.5;
             --common-column: var(--field-width) var(--label) var(--field-width) var(--label) var(--field-width)
                 var(--label) var(--field-width);

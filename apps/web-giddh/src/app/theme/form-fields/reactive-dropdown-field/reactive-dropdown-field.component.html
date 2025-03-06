@@ -8,7 +8,7 @@
                     [required]="required" [attr.aria-expanded]="readonly ? false : true"
                     (input)="searchFormControl.next($event.target.value)"
                     #trigger="matAutocompleteTrigger"
-                    #seleonScrollctField matAutocompletePosition="auto" (focusout)="
+                    #selectField matAutocompletePosition="auto" (focusout)="
                         closeOnFocusOut &&
                         $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
                         $event?.relatedTarget?.nodeName !== 'A'
