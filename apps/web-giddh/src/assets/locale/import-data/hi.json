@@ -39,8 +39,5 @@
     "is": "है",
     "are": "हैं",
     "groups": "समूह",
-    "accounts": "खाता",
-    "select_statement": "वक्तव्य चुनें",
-    "import_voucher": "वाउचर आयात करें",
-    "import_bank_statement": "बैंक स्टेटमेंट आयात करें"
+    "accounts": "खाता"
 }
