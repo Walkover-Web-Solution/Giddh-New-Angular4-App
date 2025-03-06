@@ -1521,6 +1521,7 @@
                                         [defaultValue]="selectedWarehouseName"
                                         [placeholder]="localeData?.select_warehouse"
                                         [options]="warehouses"
+                                        (selectedOption)="selectWarehouse($event)"
                                         [label]="localeData?.select_warehouse"
                                         [readonly]="
                                             !isPettyCash &&
@@ -1900,9 +1901,10 @@
                                         [mask]="vm.inputMaskFormat"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        [ngModel]="vm.grandTotal"
-                                        (ngModelChange)="vm.grandTotal = $event; vm.inventoryTotalChanged()"
-                                    />
+                                        [(ngModel)]="vm.grandTotal"
+                                        (change)="vm.inventoryTotalChanged()"
+                                        (keypress)="totalAmountChanged$.next(true)"
+                                    ></input-field>
                                     <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
                                         <ng-container
                                             *ngTemplateOutlet="
