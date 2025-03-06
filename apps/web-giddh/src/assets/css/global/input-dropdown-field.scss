@@ -660,13 +660,13 @@ input-field {
     }
 }
 
-.readonly-field {
-    .dropdown-bg {
-        display: none !important;
-    }
-
-    .mat-mdc-form-field,
-    .mat-mdc-form-field input{
-        background-color: var(--color-primary-input-bar-background) !important;
+reactive-dropdown-field {
+    .dropdown-without-label {
+        mat-form-field {
+            .mat-mdc-text-field-wrapper {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
     }
 }

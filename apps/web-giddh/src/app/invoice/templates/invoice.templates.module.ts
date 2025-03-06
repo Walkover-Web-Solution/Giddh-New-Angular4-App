@@ -30,6 +30,7 @@ import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
         CollapseModule.forRoot(),
         HasFocusDirectiveModule,
         BsDropdownModule,
+        ShSelectModule,
         ModalModule,
         ClickOutsideModule,
         DecimalDigitsModule,

@@ -10092,12 +10092,6 @@ button#more-btn-inventory,
     max-height: 250px;
 }
 
-.transaction-list-sh-select input {
-    min-height: 49px;
-    height: 49px;
-    border: 0 none !important;
-}
-
 .inventory-dashboard .box {
     border: 1px solid var(--color-iron);
     border-radius: 2px;
@@ -10256,17 +10250,6 @@ giddh-datepicker {
                                     .entry-modal {
                                         .ledger-panel {
                                             z-index: 9;
-                                        }
-                                    }
-                                }
-                            }
-
-                            #ledger-transaction-left-list,
-                            #ledger-transaction-right-list {
-                                .transaction-list-sh-select {
-                                    sh-select-menu {
-                                        .menu {
-                                            z-index: 10;
                                         }
                                     }
                                 }
@@ -13712,7 +13695,7 @@ aside-menu-product-service {
 }
 
 .text-black {
-    color: var(--color-common-primary-text);
+    color: var(--color-common-primary-text) !important;
 }
 
 .bg-grey {

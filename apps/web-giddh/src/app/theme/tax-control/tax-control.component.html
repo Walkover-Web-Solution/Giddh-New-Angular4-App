@@ -1,54 +1,95 @@
 <span
-    class="position-relative tax-control-cmp"
+    class="position-relative tax-control-cmp custom-mat-form-field"
     (click)="$event.stopPropagation()"
     (clickOutside)="showTaxPopup = false"
 >
-    <label class="font-12" *ngIf="showHeading"
-        >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
-        <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
-    >
-    <a id="tax" class="clearfix">
-        <div class="multi-select adjust position-relative" id="tax-control-multi-select">
-            <input
-                (keydown.enter)="$event.preventDefault()"
-                matInput
-                #taxInputElement
-                type="text"
-                id="tax-control-input"
-                readonly
-                name="sum"
-                *ngIf="!maskInput"
-                class="form-control cursor-pointer text-right tax-input pd-r3"
-                [(ngModel)]="taxTotalAmount"
-                [ngClass]="{ 'field-disabled': readonly }"
-                (focus)="!readonly ? handleInputFocus() : ''"
-            />
-            <input
-                (keydown.enter)="$event.preventDefault()"
-                matInput
-                #taxInputElement
-                type="text"
-                id="tax-control-input-mask"
-                readonly
-                name="sum"
-                *ngIf="maskInput"
-                class="form-control cursor-pointer text-right tax-input pd-r2"
-                [(ngModel)]="taxTotalAmount"
-                [mask]="maskInput"
-                [prefix]="prefixInput"
-                [suffix]="suffixInput"
-                [ngClass]="{ 'field-disabled': readonly }"
-                (focus)="!readonly ? handleInputFocus() : ''"
-            />
-        </div>
-    </a>
-
+    <ng-container *ngIf="!showMatFormField">
+        <label class="font-12" *ngIf="showHeading"
+            >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
+            <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
+        >
+        <a id="tax" class="clearfix">
+            <div class="multi-select adjust position-relative" id="tax-control-multi-select">
+                <input
+                    (keydown.enter)="$event.preventDefault()"
+                    matInput
+                    #taxInputElement
+                    type="text"
+                    id="tax-control-input"
+                    readonly
+                    name="sum"
+                    *ngIf="!maskInput"
+                    class="form-control cursor-pointer text-right tax-input pd-r3"
+                    [(ngModel)]="taxTotalAmount"
+                    [ngClass]="{ 'field-disabled': readonly }"
+                    (focus)="!readonly ? handleInputFocus() : ''"
+                />
+                <input
+                    (keydown.enter)="$event.preventDefault()"
+                    matInput
+                    #taxInputElement
+                    type="text"
+                    id="tax-control-input-mask"
+                    readonly
+                    name="sum"
+                    *ngIf="maskInput"
+                    class="form-control cursor-pointer text-right tax-input pd-r2"
+                    [(ngModel)]="taxTotalAmount"
+                    [mask]="maskInput"
+                    [prefix]="prefixInput"
+                    [suffix]="suffixInput"
+                    [ngClass]="{ 'field-disabled': readonly }"
+                    (focus)="!readonly ? handleInputFocus() : ''"
+                />
+            </div>
+        </a>
+    </ng-container>
+    <ng-container *ngIf="showMatFormField">
+        <mat-form-field class="w-100 show-caret-icon" [appearance]="'outline'">
+            <mat-label>{{ customHeading ? customHeading : commonLocaleData?.app_tax }}</mat-label>
+            <a id="tax" class="clearfix">
+                <div class="multi-select adjust position-relative" id="tax-control-multi-select">
+                    <input
+                        (keydown.enter)="$event.preventDefault()"
+                        matInput
+                        #taxInputElement
+                        type="text"
+                        id="tax-control-input"
+                        readonly
+                        name="sum"
+                        *ngIf="!maskInput"
+                        class="cursor-pointer text-right pr-1"
+                        [(ngModel)]="taxTotalAmount"
+                        [ngClass]="{ 'field-disabled': readonly }"
+                        (focus)="!readonly ? handleInputFocus() : ''"
+                    />
+                    <input
+                        (keydown.enter)="$event.preventDefault()"
+                        matInput
+                        #taxInputElement
+                        type="text"
+                        id="tax-control-input-mask"
+                        readonly
+                        name="sum"
+                        *ngIf="maskInput"
+                        class="cursor-pointer text-right pr-1"
+                        [(ngModel)]="taxTotalAmount"
+                        [mask]="maskInput"
+                        [prefix]="prefixInput"
+                        [suffix]="suffixInput"
+                        [ngClass]="{ 'field-disabled': readonly }"
+                        (focus)="!readonly ? handleInputFocus() : ''"
+                    />
+                </div>
+            </a>
+        </mat-form-field>
+    </ng-container>
     <div class="position-relative">
         <ul
             class="dropdown-menu tax-dropdown pd"
             [ngStyle]="{ 'display': showTaxPopup ? 'block' : 'none' }"
             (click)="$event.stopPropagation()"
-            [style.width.px]="260"
+            [style.width.px]="225"
             [style.max-height.px]="327"
             [style.min-height.px]="100"
             [style.right]="0"

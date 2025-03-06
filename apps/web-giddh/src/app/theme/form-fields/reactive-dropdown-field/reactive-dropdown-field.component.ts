@@ -70,7 +70,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Show divider line below options */
     @Input() public showOptionDivider: boolean = false;
     /** Show Mat Label In with appearance outline Icon */
-    @Input() public showMatLabelWithLabledField: boolean = true;
+    @Input() public showMatLabel: boolean = true;
     /** Show Caret Icon */
     @Input() public showCaretIcon: boolean = true;
     /** Emits the scroll to bottom event when pagination is required  */
@@ -187,6 +187,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * This will use for close dropdown panel
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public closeDropdownPanel(): void {
+        this.trigger?.closePanel();
+    }
+
+    /**
      * Lifecycle hook for component destroy
      *
      * @memberof ReactiveDropdownFieldComponent
@@ -270,7 +279,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public createNewRecord(): void {
-        this.trigger?.closePanel();
+        this.closeDropdownPanel();
         this.createOption.emit(true);
     }
 

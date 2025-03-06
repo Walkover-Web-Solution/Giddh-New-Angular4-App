@@ -41,6 +41,7 @@ import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { CommonService } from '../../../services/common.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -54,19 +55,7 @@ const NEW_LEDGER_ENTRIES = [
     selector: 'new-ledger-entry-panel',
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%,   0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -137,7 +126,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
+    @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+    
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
 
@@ -697,7 +688,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
             if (this.discountControl) {
-                this.discountControl.change();
+            this.discountControl.change();
             }
 
             if (this.taxControll) {
@@ -1042,6 +1033,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.taxControll && this.taxControll.showTaxPopup) {
             this.taxControll.showTaxPopup = false;
+        }
+        if (this.selectMultipleFieldsRef){
+            this.selectMultipleFieldsRef?.closePanel();
         }
     }
 
@@ -2138,5 +2132,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             });
         }
+    }
+
+    /**
+     * Return Warehouse dropdown default value to show
+     *
+     * @return {*}  {string}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getWarehouseLabel(): string {
+        return this.warehouses?.find(item => item.value === this.selectedWarehouse)?.label || '';
     }
 }

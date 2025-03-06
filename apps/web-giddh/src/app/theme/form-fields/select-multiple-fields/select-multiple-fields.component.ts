@@ -62,6 +62,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showMatLabel: boolean = false;
     /** Prevent to close dropdown menu after select */
     @Input() public keepMenuOpenAfterSelect: boolean = false;
+    /** Holds autocomplete position */
+    @Input() public autoCompletePosition: string = 'auto';
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -70,8 +72,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Output() public createOption: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Callback for clear selected value */
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
-    /** Holds autocomplete position */
-    @Input() public autoCompletePosition: string = 'auto';
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
@@ -124,8 +124,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                     }
                     this.filterOptions(search);
                 }
+                this.changeDetection.detectChanges();
             }
-            this.changeDetection.detectChanges();
         });
     }
 
