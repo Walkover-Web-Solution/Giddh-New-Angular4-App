@@ -1653,7 +1653,7 @@
                                                 >
                                                     <div class="ledger-account-label d-flex column-gap5">
                                                         <span *ngIf="txn?.particular">{{ localeData?.to }}</span>
-                                                        <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, openDropdown: acitve, dr: true }"></ng-container>
+                                                        <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, dr: true }"></ng-container>
                                                     </div>
                                                     <ul
                                                         class="no-result-template"
@@ -2809,7 +2809,7 @@
         (onClear)="selectAccount($event, txn, true, true)"
         (createOption)="toggleAsidePane()"
         [showOptionDivider]="true"
-        [showMatLabelWithLabledField]="false"
+        [showMatLabel]="false"
         [showCaretIcon]="false" 
         [appearance]="'fill'"
         [createNewText]="commonLocaleData?.app_create_new"

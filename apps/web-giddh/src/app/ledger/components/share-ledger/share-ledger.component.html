@@ -20,14 +20,14 @@
             </div>
             <div class="modal-body" id="SharePop">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-12">
                         <div class="modal-wrap">
                             <div class="form-group add-mailer">
-                                <label>{{ localeData?.share_with }}</label>
+                                <!-- <label>{{ localeData?.share_with }}</label> -->
                                 <!--share account from-->
                                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
                                     <div class="input-group d-flex justify-content-between">
-                                        <mat-form-field appearance="fill" class="custom-input-field share-input-width">
+                                        <!-- <mat-form-field appearance="fill" class="custom-input-field share-input-width">
                                             <input
                                                 matInput
                                                 name="userEmail"
@@ -39,7 +39,18 @@
                                                 class="form-control mat-field-border mt-0 border-radius-5"
                                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"
                                             />
-                                        </mat-form-field>
+                                        </mat-form-field> -->
+                                        <input-field
+                                            class="w-50"
+                                            [type]="'email'"
+                                            [name]="'userEmail'"
+                                            [(ngModel)]="email"
+                                            [pattern]="'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$'"
+                                            [required]="true"
+                                            [label]="localeData?.share_with"
+                                            [placeholder]="commonLocaleData?.app_email_id"
+                                        >
+                                        </input-field>
                                         <span class="input-group-btn mr-l1">
                                             <button
                                                 mat-stroked-button
@@ -90,8 +101,8 @@
                                 </a>
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
                             </div>
-                            <div class="input-group d-flex justify-content-between">
-                                <mat-form-field appearance="fill" class="custom-input-field share-input-width">
+                            <div class="input-group d-flex justify-content-between mr-t15 mr-b15">
+                                <!-- <mat-form-field appearance="fill" class="custom-input-field share-input-width">
                                     <input
                                         #magicLinkInput
                                         matInput
@@ -100,7 +111,18 @@
                                         type="text"
                                         [(ngModel)]="magicLink"
                                     />
-                                </mat-form-field>
+                                </mat-form-field> -->
+                                <input-field
+                                    class="w-50"
+                                    #magicLinkInput
+                                    [type]="'magicLink'"
+                                    [name]="'userEmail'"
+                                    [(ngModel)]="magicLink"
+                                    [readonly]="true"
+                                    [disabled]="true"
+                                    [label]="localeData?.url"
+                                >
+                                </input-field>
                                 <span class="input-group-btn mr-l1">
                                     <button
                                         mat-stroked-button

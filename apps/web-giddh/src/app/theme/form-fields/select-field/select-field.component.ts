@@ -109,7 +109,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                 }
             });
         } else {
-            this.searchFormControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
                     this.filterOptions(search);
                 } else {

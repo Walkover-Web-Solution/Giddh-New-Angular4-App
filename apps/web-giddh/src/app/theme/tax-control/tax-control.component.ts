@@ -65,6 +65,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
+    @Input() public showMatFormField: boolean = false;
     /** True, if current transaction tax needed to be calculated inclusively
      * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */

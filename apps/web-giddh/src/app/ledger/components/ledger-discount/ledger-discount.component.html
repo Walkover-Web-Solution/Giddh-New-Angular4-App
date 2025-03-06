@@ -1,22 +1,24 @@
-<div (clickOutside)="hideDiscountMenu()">
-    <label class="font-12">{{ commonLocaleData?.app_discount }}</label>
-    <a id="discount">
-        <div class="multi-select adjust text-right">
-            <input
-                matInput
-                [prefix]="prefixInput"
-                id="ledger-discount"
-                [suffix]="suffixInput"
-                [mask]="maskInput"
-                name="discountTotal"
-                class="form-control cursor-pointer text-right mat-field-border"
-                (focus)="discountMenu = true; hideOtherPopups.emit(true)"
-                [(ngModel)]="discountTotal"
-                [readonly]="readonly"
-            />
-            <span class="caret"></span>
-        </div>
-    </a>
+<div (clickOutside)="hideDiscountMenu()" class="custom-mat-form-field">
+    <mat-form-field class="show-caret-icon w-100" [appearance]="'outline'">
+    <mat-label>{{ commonLocaleData?.app_discount }}</mat-label>
+        <a id="discount">
+            <div class="multi-select adjust text-right">
+                <input
+                    matInput
+                    autocomplete="off"
+                    [prefix]="prefixInput"
+                    id="ledger-discount"
+                    [suffix]="suffixInput"
+                    [mask]="maskInput"
+                    name="discountTotal"
+                    class="cursor-pointer text-right pr-1"
+                    (focus)="discountMenu = true; hideOtherPopups.emit(true)"
+                    [(ngModel)]="discountTotal"
+                    [readonly]="readonly"
+                />
+            </div>
+        </a>
+    </mat-form-field>
     <div
         class="my-dropdown-menu pd-1"
         (click)="$event.stopPropagation()"

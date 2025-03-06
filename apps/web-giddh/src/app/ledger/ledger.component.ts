@@ -1361,19 +1361,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.selectBlankTxn(newTrx);
         }
         this.closeAllAccountDropdown();
-        console.log(this.dropDowns.forEach(item => console.log(item)));
+
+        setTimeout(()=> {
+            if (event?.type === 'DEBIT') {
+                const debitDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+                debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
+            } else {
+                const creditDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
+                creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
+            }
+        }, 200)
         
-        if (event?.type === 'DEBIT') {
-            const debitDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
-            console.log("debitDropdowns", debitDropdowns);
-            debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
-            // this.dropDowns.first?.openDropdownPanel();
-        } else {
-            const creditDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
-            console.log("creditDropdowns", creditDropdowns);
-            creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
-            // this.dropDowns.last?.openDropdownPanel();
-        }
     }
 
     public downloadAttachedFile(fileName: string, e: Event) {
@@ -1542,7 +1540,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.shareLedgerDates.to = dayjs(this.selectedDateRange?.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
         this.dialog.open(ShareLedgerComponent, {
-            width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
@@ -1550,7 +1547,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 to: this.shareLedgerDates?.to,
             },
             role: 'alertdialog',
-            ariaLabel: 'share'
+            ariaLabel: 'share',
+            panelClass: 'mat-dialog-sm'
         });
     }
 
