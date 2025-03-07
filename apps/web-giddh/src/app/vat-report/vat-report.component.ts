@@ -10,6 +10,7 @@ import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
 import { saveAs } from "file-saver";
 import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
+import { RestrictedModules } from '../app.constant';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -67,6 +68,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public vatReportCurrencySymbol: string = 'P';
     /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
     public vatReportCurrencyMap: string[];
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private store: Store<AppState>,
@@ -85,7 +88,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
                 this.isKenyaCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'KE';
-                if (this.isUKCompany) {
+                if (this.isUKCompany && !this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling)) {
                     this.getURLHMRCAuthorization();
                 }
             }
@@ -134,7 +137,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                             this.vatReport = res.body?.sections;
                             this.cdRef.detectChanges();
                         } else {
-                            this.toasty.showSnackBar('error',res.message);
+                            this.toasty.showSnackBar('error', res.message);
                         }
                     }
                 });
@@ -151,7 +154,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
                             this.cdRef.detectChanges();
                         } else {
-                            this.toasty.showSnackBar('error',res.message);
+                            this.toasty.showSnackBar('error', res.message);
                         }
                     }
                 });
@@ -183,7 +186,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' : '.xlsx'}`);
             } else {
                 this.toasty.clearAllToaster();
-                this.toasty.showSnackBar('error',res?.message);
+                this.toasty.showSnackBar('error', res?.message);
             }
         });
     }

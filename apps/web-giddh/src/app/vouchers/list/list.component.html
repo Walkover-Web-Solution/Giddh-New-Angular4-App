@@ -83,7 +83,7 @@
                             class="w-100"
                         >
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef>
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -137,15 +137,13 @@
                                     <a
                                         href="javascript:;"
                                         class="btn-link-2"
+                                        [matTooltip]="element?.voucherNumber"
+                                        matTooltipPosition="above"
                                         (click)="showVoucherPreview(element?.uniqueName)"
-                                        >{{
-                                            element?.voucherNumber
-                                                ? element.voucherNumber
-                                                : commonLocaleData?.app_not_available
-                                        }}</a
+                                        >{{ element?.voucherNumber ?? commonLocaleData?.app_not_available }}</a
                                     >
                                     <span class="d-block" *ngIf="element?.expiredDays !== null">
-                                        <small class="text-danger" *ngIf="element?.expiredDays === 0">
+                                        <small class="text-danger text-ellipsis" *ngIf="element?.expiredDays === 0">
                                             {{ localeData?.expired_by_today }}
                                         </small>
                                     </span>
@@ -175,7 +173,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -219,11 +217,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     Estimate Date
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -251,11 +249,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ localeData?.expiry_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.expiryDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -272,7 +270,7 @@
                                     {{ commonLocaleData?.app_action }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                    <div class="d-flex justify-content-between align-items-center column-gap5 text-ellipsis">
                                         <p>{{ element.action | titlecase }}</p>
                                         <ng-container *ngIf="element?.action !== 'invoiced'">
                                             <span
@@ -407,7 +405,7 @@
                             class="w-100"
                         >
                             <ng-container matColumnDef="position">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef>
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -460,8 +458,10 @@
                                 <td mat-cell *matCellDef="let element">
                                     <a
                                         href="javascript:;"
-                                        class="btn-link-2"
+                                        class="btn-link-2 text-ellipsis"
                                         (click)="showVoucherPreview(element?.uniqueName)"
+                                        [matTooltip]="element?.proformaNumber"
+                                        matTooltipPosition="above"
                                     >
                                         {{ element.proformaNumber }}
                                     </a>
@@ -491,7 +491,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -535,11 +535,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ localeData?.proforma_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.proformaDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -567,11 +567,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ localeData?.expiry_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.expiryDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -580,7 +580,7 @@
                                     {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'" class="text-ellipsis">
                                         {{ element.status }}
                                     </div>
                                 </td>
@@ -590,7 +590,7 @@
                                     {{ commonLocaleData?.app_action }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                    <div class="d-flex justify-content-between align-items-center column-gap5 text-ellipsis">
                                         <p>{{ element?.action | titlecase }}</p>
                                         <span
                                             [matMenuTriggerFor]="menu"
@@ -785,7 +785,7 @@
                             class="w-100"
                         >
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef>
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -840,13 +840,15 @@
                                         href="javascript:;"
                                         class="btn-link-2"
                                         (click)="showVoucherPreview(element?.uniqueName)"
+                                        [matTooltip]="element?.voucherNumber"
+                                        matTooltipPosition="above"
                                         >{{
                                             element?.voucherNumber
                                                 ? element.voucherNumber
                                                 : commonLocaleData?.app_not_available
                                         }}</a
                                     >
-                                    <small class="text-danger d-block" *ngIf="element?.overdueDays">
+                                    <small class="text-danger d-block text-ellipsis" *ngIf="element?.overdueDays">
                                         {{ element.overdueDays }}
                                     </small>
                                 </td>
@@ -875,7 +877,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -919,11 +921,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ commonLocaleData?.app_invoice_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -970,11 +972,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ localeData?.due_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element.dueDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -993,14 +995,15 @@
                                     {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                    <div class="d-flex justify-content-between align-items-center column-gap5 text-ellipsis">
                                         <p>{{ element.balanceStatus | titlecase }}</p>
                                         <span
                                             [matMenuTriggerFor]="menu"
                                             class="cursor-pointer"
                                             *ngIf="
                                                 element?.balanceStatus !== 'cancel' &&
-                                                !isCompany && !isConsolidatedBranch
+                                                !isCompany &&
+                                                !isConsolidatedBranch
                                             "
                                         >
                                             <i class="icon-dots-three-vertical"></i>
@@ -1222,7 +1225,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     <a
                                         href="javascript:;"
                                         class="btn-link-2"
@@ -1255,7 +1258,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -1299,11 +1302,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -1334,6 +1337,16 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
+                            <ng-container matColumnDef="einvoicestatus">
+                                <th mat-header-cell *matHeaderCellDef class="text-center">
+                                    {{ localeData?.e_invoice_status }}
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element?.status ?? "-" }}
+                                    </div>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ commonLocaleData?.app_status }}
@@ -1346,7 +1359,8 @@
                                             class="cursor-pointer"
                                             *ngIf="
                                                 element?.balanceStatus !== 'cancel' &&
-                                                !isCompany && !isConsolidatedBranch
+                                                !isCompany &&
+                                                !isConsolidatedBranch
                                             "
                                         >
                                             <i class="icon-dots-three-vertical"></i>
@@ -1501,7 +1515,7 @@
                             class="w-100"
                         >
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef>
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -1536,7 +1550,7 @@
                                     (clickOutside)="handleClickOutside($event, invoiceNo, 'creditNoteNumber')"
                                     width="15%"
                                 >
-                                    <div class="d-flex align-items-center column-gap5">
+                                    <div class="d-flex align-items-center column-gap5 text-ellipsis">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
@@ -1551,7 +1565,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     <a
                                         href="javascript:;"
                                         class="btn-link-2"
@@ -1584,7 +1598,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">
+                                    <div class="cursor-pointer text-ellipsis" (dblclick)="element.showAccountDetails = true" [matTooltip]="element.account?.customerName" matTooltipPosition="above">
                                         {{ element.account?.customerName || element?.account?.name | titlecase }}
                                     </div>
                                     <mat-card
@@ -1663,6 +1677,16 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
+                            <ng-container matColumnDef="einvoicestatus">
+                                <th mat-header-cell *matHeaderCellDef class="text-center">
+                                    {{ localeData?.e_invoice_status }}
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element?.status ?? "-" }}
+                                    </div>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ commonLocaleData?.app_status }}
@@ -1675,7 +1699,8 @@
                                             class="cursor-pointer"
                                             *ngIf="
                                                 element?.balanceStatus !== 'cancel' &&
-                                                !isCompany && !isConsolidatedBranch
+                                                !isCompany &&
+                                                !isConsolidatedBranch
                                             "
                                         >
                                             <i class="icon-dots-three-vertical"></i>
@@ -1830,7 +1855,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_particular }}</th>
-                                    <td mat-cell *matCellDef="let element" class="p-0">
+                                    <td mat-cell *matCellDef="let element" class="p-0 text-ellipsis">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>{{ transaction?.particular?.name }}</p>
                                             <p *ngIf="transaction?.inventory?.stock">
@@ -1843,7 +1868,7 @@
                                     <th mat-header-cell *matHeaderCellDef class="text-right">
                                         {{ commonLocaleData?.app_amount }}
                                     </th>
-                                    <td mat-cell *matCellDef="let element" class="text-right p-0">
+                                    <td mat-cell *matCellDef="let element" class="text-right p-0 text-ellipsis">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>
                                                 <amount-field
@@ -1858,7 +1883,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="account">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_account }}</th>
-                                    <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    <td mat-cell *matCellDef="let element" class="no-dbl-click-select text-ellipsis">
                                         <div
                                             class="cursor-pointer"
                                             (dblclick)="!isCompany && (element.showAccountDetails = true)"
@@ -1912,7 +1937,7 @@
                                         matTooltipPosition="above"
                                         [matTooltip]="element?.totalTooltipText"
                                     >
-                                        <span class="d-inline-flex">
+                                        <span class="d-inline-flex text-ellipsis">
                                             <amount-field
                                                 [amount]="element.total.amount"
                                                 [currencySymbol]="element.accountCurrencySymbol"
@@ -1924,7 +1949,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="description">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_description }}</th>
-                                    <td mat-cell *matCellDef="let element">
+                                    <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                         {{ element?.description ? (element.description | titlecase) : "-" }}
                                     </td>
                                 </ng-container>
@@ -2061,10 +2086,10 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="date">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="table-date-width">
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -2085,22 +2110,18 @@
                                                     fieldName: 'purchaseOrderNumber',
                                                     voucherType: 'purchase-order',
                                                     formControl: voucherNumberInput,
-                                                    title: localeData?.po_number + ' #'
+                                                    title: localeData?.order_no + ' #'
                                                 }
                                             "
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                <td mat-cell *matCellDef="let element" [matTooltip]="element?.voucherNumber" matTooltipPosition="above" class="no-dbl-click-select text-ellipsis">
                                     <a
                                         href="javascript:;"
                                         class="btn-link-2"
                                         (click)="showVoucherPreview(element?.uniqueName)"
-                                        >{{
-                                            element?.voucherNumber
-                                                ? element.voucherNumber
-                                                : commonLocaleData?.app_not_available
-                                        }}</a
+                                        >{{ element?.voucherNumber ?? commonLocaleData?.app_not_available }}</a
                                     >
                                 </td>
                             </ng-container>
@@ -2127,7 +2148,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" [matTooltip]="element?.vendor?.name" matTooltipPosition="above">
                                     {{ element?.vendor?.name }}
                                 </td>
                             </ng-container>
@@ -2155,11 +2176,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ localeData?.expected_delivery }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     <span
                                         [ngClass]="{
                                             'ontime-delivery': element?.dueDays > 0,
@@ -2356,7 +2377,7 @@
                                     (clickOutside)="handleClickOutside($event, invoiceNo, 'billNumber')"
                                     width="15%"
                                 >
-                                    <div class="d-flex align-items-center column-gap5">
+                                    <div class="d-flex align-items-center column-gap5 text-ellipsis">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
@@ -2376,13 +2397,15 @@
                                         href="javascript:;"
                                         class="btn-link-2"
                                         (click)="showVoucherPreview(element?.uniqueName)"
+                                        [matTooltip]="element?.voucherNumber"
+                                        matTooltipPosition="above"
                                         >{{
                                             element?.voucherNumber
                                                 ? element.voucherNumber
                                                 : commonLocaleData?.app_not_available
                                         }}</a
                                     >
-                                    <div *ngIf="element?.dueDays !== null">
+                                    <div *ngIf="element?.dueDays !== null"  class="text-ellipsis">
                                         <small class="text-danger" *ngIf="element?.dueDays > 0">
                                             {{ getOverdueDaysText(element.dueDays) }}
                                         </small>
@@ -2400,7 +2423,7 @@
                                     (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"
                                     width="15%"
                                 >
-                                    <div class="d-flex align-items-center column-gap5">
+                                    <div class="d-flex align-items-center column-gap5 text-ellipsis">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
@@ -2415,7 +2438,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" [matTooltip]="element?.account?.customerName" matTooltipPosition="above">
                                     {{ element?.account?.customerName | titlecase }}
                                 </td>
                             </ng-container>
@@ -2424,11 +2447,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ localeData?.bill_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -2451,13 +2474,13 @@
                                                     fieldName: 'purchaseOrderNumbers',
                                                     voucherType: 'purchase',
                                                     formControl: purchaseOrderUniqueNameInput,
-                                                    title: localeData?.po_number + ' #'
+                                                    title: localeData?.linked_order + ' #'
                                                 }
                                             "
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element?.purchaseOrderNumbers }}
                                 </td>
                             </ng-container>
@@ -2505,7 +2528,8 @@
                                             class="cursor-pointer"
                                             *ngIf="
                                                 element?.balanceStatus !== 'cancel' &&
-                                                !isCompany && !isConsolidatedBranch
+                                                !isCompany &&
+                                                !isConsolidatedBranch
                                             "
                                         >
                                             <i class="icon-dots-three-vertical"></i>
@@ -2559,593 +2583,6 @@
                 </div>
             </mat-tab>
             <!-- bill-content-end -->
-
-            <!-- setting-content-start -->
-            <!-- ===== HIDE THIS TAB FOR NOW ===== -->
-            <mat-tab
-                [label]="localeData?.tabs?.settings"
-                class="setting-svg"
-                *ngIf="activeTabGroup !== 3 && activeTabGroup !== 4 && !isCompany && !isConsolidatedBranch"
-            >
-                <ng-container *ngIf="activeModule === 'settings'">
-                    <div class="pd-t15" *ngIf="voucherType !== 'purchase'">
-                        <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
-                    </div>
-                    <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting>
-                </ng-container>
-                <mat-tab-group
-                    mat-stretch-tabs="false"
-                    mat-align-tabs="start"
-                    class="tabs-box-wrap pt-3 px-4"
-                    *ngIf="false"
-                >
-                    <mat-tab *ngIf="activeTabGroup === 0">
-                        <ng-template mat-tab-label>
-                            <i class="icon-chat2"></i>
-                            General
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">
-                                General
-                                <span class="text-gray font-12"
-                                    >(These settings will be applicable on Estimates, Proforma and Invoices)</span
-                                >
-                            </h4>
-                            <mat-slide-toggle
-                                name="enableNarrationOnInvAndVoucher"
-                                class="disable-toggle slide-toggle"
-                                color="primary"
-                            >
-                                Show Narration on Ledger
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 0">
-                        <ng-template mat-tab-label>
-                            <i class="icon-mail"></i>
-                            Email
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">
-                                Email/SMS
-                                <span class="text-gray font-12"
-                                    >(These settings will be applicable on Estimates, Proforma and Invoices)</span
-                                >
-                            </h4>
-                            <div class="d-flex column-gap1 align-items-center mb-3">
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'From Email'"
-                                    [placeholder]="'ravinder@walkover.in'"
-                                    [type]="'text'"
-                                    class="settings-field"
-                                ></input-field>
-                                <span class="text-success">Verified</span>
-                                <button mat-stroked-button class="mat-icon-md-btn">
-                                    <i class="icon-trash"></i>
-                                </button>
-                            </div>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle" color="primary">
-                                Send email through Gmail
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 0">
-                        <ng-template mat-tab-label>
-                            <i class="icon-estimate1"></i>
-                            Estimate
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">Estimate/Quotation</h4>
-                            <div class="d-flex column-gap1 mb-3">
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'Heading Name'"
-                                    [placeholder]="'ESTIMATE'"
-                                    [type]="'text'"
-                                    class="settings-field d-block"
-                                ></input-field>
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'Default expiry days'"
-                                    [placeholder]="'00'"
-                                    [type]="'text'"
-                                    class="settings-field d-block"
-                                    [matSuffix]="'days'"
-                                ></input-field>
-                            </div>
-                            <label for="">Next step to Estimate</label>
-                            <mat-radio-group aria-label="Select an option" class="mt-2 mb-3">
-                                <mat-radio-button value="1" color="primary">Proforma</mat-radio-button>
-                                <mat-radio-button value="2" color="primary">Invoice</mat-radio-button>
-                            </mat-radio-group>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Auto change status (on expiry)
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                Auto mail when generated
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 0">
-                        <ng-template mat-tab-label>
-                            <i class="icon-sales-order"></i>
-                            Proforma
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">Proforma Invoice</h4>
-                            <div class="d-flex column-gap1 mb-3">
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'Heading Name'"
-                                    [placeholder]="'PROFORMA'"
-                                    [type]="'text'"
-                                    class="settings-field d-block"
-                                ></input-field>
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'Default expiry days'"
-                                    [placeholder]="'00'"
-                                    [type]="'text'"
-                                    class="settings-field d-block"
-                                    [matSuffix]="'days'"
-                                ></input-field>
-                            </div>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Auto change status (on expiry)
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                Auto mail when generated
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 0">
-                        <ng-template mat-tab-label>
-                            <div class="voucher-svg">
-                                <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M16.2426 4.00113L16.2497 2.00002H21.8924L21.8995 7.6498L19.8984 7.65687L19.8913 5.41534L15.5285 9.77819L14.1142 8.36398L18.4771 4.00113H16.2426Z"
-                                    />
-                                    <path
-                                        d="M19 19.1787V9.17865H21V19.1787C21 20.2787 20.1 21.1787 19 21.1787H5C3.9 21.1787 3 20.2787 3 19.1787V5.17865C3 4.07865 3.9 3.17865 5 3.17865H15V5.17865H5V19.1787H19Z"
-                                    />
-                                    <path d="M7 17.1787H14V15.1787H7V17.1787Z" />
-                                    <path d="M7 13.1787H17V11.1787H7V13.1787Z" />
-                                </svg>
-                            </div>
-                            Invoice
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">Invoice</h4>
-                            <div class="d-flex column-gap1 mb-3">
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'Default expiry days'"
-                                    [placeholder]="'00'"
-                                    [type]="'text'"
-                                    class="settings-field d-block mb-3"
-                                    [matSuffix]="'days'"
-                                ></input-field>
-                                <giddh-datepicker
-                                    type="text"
-                                    (keydown.enter)="$event.preventDefault()"
-                                    [label]="'Invoice Lock Date'"
-                                    [placeholder]="'DD-MM-YYYY'"
-                                    name="voucherDate"
-                                    [showToggleIcon]="false"
-                                    [appearance]="'outline'"
-                                    class="settings-field d-block"
-                                >
-                                </giddh-datepicker>
-                            </div>
-                            <mat-slide-toggle
-                                name=""
-                                class="disable-toggle slide-toggle d-block my-3"
-                                color="primary"
-                                checked
-                            >
-                                Show seal according to status of payment
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Auto mail when updated
-                            </mat-slide-toggle>
-                            <div class="mb-3 d-flex align-items-center column-gap15">
-                                <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                    Custom Invoice#
-                                </mat-slide-toggle>
-                                <input-field
-                                    [name]="'branch'"
-                                    [label]="'Branch Prefix'"
-                                    [placeholder]="'Branch Prefix'"
-                                    [type]="'text'"
-                                ></input-field>
-                                <input-field
-                                    [name]="'sub'"
-                                    [label]="'Sub Prefix'"
-                                    [placeholder]="'Sub Prefix'"
-                                    [type]="'text'"
-                                ></input-field>
-                                <input-field
-                                    [name]="'no'"
-                                    [label]="'Initial No.'"
-                                    [placeholder]="'00'"
-                                    [type]="'tel'"
-                                ></input-field>
-                            </div>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Auto Delete entries when deleting their invoice
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Apply round off on sales/cash voucher
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Run Auto-paid for all the accounts
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Automatically generate voucher for the entries present in the ledger
-                            </mat-slide-toggle>
-                            <div class="mb-3 d-flex align-items-center column-gap15">
-                                <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                    E-invoicing Authentication
-                                </mat-slide-toggle>
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'Username'"
-                                    [placeholder]="'Username'"
-                                    [type]="'text'"
-                                ></input-field>
-                                <input-field
-                                    [name]="'password'"
-                                    [label]="'Password'"
-                                    [placeholder]="'Password'"
-                                    [type]="'password'"
-                                ></input-field>
-                                <input-field
-                                    [name]="'password'"
-                                    [label]="'GSTIN'"
-                                    [placeholder]="'GSTIN'"
-                                    [type]="'text'"
-                                ></input-field>
-                            </div>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                Enable confirmation pop-up to create E-Invoice
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 1">
-                        <ng-template mat-tab-label>
-                            <div class="voucher-svg">
-                                <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
-                                    />
-                                    <path
-                                        d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
-                                    />
-                                    <path d="M7 18H14V16H7V18Z" />
-                                </svg>
-                            </div>
-                            Debit Note
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">Debit Note</h4>
-                            <div class="mb-3 d-flex align-items-center column-gap15">
-                                <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                    Custom Invoice#
-                                </mat-slide-toggle>
-                                <input-field
-                                    [name]="'branch'"
-                                    [label]="'Branch Prefix'"
-                                    [placeholder]="'Branch Prefix'"
-                                    [type]="'text'"
-                                    class=""
-                                ></input-field>
-                                <input-field
-                                    [name]="'sub'"
-                                    [label]="'Sub Prefix'"
-                                    [placeholder]="'Sub Prefix'"
-                                    [type]="'text'"
-                                    class=""
-                                ></input-field>
-                                <input-field
-                                    [name]="'no'"
-                                    [label]="'Initial No.'"
-                                    [placeholder]="'00'"
-                                    [type]="'tel'"
-                                    class=""
-                                ></input-field>
-                            </div>
-                            <mat-slide-toggle
-                                name="voucher"
-                                class="disable-toggle slide-toggle d-block"
-                                color="primary"
-                            >
-                                Apply round off on credit note voucher
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 1">
-                        <ng-template mat-tab-label>
-                            <div class="voucher-svg">
-                                <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
-                                    />
-                                    <path
-                                        d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
-                                    />
-                                    <path d="M7 18H14V16H7V18Z" />
-                                </svg>
-                            </div>
-                            Credit Note
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">Credit Note</h4>
-                            <div class="mb-3 d-flex align-items-center column-gap15">
-                                <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                    Custom Invoice#
-                                </mat-slide-toggle>
-                                <input-field
-                                    [name]="'branch'"
-                                    [label]="'Branch Prefix'"
-                                    [placeholder]="'Branch Prefix'"
-                                    [type]="'text'"
-                                ></input-field>
-                                <input-field
-                                    [name]="'sub'"
-                                    [label]="'Sub Prefix'"
-                                    [placeholder]="'Sub Prefix'"
-                                    [type]="'text'"
-                                ></input-field>
-                                <input-field
-                                    [name]="'no'"
-                                    [label]="'Initial No.'"
-                                    [placeholder]="'00'"
-                                    [type]="'tel'"
-                                ></input-field>
-                            </div>
-                            <mat-slide-toggle
-                                name="voucher"
-                                class="disable-toggle slide-toggle d-block"
-                                color="primary"
-                            >
-                                Apply round off on credit note voucher
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 2">
-                        <ng-template mat-tab-label>
-                            <i class="icon-mail"></i>
-                            Integration
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">
-                                Integration
-                                <span class="text-gray font-12"
-                                    >(These settings will be applicable on Purchase Order and Bill)</span
-                                >
-                            </h4>
-                            <div class="d-flex column-gap1 align-items-center mb-3">
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'From Email'"
-                                    [placeholder]="'ravinder@walkover.in'"
-                                    [type]="'text'"
-                                    class="settings-field"
-                                ></input-field>
-                                <span class="text-success">Verified</span>
-                                <button mat-stroked-button class="mat-icon-md-btn">
-                                    <i class="icon-trash"></i>
-                                </button>
-                            </div>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle" color="primary">
-                                Send email through Gmail
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 2">
-                        <ng-template mat-tab-label>
-                            <i class="icon-sales-order"></i>
-                            Pur.Order
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">Purchase Order</h4>
-                            <div class="d-flex column-gap1 mb-3">
-                                <input-field
-                                    [name]="'name'"
-                                    [label]="'Default expiry days'"
-                                    [placeholder]="'00'"
-                                    [type]="'text'"
-                                    class="settings-field d-block"
-                                    [matSuffix]="'days'"
-                                ></input-field>
-                            </div>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Auto change status (on expiry)
-                            </mat-slide-toggle>
-                            <div class="mb-3 d-flex align-items-center column-gap15">
-                                <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                    Custom Purchase Order#
-                                </mat-slide-toggle>
-                                <input-field
-                                    [name]="'branch'"
-                                    [label]="'Initial No.'"
-                                    [placeholder]="'Branch Prefix'"
-                                    [type]="'text'"
-                                    class="text-right"
-                                ></input-field>
-                                <input-field [name]="'sub'" [label]="'Prefix'" [type]="'text'"></input-field>
-                            </div>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                    <mat-tab *ngIf="activeTabGroup === 2">
-                        <ng-template mat-tab-label>
-                            <div class="voucher-svg">
-                                <svg width="32" height="32" viewBox="0 0 25 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M17.0463 13C17.7963 13 18.4563 12.59 18.7963 11.97L22.3763 5.48C22.7463 4.82 22.2663 4 21.5063 4H6.70634L5.76634 2H2.49634V4H4.49634L8.09634 11.59L6.74634 14.03C6.01634 15.37 6.97634 17 8.49634 17H20.4963V15H8.49634L9.59634 13H17.0463ZM7.65634 6H19.8063L17.0463 11H10.0263L7.65634 6ZM8.49634 18C7.39634 18 6.50634 18.9 6.50634 20C6.50634 21.1 7.39634 22 8.49634 22C9.59634 22 10.4963 21.1 10.4963 20C10.4963 18.9 9.59634 18 8.49634 18ZM18.4963 18C17.3963 18 16.5063 18.9 16.5063 20C16.5063 21.1 17.3963 22 18.4963 22C19.5963 22 20.4963 21.1 20.4963 20C20.4963 18.9 19.5963 18 18.4963 18Z"
-                                    />
-                                </svg>
-                            </div>
-                            Pur. Bill
-                        </ng-template>
-                        <div class="tabs-box-content py-3">
-                            <h4 class="font-16 border-bottom pb-2 mb-3">Purchase Bill</h4>
-                            <giddh-datepicker
-                                type="text"
-                                (keydown.enter)="$event.preventDefault()"
-                                [label]="'Bill Lock Date'"
-                                [placeholder]="'DD-MM-YYYY'"
-                                name="voucherDate"
-                                [showToggleIcon]="false"
-                                [appearance]="'outline'"
-                                class="settings-field d-block mb-3"
-                            >
-                            </giddh-datepicker>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Show narration to ledger
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Enable Voucher Download
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block mb-3" color="primary">
-                                Apply round off on purchase voucher
-                            </mat-slide-toggle>
-                            <mat-slide-toggle name="" class="disable-toggle slide-toggle d-block" color="primary">
-                                Allow system generated number for Bill and Debit note
-                            </mat-slide-toggle>
-                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
-                        </div>
-                    </mat-tab>
-                </mat-tab-group>
-            </mat-tab>
-            <!-- setting-content-end -->
-
-            <!-- template-content-start -->
-            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="pd-t15" *ngIf="activeModule === 'templates'">
-                    <edit-invoice></edit-invoice>
-                </div>
-                <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
-                    <dropdown-field
-                        [name]="'design'"
-                        [label]="'Select Design for'"
-                        [placeholder]="'Select'"
-                        class="w-50 template-design d-block"
-                    >
-                    </dropdown-field>
-                    <div class="template-wrapper mt-3">
-                        <mat-card class="outline-card add-template-wrapper">
-                            <mat-card-content class="pt-3">
-                                <h3 class="fonr-16">Design Template</h3>
-                                <p class="my-3">
-                                    Click to add a template from our gallery. You can customize the template title,
-                                    columns,and headers in line item table.
-                                </p>
-                                <button mat-stroked-button color="primary" (click)="templateEdit()">Add New</button>
-                            </mat-card-content>
-                        </mat-card>
-                        <mat-card class="outline-card add-template-wrapper text-center">
-                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cursor-pointer">
-                                    <i class="icon-favorite-selected"></i>
-                                    Set as Default
-                                </span>
-                                <div class="d-flex column-gap1 justify-content-center">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Preview"
-                                        matTooltipPosition="above"
-                                        (click)="templateDialog()"
-                                    >
-                                        <i class="icon-eye"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Edit Template"
-                                        matTooltipPosition="above"
-                                        (click)="templateEdit()"
-                                    >
-                                        <i class="icon-edit-pencil"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Delete"
-                                        matTooltipPosition="above"
-                                        (click)="deleteVoucherDialog()"
-                                    >
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </div>
-                                <p class="text-ellipsis d-inline-block template-content">
-                                    Created by: Dilpreet Singh Dang
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
-                        <mat-card class="outline-card add-template-wrapper text-center">
-                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cursor-pointer active">
-                                    <i class="icon-favorite-selected"></i>
-                                    Set as Default
-                                </span>
-                                <div class="d-flex column-gap1 justify-content-center">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Preview"
-                                        matTooltipPosition="above"
-                                        (click)="templateDialog()"
-                                    >
-                                        <i class="icon-eye"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Edit Template"
-                                        matTooltipPosition="above"
-                                        (click)="templateEdit()"
-                                    >
-                                        <i class="icon-edit-pencil"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Delete"
-                                        matTooltipPosition="above"
-                                        (click)="deleteVoucherDialog()"
-                                    >
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </div>
-                                <p class="text-ellipsis d-inline-block template-content">
-                                    Created by: Dilpreet Singh Dang
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                </div>
-            </mat-tab>
-            <!-- template-content-end -->
 
             <!-- receipt-content-start -->
             <mat-tab [label]="localeData?.tabs?.receipt" *ngIf="activeTabGroup === 3">
@@ -3318,7 +2755,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element.voucherNumber" matTooltipPosition="above">
                                     {{ element.voucherNumber }}
                                 </td>
                             </ng-container>
@@ -3327,11 +2764,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -3353,7 +2790,7 @@
                                         </button>
                                     </mat-menu>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element.receiptType" matTooltipPosition="above">
                                     {{ element.receiptType }}
                                 </td>
                             </ng-container>
@@ -3380,7 +2817,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element?.account?.customerName" matTooltipPosition="above">
                                     {{ element?.account?.customerName }}
                                 </td>
                             </ng-container>
@@ -3388,7 +2825,7 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.payment_mode_label }}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element.paymentMode?.name }}
                                 </td>
                             </ng-container>
@@ -3396,9 +2833,9 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.invoice_no_label }}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     <ng-container *ngIf="element.adjustments?.length > 0">
-                                        <ng-container *ngFor="let adjustment of element.adjustments">
+                                        <ng-container *ngFor="let adjustment of element.adjustments" [matTooltip]="adjustment?.voucherNumber" matTooltipPosition="above">
                                             {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
                                         </ng-container>
                                     </ng-container>
@@ -3470,7 +2907,6 @@
                 </div>
             </mat-tab>
             <!-- receipt-content-end -->
-
             <!-- payment-content-start -->
             <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
@@ -3621,7 +3057,7 @@
                                         </ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element.voucherNumber }}
                                 </td>
                             </ng-container>
@@ -3630,11 +3066,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -3661,7 +3097,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" [matTooltip]="element?.account?.customerName" matTooltipPosition="above">
                                     {{ element?.account?.customerName }}
                                 </td>
                             </ng-container>
@@ -3679,7 +3115,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <ng-container *ngIf="element.adjustments?.length > 0">
-                                        <ng-container *ngFor="let adjustment of element.adjustments">
+                                        <ng-container *ngFor="let adjustment of element.adjustments" class="text-ellipsis">
                                             {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
                                         </ng-container>
                                     </ng-container>
@@ -3751,7 +3187,6 @@
                 </div>
             </mat-tab>
             <!-- payment-content-end -->
-
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 3 || activeTabGroup === 4">
                 <div *ngIf="activeModule === 'pending'">
@@ -3846,7 +3281,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_particular }}</th>
-                                    <td mat-cell *matCellDef="let element" class="p-0">
+                                    <td mat-cell *matCellDef="let element" class="p-0 text-ellipsis">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>{{ transaction?.particular?.name }}</p>
                                             <p *ngIf="transaction?.inventory?.stock">
@@ -3940,7 +3375,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="description">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_description }}</th>
-                                    <td mat-cell *matCellDef="let element">
+                                    <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                         {{ element?.description ? (element.description | titlecase) : "-" }}
                                     </td>
                                 </ng-container>
@@ -3970,6 +3405,1375 @@
                 </div>
             </mat-tab>
             <!-- pending-content-end -->
+            <!-- setting-content-start -->
+            <!-- ===== HIDE THIS TAB FOR NOW ===== -->
+            <mat-tab
+                [label]="localeData?.tabs?.settings"
+                class="setting-svg"
+                *ngIf="(!isCompany && !isConsolidatedBranch) || queryParams.tabIndex"
+            >
+                <ng-container *ngIf="activeModule === 'settings' || queryParams.tabIndex">
+                    <ng-container *ngIf="voucherApiVersion === 1">
+                        <div class="pd-t15" *ngIf="voucherType !== 'purchase'">
+                            <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
+                        </div>
+                        <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting>
+                    </ng-container>
+                    <ng-container *ngIf="voucherApiVersion === 2">
+                        <form [formGroup]="settingForm">
+                            <mat-tab-group
+                                mat-stretch-tabs="false"
+                                mat-align-tabs="start"
+                                class="tabs-box-wrap pt-3 px-4"
+                                [selectedIndex]="selectedInnerTabIndex"
+                            >
+                                <div
+                                    validateSectionPermission
+                                    [hasPermission]="hasInvoiceSettingPermissions"
+                                    validateSubscription
+                                >
+                                    <!-- general-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 0">
+                                        <ng-template mat-tab-label>
+                                            <i class="icon-chat2"></i>
+                                            {{ localeData?.general }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ localeData?.general }}
+                                                <span class="text-gray font-12">{{
+                                                    localeData?.general_settings_applicable
+                                                }}</span>
+                                            </h4>
+                                            <div>
+                                                <mat-slide-toggle
+                                                    aria-label="enable narration onin voucher"
+                                                    name="enableNarrationOnInvAndVoucher"
+                                                    formControlName="enableNarrationOnInvAndVoucher"
+                                                    class="disable-toggle slide-toggle mb-3"
+                                                    color="primary"
+                                                >
+                                                    {{ localeData?.narration_on_mobile }}
+                                                </mat-slide-toggle>
+                                            </div>
+                                            <div>
+                                                <mat-slide-toggle
+                                                    aria-label="voucher address manual enabled"
+                                                    name="voucherAddressManualEnabled"
+                                                    formControlName="voucherAddressManualEnabled"
+                                                    class="disable-toggle slide-toggle"
+                                                    color="primary"
+                                                >
+                                                    {{ localeData?.add_address_manually_on_voucher }}
+                                                </mat-slide-toggle>
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- general-content-end -->
+                                    <!-- email-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 0">
+                                        <ng-template mat-tab-label>
+                                            <i class="icon-mail"></i>
+                                            {{ commonLocaleData?.app_email }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ localeData?.email_sms }}
+                                                <span class="text-gray font-12">{{
+                                                    localeData?.general_settings_applicable
+                                                }}</span>
+                                            </h4>
+                                            <div
+                                                class="d-flex column-gap1 align-items-center mb-3"
+                                                formGroupName="invoiceSettings"
+                                            >
+                                                <input-field
+                                                    [name]="'invoiceEmail'"
+                                                    [label]="localeData?.from_email"
+                                                    [placeholder]="localeData?.enter_email"
+                                                    [type]="'text'"
+                                                    formControlName="email"
+                                                    class="settings-field"
+                                                    [matSuffixIcon]="
+                                                        settingForm.get('invoiceSettings.emailVerified').value
+                                                            ? 'icon-tick'
+                                                            : 'icon-info'
+                                                    "
+                                                    (onChange)="
+                                                        onChangeEmail(settingForm.get('invoiceSettings.email').value)
+                                                    "
+                                                    [suffixTooltipText]="
+                                                        settingForm.get('invoiceSettings.emailVerified').value
+                                                            ? localeData?.verified
+                                                            : localeData?.unverified
+                                                    "
+                                                    [readonly]="settingForm.get('invoiceSettings.emailVerified').value"
+                                                ></input-field>
+                                                <button
+                                                    *ngIf="!settingForm.get('invoiceSettings.emailVerified').value"
+                                                    mat-stroked-button
+                                                    [disabled]="
+                                                        !isEmailChanged &&
+                                                        (!settingForm.get('invoiceSettings.email').value ||
+                                                            settingForm.get('invoiceSettings.email').value?.length < 4)
+                                                    "
+                                                    (click)="
+                                                        verifyEmail(
+                                                            settingForm.get('invoiceSettings.email').value,
+                                                            'invoice'
+                                                        )
+                                                    "
+                                                >
+                                                    {{ localeData?.verify }}
+                                                </button>
+                                                <span
+                                                    class="text-success"
+                                                    *ngIf="settingForm.get('invoiceSettings.emailVerified').value"
+                                                >
+                                                    {{ localeData?.verified }}
+                                                </span>
+                                                <button
+                                                    mat-stroked-button
+                                                    class="mat-icon-md-btn"
+                                                    [ngClass]="{
+                                                        'delete-icon-opacity':
+                                                            !settingForm.get('invoiceSettings.email').value ||
+                                                            settingForm.get('invoiceSettings.email').value?.length < 4,
+                                                        'cursor-pointer': !(
+                                                            !settingForm.get('invoiceSettings.email').value ||
+                                                            settingForm.get('invoiceSettings.email').value?.length < 4
+                                                        )
+                                                    }"
+                                                    (click)="
+                                                        shouldDeleteEmail('invoice') &&
+                                                            deleteEmail(settingForm.get('invoiceSettings.email').value)
+                                                    "
+                                                >
+                                                    <i class="icon-trash"></i>
+                                                </button>
+                                            </div>
+                                            <span
+                                                formGroupName="companyEmailSettings"
+                                                class="d-flex align-baseline mr-5"
+                                            >
+                                                <mat-slide-toggle
+                                                    aria-label="send email"
+                                                    formControlName="sendThroughGmail"
+                                                    name="sendThroughGmail"
+                                                    class="disable-toggle slide-toggle"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                {{ localeData?.send_email_gmail }}
+                                                <span class="ml-5 integrated-email" *ngIf="!isGmailIntegrated">
+                                                    <a [href]="gmailAuthCodeUrl$ | async">{{
+                                                        localeData?.integrate_gmail
+                                                    }}</a>
+                                                </span>
+                                            </span>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- email-content-end -->
+                                    <!-- estimate-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 0">
+                                        <ng-template mat-tab-label>
+                                            <i class="icon-estimate1"></i>
+                                            {{ localeData?.estimate }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3" formGroupName="estimateSettings">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ localeData?.estimate_quotation }}
+                                            </h4>
+                                            <div class="d-flex column-gap1 mb-3">
+                                                <input-field
+                                                    [name]="'headerName'"
+                                                    [label]="localeData?.heading_name"
+                                                    [placeholder]="localeData?.eg_placeholder"
+                                                    [type]="'text'"
+                                                    formControlName="headerName"
+                                                    [required]="true"
+                                                    [showError]="
+                                                        settingForm?.get('estimateSettings.headerName')?.dirty &&
+                                                        settingForm?.get('estimateSettings.headerName')?.errors
+                                                    "
+                                                    class="settings-field d-block"
+                                                ></input-field>
+                                                <input-field
+                                                    [name]="'name'"
+                                                    [label]="localeData?.default_expiry_days"
+                                                    [placeholder]="'00'"
+                                                    [type]="'text'"
+                                                    [maxlength]="3"
+                                                    [allowDigitsOnly]="true"
+                                                    formControlName="duePeriod"
+                                                    class="settings-field d-block"
+                                                    [matSuffix]="commonLocaleData?.app_days"
+                                                ></input-field>
+                                            </div>
+                                            <label
+                                                >{{ localeData?.estimate_next_step
+                                                }}<span class="red-text">*</span></label
+                                            >
+                                            <mat-radio-group
+                                                formControlName="nextStepToEstimate"
+                                                aria-label="Select an option"
+                                                class="mt-2 mb-3"
+                                            >
+                                                <mat-radio-button color="primary" value="salesorder">{{
+                                                    localeData?.proforma
+                                                }}</mat-radio-button>
+                                                <mat-radio-button color="primary" value="invoice">{{
+                                                    commonLocaleData?.app_invoice
+                                                }}</mat-radio-button>
+                                            </mat-radio-group>
+                                            <mat-slide-toggle
+                                                aria-label="status expiry"
+                                                name="autoChangeStatusOnExp"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoChangeStatusOnExp"
+                                            >
+                                                {{ localeData?.auto_change_status_expiry }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                name="autoWhatsApp"
+                                                aria-label="auto whatsApp"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoWhatsApp"
+                                            >
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.estimate) }}
+                                            </mat-slide-toggle>
+                                            <div class="d-flex align-items-center">
+                                                <mat-slide-toggle
+                                                    name="autoMail"
+                                                    aria-label="auto mail"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="autoMail"
+                                                >
+                                                    {{ localeData?.auto_email_generate }}
+                                                </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer ml-3"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.estimate)"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- estimate-content-end -->
+                                    <!-- proforma-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 0">
+                                        <ng-template mat-tab-label>
+                                            <i class="icon-sales-order"></i>
+                                            {{ localeData?.proforma }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3" formGroupName="proformaSettings">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ localeData?.proforma_invoice }}
+                                            </h4>
+                                            <div class="d-flex column-gap1 mb-3">
+                                                <input-field
+                                                    [name]="'name'"
+                                                    [label]="localeData?.heading_name"
+                                                    [placeholder]="localeData?.eg_placeholder"
+                                                    [type]="'text'"
+                                                    formControlName="headerName"
+                                                    [required]="true"
+                                                    class="settings-field d-block"
+                                                    [showError]="
+                                                        settingForm?.get('proformaSettings.headerName')?.dirty &&
+                                                        settingForm?.get('proformaSettings.headerName')?.errors
+                                                    "
+                                                ></input-field>
+                                                <input-field
+                                                    [name]="'name'"
+                                                    [label]="localeData?.default_expiry_day"
+                                                    [placeholder]="'00'"
+                                                    [maxlength]="3"
+                                                    [allowDigitsOnly]="true"
+                                                    formControlName="duePeriod"
+                                                    [type]="'text'"
+                                                    class="settings-field d-block"
+                                                    [matSuffix]="commonLocaleData?.app_days"
+                                                ></input-field>
+                                            </div>
+                                            <mat-slide-toggle
+                                                aria-label="expiry"
+                                                name="autoChangeStatusOnExp"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoChangeStatusOnExp"
+                                            >
+                                                {{ localeData?.auto_change_status_expiry }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                aria-label="auto whatsApp"
+                                                name="autoWhatsApp"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoWhatsApp"
+                                            >
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.proforma) }}
+                                            </mat-slide-toggle>
+                                            <div class="d-flex align-items-center">
+                                                <mat-slide-toggle
+                                                    aria-label="proforma auto mail"
+                                                    name="autoMail"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="autoMail"
+                                                >
+                                                    {{ localeData?.auto_mail_generate_update }}
+                                                </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer ml-3"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.proforma)"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- proforma-content-end -->
+                                    <!-- invoice-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 0">
+                                        <ng-template mat-tab-label>
+                                            <div class="voucher-svg">
+                                                <svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M16.2426 4.00113L16.2497 2.00002H21.8924L21.8995 7.6498L19.8984 7.65687L19.8913 5.41534L15.5285 9.77819L14.1142 8.36398L18.4771 4.00113H16.2426Z"
+                                                    />
+                                                    <path
+                                                        d="M19 19.1787V9.17865H21V19.1787C21 20.2787 20.1 21.1787 19 21.1787H5C3.9 21.1787 3 20.2787 3 19.1787V5.17865C3 4.07865 3.9 3.17865 5 3.17865H15V5.17865H5V19.1787H19Z"
+                                                    />
+                                                    <path d="M7 17.1787H14V15.1787H7V17.1787Z" />
+                                                    <path d="M7 13.1787H17V11.1787H7V13.1787Z" />
+                                                </svg>
+                                            </div>
+                                            {{ commonLocaleData?.app_invoice }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ commonLocaleData?.app_invoice }}
+                                            </h4>
+                                            <div class="d-flex column-gap1 mb-3">
+                                                <input-field
+                                                    [name]="'name'"
+                                                    [label]="localeData?.default_expiry_days"
+                                                    [placeholder]="'00'"
+                                                    [type]="'text'"
+                                                    class="settings-field d-block mb-3"
+                                                    maxlength="3"
+                                                    formControlName="duePeriod"
+                                                    [allowDigitsOnly]="true"
+                                                    [matSuffix]="commonLocaleData?.app_days"
+                                                ></input-field>
+                                                <giddh-datepicker
+                                                    type="text"
+                                                    (keydown.enter)="$event.preventDefault()"
+                                                    [label]="localeData?.invoice_lock_date"
+                                                    [placeholder]="commonLocaleData?.app_select_date"
+                                                    formControlName="lockDate"
+                                                    name="voucherDate"
+                                                    [showToggleIcon]="false"
+                                                    [appearance]="'outline'"
+                                                    class="settings-field d-block"
+                                                >
+                                                </giddh-datepicker>
+                                            </div>
+                                            <mat-slide-toggle
+                                                aria-label="show seal"
+                                                name="invoiceStatusPayment"
+                                                class="disable-toggle slide-toggle d-block my-3"
+                                                formControlName="showSeal"
+                                                color="primary"
+                                                checked
+                                            >
+                                                {{ localeData?.show_seal }}
+                                            </mat-slide-toggle>
+                                            <div class="mb-3 d-flex align-items-center">
+                                                <mat-slide-toggle
+                                                    aria-label="invoice mail"
+                                                    name="autoMail"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="autoMail"
+                                                >
+                                                    {{ localeData?.auto_mail_update }}
+                                                </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer ml-3"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.sales)"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
+                                            </div>
+                                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                                <mat-slide-toggle
+                                                    name="useCustomInvoiceNumber"
+                                                    aria-label="invoice no"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="useCustomInvoiceNumber"
+                                                >
+                                                    {{ localeData?.custom_invoice_no }}
+                                                </mat-slide-toggle>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomInvoiceNumber').value
+                                                    "
+                                                    [name]="'branch'"
+                                                    [label]="localeData?.branch_prefix"
+                                                    formControlName="branchInvoiceNumberPrefix"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomInvoiceNumber').value
+                                                    "
+                                                    [name]="'sub'"
+                                                    [label]="localeData?.sub_prefix"
+                                                    formControlName="invoiceNumberPrefix"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomInvoiceNumber').value
+                                                    "
+                                                    [name]="'initialInvoiceNumber'"
+                                                    [label]="localeData?.initial_no"
+                                                    formControlName="initialInvoiceNumber"
+                                                    [placeholder]="'00'"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                            </div>
+                                            <mat-slide-toggle
+                                                aria-label="delete entries"
+                                                name="autoDeleteEntries"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoDeleteEntries"
+                                            >
+                                                {{ localeData?.auto_delete_entries }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                aria-label="invoice sale"
+                                                name="salesRoundOff"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="salesRoundOff"
+                                            >
+                                                {{ localeData?.apply_sales_round_off }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                aria-label="auto whatsapp invoice"
+                                                name="autoWhatsAppInvoice"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoWhatsAppInvoice"
+                                            >
+                                                {{ getWhatsappSettingLabel("invoice") }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                name="autoPaid"
+                                                aria-label="generate voucher"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoPaid"
+                                            >
+                                                {{ localeData?.run_auto_paid_for_all_the_accounts }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                *ngIf="settingForm.get('invoiceSettings.autoPaid').value"
+                                                aria-label="auto generate voucher from entry"
+                                                name="autoGenerateVoucherFromEntry"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoGenerateVoucherFromEntry"
+                                            >
+                                                {{
+                                                    localeData?.automatically_generate_voucher_for_the_entries_present_in_the_ledger
+                                                }}
+                                            </mat-slide-toggle>
+                                            <div *ngIf="activeCompany?.countryV2?.alpha2CountryCode === 'IN'">
+                                                <div class="mb-3 d-flex align-items-center column-gap15">
+                                                    <mat-slide-toggle
+                                                        aria-label="gst invoice"
+                                                        name="gstEInvoiceEnable"
+                                                        class="disable-toggle slide-toggle d-block"
+                                                        color="primary"
+                                                        formControlName="gstEInvoiceEnable"
+                                                        (change)="handleEInvoiceChange($event)"
+                                                    >
+                                                        {{ localeData?.e_invoice_authentication_label }}
+                                                    </mat-slide-toggle>
+                                                    <ng-container
+                                                        *ngIf="
+                                                            settingForm.get('invoiceSettings.gstEInvoiceEnable').value
+                                                        "
+                                                    >
+                                                        <input-field
+                                                            [name]="'userName'"
+                                                            [label]="localeData?.e_invoice_username_label"
+                                                            formControlName="gstEInvoiceUserName"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'password'"
+                                                            [label]="localeData?.e_invoice_password_label"
+                                                            formControlName="gstEInvoiceUserPassword"
+                                                            [type]="'password'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'password'"
+                                                            [label]="localeData?.e_invoice_gstin_label"
+                                                            formControlName="gstEInvoiceGstin"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                    </ng-container>
+                                                </div>
+                                                <ng-container
+                                                    *ngIf="settingForm.get('invoiceSettings.gstEInvoiceEnable').value"
+                                                >
+                                                    <mat-slide-toggle
+                                                        aria-label="generate einvoice"
+                                                        name="generateEinvoiceShowPopUp"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="generateEinvoiceShowPopUp"
+                                                    >
+                                                        {{ localeData?.enable_confirmation_pop_up_to_create_e_invoice }}
+                                                    </mat-slide-toggle>
+                                                    <mat-slide-toggle
+                                                        aria-label="generate eway bill"
+                                                        name="generateAutoEWayBill"
+                                                        class="disable-toggle slide-toggle d-block"
+                                                        color="primary"
+                                                        formControlName="generateAutoEWayBill"
+                                                    >
+                                                        {{ localeData?.generate_e_way_bill }}
+                                                    </mat-slide-toggle>
+                                                </ng-container>
+                                                <div class="pd-l1">
+                                                    <restricted-module-message
+                                                        [restrictedModule]="restrictedModules.EInvoice"
+                                                        (onUpgradePlan)="buyPlan($event)"
+                                                    >
+                                                    </restricted-module-message>
+                                                </div>
+                                            </div>
+
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- invoice-content-end -->
+                                    <!-- receipt-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 3">
+                                        <ng-template mat-tab-label>
+                                            <div class="voucher-svg">
+                                                <svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
+                                                    />
+                                                    <path
+                                                        d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
+                                                    />
+                                                    <path d="M7 18H14V16H7V18Z" />
+                                                </svg>
+                                            </div>
+                                            {{ commonLocaleData?.app_receipt }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ commonLocaleData?.app_receipt }}
+                                            </h4>
+                                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                                <mat-slide-toggle
+                                                    name=""
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="useCustomReceiptNumber"
+                                                >
+                                                    {{ localeData?.custom_receipt_no }}
+                                                </mat-slide-toggle>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomReceiptNumber').value
+                                                    "
+                                                    [name]="'branch'"
+                                                    [label]="localeData?.branch_prefix"
+                                                    formControlName="branchReceiptNumberPrefix"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomReceiptNumber').value
+                                                    "
+                                                    [name]="'sub'"
+                                                    [label]="localeData?.sub_prefix"
+                                                    formControlName="receiptNumberPrefix"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomReceiptNumber').value
+                                                    "
+                                                    [name]="'initialReceiptNumber'"
+                                                    [label]="localeData?.initial_no"
+                                                    formControlName="initialReceiptNumber"
+                                                    [placeholder]="'00'"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                            </div>
+                                            <mat-slide-toggle
+                                                aria-label="auto whatsapp receipt"
+                                                name="autoWhatsAppReceipt"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoWhatsAppReceipt"
+                                            >
+                                                {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.receipt) }}
+                                            </mat-slide-toggle>
+                                            <div class="d-flex align-items-center">
+                                                <mat-slide-toggle
+                                                    aria-label="auto mail receipt"
+                                                    name="autoMailReceipt"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="autoMailReceipt"
+                                                >
+                                                    {{ localeData?.auto_mail_generate_update }}
+                                                </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer ml-3"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.receipt)"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- receipt-content-end -->
+                                    <!-- debit-note-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 1">
+                                        <ng-template mat-tab-label>
+                                            <div class="voucher-svg">
+                                                <svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
+                                                    />
+                                                    <path
+                                                        d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
+                                                    />
+                                                    <path d="M7 18H14V16H7V18Z" />
+                                                </svg>
+                                            </div>
+                                            {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                                            </h4>
+                                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                                <mat-slide-toggle
+                                                    aria-label="debit no"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="useCustomDebitNoteNumber"
+                                                >
+                                                    {{ localeData?.custom_debit_note_no }}
+                                                </mat-slide-toggle>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomDebitNoteNumber')
+                                                            .value
+                                                    "
+                                                    [name]="'branchDebitNoteNumberPrefix'"
+                                                    [label]="localeData?.branch_prefix"
+                                                    [type]="'text'"
+                                                    formControlName="branchDebitNoteNumberPrefix"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomDebitNoteNumber')
+                                                            .value
+                                                    "
+                                                    [name]="'debitNoteNumberPrefix'"
+                                                    [label]="localeData?.sub_prefix"
+                                                    formControlName="debitNoteNumberPrefix"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomDebitNoteNumber')
+                                                            .value
+                                                    "
+                                                    [name]="'initialDebitNoteNumber'"
+                                                    [label]="localeData?.initial_no"
+                                                    [placeholder]="'00'"
+                                                    [type]="'text'"
+                                                    formControlName="initialDebitNoteNumber"
+                                                ></input-field>
+                                            </div>
+                                            <mat-slide-toggle
+                                                aria-label="auto whatsapp debit  note"
+                                                name="autoWhatsAppDebitNote"
+                                                formControlName="autoWhatsAppDebitNote"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                            >
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.debitNote) }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                aria-label="debit note round off"
+                                                name="debitNoteRoundOff"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="debitNoteRoundOff"
+                                            >
+                                                {{ localeData?.apply_debit_note_round_off }}
+                                            </mat-slide-toggle>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <mat-slide-toggle
+                                                    aria-label="debit note"
+                                                    name="autoMailDebitNote"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="autoMailDebitNote"
+                                                >
+                                                    {{ localeData?.auto_email_generate }}
+                                                </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer ml-3"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.debitNote)"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- debit-note-content-end -->
+                                    <!-- credit-note-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 1">
+                                        <ng-template mat-tab-label>
+                                            <div class="voucher-svg">
+                                                <svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
+                                                    />
+                                                    <path
+                                                        d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
+                                                    />
+                                                    <path d="M7 18H14V16H7V18Z" />
+                                                </svg>
+                                            </div>
+                                            {{ commonLocaleData?.app_voucher_types?.credit_note }}
+                                        </ng-template>
+                                        <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                {{ commonLocaleData?.app_voucher_types?.credit_note }}
+                                            </h4>
+                                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                                <mat-slide-toggle
+                                                    aria-label="custom invoice"
+                                                    name="useCustomCreditNoteNumber"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="useCustomCreditNoteNumber"
+                                                >
+                                                    {{ localeData?.custom_credit_note_no }}
+                                                </mat-slide-toggle>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomCreditNoteNumber')
+                                                            .value
+                                                    "
+                                                    [name]="'branchCreditNoteNumberPrefix'"
+                                                    [label]="localeData?.branch_prefix"
+                                                    [type]="'text'"
+                                                    formControlName="branchCreditNoteNumberPrefix"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomCreditNoteNumber')
+                                                            .value
+                                                    "
+                                                    [name]="'creditNoteNumberPrefix'"
+                                                    [label]="localeData?.sub_prefix"
+                                                    formControlName="creditNoteNumberPrefix"
+                                                    [type]="'text'"
+                                                ></input-field>
+                                                <input-field
+                                                    *ngIf="
+                                                        settingForm.get('invoiceSettings.useCustomCreditNoteNumber')
+                                                            .value
+                                                    "
+                                                    [name]="'initialCreditNoteNumber'"
+                                                    [label]="localeData?.initial_no"
+                                                    [placeholder]="'00'"
+                                                    [type]="'text'"
+                                                    formControlName="initialCreditNoteNumber"
+                                                ></input-field>
+                                            </div>
+                                            <mat-slide-toggle
+                                                aria-label="credit note round off"
+                                                name="creditNoteRoundOff"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="creditNoteRoundOff"
+                                            >
+                                                {{ localeData?.apply_credit_note_round_off }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                aria-label="credit note whatsapp"
+                                                name="voucher"
+                                                formControlName="autoWhatsAppCreditNote"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                            >
+                                                {{ getWhatsappSettingLabel(voucherTypeEnum.creditNote) }}
+                                            </mat-slide-toggle>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <mat-slide-toggle
+                                                    aria-label="credit note auto mail"
+                                                    name="autoMailCreditNote"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="autoMailCreditNote"
+                                                >
+                                                    {{ localeData?.auto_email_generate }}
+                                                </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer ml-3"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.creditNote)"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </mat-tab>
+                                    <!-- credit-note-content-end -->
+                                </div>
+                                <!-- integration-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 2">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-mail"></i>
+                                        {{ localeData?.integration }}
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="purchaseBillSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            {{ localeData?.integration }}
+                                            <span class="text-gray font-12"> {{ localeData?.settings_note }}</span>
+                                        </h4>
+                                        <div class="d-flex column-gap1 align-items-center mb-3">
+                                            <input-field
+                                                [name]="'invoiceEmail'"
+                                                [label]="localeData?.from_email"
+                                                [type]="'text'"
+                                                formControlName="email"
+                                                class="settings-field"
+                                                [matSuffixIcon]="
+                                                    settingForm.get('purchaseBillSettings.emailVerified').value
+                                                        ? 'icon-tick'
+                                                        : 'icon-info'
+                                                "
+                                                (onChange)="
+                                                    onChangeEmail(settingForm.get('purchaseBillSettings.email').value)
+                                                "
+                                                [suffixTooltipText]="
+                                                    settingForm.get('purchaseBillSettings.emailVerified').value
+                                                        ? localeData?.verified
+                                                        : localeData?.unverified
+                                                "
+                                                [readonly]="settingForm.get('purchaseBillSettings.emailVerified').value"
+                                            ></input-field>
+                                            <button
+                                                *ngIf="!settingForm.get('purchaseBillSettings.emailVerified').value"
+                                                mat-stroked-button
+                                                [disabled]="
+                                                    !isEmailChanged &&
+                                                    (!settingForm.get('purchaseBillSettings.email').value ||
+                                                        settingForm.get('purchaseBillSettings.email').value?.length <
+                                                            4 ||
+                                                        settingForm.get('purchaseBillSettings.emailVerified').value)
+                                                "
+                                                (click)="
+                                                    verifyEmail(
+                                                        settingForm.get('purchaseBillSettings.email').value,
+                                                        voucherTypeEnum.purchase
+                                                    )
+                                                "
+                                            >
+                                                {{ localeData?.verify }}
+                                            </button>
+                                            <span
+                                                class="text-success"
+                                                *ngIf="settingForm.get('purchaseBillSettings.emailVerified').value"
+                                            >
+                                                {{ localeData?.verified }}
+                                            </span>
+                                            <button
+                                                mat-stroked-button
+                                                class="mat-icon-md-btn"
+                                                [ngClass]="{
+                                                    'delete-icon-opacity':
+                                                        !settingForm.get('purchaseBillSettings.email').value ||
+                                                        settingForm.get('purchaseBillSettings.email').value?.length < 4,
+                                                    'cursor-pointer': !(
+                                                        !settingForm.get('purchaseBillSettings.email').value ||
+                                                        settingForm.get('purchaseBillSettings.email').value?.length < 4
+                                                    )
+                                                }"
+                                                (click)="
+                                                    shouldDeleteEmail() &&
+                                                        deleteEmail(settingForm.get('purchaseBillSettings.email').value)
+                                                "
+                                            >
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="d-flex column-gap10 align-baseline mr-5">
+                                            <mat-slide-toggle
+                                                aria-label="send email"
+                                                formControlName="sendThroughGmail"
+                                                name="sendGmail"
+                                                class="disable-toggle slide-toggle"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            {{ localeData?.send_email_gmail }}
+                                            <span class="ml-3 integrated-email" *ngIf="!isGmailIntegrated">
+                                                <a [href]="gmailAuthCodeUrl$ | async">{{
+                                                    localeData?.integrate_gmail
+                                                }}</a>
+                                            </span>
+                                        </div>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- integration-content-end -->
+                                <!-- purchase-order-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 2">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-sales-order"></i>
+                                        {{ localeData?.pur_order }}
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="purchaseBillSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            {{ localeData?.purchase_order }}
+                                        </h4>
+                                        <div class="d-flex column-gap1 mb-3">
+                                            <input-field
+                                                [name]="'name'"
+                                                [label]="localeData?.default_expiry_days"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                                class="settings-field d-block"
+                                                maxlength="3"
+                                                formControlName="poDuePeriod"
+                                                [allowDigitsOnly]="true"
+                                                [matSuffix]="commonLocaleData?.app_days"
+                                            ></input-field>
+                                        </div>
+                                        <mat-slide-toggle
+                                            aria-label="change po status on expiry"
+                                            name="changePOStatusOnExpiry"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="changePOStatusOnExpiry"
+                                        >
+                                            {{ localeData?.auto_change_status }}
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            aria-label="purchase order whatsapp"
+                                            name="poAutoWhatsApp"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="poAutoWhatsApp"
+                                        >
+                                            {{ getWhatsappSettingLabel("purchase order") }}
+                                        </mat-slide-toggle>
+                                        <div class="mb-3 d-flex align-items-center column-gap15">
+                                            <mat-slide-toggle
+                                                aria-label="custom po number"
+                                                name="useCustomPONumber"
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="useCustomPONumber"
+                                            >
+                                                {{ localeData?.custom_po_number }}
+                                            </mat-slide-toggle>
+                                            <input-field
+                                                *ngIf="settingForm.get('purchaseBillSettings.useCustomPONumber').value"
+                                                [name]="'poNumberPrefix'"
+                                                [label]="localeData?.sub_prefix"
+                                                formControlName="poNumberPrefix"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="settingForm.get('purchaseBillSettings.useCustomPONumber').value"
+                                                [name]="'initialPONumber'"
+                                                [label]="localeData?.initial_no"
+                                                formControlName="initialPONumber"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                        </div>
+                                        <div class="d-flex column-gap1 mb-3">
+                                            {{ commonLocaleData?.app_custom_email_template }}
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('purchase order')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- purchase-order-content-end -->
+                                <!-- purchase-bill-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 2">
+                                    <ng-template mat-tab-label>
+                                        <div class="voucher-svg">
+                                            <svg
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 25 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M17.0463 13C17.7963 13 18.4563 12.59 18.7963 11.97L22.3763 5.48C22.7463 4.82 22.2663 4 21.5063 4H6.70634L5.76634 2H2.49634V4H4.49634L8.09634 11.59L6.74634 14.03C6.01634 15.37 6.97634 17 8.49634 17H20.4963V15H8.49634L9.59634 13H17.0463ZM7.65634 6H19.8063L17.0463 11H10.0263L7.65634 6ZM8.49634 18C7.39634 18 6.50634 18.9 6.50634 20C6.50634 21.1 7.39634 22 8.49634 22C9.59634 22 10.4963 21.1 10.4963 20C10.4963 18.9 9.59634 18 8.49634 18ZM18.4963 18C17.3963 18 16.5063 18.9 16.5063 20C16.5063 21.1 17.3963 22 18.4963 22C19.5963 22 20.4963 21.1 20.4963 20C20.4963 18.9 19.5963 18 18.4963 18Z"
+                                                />
+                                            </svg>
+                                        </div>
+                                        {{ localeData?.pur_bill }}
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="purchaseBillSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">{{ localeData?.purchase_bill }}</h4>
+                                        <giddh-datepicker
+                                            type="text"
+                                            (keydown.enter)="$event.preventDefault()"
+                                            [label]="localeData?.bill_lock_date"
+                                            [placeholder]="commonLocaleData?.app_select_date"
+                                            name="voucherDate"
+                                            formControlName="lockDate"
+                                            [showToggleIcon]="false"
+                                            [appearance]="'outline'"
+                                            class="settings-field d-block mb-3"
+                                        >
+                                        </giddh-datepicker>
+                                        <mat-slide-toggle
+                                            name="enableNarration"
+                                            aria-label="enable narration"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="enableNarration"
+                                        >
+                                            {{ localeData?.show_narration_ledger }}
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            name="enableVoucherDownload"
+                                            aria-label="enable voucher download"
+                                            formControlName="enableVoucherDownload"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                        >
+                                            {{ localeData?.enable_voucher_download }}
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle
+                                            aria-label="auto whatsapp"
+                                            name="autoWhatsApp"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            formControlName="autoWhatsApp"
+                                        >
+                                            {{ getWhatsappSettingLabel("purchase bill") }}
+                                        </mat-slide-toggle>
+                                        <ng-container formGroupName="invoiceSettings">
+                                            <mat-slide-toggle
+                                                aria-label="purchase roundOff"
+                                                name="purchaseRoundOff"
+                                                formControlName="purchaseRoundOff"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                            >
+                                                {{ localeData?.apply_purchase_round_off }}
+                                            </mat-slide-toggle>
+                                            <mat-slide-toggle
+                                                name="generateAutoPurchaseNumber"
+                                                formControlName="generateAutoPurchaseNumber"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                aria-label="generate purchase number"
+                                            >
+                                                {{ localeData?.generate_auto_purchase_number }}
+                                            </mat-slide-toggle>
+                                        </ng-container>
+                                        <div class="d-flex column-gap1 mb-3">
+                                            {{ commonLocaleData?.app_custom_email_template }}
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog(voucherTypeEnum.purchase)"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- purchase-bill-content-end -->
+                                <!-- payment-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 4">
+                                    <ng-template mat-tab-label>
+                                        <div class="voucher-svg">
+                                            <svg
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M15.415 8.085L13.995 9.495L10.005 5.505L13.995 1.505L15.415 2.915L13.835 4.505L19 4.505V4.5H21V14H7V12H19V6.505L13.835 6.505L15.415 8.085Z"
+                                                />
+                                                <path
+                                                    d="M19 16H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H9V6H5V20H19V16Z"
+                                                />
+                                                <path d="M7 18H14V16H7V18Z" />
+                                            </svg>
+                                        </div>
+                                        {{ commonLocaleData?.app_payment }}
+                                    </ng-template>
+                                    <div class="tabs-box-content py-3" formGroupName="invoiceSettings">
+                                        <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            {{ commonLocaleData?.app_payment }}
+                                        </h4>
+                                        <div class="mb-3 d-flex align-items-center column-gap15">
+                                            <mat-slide-toggle
+                                                name="useCustomPaymentNumber"
+                                                aria-label="custom payment no"
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="useCustomPaymentNumber"
+                                            >
+                                                {{ localeData?.custom_payment_no }}
+                                            </mat-slide-toggle>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomPaymentNumber').value"
+                                                [name]="'branchPaymentNumberPrefix'"
+                                                [label]="localeData?.branch_prefix"
+                                                formControlName="branchPaymentNumberPrefix"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomPaymentNumber').value"
+                                                [name]="'paymentNumberPrefix'"
+                                                [label]="localeData?.sub_prefix"
+                                                formControlName="paymentNumberPrefix"
+                                                [type]="'text'"
+                                            ></input-field>
+                                            <input-field
+                                                *ngIf="settingForm.get('invoiceSettings.useCustomPaymentNumber').value"
+                                                [name]="'initialPaymentNumber'"
+                                                [label]="localeData?.initial_no"
+                                                formControlName="initialPaymentNumber"
+                                                [placeholder]="'00'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-3">
+                                            <mat-slide-toggle
+                                                name="autoMailPayment"
+                                                class="disable-toggle slide-toggle d-block"
+                                                color="primary"
+                                                formControlName="autoMailPayment"
+                                                aria-label="auto mail payment"
+                                            >
+                                                {{ localeData?.auto_email_generate }}
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:;"
+                                                class="cursor-pointer ml-3"
+                                                (click)="openCustomEmailDialog(voucherTypeEnum.payment)"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
+                                        </div>
+                                        <mat-slide-toggle
+                                            name="autoWhatsAppPayment"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            aria-label="auto whatsapp payment"
+                                            formControlName="autoWhatsAppPayment"
+                                        >
+                                            {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.payment) }}
+                                        </mat-slide-toggle>
+                                        <!--  Confirmed with Kriti that she was not aware of this setting due to the comment.
+                                        <mat-slide-toggle
+                                            name="createPaymentEntry"
+                                            class="disable-toggle slide-toggle d-block mb-3"
+                                            color="primary"
+                                            aria-label="auto create payment entry"
+                                            formControlName="createPaymentEntry"
+                                        >
+                                            Create payment entry
+                                        </mat-slide-toggle> -->
+                                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                    </div>
+                                </mat-tab>
+                                <!-- payment-content-end -->
+                            </mat-tab-group>
+                        </form>
+                    </ng-container>
+                </ng-container>
+            </mat-tab>
+            <!-- setting-content-end -->
+
+            <!-- template-content-start -->
+            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
+                <div class="pd-t15" *ngIf="activeModule === 'templates'">
+                    <edit-invoice></edit-invoice>
+                </div>
+                <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
+                    <dropdown-field
+                        [name]="'design'"
+                        [label]="'Select Design for'"
+                        [placeholder]="'Select'"
+                        class="w-50 template-design d-block"
+                    >
+                    </dropdown-field>
+                    <div class="template-wrapper mt-3">
+                        <mat-card class="outline-card add-template-wrapper">
+                            <mat-card-content class="pt-3">
+                                <h3 class="fonr-16">Design Template</h3>
+                                <p class="my-3">
+                                    Click to add a template from our gallery. You can customize the template title,
+                                    columns,and headers in line item table.
+                                </p>
+                                <button mat-stroked-button color="primary" (click)="templateEdit()">Add New</button>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cursor-pointer">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="mat-icon-md-btn"
+                                        matTooltip="Preview"
+                                        matTooltipPosition="above"
+                                        (click)="templateDialog()"
+                                    >
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="mat-icon-md-btn"
+                                        matTooltip="Edit Template"
+                                        matTooltipPosition="above"
+                                        (click)="templateEdit()"
+                                    >
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="mat-icon-md-btn"
+                                        matTooltip="Delete"
+                                        matTooltipPosition="above"
+                                        (click)="deleteVoucherDialog()"
+                                    >
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">
+                                    Created by: Dilpreet Singh Dang
+                                </p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cursor-pointer active">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="mat-icon-md-btn"
+                                        matTooltip="Preview"
+                                        matTooltipPosition="above"
+                                        (click)="templateDialog()"
+                                    >
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="mat-icon-md-btn"
+                                        matTooltip="Edit Template"
+                                        matTooltipPosition="above"
+                                        (click)="templateEdit()"
+                                    >
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="mat-icon-md-btn"
+                                        matTooltip="Delete"
+                                        matTooltipPosition="above"
+                                        (click)="deleteVoucherDialog()"
+                                    >
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">
+                                    Created by: Dilpreet Singh Dang
+                                </p>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- template-content-end -->
         </mat-tab-group>
         <div class="video-link position-absolute" *ngIf="activeTabGroup === 0 && selectedTabIndex === 2">
             <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
@@ -4089,8 +4893,8 @@
     <!-- setting-tab-btn -->
     <ng-template #actionButtons>
         <div class="d-flex column-gap1 mt-4">
-            <button mat-stroked-button color="primary">{{ commonLocaleData?.app_save }}</button>
-            <button mat-stroked-button>{{ commonLocaleData?.app_payment_status?.paid }}</button>
+            <button (click)="onSubmit()" mat-stroked-button color="primary">{{ commonLocaleData?.app_save }}</button>
+            <button (click)="resetForm()" mat-stroked-button>{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </ng-template>
 

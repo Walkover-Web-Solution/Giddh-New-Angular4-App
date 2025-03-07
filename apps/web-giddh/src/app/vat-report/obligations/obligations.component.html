@@ -100,17 +100,22 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                     <section *ngIf="!tableDataSource?.length">
-                        <div *ngIf="getFormControl('taxNumber').value">
-                            <div *ngIf="connectToHMRCUrl" class="position-center position-absolute">
-                                <a mat-stroked-button color="primary" [href]="connectToHMRCUrl">
-                                    {{ localeData?.connect_to_hmrc }}
-                                </a>
+                        <div *ngIf="hasTaxNumber">
+                            <div *ngIf="connectToHMRCUrl || isTaxRestrictedModule" class="position-center position-absolute">
+                                <div class="text-center">
+                                    <a [disabled]="isTaxRestrictedModule" mat-stroked-button color="primary" [href]="connectToHMRCUrl">
+                                        {{ localeData?.connect_to_hmrc }}
+                                    </a>
+                                </div>
+                                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                                    (onUpgradePlan)="buyPlan($event)">
+                                </restricted-module-message>
                             </div>
-                            <div class="no-data"  *ngIf="!connectToHMRCUrl">
+                            <div class="no-data"  *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
                                 <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                             </div>
                         </div>
-                        <div class="no-data" *ngIf="!getFormControl('taxNumber').value">
+                        <div class="no-data" *ngIf="hasTaxNumber === false">
                             <h1>{{ localeData?.no_vrn_available }}</h1>
                         </div>
                     </section>
