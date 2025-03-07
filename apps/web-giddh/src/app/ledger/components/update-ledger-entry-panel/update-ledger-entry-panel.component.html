@@ -2315,13 +2315,13 @@
                                                 "
                                             >
                                                 <div class="form-group mr-b05">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [label]="commonLocaleData?.app_reference_invoice"
                                                         *ngIf="voucherApiVersion === 2"
                                                         [id]="'update-ledger-invoice-voucher-number'"
                                                         [options]="invoiceList"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [defaultValue]="selectedInvoice"
+                                                        [labelValue]="selectedInvoice"
                                                         [ngClass]="{
                                                             'read-only':
                                                                 !isPettyCash &&
@@ -2383,7 +2383,7 @@
                                                                 </div>
                                                             </a>
                                                         </ng-template>
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                     <!-- <sh-select
                                                         *ngIf="voucherApiVersion !== 2"
                                                         id="update-ledger-invoice-voucher-number"
@@ -2896,7 +2896,6 @@
                     </span>
                 </div>
             </div>
-
             <div *ngIf="vm.selectedLedger.touristSchemeApplicable">
                 <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
                     <input-field

@@ -65,6 +65,7 @@ import { CreateDiscountComponent } from '../../../theme/create-discount/create-d
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
 import { CompanyActions } from '../../../actions/company.actions';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -1716,9 +1717,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public touristSchemeApplicableToggle(event): void {
+    public touristSchemeApplicableToggle(event: MatCheckbox): void {
         this.vm.selectedLedger.passportNumber = '';
-        this.vm.selectedLedger.touristSchemeApplicable = event?.value;
+        this.vm.selectedLedger.touristSchemeApplicable = event?.checked;
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
