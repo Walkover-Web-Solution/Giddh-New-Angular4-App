@@ -215,6 +215,7 @@
                                                                 [showClear]="false"
                                                                 [defaultValue]="txn.particular.name"
                                                                 [placeholder]="localeData?.to_select_accounts"
+                                                                [cssClass]="'bg-transparent'"
                                                             >
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
@@ -482,6 +483,7 @@
                                                     class="col-3 d-flex align-items-center custom-input-field"
                                                 >
                                                     <giddh-datepicker
+                                                        class="width-datepicker"
                                                         [showToggleIcon]="false"
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
@@ -517,7 +519,7 @@
                                                             >
                                                             <select-field
                                                                 [id]="'credit-select-' + i"
-                                                                [cssClass]="'form-control'"
+                                                                [cssClass]="'form-control bg-transparent'"
                                                                 class="w-100"
                                                                 [showCreateNew]="true"
                                                                 [showKeyboardCommand]="commonLocaleData?.app_alt_c"
@@ -899,6 +901,7 @@
                                                         [showClear]="false"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.to_select_accounts"
+                                                        [cssClass]="'bg-transparent'"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <ng-container *ngIf="!option.additional?.stock">
@@ -1155,6 +1158,7 @@
                                             class="col-3 d-flex align-items-center custom-input-field"
                                         >
                                             <giddh-datepicker
+                                                class="width-datepicker"
                                                 [showToggleIcon]="false"
                                                 [disabled]="
                                                     isEinvoiceGenerated ||
@@ -1189,7 +1193,7 @@
                                                     >
                                                     <select-field
                                                         [id]="'credit-select-' + i"
-                                                        [cssClass]="'form-control'"
+                                                        [cssClass]="'form-control bg-transparent'"
                                                         class="w-100"
                                                         [showCreateNew]="true"
                                                         [showKeyboardCommand]="commonLocaleData?.app_alt_c"
@@ -1550,7 +1554,7 @@
                         "
                     >
                         <div
-                            class="width-100 total-detail-table align-items-baseline"
+                            class="width-100 total-detail-table align-items-baseline column-gap1"
                             [ngClass]="{ 'add-multicurrency': vm.isMultiCurrencyAvailable }"
                         >
                             <ng-template [ngIf]="vm.showNewEntryPanel && vm.stockTrxEntry">
@@ -1678,7 +1682,7 @@
                                     [prefix]="vm.selectedPrefixForCurrency"
                                     [suffix]="vm.selectedSuffixForCurrency"
                                     [(ngModel)]="vm.advanceReceiptAmount"
-                                    [cssClass]="'text-right'"
+                                    [cssClass]="'text-right bg-transparent'"
                                 ></input-field>
                                 <input-field
                                     [label]="commonLocaleData?.app_amount"
@@ -1691,7 +1695,7 @@
                                     [id]="'update-ledger-amount'"
                                     *ngIf="!isAdvanceReceipt"
                                     [type]="'text'"
-                                    [cssClass]="'text-right'"
+                                    [cssClass]="'text-right bg-transparent'"
                                     [name]="'amount'"
                                     [mask]="vm.inputMaskFormat"
                                     [autocomplete]="'off'"
@@ -1745,7 +1749,7 @@
                                         (vm.isPaymentReceipt &&
                                             vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                 "
-                                class="text-right table-amount"
+                                class="text-right min-width-0"
                             >
                                 <span auto-close="outsideClick">
                                     <update-ledger-discount
@@ -1768,6 +1772,7 @@
                                         (hideOtherPopups)="hideTax()"
                                         [readonly]="isEinvoiceGenerated"
                                         (createNewDiscount)="showCreateDiscountDialog()"
+                                        [cssClass]="'bg-transparent'"
                                     >
                                     </update-ledger-discount>
                                 </span>
@@ -1814,7 +1819,7 @@
                                         ? 'disabled'
                                         : null
                                 "
-                                class="dropdown-container dropdown-left text-right table-amount"
+                                class="dropdown-container dropdown-left text-right min-width-0"
                                 *ngIf="
                                     (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
                                     (vm.companyTaxesList$ | async)?.length &&
@@ -1854,6 +1859,7 @@
                                         (taxAmountSumEvent)="calculateTax()"
                                         (createNewTax)="showCreateTaxDialog()"
                                         [readonly]="isEinvoiceGenerated"
+                                        [cssClass]="'bg-transparent'"
                                     >
                                     </update-ledger-tax-control>
                                 </span>
@@ -2049,7 +2055,7 @@
                                         rows="3"
                                         matInput
                                         [(ngModel)]="vm.selectedLedger.description"
-                                        class="form-control mat-field-border"
+                                        class="form-control mat-field-border bg-transparent"
                                         [placeholder]="commonLocaleData?.app_description"
                                         [disabled]="
                                             !isPettyCash &&
@@ -2243,7 +2249,7 @@
                                     <table class="xs-table-block mb-1">
                                         <tr class="d-flex align-items-center flex-wrap">
                                             <td class="select2-parent pd-r1">
-                                                <div class="form-group mr-b05">
+                                                <div class="form-group mrB15">
                                                     <dropdown-field
                                                         [label]="commonLocaleData?.app_voucher_type"
                                                         [id]="'update-ledger-voucher-type-default'"
@@ -2264,7 +2270,7 @@
                                                                     isConsolidatedBranch) &&
                                                                 branches?.length > 1)
                                                         "
-                                                        [cssClass]="'width-115'"
+                                                        [cssClass]="'width-115 bg-transparent'"
                                                     ></dropdown-field>
                                                 </div>
                                             </td>
@@ -2281,7 +2287,7 @@
                                                         vm.selectedLedger?.voucher?.shortCode == 'jr')
                                                 "
                                             >
-                                                <div class="form-group mr-b05">
+                                                <div class="form-group mrB15">
                                                     <input-field
                                                         [label]="commonLocaleData?.app_number"
                                                         *ngIf="vm.selectedLedger?.voucher?.shortCode === 'sal'"
@@ -2314,7 +2320,7 @@
                                                     vm.selectedLedger?.voucher?.shortCode == 'debit note'
                                                 "
                                             >
-                                                <div class="form-group mr-b05">
+                                                <div class="form-group mrB15">
                                                     <reactive-dropdown-field
                                                         [label]="commonLocaleData?.app_reference_invoice"
                                                         *ngIf="voucherApiVersion === 2"
@@ -2466,7 +2472,7 @@
                                                 </div>
                                             </td>
                                             <td class="pd-r1">
-                                                <div class="form-group mr-b05">
+                                                <div class="form-group mr-b05 bg-transparent">
                                                     <input-field
                                                         [label]="localeData?.voucher_no"
                                                         [id]="'update-ledger-voucher-no'"
@@ -2474,6 +2480,7 @@
                                                         [placeholder]="localeData?.voucher_no"
                                                         [ngModel]="vm.selectedLedger.voucherNo"
                                                         [readonly]="true"
+                                                        [cssClass]="'bg-transparent'"
                                                     ></input-field>
                                                 </div>
                                             </td>
@@ -2588,6 +2595,7 @@
                                                         [id]="'update-ledger-cheque-number'"
                                                         [placeholder]="localeData?.cheque_number_placeholder"
                                                         [(ngModel)]="vm.selectedLedger.chequeNumber"
+                                                        [cssClass]="'bg-transparent'"
                                                     ></input-field>
                                                 </td>
                                                 <td class="custom-input-field">
@@ -2603,6 +2611,7 @@
                                                         "
                                                         id="update-ledger-cheque-clearance"
                                                         [(ngModel)]="vm.selectedLedger.chequeClearanceDate"
+                                                        [cssClass]="'bg-transparent'"
                                                     ></giddh-datepicker>
                                                 </td>
                                             </tr>
@@ -2622,7 +2631,7 @@
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 branches?.length > 1
                                         }"
-                                        class="select-multiple-chiplist w-100"
+                                        class="select-multiple-chiplist w-100 bg-transparent"
                                         [readonly]="
                                             !isPettyCash &&
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
