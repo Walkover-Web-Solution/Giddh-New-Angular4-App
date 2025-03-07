@@ -386,14 +386,14 @@
                             </th>
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
-                                <!-- <div [hidden]="showPaymentSearchBar">
-                                    <i
+                                <div [hidden]="showPaymentSearchBar">
+                                    <!-- <i
                                         class="icon-search"
                                         *ngIf="voucherApiVersion !== 2"
                                         (click)="searchBy(null, 'paymentMode', true)"
-                                    ></i>
+                                    ></i> -->
                                     <span>{{ localeData?.payment_mode_label }}</span>
-                                </div> -->
+                                </div>
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
                                     <input
                                         #paymentMode
@@ -411,14 +411,14 @@
                             </th>
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
-                                <!-- <div [hidden]="showInvoiceSearchBar">
-                                    <i
+                                <div [hidden]="showInvoiceSearchBar">
+                                    <!-- <i
                                         class="icon-search"
                                         *ngIf="voucherApiVersion !== 2"
                                         (click)="searchBy(null, 'invoiceNumber', true)"
-                                    ></i>
+                                    ></i> -->
                                     <span>{{ localeData?.invoice_no_label }}</span>
-                                </div> -->
+                                </div>
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
                                     <input
                                         #invoiceNumber

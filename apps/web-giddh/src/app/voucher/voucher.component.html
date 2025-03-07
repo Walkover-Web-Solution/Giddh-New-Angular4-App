@@ -62,7 +62,7 @@
                                                             invoiceType !== 'sales' &&
                                                             invoiceType !== 'cash' &&
                                                             invoiceType !== 'purchase' &&
-                                                            (
+                                                            (voucherApiVersion === 2 &&
                                                               invoiceType !== 'debit note' &&
                                                               invoiceType !== 'credit note'))
                                                     "
@@ -79,6 +79,7 @@
                                                     (scrollEnd)="handleScrollEnd('customer')"
                                                     [scrollableElementId]="'customerId'"
                                                 >
+                                                <!--voucherApiVersion === 1 || -->
                                                     <ng-template #optionTemplate let-option="option">
                                                         <span  aria-label="label value">
                                                             <div class="option-label cursor-pointer">

@@ -353,13 +353,11 @@
                             </div> -->
                             <div
                                 *ngIf="
-                                        !entry.linkingAdjustment &&
-                                        !shouldDisableEdit(entry) ||
                                     voucherApiVersion === 2
                                 "
                                 class="col-sm-3"
                             >
-                            <!-- voucherApiVersion !== 2 && -->
+                            <!-- voucherApiVersion !== 2 && !entry.linkingAdjustment && !shouldDisableEdit(entry) ||-->
                                 <a
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
