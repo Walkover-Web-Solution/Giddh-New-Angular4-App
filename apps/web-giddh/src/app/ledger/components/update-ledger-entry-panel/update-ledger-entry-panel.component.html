@@ -210,8 +210,8 @@
                                                                 [options]="searchResults"
                                                                 #dbtSelect
                                                                 (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                                (selectedOption)="selectAccount($event, txn)"
-                                                                (onClear)="selectAccount($event, txn, true)"
+                                                                (selectedOption)="selectAccount($event, txn, dbtSelect)"
+                                                                (onClear)="selectAccount($event, txn, dbtSelect, true)"
                                                                 [showClear]="false"
                                                                 [defaultValue]="txn.particular.name"
                                                                 [placeholder]="localeData?.to_select_accounts"
@@ -550,8 +550,8 @@
                                                                 [options]="searchResults"
                                                                 #crdSelect
                                                                 (click)="addBlankTrx('CREDIT', txn, $event)"
-                                                              (selectedOption)="selectAccount($event, txn)"
-                                                                (onClear)="selectAccount($event, txn, true)"
+                                                                (selectedOption)="selectAccount($event, txn, crdSelect)"
+                                                                (onClear)="selectAccount($event, txn, crdSelect, true)"
                                                                 [defaultValue]="txn.particular.name"
                                                                 [placeholder]="localeData?.by_select_accounts"
                                                                 (blur)="
@@ -896,8 +896,8 @@
                                                         [options]="searchResults"
                                                         #dbtSelect
                                                         (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                        (selectedOption)="selectAccount($event, txn)"
-                                                                (onClear)="selectAccount($event, txn, true)"
+                                                        (selectedOption)="selectAccount($event, txn, dbtSelect)"
+                                                        (onClear)="selectAccount($event, txn, dbtSelect, true)"
                                                         [showClear]="false"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.to_select_accounts"
@@ -1223,8 +1223,8 @@
                                                         [options]="searchResults"
                                                         #crdSelect
                                                         (click)="addBlankTrx('CREDIT', txn, $event)"
-                                                        (selectedOption)="selectAccount($event, txn)"
-                                                                (onClear)="selectAccount($event, txn, true)"
+                                                        (selectedOption)="selectAccount($event, txn, crdSelect)"
+                                                        (onClear)="selectAccount($event, txn, crdSelect, true)"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.by_select_accounts"
                                                         (blur)="
