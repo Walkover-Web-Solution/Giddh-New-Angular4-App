@@ -618,7 +618,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp?: ShSelectComponent, clearAccount?: boolean, isVariantChanged?: boolean) {
+    public selectAccount(e: IOption, txn: ILedgerTransactionItem, clearAccount?: boolean, isVariantChanged?: boolean) {
         if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
@@ -655,12 +655,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             if (e.label) {
                 txn.particular.name = e.label;
+                txn.particular.uniqueName = e.value;
             }
             // if ther's stock entry
             if (e.additional?.stock) {
                 // check if we aleready have stock entry
                 if (this.vm.isThereStockEntry(e?.value)) {
-                    selectCmp?.clear();
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
                     txn.selectedAccount = null;
@@ -2578,7 +2578,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 uniqueName: stockLinkedAcccount
             }
         };
-        this.selectAccount(eventDetails, stockEntry, null, false, true);
+        this.selectAccount(eventDetails, stockEntry, false, true);
     }
 
     /**
