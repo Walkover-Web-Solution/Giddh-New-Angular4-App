@@ -691,7 +691,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnInit() {
         this.store.dispatch(this.invoiceActions.getTemplateState());
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params) {
+            if (params && params.module === 'templates') {
                 // && (this.generalService.voucherApiVersion === 2 && params.module === 'templates') || (this.generalService.voucherApiVersion === 1)
                 if (params.selectedType) {
                     if (params.selectedType === VoucherTypeEnum.creditNote || params.selectedType === VoucherTypeEnum.debitNote) {
