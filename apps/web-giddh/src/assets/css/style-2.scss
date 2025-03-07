@@ -3776,7 +3776,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .download-invoice-ledger {
-    padding-left: 15px;
+    padding-left: 5px;
     align-items: center;
     font-size: var(--font-size-15);
 }
@@ -9285,6 +9285,8 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .update-ledger-account input {
     padding-left: 4px !important;
+    text-overflow: ellipsis;
+    border: none;
 }
 
 .select2-parent.select2-ledger .update-ledger-account sh-select .header.open input:placeholder-shown {
@@ -13117,7 +13119,7 @@ body.hide-scroll-body.master-page {
 
 .mat-datepicker-input:disabled {
     color: var(--color-primary-input-bar-text) !important;
-    background-color: var(--color-primary-input-bar-background) !important;
+    background-color: var(--color-secondary-input-bar-background) !important;
 }
 
 .mat-menu-btn {
@@ -13373,7 +13375,7 @@ voucher-component {
     }
 
     .mat-mdc-form-field {
-        background-color: var(--color-primary-input-bar-background) !important;
+        background-color: var(--color-secondary-input-bar-background) !important;
     }
 
     .dropdown-bg {

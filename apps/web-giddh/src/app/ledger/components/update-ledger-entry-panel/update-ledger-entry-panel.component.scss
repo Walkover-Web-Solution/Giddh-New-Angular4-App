@@ -97,7 +97,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     justify-content: flex-end;
     padding-top: 25px;
     display: flex;
-    padding-left: 8px;
+    padding-left: 15px;
 }
 
 .total-col span.bd-rt {
@@ -144,7 +144,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 .icon-box {
     display: flex;
     align-items: center;
-    padding: 10px 10px 0 10px;
     font-size: 12px;
     height: 60px;
     label {
@@ -320,7 +319,7 @@ p.edit-message {
 }
 
 .read-only {
-    background-color: var(--color-primary-input-bar-background) !important;
+    background-color: var(--color-secondary-input-bar-background) !important;
 }
 /* responsive */
 
@@ -502,12 +501,19 @@ p.edit-message {
         box-sizing: border-box !important;
     }
 }
+.read-only {
+    .readonly-field {
+        .mat-mdc-form-field {
+            background-color: var(--color-secondary-input-bar-background) !important;
+        }
+    }
+}
 
 .width-datepicker {
     width: 130px !important;
 }
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1653px) {
     .width-datepicker {
         width: 100px !important;
     }
@@ -541,4 +547,12 @@ p.edit-message {
     .reference-invoice {
         width: 150px;
     }
+}
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .width-datepicker {
+        width: 78px !important;
+    }
+}
+.mat-datepicker-input:disabled {
+    background: transparent !important;
 }
