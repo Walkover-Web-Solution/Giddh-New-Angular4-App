@@ -571,14 +571,15 @@
                 </ng-container>
             </div>
         </div>
-        <div class="text-center mt-4 mb-5 position-sticky position-left" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+        <div class="text-center mt-4 mb-5 position-sticky position-left">
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="(purchaseRegisteDetailedResponse$ | async).totalItems"
-                [pageSize]="paginationLimit"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageSize]="getDetailedPurchaseRequestFilter.count"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-                [pageIndex]="getDetailedPurchaseReport.page - 1"
+                [pageIndex]="getDetailedPurchaseRequestFilter.page - 1"
             ></mat-paginator>
         </div>
         <div

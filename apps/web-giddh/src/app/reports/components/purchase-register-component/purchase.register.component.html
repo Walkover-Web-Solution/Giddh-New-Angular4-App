@@ -62,8 +62,8 @@
                             <mat-option (click)="populateRecords('quarterly')" [value]="commonLocaleData?.app_duration?.quarterly">
                                 {{ commonLocaleData?.app_duration?.quarterly }}
                             </mat-option>
-                            <mat-option [value]="commonLocaleData?.app_duration?.weekly">
-                                <span 
+                            <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position">
+                                <span
                                     class="w-100 d-flex justify-content-between"
                                     [matMenuTriggerFor]="monthMenu"
                                     (click)="$event.stopPropagation()"

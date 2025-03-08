@@ -73,7 +73,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
-     * [2] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
      */
     public columnDefinitions: Record<string, ColumnDefinition> = {
         particular: ["app_particular", true, "", true],
@@ -295,6 +295,9 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
+                if (!this.activeFinacialYr && this.selectedCompany.financialYears.length) {
+                    this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                }
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 }

@@ -8,7 +8,20 @@
                 *matHeaderCellDef 
                 [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''"
             >
-                {{ tableSecondaryHeader?.[trimColumn(column)] ?? ' ' }}
+                <ng-container *ngIf="tableSecondaryHeader?.hasOwnProperty(trimColumn(column))">
+                    <!-- Number field -->
+                    <amount-field
+                        *ngIf="isNumber(tableSecondaryHeader?.[trimColumn(column)])"
+                        [amount]="tableSecondaryHeader?.[trimColumn(column)]"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    ></amount-field>
+
+                    <!-- String field -->
+                    <span *ngIf="!isNumber(tableSecondaryHeader?.[trimColumn(column)])">
+                        {{ tableSecondaryHeader?.[trimColumn(column)] }}
+                    </span>
+                </ng-container>
             </th>
         </ng-container>
     </ng-container>
@@ -46,7 +59,20 @@
         <!-- Footer Row: Displays total count values below data rows -->
         <ng-container *ngIf="showFooterRow">
             <td mat-footer-cell *matFooterCellDef class="p-0" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
-                {{ footerRow?.[column] ?? ' ' }}
+                <ng-container *ngIf="footerRow?.hasOwnProperty(column)">
+                    <!-- Number field -->
+                    <amount-field
+                        *ngIf="footerRow?.[column] && isNumber(footerRow?.[column])"
+                        [amount]="element?.[column]"
+                        [currencySymbol]="false"
+                        [currencyCode]="false"
+                    ></amount-field>
+
+                    <!-- String field -->
+                    <span *ngIf="!isNumber(footerRow?.[column])">
+                        {{ footerRow?.[column] ?? "-" }}
+                    </span>
+                </ng-container>
             </td>
         </ng-container>
     </ng-container>
