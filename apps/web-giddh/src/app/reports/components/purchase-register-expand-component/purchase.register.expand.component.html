@@ -571,7 +571,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="text-center mt-4 mb-5 position-sticky position-left">
+        <div class="text-center mt-4 mb-5 position-sticky position-left" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit>
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="(purchaseRegisteDetailedResponse$ | async).totalItems"

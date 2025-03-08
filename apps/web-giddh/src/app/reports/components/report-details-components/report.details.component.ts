@@ -290,7 +290,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
-                if (!this.activeFinacialYr && this.selectedCompany.financialYears.length) {
+                if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
                 }
                 if (selectedFinancialYear) {
