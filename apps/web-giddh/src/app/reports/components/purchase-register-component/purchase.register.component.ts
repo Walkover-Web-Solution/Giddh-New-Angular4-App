@@ -22,6 +22,7 @@ import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
+import { DurationEnum } from '../../constants/reports.constant';
 
 @Component({
     selector: 'purchase-register-component',
@@ -36,7 +37,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public activeFinacialYr: ActiveFinancialYear;
     public purchaseRegisterTotal: PurchaseReportsModel = new PurchaseReportsModel();
     public monthNames = [];
-    public selectedType = 'monthly';
+    /** Selected duration type */
+    public selectedType: DurationEnum = DurationEnum.Monthly;
     private selectedMonth: string;
     public dateRange: Date[];
     public dayjs = dayjs;
@@ -86,6 +88,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         netPurchase: ["app_net_purchase", false, "text-right"],
         cumulative: ["app_cumulative", false, "text-right"]
     }
+    /** Constant for duration */
+    public durationEnum: typeof DurationEnum = DurationEnum;
 
     constructor(
         private router: Router,
@@ -259,7 +263,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
-        let currentTimeFilter = '';
+        let currentTimeFilter: DurationEnum = this.selectedType;
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params?.interval || params?.selectedMonth) {
@@ -275,7 +279,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
+            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter.toLowerCase() : '';
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -302,7 +306,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
-                this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
+                this.selectedType = currentTimeFilter;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
@@ -367,7 +371,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             let request: ReportsRequestModel = {
                 to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
                 from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
-                interval: 'monthly',
+                interval: this.durationEnum.Monthly,
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
