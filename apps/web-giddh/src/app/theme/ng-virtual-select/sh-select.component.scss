@@ -69,6 +69,8 @@ i.close.icon.clear:hover::after {
     color: var(--color-primary-sh-select-disabled);
     cursor: not-allowed;
     border-radius: 5px;
+    background-color: #fff;
+
 }
 
 .chip {
@@ -112,7 +114,7 @@ i.close.icon.clear:hover::after {
     cursor: not-allowed;
     pointer-events: none;
     color: var(--color-common-secondary-disabled) !important;
-    background: var(--color-input-primary-background) !important;
+    // background: var(--color-input-primary-background) !important;
 }
 
 :host(.disabled-ledger) {
