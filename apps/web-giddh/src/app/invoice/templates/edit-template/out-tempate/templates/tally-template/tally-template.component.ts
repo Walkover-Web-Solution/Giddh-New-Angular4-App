@@ -22,7 +22,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
     @Input() public fieldsAndVisibility: any = null;
     /** Holds true if preview mode */
     @Input() public isPreviewMode: boolean = false;
-    /** Holds true if show company logo */
+    /** Holds true to show company logo */
     @Input() public showLogo: boolean = true;
     /** Holds true if show company name */
     @Input() public showCompanyName: boolean;
@@ -78,7 +78,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
-        this.companySetting$.subscribe(address => {
+        this.companySetting$.pipe(takeUntil(this.destroyed$)).subscribe(address => {
             if (address && address.address) {
                 this.companyAddress = cloneDeep(address.address);
             } else if (!address) {
