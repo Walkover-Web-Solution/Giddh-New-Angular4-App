@@ -1,13 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, PayPalClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { PayPalClass, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { cloneDeep, find } from '../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { debounceTime, filter, Observable, of as observableOf, pairwise, ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { IForceClear } from '../../models/api-models/Sales';
 import { AppState } from '../../store';
-import { FormBuilder, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ToasterService } from '../../services/toaster.service';
@@ -33,7 +33,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /* This will clear the selected paypal linked account */
     public paypalForceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
     /** Stores the search results pagination details */
-    public paypalAccountsSearchResultsPaginationData = {
+    public paypalAccountsSearchResultsPaginationData: any = {
         page: 0,
         totalPages: 0,
         query: ''
@@ -43,7 +43,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** True, if API call should be prevented on default scroll caused by scroll in list */
     public paypalPreventDefaultScrollApiCall: boolean = false;
     /** Stores the default search results pagination details */
-    public paypalDefaultAccountPaginationData = {
+    public paypalDefaultAccountPaginationData: any = {
         page: 0,
         totalPages: 0,
         query: ''
@@ -65,7 +65,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** True, if API call should be prevented on default scroll caused by scroll in list */
     public preventDefaultScrollApiCall: boolean = false;
     /** Stores the default search results pagination details */
-    public defaultAccountPaginationData = {
+    public defaultAccountPaginationData: any = {
         page: 0,
         totalPages: 0,
         query: ''
@@ -87,7 +87,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */
-    public portalUrl: any = PORTAL_URL;
+    public portalUrl: string = PORTAL_URL;
     /** Stores the profile data of an organization (company or profile) */
     public profileData: OrganizationProfile = {
         name: '',
@@ -128,12 +128,10 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public accounts$: Observable<IOption[]>;
 
-
     constructor(
         private generalService: GeneralService,
         private store: Store<AppState>,
         private searchService: SearchService,
-        private _fb: UntypedFormBuilder,
         private changeDetectionRef: ChangeDetectorRef,
         private settingsIntegrationActions: SettingsIntegrationActions,
         private toasty: ToasterService,
@@ -153,7 +151,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /**
      * This hook will use for init
      *
-     * @memberof ShopifyIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -185,16 +183,16 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         }
 
         // getting all page data of integration page
-        this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(data => data?.settings?.integration), takeUntil(this.destroyed$)).subscribe((response) => {
             // set razor pay form data
-            if (o?.razorPayForm) {
-                if (typeof o?.razorPayForm !== "string") {
-                    this.razorPayObj = cloneDeep(o?.razorPayForm);
+            if (response?.razorPayForm) {
+                if (typeof response?.razorPayForm !== "string") {
+                    this.razorPayObj = cloneDeep(response?.razorPayForm);
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
                     }
-                    this.razorPayObj.password = o?.razorPayForm?.userName ? 'YOU_ARE_NOT_ALLOWED' : '';
+                    this.razorPayObj.password = response?.razorPayForm?.userName ? 'YOU_ARE_NOT_ALLOWED' : '';
                 }
                 this.updateRazor = true;
             } else {
@@ -203,9 +201,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
 
             // set paypal form data
-            if (o?.paypalForm) {
-                if (typeof o?.paypalForm !== "string") {
-                    this.paypalObj = cloneDeep(o?.paypalForm);
+            if (response?.paypalForm) {
+                if (typeof response?.paypalForm !== "string") {
+                    this.paypalObj = cloneDeep(response?.paypalForm);
                     this.linkedAccountLabel = this.paypalObj?.account?.name;
                     if (this.paypalObj && this.paypalObj.account === null) {
                         this.paypalObj.account = { name: null, uniqueName: null };
@@ -225,15 +223,14 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                 this.profileData.portalDomain = response.portalDomain;
             }
         });
-
     }
 
     /**
- * Initialise Form
- *
- * @private
- * @memberof PersonalInformationComponent
- */
+     * Initialise Form
+     *
+     * @private
+     * @memberof CustomerPortalComponent
+     */
     private initProfileForm(profileData?: any): void {
         this.profileForm = this.formBuilder.group({
             name: [profileData?.name ?? ''],
@@ -279,7 +276,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     * This will be use for select linked account
     *
     * @param {IOption} event
-    * @memberof SettingIntegrationComponent
+    * @memberof CustomerPortalComponent
     */
     public selectLinkedAccount(event: IOption): void {
         if (event?.value) {
@@ -297,7 +294,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /**
     * This will be use for set paypal dummy data
     *
-    * @memberof SettingIntegrationComponent
+    * @memberof CustomerPortalComponent
     */
     public setPaypalDummyData(): void {
         if (this.paypalObj) {
@@ -310,7 +307,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /**
      * This will be use for scroll end handler
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     public paypalHandleScrollEnd(): void {
         if (this.paypalAccountsSearchResultsPaginationData.page < this.paypalAccountsSearchResultsPaginationData.totalPages) {
@@ -342,7 +339,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     * @param {number} [page=1] Page to request
     * @param {boolean} withStocks True, if search should include stocks in results
     * @param {Function} successCallback Callback to carry out further operation
-    * @memberof SettingIntegrationComponent
+    * @memberof CustomerPortalComponent
     */
     public paypalOnAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.paypalAccountsSearchResultsPaginationData.query = query;
@@ -396,7 +393,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
  * Scroll end handler
  *
  * @returns null
- * @memberof SettingIntegrationComponent
+ * @memberof CustomerPortalComponent
  */
     public handleScrollEnd(): void {
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
@@ -426,7 +423,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
  * @param {number} [page=1] Page to request
  * @param {boolean} withStocks True, if search should include stocks in results
  * @param {Function} successCallback Callback to carry out further operation
- * @memberof SettingIntegrationComponent
+ * @memberof CustomerPortalComponent
  */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
@@ -513,7 +510,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
  * This will be use for save paypal details
  *
  * @return {*}
- * @memberof SettingIntegrationComponent
+ * @memberof CustomerPortalComponent
  */
     public savePaypalDetails(): void {
         let data = cloneDeep(this.paypalObj);
@@ -529,7 +526,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * This will be use for update paypal details
      *
      * @return {*}
-     * @memberof SettingIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     public updatePaypalDetails(): void {
         let data = cloneDeep(this.paypalObj);
@@ -544,7 +541,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /**
      * This will be use for unlink account from paypal
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     public unlinkAccountFromPaypal(): void {
         if (this.paypalObj.account && this.paypalObj.account.name && this.paypalObj.account?.uniqueName) {
@@ -565,7 +562,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /**
      * This will be use for delete paypal details
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     public deletePaypalDetails(): void {
         this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
@@ -577,7 +574,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      *
      * @param {*} emailStr
      * @return {*}  {boolean}
-     * @memberof SettingIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     public validateEmail(emailStr: any): boolean {
         return EMAIL_VALIDATION_REGEX.test(emailStr);
@@ -586,7 +583,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /**
      * Releases memory
      *
-     * @memberof SettingIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -597,7 +594,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * Loads the default account search suggestion when module is loaded
      *
      * @private
-     * @memberof SettingIntegrationComponent
+     * @memberof CustomerPortalComponent
      */
     private loadDefaultAccountsSuggestions(): void {
         this.onAccountSearchQueryChanged('', 1, (response) => {
@@ -617,7 +614,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     * Loads the default account search suggestion when module is loaded
     *
     * @private
-    * @memberof SettingIntegrationComponent
+    * @memberof CustomerPortalComponent
     */
     private paypalLoadDefaultAccountsSuggestions(): void {
         this.paypalOnAccountSearchQueryChanged('', 1, (response) => {
@@ -635,11 +632,11 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     }
 
     /**
- * Handles profile update operation
- *
- * @param {string} keyName Key to be updated
- * @memberof PersonalInformationComponent
- */
+     * Handles profile update operation
+     *
+     * @param {string} keyName Key to be updated
+     * @memberof CustomerPortalComponent
+     */
     public profileUpdated(keyName: string): void {
         const value = this.profileForm?.get(keyName).value;
         if (this.updatedData[keyName] !== value) {
@@ -649,10 +646,10 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     }
 
     /**
-       *This will use for copy api url link and display copied
-       *
-       * @memberof PersonalInformationComponent
-       */
+     *This will use for copy api url link and display copied
+    *
+    * @memberof CustomerPortalComponent
+    */
     public copyUrl(): void {
         const urlToCopy = this.portalLoginUrl;
         this.clipboardService.copyFromContent(urlToCopy);
@@ -661,6 +658,4 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.isCopied = false;
         }, 3000);
     }
-
-
 }
