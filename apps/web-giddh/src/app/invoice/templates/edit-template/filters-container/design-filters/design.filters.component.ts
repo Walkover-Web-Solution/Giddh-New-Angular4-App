@@ -376,6 +376,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 if (this.customTemplate.templateType === 'tally_template') {
                     this.presetFonts = [
                         { label: 'Open Sans', value: 'Open Sans' },
+                        { label: 'Sans-Serif', value: 'Sans-Serif' },
                         { label: 'Roboto', value: 'Roboto' }
                     ];
                 }
