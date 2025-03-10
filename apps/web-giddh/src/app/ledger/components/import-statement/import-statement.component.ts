@@ -15,7 +15,7 @@ import { saveAs } from 'file-saver';
 import { LedgerComponentStore } from '../../ledger.store';
 import { OptionInterface } from '../../../models/api-models/Voucher';
 import { ImportStepEnum, ImportStatementType } from './import-statement.const';
-import { FileTypeEnum } from '../../../shared/Enums/common-enum';
+import { FileTypeEnum } from '../../../shared/Enums/common.enum';
 
 @Component({
     selector: 'import-statement',
