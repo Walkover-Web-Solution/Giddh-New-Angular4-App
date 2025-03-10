@@ -27,12 +27,17 @@
                                     <setting-taxes></setting-taxes>
                                 </div>
                             </div>
-                            <div *ngIf="activeTab === 'integration'" class="position-relative">
+                            <div
+                                *ngIf="activeTab === 'integration'"
+                                class="position-relative"
+                            >
                                 <hamburger-menu [pageHeading]="localeData?.setting_integration"></hamburger-menu>
                                 <ng-container *ngIf="integrationtab === 'e-comm'">
                                     <span class="video-link position-absolute">
-                                        <watch-video [cssClass]="'text-primary pd-r15'"
-                                            [moduleName]="'ECOMM_INTEGRATION'"></watch-video>
+                                        <watch-video
+                                            [cssClass]="'text-primary pd-r15'"
+                                            [moduleName]="'ECOMM_INTEGRATION'"
+                                        ></watch-video>
                                     </span>
                                 </ng-container>
                                 <div class="setting-container m-0">
@@ -110,7 +115,9 @@
                                 </div>
                             </div>
                             <div *ngIf="activeTab === 'shopify'">
-                                <hamburger-menu [pageHeading]="localeData?.setting_shopify_integration"></hamburger-menu>
+                                <hamburger-menu
+                                    [pageHeading]="localeData?.setting_shopify_integration"
+                                ></hamburger-menu>
                                 <div class="setting-container">
                                     <span class="video-link float-right mb-2 mr-t1">
                                         <watch-video
@@ -128,7 +135,9 @@
                                 </div>
                             </div>
                             <div *ngIf="activeTab === 'portal'">
-                                <hamburger-menu [pageHeading]="localeData?.setting_customer_portal_integration"></hamburger-menu>
+                                <hamburger-menu
+                                    [pageHeading]="localeData?.setting_customer_portal_integration"
+                                ></hamburger-menu>
                                 <div class="setting-container">
                                     <customer-portal></customer-portal>
                                 </div>

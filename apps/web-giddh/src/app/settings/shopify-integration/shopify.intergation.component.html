@@ -4,7 +4,6 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <ng-template> <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }} </ng-template>
     <div class="mr-t2 box clearfix">
         <h3 class="section-head mb-1">{{ localeData?.ecommerce?.shopify_form_heading }}</h3>
         <span *ngIf="isEcommerceShopifyUserVerified">{{ localeData?.ecommerce?.shopify_connected_message }}</span>
