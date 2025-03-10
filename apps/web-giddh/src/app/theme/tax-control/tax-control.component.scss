@@ -58,3 +58,9 @@ sup.mandatory-asterisk {
     background-size: 10px !important;
     background-repeat: no-repeat;
 }
+
+.tax-wrapper {
+    max-height: 156px;
+    min-width: 200px;
+    overflow-y: auto;
+}

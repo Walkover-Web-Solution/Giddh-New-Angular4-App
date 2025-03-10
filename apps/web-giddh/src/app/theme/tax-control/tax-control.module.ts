@@ -11,6 +11,7 @@ import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
 import { TaxControlComponent } from './tax-control.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { FormFieldsModule } from '../form-fields/form-fields.module';
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import { MatInputModule } from '@angular/material/input';
         MatButtonModule,
         MatCheckboxModule,
         MatInputModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        FormFieldsModule
     ],
     declarations: [TaxControlComponent],
     exports: [TaxControlComponent]
