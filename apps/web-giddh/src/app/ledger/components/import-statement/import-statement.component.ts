@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import { LedgerComponentStore } from '../../ledger.store';
 import { OptionInterface } from '../../../models/api-models/Voucher';
 import { ImportStepEnum, ImportStatementType } from './import-statement.const';
+import { fileEnum } from '../../../shared/common-enum';
 
 @Component({
     selector: 'import-statement',
@@ -45,6 +46,8 @@ export class ImportStatementComponent implements OnDestroy {
     public selectStatement: ImportStatementType = ImportStatementType.Voucher;
     /** Store signed url response */
     public signedUrlResponse: any = {};
+    /** Constant for file type */
+    public fileType: typeof fileEnum = fileEnum;
 
     constructor(
         private ledgerService: LedgerService,
@@ -103,7 +106,7 @@ export class ImportStatementComponent implements OnDestroy {
      * @memberof ImportStatementComponent
      */
     public onFileChange(file: FileList): void {
-        let validExtensions = ['pdf', 'csv', 'xls', 'xlsx'];
+        let validExtensions = [this.fileType.Pdf, this.fileType.Csv, this.fileType.Xls, this.fileType.Xlsx];
         let type = (file && file.item(0)) ? this.generalService.getFileExtension(file.item(0).name) : 'null';
         type = type?.toLowerCase();
         let isValidFileType = validExtensions.some(extension => type === extension);
@@ -130,7 +133,7 @@ export class ImportStatementComponent implements OnDestroy {
     public importStatement(): void {
         this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
         this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
-        if (this.getRequest.entity === "pdf") {
+        if (this.getRequest.entity === this.fileType.Pdf) {
             this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === 'success') {
                     this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
@@ -181,8 +184,8 @@ export class ImportStatementComponent implements OnDestroy {
      */
     public async downloadSampleFile(selectAccount: string, isCsv: boolean = false) {
         const isBankStatement = selectAccount === this.importStatementType.BankStatement;
-        const fileUrl = SAMPLE_FILES_URL + `${isBankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? 'csv' : 'xlsx'}`;
-        const fileName = `${isBankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileUrl = SAMPLE_FILES_URL + `${isBankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? this.fileType.Csv : this.fileType.Xlsx}`;
+        const fileName = `${isBankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? this.fileType.Csv : this.fileType.Xlsx}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
             saveAs(blob, fileName);
