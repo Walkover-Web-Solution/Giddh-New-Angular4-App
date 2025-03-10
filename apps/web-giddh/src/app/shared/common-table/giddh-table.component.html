@@ -11,15 +11,15 @@
                 <ng-container *ngIf="tableSecondaryHeader?.hasOwnProperty(trimColumn(column))">
                     <!-- Number field -->
                     <amount-field
-                        *ngIf="isNumber(tableSecondaryHeader.[trimColumn(column)])"
-                        [amount]="tableSecondaryHeader.[trimColumn(column)]"
+                        *ngIf="isNumber(tableSecondaryHeader[trimColumn(column)])"
+                        [amount]="tableSecondaryHeader[trimColumn(column)]"
                         [currencySymbol]="false"
                         [currencyCode]="false"
                     ></amount-field>
 
                     <!-- String field -->
-                    <span *ngIf="!isNumber(tableSecondaryHeader.[trimColumn(column)])">
-                        {{ tableSecondaryHeader.[trimColumn(column)] }}
+                    <span *ngIf="!isNumber(tableSecondaryHeader[trimColumn(column)])">
+                        {{ tableSecondaryHeader[trimColumn(column)] }}
                     </span>
                 </ng-container>
             </th>
@@ -62,15 +62,15 @@
                 <ng-container *ngIf="footerRow?.hasOwnProperty(column)">
                     <!-- Number field -->
                     <amount-field
-                        *ngIf="isNumber(footerRow.[column])"
-                        [amount]="footerRow.[column]"
+                        *ngIf="isNumber(footerRow[column])"
+                        [amount]="footerRow[column]"
                         [currencySymbol]="false"
                         [currencyCode]="false"
                     ></amount-field>
 
                     <!-- String field -->
-                    <span *ngIf="!isNumber(footerRow.[column])">
-                        {{ footerRow.[column] }}
+                    <span *ngIf="!isNumber(footerRow[column])">
+                        {{ footerRow[column] }}
                     </span>
                 </ng-container>
             </td>
