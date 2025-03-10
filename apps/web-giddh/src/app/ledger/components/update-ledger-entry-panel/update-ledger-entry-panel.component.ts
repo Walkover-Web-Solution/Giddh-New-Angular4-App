@@ -4,6 +4,7 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
@@ -32,7 +33,7 @@ import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Compa
 import { DownloadLedgerRequest, IVariant, LedgerResponse } from '../../../models/api-models/Ledger';
 import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
@@ -52,7 +53,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
@@ -293,6 +294,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAccountSearchData: boolean = true;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    public transaction: ITransactionItem;
+    public index: number;
+    public transactionsList: ITransactionItem[];
+    /** True if ledger account belongs to sundry debtor/creditor */
+    public isShowNoDataFound: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -312,9 +318,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private ledgerUtilityService: LedgerUtilityService,
-        private invoiceAction: InvoiceActions
+        private invoiceAction: InvoiceActions,
+        @Inject(MAT_DIALOG_DATA) public data: any
     ) {
+        console.log(data);
 
+        this.transaction = data.transaction;
+        this.index = data.index;
+        this.transactionsList = data.transactionsList;
         this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
 
         this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
@@ -330,6 +341,46 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
     }
+
+    public moveToNext(): void {
+        console.log(this.transactionsList, this.index, this.transaction);
+        if (this.index < this.transactionsList.length - 1) {
+            this.index++;
+            this.transaction = this.transactionsList[this.index];
+            this.sliderRefreshData();
+            this.isShowNoDataFound = false;
+        } else {
+            console.log(this.isShowNoDataFound);
+
+            this.isShowNoDataFound = true;
+        }
+    }
+
+
+
+    public moveToPrevious(): void {
+        if (this.index > 0) {
+            this.index--;
+            this.transaction = this.transactionsList[this.index];
+            this.sliderRefreshData();
+            this.isShowNoDataFound = false;
+        } else {
+            this.isShowNoDataFound = true;
+            console.log(this.isShowNoDataFound);
+
+        }
+    }
+    public sliderRefreshData(): void {
+        // get entry name and ledger account uniqueName
+        observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            if (resp[0] && resp[1]) {
+                this.entryUniqueName = this.transaction.entryUniqueName;
+                this.accountUniqueName = resp[1];
+                this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
+            }
+        });
+    }
+
 
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */

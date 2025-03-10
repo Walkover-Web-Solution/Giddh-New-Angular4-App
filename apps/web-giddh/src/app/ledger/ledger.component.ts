@@ -1485,7 +1485,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.needToReCalculate.next(false);
     }
 
-    public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
+
+    public showUpdateLedgerModal(txn: ITransactionItem, type: 'cr' | 'dr') {
+        console.log(txn, type, this.ledgerTransactions.creditTransactions);
+        const transactionsList = type === 'cr' ? this.ledgerTransactions.creditTransactions : this.ledgerTransactions.debitTransactions;
+        const txnIndex = transactionsList.findIndex(t => t.entryUniqueName === txn.entryUniqueName);
+
         if (txn?.adjustmentEntry) {
             this.router.navigate([`/pages/inventory/v2/product/adjust/${txn?.description}`]);
         } else {
@@ -1497,7 +1502,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
             this.lc.selectedTxnUniqueName = txn.entryUniqueName;
             this.entrySide = type;
-            this.loadUpdateLedgerComponent();
+            this.loadUpdateLedgerComponent(txn, txnIndex, transactionsList);
         }
     }
 
@@ -1737,12 +1742,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public loadUpdateLedgerComponent() {
+    public loadUpdateLedgerComponent(transaction: ITransactionItem, index: number, transactionsList: ITransactionItem[]) {
         this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
             height: '650px',
             role: 'alertdialog',
-            ariaLabel: 'update'
+            ariaLabel: 'update',
+            data: { transaction, index, transactionsList }
         });
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
@@ -2829,7 +2835,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {ITransactionItem} txn
      * @memberof LedgerComponent
      */
-    public showUpdateLedgerModalIpad(txn: ITransactionItem, type: string): void {
+    public showUpdateLedgerModalIpad(txn: ITransactionItem, type: 'cr' | 'dr'): void {
         if (this.touchedTransaction?.entryUniqueName === txn?.entryUniqueName) {
             this.showUpdateLedgerModal(txn, type);
         } else {
