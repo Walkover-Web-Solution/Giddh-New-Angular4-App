@@ -1872,12 +1872,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         if (!uniqueName) {
             return isInitialized;
         }
-    
         if (!isUpdateMode || (!isInitialized && warehouseList[uniqueName]?.length)) {
             warehouseList[uniqueName] = [];
             isInitialized = true;
         }
-        
         return isInitialized;
     }
 
