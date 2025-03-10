@@ -128,7 +128,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
-
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
 
@@ -839,13 +838,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
-        if ((this.isRcmEntry) && !this.validateTaxes()) {
-            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
-                // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement?.nativeElement.classList.add('error-box');
-                return;
-            }
-        }
         if (this.currentTxn?.isStock && !this.selectedStockVariant.value) {
             return;
         }
@@ -1027,29 +1019,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
-    public hideDiscountTax(): void {
-        if (this.discountControl && this.discountControl.discountMenu) {
-            this.discountControl.discountMenu = false;
-        }
-        if (this.taxControll && this.taxControll.showTaxPopup) {
-            this.taxControll.showTaxPopup = false;
-        }
+    /**
+     * If click on entry panel body it will hide all dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public hideAllDropdownTax(): void {
         if (this.selectMultipleFieldsRef) {
             this.selectMultipleFieldsRef?.closePanel();
-        }
-    }
-
-    public hideDiscount(): void {
-        if (this.discountControl && this.discountControl.discountMenu) {
-            this.discountControl.change();
-            this.discountControl.discountMenu = false;
-        }
-    }
-
-    public hideTax(): void {
-        if (this.taxControll && this.taxControll.showTaxPopup) {
-            this.taxControll.change();
-            this.taxControll.showTaxPopup = false;
         }
     }
 

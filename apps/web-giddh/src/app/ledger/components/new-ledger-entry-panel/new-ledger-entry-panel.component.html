@@ -1,6 +1,6 @@
 <div
     class="ledger-panel giddh-overlap-block new-ledger-panel"
-    (click)="hideDiscountTax()"
+    (click)="hideAllDropdownTax()"
     #entryContent
     (keyup)="saveCtrlEnter($event)"
     (clickOutside)="clickedOutside($event)"
@@ -232,7 +232,6 @@
                         [discountsList]="discountsList"
                         [commonLocaleData]="commonLocaleData"
                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
-                        (hideOtherPopups)="hideTax()"
                         (discountTotalUpdated)="calculateDiscount($event)"
                     >
                     </ledger-discount>
@@ -305,12 +304,12 @@
                                 : []
                         "
                         (taxAmountSumEvent)="calculateTax()"
-                        (hideOtherPopups)="hideDiscount()"
                         (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
                         [calculateTaxInclusively]="isAdvanceReceiptWithTds || isInclusiveEntry"
                         [isAdvanceReceipt]="isAdvanceReceipt"
                         [allowedSelectionOfAType]="allowedSelectionOfAType"
                         [commonLocaleData]="commonLocaleData"
+                        [showError]="isRcmEntry && !validateTaxes()"
                     >
                     </tax-control>
 
@@ -488,7 +487,7 @@
                                                 id="ledger-invoice-number"
                                                 [type]="'text'"
                                                 [disabled]="isReadOnly"
-                                                [placeholder]="commonLocaleData?.app_number"
+                                                [placeholder]="voucherApiVersion === 2 ? commonLocaleData?.app_number : commonLocaleData?.app_invoice_no"
                                                 [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"
                                             >
                                             </input-field>
@@ -496,9 +495,9 @@
                                     </td>
 
                                     <td
-                                        *ngIf="
+                                        *ngIf="voucherApiVersion === 2 && (
                                             blankLedger.voucherType == 'credit note' ||
-                                            blankLedger.voucherType === 'debit note'
+                                            blankLedger.voucherType === 'debit note')
                                         "
                                     >
                                         <div class="form-group">
@@ -550,8 +549,9 @@
                                                         ({{ commonLocaleData?.app_amount }}:
                                                         <span class="d-inline-flex">
                                                             <amount-field
-                                                                [amount]="option.additional?.unadjustedAmount
-                                                                ?.amountForAccount"
+                                                                [amount]="voucherApiVersion === 2 
+                                                                    ? option.additional?.unadjustedAmount?.amountForAccount
+                                                                    : option.additional?.balanceDue?.amountForAccount"
                                                                 [currencySymbol]="false"
                                                                 [currencyCode]="false"
                                                             >
@@ -634,6 +634,7 @@
                                         </div>
                                         <div
                                             [ngClass]="{ 'mr-l1': selectedInvoiceForCreditNote }"
+                                            *ngIf="voucherApiVersion === 2"
                                         >
                                             <input-field
                                                 id="ledger-invoice-number"
@@ -881,7 +882,7 @@
                                         class="pull-left"
                                         name="generateInvoice"
                                         [disabled]="
-                                            isAdvanceReceipt ||
+                                            (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                             autoGenerateVoucherFromEntry ||
                                             currentTxn?.voucherAdjustments?.adjustments?.length ||
                                             currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||

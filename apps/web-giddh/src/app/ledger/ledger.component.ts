@@ -1626,14 +1626,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 
-    public onEnter(se, txn) {
-        if (!this.isSelectOpen) {
-            this.isSelectOpen = true;
-            se.show();
-            this.showNewLedgerEntryPopup(txn);
-        }
-    }
-
     public hideNewLedgerEntryPopup(event?) {
         this.selectedTrxWhileHovering = '';
 
