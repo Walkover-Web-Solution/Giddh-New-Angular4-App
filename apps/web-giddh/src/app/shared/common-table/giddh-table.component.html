@@ -29,7 +29,7 @@
     <!-- Dynamically generates columns based on displayedColumns array -->
     <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
         <!-- Column Header Row: Displays the main headers for each column -->
-        <th mat-header-cell *matHeaderCellDef class="max-width-150 p-0" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
+        <th mat-header-cell *matHeaderCellDef class="max-width-150" [ngClass]="columnDefinitions?.[trimColumn(column)]?.[2] ?? ''">
             {{ getHeaderLabel(column) }}
         </th>
 
@@ -51,7 +51,7 @@
             </span>
 
             <!-- Clickable link for clickable columns -->
-            <a *ngIf="isClickableColumn(column)" class="cursor-pointer" (click)="handleClick(element, column)">
+            <a *ngIf="isClickableColumn(column)" class="cursor-pointer break-word" (click)="handleClick(element, column)">
                 {{ element?.[column] ?? '-' }}
             </a>
         </td>
