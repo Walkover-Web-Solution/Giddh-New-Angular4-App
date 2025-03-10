@@ -62,7 +62,7 @@
                 </label>
                 <span  class="path-name">{{ selectedFile }}</span>
             </div>
-            <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === 'pdf' && selectStatement === importStatementType.BankStatement">
+            <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement">
                 <mat-label class="import-field-label align-bottom">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
                 <mat-form-field appearance="fill" class="w-100 custom-input-field">
                     <input
@@ -76,7 +76,7 @@
             </div>
             <div
                 class="pd-b2 clearfix"
-                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
+                *ngIf="[fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)"
             >
                 <label class="import-field-label align-bottom">{{
                     inputData?.localeData?.header_provided
@@ -90,8 +90,8 @@
                     }}</span>
                 </mat-slide-toggle>
             </div>
-             <div class="pd-b2 clearfix"
-                *ngIf="selectStatement === importStatementType.BankStatement && (getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx')"
+            <div class="pd-b2 clearfix"
+                *ngIf="selectStatement === importStatementType.BankStatement && [fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)"
                 >
                 <label class="import-field-label align-bottom">{{
                     inputData?.localeData?.same_debit_credit_column
