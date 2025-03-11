@@ -550,7 +550,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let params = response[0];
-                this.queryParams = response[1];
+                this.queryParams = cloneDeep(response[1]);
 
                 if (this.queryParams?.redirect) {
                     this.redirectUrl = this.queryParams.redirect;
@@ -3067,6 +3067,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceForm?.get('entries')['controls']?.forEach(entry => {
                     entry.get('date')?.patchValue(dayjs(this.invoiceForm.get('date')?.value).format(GIDDH_DATE_FORMAT));
                 });
+                if (this.queryParams.page) {
+                    let voucherDate = this.invoiceForm?.get('date')?.value;
+                    if (typeof voucherDate === "object") {
+                        voucherDate = dayjs(voucherDate).format(GIDDH_DATE_FORMAT);
+                    }
+                    this.queryParams.page = 1;
+                    this.queryParams.to = voucherDate;
+                    this.queryParams.from = voucherDate;
+                }
             } else if (this.dateChangeType === "entry") {
                 let entryFormGroup = this.getEntryFormGroup(this.updatedEntryIndex);
 
@@ -3885,7 +3894,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (callback) {
                             callback(response);
                         } else {
-                            this.router.navigate(['/pages/vouchers/preview/' + this.voucherType + '/list']);
+                            this.invoiceForm.get('uniqueName').patchValue(response.body?.number);
+                            this.redirectToVoucherPreview();
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);

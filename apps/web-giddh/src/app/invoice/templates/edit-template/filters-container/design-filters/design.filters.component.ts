@@ -371,6 +371,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public setFontAndFontSize() {
         if (this.customTemplate) {
             if (this.customTemplate.font) {
+                if (this.customTemplate.templateType === 'tally_template') {
+                    this.presetFonts = [
+                        { label: 'Open Sans', value: 'Open Sans' },
+                        { label: 'Roboto', value: 'Roboto' }
+                    ];
+                }
+
                 this.presetFonts.map(font => {
                     if (font?.value === this.customTemplate.font) {
                         this.selectedFont = font.label;
