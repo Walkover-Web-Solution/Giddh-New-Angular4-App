@@ -117,6 +117,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.appUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
     /**
     * This function will use for get institutions details
@@ -164,7 +165,6 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = (isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {

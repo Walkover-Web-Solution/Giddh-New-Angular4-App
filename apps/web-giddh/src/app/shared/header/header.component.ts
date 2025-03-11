@@ -338,6 +338,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private renderer: Renderer2
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.appUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
@@ -697,8 +698,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
         // endregion
-
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver

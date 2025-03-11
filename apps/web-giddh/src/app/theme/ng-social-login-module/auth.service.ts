@@ -60,6 +60,7 @@ export class AuthService {
         this.loadingService.show();
         return new Promise((resolve, reject) => {
             const providerObject = this.providers.get(providerId);
+            console.log("providerObject " , providerObject);
             if (providerObject) {
                 if (providerObject.isInitialize) {
                     providerObject.signIn().then((user: SocialUser) => {
