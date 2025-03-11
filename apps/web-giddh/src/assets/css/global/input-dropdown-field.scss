@@ -486,6 +486,7 @@ ngx-mat-select-search {
 .custom-input-field {
     .mdc-text-field--filled {
         padding: 0;
+        background-color: transparent;
     }
 
     &.share-input-width {

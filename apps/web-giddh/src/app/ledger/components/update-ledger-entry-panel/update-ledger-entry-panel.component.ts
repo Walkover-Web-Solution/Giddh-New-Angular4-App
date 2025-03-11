@@ -324,6 +324,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public transactionsList: ITransactionItem[];
     /** True if show no data found */
     public isShowNoDataFound: boolean = false;
+     /** Holds images folder path */
+     public imgPath: string = "";
 
     // Listen for Arrow Keys
     @HostListener('window:keydown', ['$event'])
@@ -384,6 +386,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

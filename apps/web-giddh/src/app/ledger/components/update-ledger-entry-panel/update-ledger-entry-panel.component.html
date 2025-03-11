@@ -89,7 +89,7 @@
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found">
                     <h1>{{ localeData?.no_data_found_message }}</h1>
-                    <img height="200" src="/assets/images/no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
+                    <img height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found"/>
                 </div>
             </div>
             <button
@@ -2536,7 +2536,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="pd-r1">
-                                                    <div class="form-group mr-b05 bg-transparent">
+                                                    <div class="form-group mr-b05">
                                                         <input-field
                                                             [label]="localeData?.voucher_no"
                                                             [id]="'update-ledger-voucher-no'"
@@ -2927,7 +2927,7 @@
                 </div>
             </div>
             <p
-                class="edit-message"
+                class="edit-message w-100"
                 *ngIf="
                     !isPettyCash &&
                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&

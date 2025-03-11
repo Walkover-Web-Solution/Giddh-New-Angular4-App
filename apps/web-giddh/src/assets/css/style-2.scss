@@ -13819,3 +13819,8 @@ mat-list {
         border-bottom: none !important;
     }
 }
+.mdc-text-field--disabled {
+    .mdc-text-field--filled {
+       background-color: transparent;
+    }
+}

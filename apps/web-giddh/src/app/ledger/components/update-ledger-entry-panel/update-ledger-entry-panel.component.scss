@@ -288,10 +288,10 @@ p.edit-message {
     background-color: var(--color-dark-fog);
     text-align: center;
     padding: 8px 0;
-    border-top: 1px solid var(--color-common-secondary-border);
     font-size: var(--font-size-15);
     font-family: var(--font-semibold);
-    margin-top: 15px;
+    margin-top: 0px;
+    max-width: min(1200px, 80vw);
 }
 
 .collapse-icons {
@@ -347,15 +347,15 @@ p.edit-message {
 .dialog-background {
     background-color: var(--color-gray);
     display: grid;
-    place-items: center;
+    place-content: center;
 }
 
 .no-data-found {
     background: var(--color-white);
     text-align: center;
     font-size: var(--font-size-32);
-    height: 60%;
-    width: 60%;
+    height: 100%;
+    width: 100%;
     padding: 3rem;
     color: var(--color-gray);
 }
