@@ -1485,9 +1485,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.needToReCalculate.next(false);
     }
 
-
-    public showUpdateLedgerModal(txn: ITransactionItem, type: 'cr' | 'dr') {
-        console.log(txn, type, this.ledgerTransactions.creditTransactions);
+    /**
+     * Show update ledger panel
+     *
+     * @param {ITransactionItem} txn
+     * @param {('cr' | 'dr')} type
+     * @memberof LedgerComponent
+     */
+    public showUpdateLedgerModal(txn: ITransactionItem, type: 'cr' | 'dr'): void {
         const transactionsList = type === 'cr' ? this.ledgerTransactions.creditTransactions : this.ledgerTransactions.debitTransactions;
         const txnIndex = transactionsList.findIndex(t => t.entryUniqueName === txn.entryUniqueName);
 
@@ -1742,10 +1747,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public loadUpdateLedgerComponent(transaction: ITransactionItem, index: number, transactionsList: ITransactionItem[]) {
+    /**
+     * This will be use for load update ledger component 
+     *
+     * @param {ITransactionItem} transaction
+     * @param {number} index
+     * @param {ITransactionItem[]} transactionsList
+     * @memberof LedgerComponent
+     */
+    public loadUpdateLedgerComponent(transaction: ITransactionItem, index: number, transactionsList: ITransactionItem[]): void {
         this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
-            width: '70%',
-            height: '650px',
+            width: '100vw',
+            height: '100vh',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
             role: 'alertdialog',
             ariaLabel: 'update',
             data: { transaction, index, transactionsList }

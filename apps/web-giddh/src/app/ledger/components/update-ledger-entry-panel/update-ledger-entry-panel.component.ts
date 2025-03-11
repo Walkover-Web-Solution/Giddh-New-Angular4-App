@@ -4,6 +4,7 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
+    HostListener,
     Inject,
     Input,
     OnChanges,
@@ -294,11 +295,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAccountSearchData: boolean = true;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Hold ledger transactions */
     public transaction: ITransactionItem;
+    /** Hold ledger transactions index */
     public index: number;
+    /** Hold ledger transactions type cr/dr list */
     public transactionsList: ITransactionItem[];
-    /** True if ledger account belongs to sundry debtor/creditor */
+    /** True if show no data found */
     public isShowNoDataFound: boolean = false;
+
+    // Listen for Arrow Keys
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'ArrowRight') {
+            this.moveToNextTransactions();
+        } else if (event.key === 'ArrowLeft') {
+            this.moveToPreviousTransactions();
+        }
+    }
 
     constructor(
         private accountService: AccountService,
@@ -321,11 +335,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private invoiceAction: InvoiceActions,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
-        console.log(data);
-
-        this.transaction = data.transaction;
-        this.index = data.index;
-        this.transactionsList = data.transactionsList;
+        this.transaction = data?.transaction;
+        this.index = data?.index;
+        this.transactionsList = data?.transactionsList;
         this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
 
         this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
@@ -341,46 +353,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
     }
-
-    public moveToNext(): void {
-        console.log(this.transactionsList, this.index, this.transaction);
-        if (this.index < this.transactionsList.length - 1) {
-            this.index++;
-            this.transaction = this.transactionsList[this.index];
-            this.sliderRefreshData();
-            this.isShowNoDataFound = false;
-        } else {
-            console.log(this.isShowNoDataFound);
-
-            this.isShowNoDataFound = true;
-        }
-    }
-
-
-
-    public moveToPrevious(): void {
-        if (this.index > 0) {
-            this.index--;
-            this.transaction = this.transactionsList[this.index];
-            this.sliderRefreshData();
-            this.isShowNoDataFound = false;
-        } else {
-            this.isShowNoDataFound = true;
-            console.log(this.isShowNoDataFound);
-
-        }
-    }
-    public sliderRefreshData(): void {
-        // get entry name and ledger account uniqueName
-        observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-            if (resp[0] && resp[1]) {
-                this.entryUniqueName = this.transaction.entryUniqueName;
-                this.accountUniqueName = resp[1];
-                this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
-            }
-        });
-    }
-
 
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
@@ -2741,6 +2713,51 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.vm.onTxnAmountChange(txn);
                 }
                 this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * This will be use for move to next transactions
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public moveToNextTransactions(): void {
+        if (this.index < this.transactionsList.length - 1) {
+            this.index++;
+            this.transaction = this.transactionsList[this.index];
+            this.sliderRefreshData();
+            this.isShowNoDataFound = false;
+        } else {
+            this.index++;
+            this.isShowNoDataFound = true;
+        }
+    }
+
+    /**
+     * This will be use for move to previous transactions
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public moveToPreviousTransactions(): void {
+        if (this.index > 0) {
+            this.index--;
+            this.transaction = this.transactionsList[this.index];
+            this.sliderRefreshData();
+            this.isShowNoDataFound = false;
+        } else {
+            this.index--;
+            this.isShowNoDataFound = true;
+        }
+    }
+
+    public sliderRefreshData(): void {
+        // get entry name and ledger account uniqueName
+        observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            if (resp[0] && resp[1]) {
+                this.entryUniqueName = this.transaction.entryUniqueName;
+                this.accountUniqueName = resp[1];
+                this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
             }
         });
     }
