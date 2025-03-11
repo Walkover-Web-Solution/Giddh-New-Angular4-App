@@ -608,7 +608,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         }
         else {
-            this.isVoucherDownloadError = true;
             this.pdfPreviewHasError = true;
             if (this.voucherType === VoucherTypeEnum.purchase) {
                 this.shouldShowUploadAttachment = true;
