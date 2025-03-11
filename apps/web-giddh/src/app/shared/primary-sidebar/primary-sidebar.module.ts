@@ -44,8 +44,7 @@ import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config
     providers: [
         {
             provide: AuthServiceConfig,
-            useFactory: () => {
-                const injector = Injector.create({ providers: [{ provide: ServiceConfig, useValue: {} }] });
+            useFactory: (injector: Injector) => {
                 const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
                 return new AuthServiceConfig(
                     [
@@ -56,7 +55,8 @@ import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config
                     ],
                     false
                 );
-            }
+            },
+            deps: [Injector] // Ensure the injector is available
         }
     ]
 })

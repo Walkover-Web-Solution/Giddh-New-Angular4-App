@@ -62,7 +62,7 @@
                 const apiDomainName =
                     whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomainName || "https://apitest.giddh.com";
                 const logoUrl = "./assets/images/giddh-big-logo.svg";
-
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
                 if (whiteLabelConfig) {
                     // Remove the h1 tag containing the image
                     const logoContainer = document.querySelector("#main-giddh-loader h1");
