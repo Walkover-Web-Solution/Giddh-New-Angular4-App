@@ -122,8 +122,6 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      * prepare taxObject as per needed
      */
     public prepareTaxObject() {
-        console.log(this.taxes);
-        
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
             this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
