@@ -318,6 +318,9 @@ giddh-datepicker,
         mat-datepicker-toggle {
             display: flex;
         }
+        .mat-mdc-form-field-icon-suffix {
+            padding: 0px 0 0 0px;
+        }
     }
 }
 
