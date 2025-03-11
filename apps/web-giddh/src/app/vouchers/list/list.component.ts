@@ -468,7 +468,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         companyInventorySettings: this.settingResponse.companyInventorySettings || {}
                     });
                 }
-                if (this.isEInvoiceEnabled === null) {
+                if (this.isEInvoiceEnabled === null || params?.voucherType) {
                     this.initSettingObj();
                 }
                 if (this.queryParams.page) {
