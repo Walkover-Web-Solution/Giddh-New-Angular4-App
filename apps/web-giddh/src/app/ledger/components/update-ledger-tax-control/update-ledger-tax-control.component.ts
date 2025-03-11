@@ -111,12 +111,19 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             this.calculateInclusiveOrExclusiveFormattedTax();
             this.taxAmountSumEvent.emit(this.sum);
         }
+        
+        if ('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
+            this.prepareTaxObject();
+            this.change();
+        }
     }
 
     /**
      * prepare taxObject as per needed
      */
     public prepareTaxObject() {
+        console.log(this.taxes);
+        
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
             this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }

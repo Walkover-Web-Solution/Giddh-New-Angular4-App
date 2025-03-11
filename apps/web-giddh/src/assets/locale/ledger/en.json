@@ -217,5 +217,6 @@
     "import_voucher_heading": "Import Voucher (CSV/EXCEL only)",
     "select_statement": "Select Statement",
     "import_voucher": "Import Voucher",
-    "import_bank_statement": "Import Bank Statement"
+    "import_bank_statement": "Import Bank Statement",
+    "no_data_found_message":"No transactions found. Please change the page to get transactions."
 }

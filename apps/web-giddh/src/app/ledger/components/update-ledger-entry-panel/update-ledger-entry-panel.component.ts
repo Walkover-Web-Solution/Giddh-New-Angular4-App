@@ -4,6 +4,8 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
+    HostListener,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
@@ -32,7 +34,7 @@ import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Compa
 import { DownloadLedgerRequest, IVariant, LedgerResponse } from '../../../models/api-models/Ledger';
 import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
@@ -52,7 +54,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
@@ -67,6 +69,7 @@ import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.t
 import { CompanyActions } from '../../../actions/company.actions';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
+import { UpdateLedgerTaxControlComponent } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -314,7 +317,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Create tax dialog ref  */
     public taxAsideMenuRef: MatDialogRef<any>;
+    /** Hold ledger transactions */
+    public transaction: ITransactionItem;
+    /** Hold ledger transactions index */
+    public index: number;
+    /** Hold ledger transactions type cr/dr list */
+    public transactionsList: ITransactionItem[];
+    /** True if show no data found */
+    public isShowNoDataFound: boolean = false;
 
+    // Listen for Arrow Keys
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'ArrowRight') {
+            this.moveToNextTransactions();
+        } else if (event.key === 'ArrowLeft') {
+            this.moveToPreviousTransactions();
+        }
+    }
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
@@ -337,8 +357,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private ledgerUtilityService: LedgerUtilityService,
-        private invoiceAction: InvoiceActions
+        private invoiceAction: InvoiceActions,
+        @Inject(MAT_DIALOG_DATA) public data: any
     ) {
+        this.transaction = data?.transaction;
+        this.index = data?.index;
+        this.transactionsList = data?.transactionsList;
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1196,10 +1220,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                 if (selectedInvoice) {
                     if (this.voucherApiVersion === 2) {
-                        selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.voucherNumber, this.commonLocaleData);
+                        selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.number, this.commonLocaleData);
 
                         invoiceSelected = {
-                            label: selectedInvoice.voucherNumber ? selectedInvoice.voucherNumber : '-',
+                            label: selectedInvoice.number ? selectedInvoice.number : '-',
                             value: selectedInvoice.uniqueName,
                             additional: selectedInvoice
                         };
@@ -2817,11 +2841,57 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public closeTaxModal(): void {
         this.store.dispatch(this.companyActions.getTax());
-        this.store.pipe((select(tax => tax.company && tax.company.taxes)), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.vm.taxRenderData = response;
+        this.taxAsideMenuRef.close();
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+   * This will be use for move to next transactions
+   *
+   * @memberof UpdateLedgerEntryPanelComponent
+   */
+    public moveToNextTransactions(): void {
+        if (this.index < this.transactionsList.length - 1) {
+            this.index++;
+            this.transaction = this.transactionsList[this.index];
+            this.sliderRefreshData();
+            this.isShowNoDataFound = false;
+        } else {
+            this.index++;
+            this.isShowNoDataFound = true;
+        }
+    }
+
+    /**
+     * This will be use for move to previous transactions
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public moveToPreviousTransactions(): void {
+        if (this.index > 0) {
+            this.index--;
+            this.transaction = this.transactionsList[this.index];
+            this.sliderRefreshData();
+            this.isShowNoDataFound = false;
+        } else {
+            this.index--;
+            this.isShowNoDataFound = true;
+        }
+    }
+
+/**
+ * This will be use for slider refresh transactions
+ *
+ * @memberof UpdateLedgerEntryPanelComponent
+ */
+public sliderRefreshData(): void {
+        // get entry name and ledger account uniqueName
+        observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            if (resp[0] && resp[1]) {
+                this.entryUniqueName = this.transaction?.entryUniqueName;
+                this.accountUniqueName = resp[1];
+                this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
             }
         });
-        this.taxAsideMenuRef.close();
     }
 }
