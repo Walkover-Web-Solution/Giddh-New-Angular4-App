@@ -285,25 +285,9 @@ giddh-datepicker,
 }
 
 .ledger-row {
-    giddh-datepicker {
-        border: 3px solid green;
-        // .mat-mdc-form-field {
-        //     min-width: 71px;
-        //     max-width: 111px;
-        // }
-        // .mat-datepicker-input {
-        //     // position: absolute;
-        //     // margin-top: 12px;
-        // }
-
-        // // .mat-datepicker-toggle {
-        // //     position: relative;
-        // //     left: 75px;
-        // // }
-        
+    giddh-datepicker { 
         .mat-mdc-form-field-infix {
             width: 100%;
-            background-color: pink;
             display: flex;
             align-items: center;
 
