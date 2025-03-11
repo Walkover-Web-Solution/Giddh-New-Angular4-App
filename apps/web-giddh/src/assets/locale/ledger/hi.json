@@ -217,5 +217,6 @@
     "import_voucher_heading": "वाउचर आयात करें (केवल CSV/EXCEL)",
     "select_statement": "वक्तव्य चुनें",
     "import_voucher": "वाउचर आयात करें",
-    "import_bank_statement": "बैंक स्टेटमेंट आयात करें"
+    "import_bank_statement": "बैंक स्टेटमेंट आयात करें",
+    "no_data_found_message":"कोई लेन-देन नहीं मिला। कृपया लेन-देन प्राप्त करने के लिए पृष्ठ बदलें।"    
 }

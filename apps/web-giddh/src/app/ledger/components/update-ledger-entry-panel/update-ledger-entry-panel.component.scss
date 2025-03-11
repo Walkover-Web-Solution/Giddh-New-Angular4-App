@@ -321,8 +321,46 @@ p.edit-message {
 .read-only {
     background-color: var(--color-secondary-input-bar-background) !important;
 }
-/* responsive */
 
+.navigation-icon {
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    &-left {
+        left: 15px;
+    }
+
+    &-right {
+        right: 15px;
+    }
+}
+
+.update-ledger-dialog {
+    max-width: min(1200px, 80vw);
+}
+
+.slider-icon {
+    font-size: 60px;
+}
+
+.dialog-background {
+    background-color: var(--color-gray);
+    display: grid;
+    place-items: center;
+}
+
+.no-data-found {
+    background: var(--color-white);
+    text-align: center;
+    font-size: var(--font-size-32);
+    height: 60%;
+    width: 60%;
+    padding: 3rem;
+    color: var(--color-gray);
+}
+
+/* responsive */
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
         display: flex;
