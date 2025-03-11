@@ -763,53 +763,49 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                                <div class="d-flex align-items-center custom-input-field">
-                                                                    <span class="checkbox-span position-absolute mr-l1">
-                                                                        <mat-checkbox
-                                                                            color="primary"
-                                                                            [id]="
-                                                                                'transaction-mapped-select-entry-dr-' +
-                                                                                i
-                                                                            "
-                                                                            [checked]="
-                                                                                selectedDebitTransactionIds?.has(
+                                                                <div style="border: 1px dashed red;" class="d-flex align-items-center custom-input-field w-100">
+                                                                    <mat-checkbox
+                                                                        color="primary"
+                                                                        [id]="
+                                                                            'transaction-mapped-select-entry-dr-' +
+                                                                            i
+                                                                        "
+                                                                        [checked]="
+                                                                            selectedDebitTransactionIds?.has(
+                                                                                txn?.id
+                                                                            )
+                                                                        "
+                                                                        [ngClass]="{
+                                                                            'd-none':
+                                                                                selectedBankTrxWhileHovering !==
+                                                                                    txn.id &&
+                                                                                !selectedDebitTransactionIds.has(
                                                                                     txn?.id
                                                                                 )
-                                                                            "
-                                                                            [ngClass]="{
-                                                                                'd-none':
-                                                                                    selectedBankTrxWhileHovering !==
-                                                                                        txn.id &&
-                                                                                    !selectedDebitTransactionIds.has(
-                                                                                        txn?.id
-                                                                                    )
-                                                                            }"
-                                                                            (change)="
-                                                                                selectEntryForBulkAction(
-                                                                                    $event,
-                                                                                    item,
-                                                                                    txn.id,
-                                                                                    'debit'
-                                                                                )
-                                                                            "
-                                                                            [disabled]="
-                                                                                (currentOrganizationType ===
-                                                                                    'COMPANY' ||
-                                                                                    isConsolidatedBranch) &&
-                                                                                currentCompanyBranches?.length > 2
-                                                                            "
-                                                                        ></mat-checkbox>
-                                                                    </span>
-                                                                    <span class="custom-input-field mr-l05" [ngClass]="{'pd-l2': !(selectedBankTrxWhileHovering !==
-                                                                    txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
-                                                                        <giddh-datepicker
-                                                                            name="bsdateledger"
-                                                                            [(ngModel)]="item.entryDate"
-                                                                            (dateSelected)="onChangeEntryDate(item)"
-                                                                            (datepickerState)="datepickerState($event)"
-                                                                            [showToggleIcon] = "true"
-                                                                        ></giddh-datepicker>
-                                                                    </span>
+                                                                        }"
+                                                                        (change)="
+                                                                            selectEntryForBulkAction(
+                                                                                $event,
+                                                                                item,
+                                                                                txn.id,
+                                                                                'debit'
+                                                                            )
+                                                                        "
+                                                                        [disabled]="
+                                                                            (currentOrganizationType ===
+                                                                                'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
+                                                                            currentCompanyBranches?.length > 2
+                                                                        "
+                                                                    ></mat-checkbox>
+                                                                    <giddh-datepicker
+                                                                        class="flex-grow-1"
+                                                                        name="bsdateledger"
+                                                                        [(ngModel)]="item.entryDate"
+                                                                        (dateSelected)="onChangeEntryDate(item)"
+                                                                        (datepickerState)="datepickerState($event)"
+                                                                        [showToggleIcon] = "true"
+                                                                    ></giddh-datepicker>
                                                                 </div>
                                                             </mat-grid-tile>
                                                             <mat-grid-tile
@@ -1128,52 +1124,49 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                              <div class="d-flex align-items-center custom-input-field">
-                                                                    <span class="checkbox-span checked mr-l1">
-                                                                        <mat-checkbox
-                                                                            color="primary"
-                                                                            [id]="
-                                                                                'transaction-mapped-select-entry-cr-' +
-                                                                                i
-                                                                            "
-                                                                            [checked]="
-                                                                                selectedCreditTransactionIds?.has(
+                                                              <div style="border: 1px dashed blue;" class="custom-input-field d-flex align-items-center w-100">
+                                                                    <mat-checkbox
+                                                                        color="primary"
+                                                                        [id]="
+                                                                            'transaction-mapped-select-entry-cr-' +
+                                                                            i
+                                                                        "
+                                                                        [checked]="
+                                                                            selectedCreditTransactionIds?.has(
+                                                                                txn?.id
+                                                                            )
+                                                                        "
+                                                                        [ngClass]="{
+                                                                            'd-none':
+                                                                                selectedBankTrxWhileHovering !==
+                                                                                    txn.id &&
+                                                                                !selectedCreditTransactionIds?.has(
                                                                                     txn?.id
                                                                                 )
-                                                                            "
-                                                                            [ngClass]="{
-                                                                                'd-none':
-                                                                                    selectedBankTrxWhileHovering !==
-                                                                                        txn.id &&
-                                                                                    !selectedCreditTransactionIds?.has(
-                                                                                        txn?.id
-                                                                                    )
-                                                                            }"
-                                                                            (change)="
-                                                                                selectEntryForBulkAction(
-                                                                                    $event,
-                                                                                    item,
-                                                                                    txn.id,
-                                                                                    'credit'
-                                                                                )
-                                                                            "
-                                                                            [disabled]="
-                                                                                (currentOrganizationType ===
-                                                                                    'COMPANY' ||
-                                                                                    isConsolidatedBranch) &&
-                                                                                currentCompanyBranches?.length > 2
-                                                                            "
-                                                                        ></mat-checkbox>
-                                                                    </span>
-                                                                    <span class="custom-input-field ml-1">
-                                                                        <giddh-datepicker
-                                                                            name="bsDates"
-                                                                            [(ngModel)]="item.entryDate"
-                                                                            (dateSelected)="onChangeEntryDate(item)"
-                                                                            (datepickerState)="datepickerState($event)"
-                                                                            [showToggleIcon] = "true"
-                                                                        ></giddh-datepicker>
-                                                                    </span>
+                                                                        }"
+                                                                        (change)="
+                                                                            selectEntryForBulkAction(
+                                                                                $event,
+                                                                                item,
+                                                                                txn.id,
+                                                                                'credit'
+                                                                            )
+                                                                        "
+                                                                        [disabled]="
+                                                                            (currentOrganizationType ===
+                                                                                'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
+                                                                            currentCompanyBranches?.length > 2
+                                                                        "
+                                                                    ></mat-checkbox>
+                                                                    <giddh-datepicker
+                                                                        class="flex-grow-1"
+                                                                        name="bsDates"
+                                                                        [(ngModel)]="item.entryDate"
+                                                                        (dateSelected)="onChangeEntryDate(item)"
+                                                                        (datepickerState)="datepickerState($event)"
+                                                                        [showToggleIcon] = "true"
+                                                                    ></giddh-datepicker>
                                                                 </div>
                                                             </mat-grid-tile>
                                                             <mat-grid-tile

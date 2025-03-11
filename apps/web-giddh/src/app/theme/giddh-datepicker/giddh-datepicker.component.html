@@ -24,7 +24,7 @@
         />
         <ng-container *ngIf="showToggleIcon">
             <mat-datepicker-toggle
-                matSuffix
+                matIconSuffix
                 [for]="picker"
                 (focusout)="!isDatepickerOpen ? focusOut.emit(true) : ''"
                 (click)="emitDatepickerState(true); picker?.open()"
