@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component, ContentChild, EventEmitter, HostListener, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, EventEmitter, HostListener, Input, Output, TemplateRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -15,53 +14,51 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ],
     standalone: true
 })
-export class CarouselComponent implements OnInit, AfterContentInit {
+export class CarouselComponent {
     /** Holds template of slide on the component itself */
     @ContentChild('slideTemplate', { static: false }) public slideTemplate: TemplateRef<any>;
-    /** */
+    /** Hold next disable event */
     @Input() public isNextDisabled: boolean = false;
-    /** */
+    /** Hold previous disable event */
     @Input() public isPreviousDisabled: boolean = false;
     /** Emits navigate to previous slide */
     @Output() public navigatePrevious: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emits navigate to next slide */
     @Output() public navigateNext: EventEmitter<boolean> = new EventEmitter<boolean>();
-    public isContentFocused: boolean;
 
     constructor(
-        private dialog: MatDialog,
-        @Inject(MAT_DIALOG_DATA) public inputData
     ) { }
 
     /**
-     * Initializes the component
+     *Handle previous navigate previous
      *
      * @memberof CarouselComponent
      */
-    public ngOnInit(): void {
-        console.log("inputData", this.inputData);
-    }
-
-    /**
-     * Called after content has been projected into the view.
-     *
-     * @memberof CarouselComponent
-     */
-    public ngAfterContentInit(): void {
-        console.log(this.slideTemplate); // Now slideTemplate should be available
-    }
-
     public handleNavigatePrevious(): void {
         this.navigatePrevious.emit(true);
     }
 
+    /**
+     * Emit handle navigation next event
+     *
+     * @memberof CarouselComponent
+     */
     public handleNavigateNext(): void {
         this.navigateNext.emit(true);
     }
 
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
-        if (!this.isContentFocused) {
+        // Get the active element in the document
+        const activeElement = document.activeElement;
+
+        // Check if the focused element is an input field, textarea, or a contenteditable element
+        const isInputFocused = activeElement && (
+            activeElement.tagName === 'INPUT' ||
+            activeElement.tagName === 'TEXTAREA'
+        );
+
+        if (!isInputFocused) { // Only navigate if no input field is focused
             if (event.key === 'ArrowRight') {
                 this.handleNavigateNext();
                 event.preventDefault();
@@ -71,4 +68,5 @@ export class CarouselComponent implements OnInit, AfterContentInit {
             }
         }
     }
+
 }

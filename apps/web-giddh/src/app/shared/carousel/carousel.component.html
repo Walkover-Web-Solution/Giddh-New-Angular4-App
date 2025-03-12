@@ -20,13 +20,7 @@
         <i class="icon-right slider-icon"></i>
     </button>
 
-    <main 
-      class="carousel-content" 
-      (focus)="isContentFocused = true" 
-      (blur)="isContentFocused = false" 
-      tabindex="0"
-    >
-        {{ isContentFocused }}
+    <main class="carousel-content" tabindex="0">
         <ng-container *ngIf="slideTemplate">
             <ng-container *ngTemplateOutlet="slideTemplate"></ng-container>
         </ng-container>
