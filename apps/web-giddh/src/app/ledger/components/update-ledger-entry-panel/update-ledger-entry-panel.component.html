@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div id="entryModal" class="d-flex">
+    <div id="entryModal">
         <!-- region header -->
         <div class="modal-header align-items-center flex-row-reverse dialog-fixed-header" *ngIf="!isPettyCash">
             <button
@@ -85,14 +85,14 @@
         <!-- endregion -->
 
         <!-- region main body -->
-        <div class="position-relative dialog-height dialog-background pd-t15 pd-b15 flex-grow-1">
+        <div class="position-relative">
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found">
                     <h1>{{ localeData?.no_data_found_message }}</h1>
                     <img height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found"/>
                 </div>
             </div>
-            <button
+            <!-- <button
                 mat-fab
                 color="primary"
                 class="navigation-icon navigation-icon-left position-absolute"
@@ -109,7 +109,7 @@
                 [matTooltip]="'Next'"
             >
                 <i class="icon-right slider-icon"></i>
-            </button>
+            </button> -->
             <div class="modal-body pd-l5 pd-r5 update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
                 <span class="font-15" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
                 <!-- region transactions -->
