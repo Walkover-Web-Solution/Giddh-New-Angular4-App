@@ -89,29 +89,30 @@
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found">
                     <h1>{{ localeData?.no_data_found_message }}</h1>
-                    <img height="200" src="/assets/images/no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
+                    <img height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
-            <!-- <button
-                mat-fab
-                color="primary"
-                class="navigation-icon navigation-icon-left position-absolute"
-                (click)="moveToPreviousTransactions()"
-                [matTooltip]="'Previous'"
-            >
-                <i class="icon-left slider-icon"></i>
-            </button>
-            <button
-                mat-fab
-                color="primary"
-                class="navigation-icon navigation-icon-right position-absolute"
-                (click)="moveToNextTransactions()"
-                [matTooltip]="'Next'"
-            >
-                <i class="icon-right slider-icon"></i>
-            </button> -->
             <div class="modal-body pd-l5 pd-r5 update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
                 <span class="font-15" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
+                <div class="pr-2 w-25 pb-1">
+                    <giddh-datepicker
+                        [label]="commonLocaleData?.app_date"
+                        [placeholder]="commonLocaleData?.app_date"
+                        [disabled]="
+                            isEinvoiceGenerated ||
+                            (!isPettyCash &&
+                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                branches?.length > 1)
+                        "
+                        name="entryDate"
+                        [showToggleIcon]="false"
+                        [appearance]="'outline'"
+                        [(ngModel)]="vm.selectedLedger.entryDate"
+                        (dateSelected)="resetInvoiceList()"
+                        (datepickerState)="datepickerState($event)"
+                    >
+                    </giddh-datepicker>
+                </div>
                 <!-- region transactions -->
                 <div class="ledg-head entry-popup">
                     <table class="w-100 ledger-head mr-t1 hidden-xs">
@@ -137,12 +138,12 @@
                                     <table class="width-100 card-table">
                                         <thead class="hidden-xs">
                                             <tr class="thead-background1 row">
-                                                <th class="col-3 border-top-none">
+                                                <!-- <th class="col-3 border-top-none">
                                                     <span class="cursor-pointer">
                                                         {{ commonLocaleData?.app_date }}
                                                     </span>
-                                                </th>
-                                                <th class="col-6 border-top-none">
+                                                </th> -->
+                                                <th class="col-9 border-top-none">
                                                     {{ commonLocaleData?.app_particular }}
                                                 </th>
 
@@ -163,34 +164,13 @@
                                             >
                                                 <ng-container *ngIf="txn.type === 'DEBIT'">
                                                     <td
-                                                        class="col-3 d-flex align-items-center custom-input-field"
-                                                        [attr.data-title]="commonLocaleData?.app_date"
-                                                    >
-                                                        <giddh-datepicker
-                                                            class="width-datepicker"
-                                                            [showToggleIcon]="false"
-                                                            [disabled]="
-                                                                isEinvoiceGenerated ||
-                                                                (!isPettyCash &&
-                                                                    (currentOrganizationType === 'COMPANY' ||
-                                                                        isConsolidatedBranch) &&
-                                                                    branches?.length > 1)
-                                                            "
-                                                            [id]="'giddh-datepicker-left-' + i"
-                                                            name="datess"
-                                                            [(ngModel)]="vm.selectedLedger.entryDate"
-                                                            (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                            (dateSelected)="resetInvoiceList()"
-                                                        ></giddh-datepicker>
-                                                    </td>
-                                                    <td
                                                         [attr.data-title]="commonLocaleData?.app_particular"
                                                         [id]="'debit-id-' + i"
                                                         [ngClass]="{
                                                             'other-account-entry':
                                                                 isPettyCash && txn?.particular?.uniqueName === 'others'
                                                         }"
-                                                        class="col-6 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                        class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                                     >
                                                         <ng-template [ngIf]="!txn.isDiscount">
                                                             <div class="d-flex update-ledger-account w-100">
@@ -494,12 +474,7 @@
                                     <table class="width-100 card-table">
                                         <thead class="xs-hidden">
                                             <tr class="thead-background1 row">
-                                                <th class="col-3 border-top-none">
-                                                    <span class="cursor-pointer">
-                                                        {{ commonLocaleData?.app_date }}
-                                                    </span>
-                                                </th>
-                                                <th class="col-6 border-top-none">
+                                                <th class="col-9 border-top-none">
                                                     {{ commonLocaleData?.app_particular }}
                                                 </th>
                                                 <th class="col-3 text-right border-top-none">
@@ -514,29 +489,9 @@
                                             >
                                                 <ng-container *ngIf="txn.type == 'CREDIT'">
                                                     <td
-                                                        [attr.data-title]="commonLocaleData?.app_date"
-                                                        class="col-3 d-flex align-items-center custom-input-field"
-                                                    >
-                                                        <giddh-datepicker
-                                                            class="width-datepicker"
-                                                            [showToggleIcon]="false"
-                                                            [disabled]="
-                                                                isEinvoiceGenerated ||
-                                                                (!isPettyCash &&
-                                                                    (currentOrganizationType === 'COMPANY' ||
-                                                                        isConsolidatedBranch) &&
-                                                                    branches?.length > 1)
-                                                            "
-                                                            [id]="'giddh-datepicker-right-' + i"
-                                                            name="datepic"
-                                                            [(ngModel)]="vm.selectedLedger.entryDate"
-                                                            (click)="addBlankTrx('CREDIT', txn, $event)"
-                                                        ></giddh-datepicker>
-                                                    </td>
-                                                    <td
                                                         [attr.data-title]="commonLocaleData?.app_particular"
                                                         [id]="'credit-id-' + i"
-                                                        class="position-relative col-6 select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                        class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                                         [ngClass]="{
                                                             'other-account-entry':
                                                                 isPettyCash && txn?.particular?.uniqueName === 'others'
@@ -847,12 +802,7 @@
                             <table class="width-100 card-table">
                                 <thead class="hidden-xs">
                                     <tr class="thead-background1 row">
-                                        <th class="col-3 border-top-none">
-                                            <span class="cursor-pointer">
-                                                {{ commonLocaleData?.app_date }}
-                                            </span>
-                                        </th>
-                                        <th class="col-6 border-top-none">{{ commonLocaleData?.app_particular }}</th>
+                                        <th class="col-9 border-top-none">{{ commonLocaleData?.app_particular }}</th>
 
                                         <th class="col-3 text-right border-top-none">
                                             {{ commonLocaleData?.app_amount }}
@@ -871,34 +821,13 @@
                                     >
                                         <ng-container *ngIf="txn.type === 'DEBIT'">
                                             <td
-                                                class="col-3 d-flex align-items-center custom-input-field"
-                                                [attr.data-title]="commonLocaleData?.app_date"
-                                            >
-                                                <giddh-datepicker
-                                                    class="width-datepicker"
-                                                    [showToggleIcon]="false"
-                                                    [disabled]="
-                                                        isEinvoiceGenerated ||
-                                                        (!isPettyCash &&
-                                                            (currentOrganizationType === 'COMPANY' ||
-                                                                isConsolidatedBranch) &&
-                                                            branches?.length > 1)
-                                                    "
-                                                    [id]="'giddh-datepicker-left-' + i"
-                                                    name="datess"
-                                                    [(ngModel)]="vm.selectedLedger.entryDate"
-                                                    (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                    (dateSelected)="resetInvoiceList()"
-                                                ></giddh-datepicker>
-                                            </td>
-                                            <td
                                                 [attr.data-title]="commonLocaleData?.app_particular"
                                                 [id]="'debit-id-' + i"
                                                 [ngClass]="{
                                                     'other-account-entry':
                                                         isPettyCash && txn?.particular?.uniqueName === 'others'
                                                 }"
-                                                class="col-6 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                             >
                                                 <ng-template [ngIf]="!txn.isDiscount">
                                                     <div class="d-flex update-ledger-account w-100">
@@ -1186,12 +1115,7 @@
                             <table class="width-100 card-table">
                                 <thead class="xs-hidden">
                                     <tr class="thead-background1 row">
-                                        <th class="col-3 border-top-none">
-                                            <span class="cursor-pointer">
-                                                {{ commonLocaleData?.app_date }}
-                                            </span>
-                                        </th>
-                                        <th class="col-6 border-top-none">{{ commonLocaleData?.app_particular }}</th>
+                                        <th class="col-9 border-top-none">{{ commonLocaleData?.app_particular }}</th>
                                         <th class="col-3 text-right border-top-none">
                                             {{ commonLocaleData?.app_amount }}
                                         </th>
@@ -1204,29 +1128,9 @@
                                     >
                                         <ng-container *ngIf="txn.type == 'CREDIT'">
                                             <td
-                                                [attr.data-title]="commonLocaleData?.app_date"
-                                                class="col-3 d-flex align-items-center custom-input-field"
-                                            >
-                                                <giddh-datepicker
-                                                    class="width-datepicker"
-                                                    [showToggleIcon]="false"
-                                                    [disabled]="
-                                                        isEinvoiceGenerated ||
-                                                        (!isPettyCash &&
-                                                            (currentOrganizationType === 'COMPANY' ||
-                                                                isConsolidatedBranch) &&
-                                                            branches?.length > 1)
-                                                    "
-                                                    [id]="'giddh-datepicker-right-' + i"
-                                                    name="datepic"
-                                                    [(ngModel)]="vm.selectedLedger.entryDate"
-                                                    (click)="addBlankTrx('CREDIT', txn, $event)"
-                                                ></giddh-datepicker>
-                                            </td>
-                                            <td
                                                 [attr.data-title]="commonLocaleData?.app_particular"
                                                 [id]="'credit-id-' + i"
-                                                class="position-relative col-6 select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between"
                                                 [ngClass]="{
                                                     'other-account-entry':
                                                         isPettyCash && txn?.particular?.uniqueName === 'others'

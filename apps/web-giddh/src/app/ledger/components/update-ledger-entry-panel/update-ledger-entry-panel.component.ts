@@ -4,16 +4,16 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
-    HostListener,
     Inject,
     Input,
     OnChanges,
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     SimpleChanges,
     TemplateRef,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
@@ -69,7 +69,10 @@ import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.t
 import { CompanyActions } from '../../../actions/company.actions';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
-import { UpdateLedgerTaxControlComponent } from '../update-ledger-tax-control/update-ledger-tax-control.component';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatSelect } from '@angular/material/select';
+import { ServiceConfig } from '../../../services/service.config';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -118,12 +121,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public generateEInvoice: boolean = null;
     /** Holds side of entry (dr/cr) */
     @Input() public entrySide: string;
+    /** Holds transaction data*/
+    @Input() public entryTransactionData: any;
+    /** Holds carousel previous event*/
+    @Input() public carouselPrevious: boolean;
+    /** Holds carousel next event*/
+    @Input() public carouselNext: boolean;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
+    /** Element ref for mat menu **/
+    @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
+    /** Element ref for mat autocomplete **/
+    @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
+    /** Element ref for mat select **/
+    @ViewChild(MatSelect) matSelect: MatSelect;
     /** Adjustment modal */
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Warehouse data for warehouse drop down */
@@ -325,16 +340,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public transactionsList: ITransactionItem[];
     /** True if show no data found */
     public isShowNoDataFound: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
+    /** True if datepicker is open */
+    public isDatepickerOpen: boolean = false;
 
-    // Listen for Arrow Keys
-    @HostListener('window:keydown', ['$event'])
-    handleKeyDown(event: KeyboardEvent) {
-        if (event.key === 'ArrowRight') {
-            this.moveToNextTransactions();
-        } else if (event.key === 'ArrowLeft') {
-            this.moveToPreviousTransactions();
-        }
-    }
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
@@ -358,11 +368,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private adjustmentUtilityService: AdjustmentUtilityService,
         private ledgerUtilityService: LedgerUtilityService,
         private invoiceAction: InvoiceActions,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        private renderer: Renderer2,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
-        this.transaction = data?.transaction;
-        this.index = data?.index;
-        this.transactionsList = data?.transactionsList;
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -385,6 +393,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -563,11 +572,22 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngAfterViewInit() {
         this.vm.discountComponent = this.discountComponent;
+        this.transaction = this.entryTransactionData?.transaction;
+        this.index = this.entryTransactionData?.index;
+        this.transactionsList = this.entryTransactionData?.transactionsList;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['isPettyCash']) {
             this.isPettyCash = changes['isPettyCash'].currentValue;
+        }
+
+        if (changes['carouselNext'] && changes['carouselNext'].currentValue) {
+            this.moveToNextTransactions();
+        }
+
+        if (changes['carouselPrevious'] && changes['carouselPrevious'].currentValue) {
+            this.moveToPreviousTransactions();
         }
         if (changes['pettyCashEntry'] && changes['pettyCashEntry'].currentValue !== changes['pettyCashEntry'].previousValue) {
             this.accountPettyCashStream = changes['pettyCashEntry'].currentValue.body;
@@ -2859,6 +2879,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         } else {
             this.index++;
             this.isShowNoDataFound = true;
+            this.closeAll();
         }
     }
 
@@ -2876,15 +2897,40 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         } else {
             this.index--;
             this.isShowNoDataFound = true;
+            this.closeAll();
         }
     }
 
-/**
- * This will be use for slider refresh transactions
- *
- * @memberof UpdateLedgerEntryPanelComponent
- */
-public sliderRefreshData(): void {
+    /**
+     *This will be use for close all open dropdowns when user using keyboard shortcuts
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public closeAll(): void {
+        if (this.menuTrigger) {
+            this.menuTrigger.closeMenu();
+        }
+        if (this.autocompleteTrigger) {
+            this.autocompleteTrigger.closePanel();
+        }
+        if (this.matSelect) {
+            this.matSelect.close();
+        }
+
+        if (this.isDatepickerOpen) {
+            const overlayElement = document.querySelector('.cdk-overlay-pane.mat-datepicker-popup');
+            if (overlayElement) {
+                this.renderer.setStyle(overlayElement, 'display', 'none');
+            }
+        }
+    }
+
+    /**
+     * This will be use for slider refresh transactions
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public sliderRefreshData(): void {
         // get entry name and ledger account uniqueName
         observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (resp[0] && resp[1]) {
@@ -2893,5 +2939,15 @@ public sliderRefreshData(): void {
                 this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
             }
         });
+    }
+
+    /**
+     * This maintains state of datepicker (open/closed)
+     *
+     * @param {*} event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public datepickerState(event: any): void {
+        this.isDatepickerOpen = event;
     }
 }
