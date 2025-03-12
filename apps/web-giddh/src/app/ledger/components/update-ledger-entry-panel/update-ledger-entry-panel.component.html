@@ -92,24 +92,6 @@
                     <img height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
-            <!-- <button
-                mat-fab
-                color="primary"
-                class="navigation-icon navigation-icon-left position-absolute"
-                (click)="moveToPreviousTransactions()"
-                [matTooltip]="'Previous'"
-            >
-                <i class="icon-left slider-icon"></i>
-            </button>
-            <button
-                mat-fab
-                color="primary"
-                class="navigation-icon navigation-icon-right position-absolute"
-                (click)="moveToNextTransactions()"
-                [matTooltip]="'Next'"
-            >
-                <i class="icon-right slider-icon"></i>
-            </button> -->
             <div class="modal-body pd-l5 pd-r5 update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
                 <span class="font-15" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
                 <div class="pr-2 w-25 pb-1">

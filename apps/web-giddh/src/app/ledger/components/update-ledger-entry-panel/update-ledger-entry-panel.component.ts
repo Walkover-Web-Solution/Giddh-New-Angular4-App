@@ -52,7 +52,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
