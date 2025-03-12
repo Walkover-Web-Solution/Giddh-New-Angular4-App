@@ -700,14 +700,14 @@
                                 </div>
                                 <div class="wrap-transaction-map clearfix">
                                     <div class="w-100 ledger-head mt-0">
-                                        <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="37px">
+                                        <mat-grid-list cols="2" rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
-                                                <span class="pull-right">{{ localeData?.dr }}</span>
+                                                <span>{{ localeData?.dr }}</span>
                                             </mat-grid-tile>
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_credit }}
-                                                <span class="pull-right">{{ localeData?.cr }}</span>
+                                                <span>{{ localeData?.cr }}</span>
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
@@ -773,8 +773,8 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                                <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
-                                                                    <span class="checkbox-span position-absolute">
+                                                                <div class="d-flex align-items-center custom-input-field">
+                                                                    <span class="checkbox-span position-absolute mr-l1">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -810,8 +810,8 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                   <span class="custom-input-field" [ngClass]="{'pd-l15': !(selectedBankTrxWhileHovering !==
-                                                                    txn?.id && !selectedDebitTransactionIds.has(txn?.id))}">
+                                                                    <span class="custom-input-field mr-l05" [ngClass]="{'pd-l2': !(selectedBankTrxWhileHovering !==
+                                                                    txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
@@ -1139,8 +1139,8 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                              <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
-                                                                    <span class="checkbox-span position-absolute">
+                                                              <div class="d-flex align-items-center custom-input-field">
+                                                                    <span class="checkbox-span checked mr-l1">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -1176,8 +1176,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                   <span class="custom-input-field" [ngClass]="{'pd-l15': !(selectedBankTrxWhileHovering !==
-                                                                    txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
+                                                                    <span class="custom-input-field ml-1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -2147,7 +2146,7 @@
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                 [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
-                                                (saveBlankLedger)="generateLedger($event)"
+                                                (saveBlankLedger)="generateLedger()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                 [referenceVouchersTotalPages]="referenceVouchersTotalPages"
@@ -2622,7 +2621,7 @@
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                 [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
-                                                (saveBlankLedger)="generateLedger($event)"
+                                                (saveBlankLedger)="generateLedger()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"

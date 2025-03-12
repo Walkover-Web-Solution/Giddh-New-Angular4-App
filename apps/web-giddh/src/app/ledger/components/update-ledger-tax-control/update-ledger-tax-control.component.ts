@@ -85,6 +85,8 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     private selectedTaxes: UpdateLedgerTaxData[] = [];
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Emitter for create new tax selected */
+    @Output() public createNewTax: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private generalService: GeneralService) {
 
@@ -108,6 +110,11 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
             this.calculateInclusiveOrExclusiveFormattedTax();
             this.taxAmountSumEvent.emit(this.sum);
+        }
+        
+        if ('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
+            this.prepareTaxObject();
+            this.change();
         }
     }
 
@@ -353,5 +360,14 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      */
     public taxLabelBluring(taxLabel: HTMLElement): void {
         this.generalService.dropdownFocusOut(taxLabel);
+    }
+
+    /**
+     * Emits create new tax event
+     *
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public createNew(): void {
+        this.createNewTax.emit();
     }
 }

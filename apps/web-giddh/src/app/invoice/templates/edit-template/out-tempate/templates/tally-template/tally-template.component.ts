@@ -78,7 +78,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
-        this.companySetting$.subscribe(address => {
+        this.companySetting$.pipe(takeUntil(this.destroyed$)).subscribe(address => {
             if (address && address.address) {
                 this.companyAddress = cloneDeep(address.address);
             } else if (!address) {

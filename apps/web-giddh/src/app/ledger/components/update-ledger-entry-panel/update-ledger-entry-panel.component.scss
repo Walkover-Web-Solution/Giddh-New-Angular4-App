@@ -2,6 +2,11 @@
     padding: 0 4px;
 }
 
+.edit-icon-position {
+    top: -28px;
+    right: 0;
+}
+
 .height-30 {
     height: 30px;
 }
@@ -92,7 +97,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     justify-content: flex-end;
     padding-top: 25px;
     display: flex;
-    padding-left: 8px;
+    padding-left: 15px;
 }
 
 .total-col span.bd-rt {
@@ -133,13 +138,12 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .total-detail-table .table-amount {
-    width: 100%;
+    min-width: 0;
 }
 
 .icon-box {
     display: flex;
     align-items: center;
-    padding: 10px 10px 0 10px;
     font-size: 12px;
     height: 60px;
     label {
@@ -313,8 +317,50 @@ p.edit-message {
         font-size: var(--font-size-15);
     }
 }
-/* responsive */
 
+.read-only {
+    background-color: var(--color-secondary-input-bar-background) !important;
+}
+
+.navigation-icon {
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    &-left {
+        left: 15px;
+    }
+
+    &-right {
+        right: 15px;
+    }
+}
+
+.update-ledger-dialog {
+    max-width: min(1200px, 80vw);
+}
+
+.slider-icon {
+    font-size: 60px;
+}
+
+.dialog-background {
+    background-color: var(--color-gray);
+    display: grid;
+    place-items: center;
+}
+
+.no-data-found {
+    background: var(--color-white);
+    text-align: center;
+    font-size: var(--font-size-32);
+    height: 60%;
+    width: 60%;
+    padding: 3rem;
+    color: var(--color-gray);
+}
+
+/* responsive */
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
         display: flex;
@@ -330,13 +376,12 @@ p.edit-message {
         width: 100% !important;
         float: left;
         height: initial;
-        display: none;
     }
     .custom-tabs {
         display: block !important;
     }
-    .left-col-new.active,
-    .right-col-new.active {
+    .left-col-new,
+    .right-col-new {
         display: block !important;
     }
     .total-detail-table {
@@ -431,7 +476,7 @@ p.edit-message {
             width: 185px;
             margin-top: 5px;
         }
-    } 
+    }
     .currency-convertor {
         float: right;
         display: block;
@@ -494,12 +539,19 @@ p.edit-message {
         box-sizing: border-box !important;
     }
 }
+.read-only {
+    .readonly-field {
+        .mat-mdc-form-field {
+            background-color: var(--color-secondary-input-bar-background) !important;
+        }
+    }
+}
 
 .width-datepicker {
     width: 130px !important;
 }
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1653px) {
     .width-datepicker {
         width: 100px !important;
     }
@@ -533,4 +585,12 @@ p.edit-message {
     .reference-invoice {
         width: 150px;
     }
+}
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .width-datepicker {
+        width: 78px !important;
+    }
+}
+.mat-datepicker-input:disabled {
+    background: transparent !important;
 }

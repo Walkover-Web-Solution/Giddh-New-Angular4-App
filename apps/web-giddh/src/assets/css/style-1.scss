@@ -325,10 +325,10 @@ aside-menu-account .container-fluid {
     padding-bottom: 50px;
 }
 .pd-r5 {
-    padding-right: 50px;
+    padding-right: 50px !important;
 }
 .pd-l5 {
-    padding-left: 50px;
+    padding-left: 50px !important;
 }
 .pd-r15 {
     padding-right: 15px;
@@ -337,7 +337,7 @@ aside-menu-account .container-fluid {
     padding-left: 15px;
 }
 .pd-t15 {
-    padding-top: 15px;
+    padding-top: 15px !important; 
 }
 .pd-b15 {
     padding-bottom: 15px;
@@ -504,6 +504,11 @@ aside-menu-account .container-fluid {
 .bdr-radius-50 {
     border-radius: 50px !important;
 }
+
+.bdr-radius-circle {
+    border-radius: 50% !important;
+}
+
 .pa {
     position: absolute;
 }
@@ -524,6 +529,9 @@ aside-menu-account .container-fluid {
 }
 .min-width-unset {
     min-width: unset !important;
+}
+.min-width-0 {
+    min-width: 0 !important;
 }
 .min-width-100 {
     min-width: 100px;
@@ -1879,6 +1887,9 @@ ul.pills li {
     padding-bottom: 350px;
 }
 #entryModal {
+    height: 100vh !important;
+    flex-direction: column !important;
+    display: flex !important;
     .modal-body {
         padding: 15px 20px;
         display: flex;
