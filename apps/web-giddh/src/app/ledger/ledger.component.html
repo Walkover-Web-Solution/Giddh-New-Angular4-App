@@ -220,6 +220,7 @@
                                         />
                                     </mat-form-field>
                                 </span>
+                                <button mat-stroked-button (click)="openCarousel()">Test carousel</button>
                                 <button
                                     aria-label="filter"
                                     id="advance-filter"
@@ -3255,3 +3256,28 @@
                 <attachments [selectedItem]="selectedItem"></attachments>
             </ng-template>
 </ng-container>
+
+<!-- carousel template -->
+<ng-template #carousel>
+    <giddh-carousel
+        [isNextDisabled]="false"
+        [isPreviousDisabled]="false"
+        (navigatePrevious)="null"
+        (navigateNext)="null"
+    >
+        <ng-template #slideTemplate>
+            <update-ledger-entry-panel
+                [defaultSuggestions]="defaultSuggestions"
+                [tcsOrTds]="tcsOrTds"
+                [searchResultsPaginationPage]="defaultResultsPaginationData.page"
+                [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
+                [activeCompany]="activeCompany"
+                [entrySide]="entrySide"
+                [generateEInvoice]="generateEInvoice"
+                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
+                (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+                (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
+            ></update-ledger-entry-panel>
+        </ng-template>
+    </giddh-carousel>
+</ng-template>

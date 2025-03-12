@@ -322,34 +322,6 @@ p.edit-message {
     background-color: var(--color-secondary-input-bar-background) !important;
 }
 
-.navigation-icon {
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-
-    &-left {
-        left: 15px;
-    }
-
-    &-right {
-        right: 15px;
-    }
-}
-
-.update-ledger-dialog {
-    max-width: min(1200px, 80vw);
-}
-
-.slider-icon {
-    font-size: 60px;
-}
-
-.dialog-background {
-    background-color: var(--color-gray);
-    display: grid;
-    place-items: center;
-}
-
 .no-data-found {
     background: var(--color-white);
     text-align: center;
