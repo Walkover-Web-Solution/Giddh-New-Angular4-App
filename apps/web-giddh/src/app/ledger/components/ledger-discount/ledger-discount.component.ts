@@ -3,6 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import { HIGH_RATE_FIELD_PRECISION } from '../../../app.constant';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'ledger-discount',
@@ -27,6 +28,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     public discountPercentageModal: number = 0;
     public discountFixedValueModal: number = 0;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
+    /** Holds mat menu reference */
+    @ViewChild(MatMenuTrigger) discountMenu: MatMenuTrigger;
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
@@ -84,7 +87,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * prepare discount obj
      */
-     public prepareDiscountList() {
+    public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         }
@@ -187,6 +190,20 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     public trackByFn(index) {
         return index;
+    }
+
+    /**
+    * Toggle discount menu
+    *
+    * @param {boolean} [isOpen=false]
+    * @memberof LedgerDiscountComponent
+    */
+    public toggleDiscountMenu(isOpen: boolean = false) {
+        if (isOpen) {
+            this.discountMenu?.openMenu();
+        } else {
+            this.discountMenu?.closeMenu();
+        }
     }
 
     public ngOnDestroy(): void {

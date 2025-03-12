@@ -73,7 +73,6 @@
                     padding-right: 10px;
                     reactive-dropdown-field,
                     input-field,
-                    select-multiple-fields,
                     ledger-discount,
                     tax-control {
                         display: block;
@@ -89,6 +88,9 @@
                     }
                 }
             }
+        }
+        .tag-wrapper {
+            max-width: 445px;
         }
     }
     #ledger-description {

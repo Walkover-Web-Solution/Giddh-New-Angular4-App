@@ -24,12 +24,12 @@
                     <i class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </a>
                 <span class="close" (click)="onCancel()">
-                    <i class="icon-cross"></i>
+                    <i class="icon-cross font-15"></i>
                 </span>
             </div>
         </div>
         <mat-dialog-content>
-            <div class="modal-body clearfix ledger-advance-search-field" id="export-body">
+            <div class="modal-body clearfix ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
                 <form [formGroup]="advanceSearchForm">
                     <div class="clearfix">
                         <div class="row mb-2 ml-0 mr-0">
@@ -63,7 +63,8 @@
                                     <select-multiple-fields
                                         [name]="'particulars'"
                                         [appearance]="'outline'"
-                                        formControlName="accountUniqueNames"
+                                        [formControl]="advanceSearchForm?.controls['accountUniqueNames']"
+                                        [selectedValues]="advanceSearchForm?.controls['accountUniqueNames']?.value"
                                         [keepMenuOpenAfterSelect]="true"
                                         [commonLocaleData]="commonLocaleData"
                                         [showMatLabel]="true"
@@ -93,7 +94,8 @@
                                         [showMatLabel]="true"
                                         [keepMenuOpenAfterSelect]="true"
                                         [commonLocaleData]="commonLocaleData"
-                                        formControlName="groupUniqueNames"
+                                        [formControl]="advanceSearchForm?.controls['groupUniqueNames']"
+                                        [selectedValues]="advanceSearchForm?.controls['groupUniqueNames']?.value"
                                         [name]="'groups'"
                                         [label]="localeData?.merge_group"
                                         [placeholder]="localeData?.select_groups"
@@ -123,7 +125,7 @@
                                             <mat-slide-toggle
                                                 color="primary"
                                                 id="includeParticulars"
-                                                formControlName="includeParticulars"
+                                                [formControl]="advanceSearchForm?.controls['includeParticulars']"
                                             >
                                                 <span
                                                     class="pull-left"
@@ -143,7 +145,8 @@
                                             <select-multiple-fields
                                                 [name]="'particulars'"
                                                 [appearance]="'outline'"
-                                                formControlName="particulars"
+                                                [formControl]="advanceSearchForm?.controls['particulars']"
+                                                [selectedValues]="advanceSearchForm?.controls['particulars']?.value"
                                                 [keepMenuOpenAfterSelect]="true"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [showMatLabel]="true"
@@ -176,7 +179,7 @@
                                             <mat-slide-toggle
                                                 color="primary"
                                                 id="includeVouchers"
-                                                formControlName="includeVouchers"
+                                                [formControl]="advanceSearchForm?.controls['includeVouchers']"
                                             >
                                                 <span
                                                     class="pull-left"
@@ -196,7 +199,8 @@
                                             <select-multiple-fields
                                                 [name]="'particulars'"
                                                 [appearance]="'outline'"
-                                                formControlName="vouchers"
+                                                [formControl]="advanceSearchForm?.controls['vouchers']"
+                                                [selectedValues]="advanceSearchForm?.controls['vouchers']?.value"
                                                 [keepMenuOpenAfterSelect]="true"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [showMatLabel]="true"
@@ -224,7 +228,7 @@
                                                 class="w-100"
                                                 [name]="'particulars'"
                                                 [placeholder]="commonLocaleData?.app_select_range"
-                                                formControlName="amountOption"
+                                                [formControl]="advanceSearchForm?.controls['amountOption']"
                                                 [options]="comparisonFilterDropDown$ | async"
                                                 (selectedOption)="onRangeSelect('amount', $event)">
                                             </reactive-dropdown-field>
@@ -235,7 +239,7 @@
                                             <input-field
                                                 [type]="'text'"
                                                 [name]="'amount'"
-                                                formControlName="amount"
+                                                [formControl]="advanceSearchForm?.controls['amount']"
                                                 [customDecimalPlaces]="2"
                                                 [allowDecimalDigitsOnly]="true"
                                                 [label]="commonLocaleData?.app_amount"
@@ -256,7 +260,7 @@
                                 <div class="row">
                                     <div class="col-6 col-md-6">
                                         <div class="form-group">
-                                            <mat-slide-toggle color="primary" formControlName="cancelledEntries">
+                                            <mat-slide-toggle color="primary" [formControl]="advanceSearchForm?.controls['cancelledEntries']">
                                                 <span
                                                     class="pull-left"
                                                     *ngIf="advanceSearchForm.get('cancelledEntries')?.value"
@@ -289,14 +293,14 @@
                                         <div class="col-sm-5">
                                             <label>{{ commonLocaleData?.app_inventory }}</label>
                                         </div>
-                                        <div class="col-sm-7" formGroupName="inventory">
+                                        <div class="col-sm-7" [formGroupName]="'inventory'">
                                             <div class="row">
                                                 <div class="pr-0 col-sm-3 col-12 d-flex align-items-center">
                                                     <div class="checkbox mat-switch">
                                                         <mat-slide-toggle
                                                             color="primary"
                                                             id="includeInventory"
-                                                            formControlName="includeInventory"
+                                                            [formControl]="advanceSearchForm.get('inventory.includeInventory')"
                                                         >
                                                             <span
                                                                 class="pull-left"
@@ -324,7 +328,8 @@
                                                             [showMatLabel]="true"
                                                             [keepMenuOpenAfterSelect]="true"
                                                             [commonLocaleData]="commonLocaleData"
-                                                            formControlName="inventories"
+                                                            [formControl]="advanceSearchForm.get('inventory.inventories')"
+                                                            [selectedValues]="advanceSearchForm.get('inventory.inventories')?.value"
                                                             [name]="'inventories'"
                                                             [label]="commonLocaleData?.app_inventory"
                                                             [placeholder]="commonLocaleData?.app_select_accounts"
@@ -344,7 +349,7 @@
                                                             class="w-100"
                                                             [name]="'particulars'"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            formControlName="inventoryQty"
+                                                            [formControl]="advanceSearchForm.get('inventory.inventoryQty')"
                                                             [options]="comparisonFilterDropDown$ | async"
                                                             (selectedOption)="onRangeSelect('inventoryQty', $event)">
                                                         </reactive-dropdown-field>
@@ -355,7 +360,7 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [name]="'amount'"
-                                                            formControlName="quantity"
+                                                            [formControl]="advanceSearchForm.get('inventory.quantity')"
                                                             [customDecimalPlaces]="4"
                                                             [allowDecimalDigitsOnly]="true"
                                                             [placeholder]="commonLocaleData?.app_quantity"
@@ -371,7 +376,7 @@
                                                             class="w-100"
                                                             [name]="'particulars'"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            formControlName="inventoryVal"
+                                                            [formControl]="advanceSearchForm.get('inventory.inventoryVal')"
                                                             [options]="comparisonFilterDropDown$ | async"
                                                             (selectedOption)="onRangeSelect('inventoryVal', $event)">
                                                         </reactive-dropdown-field>
@@ -382,7 +387,7 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [name]="'itemValue'"
-                                                            formControlName="itemValue"
+                                                            [formControl]="advanceSearchForm.get('inventory.itemValue')"
                                                             [customDecimalPlaces]="3"
                                                             [allowDecimalDigitsOnly]="true"
                                                             [placeholder]="commonLocaleData?.app_value"
@@ -406,7 +411,7 @@
                                                         class="w-100"
                                                         [type]="'text'"
                                                         [name]="'chequeNumber'"
-                                                        formControlName="chequeNumber"
+                                                        [formControl]="advanceSearchForm?.controls['chequeNumber']"
                                                         [placeholder]="commonLocaleData?.app_cheque_number"
                                                     >
                                                     </input-field>
@@ -420,7 +425,7 @@
                                                         [cssClass]="'mat-field-border bdr form-control'"
                                                         [placeholder]="commonLocaleData?.app_clearance_date"
                                                         name="from"
-                                                        formControlName="dateOnCheque"
+                                                        [formControl]="advanceSearchForm?.controls['dateOnCheque']"
                                                         [showToggleIcon]="false"
                                                     ></giddh-datepicker>
                                                 </div>
@@ -438,7 +443,7 @@
                                                 class="w-100"
                                                 [type]="'text'"
                                                 [name]="'description'"
-                                                formControlName="description"
+                                                [formControl]="advanceSearchForm?.controls['description']"
                                                 [placeholder]="commonLocaleData?.app_description"
                                             >
                                             </input-field>

@@ -639,7 +639,9 @@ app-cdk-scroll {
 input-field {
     .prefix-icon-field {
         i {
-            inset: 16px 0 0 0;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
         }
         &.mat-mdc-form-field {
             .mat-mdc-text-field-wrapper {
