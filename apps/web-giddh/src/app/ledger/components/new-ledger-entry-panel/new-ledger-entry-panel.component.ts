@@ -127,7 +127,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
-    @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+    @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
 
@@ -561,14 +561,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public addToDrOrCr(type: string, e: Event) {
         e.stopPropagation();
-        if (this.isRcmEntry && !this.validateTaxes()) {
-            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
-                // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement?.nativeElement.classList.add('error-box');
-                return;
-            }
-        }
-
         this.changeTransactionType.emit({
             type,
             warehouse: this.selectedWarehouse
@@ -690,8 +682,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountControl.change();
             }
 
-            if (this.taxControll) {
-                this.taxControll.change();
+            if (this.taxControl) {
+                this.taxControl.change();
             }
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
@@ -782,9 +774,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.discountControl.change();
         }
 
-        if (this.taxControll) {
-            this.taxControll.taxTotalAmount = this.currentTxn.amount;
-            this.taxControll.change();
+        if (this.taxControl) {
+            this.taxControl.taxTotalAmount = this.currentTxn.amount;
+            this.taxControl.change();
         }
 
         if (this.currentTxn?.selectedAccount) {
@@ -1025,8 +1017,41 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public hideAllDropdownTax(): void {
+        this.closeAddTagDropdown();
+        this.closeTaxDropdown();
+        this.closeDiscountDropdown();
+    }
+
+    /**
+     * Close Add tag dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeAddTagDropdown(): void {
         if (this.selectMultipleFieldsRef) {
             this.selectMultipleFieldsRef?.closePanel();
+        }
+    }
+
+    /**
+    * Close tax dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public closeTaxDropdown(): void {
+        if (this.taxControl) {
+            this.taxControl.toggleTaxMenu(false);
+        }
+    }
+
+    /**
+    * Close discount dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public closeDiscountDropdown(): void {
+        if (this.discountControl) {
+            this.discountControl.toggleDiscountMenu(false);
         }
     }
 
@@ -1376,8 +1401,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.discountControl) {
             this.discountControl.discountTotal = this.currentTxn.discount;
         }
-        if (this.taxControll) {
-            this.taxControll.taxTotalAmount = this.currentTxn.tax;
+        if (this.taxControl) {
+            this.taxControl.taxTotalAmount = this.currentTxn.tax;
         }
         setTimeout(() => {
             // Set it to false after some time, done as (ngModelChange) is triggered twice for amount field
@@ -2014,8 +2039,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 0) || 0;
         }
         let taxTotal = 0;
-        if (this.taxControll) {
-            taxTotal = this.taxControll.taxRenderData?.filter(f => f.isChecked)
+        if (this.taxControl) {
+            taxTotal = this.taxControl.taxRenderData?.filter(f => f.isChecked)
                 .reduce((pv, cv) => {
                     return Number(pv) + Number(cv.amount);
                 }, 0) || 0;
@@ -2044,9 +2069,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.discountControl.change(null, null, true);
             this.calculateTaxValue();
         }
-        if (this.taxControll) {
-            this.taxControll.totalForTax = this.currentTxn.total;
-            this.taxControll.change(true);
+        if (this.taxControl) {
+            this.taxControl.totalForTax = this.currentTxn.total;
+            this.taxControl.change(true);
             this.calculateTotal();
         }
         if (this.currentTxn?.selectedAccount) {

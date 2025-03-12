@@ -102,9 +102,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
     constructor(
         private changeDetection: ChangeDetectorRef
-    ) {
-
-    }
+    ) { }
 
     /**
      * Lifecycle hook for component initialization
@@ -175,6 +173,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
             this.fieldFilteredOptions$ = of(this.options);
+            if (changes?.options?.currentValue?.length > 0 && !changes?.options?.previousValue) {
+                this.setLabelValue();
+            }
         }
 
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
@@ -293,5 +294,20 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         setTimeout(() => {
             this.selectField?.nativeElement?.focus();
         }, 10);
+    }
+
+    /**
+     * Set value of Label from options using control value
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private setLabelValue(): void {
+        if (this.value !== undefined && this.value !== null) {
+            let val = this.options.find(search => search.value === this.value);
+            if (val) {
+                this.labelValue = val.label;
+            }
+        }
     }
 }

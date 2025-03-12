@@ -1540,7 +1540,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             },
             role: 'alertdialog',
             ariaLabel: 'share',
-            panelClass: 'mat-dialog-sm'
+            panelClass: 'mat-dialog-md'
         });
     }
 

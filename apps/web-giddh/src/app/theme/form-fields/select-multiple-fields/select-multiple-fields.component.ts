@@ -233,7 +233,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public removeOption(index: number): void {
         if (index >= 0) {
             this.chipList.splice(index, 1);
-            this.writeValue(this.value.splice(index, 1));
+            this.value.splice(index, 1);
+            this.writeValue(this.value);
             // Close the autocomplete dropdown if it's open
             setTimeout(() => {
                 if (this.trigger && this.trigger.panelOpen) {

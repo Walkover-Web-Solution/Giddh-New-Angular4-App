@@ -25,9 +25,9 @@
                             <div class="form-group add-mailer">
                                 <!--share account from-->
                                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
-                                    <div class="input-group d-flex justify-content-between">
+                                    <div class="input-group d-flex align-items-center">
                                         <input-field
-                                            class="w-50"
+                                            class="w-75"
                                             [type]="'email'"
                                             [name]="'userEmail'"
                                             [(ngModel)]="email"
@@ -37,7 +37,7 @@
                                             [placeholder]="commonLocaleData?.app_email_id"
                                         >
                                         </input-field>
-                                        <span class="input-group-btn mr-l1">
+                                        <span class="input-group-btn mr-l3">
                                             <button
                                                 mat-stroked-button
                                                 color="primary"
@@ -86,9 +86,9 @@
                                 </a>
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
                             </div>
-                            <div class="input-group d-flex justify-content-between mr-t15 mr-b15">
+                            <div class="input-group d-flex align-items-center mr-t15 mr-b15">
                                 <input-field
-                                    class="w-50"
+                                    class="w-75"
                                     #magicLinkInput
                                     [type]="'magicLink'"
                                     [name]="'userEmail'"
@@ -98,7 +98,7 @@
                                     [label]="localeData?.url"
                                 >
                                 </input-field>
-                                <span class="input-group-btn mr-l1">
+                                <span class="input-group-btn mr-l3">
                                     <button
                                         mat-stroked-button
                                         type="button"

@@ -83,7 +83,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     @ViewChild('taxInputElement', { static: false }) public taxInputElement: ElementRef;
     /** Holds Mat Menu Reference */
-    @ViewChild('taxMenu') public taxMenu: MatMenuTrigger;
+    @ViewChild(MatMenuTrigger) taxMenu: MatMenuTrigger;
 
     public taxSum: number = 0;
     public taxTotalAmount: number = 0;
@@ -216,14 +216,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @param {boolean} [isOpen=false]
      * @memberof TaxControlComponent
      */
-    public toggleTaxPopup(isOpen: boolean = false) {
+    public toggleTaxMenu(isOpen: boolean = false) {
         if (isOpen) {
-            this.taxMenu.openMenu();
+            this.taxMenu?.openMenu();
         } else {
-            this.taxMenu.closeMenu();
+            this.taxMenu?.closeMenu();
         }
     }
-
 
     public ngOnDestroy() {
         this.taxAmountSumEvent.unsubscribe();
@@ -328,7 +327,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
         }
-        this.toggleTaxPopup(false);
+        this.toggleTaxMenu(false);
         return false;
     }
 

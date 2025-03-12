@@ -222,6 +222,7 @@
                     (click)="$event.stopPropagation()"
                 >
                     <ledger-discount
+                        (click)="closeTaxDropdown(); closeAddTagDropdown()"
                         #discount
                         id="ledger-discount"
                         [discountAccountsDetails]="currentTxn?.discounts"
@@ -272,7 +273,7 @@
                     (companyTaxesList$ | async)?.length
                     "
                     (clickOutside)="hideTax()"
-                    (click)="$event.stopPropagation()"
+                    (click)="$event.stopPropagation();closeDiscountDropdown(); closeAddTagDropdown()"
                 >
                     <tax-control
                         id="ledger-tax"
@@ -753,16 +754,16 @@
                                 </tbody>
                             </table>
 
-                            <table class="mr-t2">
+                            <table class="mr-t2 tag-wrapper w-100">
                                 <tbody>
                                     <tr>
-                                        <td [ngClass]="{'custom-mat-form-field': blankLedger.tagNames}">
+                                        <td [ngClass]="{'custom-mat-form-field': !blankLedger?.tagNames?.length}">
                                             <select-multiple-fields
                                                 class="d-block w-100"
-                                                (click)="$event.stopPropagation()"
+                                                (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
                                                 #selectMultipleFieldsRef
                                                 [name]="'tagNames'"
-                                                 [allowAddChip]="false"
+                                                [allowAddChip]="false"
                                                 id="ledger-assign-tag"
                                                 [disabled]="isReadOnly"
                                                 [appearance]="'outline'"
