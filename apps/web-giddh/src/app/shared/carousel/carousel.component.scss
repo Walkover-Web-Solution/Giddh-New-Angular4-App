@@ -1,0 +1,29 @@
+.carousel {
+    --carousel-content-width: 1200px;
+    height: 100lvh;
+    width: 100lvw;
+    place-content: center;
+
+    .navigation-icon {
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+
+        &-left {
+            left: 15px;
+        }
+
+        &-right {
+            right: 15px;
+        }
+    }
+
+    .carousel-content {
+        max-width: min(var(--carousel-content-width), 80svw);
+        max-height: 80svh;
+    }
+
+    .slider-icon {
+        font-size: 60px;
+    }
+}
