@@ -16,7 +16,5 @@ export class AppLoginSuccessComponent {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-big-logo.svg';
-        console.log("sdfghjdfghj");
-        
     }
 }
