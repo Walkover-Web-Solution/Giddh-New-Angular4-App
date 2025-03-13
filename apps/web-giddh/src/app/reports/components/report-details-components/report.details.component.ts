@@ -274,7 +274,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter.toLowerCase() : '';
+            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -300,8 +300,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 }
-                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
-                this.selectedType = currentTimeFilter;
+                this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
+                const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
+                this.selectedType = currentTimeFilter || this.selectedType;
                 this.activeFinacialYr = activeFinancialYear;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
