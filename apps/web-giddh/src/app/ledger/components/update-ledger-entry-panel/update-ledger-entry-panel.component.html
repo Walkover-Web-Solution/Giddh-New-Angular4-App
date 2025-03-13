@@ -87,9 +87,9 @@
         <!-- region main body -->
         <div mat-dialog-content class="position-relative">
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
-                <div class="no-data-found">
+                <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                     <h1>{{ localeData?.no_data_found_message }}</h1>
-                    <img height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
+                    <img class="mr-t1" height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
             <div class="modal-body pd-l5 pd-r5 update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
