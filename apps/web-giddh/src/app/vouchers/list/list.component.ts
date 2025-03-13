@@ -40,6 +40,7 @@ import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
 import { ServiceConfig } from "../../services/service.config";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -1278,9 +1279,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} selectedTabIndex
      * @memberof VoucherListComponent
      */
-    public tabChanged(selectedTabIndex: any): void {
-        this.selectedTabIndex = selectedTabIndex;
-        this.redirectToSelectedTab(selectedTabIndex);
+    public tabChanged(event: MatTabChangeEvent): void {
+        this.selectedTabIndex = event.index;
+        this.redirectToSelectedTab(event.index);
     }
 
     /**
