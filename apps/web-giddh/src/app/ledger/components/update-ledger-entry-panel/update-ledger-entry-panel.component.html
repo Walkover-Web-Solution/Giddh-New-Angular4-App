@@ -5,12 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div id="entryModal">
+    <div id="entryModal" class="w-100">
         <!-- region header -->
-        <div class="modal-header align-items-center flex-row-reverse dialog-fixed-header" *ngIf="!isPettyCash">
+        <div mat-dialog-title class="modal-header align-items-center flex-row-reverse dialog-fixed-header" *ngIf="!isPettyCash">
             <button
                 aria-hidden="true"
-                class="close hover-orange"
+                class="close hover-orange mr-t05"
                 mat-button
                 mat-dialog-close
                 [attr.aria-label]="commonLocaleData?.app_close"
@@ -85,7 +85,7 @@
         <!-- endregion -->
 
         <!-- region main body -->
-        <div class="position-relative">
+        <div mat-dialog-content class="position-relative">
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found">
                     <h1>{{ localeData?.no_data_found_message }}</h1>
@@ -1226,7 +1226,7 @@
                                                         [id]="'update-ledger-discount'"
                                                         [readonly]="true"
                                                         [(ngModel)]="txn.particular.name"
-                                                        [cssClass]="'transaction-particular-name border-none'"
+                                                        [cssClass]="'transaction-particular-name border-none bg-transparent'"
                                                     />
                                                 </ng-template>
 
@@ -1779,7 +1779,7 @@
                                             ? 'disabled'
                                             : null
                                     "
-                                    class="dropdown-container dropdown-left text-right min-width-0"
+                                    class="dropdown-container dropdown-left text-right"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
                                         (vm.companyTaxesList$ | async)?.length &&
@@ -1819,7 +1819,6 @@
                                             (taxAmountSumEvent)="calculateTax()"
                                             (createNewTax)="showCreateTaxDialog()"
                                             [readonly]="isEinvoiceGenerated"
-                                            [cssClass]="'bg-transparent'"
                                         >
                                         </update-ledger-tax-control>
                                     </span>
@@ -2016,7 +2015,7 @@
                                             rows="3"
                                             matInput
                                             [(ngModel)]="vm.selectedLedger.description"
-                                            class="form-control mat-field-border bg-transparent"
+                                            class="form-control mat-field-border"
                                             [placeholder]="commonLocaleData?.app_description"
                                             [disabled]="
                                                 !isPettyCash &&
@@ -2236,7 +2235,7 @@
                                                                         isConsolidatedBranch) &&
                                                                     branches?.length > 1)
                                                             "
-                                                            [cssClass]="'width-115 bg-transparent'"
+                                                            [cssClass]="'width-115'"
                                                         ></dropdown-field>
                                                     </div>
                                                 </td>
@@ -2560,11 +2559,12 @@
                                                                     isConsolidatedBranch) &&
                                                                 branches?.length > 1
                                                             "
+                                                            [disabled]="(currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch)"
                                                             [type]="'text'"
                                                             [id]="'update-ledger-cheque-number'"
                                                             [placeholder]="localeData?.cheque_number_placeholder"
                                                             [(ngModel)]="vm.selectedLedger.chequeNumber"
-                                                            [cssClass]="'bg-transparent'"
                                                         ></input-field>
                                                     </td>
                                                     <td class="custom-input-field">
@@ -2580,7 +2580,6 @@
                                                             "
                                                             id="update-ledger-cheque-clearance"
                                                             [(ngModel)]="vm.selectedLedger.chequeClearanceDate"
-                                                            [cssClass]="'bg-transparent'"
                                                         ></giddh-datepicker>
                                                     </td>
                                                 </tr>
@@ -2600,7 +2599,7 @@
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     branches?.length > 1
                                             }"
-                                            class="select-multiple-chiplist w-100 bg-transparent"
+                                            class="select-multiple-chiplist w-100"
                                             [readonly]="
                                                 !isPettyCash &&
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
@@ -2831,7 +2830,7 @@
                 </div>
             </div>
             <p
-                class="edit-message"
+                class="edit-message w-100 position-sticky"
                 *ngIf="
                     !isPettyCash &&
                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
