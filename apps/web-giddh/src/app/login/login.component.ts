@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || (this.serviceConfig.AppUrl || AppUrl)) + APP_FOLDER;
         this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.appUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
@@ -373,7 +373,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
-                console.log('GoogleLoginProvider.PROVIDER_ID ', GoogleLoginProvider.PROVIDER_ID);
                 
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
 
@@ -450,9 +449,6 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public signInWithOtp(): void {
         this.loaderService.show();
-        console.log(this.serviceConfig.GOOGLE_CLIENT_ID);
-        console.log(this.serviceConfig);
-        
         let configuration = {
             widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID ,
             tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,

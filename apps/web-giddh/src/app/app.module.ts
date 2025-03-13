@@ -40,27 +40,23 @@ import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
-
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
 
 export function fetchWhiteLabel(): () => Promise<void> {
     return async () => {
-      if (!whiteLabelConfig) { // <-- now it only calls the API if it's missing
-        try {
-          const response = await fetch('https://apitest.giddh.com/white-label');
-          const data = await response.json();
-          localStorage.setItem('whiteLabel', JSON.stringify(data));
-          whiteLabelConfig = data;
-          console.log(whiteLabelConfig);
-        } catch (error) {
-          console.error('Failed to fetch white label data:', error);
+        if (!whiteLabelConfig) {
+            try {
+                const response = await fetch('https://apitest.giddh.com/white-label');
+                const data = await response.json();
+                localStorage.setItem('whiteLabel', JSON.stringify(data));
+                whiteLabelConfig = data;
+            } catch (error) {
+                console.error('Failed to fetch white label data:', error);
+            }
         }
-      } else {
-        console.log("callllllll");
-      }
     };
 }
-  
+
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     {
@@ -106,15 +102,19 @@ if (whiteLabelConfig) {
 }
 export function getServiceConfig(): any {
     return {
-        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain}/` : (
-                (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl) || 
-                'http://localhost:3000/'),
+        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body?.giddhWhiteLabel.apiDomain}/` :
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName || Configuration.AppUrl,
+        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName || Configuration.AppUrl,
         PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
         OTP_WIDGET_ID: whiteLabelConfig?.body?.otpWidgetIdWeb || Configuration.OTP_WIDGET_ID,
         OTP_TOKEN_AUTH: whiteLabelConfig?.body?.otpWidgetTokenWeb || Configuration.OTP_TOKEN_AUTH,
         GOOGLE_CLIENT_ID: whiteLabelConfig?.body?.googleClientId || Configuration.GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET: whiteLabelConfig?.body?.googleClientSecret || Configuration.GOOGLE_CLIENT_SECRET,
+        OTP_WIDGET_ID_NEW: whiteLabelConfig?.body?.otpWidgetIdElectron || '33686b716134333831313239',
+        OTP_TOKEN_AUTH_NEW: whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1',
         RAZORPAY_KEY: whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId || Configuration.RAZORPAY_KEY,
         _
     };
@@ -123,9 +123,7 @@ export function getServiceConfig(): any {
 export function getServiceConfigAfterInit(): () => Promise<any> {
     return async () => {
         await fetchWhiteLabel()();
-        setTimeout(()=>{
-            return getServiceConfig();
-        },500);
+        return getServiceConfig();
     };
 }
 
@@ -176,8 +174,8 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
             useFactory: getServiceConfigAfterInit,
             multi: true,
             deps: [HttpClientModule]
-          },
-          
+        },
+
         {
             provide: ServiceConfig,
             useFactory: getServiceConfig
