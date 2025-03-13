@@ -238,7 +238,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl)))?.replace(':client_id', (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID));
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -254,6 +253,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         let companyUniqueName = this.generalService.companyUniqueName;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
