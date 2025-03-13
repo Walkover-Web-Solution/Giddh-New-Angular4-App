@@ -31,6 +31,10 @@ table.width-100 {
     padding-right: 35px !important;
 }
 
+.model-header {
+    padding: 0 15px 0 15px;
+}
+
 .modal-header ng-select {
     width: 339px !important;
 }
@@ -291,6 +295,7 @@ p.edit-message {
     font-size: var(--font-size-15);
     font-family: var(--font-semibold);
     margin-top: 0px;
+    bottom: 0;
 }
 
 .collapse-icons {
@@ -318,7 +323,7 @@ p.edit-message {
 }
 
 .read-only {
-    background-color: var(--color-secondary-input-bar-background) !important;
+    background-color: var(--color-primary-input-bar-background) !important;
 }
 
 .no-data-found {
@@ -510,16 +515,10 @@ p.edit-message {
         box-sizing: border-box !important;
     }
 }
-.read-only {
-    .readonly-field {
-        .mat-mdc-form-field {
-            background-color: var(--color-secondary-input-bar-background) !important;
-        }
-    }
-}
 
 .width-datepicker {
-    width: 130px !important;
+    width: 107px !important;
+    margin-top: 7px;
 }
 
 @media screen and (max-width: 1653px) {
@@ -561,7 +560,4 @@ p.edit-message {
     .width-datepicker {
         width: 78px !important;
     }
-}
-.mat-datepicker-input:disabled {
-    background: transparent !important;
 }

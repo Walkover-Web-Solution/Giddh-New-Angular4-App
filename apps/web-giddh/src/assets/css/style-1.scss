@@ -2678,6 +2678,7 @@ giddh-datepicker {
     .mat-expansion-panel-header {
         padding: 0 15px !important;
         background-color: var(--color-tab-primary-background) !important;
+        border-radius: initial;
         &:hover {
             background-color: var(--color-tab-primary-background) !important;
         }
