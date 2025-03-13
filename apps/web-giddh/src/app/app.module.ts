@@ -42,6 +42,7 @@ import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription
 const whiteLabelString = localStorage.getItem('whiteLabel');
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
 
+// FetchWhiteLabel returns an async function that fetches white-label data from an API, stores it in localStorage, and caches it in whiteLabelConfig.
 export function fetchWhiteLabel(): () => Promise<void> {
     return async () => {
         if (!whiteLabelConfig) {
@@ -100,14 +101,16 @@ if (whiteLabelConfig) {
         localStorage.setItem("Country-Region", "GL");
     }
 }
+
+// GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
     return {
         apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
             (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body?.giddhWhiteLabel.apiDomain}/` :
+        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
             (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName || Configuration.AppUrl,
-        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName || Configuration.AppUrl,
+        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
+        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
         OTP_WIDGET_ID: whiteLabelConfig?.body?.otpWidgetIdWeb || Configuration.OTP_WIDGET_ID,
         OTP_TOKEN_AUTH: whiteLabelConfig?.body?.otpWidgetTokenWeb || Configuration.OTP_TOKEN_AUTH,
@@ -120,6 +123,7 @@ export function getServiceConfig(): any {
     };
 }
 
+// GetServiceConfigAfterInit returns an async function that first fetches white-label data and then retrieves the service configuration.
 export function getServiceConfigAfterInit(): () => Promise<any> {
     return async () => {
         await fetchWhiteLabel()();
