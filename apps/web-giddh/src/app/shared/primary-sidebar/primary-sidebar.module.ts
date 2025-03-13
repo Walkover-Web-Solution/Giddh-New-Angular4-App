@@ -56,7 +56,7 @@ import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config
                     false
                 );
             },
-            deps: [Injector] // Ensure the injector is available
+            deps: [Injector]
         }
     ]
 })
