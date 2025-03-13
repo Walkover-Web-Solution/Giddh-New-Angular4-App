@@ -406,16 +406,12 @@ getApi: function () {
     var region = this.getParameterByName('region'); // Get the region from URL query params
 
     // Check if region is present and set the apiBaseUrl accordingly
-    console.log("https://gbapi.giddh.com/");
     if (region) {
         apiBaseUrl = 'https://gbapi.giddh.com/';
     } else {
-        
         const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
         if (whiteLabelData) {
        apiBaseUrl = `${whiteLabelData?.body?.giddhWhiteLabel?.apiDomain}/`;
-       console.log("apiBaseUrl", apiBaseUrl);
-       
         } else {
              // Original logic based on hostname
             switch (window.location.hostname) {
