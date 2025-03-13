@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -41,6 +41,23 @@ import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
+
+// FetchWhiteLabel returns an async function that fetches white-label data from an API, stores it in localStorage, and caches it in whiteLabelConfig.
+export function fetchWhiteLabel(): () => Promise<void> {
+    return async () => {
+        if (!whiteLabelConfig) {
+            try {
+                const response = await fetch('https://apitest.giddh.com/white-label');
+                const data = await response.json();
+                localStorage.setItem('whiteLabel', JSON.stringify(data));
+                whiteLabelConfig = data;
+            } catch (error) {
+                console.error('Failed to fetch white label data:', error);
+            }
+        }
+    };
+}
+
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     {
@@ -85,6 +102,36 @@ if (whiteLabelConfig) {
     }
 }
 
+// GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
+export function getServiceConfig(): any {
+    return {
+        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
+        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
+        PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
+        OTP_WIDGET_ID: whiteLabelConfig?.body?.otpWidgetIdWeb || Configuration.OTP_WIDGET_ID,
+        OTP_TOKEN_AUTH: whiteLabelConfig?.body?.otpWidgetTokenWeb || Configuration.OTP_TOKEN_AUTH,
+        GOOGLE_CLIENT_ID: whiteLabelConfig?.body?.googleClientId || Configuration.GOOGLE_CLIENT_ID,
+        GOOGLE_CLIENT_SECRET: whiteLabelConfig?.body?.googleClientSecret || Configuration.GOOGLE_CLIENT_SECRET,
+        OTP_WIDGET_ID_NEW: whiteLabelConfig?.body?.otpWidgetIdElectron || '33686b716134333831313239',
+        OTP_TOKEN_AUTH_NEW: whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1',
+        RAZORPAY_KEY: whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId || Configuration.RAZORPAY_KEY,
+        _
+    };
+}
+
+// GetServiceConfigAfterInit returns an async function that first fetches white-label data and then retrieves the service configuration.
+export function getServiceConfigAfterInit(): () => Promise<any> {
+    return async () => {
+        await fetchWhiteLabel()();
+        return getServiceConfig();
+    };
+}
+
+
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -127,22 +174,15 @@ if (whiteLabelConfig) {
     ],
     providers: [
         {
+            provide: APP_INITIALIZER,
+            useFactory: getServiceConfigAfterInit,
+            multi: true,
+            deps: [HttpClient]
+        },
+
+        {
             provide: ServiceConfig,
-            useValue: {
-                apiUrl: `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-                appUrl: `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
-                PORTAL_URL: `${whiteLabelConfig.body.giddhWhiteLabel.portalDomain}/` || Configuration.PORTAL_URL,
-                OTP_WIDGET_ID: `${whiteLabelConfig.body.otpWidgetIdWeb}` || Configuration.OTP_WIDGET_ID,
-                OTP_TOKEN_AUTH: `${whiteLabelConfig.body.otpWidgetTokenWeb}` || Configuration.OTP_TOKEN_AUTH,
-                GOOGLE_CLIENT_ID: `${whiteLabelConfig.body.googleClientId}` || Configuration.GOOGLE_CLIENT_ID,
-                GOOGLE_CLIENT_SECRET: `${whiteLabelConfig.body.googleClientSecret}` || Configuration.GOOGLE_CLIENT_SECRET,
-                ApiUrl: `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` || (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-                AppUrl: `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` || Configuration.AppUrl,
-                OTP_WIDGET_ID_NEW: `${whiteLabelConfig.body.otpWidgetIdElectron}` || '33686b716134333831313239',
-                OTP_TOKEN_AUTH_NEW: `${whiteLabelConfig.body.otpWidgetTokenElectron}` || '205968TmXguUAwoD633af103P1',
-                RAZORPAY_KEY: `${whiteLabelConfig.body.razorpayPaymentDetails.keyId}` || Configuration.RAZORPAY_KEY,
-                _
-            }
+            useFactory: getServiceConfig
         },
         environment.ENV_PROVIDERS,
         APP_PROVIDERS,
