@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -177,7 +177,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
             provide: APP_INITIALIZER,
             useFactory: getServiceConfigAfterInit,
             multi: true,
-            deps: [HttpClientModule]
+            deps: [HttpClient]
         },
 
         {
