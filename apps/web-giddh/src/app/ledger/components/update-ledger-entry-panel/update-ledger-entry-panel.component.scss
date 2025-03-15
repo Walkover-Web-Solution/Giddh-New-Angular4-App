@@ -336,7 +336,9 @@ p.edit-message {
     padding: 3rem;
     color: var(--color-gray);
 }
-
+.cross-button {
+    font-size: 2rem;
+}
 /* responsive */
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
