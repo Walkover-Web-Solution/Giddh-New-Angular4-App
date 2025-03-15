@@ -73,9 +73,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private router: Router,
-        private ledgerComponentStore: LedgerComponentStore,
+        private ledgerComponentStore: LedgerComponentStore
     ) {
-    
+
     }
 
     public onFileChange(file: FileList) {
@@ -131,7 +131,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             if (data) {
                 this.entity = data.type;
                 this.setTitle();
-                if (this.entity === 'voucher' && !this.accountSearchRequest.isLoading){
+                if (this.entity === 'voucher' && !this.accountSearchRequest.isLoading) {
                     this.searchAccount();
                 }
                 if (this.entity === "banktransactions") {

@@ -788,7 +788,7 @@ export class LedgerService {
     /**
      * Retrieves a signed URL for downloading an attachment.
      *
-     * @param {string} fileName File name
+     * @param {string} fileName, File name
      * @memberof LedgerService
      */
     public getSignedUrl(fileName: string): Observable<BaseResponse<any, any>> {
@@ -818,8 +818,8 @@ export class LedgerService {
     /**
      * Import voucher
      *
-     * @param {any} params Request URL parameters.
-     * @param {any} data The signed URL response data.
+     * @param {any} params, Request URL parameters.
+     * @param {any} data, The signed URL response data.
      * @memberof LedgerService
      */
     public importVoucher(params: any, data: any): Observable<BaseResponse<any, any>> {
