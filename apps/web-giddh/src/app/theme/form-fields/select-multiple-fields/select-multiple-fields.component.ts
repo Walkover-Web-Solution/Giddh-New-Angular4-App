@@ -42,6 +42,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public isPurchaseOrder: string = '';
     /** Holds module translation data */
     @Input() public localeData: any = {};
+    @Input() public isSmallWidth: string;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */

@@ -518,6 +518,10 @@ body {
         .cdk-overlay-pane {
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
+
+                &:has(.dropdown-width) {
+                    width: 40%;
+                }
             }
         }
     }

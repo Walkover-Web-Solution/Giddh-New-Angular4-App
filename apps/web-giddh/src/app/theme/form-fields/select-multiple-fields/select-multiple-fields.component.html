@@ -36,7 +36,7 @@
             />
         </mat-chip-grid>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
-            <mat-option (click)="(name === emailType.To || name === emailType.Cc || name === emailType.Bcc) && $event.stopPropagation()" [ngClass]="{'po-options-line': isPurchaseOrder }" *ngFor="let option of fieldFilteredOptions" [value]="option">
+            <mat-option (click)="(name === emailType.To || name === emailType.Cc || name === emailType.Bcc) && $event.stopPropagation()" [class]="isSmallWidth" [ngClass]="{'po-options-line': isPurchaseOrder}" *ngFor="let option of fieldFilteredOptions" [value]="option">
                 <ng-container *ngIf="!isPurchaseOrder">{{ option.label }}</ng-container>
                 <ng-container *ngIf="isPurchaseOrder">
                     <span class="po-option-label"> {{ option?.label }}</span>
