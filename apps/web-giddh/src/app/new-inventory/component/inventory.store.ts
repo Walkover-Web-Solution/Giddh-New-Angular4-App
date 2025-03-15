@@ -11,6 +11,7 @@ import { IDiscountList } from "../../models/api-models/SettingsDiscount";
 import { SettingsDiscountService } from "../../services/settings.discount.service";
 import { CommonService } from '../../services/common.service';
 import { LedgerService } from "../../services/ledger.service";
+import { CustomFieldsService } from "../../services/custom-fields.service";
 
 export interface InventoryState {
     isLoading: boolean;
@@ -19,6 +20,7 @@ export interface InventoryState {
     uploadAttachmentIsSuccess: any;
     downloadAttachmentInProgress: boolean;
     previewAttachmentIsSuccess: any;
+    customFieldsSuccess: any;
 }
 
 const DEFAULT_STATE: InventoryState = {
@@ -27,7 +29,8 @@ const DEFAULT_STATE: InventoryState = {
     uploadAttachmentInProgress: false,
     uploadAttachmentIsSuccess: null,
     downloadAttachmentInProgress: false,
-    previewAttachmentIsSuccess: null
+    previewAttachmentIsSuccess: null,
+    customFieldsSuccess:null
 };
 
 @Injectable()
@@ -39,7 +42,8 @@ export class InventoryComponentStore extends ComponentStore<any> {
         private toaster: ToasterService,
         public router: Router,
         private commonService: CommonService,
-        private ledgerService: LedgerService
+        private ledgerService: LedgerService,
+        private customFieldsService: CustomFieldsService
     ) {
         super(DEFAULT_STATE);
     }
@@ -50,6 +54,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     public uploadAttachmentInProgress$ = this.select((state) => state.uploadAttachmentInProgress);
     public previewAttachmentIsSuccess$ = this.select((state) => state.previewAttachmentIsSuccess);
     public downloadAttachmentInProgress$ = this.select((state) => state.downloadAttachmentInProgress);
+    public customFieldsSuccess$: Observable<any> = this.select((state) => state.customFieldsSuccess);
 
     /**
      * This will use for Export Item Wise Report Data
@@ -308,6 +313,38 @@ export class InventoryComponentStore extends ComponentStore<any> {
                     uploadAttachmentIsSuccess: null
                 });
                 return of(null);
+            })
+        );
+    });
+
+    /**
+     * This will use for get custom fields
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly getCustomFields = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ customFieldsSuccess: null });
+                return this.customFieldsService.list(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res && res.status === "success") {
+                                return this.patchState({ customFieldsSuccess: res.body?.results });
+                            } else {
+                                res?.message &&  this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ customFieldsSuccess: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                customFieldsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
             })
         );
     });

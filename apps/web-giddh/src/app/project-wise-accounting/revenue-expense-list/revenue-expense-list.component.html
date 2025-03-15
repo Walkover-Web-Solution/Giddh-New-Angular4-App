@@ -53,9 +53,9 @@
             <table class="table entry-table editable-table">
                 <thead *ngIf="!isCompany || totalResults">
                     <tr>
-                        <th class="text-left">{{ commonLocaleData?.app_select_account }}</th>
-                        <th class="text-left">{{ localeData?.select_entry }}</th>
-                        <th class="text-left">{{ commonLocaleData?.app_select_method }}</th>
+                        <th class="text-left">{{ commonLocaleData?.app_account }}</th>
+                        <th class="text-left">{{ localeData?.entry }}</th>
+                        <th class="text-left">{{ localeData?.method }}</th>
                         <th class="text-left">{{ commonLocaleData?.app_amount }}</th>
                         <th *ngIf="!isCompany" class="text-left">{{ commonLocaleData?.app_action }}</th>
                     </tr>
@@ -123,7 +123,7 @@
                             >
                             </input-field>
                         </td>
-                        <td class="text-center">
+                        <td>
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -133,7 +133,7 @@
                         </td>
                     </tr>
                 </thead>
-                <tbody class="text-center">
+                <tbody>
                     <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
                         <ng-container formArrayName="entryList">
                             <ng-container
@@ -207,7 +207,7 @@
                                         >
                                         </input-field>
                                     </td>
-                                    <td *ngIf="!isCompany" class="position-relative text-center">
+                                    <td *ngIf="!isCompany" class="position-relative">
                                         <span class="editable-table-hide-element">
                                             <button mat-stroked-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>

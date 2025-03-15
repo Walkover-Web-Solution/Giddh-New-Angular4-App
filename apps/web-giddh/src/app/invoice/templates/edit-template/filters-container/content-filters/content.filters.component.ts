@@ -110,6 +110,17 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this.invoiceUiDataService.setContentForm(this.contentForm);
             }
             this.customTemplate = cloneDeep(template);
+            if (this.customTemplate.templateType === 'tally_template') {
+                this.customTemplate.sections.footer.data.imageSignature.display = true;
+                this.customTemplate.sections.footer.data.slogan.display = false;
+                if (this.voucherType !== 'sales') {
+                    this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
+                    this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+                } else {
+                        this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+                        this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+                }
+            }
             this.assignImageSignature();
         });
 
@@ -341,6 +352,22 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         } else {
             this.signatureSrc = '';
             this.signatureImgAttached = false;
+        }
+    }
+
+    /**
+     * Change voucher number or date based on Invoice number or date
+     *
+     * @param {boolean} [isDate=true] True, if date is changed
+     * @memberof ContentFilterComponent
+     */
+    public handleInvoiceDateNumberChange(isDate: boolean = true): void {
+        if (isDate) {
+            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+            this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+        } else {
+            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+            this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
         }
     }
 }

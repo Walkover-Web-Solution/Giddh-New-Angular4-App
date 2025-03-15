@@ -124,6 +124,17 @@
                     }
                 },
                 {
+                    "label": "पावती सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/receipt/setting",
+                    "icon": "icon-reciept-new",
+                    "description": "पावती सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "विक्री नोंदणी",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -245,6 +256,17 @@
                     "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "पेमेंट सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/payment/settings",
+                    "icon": "icon-reciept-new",
+                    "description": "पेमेंट सेटिंग्ज",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2

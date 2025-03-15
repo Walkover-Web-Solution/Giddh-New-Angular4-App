@@ -814,6 +814,7 @@
                                                                     <reactive-dropdown-field
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
+                                                                        (keydown.enter)="$event.preventDefault()"
                                                                         [label]="commonLocaleData?.app_account"
                                                                         [placeholder]="localeData?.select_acc"
                                                                         formControlName="uniqueName"
@@ -1211,6 +1212,7 @@
                                                                             [readonly]="invoiceForm.get('isAdvanceReceipt')?.value"
                                                                             decimalDigitsDirective
                                                                             formControlName="amountForAccount"
+                                                                            (keydown.enter)="$event.preventDefault()"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
                                                                     <span

@@ -296,7 +296,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             return;
         }
         this.selectedInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
-        if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+        if (this.selectedInvoice && (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice)) {
             this.getVoucherVersions(this.selectedInvoice);
         }
         if (this.selectedInvoice && !this.isVoucherDownloading) {
@@ -530,7 +530,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private handleDownloadVoucherPdf(response: any): void {
-        if (response) {
+        if (typeof response === 'string' || (response?.hasOwnProperty('data') && response.data)) {
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
                 if (response) {

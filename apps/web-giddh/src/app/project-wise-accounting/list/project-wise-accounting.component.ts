@@ -230,7 +230,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     */
     public getSearchFieldText(fieldName: string): string {
         if (fieldName === "name" || fieldName === "status") {
-            return fieldName === "name" ? this.localeData?.search_project : this.localeData?.search_status;;
+            return fieldName === "name" ? this.localeData?.project_name : this.commonLocaleData?.app_status;
         }
         return "";
     }

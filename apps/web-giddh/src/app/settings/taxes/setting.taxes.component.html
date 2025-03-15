@@ -39,7 +39,7 @@
                     <!-- Tax Number Column -->
                     <ng-container matColumnDef="taxNumber">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.taxNumber }}</td>
+                        <td mat-cell *matCellDef="let element" [matTooltip]="element?.taxNumber" matTooltipPosition="above">{{ element?.taxNumber }}</td>
                     </ng-container>
 
                     <!-- Name Column -->
@@ -61,7 +61,7 @@
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.linked_account }}</th>
                         <td mat-cell *matCellDef="let element">
                             <ng-container *ngIf="element?.accounts?.length; else showDash">
-                                <p *ngFor="let account of element.accounts">
+                                <p *ngFor="let account of element.accounts" class="text-ellipsis">
                                     {{ account.name }}
                                 </p>
                             </ng-container>
