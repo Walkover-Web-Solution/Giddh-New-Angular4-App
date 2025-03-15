@@ -141,6 +141,8 @@ export class TemplateFroalaComponent implements OnInit {
     public get getTotalEmailsCount(): number {
         return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
     };
+    /** Holds width of select-multiple-fields */
+    public isSmallWidth: string = '';
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
