@@ -31,7 +31,7 @@ export class ImportStatementComponent implements OnDestroy {
     /** Object for API request parameters */
     public getRequest: any = { entity: 'pdf', companyUniqueName: '', accountUniqueName: '' };
     /** Object for API post parameters */
-    public postRequest: any = { file: '', password: '', isHeaderProvided: true, accountUniqueName: undefined, sameDebitCreditAmountColumn: undefined };
+    public postRequest: any = { file: '', password: '', isHeaderProvided: true, accountUniqueName: undefined, sameDebitCreditAmountColumn: undefined, selectedFileList: null };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Account data results Observable */
@@ -113,13 +113,14 @@ export class ImportStatementComponent implements OnDestroy {
         this.selectedFile = file.item(0).name;
 
         this.getRequest.entity = type;
-
-        if (!isValidFileType) {
+        this.postRequest.selectedFileList = file;
+        if (!isValidFileType || (this.selectStatement === this.importStatementType.Voucher && this.fileType.PDF === type)) {
             if (file && file.length > 0) {
-                this.toaster.showSnackBar("error", this.inputData?.localeData?.import_error);
+                this.toaster.showSnackBar("error", this.selectStatement === this.importStatementType.Voucher ? this.inputData?.localeData?.voucher_error : this.inputData?.localeData?.import_error);
             }
             this.selectedFile = null;
             this.postRequest.file = null;
+            this.postRequest.selectedFileList = null;
             return;
         }
         this.postRequest.file = file.item(0);
@@ -204,5 +205,6 @@ export class ImportStatementComponent implements OnDestroy {
     public selectStatementAccount(importStep: ImportStepEnum, selectStatement: ImportStatementType): void {
         this.importStep = importStep;
         this.selectStatement = selectStatement;
+        this.onFileChange(this.postRequest.selectedFileList);
     }
 }
