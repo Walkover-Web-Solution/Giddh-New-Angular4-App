@@ -21,7 +21,7 @@
         <div class="flex-grow-1">
             <ul class="list-inline d-flex column-gap1 align-items-center justify-content-end w-100">
                 <li  *ngIf="!isTabScreen">
-                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
+                    <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR1"></ng-container>
                 </li>
                 <li class="d-flex column-gap1 align-items-center">
                     <button
@@ -63,8 +63,8 @@
                     </button>
                 </li>
             </ul>
-            <div *ngIf="isTabScreen">
-                <watch-video [cssClass]="'text-primary pull-right'" [moduleName]="'GSTR1'"></watch-video>
+            <div *ngIf="isTabScreen" class="pull-right pd-r0">
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR1"></ng-container>
             </div>
             <span class="pull-right filling-header-message" *ngIf="isCompany && showGstFiling">
                 <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
@@ -94,7 +94,9 @@
         <div class="d-flex flex-column">
             <div class="d-flex column-gap1 justify-content-end align-items-center">
                 <div class="d-inline-flex align-items-center column-gap1">
-                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'" *ngIf="!isTabScreen"></watch-video>
+                    <div *ngIf="!isTabScreen">
+                        <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR2"></ng-container>
+                    </div>
                     <button
                         mat-stroked-button
                         color="primary"
@@ -136,7 +138,7 @@
                 </div>
             </div>
             <div *ngIf="isTabScreen">
-                <watch-video [cssClass]="'text-primary pull-right'" [moduleName]="'GSTR2'"></watch-video>
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR2"></ng-container>
             </div>
             <div class="d-flex justify-content-end filling-header-message">
                 <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
@@ -199,4 +201,11 @@
         #picker
     >
     </mat-datepicker>
+</ng-template>
+
+<ng-template #watchVideoTemplateGSTR1>
+    <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR1'"></watch-video>
+</ng-template>
+<ng-template #watchVideoTemplateGSTR2>
+    <watch-video [cssClass]="'text-primary pull-right'" [moduleName]="'GSTR2'"></watch-video>
 </ng-template>

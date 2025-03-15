@@ -87,7 +87,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public exemptValuesDisplayedColumns: string[] = ['supplyNature', 'interStateSupplies', 'intraStateSupplies'];
     /** Holds exempt values table data */
     public exemptValuesTableData: any[] = [];
-    /** true, on responsive screen size */
+     /** Holds true, if screen size  less than or equals to 1023px */
     public isSmallScreen: boolean = false;
 
     constructor(
@@ -249,7 +249,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             "(max-width: 1023px)",
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isSmallScreen = result?.matches;
-            console.log(result);
         });
     }
 

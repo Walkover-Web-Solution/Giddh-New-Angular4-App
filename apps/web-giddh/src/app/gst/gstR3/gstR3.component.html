@@ -69,7 +69,7 @@
 
                     <div class="d-flex column-gap1 align-items-center">
                         <span *ngIf="!isSmallScreen">
-                            <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'"></watch-video>
+                            <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
                         </span>
                         <ul class="list-inline">
                             <li>
@@ -135,8 +135,8 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="isSmallScreen">
-                <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pd-r15"></watch-video>
+            <div *ngIf="isSmallScreen" class="pull-right pd-r15">
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
             </div>
             <div class="scroll-y noscroll-x fill body scrollbox">
                 <!--Hide this feature (Approved by Shubhendra Sir )-->
@@ -873,3 +873,6 @@
         [commonLocaleData]="commonLocaleData"
     ></filing-header>
 </ng-container>
+<ng-template #watchVideoTemplateGSTR3>
+    <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pd-r15"></watch-video>
+</ng-template>
