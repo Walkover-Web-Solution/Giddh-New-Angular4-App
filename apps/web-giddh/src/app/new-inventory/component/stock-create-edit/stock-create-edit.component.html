@@ -40,7 +40,7 @@
                     >
                         <div class="stock-width">
                             <div class="row flex-column-reverse flex-md-row">
-                                <div class="col-md-12 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
+                                <div class="col-12 upper-common-form-label-field">
                                     <div class="row row-gap">
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
@@ -483,7 +483,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-12 col-lg-12 pt-3 which-tab">
+                                                                        <div class="col-12 pt-3 which-tab">
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
@@ -503,7 +503,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-12 which-tab-3"
+                                                                            class="col-12 which-tab-3"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -688,7 +688,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-12 col-lg-12 pt-3">
+                                                                        <div class="col-12 pt-3">
                                                                             <dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
@@ -708,7 +708,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-12"
+                                                                            class="col-12"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -1657,7 +1657,7 @@
                                     <div class="tab-container-new px-3">
                                         <div class="other-width">
                                             <div class="row row-gap align-items-center">
-                                                <div class="col-sm-12 col-lg-12 mb-3">
+                                                <div class="col-12 mb-3">
                                                     <mat-radio-group
                                                         color="primary"
                                                         name="hsn_sac"
@@ -1671,7 +1671,7 @@
                                                         </mat-radio-button>
                                                     </mat-radio-group>
                                                 </div>
-                                                <div class="col-sm-3 col-lg-3">
+                                                <div class="col-sm-6 col-lg-3">
                                                     <input-field
                                                         *ngIf="hsnSac === 'HSN'"
                                                         [name]="'hsnNumber'"
@@ -1689,7 +1689,7 @@
                                                     >
                                                     </input-field>
                                                 </div>
-                                                <div class="col-sm-3 col-lg-3" *ngIf="!isVariantAvailable">
+                                                <div class="col-sm-6 col-lg-3" *ngIf="!isVariantAvailable">
                                                     <input-field
                                                         [name]="'skuCode'"
                                                         [type]="'text'"
@@ -1698,7 +1698,7 @@
                                                     >
                                                     </input-field>
                                                 </div>
-                                                <div class="col-sm-3 col-lg-3 custom-label">
+                                                <div class="col-sm-6 col-lg-3 custom-label">
                                                     <label *ngIf="inlineEditCustomField !== 1"
                                                         >{{ stockForm.customField1Heading || localeData?.custom_field }}
                                                         :
@@ -1732,7 +1732,7 @@
                                                         ></i>
                                                     </span>
                                                 </div>
-                                                <div class="col-sm-3 col-lg-3">
+                                                <div class="col-sm-6 col-lg-3">
                                                     <div>
                                                         <input-field
                                                             [name]="'customField1Value'"
@@ -1745,7 +1745,7 @@
                                             </div>
                                             <div class="row mr-t15 align-items-center">
                                                 <ng-container *ngIf="!isVariantAvailable">
-                                                    <div class="col-sm-3 col-lg-3">
+                                                    <div class="col-sm-6 col-lg-3">
                                                         <input-field
                                                             [name]="'openingQuantity'"
                                                             [type]="'number'"
@@ -1757,7 +1757,7 @@
                                                         >
                                                         </input-field>
                                                     </div>
-                                                    <div class="col-sm-3 col-lg-3">
+                                                    <div class="col-sm-6 col-lg-3">
                                                         <input-field
                                                             [name]="'openingAmount'"
                                                             [type]="'text'"
@@ -1772,7 +1772,7 @@
                                                         </input-field>
                                                     </div>
                                                 </ng-container>
-                                                <div class="col-sm-3 col-lg-3" *ngIf="isVariantAvailable">
+                                                <div class="col-sm-6 col-lg-3" *ngIf="isVariantAvailable">
                                                     <input-field
                                                         [name]="'skuCode'"
                                                         [type]="'text'"
@@ -1781,7 +1781,7 @@
                                                     >
                                                     </input-field>
                                                 </div>
-                                                <div class="col-sm-3 col-lg-3 custom-label">
+                                                <div class="col-sm-6 col-lg-3 custom-label">
                                                     <label *ngIf="inlineEditCustomField !== 2"
                                                         >{{ stockForm.customField2Heading || localeData?.custom_field }}
                                                         :
@@ -1815,7 +1815,7 @@
                                                         ></i>
                                                     </span>
                                                 </div>
-                                                <div class="col-sm-3 col-lg-3">
+                                                <div class="col-sm-6 col-lg-3">
                                                     <input-field
                                                         [name]="'customField2Value'"
                                                         [placeholder]="localeData?.custom_field"

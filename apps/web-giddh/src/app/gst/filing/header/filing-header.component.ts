@@ -117,7 +117,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public restrictedModules: any = RestrictedModules;
     /** Holds Tax Service Enum */
     public taxServiceEnum = TaxServiceEnum;
-    /** true, on responsive screen size */
+    /** Holds true, if screen size  less than or equals to 1300px */
     public isTabScreen: boolean = false;
 
     constructor(
@@ -200,8 +200,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             "(max-width: 1300px)",
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isTabScreen = result?.matches;
-            console.log(result);
-        })
+        });
     }
 
     public pullFromGstIn(ev) {
