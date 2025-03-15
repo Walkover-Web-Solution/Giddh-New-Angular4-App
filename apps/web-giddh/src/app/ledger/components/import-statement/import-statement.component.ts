@@ -205,6 +205,6 @@ export class ImportStatementComponent implements OnDestroy {
     public selectStatementAccount(importStep: ImportStepEnum, selectStatement: ImportStatementType): void {
         this.importStep = importStep;
         this.selectStatement = selectStatement;
-        this.onFileChange(this.postRequest.selectedFileList);
+        this.postRequest.selectedFileList && this.onFileChange(this.postRequest.selectedFileList);
     }
 }
