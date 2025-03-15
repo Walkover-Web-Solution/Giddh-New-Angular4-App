@@ -2441,6 +2441,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         uniqueName: t.particular?.uniqueName
                     }
                 });
+                this.isStockPresent = false;
             }
         });
         initialAccounts.push(...this.defaultSuggestions);
