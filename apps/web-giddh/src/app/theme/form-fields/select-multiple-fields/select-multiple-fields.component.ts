@@ -44,6 +44,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public localeData: any = {};
     /** Holds autocomplete position */
     @Input() public autoCompletePosition: string = 'auto';
+    @Input() public isSmallWidth: string;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
