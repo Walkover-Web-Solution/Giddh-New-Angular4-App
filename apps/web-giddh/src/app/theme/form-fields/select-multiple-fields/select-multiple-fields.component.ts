@@ -44,8 +44,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public localeData: any = {};
     /** Holds autocomplete position */
     @Input() public autoCompletePosition: string = 'auto';
-    /**  Holds width of select-multiple-fields for email template */
-    @Input() public isSmallWidth: string;
+    /** Holds CSS class which applied on mat options tag */
+    @Input() public optionClass: string;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */

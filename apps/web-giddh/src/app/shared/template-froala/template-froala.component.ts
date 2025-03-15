@@ -142,7 +142,7 @@ export class TemplateFroalaComponent implements OnInit {
         return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
     };
     /** Holds width of select-multiple-fields */
-    public isSmallWidth: string = '';
+    public optionClass: string = '';
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
