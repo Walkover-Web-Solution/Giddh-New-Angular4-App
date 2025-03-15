@@ -1183,6 +1183,15 @@ textarea {
         }
     }
 }
+
+.update-entry-transaction-date {
+    giddh-datepicker {
+        .mat-mdc-text-field-wrapper {
+            padding-left: 5px !important;
+        }
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -13618,11 +13627,15 @@ aside-menu-product-service {
     }
 }
 
+.text-white-color {
+    color: var(--white-color) !important;
+}
+
 .text-underline {
-    text-decoration: underline;
+    text-decoration: underline !important;
 
     &:hover {
-        text-decoration: underline;
+        text-decoration: underline !important;
     }
 }
 

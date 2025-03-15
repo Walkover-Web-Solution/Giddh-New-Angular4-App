@@ -7,112 +7,126 @@
 >
     <div id="entryModal" class="w-100">
         <!-- region header -->
-        <div mat-dialog-title class="modal-header align-items-center flex-row-reverse dialog-fixed-header" *ngIf="!isPettyCash">
-            <button
-                aria-hidden="true"
-                class="close hover-orange mr-t05"
-                mat-button
-                mat-dialog-close
-                [attr.aria-label]="commonLocaleData?.app_close"
-            >
-                ×
-            </button>
-
-            <h3
-                *ngIf="!openDropDown"
-                (dblclick)="!isEinvoiceGenerated ? openHeaderDropDown() : ''"
-                class="d-inline-block mr-1"
-            >
-                {{ (baseAccount$ | async)?.name }} {{ commonLocaleData?.app_ac }}
-            </h3>
-            <select-field
-                [readonly]="
-                    !isPettyCash &&
-                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                    branches?.length > 1
-                "
-                [ngClass]="{
-                    'read-only':
-                        !isPettyCash &&
-                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                        branches?.length > 1
-                }"
-                [id]="'update-ledger-select-account'"
-                *ngIf="openDropDown"
-                [cssClass]="'text-left d-inline-block'"
-                [placeholder]="commonLocaleData?.app_select_account"
-                [isPaginationEnabled]="true"
-                (scrollEnd)="handleScrollEnd()"
-                (dynamicSearchedQuery)="isAccountSearchData = true; onSearchQueryChanged($event)"
-                [enableDynamicSearch]="true"
-                (onClear)="handleSuggestionHide()"
-                [name]="'accountUniqueName'"
-                [scrollableElementId]="'baseAccount'"
-                [options]="searchResults"
-                [defaultValue]="baseAccountName"
-            >
-                <ng-template #optionTemplate let-option="option">
-                    <ng-container *ngIf="!option.additional?.stock">
-                        <a href="javascript:;" class="d-block py-2" (click)="changeBaseAccount(option)">
-                            <div class="option-label pt-2">
-                                {{ option?.label | titlecase }}
-                            </div>
-                            <div class="option-value pb-2">
-                                {{ option.additional?.uniqueName }}
-                            </div>
-                        </a>
-                    </ng-container>
-                    <ng-container *ngIf="option.additional?.stock">
-                        <a href="javascript:;" class="flex-column" (click)="changeBaseAccount(option)">
-                            <div class="option-label">
-                                {{ option?.label | titlecase }}
-                                <span *ngIf="option?.additional?.stock">
-                                    ({{ option?.additional?.stock?.name | titlecase }})
-                                </span>
-                            </div>
-                            <div class="option-value">
-                                {{ option.additional?.uniqueName }}
-                            </div>
-                            <div class="option-value-stock font-12">
-                                {{ commonLocaleData?.app_stock }}:
-                                {{ option.additional?.stock?.uniqueName }}
-                            </div>
-                        </a>
-                    </ng-container>
-                </ng-template>
-            </select-field>
-        </div>
-        <!-- endregion -->
-
-        <!-- region main body -->
-        <div mat-dialog-content class="position-relative">
-            <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
-                <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
-                    <h1>{{ localeData?.no_data_found_message }}</h1>
-                    <img class="mr-t1" height="200" src="{{ imgPath }}no-data.png" [alt]="commonLocaleData?.app_no_data_found" />
-                </div>
-            </div>
-            <div class="modal-body pd-l5 pd-r5 update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
-                <span class="font-15" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
-                <div class="pr-2 w-25 pb-1">
+        <div class="modal-header d-flex justify-content-between align-items-center row gap-3" *ngIf="!isPettyCash">
+            <!-- Left Section -->
+            <div class="col d-flex justify-content-start align-items-center">
+                <span class="update-entry-transaction-date">
                     <giddh-datepicker
-                        [label]="commonLocaleData?.app_date"
-                        [placeholder]="commonLocaleData?.app_date"
                         [disabled]="
                             isEinvoiceGenerated ||
                             (!isPettyCash &&
                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                 branches?.length > 1)
                         "
+                        [cssClass]="'text-white-color text-underline cursor-pointer'"
                         name="entryDate"
                         [showToggleIcon]="false"
-                        [appearance]="'outline'"
                         [(ngModel)]="vm.selectedLedger.entryDate"
                         (dateSelected)="resetInvoiceList()"
                         (datepickerState)="datepickerState($event)"
                     >
                     </giddh-datepicker>
+                </span>
+            </div>
+
+            <!-- Center Section -->
+            <div class="col d-flex justify-content-center align-items-center text-center">
+                <h3
+                    *ngIf="!openDropDown"
+                    (dblclick)="!isEinvoiceGenerated ? openHeaderDropDown() : ''"
+                    class="d-inline-block text-underline cursor-pointer"
+                >
+                    {{ (baseAccount$ | async)?.name }} {{ commonLocaleData?.app_ac }}
+                </h3>
+                <select-field
+                    class="w-100"
+                    [readonly]="
+                        !isPettyCash &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                        branches?.length > 1
+                    "
+                    [ngClass]="{
+                        'read-only':
+                            !isPettyCash &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                            branches?.length > 1
+                    }"
+                    [id]="'update-ledger-select-account'"
+                    *ngIf="openDropDown"
+                    [cssClass]="'text-left d-inline-block cursor-pointer w-100 pd-l15'"
+                    [placeholder]="commonLocaleData?.app_select_account"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleScrollEnd()"
+                    (dynamicSearchedQuery)="isAccountSearchData = true; onSearchQueryChanged($event)"
+                    [enableDynamicSearch]="true"
+                    (onClear)="handleSuggestionHide()"
+                    [name]="'accountUniqueName'"
+                    [scrollableElementId]="'baseAccount'"
+                    [autocomplete]="'off'"
+                    [options]="searchResults"
+                    [defaultValue]="baseAccountName"
+                >
+                    <ng-template #optionTemplate let-option="option">
+                        <ng-container *ngIf="!option.additional?.stock">
+                            <a href="javascript:;" class="d-block py-2" (click)="changeBaseAccount(option)">
+                                <div class="option-label pt-2">
+                                    {{ option?.label | titlecase }}
+                                </div>
+                                <div class="option-value pb-2">
+                                    {{ option.additional?.uniqueName }}
+                                </div>
+                            </a>
+                        </ng-container>
+                        <ng-container *ngIf="option.additional?.stock">
+                            <a href="javascript:;" class="flex-column" (click)="changeBaseAccount(option)">
+                                <div class="option-label">
+                                    {{ option?.label | titlecase }}
+                                    <span *ngIf="option?.additional?.stock">
+                                        ({{ option?.additional?.stock?.name | titlecase }})
+                                    </span>
+                                </div>
+                                <div class="option-value">
+                                    {{ option.additional?.uniqueName }}
+                                </div>
+                                <div class="option-value-stock font-12">
+                                    {{ commonLocaleData?.app_stock }}:
+                                    {{ option.additional?.stock?.uniqueName }}
+                                </div>
+                            </a>
+                        </ng-container>
+                    </ng-template>
+                </select-field>
+            </div>
+
+            <!-- Right Section -->
+            <div class="col d-flex justify-content-end align-items-center pr-0">
+                <button
+                    aria-hidden="true"
+                    class="cross-button text-white-color d-flex align-items-center justify-content-center"
+                    mat-button
+                    mat-dialog-close
+                    [attr.aria-label]="commonLocaleData?.app_close"
+                >
+                    ×
+                </button>
+            </div>
+        </div>
+        <!-- endregion -->
+        <!-- region main body -->
+        <div mat-dialog-content class="position-relative">
+            <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
+                <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
+                    <h1>{{ localeData?.no_data_found_message }}</h1>
+                    <img
+                        class="mr-t1"
+                        height="200"
+                        src="{{ imgPath }}no-data.png"
+                        [alt]="commonLocaleData?.app_no_data_found"
+                    />
                 </div>
+            </div>
+            <div class="modal-body update-ledger-dialog" [hidden]="isChangeAcc || isShowNoDataFound">
+                <span class="font-15" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
                 <!-- region transactions -->
                 <div class="ledg-head entry-popup">
                     <table class="w-100 ledger-head mr-t1 hidden-xs">
@@ -1226,7 +1240,9 @@
                                                         [id]="'update-ledger-discount'"
                                                         [readonly]="true"
                                                         [(ngModel)]="txn.particular.name"
-                                                        [cssClass]="'transaction-particular-name border-none bg-transparent'"
+                                                        [cssClass]="
+                                                            'transaction-particular-name border-none bg-transparent'
+                                                        "
                                                     />
                                                 </ng-template>
 
@@ -2201,8 +2217,7 @@
                         <div class="col-md-6 pd-t1 accordion-expansion">
                             <mat-accordion multi>
                                 <mat-expansion-panel
-                                    (opened)="isMoreDetailOpen = true"
-                                    (closed)="isMoreDetailOpen = false"
+                                    [expanded]="isMoreDetailOpen"
                                     [ngClass]="{ 'overflow-visible': isMoreDetailOpen }"
                                 >
                                     <mat-expansion-panel-header>
@@ -2559,8 +2574,10 @@
                                                                     isConsolidatedBranch) &&
                                                                 branches?.length > 1
                                                             "
-                                                            [disabled]="(currentOrganizationType === 'COMPANY' ||
-                                                            isConsolidatedBranch)"
+                                                            [disabled]="
+                                                                currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch
+                                                            "
                                                             [type]="'text'"
                                                             [id]="'update-ledger-cheque-number'"
                                                             [placeholder]="localeData?.cheque_number_placeholder"

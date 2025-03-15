@@ -344,7 +344,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public imgPath: string = "";
     /** True if datepicker is open */
     public isDatepickerOpen: boolean = false;
-
+    /** Hold last valid index */
+    public lastValidIndex: number;
+    
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
@@ -2177,6 +2179,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 .subscribe((resp: any[]) => {
                     if (resp[0] && resp[1] && resp[2]) {
                         this.initEntry(resp);
+                        this.isMoreDetailOpen = true;
                     }
                 });
         }
@@ -2865,42 +2868,72 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.taxAsideMenuRef.close();
         this.changeDetectorRef.detectChanges();
     }
-
+    
     /**
-   * This will be use for move to next transactions
-   *
-   * @memberof UpdateLedgerEntryPanelComponent
-   */
+     * Handle event for next transaction
+     *
+     * @return {*}  {void}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     public moveToNextTransactions(): void {
-        if (this.index < this.transactionsList.length - 1) {
-            this.index++;
-            this.transaction = this.transactionsList[this.index];
-            this.sliderRefreshData();
-            this.isShowNoDataFound = false;
-        } else {
-            this.index++;
-            this.isShowNoDataFound = true;
-            this.closeAll();
+        let nextIndex = this.index + 1;
+
+        while (nextIndex < this.transactionsList.length) {
+            if (this.transactionsList[nextIndex]?.entryUniqueName !== this.transaction?.entryUniqueName) {
+                this.index = nextIndex;
+                this.transaction = this.transactionsList[this.index];
+                this.sliderRefreshData();
+                this.isShowNoDataFound = false;
+                return;
+            }
+            nextIndex++;
         }
+
+        // If no valid next entry, show "No Data Found"
+        this.index = this.transactionsList.length; // Move index out of bounds
+        this.isShowNoDataFound = true;
+        this.transaction = null;
+        this.closeAll();
     }
 
     /**
-     * This will be use for move to previous transactions
+     * Handle event for previous transactions
      *
+     * @return {*}  {void}
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public moveToPreviousTransactions(): void {
-        if (this.index > 0) {
-            this.index--;
+        // If currently at "No Data Found" state and moving back, restore the last valid entry
+        if (this.isShowNoDataFound && this.index === this.transactionsList.length) {
+            this.index = this.transactionsList.length - 1; // Move to last entry
             this.transaction = this.transactionsList[this.index];
             this.sliderRefreshData();
             this.isShowNoDataFound = false;
-        } else {
-            this.index--;
-            this.isShowNoDataFound = true;
-            this.closeAll();
+            return;
         }
+
+        let prevIndex = this.index - 1;
+
+        while (prevIndex >= 0) {
+            if (this.transactionsList[prevIndex]?.entryUniqueName !== this.transaction?.entryUniqueName) {
+                this.index = prevIndex;
+                this.transaction = this.transactionsList[this.index];
+                this.sliderRefreshData();
+                this.isShowNoDataFound = false;
+                return;
+            }
+            prevIndex--;
+        }
+
+        // If no valid previous entry, show "No Data Found"
+        this.index = -1; // Move index out of bounds
+        this.isShowNoDataFound = true;
+        this.transaction = null;
+        this.closeAll();
     }
+
+
+
 
     /**
      *This will be use for close all open dropdowns when user using keyboard shortcuts
