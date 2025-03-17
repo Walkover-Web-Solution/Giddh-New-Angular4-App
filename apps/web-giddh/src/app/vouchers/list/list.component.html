@@ -11,7 +11,7 @@
             mat-stretch-tabs="false"
             mat-align-tabs="start"
             [selectedIndex]="selectedTabIndex"
-            (selectedIndexChange)="tabChanged($event)"
+            (selectedTabChange)="tabChanged($event)"
             class="table-header-sticky"
         >
             <!-- estimate-content-start -->
@@ -2296,7 +2296,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element.voucherNumber" matTooltipPosition="above">
                                     {{ element.voucherNumber }}
                                 </td>
                             </ng-container>
@@ -2305,11 +2305,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -2331,7 +2331,7 @@
                                         </button>
                                     </mat-menu>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element.receiptType" matTooltipPosition="above">
                                     {{ element.receiptType }}
                                 </td>
                             </ng-container>
@@ -2358,7 +2358,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis" [matTooltip]="element?.account?.customerName" matTooltipPosition="above">
                                     {{ element?.account?.customerName }}
                                 </td>
                             </ng-container>
@@ -2366,7 +2366,7 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.payment_mode_label }}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element.paymentMode?.name }}
                                 </td>
                             </ng-container>
@@ -2374,9 +2374,9 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.invoice_no_label }}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     <ng-container *ngIf="element.adjustments?.length > 0">
-                                        <ng-container *ngFor="let adjustment of element.adjustments">
+                                        <ng-container *ngFor="let adjustment of element.adjustments" [matTooltip]="adjustment?.voucherNumber" matTooltipPosition="above">
                                             {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
                                         </ng-container>
                                     </ng-container>
@@ -2598,7 +2598,7 @@
                                         </ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" class="text-ellipsis">
                                     {{ element.voucherNumber }}
                                 </td>
                             </ng-container>
@@ -2607,11 +2607,11 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="sortable-header-justify-center"
+                                    class="sortable-header-justify-center table-date-width"
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-center">
+                                <td mat-cell *matCellDef="let element" class="text-center table-date-width">
                                     {{ element?.voucherDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -2638,7 +2638,7 @@
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element" [matTooltip]="element?.account?.customerName" matTooltipPosition="above">
                                     {{ element?.account?.customerName }}
                                 </td>
                             </ng-container>
@@ -2656,7 +2656,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <ng-container *ngIf="element.adjustments?.length > 0">
-                                        <ng-container *ngFor="let adjustment of element.adjustments">
+                                        <ng-container *ngFor="let adjustment of element.adjustments" class="text-ellipsis">
                                             {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
                                         </ng-container>
                                     </ng-container>
@@ -2822,7 +2822,7 @@
                                 </ng-container>
                                 <ng-container matColumnDef="particular">
                                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_particular }}</th>
-                                    <td mat-cell *matCellDef="let element" class="p-0">
+                                    <td mat-cell *matCellDef="let element" class="p-0 text-ellipsis">
                                         <ng-container *ngFor="let transaction of element?.transactions">
                                             <p>{{ transaction?.particular?.name }}</p>
                                             <p *ngIf="transaction?.inventory?.stock">
@@ -3078,7 +3078,7 @@
                                                     mat-stroked-button
                                                     class="mat-icon-md-btn"
                                                     [ngClass]="{
-                                                        'delete-icon-opacity':
+                                                        'opacity-5':
                                                             !settingForm.get('invoiceSettings.email').value ||
                                                             settingForm.get('invoiceSettings.email').value?.length < 4,
                                                         'cursor-pointer': !(
@@ -3887,7 +3887,7 @@
                                                 mat-stroked-button
                                                 class="mat-icon-md-btn"
                                                 [ngClass]="{
-                                                    'delete-icon-opacity':
+                                                    'opacity-5':
                                                         !settingForm.get('purchaseBillSettings.email').value ||
                                                         settingForm.get('purchaseBillSettings.email').value?.length < 4,
                                                     'cursor-pointer': !(

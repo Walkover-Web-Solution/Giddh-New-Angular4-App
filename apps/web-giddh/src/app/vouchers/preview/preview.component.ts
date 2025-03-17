@@ -530,7 +530,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private handleDownloadVoucherPdf(response: any): void {
-        if (response) {
+        if (typeof response === 'string' || (response?.hasOwnProperty('data') && response.data)) {
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
                 if (response) {

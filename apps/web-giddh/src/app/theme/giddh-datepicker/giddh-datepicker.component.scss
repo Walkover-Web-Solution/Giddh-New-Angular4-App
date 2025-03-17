@@ -1,0 +1,11 @@
+.mat-datepicker-toggle {
+    visibility: hidden;
+    color: var(--color-abbey) !important;
+}
+.toggle-Icon {
+    &:hover {
+        mat-datepicker-toggle {
+            visibility: visible;
+        }
+    }
+}

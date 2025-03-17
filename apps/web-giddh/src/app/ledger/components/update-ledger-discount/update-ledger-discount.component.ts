@@ -49,6 +49,8 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     private discountsList: any[] = [];
     /** True if get discounts list api call in progress */
     private getDiscountsLoading: boolean = false;
+    /** Emitter for create new discount */
+    @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private settingsDiscountService: SettingsDiscountService
@@ -90,7 +92,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     /**
      * prepare discount obj
      */
-     public prepareDiscountList() {
+    public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         } else {
@@ -218,5 +220,14 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Emits create new discount event
+     *
+     * @memberof UpdateLedgerDiscountComponent
+     */
+    public createNew(): void {
+        this.createNewDiscount.emit();
     }
 }

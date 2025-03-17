@@ -840,6 +840,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 delete data?.sections?.footer?.data?.textUnderSlogan;
             }
 
+            if (vouchertyp === 'voucher') {
+                data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
+                data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
+            } else {
+                data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
+                data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
+            }
+
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');

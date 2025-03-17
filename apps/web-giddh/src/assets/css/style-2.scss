@@ -1184,6 +1184,24 @@ textarea {
     }
 }
 
+.update-entry-transaction-date {
+    giddh-datepicker {
+        .mat-mdc-text-field-wrapper {
+            padding-left: 5px !important;
+        }
+        .mdc-text-field--disabled {
+            &.mdc-text-field--filled {
+                background-color: var(--color-transparent-background) !important;
+            }
+        }
+        .readonly-field { 
+            .mat-mdc-form-field {
+                background-color: var(--color-transparent-background) !important;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -3080,10 +3098,6 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 /*btn end*/
-.ledger-main .form-control {
-    background: var(--color-table-input-background) !important;
-}
-
 .ledger-header thead th {
     background: var(--color-white);
     border-right: 1px solid var(--color-iron);
@@ -3638,6 +3652,10 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-24) !important;
 }
 
+.icon-font-48 {
+    font-size: var(--font-size-48) !important;
+}
+
 .word-wrap {
     word-break: normal;
     white-space: nowrap;
@@ -3776,7 +3794,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .download-invoice-ledger {
-    padding-left: 15px;
+    padding-left: 5px;
     align-items: center;
     font-size: var(--font-size-15);
 }
@@ -3896,6 +3914,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .pointer-event-none {
     pointer-events: none !important;
+}
+
+.pointer-event-all {
+    pointer-events: all !important;
 }
 
 .cursor-default {
@@ -4303,7 +4325,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: var(--color-primary-header-background) !important;
-    color: var(--color-white);
+    color: var(--color-white-tertiary);
     border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
@@ -6311,6 +6333,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     margin: 0 !important;
     min-width: auto !important;
     background: transparent !important;
+    height: auto;
 }
 
 /**new modal design**/
@@ -9285,6 +9308,9 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .update-ledger-account input {
     padding-left: 4px !important;
+    text-overflow: ellipsis;
+    border: none;
+    min-width: 100%;
 }
 
 .select2-parent.select2-ledger .update-ledger-account sh-select .header.open input:placeholder-shown {
@@ -12126,7 +12152,7 @@ body.prevent-body-scroll {
     min-height: 60px;
 }
 
-.delete-icon-opacity {
+.opacity-5 {
     opacity: 0.5;
 }
 
@@ -13123,7 +13149,7 @@ body.hide-scroll-body.master-page {
     color: var(--color-secondary-input-bar-border);
 }
 
-.mat-datepicker-input:disabled {
+.mat-datepicker:disabled {
     color: var(--color-primary-input-bar-text) !important;
     background-color: var(--color-primary-input-bar-background) !important;
 }
@@ -13375,6 +13401,20 @@ voucher-component {
     color: var(--color-black);
 }
 
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
+
+    .mat-mdc-form-field {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
+
+    .dropdown-bg {
+        background-color: transparent !important;
+    }
+}
+
 .new-branch-transfer-page {
     .cdk-overlay-container {
         z-index: 99999 !important;
@@ -13387,7 +13427,7 @@ voucher-component {
         font-size: var(--font-size-16) !important;
         font-family: var(--font-semibold) !important;
         color: var(--color-toast-primary-text) !important;
-        padding: 0;
+        padding: 0 15px 0 15px;
         line-height: 55px !important;
     }
 
@@ -13602,11 +13642,15 @@ aside-menu-product-service {
     }
 }
 
+.text-white-color {
+    color: var(--white-color) !important;
+}
+
 .text-underline {
-    text-decoration: underline;
+    text-decoration: underline !important;
 
     &:hover {
-        text-decoration: underline;
+        text-decoration: underline !important;
     }
 }
 
@@ -13815,5 +13859,36 @@ mat-list {
 [mat-sort-header].cdk-program-focused {
     .mat-sort-header-container {
         border-bottom: none !important;
+    }
+}
+.mdc-text-field--disabled {
+    .mdc-text-field--filled {
+       background-color: transparent;
+    }
+}
+
+//Common class to make dialog background transparent add this in panel class
+.dialog-bg-transparent {
+    .mat-mdc-dialog-surface {
+        background-color: transparent !important;
+    }
+}
+.select-multiple-chiplist {
+    mat-chip-grid {
+        mat-chip-row {
+            &.mat-mdc-chip {
+                &:not(.mdc-evolution-chip--disabled) {
+                    --mdc-chip-elevated-container-color: var(--color-filter-background) !important;
+                    border: 1px solid var( --color-primary-button-border);
+
+                    .mdc-evolution-chip__text-label {
+                        --mdc-chip-label-text-color: var(--color-tab-secondary-text) !important;
+                    }
+                    .mdc-evolution-chip__icon--trailing {
+                        --mdc-chip-with-trailing-icon-trailing-icon-color: var(--color-tab-secondary-text) !important;
+                    }
+                }
+            }
+        }
     }
 }

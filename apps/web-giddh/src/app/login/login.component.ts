@@ -373,6 +373,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
+                
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
 
                 if (!isElectron) {

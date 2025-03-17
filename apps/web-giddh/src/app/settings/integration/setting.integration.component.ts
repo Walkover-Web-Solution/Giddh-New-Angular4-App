@@ -253,7 +253,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         let companyUniqueName = this.generalService.companyUniqueName;
         this.voucherApiVersion = this.generalService.voucherApiVersion;

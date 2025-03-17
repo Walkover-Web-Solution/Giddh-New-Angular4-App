@@ -316,7 +316,7 @@ aside-menu-account .container-fluid {
     padding-bottom: 40px;
 }
 .pd-l4 {
-    padding-left: 40px;
+    padding-left: 40px !important;
 }
 .pd-r4 {
     padding-right: 40px;
@@ -325,10 +325,10 @@ aside-menu-account .container-fluid {
     padding-bottom: 50px;
 }
 .pd-r5 {
-    padding-right: 50px;
+    padding-right: 50px !important;
 }
 .pd-l5 {
-    padding-left: 50px;
+    padding-left: 50px !important;
 }
 .pd-r15 {
     padding-right: 15px;
@@ -337,7 +337,7 @@ aside-menu-account .container-fluid {
     padding-left: 15px;
 }
 .pd-t15 {
-    padding-top: 15px;
+    padding-top: 15px !important; 
 }
 .pd-b15 {
     padding-bottom: 15px;
@@ -460,6 +460,9 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px;
 }
+.row-gap5 {
+    row-gap: 5px;
+}
 .row-gap1 {
     row-gap: 10px;
 }
@@ -501,6 +504,11 @@ aside-menu-account .container-fluid {
 .bdr-radius-50 {
     border-radius: 50px !important;
 }
+
+.bdr-radius-circle {
+    border-radius: 50% !important;
+}
+
 .pa {
     position: absolute;
 }
@@ -521,6 +529,9 @@ aside-menu-account .container-fluid {
 }
 .min-width-unset {
     min-width: unset !important;
+}
+.min-width-0 {
+    min-width: 0 !important;
 }
 .min-width-100 {
     min-width: 100px;
@@ -2672,6 +2683,7 @@ giddh-datepicker {
     .mat-expansion-panel-header {
         padding: 0 15px !important;
         background-color: var(--color-tab-primary-background) !important;
+        border-radius: initial;
         &:hover {
             background-color: var(--color-tab-primary-background) !important;
         }
