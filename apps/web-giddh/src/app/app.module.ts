@@ -59,7 +59,7 @@ if (!environment.production) {
 
 let giddhRegion = document.cookie
     .split('; ')
-    .find(cookie => cookie.startsWith('giddh_region='))
+    .find(cookie => cookie?.startsWith('giddh_region='))
     ?.split('=')[1];
 giddhRegion = giddhRegion?.toUpperCase();
 
