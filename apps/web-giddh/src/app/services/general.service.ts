@@ -2210,5 +2210,39 @@ export class GeneralService {
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
     }
+
+    public getVoucherTypeList(commonLocaleData : any) : any[] {
+        console.log(commonLocaleData.app_voucher_types);
+        
+        const voucherTypeList = [{
+            label: commonLocaleData?.app_voucher_types.sales,
+            value: 'sales'
+        }, {
+            label: commonLocaleData?.app_voucher_types.purchase,
+            value: 'purchase'
+        }, {
+            label: commonLocaleData?.app_voucher_types.receipt,
+            value: 'receipt'
+        }, {
+            label: commonLocaleData?.app_voucher_types.payment,
+            value: 'payment'
+        }, {
+            label: commonLocaleData?.app_voucher_types.journal,
+            value: 'journal'
+        }, {
+            label: commonLocaleData?.app_voucher_types.contra,
+            value: 'contra'
+        }, {
+            label: commonLocaleData?.app_voucher_types.debit_note,
+            value: 'debit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.credit_note,
+            value: 'credit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.advance_receipt,
+            value: 'advance-receipt'
+        }];
+        return voucherTypeList;
+    }
 }
 

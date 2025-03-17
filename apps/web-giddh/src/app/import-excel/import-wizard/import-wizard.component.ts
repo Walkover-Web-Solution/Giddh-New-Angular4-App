@@ -121,10 +121,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
             if (voucherResponse) {
                 const requestObject = {
-                    accountUniqueName: this.voucherResponse.accountUniqueName,
+                    accountUniqueName: this.voucherResponse.accountUniqueName ?? "",
                     subType: "VOUCHER",
-                    type: "ACCOUNT_WISE_VOUCHER_IMPORT",
-                    isHeaderProvided: this.voucherResponse.isHeaderProvided
+                    type: this.voucherResponse.accountUniqueName ? "ACCOUNT_WISE_VOUCHER_IMPORT" : 'VOUCHER_WISE_VOUCHER_IMPORT',
+                    isHeaderProvided: this.voucherResponse.isHeaderProvided,
+                    voucherType: this.voucherResponse.selectVoucher ?? ""
                 }
                 this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
             }
@@ -165,7 +166,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onFileUpload(data: any) {
-        if (this.entity === "voucher") {
+        if (this.entity === "account-wise" || this.entity === "voucher-wise") {
             this.voucherResponse = data;
             this.ledgerComponentStore.getSignedUrl(this.voucherResponse.file.name);
             return;

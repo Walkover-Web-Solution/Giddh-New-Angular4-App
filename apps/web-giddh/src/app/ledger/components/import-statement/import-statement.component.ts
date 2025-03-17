@@ -93,7 +93,7 @@ export class ImportStatementComponent implements OnDestroy {
                 this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(importVoucherSuccessResponse));
                 this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
                 this.dialogRef.close(true);
-                this.router.navigate(['/pages/import/voucher']);
+                this.router.navigate(['/pages/import/account-wise']);
             }
         });
     }

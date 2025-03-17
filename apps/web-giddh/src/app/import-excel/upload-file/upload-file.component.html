@@ -89,7 +89,7 @@
             {{ localeData?.header_provided }}
             <div class="mr-t1">
                 <reactive-dropdown-field
-                    *ngIf="entity === 'voucher'"
+                    *ngIf="entity === 'account-wise'"
                     [label]="commonLocaleData?.app_select_account"
                     [placeholder]="commonLocaleData?.app_select"
                     [options]="accountSearchResponse"
@@ -99,6 +99,16 @@
                     (dynamicSearchedQuery)="searchAccount($event)"
                     (onClear)="accountUniqueName = null; accountLabel = null"
                     (selectedOption)="accountUniqueName = $event?.value; accountLabel = $event?.label"
+                    [required]="true"
+                >
+                </reactive-dropdown-field>
+                <reactive-dropdown-field
+                    *ngIf="entity === 'voucher-wise'"
+                    [label]="commonLocaleData?.app_select_voucher"
+                    [placeholder]="commonLocaleData?.app_select"
+                    [options]="voucherListResponse"
+                    (onClear)="selectVoucher = null"
+                    (selectedOption)="selectVoucher = $event?.value"
                     [required]="true"
                 >
                 </reactive-dropdown-field>
@@ -127,7 +137,7 @@
                 matTooltipPosition="above"
                 color="primary"
                 [ladda]="isLoading"
-                [disabled]="file === null || entity === 'voucher' && !accountUniqueName"
+                [disabled]="file === null || entity === 'account-wise' && !accountUniqueName || entity === 'voucher-wise' && !selectVoucher"
                 (click)="handleFileUpload(file)"
             >
                 {{ commonLocaleData?.app_next }}
