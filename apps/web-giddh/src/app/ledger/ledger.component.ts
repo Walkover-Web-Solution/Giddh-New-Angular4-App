@@ -2603,14 +2603,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public showUploadBankStatementModal(): void {
         let dialogRef = this.dialog.open(ImportStatementComponent, {
-            width: '630px',
+            panelClass: ['mat-dialog-md'],
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
             },
             role: 'alertdialog',
-            ariaLabel: 'import'
+            ariaLabel: 'import',
+            autoFocus: false
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {

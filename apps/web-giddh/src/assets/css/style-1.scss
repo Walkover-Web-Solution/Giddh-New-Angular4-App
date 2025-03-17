@@ -316,7 +316,7 @@ aside-menu-account .container-fluid {
     padding-bottom: 40px;
 }
 .pd-l4 {
-    padding-left: 40px;
+    padding-left: 40px !important;
 }
 .pd-r4 {
     padding-right: 40px;
@@ -337,7 +337,7 @@ aside-menu-account .container-fluid {
     padding-left: 15px;
 }
 .pd-t15 {
-    padding-top: 15px;
+    padding-top: 15px !important; 
 }
 .pd-b15 {
     padding-bottom: 15px;
@@ -504,6 +504,11 @@ aside-menu-account .container-fluid {
 .bdr-radius-50 {
     border-radius: 50px !important;
 }
+
+.bdr-radius-circle {
+    border-radius: 50% !important;
+}
+
 .pa {
     position: absolute;
 }

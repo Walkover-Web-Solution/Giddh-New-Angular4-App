@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html id="default" lang="en">
+    <head>
+        <title></title>
+        <style>
+            :root {
+                --custom-font-size: 14px;
+            }
+            * {
+                font-size: var(--custom-font-size) !important;
+            }
+        </style>
+        <style type="text/css" *ngIf="inputTemplate.font === 'Roboto'">
+            /* Roboto Light (200) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Light.ttf") format("truetype");
+            font-weight: 200;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Light Italic (200 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-LightItalic.ttf") format("truetype");
+            font-weight: 200;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Regular (400) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+            font-weight: 400;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Italic (400 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Italic.ttf") format("truetype");
+            font-weight: 400;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Medium (500) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Medium.ttf") format("truetype");
+            font-weight: 500;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Medium Italic (500 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-MediumItalic.ttf") format("truetype");
+            font-weight: 500;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Bold (700) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Bold.ttf") format("truetype");
+            font-weight: 700;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF; /* Basic Latin and Latin-1 Supplement */
+            }
+
+            /* Roboto Bold Italic (700 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-BoldItalic.ttf") format("truetype");
+            font-weight: 700;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF; /* Basic Latin and Latin-1 Supplement */
+            }
+        </style>
+    </head>
+
+    <body
+        class="pd-l1 pd-r1"
+        *ngIf="inputTemplate.sections && inputTemplate.sections"
+        [ngStyle]="{
+            'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans',
+            'padding-top': inputTemplate.topMargin + 'px',
+            'padding-bottom': inputTemplate.bottomMargin + 'px',
+            'padding-right': inputTemplate.rightMargin + 'px',
+            'padding-left': inputTemplate.leftMargin + 'px',
+            'font-size': inputTemplate.fontDefault + 'px',
+            '--custom-font-size': inputTemplate.fontDefault + 'px'
+        }"
+    >
+    <div>
+    </div>
+        <!-- Header -->
+        <div
+            id="Template-header"
+            [ngClass]="{
+                'disabled-area': !templateUISectionVisibility.header,
+                ' ': templateUISectionVisibility.header
+            }"
+            (click)="onClickSection('header')"
+        >
+            <a
+                href="javascript:void(0);"
+                class="edit-template"
+                *ngIf="!templateUISectionVisibility.header"
+                aria-label="edit icon"
+            >
+                <i class="icon-edit-pencil"></i>
+            </a>
+            <header id="pageHeader" class="pb-0">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="padding-0 border-none">
+                                <table class="mr-t1">
+                                    <tr>
+                                        <td class="border-none" width="33%" colspan="100%">
+                                            <ng-container
+                                                *ngIf="
+                                                    fieldsAndVisibility.header.formNameInvoice?.label &&
+                                                    fieldsAndVisibility.header.formNameTaxInvoice?.label
+                                                "
+                                            >
+                                                <h1
+                                                    *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display"
+                                                    class="text-center"
+                                                >
+                                                    <strong class="strong" style="font-size: calc(var(--custom-font-size) + 4px) !important">
+                                                        {{
+                                                            fieldsAndVisibility.header.formNameTaxInvoice?.display
+                                                                ? fieldsAndVisibility.header.formNameTaxInvoice?.label
+                                                                : fieldsAndVisibility.header.formNameInvoice?.label
+                                                        }}
+                                                    </strong>
+                                                </h1>
+                                            </ng-container>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="fieldsAndVisibility.footer.displayExportMessage?.display">
+                                        <td
+                                            colspan="100%"
+                                            class="border-none text-center"
+                                            [ngStyle]="{
+                                                'font-size': inputTemplate.fontMedium + 'px',
+                                                'white-space': 'pre-line'
+                                            }"
+                                        >
+                                            {{
+                                                activeCompany?.withPay
+                                                    ? "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITH PAYMENT OF INTEGRATED TAX"
+                                                    : "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX"
+                                            }}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table
+                                    *ngIf="
+                                        showGstComposition &&
+                                        (fieldsAndVisibility?.header?.showQrCode?.display ||
+                                            fieldsAndVisibility?.header?.showEInvoiceDetails?.display)
+                                    "
+                                >
+                                    <tr>
+                                        <td
+                                            class="border-none vertical-align-bottom"
+                                            *ngIf="fieldsAndVisibility?.header?.showEInvoiceDetails?.display"
+                                        >
+                                            <table>
+                                                <tr>
+                                                    <td class="border-none padding-0" width="95px">IRN</td>
+                                                    <td class="border-none padding-0" style="word-break: break-all">
+                                                        :
+                                                        def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none padding-0" width="95px">Ack No</td>
+                                                    <td class="border-none padding-0">: 152410022936999</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-none padding-0" width="95px">Ack Date</td>
+                                                    <td class="border-none padding-0">: {{ getTodayDate(true) }} 10:08:00</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td
+                                            width="120px"
+                                            id="qr-code-section"
+                                            class="border-none text-right vertical-align-bottom"
+                                            *ngIf="fieldsAndVisibility?.header?.showQrCode?.display"
+                                        >
+                                            <img
+                                                src="{{imgPath}}QR_code.png"
+                                                alt="qr image"
+                                                width="120px"
+                                            />
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table>
+                                    <tr>
+                                        <td width="50%" class="padding-0">
+                                            <table>
+                                                <tr *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display || showLogo">
+                                                    <td class="border-none border-bottom">
+                                                        <table>
+                                                            <tr>
+                                                                <td
+                                                                    class="padding-0 border-none pd-r1"
+                                                                    width="{{ inputTemplate.logoSize + 'px' }}"
+                                                                    *ngIf="showLogo"
+                                                                >
+                                                                    <figure class="margin-0">
+                                                                        <img
+                                                                            [src]="logoSrc"
+                                                                            [attr.width]="inputTemplate.logoSize + 'px'"
+                                                                            [attr.height]="
+                                                                                inputTemplate.logoSize + 'px'
+                                                                            "
+                                                                            alt="logo"
+                                                                        />
+                                                                    </figure>
+                                                                </td>
+                                                                <td
+                                                                    class="padding-0 border-none"
+                                                                    *ngIf="fieldsAndVisibility.header.companyName?.display ||
+                                                                        fieldsAndVisibility?.header?.showCompanyAddress?.display ||
+                                                                        fieldsAndVisibility.header.gstin?.display
+                                                                    "
+                                                                >
+                                                                    <h2 class="word-break" *ngIf="fieldsAndVisibility.header.companyName?.display">
+                                                                        <strong class="strong"> 
+                                                                            {{ fieldsAndVisibility.header.companyName?.label || "Walkover Web Solutions Pvt" }}
+                                                                        </strong>
+                                                                    </h2>
+
+                                                                    <p class="margin-0" *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display">
+                                                                        Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2,
+                                                                        Old Palasia, Near Greater Kailash Hospital,
+                                                                        Indore 452001(M. P.)
+                                                                    </p>
+
+                                                                    <table *ngIf="fieldsAndVisibility.header.gstin?.display">
+                                                                        <tr>
+                                                                            <td
+                                                                                class="border-none padding-0"
+                                                                                width="60px"
+                                                                            >
+                                                                                {{
+                                                                                    fieldsAndVisibility.header.gstin
+                                                                                        ?.label || "GSTIN"
+                                                                                }}
+                                                                            </td>
+                                                                            <td class="border-none padding-0">
+                                                                                :
+                                                                                {{
+                                                                                    companyGSTIN
+                                                                                        ? companyGSTIN
+                                                                                        : "12BAUCS7548A1Z4"
+                                                                                }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="fieldsAndVisibility.header.customerName?.display">
+                                                    <td class="border-none border-bottom">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.customerName
+                                                                            ?.label || "Customer Name"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">
+                                                                    <strong class="strong"> : Green Soft Solutions</strong>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+                                                    <td class="border-none border-bottom">
+                                                        <p class="font-11">
+                                                            {{
+                                                                fieldsAndVisibility.header.shippingAddress?.label ||
+                                                                    "Consignee (Ship to)"
+                                                            }}
+                                                        </p>
+
+                                                        <p>5 A.B. Road</p>
+                                                        <p>Indore (M.P.) 452000, Madhya Pradesh</p>
+                                                        <p *ngIf="fieldsAndVisibility.header.shippingState?.display">
+                                                            Madhya Pradesh
+                                                        </p>
+
+                                                        <table>
+                                                            <tr
+                                                                *ngIf="
+                                                                    fieldsAndVisibility.header.shippingGstin?.display
+                                                                "
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.shippingGstin
+                                                                            ?.label || "GSTIN"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">: 11AAAAAA000Z0A1</td>
+                                                            </tr>
+
+                                                            <tr
+                                                                *ngIf="
+                                                                    fieldsAndVisibility.header.shippingState?.display
+                                                                "
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.shippingState
+                                                                            ?.label || "State Name"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">: Madhya Pradesh</td>
+                                                            </tr>
+
+                                                            <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility?.header?.attentionTo
+                                                                            ?.label || "Contact person"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">
+                                                                    : Mr. Alok Gangrade
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr
+                                                                *ngIf="
+                                                                    fieldsAndVisibility.header.customerEmail?.display
+                                                                "
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    E-mail
+                                                                </td>
+                                                                <td class="border-none padding-0">
+                                                                    : alokgangrade@gmail.com
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr
+                                                                *ngIf="
+                                                                    fieldsAndVisibility.header.customerMobileNumber
+                                                                        ?.display
+                                                                "
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    Contact
+                                                                </td>
+                                                                <td class="border-none padding-0">: +91 901212XXXX</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                                    <td class="border-none">
+                                                        <p class="font-11">
+                                                            {{
+                                                                fieldsAndVisibility.header.billingAddress?.label ||
+                                                                    "Buyer (Bill to)"
+                                                            }}
+                                                        </p>
+                                                        <p>5 A.B. Road</p>
+                                                        <p>Indore (M.P.) 452000, Madhya Pradesh</p>
+                                                        <p *ngIf="fieldsAndVisibility.header.shippingState?.display">
+                                                            Madhya Pradesh
+                                                        </p>
+
+                                                        <table>
+                                                            <tr
+                                                                *ngIf="fieldsAndVisibility.header.billingGstin?.display"
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.billingGstin
+                                                                            ?.label || "GSTIN"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">: 11AAAAAA000Z0A1</td>
+                                                            </tr>
+
+                                                            <tr
+                                                                *ngIf="fieldsAndVisibility.header.billingState?.display"
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.billingState
+                                                                            ?.label || "State Name"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">: Madhya Pradesh</td>
+                                                            </tr>
+
+                                                            <tr
+                                                                *ngIf="
+                                                                    fieldsAndVisibility.header.displayPlaceOfSupply
+                                                                        ?.display
+                                                                "
+                                                            >
+                                                                <td class="border-none padding-0 vertical-align-bottom" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.displayPlaceOfSupply
+                                                                            ?.label || "Place Of Supply"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0 vertical-align-bottom">
+                                                                    : Madhya Pradesh (MP)
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility?.header?.attentionTo
+                                                                            ?.label || "Contact person"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">
+                                                                    : Mr. Alok Gangrade
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr
+                                                                *ngIf="
+                                                                    fieldsAndVisibility.header.customerEmail?.display
+                                                                "
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    E-mail
+                                                                </td>
+                                                                <td class="border-none padding-0">
+                                                                    : alokgangrade@gmail.com
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr
+                                                                *ngIf="
+                                                                    fieldsAndVisibility.header.customerMobileNumber
+                                                                        ?.display
+                                                                "
+                                                            >
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    Contact
+                                                                </td>
+                                                                <td class="border-none padding-0">: +91 901212XXXX</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="50%" class="padding-0 vertical-align-top">
+                                            <table
+                                                class="table-row-height"
+                                                *ngIf="
+                                                    fieldsAndVisibility.header.invoiceNumber?.display ||
+                                                    fieldsAndVisibility.header.invoiceDate?.display
+                                                "
+                                            >
+                                                <tr>
+                                                    <td width="50%" class="border-none border-bottom border-right">
+                                                        <ng-container
+                                                            *ngIf="fieldsAndVisibility.header.invoiceNumber?.display"
+                                                        >
+                                                            <ng-container *ngIf="voucherType === 'sales'; else voucherNo">
+                                                                {{ fieldsAndVisibility.header.invoiceNumber?.label || "Invoice No." }}
+                                                            </ng-container>
+                                                            <ng-template #voucherNo>
+                                                                {{ fieldsAndVisibility.header.voucherNumber?.label || "Voucher No." }}
+                                                            </ng-template>
+                                                            <p class="margin-0">
+                                                                <strong class="strong">{{ getTodayDate(false, true) + "-1" }}</strong>
+                                                            </p>
+                                                        </ng-container>
+                                                    </td>
+                                                    <td width="50%" class="border-none border-bottom">
+                                                        <ng-container
+                                                            *ngIf="fieldsAndVisibility.header.invoiceDate?.display"
+                                                        >
+                                                            <span>
+                                                                <ng-container *ngIf="voucherType === 'sales'; else voucherDate">
+                                                                    {{ fieldsAndVisibility.header.invoiceDate?.label || "Invoice Date" }}
+                                                                </ng-container>
+                                                                <ng-template #voucherDate>
+                                                                    {{ fieldsAndVisibility.header.voucherDate?.label || "Voucher Date" }}
+                                                                </ng-template>
+                                                            </span>
+                                                            <p class="margin-0">
+                                                                <strong class="strong">{{ getTodayDate(false) }}</strong>
+                                                            </p>
+                                                        </ng-container>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </header>
+        </div>
+
+        <!-- Body -->
+        <div
+            id="body"
+            [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }"
+            (click)="onClickSection('table')"
+        >
+            <a
+                href="javascript:void(0);"
+                class="edit-template"
+                *ngIf="!templateUISectionVisibility.table"
+                aria-label="edit icon"
+            >
+                <i class="icon-edit-pencil"></i>
+            </a>
+            <main id="Template-table">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="padding-0 border-none">
+                                <table>
+                                    <thead>
+                                        <tr class="border-top-none">
+                                            <th
+                                                width="30px"
+                                                class="text-center"
+                                                *ngIf="fieldsAndVisibility.table.sNo?.display"
+                                            >
+                                                {{ fieldsAndVisibility.table.sNo?.label || "Sl No." }}
+                                            </th>
+                                            <th width="28%" *ngIf="fieldsAndVisibility.table.item?.display">
+                                                {{ fieldsAndVisibility.table.item?.label || "Description of Goods" }}
+                                            </th>
+                                            <th class="text-center" *ngIf="fieldsAndVisibility.table.hsnSac?.display">
+                                                {{ fieldsAndVisibility.table.hsnSac?.label || "HSN/SAC" }}
+                                            </th>
+                                            <th class="text-center" *ngIf="fieldsAndVisibility.table.quantity?.display">
+                                                {{ fieldsAndVisibility.table.quantity?.label || "Quantity" }}
+                                            </th>
+                                            <th class="text-right" *ngIf="fieldsAndVisibility.table.rate?.display">
+                                                {{ fieldsAndVisibility.table.rate?.label || "Rate" }}
+                                            </th>
+                                            <th class="text-center">per</th>
+                                            <th class="text-center" *ngIf="fieldsAndVisibility.table.discount?.display">
+                                                {{ fieldsAndVisibility.table.discount?.label || "Disc." }}
+                                            </th>
+                                            <th class="text-right no-wrap" *ngIf="fieldsAndVisibility.table.total?.display">
+                                                {{ fieldsAndVisibility.table.total?.label || "Amount" }}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left text-center vertical-align-top"
+                                                *ngIf="fieldsAndVisibility.table.sNo?.display"
+                                            >
+                                                1
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.item?.display"
+                                            >
+                                                <span class="strong" *ngIf="fieldsAndVisibility.table.item?.display">
+                                                    Dummy Product Edition 1
+                                                </span>
+                                                <p>
+                                                    Dummy Product Description 1
+                                                </p>
+
+                                                <p
+                                                    class="custom-fields small text-light"
+                                                    *ngIf="fieldsAndVisibility.table.date?.display"
+                                                >
+                                                    {{ getTodayDate(true) }}
+                                                </p>
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left text-center"
+                                                *ngIf="fieldsAndVisibility.table.hsnSac?.display"
+                                            >
+                                                12345
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left text-center"
+                                                *ngIf="fieldsAndVisibility.table.quantity?.display"
+                                            >
+                                                <span class="strong">2 No.</span>
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left text-right"
+                                                *ngIf="fieldsAndVisibility.table.rate?.display"
+                                            >
+                                                <span [innerHTML]="rupeeSymbol"></span>1000.00
+                                            </td>
+
+                                            <td class="border-none border-right border-left text-center">No.</td>
+
+                                            <td
+                                                class="border-none border-right border-left text-center"
+                                                *ngIf="fieldsAndVisibility.table.discount?.display"
+                                            >
+                                                <span [innerHTML]="rupeeSymbol"></span>300.00
+                                            </td>
+                                            <td class="border-none border-right border-left text-right" *ngIf="fieldsAndVisibility.table.total?.display">
+                                                <p class="no-wrap"><span [innerHTML]="rupeeSymbol"></span>2006.00</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left text-center vertical-align-top"
+                                                *ngIf="fieldsAndVisibility.table.sNo?.display"
+                                            >
+                                                2
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.item?.display"
+                                            >
+                                                <span class="strong" *ngIf="fieldsAndVisibility.table.item?.display">
+                                                    Dummy Product Edition 2
+                                                </span>
+                                                <p>
+                                                    Dummy Product Description 2
+                                                </p>
+
+                                                <p
+                                                    class="custom-fields small text-light"
+                                                    *ngIf="fieldsAndVisibility.table.date?.display"
+                                                >
+                                                    {{ getTodayDate(true) }}
+                                                </p>
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left text-center"
+                                                *ngIf="fieldsAndVisibility.table.hsnSac?.display"
+                                            >
+                                                54321
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left text-center"
+                                                *ngIf="fieldsAndVisibility.table.quantity?.display"
+                                            >
+                                                <span class="strong">2 No.</span>
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left text-right"
+                                                *ngIf="fieldsAndVisibility.table.rate?.display"
+                                            >
+                                                <span [innerHTML]="rupeeSymbol"></span>300.00
+                                            </td>
+
+                                            <td class="border-none border-right border-left text-center">No.</td>
+
+                                            <td
+                                                class="border-none border-right border-left text-center"
+                                                *ngIf="fieldsAndVisibility.table.discount?.display"
+                                            >
+                                                <span [innerHTML]="rupeeSymbol"></span>500.00
+                                            </td>
+                                            <td class="border-none border-right border-left text-right" *ngIf="fieldsAndVisibility.table.total?.display">
+                                                <p class="no-wrap"><span [innerHTML]="rupeeSymbol"></span>118.00</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.sNo?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.item?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.hsnSac?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.quantity?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.rate?.display"
+                                            ></td>
+                                            <td class="border-none border-right border-left"></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.discount?.display"
+                                            ></td>
+                                            <td class="border-none border-right border-left border-top text-right" *ngIf="fieldsAndVisibility.table.total?.display">
+                                                <div class="pull-right text-black">
+                                                    <span [innerHTML]="rupeeSymbol"></span>1800.00
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.sNo?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left text-right"
+                                                *ngIf="fieldsAndVisibility.table.item?.display"
+                                            >
+                                                <strong class="strong" style="text-transform: uppercase">CGST</strong>
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.hsnSac?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.quantity?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.rate?.display"
+                                            ></td>
+                                            <td class="border-none border-right border-left"></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.discount?.display"
+                                            ></td>
+                                            <td class="border-none border-right border-left text-right" *ngIf="fieldsAndVisibility.table.total?.display">
+                                                <div class="pull-right text-black">
+                                                    <strong class="strong">162.00</strong>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.sNo?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left text-right"
+                                                *ngIf="fieldsAndVisibility.table.item?.display"
+                                            >
+                                                <strong class="strong" style="text-transform: uppercase strong">SGST</strong>
+                                            </td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.hsnSac?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.quantity?.display"
+                                            ></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.rate?.display"
+                                            ></td>
+                                            <td class="border-none border-right border-left"></td>
+                                            <td
+                                                class="border-none border-right border-left"
+                                                *ngIf="fieldsAndVisibility.table.discount?.display"
+                                            ></td>
+                                            <td class="border-none border-right border-left text-right" *ngIf="fieldsAndVisibility.table.total?.display">
+                                                <div class="pull-right text-black">
+                                                    <strong class="strong">162.00</strong>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="fieldsAndVisibility.table.total?.display">
+                                            <td *ngIf="fieldsAndVisibility.table.sNo?.display"></td>
+                                            <td class="text-right" *ngIf="fieldsAndVisibility.table.item?.display">
+                                                Total
+                                            </td>
+                                            <td *ngIf="fieldsAndVisibility.table.hsnSac?.display"></td>
+                                            <td
+                                                class="text-center"
+                                                *ngIf="fieldsAndVisibility.table.quantity?.display"
+                                            >
+                                                <span class="strong" *ngIf="fieldsAndVisibility.table.totalQuantity?.display">4 No.</span>
+                                            </td>
+                                            <td *ngIf="fieldsAndVisibility.table.rate?.display"></td>
+                                            <td></td>
+                                            <td *ngIf="fieldsAndVisibility.table.discount?.display"></td>
+                                            <td class="text-right">
+                                                <strong class="strong">
+                                                    <span [innerHTML]="rupeeSymbol"></span>2124.00
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+                    <tr>
+                        <td class="border-none border-left border-right padding-0">
+                            <table>
+                                <tr>
+                                    <td class="border-none" width="50%">Amount Chargeable (in words)</td>
+                                    <td class="border-none text-right" width="50%">E. & O.E</td>
+                                </tr>
+                                <tr>
+                                    <td class="border-none" colspan="100%">
+                                        <strong class="strong">Two Thousand One Hundred Twenty Four Only</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <table *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
+                    <thead>
+                        <tr>
+                            <th
+                                class="vertical-align-top text-center"
+                                rowspan="2"
+                                width="20%"
+                            >
+                                HSN/SAC
+                            </th>
+                            <th
+                                class="text-center vertical-align-top"
+                                rowspan="2"
+                            >
+                                Taxable Value
+                            </th>
+                            <th class="text-center" colspan="2" width="25%">CGST</th>
+                            <th class="text-center" colspan="2" width="25%">SGST</th>
+                            <th
+                                class="text-right vertical-align-top"
+                                rowspan="2"
+                            >
+                                Total Tax Amount
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center" width="12.5%">Rate</th>
+                            <th class="text-center" width="12.5%">Amount</th>
+                            <th class="text-center" width="12.5%">Rate</th>
+                            <th class="text-center" width="12.5%">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>12345</td>
+                            <td
+                                class="text-center"
+                            >
+                                1700.00
+                            </td>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">153.00</td>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">153.00</td>
+                            <td
+                                class="text-right"
+                            >
+                                306.00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>54321</td>
+                            <td
+                                class="text-center"
+                            >
+                                100.00
+                            </td>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">9.00</td>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">9.00</td>
+                            <td
+                                class="text-right"
+                            >
+                                18.00
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td
+                                class="text-right"
+                            >
+                                <strong class="strong">Total</strong>
+                            </td>
+                            <td
+                                class="text-center"
+                            >
+                                <strong class="strong">1800.00</strong>
+                            </td>
+                            <td></td>
+                            <td class="text-center">
+                                <strong class="strong">162.00</strong>
+                            </td>
+                            <td></td>
+                            <td class="text-center">
+                                <strong class="strong">162.00</strong>
+                            </td>
+                            <td
+                                class="text-right"
+                            >
+                                <strong class="strong">324.00</strong>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <p *ngIf="false">
+                    Tax Amount (in words):
+                    <strong class="strong">INR ... Only</strong>
+                </p>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <div
+            id="content_wrap"
+            class="height-100 content_wrap"
+            [ngClass]="{
+                'disabled-area': !templateUISectionVisibility.footer,
+                ' ': templateUISectionVisibility.footer
+            }"
+            (click)="onClickSection('footer')"
+        >
+            <a
+                href="javascript:void(0);"
+                class="edit-template"
+                *ngIf="!templateUISectionVisibility.footer"
+                aria-label="edit icon"
+            >
+                <i class="icon-edit-pencil"></i>
+            </a>
+            <footer id="Template-footer">
+                <table>
+                    <tr>
+                        <td class="border-none border-left border-right border-bottom padding-0">
+                            <table style="margin-top: 40px">
+                                <tbody>
+                                    <tr>
+                                        <td class="border-none padding-0">
+                                            <table style="margin-top: auto">
+                                                <tr>
+                                                    <td class="border-none border-right" width="50%" rowspan="2" [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px' }">
+                                                        <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                                            <u><strong class="strong">Declaration: </strong></u>
+                                                            <p class="margin-0" style="white-space: pre-line">{{ fieldsAndVisibility.footer.message1?.label }}</p>
+                                                        </ng-container>
+                                                    </td>
+                                                    <td class="border-none border-top text-right pb-0" width="50%">
+                                                        <ng-container *ngIf="fieldsAndVisibility.footer.companyName?.display">
+                                                            <span class="font-12">
+                                                                for
+                                                                {{
+                                                                    fieldsAndVisibility.header.companyName?.label
+                                                                }}
+                                                            </span>
+                                                        </ng-container>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="showImageSignature || fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                                    <td class="border-none text-right">
+                                                        <ng-container *ngIf="showImageSignature && imageSignatureSrc?.length">
+                                                            <div>
+                                                                <img
+                                                                    [src]="imageSignatureSrc"
+                                                                    class="inner-img-signature"
+                                                                    alt="signature-image"
+                                                                />
+                                                            </div>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                                            {{ fieldsAndVisibility.footer.textUnderSlogan?.label || "Authorised Signatory" }}
+                                                        </ng-container>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </footer>
+        </div>
+    </body>
+</html>

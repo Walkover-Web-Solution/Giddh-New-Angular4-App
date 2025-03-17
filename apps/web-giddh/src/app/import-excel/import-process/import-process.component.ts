@@ -10,7 +10,6 @@ import { cloneDeep } from '../../lodash-optimized';
 })
 export class ImportProcessComponent {
     public rawImportData: ImportExcelResponseData;
-
     public get importData(): ImportExcelResponseData {
         return this._importData;
     }
