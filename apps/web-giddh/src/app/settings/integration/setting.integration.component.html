@@ -446,7 +446,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="!hasIntegrationScope">
-                        <h3 class="mb-1">{{localeData?.payment?.permission_message}}</h3>
+                        <h3 class="mb-1">{{ localeData?.payment?.permission_message }}</h3>
                     </ng-container>
                     <div class="connected-accounts">
                         <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
@@ -459,11 +459,13 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                             <div class="account-info-background width-100 font-15 row align-items-center">
+                                <div class="account-info-background width-100 font-15 row align-items-center">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
-                                        <span *ngIf="bankAccount?.bankResource?.accountNumber" class="account-number mt-2 font-15 inline"
+                                        <span
+                                            *ngIf="bankAccount?.bankResource?.accountNumber"
+                                            class="account-number mt-2 font-15 inline"
                                             ><b
                                                 ><span *ngIf="!isIciciBankSupportedCountry"
                                                     >{{ commonLocaleData?.app_ac }} #</span
@@ -554,6 +556,19 @@
                                         </span>
                                     </div>
                                 </div>
+                                <ng-container *ngIf="bankAccount?.message">
+                                    <div class="mt-2 mr-l1">
+                                        <p class="error-message">
+                                            {{ bankAccount?.message }}
+                                            <a
+                                                class="cursor-pointer text-underline"
+                                                href="javascript:;"
+                                                (click)="reconnectBank(bankAccount)"
+                                                >{{ commonLocaleData?.app_click_here }}</a
+                                            >
+                                        </p>
+                                    </div>
+                                </ng-container>
                                 <div class="font-15">
                                     <ng-container *ngIf="bankAccount?.bankResource?.payor?.length > 0">
                                         <div
@@ -700,12 +715,9 @@
                                 >
                             </li>
                             <li>
-                                <a
-                                    target="_blank"
-                                    class="btn link-color"
-                                    [href]="syncWithTallyHelpDocUrl"
-                                    >{{ localeData?.tally?.help_documentation }}</a
-                                >
+                                <a target="_blank" class="btn link-color" [href]="syncWithTallyHelpDocUrl">{{
+                                    localeData?.tally?.help_documentation
+                                }}</a>
                             </li>
                         </ul>
                     </div>

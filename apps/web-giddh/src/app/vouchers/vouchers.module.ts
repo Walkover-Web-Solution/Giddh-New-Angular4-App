@@ -89,6 +89,8 @@ import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
 import { A11yModule } from "@angular/cdk/a11y";
 import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
+import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-section-permission/validate-section-permission.module";
+import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
 
 @NgModule({
     declarations: [
@@ -183,7 +185,9 @@ import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
         InvoiceTemplatesModule,
         CdkScrollModule,
         TrimPipeModule,
-        A11yModule
+        A11yModule,
+        ValidateSectionPermissionDirectiveModule,
+        SubscriptionUpgradeButtonModule
     ],
     exports: [
 

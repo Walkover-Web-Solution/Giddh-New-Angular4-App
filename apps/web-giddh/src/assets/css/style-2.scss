@@ -790,6 +790,21 @@ textarea {
     min-width: 170px;
 }
 
+.giddh-table {
+    thead {
+        tr {
+            .top-header-columns {
+                border: none !important;
+            }
+        }
+    }
+    .second-header-border {
+        th {
+            border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
+        }
+    }
+}
+
 .report-td-column {
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
@@ -3624,6 +3639,10 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-24) !important;
 }
 
+.icon-font-48 {
+    font-size: var(--font-size-48) !important;
+}
+
 .word-wrap {
     word-break: normal;
     white-space: nowrap;
@@ -4551,7 +4570,7 @@ select.form-control {
     min-height: 100%;
     height: 100%;
     position: relative;
-    overflow-y: auto;
+    overflow-y: initial;
 }
 
 #getGroupModal .modal-body {
@@ -11491,36 +11510,6 @@ body {
         }
     }
 
-    .form-bg {
-        width: 100%;
-    }
-
-    .grp-col {
-        float: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
-    .grp-list .list-item {
-        display: inline-block;
-    }
-
-    .col-wrapper {
-        white-space: initial;
-    }
-
-    .col-wrapper:nth-child(2) {
-        margin-left: 0px;
-        width: 100%;
-    }
-
-    .grp-list {
-        padding: 0px;
-        background: var(--color-wild-sand);
-        width: 100%;
-        display: block;
-    }
-
     .users-last-list > li:last-child {
         height: inherit !important;
     }
@@ -11535,7 +11524,6 @@ body {
     }
 
     .left-account-operation {
-        height: initial !important;
         width: 100%;
         background: var(--color-white);
     }
@@ -11700,37 +11688,6 @@ body {
         display: block;
     }
 
-    .form-bg {
-        width: 100%;
-    }
-
-    .grp-col {
-        float: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-    }
-
-    .grp-list .list-item {
-        display: inline-block;
-    }
-
-    .col-wrapper {
-        white-space: initial;
-    }
-
-    .col-wrapper:nth-child(2) {
-        margin-left: 0px;
-        width: 100%;
-    }
-
-    .grp-list {
-        padding: 10px 0px !important;
-        background: var(--color-wild-sand);
-        width: 100%;
-        display: block;
-    }
-
     .users-last-list > li:last-child {
         height: inherit !important;
     }
@@ -11741,24 +11698,6 @@ body {
 
     .customer-right-wrap .text-right.xs-left {
         text-align: right !important;
-    }
-
-    .form-box.form-bg {
-        height: auto !important;
-        min-height: auto;
-    }
-
-    .left-account-operation {
-        height: initial !important;
-        width: 100% !important;
-    }
-
-    .users-last-list > li {
-        display: inline-block;
-    }
-
-    .col-wrapper:first-child .grp-list {
-        padding-top: 0;
     }
 
     .col-wrapper:nth-child(1) .master-list a {
@@ -11788,17 +11727,6 @@ body {
 
     .col-wrapper:nth-child(1) {
         background: transparent;
-        position: relative;
-    }
-
-    .grp-list:nth-child(2) {
-        background-color: var(--color-white);
-    }
-
-    .col-wrapper.left-account-operation:nth-child(3),
-    .col-wrapper.left-account-operation:nth-child(2),
-    .col-wrapper.left-account-operation:nth-child(4) {
-        border-top: 1px solid var(--color-iron);
     }
 
     .manage-account-popup.modal {
@@ -12194,7 +12122,7 @@ body.prevent-body-scroll {
     min-height: 60px;
 }
 
-.delete-icon-opacity {
+.opacity-5 {
     opacity: 0.5;
 }
 
@@ -13832,6 +13760,10 @@ import-wizard {
     }
 }
 
+.z-index-0 {
+    z-index: 0;
+}
+
 // table header search icon
 .table-search-icon {
     top: 2px;
@@ -13883,4 +13815,10 @@ mat-list {
 
 .search-table {
     min-width: 140px;
+}
+
+[mat-sort-header].cdk-program-focused {
+    .mat-sort-header-container {
+        border-bottom: none !important;
+    }
 }

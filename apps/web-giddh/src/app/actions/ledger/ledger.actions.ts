@@ -376,7 +376,7 @@ export class LedgerActions {
             ofType(LEDGER.GET_LEDGER_BALANCE),
             switchMap((action: CustomActions) => {
                 let req: any = action.payload;
-                return this.ledgerService.GetLedgerBalance(req);
+                return this.ledgerService.getLedgerBalance(req);
             }), map(res => this.validateResponse<any, any>(res, {
                 type: LEDGER.GET_LEDGER_BALANCE_RESPONSE,
                 payload: res
@@ -683,7 +683,7 @@ export class LedgerActions {
     public GetLedgerBalance(request: any): CustomActions {
         return {
             type: LEDGER.GET_LEDGER_BALANCE,
-            payload: { from: request.from, to: request.to, accountUniqueName: request.accountUniqueName, accountCurrency: request.accountCurrency, branchUniqueName: request.branchUniqueName }
+            payload: { q: request.q, from: request.from, to: request.to, accountUniqueName: request.accountUniqueName, accountCurrency: request.accountCurrency, branchUniqueName: request.branchUniqueName }
         };
     }
 

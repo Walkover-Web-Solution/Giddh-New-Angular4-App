@@ -45,7 +45,9 @@
         li {
             display: flex;
             button {
-                display: none;
+                i {
+                    color: var(--color-primary-header-icons);
+                }
             }
             h4 {
                 color: var(--color-white);

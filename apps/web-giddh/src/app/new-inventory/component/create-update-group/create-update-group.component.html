@@ -13,7 +13,24 @@
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">          
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-9">
+                        <div class="col-12 text-right">
+                            <span *ngIf="!showLoader && !addGroup" class="mt-3">
+                                <button
+                                    *ngIf="groupUniqueName"
+                                    (click)="backClicked()"
+                                    class="mr-0"
+                                    mat-stroked-button
+                                    color="primary"
+                                >
+                                    <i class="icon-left back-left"></i>
+                                    {{ commonLocaleData?.app_back }}
+                                </button>
+                            </span>
+                            <span  class="mt-3">
+                                <watch-video [cssClass]="'text-primary pd-t05'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
+                            </span>
+                        </div>
+                        <div class="col-12">
                             <div class="create-group-page">
                                 <div class="row row-gap">
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
@@ -220,23 +237,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-3">
-                            <span *ngIf="!showLoader && !addGroup" class="float-right mt-3">
-                                <button
-                                    *ngIf="groupUniqueName"
-                                    (click)="backClicked()"
-                                    class="mr-0"
-                                    mat-stroked-button
-                                    color="primary"
-                                >
-                                    <i class="icon-left back-left"></i>
-                                    {{ commonLocaleData?.app_back }}
-                                </button>
-                            </span>
-                            <span  class="float-right mt-3">
-                                <watch-video [cssClass]="'text-primary pd-t05 pd-r15'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
-                            </span>
                         </div>
                     </div>
                 </div>

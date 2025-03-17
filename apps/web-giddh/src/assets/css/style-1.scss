@@ -337,7 +337,7 @@ aside-menu-account .container-fluid {
     padding-left: 15px;
 }
 .pd-t15 {
-    padding-top: 15px;
+    padding-top: 15px !important; 
 }
 .pd-b15 {
     padding-bottom: 15px;
@@ -460,6 +460,9 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px;
 }
+.row-gap5 {
+    row-gap: 5px;
+}
 .row-gap1 {
     row-gap: 10px;
 }
@@ -501,6 +504,11 @@ aside-menu-account .container-fluid {
 .bdr-radius-50 {
     border-radius: 50px !important;
 }
+
+.bdr-radius-circle {
+    border-radius: 50% !important;
+}
+
 .pa {
     position: absolute;
 }

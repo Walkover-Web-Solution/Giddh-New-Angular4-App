@@ -5,8 +5,13 @@
         [floatLabel]="floatLabel"
     >
         <mat-label>
-            {{ label || placeholder }} 
-            <i *ngIf="showLabelIcon" [class]="labelIconClass" [matTooltip]="labelIconTooltip" matTooltipPosition="above"></i>
+            {{ label || placeholder }}
+            <i
+                *ngIf="showLabelIcon"
+                [class]="labelIconClass"
+                [matTooltip]="labelIconTooltip"
+                matTooltipPosition="above"
+            ></i>
         </mat-label>
         <input
             matInput
@@ -145,5 +150,6 @@
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
+        <i matSuffixIcon [matTooltip]="suffixTooltipText"  matTooltipPosition="above" *ngIf="matSuffixIcon" [ngClass]="matSuffixIcon"matSuffix ></i>
     </mat-form-field>
 </div>

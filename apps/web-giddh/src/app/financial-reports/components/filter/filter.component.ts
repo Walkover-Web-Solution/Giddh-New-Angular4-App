@@ -46,6 +46,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
     /** True, when expand all operation is performed */
     @Input() public expandAll: boolean;
+    /** Controls the visibility of the button and branch fitter for project wise accounting.  */
+    @Input() public isProjectWiseAccounting: boolean = false;
     @Output()
     public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
     public showClearSearch: boolean;
@@ -219,7 +221,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
+            if (activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
                 this.activeCompany = activeCompany;
             }
         });

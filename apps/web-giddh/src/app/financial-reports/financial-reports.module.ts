@@ -49,6 +49,8 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
+import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -72,9 +74,17 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         AccountsFilterPipe
     ],
     exports: [
-        FinancialReportsComponent, CurrencyModule
+        FinancialReportsComponent, 
+        CurrencyModule,
+        FinancialReportsComponent, 
+        CurrencyModule,
+        ProfitLossComponent,
+        ProfitLossGridComponent,
+        ProfitLossGridRowComponent,
+        ProfitLossExportXlsComponent,
+        FinancialReportsFilterComponent
     ],
-    providers: [],
+    providers: [ProjectAccountingService],
     imports: [
         CommonModule,
         ModalModule.forRoot(),
@@ -102,7 +112,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         AmountFieldComponentModule,
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        MatButtonModule
     ],
 })
 export class FinancialReportsModule {

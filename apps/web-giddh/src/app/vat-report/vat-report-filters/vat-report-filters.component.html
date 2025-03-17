@@ -57,15 +57,20 @@
             </button>
         </div>
         <div *ngIf="isUKCompany">
-            <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl"
-                [disabled]="!connectToHMRCUrl">
-                <ng-container *ngIf="connectToHMRCUrl">
-                    {{ localeData?.connect_to_hmrc }}
-                </ng-container>
-                <ng-container *ngIf="!connectToHMRCUrl">
-                    {{ localeData?.connected_to_hmrc }}
-                </ng-container>
-            </a>
+            <div class="text-right">
+                <a mat-stroked-button color="primary" [href]="connectToHMRCUrl"
+                    [disabled]="!connectToHMRCUrl || isTaxRestrictedModule">
+                    <ng-container *ngIf="connectToHMRCUrl || isTaxRestrictedModule">
+                        {{ localeData?.connect_to_hmrc }}
+                    </ng-container>
+                    <ng-container *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
+                        {{ localeData?.connected_to_hmrc }}
+                    </ng-container>
+                </a>
+            </div>
+            <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                (onUpgradePlan)="buyPlan($event)">
+            </restricted-module-message>
         </div>
     </div>
 </div>

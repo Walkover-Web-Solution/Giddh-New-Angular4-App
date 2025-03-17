@@ -256,6 +256,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold broadcast event for project wise accounting */
+    public projectBroadcast: any;
     /** Holds true if plan is either trial or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
@@ -520,6 +522,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
+        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
+        this.projectBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                this.gotToBranchTab();
+            }
+        };
+
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
@@ -658,7 +667,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
-            .observe(['(min-width: 1020px)'])
+            .observe(['(min-width: 1280px)'])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
@@ -1241,6 +1250,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public backToCompany(): void {
+        this.expandSidebar(true);
         this.router.navigate(['/pages', 'home']);
     }
 

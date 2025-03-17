@@ -74,7 +74,6 @@
         width: inherit;
     }
     .responsive-sub-items {
-        justify-content: stretch;
         row-gap: 20px;
         column-gap: 30px;
         padding: 0 15px;
@@ -171,10 +170,14 @@
 }
 @media (max-width: 768px) {
     .giddh-all-items-wrapper {
+        .responsive-sub-items {
+            justify-content: stretch;
+        }
         .all-item-block {
             .main-item {
                 .sub-item-block {
                     .single-menu-item {
+                        width: 29%;
                         padding: 15px 10px;
                     }
                 }
