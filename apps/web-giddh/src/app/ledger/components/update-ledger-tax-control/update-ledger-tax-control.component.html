@@ -13,7 +13,7 @@
         [required]="isMandatory"
         class="text-right total-tax-amount cursor-pointer"
         [(ngModel)]="formattedTotal"
-        [ngClass]="{ 'field-disabled': readonly }"
+        [readonly]="readonly"
         [cssClass]="'text-right'"
         (onFocus)="!readonly ? handleInputFocus() : ''"
         [autocomplete]="'off'"

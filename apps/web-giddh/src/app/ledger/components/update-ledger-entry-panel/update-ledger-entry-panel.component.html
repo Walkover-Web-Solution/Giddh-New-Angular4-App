@@ -1788,13 +1788,6 @@
                                 </div>
 
                                 <div
-                                    [attr.disabled]="
-                                        !isPettyCash &&
-                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                        branches?.length > 1
-                                            ? 'disabled'
-                                            : null
-                                    "
                                     class="dropdown-container dropdown-left text-right"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
@@ -1834,7 +1827,12 @@
                                             (selectedTaxEvent)="vm.taxTrxUpdated($event)"
                                             (taxAmountSumEvent)="calculateTax()"
                                             (createNewTax)="showCreateTaxDialog()"
-                                            [readonly]="isEinvoiceGenerated"
+                                            [readonly]="
+                                                isEinvoiceGenerated ||
+                                                (!isPettyCash &&
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                                    branches?.length > 1)
+                                            "
                                         >
                                         </update-ledger-tax-control>
                                     </span>
