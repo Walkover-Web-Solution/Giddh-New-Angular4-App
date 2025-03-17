@@ -53,11 +53,11 @@
                 </div>
             </tab> -->
 
-            <mat-tab [label]="localeData?.communication?.tab_heading" *ngIf="voucherApiVersion === 2">
+            <!-- <mat-tab [label]="localeData?.communication?.tab_heading" *ngIf="voucherApiVersion === 2">
                 <app-setting-campaign></app-setting-campaign>
-            </mat-tab>
+            </mat-tab> -->
 
-            <mat-tab [label]="localeData?.email?.tab_heading">
+            <!-- <mat-tab [label]="localeData?.email?.tab_heading">
                 <ng-template> <span class="icon-mail"></span> {{ localeData?.email?.tab_heading }} </ng-template>
                 <div class="box clearfix mb-2">
                     <h3 class="section-head">{{ localeData?.email?.gmail_integration }}</h3>
@@ -135,9 +135,9 @@
                         </div>
                     </form>
                 </div>
-            </mat-tab>
+            </mat-tab> -->
 
-            <mat-tab [label]="localeData?.collection?.tab_heading">
+            <!-- <mat-tab [label]="localeData?.collection?.tab_heading">
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
                 <div class="clearfix petty-cash collection-integration">
                     <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
@@ -353,9 +353,9 @@
                         </mat-tab>
                     </mat-tab-group>
                 </div>
-            </mat-tab>
+            </mat-tab> -->
 
-            <mat-tab [label]="localeData?.ecommerce?.tab_heading">
+            <!-- <mat-tab [label]="localeData?.ecommerce?.tab_heading">
                 <ng-template> <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }} </ng-template>
                 <div class="mr-t2 box clearfix">
                     <h3 class="section-head mb-2">{{ localeData?.ecommerce?.shopify_form_heading }}</h3>
@@ -371,7 +371,7 @@
                         <span>{{ localeData?.ecommerce?.connect_shopify }}</span></a
                     >
                 </div>
-            </mat-tab>
+            </mat-tab> -->
 
             <mat-tab
                 [label]="localeData?.payment?.tab_heading"
@@ -381,7 +381,7 @@
             <bank-integration></bank-integration>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.tally?.heading" *ngIf="voucherApiVersion === 2">
+            <!-- <mat-tab [label]="localeData?.tally?.heading" *ngIf="voucherApiVersion === 2">
                 <ng-template> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
                 <div class="box clearfix mb-2">
                     <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">
@@ -425,7 +425,7 @@
                         </ul>
                     </div>
                 </div>
-            </mat-tab>
+            </mat-tab> -->
         </mat-tab-group>
     </div>
     <!--remove account integration confirmation modal-->

@@ -325,10 +325,10 @@ aside-menu-account .container-fluid {
     padding-bottom: 50px;
 }
 .pd-r5 {
-    padding-right: 50px;
+    padding-right: 50px !important;
 }
 .pd-l5 {
-    padding-left: 50px;
+    padding-left: 50px !important;
 }
 .pd-r15 {
     padding-right: 15px;
@@ -529,6 +529,9 @@ aside-menu-account .container-fluid {
 }
 .min-width-unset {
     min-width: unset !important;
+}
+.min-width-0 {
+    min-width: 0 !important;
 }
 .min-width-100 {
     min-width: 100px;
@@ -2680,6 +2683,7 @@ giddh-datepicker {
     .mat-expansion-panel-header {
         padding: 0 15px !important;
         background-color: var(--color-tab-primary-background) !important;
+        border-radius: initial;
         &:hover {
             background-color: var(--color-tab-primary-background) !important;
         }

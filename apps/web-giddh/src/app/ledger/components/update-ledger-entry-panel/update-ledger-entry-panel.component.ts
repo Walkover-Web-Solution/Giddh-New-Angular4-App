@@ -4,14 +4,16 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     SimpleChanges,
     TemplateRef,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
@@ -32,7 +34,7 @@ import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Compa
 import { DownloadLedgerRequest, IVariant, LedgerResponse } from '../../../models/api-models/Ledger';
 import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
@@ -52,7 +54,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
@@ -65,6 +67,12 @@ import { CreateDiscountComponent } from '../../../theme/create-discount/create-d
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
 import { CompanyActions } from '../../../actions/company.actions';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatSelect } from '@angular/material/select';
+import { ServiceConfig } from '../../../services/service.config';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -113,12 +121,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public generateEInvoice: boolean = null;
     /** Holds side of entry (dr/cr) */
     @Input() public entrySide: string;
+    /** Holds transaction data*/
+    @Input() public entryTransactionData: any;
+    /** Holds carousel previous event*/
+    @Input() public carouselPrevious: boolean;
+    /** Holds carousel next event*/
+    @Input() public carouselNext: boolean;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
+    /** Element ref for mat menu **/
+    @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
+    /** Element ref for mat autocomplete **/
+    @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
+    /** Element ref for mat select **/
+    @ViewChild(MatSelect) matSelect: MatSelect;
     /** Adjustment modal */
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Warehouse data for warehouse drop down */
@@ -268,8 +288,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public otherTaxDialogRef: any;
     public adjustmentDialogRef: any;
     public advanceReceiptRemoveDialogRef: any;
-    /** True if more details is open */
-    public isMoreDetailOpen: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
@@ -312,6 +330,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Create tax dialog ref  */
     public taxAsideMenuRef: MatDialogRef<any>;
+    /** Hold ledger transactions */
+    public transaction: ITransactionItem;
+    /** Hold ledger transactions index */
+    public index: number;
+    /** Hold ledger transactions type cr/dr list */
+    public transactionsList: ITransactionItem[];
+    /** True if show no data found */
+    public isShowNoDataFound: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
+    /** True if datepicker is open */
+    public isDatepickerOpen: boolean = false;
+    /** Hold last valid index */
+    public lastValidIndex: number;
 
     constructor(
         private accountService: AccountService,
@@ -335,7 +367,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private ledgerUtilityService: LedgerUtilityService,
-        private invoiceAction: InvoiceActions
+        private invoiceAction: InvoiceActions,
+        private renderer: Renderer2,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.breakPointObservar.observe([
             '(max-width: 991px)'
@@ -359,6 +393,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -537,11 +572,22 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngAfterViewInit() {
         this.vm.discountComponent = this.discountComponent;
+        this.transaction = this.entryTransactionData?.transaction;
+        this.index = this.entryTransactionData?.index;
+        this.transactionsList = this.entryTransactionData?.transactionsList;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['isPettyCash']) {
             this.isPettyCash = changes['isPettyCash'].currentValue;
+        }
+
+        if (changes['carouselNext'] && changes['carouselNext'].currentValue) {
+            this.moveToNextTransactions();
+        }
+
+        if (changes['carouselPrevious'] && changes['carouselPrevious'].currentValue) {
+            this.moveToPreviousTransactions();
         }
         if (changes['pettyCashEntry'] && changes['pettyCashEntry'].currentValue !== changes['pettyCashEntry'].previousValue) {
             this.accountPettyCashStream = changes['pettyCashEntry'].currentValue.body;
@@ -617,7 +663,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp?: ShSelectComponent, clearAccount?: boolean, isVariantChanged?: boolean) {
+    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp?: SelectFieldComponent, clearAccount?: boolean, isVariantChanged?: boolean) {
         if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
@@ -654,12 +700,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             if (e.label) {
                 txn.particular.name = e.label;
+                txn.particular.uniqueName = e.value;
             }
             // if ther's stock entry
             if (e.additional?.stock) {
                 // check if we aleready have stock entry
                 if (this.vm.isThereStockEntry(e?.value)) {
-                    selectCmp?.clear();
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
                     txn.selectedAccount = null;
@@ -1194,10 +1240,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                 if (selectedInvoice) {
                     if (this.voucherApiVersion === 2) {
-                        selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.voucherNumber, this.commonLocaleData);
+                        selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.number, this.commonLocaleData);
 
                         invoiceSelected = {
-                            label: selectedInvoice.voucherNumber ? selectedInvoice.voucherNumber : '-',
+                            label: selectedInvoice.number ? selectedInvoice.number : '-',
                             value: selectedInvoice.uniqueName,
                             additional: selectedInvoice
                         };
@@ -1712,9 +1758,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public touristSchemeApplicableToggle(event): void {
+    public touristSchemeApplicableToggle(event: MatCheckbox): void {
         this.vm.selectedLedger.passportNumber = '';
-        this.vm.selectedLedger.touristSchemeApplicable = event?.value;
+        this.vm.selectedLedger.touristSchemeApplicable = event?.checked;
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -2390,6 +2437,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         uniqueName: t.particular?.uniqueName
                     }
                 });
+                this.isStockPresent = false;
             }
         });
         initialAccounts.push(...this.defaultSuggestions);
@@ -2456,6 +2504,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         this.activeAccountSubject.next(this.activeAccount);
+
+        this.isStockPresent = this.vm.selectedLedger.transactions.some(item =>
+            item.inventory && Object.keys(item.inventory).length > 0);
+
         this.changeDetectorRef.detectChanges();
     }
 
@@ -2665,8 +2717,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         stockUnitUniqueName: variantUnitRates[0].stockUnitUniqueName
                     };
                     // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
-                    // const unitRates = this.generalService.voucherApiVersion === 1 ? stockDetails?.unitRates : variantUnitRates;
-                    const unitRates = variantUnitRates;
+                    const unitRates = variantUnitRates
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     rate = defaultUnit.rate;
                     unitCode = defaultUnit.code;
@@ -2811,11 +2862,122 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public closeTaxModal(): void {
         this.store.dispatch(this.companyActions.getTax());
-        this.store.pipe((select(tax => tax.company && tax.company.taxes)), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.vm.taxRenderData = response;
+        this.taxAsideMenuRef.close();
+        this.changeDetectorRef.detectChanges();
+    }
+    /**
+     * Handle event for next transaction
+     *
+     * @return {*}  {void}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public moveToNextTransactions(): void {
+        let nextIndex = this.index + 1;
+
+        while (nextIndex < this.transactionsList.length) {
+            if (this.transactionsList[nextIndex]?.entryUniqueName !== this.transaction?.entryUniqueName) {
+                this.index = nextIndex;
+                this.transaction = this.transactionsList[this.index];
+                this.sliderRefreshData();
+                this.isShowNoDataFound = false;
+                return;
+            }
+            nextIndex++;
+        }
+
+        // If no valid next entry, show "No Data Found"
+        this.index = this.transactionsList.length; // Move index out of bounds
+        this.isShowNoDataFound = true;
+        this.transaction = null;
+        this.closeAll();
+    }
+
+    /**
+     * Handle event for previous transactions
+     *
+     * @return {*}  {void}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public moveToPreviousTransactions(): void {
+        // If currently at "No Data Found" state and moving back, restore the last valid entry
+        if (this.isShowNoDataFound && this.index === this.transactionsList.length) {
+            this.index = this.transactionsList.length - 1; // Move to last entry
+            this.transaction = this.transactionsList[this.index];
+            this.sliderRefreshData();
+            this.isShowNoDataFound = false;
+            return;
+        }
+
+        let prevIndex = this.index - 1;
+
+        while (prevIndex >= 0) {
+            if (this.transactionsList[prevIndex]?.entryUniqueName !== this.transaction?.entryUniqueName) {
+                this.index = prevIndex;
+                this.transaction = this.transactionsList[this.index];
+                this.sliderRefreshData();
+                this.isShowNoDataFound = false;
+                return;
+            }
+            prevIndex--;
+        }
+
+        // If no valid previous entry, show "No Data Found"
+        this.index = -1; // Move index out of bounds
+        this.isShowNoDataFound = true;
+        this.transaction = null;
+        this.closeAll();
+    }
+
+
+
+
+    /**
+     *This will be use for close all open dropdowns when user using keyboard shortcuts
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public closeAll(): void {
+        if (this.menuTrigger) {
+            this.menuTrigger.closeMenu();
+        }
+        if (this.autocompleteTrigger) {
+            this.autocompleteTrigger.closePanel();
+        }
+        if (this.matSelect) {
+            this.matSelect.close();
+        }
+
+        if (this.isDatepickerOpen) {
+            const overlayElement = document.querySelector('.cdk-overlay-pane.mat-datepicker-popup');
+            if (overlayElement) {
+                this.renderer.setStyle(overlayElement, 'display', 'none');
+            }
+        }
+    }
+
+    /**
+     * This will be use for slider refresh transactions
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public sliderRefreshData(): void {
+        // get entry name and ledger account uniqueName
+        observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            if (resp[0] && resp[1]) {
+                this.entryUniqueName = this.transaction?.entryUniqueName;
+                this.accountUniqueName = resp[1];
+                this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
             }
         });
-        this.taxAsideMenuRef.close();
+    }
+
+    /**
+     * This maintains state of datepicker (open/closed)
+     *
+     * @param {*} event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public datepickerState(event: any): void {
+        this.isDatepickerOpen = event;
     }
 }

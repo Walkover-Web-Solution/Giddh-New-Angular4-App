@@ -513,6 +513,10 @@ body {
         .cdk-overlay-pane {
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
+
+                &:has(.dropdown-width) {
+                    width: 40%;
+                }
             }
         }
     }
@@ -668,6 +672,17 @@ reactive-dropdown-field {
                 padding-right: 0;
             }
         }
+    }
+}
+
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
+
+    .mat-mdc-form-field,
+    .mat-mdc-form-field input{
+        background-color: var(--color-primary-input-bar-background) !important;
     }
 }
 
