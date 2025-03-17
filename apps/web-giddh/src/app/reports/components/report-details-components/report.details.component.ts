@@ -20,6 +20,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
+import { DurationEnum } from '../../constants/reports.constant';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -31,7 +34,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public activeFinacialYr: ActiveFinancialYear;
     public salesRegisterTotal: ReportsModel = new ReportsModel();
     public monthNames = [];
-    public selectedType = 'monthly';
+    /** Selected duration type */
+    public selectedType: DurationEnum = DurationEnum.Monthly;
     private selectedMonth: string;
     public dateRange: Date[];
     public dayjs = dayjs;
@@ -57,6 +61,31 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+    /**
+     * Configuration for table columns.
+     * 
+     * Each key represents a column, and its value is an array with the following structure:
+     * 
+     * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
+     * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
+     * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
+     * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     */
+    public columnDefinitions: Record<string, ColumnDefinition> = {
+        particular: ["app_particular", true, "", true],
+        sales: ["app_sales", true, "text-right"],
+        returns: ["app_return", false, "text-right"],
+        taxTotal: ["net_tax", false, "text-right"],
+        discountTotal: ["net_discount", false, "text-right"],
+        tcsTotal: ["net_tcs", false, "text-right"],
+        tdsTotal: ["net_tds", false, "text-right"],
+        netSales: ["net_sales", false, "text-right"],
+        cumulative: ["app_cumulative", false, "text-right"]
+    }
+    /** Constant for duration */
+    public durationEnum: typeof DurationEnum = DurationEnum;
 
     constructor(
         private router: Router,
@@ -77,6 +106,12 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -120,7 +155,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -223,7 +258,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
-        let currentTimeFilter = '';
+        let currentTimeFilter: DurationEnum = this.selectedType;
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params?.interval || params?.selectedMonth) {
@@ -231,7 +266,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.interval = params.interval;
                 this.selectedMonth = params.selectedMonth;
 
-                this.router.navigate(['pages' ,'reports', 'sales-register']);
+                this.router.navigate(['pages', 'reports', 'sales-register']);
             }
         });
 
@@ -239,7 +274,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
+            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -259,11 +294,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
+                if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
+                    this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                }
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 }
-                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
-                this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
+                this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
+                const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
+                this.selectedType = currentTimeFilter || this.selectedType;
                 this.activeFinacialYr = activeFinancialYear;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
@@ -327,7 +367,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             let request: ReportsRequestModel = {
                 to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
                 from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
-                interval: 'monthly',
+                interval: this.durationEnum.Monthly,
                 branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
             this.companyService.getSalesRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -413,6 +453,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.salesRegisterTotal.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
         this.salesRegisterTotal.interval = this.interval;
         this.salesRegisterTotal.selectedMonth = this.selectedMonth;
+        this.showColum();
     }
 
     /**
@@ -484,5 +525,35 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this._toaster.errorToast(response?.message);
             }
         });
+    }
+
+    /**
+     * Updates the visibility of table columns based on specific conditions.
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public showColum(): void {
+        Object.keys(this.columnDefinitions).filter((key) => !['sales', 'particular'].includes(key)).forEach((key) => {
+            if (['tcsTotal', 'tdsTotal'].includes(key)) {
+                this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.salesRegisterTotal[key];
+            } else {
+                this.columnDefinitions[key][1] = !!this.salesRegisterTotal[key];
+            }
+        });
+    }
+
+    /**
+     * Navigates to the detailed sales report page with query parameters.
+     *
+     * @param {ReportsModel} item - The report item containing date ranges and filters.
+     * @memberof ReportsDetailsComponent
+     */
+    public goToDetailedSales(item: ReportsModel) {
+        let from = item.from;
+        let to = item.to;
+
+        if (from != null && to != null) {
+            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch?.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth } });
+        }
     }
 }
