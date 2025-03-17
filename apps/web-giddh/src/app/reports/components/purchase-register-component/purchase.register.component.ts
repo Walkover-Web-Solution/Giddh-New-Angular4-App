@@ -302,6 +302,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                    selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);

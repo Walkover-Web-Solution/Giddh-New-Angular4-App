@@ -281,8 +281,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                console.log("Run", this.selectedCompany);
-                
                 this.financialOptions = activeCompany.financialYears.map(response => {
                     if (response) {
                         return { label: response.uniqueName, value: response.uniqueName };
@@ -298,7 +296,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
-                
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
                     selectedFinancialYear = this.selectedCompany.financialYears[0];
@@ -306,11 +303,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
                 }
-                console.log("selectedFinancialYear", selectedFinancialYear);
-                console.log("this.currentActiveFinacialYear", this.currentActiveFinacialYear);
-                
                 this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
-                
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
                 this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
                 this.selectedType = currentTimeFilter || this.selectedType;
