@@ -325,12 +325,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
-        const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
-        if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
-            let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
-                return item = item.uniqueName;
-            });
-            this.addressForm.get('linkedEntity').patchValue(value);
+        let tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
+        if (!this.hideLinkEntity) {
+            if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
+                let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
+                    return item = item.uniqueName;
+                });
+                this.addressForm.get('linkedEntity').patchValue(value);
+            }
         }
 
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
@@ -360,10 +362,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
             this.updateAddress.emit({
                 formValue: this.addressForm.getRawValue(),
-                addressDetails: this.addressConfiguration
+                addressDetails: this.addressConfiguration,
+                hideLinkEntity: this.hideLinkEntity
             });
         }
-        this.addressForm.get('linkedEntity').patchValue(tempAddressFormData);
+        if (!this.hideLinkEntity) {
+            this.addressForm.get('linkedEntity').patchValue(tempAddressFormData);
+        }
     }
 
     /**

@@ -1057,11 +1057,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isAddressChangeInProgress = true;
         addressDetails.formValue.linkedEntity = addressDetails.formValue.linkedEntity || [];
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity?.uniqueName,
-            isDefault: filteredEntity.isDefault,
-            entity: filteredEntity.entity
-        }));
+        let linkEntity;
+        if (!addressDetails.hideLinkEntity) {
+            linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+                uniqueName: filteredEntity?.uniqueName,
+                isDefault: filteredEntity.isDefault,
+                entity: filteredEntity.entity
+            }));
+        } else {
+            linkEntity = addressDetails.addressDetails.linkedEntities
+                ?.filter(entity => addressDetails.formValue.linkedEntity.some(linked => linked.uniqueName === entity.uniqueName))
+                .map(filteredEntity => ({
+                    uniqueName: filteredEntity?.uniqueName,
+                    isDefault: filteredEntity.isDefault,
+                    entity: filteredEntity.entity
+                }));
+        }
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,

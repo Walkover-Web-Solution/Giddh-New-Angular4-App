@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -22,6 +22,7 @@ import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
+import { DurationEnum } from '../../constants/reports.constant';
 
 @Component({
     selector: 'purchase-register-component',
@@ -36,7 +37,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public activeFinacialYr: ActiveFinancialYear;
     public purchaseRegisterTotal: PurchaseReportsModel = new PurchaseReportsModel();
     public monthNames = [];
-    public selectedType = 'monthly';
+    /** Selected duration type */
+    public selectedType: DurationEnum = DurationEnum.Monthly;
     private selectedMonth: string;
     public dateRange: Date[];
     public dayjs = dayjs;
@@ -73,7 +75,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
-     * [2] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
      */
     public columnDefinitions: Record<string, ColumnDefinition> = {
         particular: ["app_particular", true, "", true],
@@ -86,6 +88,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         netPurchase: ["app_net_purchase", false, "text-right"],
         cumulative: ["app_cumulative", false, "text-right"]
     }
+    /** Constant for duration */
+    public durationEnum: typeof DurationEnum = DurationEnum;
 
     constructor(
         private router: Router,
@@ -97,6 +101,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
+        private changeDetectorRef: ChangeDetectorRef,
         private ledgerService: LedgerService) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -132,7 +137,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
+        this.currentCompanyBranches$.subscribe(response => {   
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch?.name,
@@ -259,7 +264,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
-        let currentTimeFilter = '';
+        let currentTimeFilter: DurationEnum = this.selectedType;
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params?.interval || params?.selectedMonth) {
@@ -275,7 +280,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
+            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -295,13 +300,19 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
+                if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
+                    this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                }
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 }
-                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
-                this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
+                this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
+                const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
+                this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                this.changeDetectorRef.detectChanges();
             }
         });
     }
@@ -364,7 +375,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             let request: ReportsRequestModel = {
                 to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
                 from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
-                interval: 'monthly',
+                interval: this.durationEnum.Monthly,
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -376,7 +387,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
-
+            
         }
     }
 

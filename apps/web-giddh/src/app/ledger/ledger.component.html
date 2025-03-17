@@ -665,7 +665,15 @@
                         </h1>
                         <section id="eledgerwrap" class="mr-t2" [hidden]="!lc.showEledger || isBankTransactionLoading">
                             <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
-                             <p *ngIf="bankAccount?.gocardlessMessage" class="mt-1 mb-1">{{ bankAccount.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer ml-1" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
+                                <p *ngIf="bankAccount?.gocardlessMessage" class="mt-1 mb-1">
+                                    {{ bankAccount.gocardlessMessage }}
+                                    <a
+                                        href="javascript:;"
+                                        class="cursor-pointer ml-1"
+                                        (click)="redirectToBankIntegration()"
+                                        >{{ commonLocaleData?.app_click_here }}</a
+                                    >
+                                </p>
                                 <div class="d-flex align-items-start justify-content-between">
                                     <div class="clearfix ledger-top-header-left">
                                         <h3 class="ledger-main-head">
@@ -700,14 +708,14 @@
                                 </div>
                                 <div class="wrap-transaction-map clearfix">
                                     <div class="w-100 ledger-head mt-0">
-                                        <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="37px">
+                                        <mat-grid-list cols="2" rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
-                                                <span class="pull-right">{{ localeData?.dr }}</span>
+                                                <span>{{ localeData?.dr }}</span>
                                             </mat-grid-tile>
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_credit }}
-                                                <span class="pull-right">{{ localeData?.cr }}</span>
+                                                <span>{{ localeData?.cr }}</span>
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
@@ -773,7 +781,7 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                                <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
+                                                                <div class="d-flex align-items-center custom-input-field">
                                                                     <span class="checkbox-span position-absolute mr-l1">
                                                                         <mat-checkbox
                                                                             color="primary"
@@ -842,12 +850,13 @@
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         class="text-ellipsis"
-                                                                        >{{
+                                                                    >
+                                                                        {{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</div
-                                                                    >
+                                                                        }}
+                                                                    </div>
                                                                 </div>
                                                                 <div
                                                                     *ngIf="txn.showAccountDropdown"
@@ -867,12 +876,13 @@
                                                                         class="text-ellipsis"
                                                                         *ngIf="!txn.showDropdown"
                                                                         class="text-ellipsis"
-                                                                        >{{
+                                                                    >
+                                                                        {{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</div
-                                                                    >
+                                                                        }}
+                                                                    </div>
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
                                                                         class="transaction-list-sh-select"
@@ -1139,7 +1149,7 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                              <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
+                                                              <div class="d-flex align-items-center custom-input-field">
                                                                     <span class="checkbox-span checked mr-l1">
                                                                         <mat-checkbox
                                                                             color="primary"
@@ -1176,7 +1186,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field">
+                                                                    <span class="custom-input-field ml-1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -1207,12 +1217,13 @@
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         class="text-ellipsis"
-                                                                        >{{
+                                                                    >
+                                                                        {{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</div
-                                                                    >
+                                                                        }}
+                                                                    </div>
                                                                 </div>
                                                                 <div
                                                                     *ngIf="txn.showAccountDropdown"
@@ -1229,12 +1240,13 @@
                                                                         class="text-ellipsis"
                                                                         *ngIf="!txn.showDropdown"
                                                                         class="text-ellipsis"
-                                                                        >{{
+                                                                    >
+                                                                        {{
                                                                             txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
-                                                                        }}</div
-                                                                    >
+                                                                        }}
+                                                                    </div>
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
                                                                         class="transaction-list-sh-select"
@@ -1504,7 +1516,12 @@
                     </div>
                     <!-- endregion -->
                     <!-- region account table-->
-                     <p *ngIf="bankAccount?.gocardlessMessage" class="float-right">{{ bankAccount.gocardlessMessage }} <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{ commonLocaleData?.app_click_here }}</a></p>
+                    <p *ngIf="bankAccount?.gocardlessMessage" class="float-right">
+                        {{ bankAccount.gocardlessMessage }}
+                        <a href="javascript:;" class="cursor-pointer" (click)="redirectToBankIntegration()">{{
+                            commonLocaleData?.app_click_here
+                        }}</a>
+                    </p>
                     <div class="clearfix"></div>
                     <mat-grid-list
                         cols="2"
@@ -2146,7 +2163,7 @@
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                 [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
-                                                (saveBlankLedger)="generateLedger($event)"
+                                                (saveBlankLedger)="generateLedger()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                 [referenceVouchersTotalPages]="referenceVouchersTotalPages"
@@ -2621,7 +2638,7 @@
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                 [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
-                                                (saveBlankLedger)="generateLedger($event)"
+                                                (saveBlankLedger)="generateLedger()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
@@ -2675,7 +2692,10 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col" *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)">
+                                    <tr
+                                        class="total-col"
+                                        *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
+                                    >
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2724,7 +2744,10 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    <tr class="total-col" *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)">
+                                    <tr
+                                        class="total-col"
+                                        *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
+                                    >
                                         <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="bd-rt padding-ledger">
@@ -2846,7 +2869,12 @@
                 <div class="container">
                     <section class="ledger-stat mr-t3" *ngIf="!showLoader">
                         <div class="row">
-                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6': 'col-3'">
+                            <div
+                                class="stat-block"
+                                [ngClass]="
+                                    isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6' : 'col-3'
+                                "
+                            >
                                 <div class="ledger-state-box">
                                     <h1>
                                         {{ localeData?.total_transactions }}
@@ -2886,7 +2914,10 @@
                                     </span>
                                 </div>
                             </div>
-                            <div *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)" class="col-3 stat-block">
+                            <div
+                                *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
+                                class="col-3 stat-block"
+                            >
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
                                     <h2 class="digit-blue d-flex">
@@ -2927,7 +2958,12 @@
                                     </h2>
                                 </div>
                             </div>
-                            <div class="stat-block" [ngClass]="isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6': 'col-3'">
+                            <div
+                                class="stat-block"
+                                [ngClass]="
+                                    isAdvanceSearchImplemented || (searchTermStream | async)?.length ? 'col-6' : 'col-3'
+                                "
+                            >
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
@@ -3079,7 +3115,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)" class="col-3 stat-block">
+                            <div
+                                *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
+                                class="col-3 stat-block"
+                            >
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.closing_balance }}</h1>
                                     <div class="d-flex flex-column justify-content-between">
@@ -3190,21 +3229,6 @@
                 </app-aside-menu-sales-other-taxes>
             </ng-template>
             <!-- update ledger entry popup -->
-            <ng-template #updateLedgerModal>
-                <update-ledger-entry-panel
-                    [defaultSuggestions]="defaultSuggestions"
-                    [tcsOrTds]="tcsOrTds"
-                    [searchResultsPaginationPage]="defaultResultsPaginationData.page"
-                    [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
-                    [activeCompany]="activeCompany"
-                    [entrySide]="entrySide"
-                    [generateEInvoice]="generateEInvoice"
-                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
-                    (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
-                    (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
-                ></update-ledger-entry-panel>
-            </ng-template>
-            <!-- update ledger entry popup -->
             <ng-template #advanceSearchModal>
                 <advance-search-model
                     [advanceSearchRequest]="advanceSearchRequest"
@@ -3255,3 +3279,29 @@
                 <attachments [selectedItem]="selectedItem"></attachments>
             </ng-template>
 </ng-container>
+
+<!-- carousel template -->
+<ng-template #carousel>
+    <giddh-carousel
+        (navigatePrevious)="handleCarouselPrevious($event)"
+        (navigateNext)="handleCarouselNext($event)"
+    >
+        <ng-template #slideTemplate>
+            <update-ledger-entry-panel
+                [defaultSuggestions]="defaultSuggestions"
+                [tcsOrTds]="tcsOrTds"
+                [searchResultsPaginationPage]="defaultResultsPaginationData.page"
+                [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
+                [activeCompany]="activeCompany"
+                [entrySide]="entrySide"
+                [generateEInvoice]="generateEInvoice"
+                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
+                (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+                (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
+                [entryTransactionData]="entryTransactionData"
+                [carouselPrevious]="carouselPrevious"
+                [carouselNext]="carouselNext"
+            ></update-ledger-entry-panel>
+        </ng-template>
+    </giddh-carousel>
+</ng-template>

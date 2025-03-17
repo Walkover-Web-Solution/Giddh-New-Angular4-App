@@ -43,22 +43,6 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the voucher and bank statement upload modal
-     *
-     * @memberof ImportTypeSelectComponent
-     */
-    public openVoucherAndBankStatementDialog(): void {
-        this.dialog.open(ImportStatementComponent, {
-            panelClass: ['mat-dialog-md'],
-            data: {
-                localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
-            },
-            autoFocus: false
-        });
-    }
-
-    /**
      * Unsubscribes from all the listeners
      *
      * @memberof ImportTypeSelectComponent

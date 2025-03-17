@@ -98,6 +98,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: TemplateRef<any>;
+    /** Holds of carousel template reference */
+    @ViewChild('carousel', { static: false }) public carousel: TemplateRef<any>;
     /** Instance of entry confirmation modal */
     @ViewChild('entryConfirmModal', { static: false }) public entryConfirmModal: any;
     /** Instance of ledger aside pane modal */
@@ -353,6 +355,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
     public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    /** Store ledger account response */
+    public ledgerAccountResponse: AccountResponse | AccountResponseV2;
     /** Observable for post balance success response */
     public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
     /** Hold callback broadcast event */
@@ -361,6 +365,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public bankIntegrationDialogRef: any;
     /** Holds if use directly integrated bank account*/
     public isDirectlyIntegrated: boolean = false;
+    /** Hold Transaction Object */
+    public entryTransactionData: any = {
+        transaction: null,
+        index: null,
+        transactionsList: null
+    };
+    /** Holds carousel previous event*/
+    public carouselPrevious: boolean;
+    /** Holds carousel next event*/
+    public carouselNext: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -605,6 +619,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+                this.ledgerAccountResponse = ledgerAccount;
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
                     this.enableAutopaid = true;
                     this.isSundryDebtorCreditor = true;
@@ -1389,17 +1404,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
-     *  @param {any} event using for pinCode and gstNumber
+     * 
      *  @returns {void}
-     *
      * @memberof LedgerComponent
      */
-    public openEwayBillDialog(event: any): void {
+    public openEwayBillDialog(): void {
         this.dialog?.closeAll();
         const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true,
-            data: { pinCode: event?.pinCode, gstNumber: event?.gstNumber }
+            data: { pincode: this.ledgerAccountResponse?.addresses?.[0]?.pincode, gstNumber: this.ledgerAccountResponse?.addresses?.[0]?.gstNumber }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.saveBlankTransaction(response);
@@ -1412,9 +1426,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public generateLedger(event: any): void {
+    public generateLedger(): void {
         if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
-            this.openEwayBillDialog(event);
+            this.openEwayBillDialog();
         } else {
             this.saveBlankTransaction();
         }
@@ -1660,7 +1674,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.needToReCalculate.next(false);
     }
 
-    public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
+    /**
+     * Show update ledger panel
+     *
+     * @param {ITransactionItem} txn
+     * @param {('cr' | 'dr')} type
+     * @memberof LedgerComponent
+     */
+    public showUpdateLedgerModal(txn: ITransactionItem, type: 'cr' | 'dr'): void {
+        const transactionsList = type === 'cr' ? this.ledgerTransactions.creditTransactions : this.ledgerTransactions.debitTransactions;
+        const txnIndex = transactionsList.findIndex(t => t.entryUniqueName === txn.entryUniqueName);
+
         if (txn?.adjustmentEntry) {
             this.router.navigate([`/pages/inventory/v2/product/adjust/${txn?.description}`]);
         } else {
@@ -1672,7 +1696,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
             this.lc.selectedTxnUniqueName = txn.entryUniqueName;
             this.entrySide = type;
-            this.loadUpdateLedgerComponent();
+            this.loadUpdateLedgerComponent(txn, txnIndex, transactionsList);
         }
     }
 
@@ -1924,13 +1948,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public loadUpdateLedgerComponent() {
-        this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
-            width: '70%',
-            height: '650px',
-            role: 'alertdialog',
-            ariaLabel: 'update'
-        });
+    /**
+     * This will be use for load update ledger component 
+     *
+     * @param {ITransactionItem} transaction
+     * @param {number} index
+     * @param {ITransactionItem[]} transactionsList
+     * @memberof LedgerComponent
+     */
+    public loadUpdateLedgerComponent(transaction: ITransactionItem, index: number, transactionsList: ITransactionItem[]): void {
+        this.entryTransactionData = { transaction, index, transactionsList }
+        this.updateLedgerModalDialogRef = this.dialog.open(this.carousel, {
+            panelClass: 'dialog-bg-transparent',
+            maxWidth: '100vw'
+        })
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             this.hideUpdateLedgerModal();
@@ -3037,7 +3068,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {ITransactionItem} txn
      * @memberof LedgerComponent
      */
-    public showUpdateLedgerModalIpad(txn: ITransactionItem, type: string): void {
+    public showUpdateLedgerModalIpad(txn: ITransactionItem, type: 'cr' | 'dr'): void {
         if (this.touchedTransaction?.entryUniqueName === txn?.entryUniqueName) {
             this.showUpdateLedgerModal(txn, type);
         } else {
@@ -3254,8 +3285,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
-                    pinCode: data.body?.pinCode,
-                    gstNumber: data.body?.gstNumber
                 };
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
@@ -3455,4 +3484,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public redirectToBankIntegration(): void {
         this.router.navigate(['pages', 'settings', 'integration', 'payment']);
     }
+    
+    /**
+     * Handle carousel previous event
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public handleCarouselPrevious(event: boolean): void {
+        this.carouselPrevious = event;
+
+        // Reset after processing
+        setTimeout(() => {
+            this.carouselPrevious = false;
+        }, 100); // Delay prevents race conditions
+    }
+
+    /**
+     *Handle carousel next event
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public handleCarouselNext(event: boolean): void {
+        this.carouselNext = event;
+
+        // Reset after processing
+        setTimeout(() => {
+            this.carouselNext = false;
+        }, 100); // Delay prevents race conditions
+    }
+
 }

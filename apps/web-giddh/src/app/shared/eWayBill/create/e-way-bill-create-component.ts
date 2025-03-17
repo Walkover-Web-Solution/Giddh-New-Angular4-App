@@ -132,15 +132,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     private initGenerateEwayBillForm(): void {
         this.generateEwayBillform = this.formBuilder.group({
             toGstIn: [this.currentVoucher?.gstNumber ?? null, Validators.required],
-            toPinCode: [this.currentVoucher?.pinCode || null, Validators.required],
+            toPinCode: [this.currentVoucher?.pincode || null, Validators.required],
             transName: [null, Validators.required],
             transId: [null, Validators.required],
             distance: [null, Validators.required],
-            transMode: [null, Validators.required],
-            vehType: [null, Validators.required],
-            transDocNo: [null, Validators.required],
-            transDocDt: [null, Validators.required],
-            vehNo: [null, Validators.required]
+            transMode: [null],
+            vehType: [null],
+            transDocNo: [null],
+            transDocDt: [null],
+            vehNo: [null]
         });
     }
 
@@ -185,7 +185,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.isFromInvalid = this.generateEwayBillform.invalid;
         if (!this.isFromInvalid) {
             const formData = this.generateEwayBillform?.value;
-            formData["transDocDt"] = dayjs(formData["transDocDt"]).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+            Object.keys(formData).forEach(key => {
+                if (formData[key] === null || (typeof formData[key] === "string" && formData[key].trim() === "")) {
+                    delete formData[key];
+                }
+            });
+            if (formData.transDocDt) {
+                const formattedDate = dayjs(formData.transDocDt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                if (dayjs(formData.transDocDt).isValid()) {
+                    formData.transDocDt = formattedDate;
+                } else {
+                    delete formData.transDocDt;
+                }
+            }
             this.sendResponse(formData);
         }
     }

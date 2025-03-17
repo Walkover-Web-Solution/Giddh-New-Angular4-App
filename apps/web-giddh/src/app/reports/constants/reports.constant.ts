@@ -39,3 +39,9 @@ export const PAYMENT_REPORT_FILTERS = {
     CUSTOMER_FILTER: 'customerName',
     VENDOR_FILTER: 'vendorName'
 }
+
+export enum DurationEnum {
+    Monthly = 'monthly',
+    Quarterly = 'quarterly',
+    Weekly = 'weekly'
+}

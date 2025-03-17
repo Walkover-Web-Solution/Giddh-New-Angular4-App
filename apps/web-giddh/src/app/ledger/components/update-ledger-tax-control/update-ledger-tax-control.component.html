@@ -13,10 +13,11 @@
         [required]="isMandatory"
         class="text-right total-tax-amount cursor-pointer"
         [(ngModel)]="formattedTotal"
-        [ngClass]="{ 'field-disabled': readonly }"
+        [readonly]="readonly"
         [cssClass]="'text-right'"
         (onFocus)="!readonly ? handleInputFocus() : ''"
         [autocomplete]="'off'"
+        [readonly]="readonly"
     ></input-field>
     <mat-menu #taxControlMenu="matMenu">
         <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">

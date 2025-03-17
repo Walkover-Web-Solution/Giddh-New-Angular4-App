@@ -10,12 +10,12 @@ import { CommonActions } from '../../../actions/common.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Router } from '@angular/router';
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, SAMPLE_FILES_URL } from '../../../app.constant';
+import { SAMPLE_FILES_URL } from '../../../app.constant';
 import { saveAs } from 'file-saver';
 import { LedgerComponentStore } from '../../ledger.store';
-import { cloneDeep } from '../../../lodash-optimized';
 import { OptionInterface } from '../../../models/api-models/Voucher';
 import { ImportStepEnum, ImportStatementType } from './import-statement.const';
+import { FileTypeEnum } from '../../../shared/Enums/common.enum';
 
 @Component({
     selector: 'import-statement',
@@ -31,13 +31,11 @@ export class ImportStatementComponent implements OnDestroy {
     /** Object for API request parameters */
     public getRequest: any = { entity: 'pdf', companyUniqueName: '', accountUniqueName: '' };
     /** Object for API post parameters */
-    public postRequest: any = { file: '', password: '', isHeaderProvided: true, accountUniqueName: undefined, sameDebitCreditAmountColumn: undefined };
+    public postRequest: any = { file: '', password: '', isHeaderProvided: true, accountUniqueName: undefined, sameDebitCreditAmountColumn: undefined, selectedFileList: null };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Account data results Observable */
     public voucherAccountResults$: Observable<OptionInterface[]> = observableOf(null);
-    /** Default result count for account searches */
-    public defaultCount = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
     /** Constant for dialog steps type */
     public importStepEnum: typeof ImportStepEnum = ImportStepEnum;
     /** Constant for dialog steps type */
@@ -48,17 +46,8 @@ export class ImportStatementComponent implements OnDestroy {
     public selectStatement: ImportStatementType = ImportStatementType.Voucher;
     /** Store signed url response */
     public signedUrlResponse: any = {};
-    /** Request parameters for account searches */
-    public accountSearchRequest: any = {
-        count: this.defaultCount,
-        withStocks: false
-    };
-    /** Stores the search results for accounts */
-    public accountSearchResponse: any[] = [];
-    /** Stores account name */
-    public accountLabel: string = "";
-    /** Stores account unique name */
-    public accountUniqueName: string = "";
+    /** Holds  file type enum */
+    public fileType: typeof FileTypeEnum = FileTypeEnum;
 
     constructor(
         private ledgerService: LedgerService,
@@ -72,9 +61,6 @@ export class ImportStatementComponent implements OnDestroy {
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>) {
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
-        if (!this.inputData?.accountUniqueName) {
-            this.searchAccount();
-        }
     }
 
     /**
@@ -93,7 +79,7 @@ export class ImportStatementComponent implements OnDestroy {
         this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
             if (voucherResponse) {
                 const requestObject = {
-                    accountUniqueName: this.inputData?.accountUniqueName ?? this.accountUniqueName,
+                    accountUniqueName: this.inputData?.accountUniqueName,
                     subType: "VOUCHER",
                     type: "ACCOUNT_WISE_VOUCHER_IMPORT",
                     isHeaderProvided: this.postRequest.isHeaderProvided
@@ -107,22 +93,7 @@ export class ImportStatementComponent implements OnDestroy {
                 this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(importVoucherSuccessResponse));
                 this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
                 this.dialogRef.close(true);
-                this.router.navigate(['/pages/import/banktransactions']);
-            }
-        });
-
-        this.ledgerComponentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
-            if (accountSearchResponse) {
-                this.accountSearchRequest.count = accountSearchResponse.count;
-                accountSearchResponse.results?.forEach(result => {
-                    if (result?.uniqueName) {
-                        this.accountSearchResponse.push({
-                            value: result.uniqueName,
-                            label: result.name
-                        });
-                    }
-                });
-                this.accountSearchRequest.isLoading = false;
+                this.router.navigate(['/pages/import/voucher']);
             }
         });
     }
@@ -135,20 +106,21 @@ export class ImportStatementComponent implements OnDestroy {
      * @memberof ImportStatementComponent
      */
     public onFileChange(file: FileList): void {
-        let validExtensions = ['pdf', 'csv', 'xls', 'xlsx'];
+        let validExtensions = [this.fileType.PDF, this.fileType.CSV, this.fileType.XLS, this.fileType.XLSX];
         let type = (file && file.item(0)) ? this.generalService.getFileExtension(file.item(0).name) : 'null';
         type = type?.toLowerCase();
         let isValidFileType = validExtensions.some(extension => type === extension);
         this.selectedFile = file.item(0).name;
 
         this.getRequest.entity = type;
-
-        if (!isValidFileType) {
+        this.postRequest.selectedFileList = file;
+        if (!isValidFileType || (this.selectStatement === this.importStatementType.Voucher && this.fileType.PDF === type)) {
             if (file && file.length > 0) {
-                this.toaster.showSnackBar("error", this.inputData?.localeData?.import_error);
+                this.toaster.showSnackBar("error", this.selectStatement === this.importStatementType.Voucher ? this.inputData?.localeData?.voucher_error : this.inputData?.localeData?.import_error);
             }
             this.selectedFile = null;
             this.postRequest.file = null;
+            this.postRequest.selectedFileList = null;
             return;
         }
         this.postRequest.file = file.item(0);
@@ -161,8 +133,8 @@ export class ImportStatementComponent implements OnDestroy {
      */
     public importStatement(): void {
         this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
-        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName ?? this.accountUniqueName;
-        if (this.getRequest.entity === "pdf") {
+        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
+        if (this.getRequest.entity === this.fileType.PDF) {
             this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === 'success') {
                     this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
@@ -213,8 +185,8 @@ export class ImportStatementComponent implements OnDestroy {
      */
     public async downloadSampleFile(selectAccount: string, isCsv: boolean = false) {
         const isBankStatement = selectAccount === this.importStatementType.BankStatement;
-        const fileUrl = SAMPLE_FILES_URL + `${isBankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? 'csv' : 'xlsx'}`;
-        const fileName = `${isBankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileUrl = SAMPLE_FILES_URL + `${isBankStatement ? 'bank-transaction' : 'voucher'}.${isCsv ? this.fileType.CSV : this.fileType.XLSX}`;
+        const fileName = `${isBankStatement ? 'bank-transaction-sample' : 'voucher-sample'}.${isCsv ? this.fileType.CSV : this.fileType.XLSX}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
             saveAs(blob, fileName);
@@ -233,50 +205,6 @@ export class ImportStatementComponent implements OnDestroy {
     public selectStatementAccount(importStep: ImportStepEnum, selectStatement: ImportStatementType): void {
         this.importStep = importStep;
         this.selectStatement = selectStatement;
-    }
-
-    /**
-     * Searches for accounts based on the query and updates the account search results.
-     *
-     * @param {string} [query=''] The search query.
-     * @param {number} [page=1] The page number for paginated results.
-     * @memberof ImportStatementComponent
-     */
-    public searchAccount(query: string = '', page: number = 1): void {
-        if (page === 1) {
-            this.accountSearchResponse = [];
-        }
-        this.accountSearchRequest.q = query;
-        this.accountSearchRequest.page = page;
-        this.accountSearchRequest.isLoading = true;
-
-        let requestObject = cloneDeep(this.accountSearchRequest);
-        requestObject.isLoading = undefined;
-        this.getProjectAccount(requestObject);
-    }
-
-    /**
-    * Fetches the list of accounts associated with a project.
-    *
-    * @param {*} requestObject The request parameters for fetching accounts.
-    * @memberof ImportStatementComponent
-    */
-    public getProjectAccount(requestObject: any): void {
-        requestObject.count = this.defaultCount;
-        this.ledgerComponentStore.getProjectAccount(requestObject);
-    }
-
-    /**
-     * Handles infinite scroll for account search by fetching the next page of results.
-     *
-     * @memberof ImportStatementComponent
-     */
-    public handleSearchAccountScrollEnd(): void {
-        if (this.accountSearchRequest.isLoading) {
-            return;
-        }
-        if (this.defaultCount === this.accountSearchRequest.count) {
-            this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
-        }
+        this.postRequest.selectedFileList && this.onFileChange(this.postRequest.selectedFileList);
     }
 }

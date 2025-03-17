@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -22,6 +22,8 @@ import { LedgerService } from '../../../services/ledger.service';
 import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
+import { DurationEnum } from '../../constants/reports.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -33,7 +35,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public activeFinacialYr: ActiveFinancialYear;
     public salesRegisterTotal: ReportsModel = new ReportsModel();
     public monthNames = [];
-    public selectedType = 'monthly';
+    /** Selected duration type */
+    public selectedType: DurationEnum = DurationEnum.Monthly;
     private selectedMonth: string;
     public dateRange: Date[];
     public dayjs = dayjs;
@@ -82,6 +85,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         netSales: ["net_sales", false, "text-right"],
         cumulative: ["app_cumulative", false, "text-right"]
     }
+    /** Constant for duration */
+    public durationEnum: typeof DurationEnum = DurationEnum;
 
     constructor(
         private router: Router,
@@ -93,6 +98,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
+        private changeDetectorRef: ChangeDetectorRef,
         private ledgerService: LedgerService) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -254,7 +260,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
-        let currentTimeFilter = '';
+        let currentTimeFilter: DurationEnum = this.selectedType;
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params?.interval || params?.selectedMonth) {
@@ -270,11 +276,13 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
+            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
+                console.log("Run", this.selectedCompany);
+                
                 this.financialOptions = activeCompany.financialYears?.map(response => {
                     if (response) {
                         return { label: response.uniqueName, value: response.uniqueName };
@@ -290,14 +298,25 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
-                if (selectedFinancialYear) {
-                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                
+                if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
+                    this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                    selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
-                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
-                this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
-                this.activeFinacialYr = activeFinancialYear;
+                if (selectedFinancialYear) {
+                    this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
+                }
+                console.log("selectedFinancialYear", selectedFinancialYear);
+                console.log("this.currentActiveFinacialYear", this.currentActiveFinacialYear);
+                
+                this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
+                
+                const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
+                this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                this.changeDetectorRef.detectChanges();
             }
         });
     }
@@ -358,7 +377,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             let request: ReportsRequestModel = {
                 to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
                 from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
-                interval: 'monthly',
+                interval: this.durationEnum.Monthly,
                 branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
             this.companyService.getSalesRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {

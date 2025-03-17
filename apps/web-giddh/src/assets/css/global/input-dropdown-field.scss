@@ -515,6 +515,10 @@ body {
         .cdk-overlay-pane {
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
+
+                &:has(.dropdown-width) {
+                    width: 40%;
+                }
             }
         }
     }
@@ -670,9 +674,20 @@ input-field {
         background-color: var(--color-primary-input-bar-background) !important;
     }
 }
+
 @media screen and (max-width: 1024px) {
     .mat-mdc-radio-group {
         display: flex;
         column-gap: 5px;
+    }
+}
+
+mat-option {
+    &.dropdown-tick-icon-position {
+        mat-pseudo-checkbox {
+            position: absolute;
+            pointer-events: none;
+            right: 35px;
+        }
     }
 }
