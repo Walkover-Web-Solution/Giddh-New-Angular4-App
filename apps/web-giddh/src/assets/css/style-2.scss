@@ -13400,7 +13400,11 @@ voucher-component {
     }
 
     .dropdown-bg {
-        background-color: transparent !important;
+        background-color: var(--color-transparent-background) !important;
+    }
+    
+    .mdc-text-field__input {
+        background-color: var(--color-transparent-background) !important; 
     }
 }
 
