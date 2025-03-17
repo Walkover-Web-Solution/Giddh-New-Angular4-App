@@ -346,7 +346,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isDatepickerOpen: boolean = false;
     /** Hold last valid index */
     public lastValidIndex: number;
-    
+
     constructor(
         private accountService: AccountService,
         private breakPointObservar: BreakpointObserver,
@@ -2511,6 +2511,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         this.activeAccountSubject.next(this.activeAccount);
+
+        const hasInventory = this.vm.selectedLedger.transactions?.some(item => item.hasOwnProperty('inventory'));
+        if (hasInventory) {
+            this.isStockPresent = true;
+        } else {
+            this.isStockPresent = false;
+        }
+
         this.changeDetectorRef.detectChanges();
     }
 
@@ -2868,7 +2876,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.taxAsideMenuRef.close();
         this.changeDetectorRef.detectChanges();
     }
-    
     /**
      * Handle event for next transaction
      *
