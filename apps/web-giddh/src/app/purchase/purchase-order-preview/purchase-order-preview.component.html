@@ -5,13 +5,13 @@
                 <div>
                     <div class="invoice-search-box">
                         <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement />
-                        <button
+                        <!-- <button
                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                             class="btn btn-sky-blue"
                             [routerLink]="['/pages/purchase-management/purchase-order/new']"
                         >
                             {{ localeData?.new_order }}
-                        </button>
+                        </button> -->
                         <button
                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                             class="btn btn-sky-blue"
@@ -154,7 +154,7 @@
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
-                                                    <a
+                                                    <!-- <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_edit"
                                                         placement="top"
@@ -164,7 +164,7 @@
                                                         ]"
                                                         *ngIf="voucherApiVersion === 1"
                                                         ><i class="icon-edit-pencil"></i
-                                                    ></a>
+                                                    ></a> -->
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_edit"
@@ -300,3 +300,4 @@
     >
     </bulk-convert>
 </ng-template>
+                    

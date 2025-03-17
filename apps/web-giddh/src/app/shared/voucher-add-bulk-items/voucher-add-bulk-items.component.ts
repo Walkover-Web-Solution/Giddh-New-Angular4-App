@@ -154,13 +154,13 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
 
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index;
-        if (!item.additional.stock || this.generalService.voucherApiVersion === 1) {
-            index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
-        } else {
+        // if (!item.additional.stock || this.generalService.voucherApiVersion === 1) {
+        //     index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+        // } else {
             if (this.generalService.voucherApiVersion === 2 && item.variants?.length === 1) {
                 const variant = item.variants[0];
                 index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
-            }
+            // }
         }
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
