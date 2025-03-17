@@ -34,6 +34,10 @@ table.width-100 {
 .model-header {
     padding: 0 15px 0 15px;
 }
+.mr-rl {
+    margin-left: 0;
+    margin-right: 0;
+}
 
 .modal-header ng-select {
     width: 339px !important;
@@ -211,7 +215,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     align-items: center;
     span {
         padding-left: 5px;
-        padding-top: 4px;
+        padding-top: 2px;
     }
     sh-select {
         width: 100%;
@@ -289,7 +293,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     }
 }
 p.edit-message {
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-filter-background);
     text-align: center;
     padding: 8px 0;
     border-top: 1px solid var(--color-common-secondary-border);
@@ -562,5 +566,10 @@ p.edit-message {
 @media (min-width: 1024px) and (max-width: 1366px) {
     .width-datepicker {
         width: 78px !important;
+    }
+}
+.update-ledger-account {
+    .read-only { 
+        background-color: var(--color-transparent-background) !important;
     }
 }
