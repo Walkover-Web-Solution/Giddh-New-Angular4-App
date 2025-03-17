@@ -698,7 +698,7 @@
                                 </div>
                                 <div class="wrap-transaction-map clearfix">
                                     <div class="w-100 ledger-head mt-0">
-                                        <mat-grid-list cols="2" rowHeight="37px">
+                                        <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
                                                 <span class="pull-right">{{ localeData?.dr }}</span>
@@ -712,22 +712,22 @@
                                     <div class="row ml-0 mr-0 ledger-book">
                                         <div class="col-6 left-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list
-                                                cols="4"
+                                                cols={{ledgerGridTotalColumns}}
                                                 rowHeight="43px"
                                                 class="ledger-table transaction-mapped-table"
                                             >
-                                                <mat-grid-tile class="bold no-right-border" colspan="1">
+                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[0]}}>
                                                     {{ commonLocaleData?.app_date }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border" colspan="2">
+                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[1]}}>
                                                     {{ commonLocaleData?.app_particular }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
+                                                <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
-                                                <mat-grid-tile colspan="1">
+                                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
                                                     <mat-checkbox
                                                         color="primary"
                                                         id="select-all-entries-dr"
@@ -744,12 +744,12 @@
                                                         (change)="selectAllBankEntries($event, 'debit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
-                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}}>&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan={{ledgerGridColumnsValue[2]}}
                                                     >&nbsp;</mat-grid-tile
                                                 >
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-left-list" cols="4" rowHeight="50px">
+                                            <mat-grid-list id="ledger-transaction-left-list" cols={{ledgerGridTotalColumns}} rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
                                                         let item of lc.bankTransactionsDebitData;
@@ -770,7 +770,7 @@
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
-                                                            <mat-grid-tile colspan="1">
+                                                            <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
                                                                 <div class="d-flex align-items-center column-gap5">
                                                                     <span class="checkbox-span">
                                                                         <mat-checkbox
@@ -819,7 +819,7 @@
                                                                 </div>
                                                             </mat-grid-tile>
                                                             <mat-grid-tile
-                                                                colspan="2"
+                                                                colspan={{ledgerGridColumnsValue[1]}}
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
@@ -989,7 +989,7 @@
                                                                     position-relative
                                                                     top-position-fix-{{ i }}
                                                                 "
-                                                                colspan="1"
+                                                                colspan={{ledgerGridColumnsValue[2]}}
                                                             >
                                                                 <input
                                                                     matInput
@@ -1077,22 +1077,22 @@
                                         </div>
                                         <div class="col-6 right-col-new" (click)="$event.stopPropagation()">
                                             <mat-grid-list
-                                                cols="4"
+                                                cols={{ledgerGridTotalColumns}}
                                                 rowHeight="43px"
                                                 class="ledger-table transaction-mapped-table"
                                             >
-                                                <mat-grid-tile class="bold no-right-border" colspan="1">
+                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[0]}}>
                                                     {{ commonLocaleData?.app_date }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border" colspan="2">
+                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[1]}}>
                                                     {{ commonLocaleData?.app_particular }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
+                                                <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
-                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
-                                                <mat-grid-tile colspan="1">
+                                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
                                                     <mat-checkbox
                                                         color="primary"
                                                         id="select-all-entries-dr"
@@ -1109,12 +1109,12 @@
                                                         (change)="selectAllBankEntries($event, 'credit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
-                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}}>&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan={{ledgerGridColumnsValue[2]}}
                                                     >&nbsp;</mat-grid-tile
                                                 >
                                             </mat-grid-list>
-                                            <mat-grid-list id="ledger-transaction-right-list" cols="4" rowHeight="50px">
+                                            <mat-grid-list id="ledger-transaction-right-list" cols={{ledgerGridTotalColumns}} rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
                                                         let item of lc.bankTransactionsCreditData;
@@ -1135,7 +1135,7 @@
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
-                                                            <mat-grid-tile colspan="1">
+                                                            <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
                                                                 <div class="d-flex align-items-center column-gap5">
                                                                     <span class="checkbox-span">
                                                                         <mat-checkbox
@@ -1184,7 +1184,7 @@
                                                                 </div>
                                                             </mat-grid-tile>
                                                             <mat-grid-tile
-                                                                colspan="2"
+                                                                colspan={{ledgerGridColumnsValue[1]}}
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
@@ -1349,7 +1349,7 @@
                                                                 class="no-right-border position-relative top-position-fix-{{
                                                                     i
                                                                 }}"
-                                                                colspan="1"
+                                                                colspan={{ledgerGridColumnsValue[2]}}
                                                             >
                                                                 <input
                                                                     matInput
@@ -1709,21 +1709,21 @@
                             }"
                         >
                             <!-- region debit transaction header-->
-                            <mat-grid-list cols="4" rowHeight="50px">
-                                <mat-grid-tile class="bold" colspan="1">
+                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px">
+                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[0]}}>
                                     <span class="cp">{{ commonLocaleData?.app_date }}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold" colspan="2">
+                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[1]}}>
                                     {{ commonLocaleData?.app_particular }}
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
+                                <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                     {{ commonLocaleData?.app_amount }}
                                 </mat-grid-tile>
                             </mat-grid-list>
                             <!-- endregion -->
 
                             <mat-grid-list
-                                cols="4"
+                                cols={{ledgerGridTotalColumns}}
                                 rowHeight="50px"
                                 tabindex="-1"
                                 *ngIf="
@@ -1731,7 +1731,7 @@
                                     ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'
                                 "
                             >
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan="1">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan={{ledgerGridColumnsValue[0]}}>
                                     <mat-checkbox
                                         color="primary"
                                         id="select-entries-date-cr"
@@ -1740,14 +1740,14 @@
                                         (change)="selectAllEntries($event, 'debit')"
                                     ></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan="2">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerGridColumnsValue[1]}}>
                                     <span *ngIf="(lc.transactionData$ | async)?.page <= 1">{{
                                         localeData?.to_balance_bf
                                     }}</span>
                                 </mat-grid-tile>
                                 <mat-grid-tile
                                     [attr.data-title]="commonLocaleData?.app_amount"
-                                    colspan="1"
+                                    colspan={{ledgerGridColumnsValue[2]}}
                                     class="no-right-border"
                                 >
                                     <div class="d-flex flex-column">
@@ -1780,14 +1780,14 @@
                             </mat-grid-list>
 
                             <mat-grid-list
-                                cols="4"
+                                cols={{ledgerGridTotalColumns}}
                                 rowHeight="50px"
                                 *ngIf="
                                     ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT' ||
                                     ledgerTxnBalance?.forwardedBalance?.amount == 0
                                 "
                             >
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all" colspan="1">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_select_all" colspan={{ledgerGridColumnsValue[0]}}>
                                     <mat-checkbox
                                         color="primary"
                                         [(ngModel)]="debitSelectAll"
@@ -1796,14 +1796,14 @@
                                         (change)="selectAllEntries($event, 'debit')"
                                     ></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
-                                <mat-grid-tile class="no-right-border" colspan="1">&nbsp;</mat-grid-tile>
+                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}}>&nbsp;</mat-grid-tile>
+                                <mat-grid-tile class="no-right-border" colspan={{ledgerGridColumnsValue[2]}}>&nbsp;</mat-grid-tile>
                             </mat-grid-list>
                             <!-- endregion -->
 
                             <!-- region debit transaction loop over transactions -->
                             <mat-grid-list
-                                cols="4"
+                                cols={{ledgerGridTotalColumns}}
                                 rowHeight="50px"
                                 tabindex="-1"
                                 class="ledger-row"
@@ -1824,7 +1824,7 @@
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
-                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan="1">
+                                <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan={{ledgerGridColumnsValue[0]}}>
                                     <div class="d-flex align-items-center column-gap5">
                                         <span class="float-left">
                                             <mat-checkbox
@@ -1844,7 +1844,7 @@
                                     </div>
                                 </mat-grid-tile>
 
-                                <mat-grid-tile colspan="2" [attr.data-title]="commonLocaleData?.app_particular">
+                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}} [attr.data-title]="commonLocaleData?.app_particular">
                                     <div class="d-flex align-items-center justify-content-between w-100">
                                         <div class="text-ellipsis particular-label">
                                             {{
@@ -1916,7 +1916,7 @@
 
                                 <mat-grid-tile
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
-                                    colspan="1"
+                                    colspan={{ledgerGridColumnsValue[2]}}
                                     class="text-right no-right-border flex-column align-items-end"
                                     [attr.data-title]="commonLocaleData?.app_amount"
                                 >
@@ -1947,10 +1947,10 @@
                                 <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
                                     <div class="width-100 no-left-border" *ngIf="txn.type === 'DEBIT'">
                                         <div class="width-100 ledger-main">
-                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
                                                 <mat-grid-tile
                                                     class="new-entry-date"
-                                                    colspan="1"
+                                                    colspan={{ledgerGridColumnsValue[0]}}
                                                     [attr.data-title]="commonLocaleData?.app_date"
                                                 >
                                                     <div class="d-flex align-items-center column-gap5">
@@ -1972,7 +1972,7 @@
                                                 </mat-grid-tile>
                                                 <mat-grid-tile
                                                     [attr.data-title]="commonLocaleData?.app_particular"
-                                                    colspan="2"
+                                                    colspan={{ledgerGridColumnsValue[1]}}
                                                     class="select2-parent select2-ledger new-entry-ledger"
                                                     (mousedown)="showNewLedgerEntryPopup(txn)"
                                                 >
@@ -2075,7 +2075,7 @@
                                                 </mat-grid-tile>
                                                 <mat-grid-tile
                                                     [attr.data-title]="commonLocaleData?.app_amount"
-                                                    colspan="1"
+                                                    colspan={{ledgerGridColumnsValue[2]}}
                                                     class="position-relative no-right-border"
                                                 >
                                                     <input
@@ -2188,14 +2188,14 @@
                             }"
                         >
                             <!-- region credit transaction header-->
-                            <mat-grid-list cols="4" rowHeight="50px">
-                                <mat-grid-tile class="bold" colspan="1">
+                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px">
+                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[0]}}>
                                     <span class="cp">{{ commonLocaleData?.app_date }}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold" colspan="2">
+                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[1]}}>
                                     {{ commonLocaleData?.app_particular }}
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
+                                <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                     {{ commonLocaleData?.app_amount }}
                                 </mat-grid-tile>
                             </mat-grid-list>
@@ -2203,7 +2203,7 @@
 
                             <!-- region credit transaction if forwardedBalance -->
                             <mat-grid-list
-                                cols="4"
+                                cols={{ledgerGridTotalColumns}}
                                 rowHeight="50px"
                                 tabindex="-1"
                                 class="ledger-row"
@@ -2213,7 +2213,7 @@
                                     ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'
                                 "
                             >
-                                <mat-grid-tile colspan="1" [attr.data-title]="commonLocaleData?.app_date">
+                                <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}} [attr.data-title]="commonLocaleData?.app_date">
                                     <mat-checkbox
                                         color="primary"
                                         id="select-all-entries-dr"
@@ -2222,14 +2222,14 @@
                                         (change)="selectAllEntries($event, 'credit')"
                                     ></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile [attr.data-title]="localeData?.bf_balance" colspan="2">
+                                <mat-grid-tile [attr.data-title]="localeData?.bf_balance" colspan={{ledgerGridColumnsValue[1]}}>
                                     <span *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                         {{ localeData?.by_balance_bf }}
                                     </span>
                                 </mat-grid-tile>
                                 <mat-grid-tile
                                     [attr.data-title]="commonLocaleData?.app_amount"
-                                    colspan="1"
+                                    colspan={{ledgerGridColumnsValue[2]}}
                                     class="text-right no-right-border"
                                 >
                                     <div class="d-flex flex-column">
@@ -2261,7 +2261,7 @@
 
                             <!-- region credit transaction no forwardedBalance -->
                             <mat-grid-list
-                                cols="4"
+                                cols={{ledgerGridTotalColumns}}
                                 rowHeight="50px"
                                 class="ledger-row"
                                 *ngIf="
@@ -2269,7 +2269,7 @@
                                     ledgerTxnBalance?.forwardedBalance?.amount == 0
                                 "
                             >
-                                <mat-grid-tile colspan="1">
+                                <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
                                     <mat-checkbox
                                         color="primary"
                                         id="select-all-entries-credit"
@@ -2278,14 +2278,14 @@
                                         (change)="selectAllEntries($event, 'credit')"
                                     ></mat-checkbox>
                                 </mat-grid-tile>
-                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
-                                <mat-grid-tile class="no-right-border" colspan="1">&nbsp;</mat-grid-tile>
+                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}}>&nbsp;</mat-grid-tile>
+                                <mat-grid-tile class="no-right-border" colspan={{ledgerGridColumnsValue[2]}}>&nbsp;</mat-grid-tile>
                             </mat-grid-list>
                             <!-- endregion -->
 
                             <!-- region credit transaction loop over transactions -->
                             <mat-grid-list
-                                cols="4"
+                                cols={{ledgerGridTotalColumns}}
                                 rowHeight="50px"
                                 class="ledger-row"
                                 *ngFor="
@@ -2306,7 +2306,7 @@
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
-                                <mat-grid-tile colspan="1" [attr.data-title]="commonLocaleData?.app_date">
+                                <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}} [attr.data-title]="commonLocaleData?.app_date">
                                     <div class="d-flex align-items-center column-gap5">
                                         <span class="ledger-checkbox pull-left">
                                             <mat-checkbox
@@ -2326,7 +2326,7 @@
                                         <span>{{ txn.entryDate }}</span>
                                     </div>
                                 </mat-grid-tile>
-                                <mat-grid-tile colspan="2" [attr.data-title]="commonLocaleData?.app_particular">
+                                <mat-grid-tile colspan={{ledgerGridColumnsValue[1]}} [attr.data-title]="commonLocaleData?.app_particular">
                                     <div class="d-flex align-items-center justify-content-between w-100">
                                         <div class="text-ellipsis particular-label">
                                             {{
@@ -2395,7 +2395,7 @@
                                     </div>
                                 </mat-grid-tile>
                                 <mat-grid-tile
-                                    colspan="1"
+                                    colspan={{ledgerGridColumnsValue[2]}}
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                     [attr.data-title]="commonLocaleData?.app_amount"
                                     class="position-relative text-right no-right-border flex-column align-items-end"
@@ -2423,9 +2423,9 @@
                                 <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
                                     <div class="width-100" *ngIf="txn.type === 'CREDIT'">
                                         <div class="width-100 h-table ledger-main">
-                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
                                                 <mat-grid-tile
-                                                    colspan="1"
+                                                    colspan={{ledgerGridColumnsValue[0]}}
                                                     class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date"
                                                 >
@@ -2444,7 +2444,7 @@
                                                 </mat-grid-tile>
                                                 <mat-grid-tile
                                                     class="select2-parent select2-ledger new-entry-ledger"
-                                                    colspan="2"
+                                                    colspan={{ledgerGridColumnsValue[1]}}
                                                     [attr.data-title]="commonLocaleData?.app_particular"
                                                     (mousedown)="showNewLedgerEntryPopup(txn)"
                                                 >
@@ -2547,7 +2547,7 @@
                                                 </mat-grid-tile>
                                                 <mat-grid-tile
                                                     class="position-relative no-right-border"
-                                                    colspan="1"
+                                                    colspan={{ledgerGridColumnsValue[2]}}
                                                     [attr.data-title]="commonLocaleData?.app_amount"
                                                 >
                                                     <input

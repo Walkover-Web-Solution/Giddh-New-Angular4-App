@@ -39,6 +39,7 @@ import { TemplateFroalaComponent } from '../../shared/template-froala/template-f
 import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -466,7 +467,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         companyInventorySettings: this.settingResponse.companyInventorySettings || {}
                     });
                 }
-                if (this.isEInvoiceEnabled === null) {
+                if (this.isEInvoiceEnabled === null || params?.voucherType) {
                     this.initSettingObj();
                 }
                 if (this.queryParams.page) {
@@ -1279,9 +1280,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} selectedTabIndex
      * @memberof VoucherListComponent
      */
-    public tabChanged(selectedTabIndex: any): void {
-        this.selectedTabIndex = selectedTabIndex;
-        this.redirectToSelectedTab(selectedTabIndex);
+    public tabChanged(event: MatTabChangeEvent): void {
+        this.selectedTabIndex = event.index;
+        this.redirectToSelectedTab(event.index);
     }
 
     /**
