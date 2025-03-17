@@ -376,7 +376,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 if (this.customTemplate.templateType === 'tally_template') {
                     this.presetFonts = [
                         { label: 'Open Sans', value: 'Open Sans' },
-                        { label: 'Sans-Serif', value: 'Sans-Serif' },
                         { label: 'Roboto', value: 'Roboto' }
                     ];
                 }
@@ -390,7 +389,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
             if (this.customTemplate.fontSize) {
                 this.presetFontsSize.map(fontSize => {
-                    if (fontSize?.value === this.customTemplate.fontSize) {
+                    if (fontSize?.value == this.customTemplate.fontSize) {
                         this.selectedFontSize = fontSize.label;
                     }
                 });

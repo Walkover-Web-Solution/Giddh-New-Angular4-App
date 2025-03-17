@@ -40,7 +40,7 @@
                     >
                     </dropdown-field>
                 </div>
-                <div class="mr-r15">
+                <div class="mr-r15 financial-dropdown">
                     <dropdown-field
                         [name]="'financialYear'"
                         [label]="commonLocaleData?.app_financial_year"
@@ -56,14 +56,14 @@
                     <mat-form-field appearance="outline" class="duration-dropdown">
                         <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
                         <mat-select [value]="selectedType">
-                            <mat-option (click)="populateRecords('monthly')" [value]="commonLocaleData?.app_duration?.monthly">
+                            <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
                                 {{ commonLocaleData?.app_duration?.monthly }}
                             </mat-option>
-                            <mat-option (click)="populateRecords('quarterly')" [value]="commonLocaleData?.app_duration?.quarterly">
+                            <mat-option (click)="populateRecords(durationEnum.Quarterly)" [value]="commonLocaleData?.app_duration?.quarterly">
                                 {{ commonLocaleData?.app_duration?.quarterly }}
                             </mat-option>
-                            <mat-option [value]="commonLocaleData?.app_duration?.weekly">
-                                <span 
+                            <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position">
+                                <span
                                     class="w-100 d-flex justify-content-between"
                                     [matMenuTriggerFor]="monthMenu"
                                     (click)="$event.stopPropagation()"
@@ -83,7 +83,7 @@
                           <button 
                             mat-menu-item 
                             *ngFor="let month of monthNames" 
-                            (click)="populateRecords('weekly', month)"
+                            (click)="populateRecords(durationEnum.Weekly, month)"
                             aria-label="Select month"
                           >
                             {{ month | slice: 0:3 }}

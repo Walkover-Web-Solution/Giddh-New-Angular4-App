@@ -96,7 +96,7 @@
                     <button 
                         mat-stroked-button
                         class="mr-r1"
-                        [matTooltip]="commonLocaleData?.app_export"
+                        [matTooltip]="commonLocaleData?.app_back"
                         [matTooltipPosition]="'above'"
                         (click)="gotoSalesRegister()"
                     >
@@ -610,7 +610,8 @@
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="(salesRegisteDetailedResponse$ | async)?.totalItems"
-                [pageSize]="paginationLimit"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageSize]="getDetailedsalesRequestFilter.count"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
                 [pageIndex]="getDetailedsalesRequestFilter.page - 1"

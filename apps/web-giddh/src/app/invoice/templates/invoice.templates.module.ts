@@ -34,7 +34,6 @@ import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
         ClickOutsideModule,
         DecimalDigitsModule,
         ValidateSectionPermissionDirectiveModule,
-        ShSelectModule,
         DeleteTemplateConfirmationModalModule
     ],
     declarations: [
