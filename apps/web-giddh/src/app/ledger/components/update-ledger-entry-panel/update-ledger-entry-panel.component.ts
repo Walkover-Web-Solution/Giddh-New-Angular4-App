@@ -285,8 +285,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public otherTaxDialogRef: any;
     public adjustmentDialogRef: any;
     public advanceReceiptRemoveDialogRef: any;
-    /** True if more details is open */
-    public isMoreDetailOpen: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
@@ -2175,7 +2173,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 .subscribe((resp: any[]) => {
                     if (resp[0] && resp[1] && resp[2]) {
                         this.initEntry(resp);
-                        this.isMoreDetailOpen = true;
                     }
                 });
         }

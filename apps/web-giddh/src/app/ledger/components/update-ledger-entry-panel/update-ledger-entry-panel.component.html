@@ -2214,8 +2214,7 @@
                         <div class="col-md-6 pd-t1 accordion-expansion">
                             <mat-accordion multi>
                                 <mat-expansion-panel
-                                    [expanded]="isMoreDetailOpen"
-                                    [ngClass]="{ 'overflow-visible': isMoreDetailOpen }"
+                                    [expanded]="true"
                                 >
                                     <mat-expansion-panel-header>
                                         <mat-panel-title (click)="getInvoiceLists()">{{
@@ -2570,10 +2569,6 @@
                                                                 (currentOrganizationType === 'COMPANY' ||
                                                                     isConsolidatedBranch) &&
                                                                 branches?.length > 1
-                                                            "
-                                                            [disabled]="
-                                                                currentOrganizationType === 'COMPANY' ||
-                                                                isConsolidatedBranch
                                                             "
                                                             [type]="'text'"
                                                             [id]="'update-ledger-cheque-number'"
