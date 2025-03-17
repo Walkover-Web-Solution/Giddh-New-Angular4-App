@@ -50,6 +50,8 @@
                         [required]="true"
                     >
                     </dropdown-field>
+                    <p>{{activeFinacialYr | json}}</p>
+                    <p>{{currentActiveFinacialYear | json}}</p>
                 </div>
                 <div class="mr-r15">
                     <mat-form-field appearance="outline" class="duration-dropdown">
@@ -61,9 +63,9 @@
                             <mat-option (click)="populateRecords(durationEnum.Quarterly)" [value]="commonLocaleData?.app_duration?.quarterly">
                                 {{ commonLocaleData?.app_duration?.quarterly }}
                             </mat-option>
-                            <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position">
-                                <span 
-                                    class="w-100 d-flex justify-content-between"
+                            <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position pointer-event-none">
+                                <span
+                                    class="w-100 d-flex justify-content-between pointer-event-all"
                                     [matMenuTriggerFor]="monthMenu"
                                     (click)="$event.stopPropagation()"
                                 >
