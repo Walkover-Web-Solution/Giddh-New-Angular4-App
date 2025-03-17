@@ -3901,6 +3901,10 @@ input[type="number"]::-webkit-inner-spin-button {
     pointer-events: none !important;
 }
 
+.pointer-event-all {
+    pointer-events: all !important;
+}
+
 .cursor-default {
     cursor: default !important;
 }
