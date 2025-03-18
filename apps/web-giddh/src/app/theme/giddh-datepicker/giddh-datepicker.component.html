@@ -1,6 +1,7 @@
 <ng-container *ngIf="!hideLabel">
     <div [ngClass]="{ 'readonly-field': disabled }">
         <mat-form-field 
+            class="toggle-Icon"
             [ngClass]="{ 'mat-form-field-invalid': showError }"
             [appearance]="appearance" 
             [floatLabel]="'auto'"
