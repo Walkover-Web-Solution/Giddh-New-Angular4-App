@@ -441,3 +441,6 @@ export interface IUnpaidInvoiceListResponse {
 export interface IVariant extends IParticular {
     variantDiscount?: any;
 }
+
+/** Type for ledger type */
+export type LedgerType = 'cr' | 'dr';
