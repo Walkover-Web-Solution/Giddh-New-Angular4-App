@@ -376,7 +376,9 @@
         "entries": "Entries",
         "trial_balance": "Trial Balance",
         "master": "Master",
-        "voucher": "Voucher"
+        "voucher": "Voucher",
+        "account_wise": "Account wise",
+        "voucher_wise": "Voucher wise"
     },
     "app_please_select": "Please Select",
     "app_company": "Company",
