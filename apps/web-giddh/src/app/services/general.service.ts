@@ -17,6 +17,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpe
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Injectable()
 export class GeneralService {
@@ -2218,8 +2219,8 @@ export class GeneralService {
      * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
-    public getVoucherTypeList(commonLocaleData: any): Array<{ label: string; value: string }> {
-        const voucherTypeList = [{
+    public getVoucherTypeList(commonLocaleData: any): IOption[] {
+        return [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'
         }, {
@@ -2247,7 +2248,6 @@ export class GeneralService {
             label: commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt'
         }];
-        return voucherTypeList;
     }
 }
 

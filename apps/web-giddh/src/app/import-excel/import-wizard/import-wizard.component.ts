@@ -9,7 +9,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { CommonActions } from '../../actions/common.actions';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
-import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { VoucherImportType, VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'import-wizard',
@@ -124,7 +124,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
                 const requestObject = {
                     accountUniqueName: this.voucherResponse.accountUniqueName ?? "",
                     subType: "VOUCHER",
-                    type: this.voucherResponse.accountUniqueName ? VoucherType.AccountWiseImport : VoucherType.VoucherWiseImport,
+                    type: this.voucherResponse.accountUniqueName ? VoucherImportType.AccountWiseImport : VoucherImportType.VoucherWiseImport,
                     isHeaderProvided: this.voucherResponse.isHeaderProvided,
                     voucherType: this.voucherResponse.selectVoucher ?? ""
                 }

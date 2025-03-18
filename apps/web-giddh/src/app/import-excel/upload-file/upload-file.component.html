@@ -143,7 +143,7 @@
                 matTooltipPosition="above"
                 color="primary"
                 [ladda]="isLoading"
-                [disabled]="file === null || entity === voucherType.AccountWise && !accountUniqueName || entity === voucherType.VoucherWise && !selectVoucher"
+                [disabled]="file === null || (entity === voucherType.AccountWise && !accountUniqueName) || (entity === voucherType.VoucherWise && !selectVoucher)"
                 (click)="handleFileUpload(file)"
             >
                 {{ commonLocaleData?.app_next }}
