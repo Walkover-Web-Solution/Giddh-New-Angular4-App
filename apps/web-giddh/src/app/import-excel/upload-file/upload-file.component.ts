@@ -12,6 +12,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { cloneDeep } from '../../lodash-optimized';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 @Component({
     selector: 'upload-file',
@@ -65,6 +67,12 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         count: this.defaultCount,
         withStocks: false
     };
+    /** Stores select voucher name */
+    public selectVoucher: string = "";
+    /** Stores the voucher response */
+    public voucherListResponse: IOption[] = [];
+    /** Holds a reference to the `VoucherType` enum */
+    public voucherType: typeof VoucherType = VoucherType;
 
     constructor(
         private toasterService: ToasterService,
@@ -120,6 +128,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      */
 
     public ngOnInit(): void {
+        this.voucherListResponse = this.generalService.getVoucherTypeList(this.commonLocaleData);
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -131,7 +140,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             if (data) {
                 this.entity = data.type;
                 this.setTitle();
-                if (this.entity === 'voucher' && !this.accountSearchRequest.isLoading) {
+                if (this.entity === this.voucherType.AccountWise && !this.accountSearchRequest.isLoading) {
                     this.searchAccount();
                 }
                 if (this.entity === "banktransactions") {
@@ -236,7 +245,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             file,
             branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch?.uniqueName : '',
             isHeaderProvided: this.isHeaderProvided,
-            accountUniqueName: this.accountUniqueName
+            accountUniqueName: this.accountUniqueName,
+            selectVoucher: this.selectVoucher
         });
     }
 
