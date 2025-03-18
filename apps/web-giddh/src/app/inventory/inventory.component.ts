@@ -468,7 +468,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.GroupStockReportRequest.branchUniqueName =
                 this.currentBranchAndWarehouseFilterValues.branch !== this.generalService.companyUniqueName ?
                     this.currentBranchAndWarehouseFilterValues.branch : null;
-            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
+            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;
             this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
         });
     }

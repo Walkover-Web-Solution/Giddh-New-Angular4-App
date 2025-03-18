@@ -86,7 +86,7 @@
                                                     (input)="checkGstNumValidation()"
                                                 ></input-field>
                                             </div>
-                                            <div class="col-sm-4 form-group">
+                                            <div class="col-sm-4 form-group" *ngIf="addressConfiguration.stateList?.length || addressConfiguration.countyList?.length" >
                                                 <ng-container *ngIf="addressConfiguration.stateList?.length">
                                                     <reactive-dropdown-field
                                                         [label]="commonLocaleData?.app_state"
@@ -121,7 +121,7 @@
                                                 </ng-container>
                                             </div>
                                             <!-- static code added for the pincode -->
-                                            <div class="col-sm-4">
+                                            <div class="form-group col-sm-4">
                                                 <div class="form-group mr-b05">
                                                     <input-field
                                                         [label]="
@@ -176,7 +176,6 @@
                                                 </mat-form-field>
                                             </div>
                                         </div>
-
                                         <div
                                             *ngIf="addressConfiguration?.type !== 'createBranchAddress'"
                                             [hidden]="hideLinkEntity"

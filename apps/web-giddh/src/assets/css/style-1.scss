@@ -316,7 +316,7 @@ aside-menu-account .container-fluid {
     padding-bottom: 40px;
 }
 .pd-l4 {
-    padding-left: 40px;
+    padding-left: 40px !important;
 }
 .pd-r4 {
     padding-right: 40px;
@@ -337,7 +337,7 @@ aside-menu-account .container-fluid {
     padding-left: 15px;
 }
 .pd-t15 {
-    padding-top: 15px;
+    padding-top: 15px !important; 
 }
 .pd-b15 {
     padding-bottom: 15px;
@@ -460,6 +460,9 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px;
 }
+.row-gap5 {
+    row-gap: 5px;
+}
 .row-gap1 {
     row-gap: 10px;
 }
@@ -501,6 +504,11 @@ aside-menu-account .container-fluid {
 .bdr-radius-50 {
     border-radius: 50px !important;
 }
+
+.bdr-radius-circle {
+    border-radius: 50% !important;
+}
+
 .pa {
     position: absolute;
 }
@@ -2843,7 +2851,7 @@ tr.mat-footer-row {
 .mat-mdc-header-cell,
 .mat-mdc-cell {
     font-weight: 400;
-    padding: 5px 10px !important;
+    padding: 5px !important;
     text-transform: capitalize;
     display: table-cell !important;
 }

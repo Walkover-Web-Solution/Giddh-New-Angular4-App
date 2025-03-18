@@ -10,9 +10,9 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { RestrictedModules } from '../../app.constant';
 
 @Component({
@@ -23,13 +23,10 @@ import { RestrictedModules } from '../../app.constant';
     encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', { static: false }) public staticTabs: TabsetComponent;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
     public asideMenuState: string = 'out';
-    /** this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     public currentPeriod: GstDatePeriod = null;
     public selectedGst: string = null;
     public gstNumber: string = null;
@@ -39,7 +36,6 @@ export class FilingComponent implements OnInit, OnDestroy {
     public isTransactionSummary: boolean = false;
     public showTaxPro: boolean = false;
     public fileReturn: {} = { isAuthenticate: false };
-    public selectedTabId: number = null;
     public gstFileSuccess$: Observable<boolean> = of(false);
     public fileReturnSucces: boolean = false;
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
@@ -67,6 +63,8 @@ export class FilingComponent implements OnInit, OnDestroy {
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = false;
+    /** Holds active tab index */
+    public activeTabIndex: number = 0;
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
@@ -77,8 +75,7 @@ export class FilingComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private gstAction: GstReconcileActions,
-        private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver) {
+        private generalService: GeneralService) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -99,15 +96,6 @@ export class FilingComponent implements OnInit, OnDestroy {
             this.showGstFiling = true;
         }
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
@@ -162,11 +150,14 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.fileReturnSucces = false;
     }
 
-    public selectTabFromUrl(tab: number) {
-        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
-            this.selectedTabId = tab;
-            this.staticTabs.tabs[this.selectedTabId].active = true;
-        }
+    /**
+     * Select tab from url
+     *
+     * @param {number} tab
+     * @memberof FilingComponent
+     */
+    public selectTabFromUrl(tab: number): void {
+        this.activeTabIndex = tab;
     }
 
     public ngOnDestroy(): void {
@@ -258,7 +249,7 @@ export class FilingComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
                 }
             });
-        } else {
+        } else if (this.selectedGst === GstReport.Gstr2) {
             this.gstr2OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
                 if (!bool) {
                     // it means no gstr2 data available or error occurred or user directly navigated to this tab
@@ -269,16 +260,6 @@ export class FilingComponent implements OnInit, OnDestroy {
 
         // get session details
         this.store.dispatch(this.gstAction.GetGSPSession(this.activeCompanyGstNumber));
-
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
-                }
-            }
-        });
     }
 
     /**
@@ -299,7 +280,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @returns {string}
      * @memberof FilingComponent
      */
-    public getGstReturnFiledText(): string {
+    public getGstReturnFieldText(): string {
         let text = this.localeData?.filing?.gst_filed_success;
         text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
         return text;
@@ -313,8 +294,23 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public getLoadingGstText(selectedGst: any): string {
-        let text = this.localeData?.loading_gst_data;
-        text = text?.replace("[SELECTED_GST]", selectedGst);
-        return text;
+        if (this.localeData) {
+            let text = this.localeData?.filing?.loading_gst_data;
+            text = text?.replace("[SELECTED_GST]", selectedGst);
+            return text;
+        }
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof FilingComponent
+     */
+    public onTabChange(event: MatTabChangeEvent): void {
+        if (event) {
+            this.activeTabIndex = event.index;
+            this.selectedTab = event.tab.textLabel;
+        }
     }
 }

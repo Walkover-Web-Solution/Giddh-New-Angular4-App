@@ -344,6 +344,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: '10'
                     },
+                    showVariantImage: {
+                        label: 'Display Image',
+                        display: false,
+                        width: '15'
+                    },
                     taxableValue: {
                         label: 'Taxable Amt.',
                         display: true,

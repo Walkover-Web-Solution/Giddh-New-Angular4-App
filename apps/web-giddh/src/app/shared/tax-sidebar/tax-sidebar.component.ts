@@ -214,13 +214,23 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 let taxes = response.body;
-                if (!this.activeCompanyGstNumber && taxes?.length === 1) {
+                if (!this.activeCompanyGstNumber && taxes?.length > 0) {
                     this.activeCompanyGstNumber = taxes[0];
+                    this.selectTax();
                 }
             }
 
             this.changeDetectionRef.detectChanges();
         });
+    }
+
+   /**
+    * Select tax handler
+    *
+    * @memberof TaxSidebarComponent
+    */
+   public selectTax(): void {        
+        this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
     }
 
     /**

@@ -228,7 +228,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
             this.rejectedItems = this.pettyCashRejectedReportResponse.results?.map((rejected, index) => {
                 rejected.index = index;
                 return rejected;
-            });;
+            });
             this.reportDates.emit([this.pettyCashRejectedReportResponse.fromDate, this.pettyCashRejectedReportResponse.toDate]);
             setTimeout(() => {
                 this.detectChanges();

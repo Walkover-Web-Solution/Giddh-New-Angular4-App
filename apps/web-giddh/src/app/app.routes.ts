@@ -7,6 +7,7 @@ import { AppLoginSuccessComponent } from "./app-login-success/app-login-success"
 import { PageComponent } from './page/page.component';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { VerifySubscriptionTransferOwnershipComponent } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.component';
+import { ProjectWiseAccountingModule } from './project-wise-accounting/project-wise-accounting.module';
 
 export const ROUTES: Routes = [
     { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
@@ -101,6 +102,7 @@ export const ROUTES: Routes = [
             { path: 'group-name', loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule), canActivate: [NeedsAuthorization] },
             { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
             { path: 'multi-currency-report', loadChildren: () => import('./multi-currency-reports/multi-currency-reports.module').then(module => module.MultiCurrencyReportsModule), canActivate: [NeedsAuthorization] },
+            { path: 'project-wise-accounting', loadChildren: () => import('./project-wise-accounting/project-wise-accounting.module').then(module => module.ProjectWiseAccountingModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

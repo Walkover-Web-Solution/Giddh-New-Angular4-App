@@ -87,6 +87,22 @@
         <div class="checkbox mt-1">
             <input type="checkbox" name="isHeaderProvided" id="is-header-provided" [(ngModel)]="isHeaderProvided" />
             {{ localeData?.header_provided }}
+            <div class="mr-t1">
+                <reactive-dropdown-field
+                    *ngIf="entity === 'voucher'"
+                    [label]="commonLocaleData?.app_select_account"
+                    [placeholder]="commonLocaleData?.app_select"
+                    [options]="accountSearchResponse"
+                    [enableDynamicSearch]="true"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleSearchAccountScrollEnd()"
+                    (dynamicSearchedQuery)="searchAccount($event)"
+                    (onClear)="accountUniqueName = null; accountLabel = null"
+                    (selectedOption)="accountUniqueName = $event?.value; accountLabel = $event?.label"
+                    [required]="true"
+                >
+                </reactive-dropdown-field>
+            </div>
         </div>
         <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">
             {{ localeData?.download_sample_xls }}
@@ -96,11 +112,22 @@
         </button>
 
         <div class="pull-right mr-t2">
-            <button class="btn btn-default" [routerLink]="['/pages/import']">{{ commonLocaleData?.app_back }}</button>
+            <button 
+                mat-stroked-button
+                [matTooltip]="commonLocaleData?.app_back" 
+                matTooltipPosition="above"  
+                class="mr-r1" 
+                [routerLink]="['/pages/import']"
+            >
+                {{ commonLocaleData?.app_back }}
+            </button>
             <button
-                class="btn btn-success"
+                mat-stroked-button 
+                [matTooltip]="commonLocaleData?.app_next" 
+                matTooltipPosition="above"
+                color="primary"
                 [ladda]="isLoading"
-                [disabled]="file === null"
+                [disabled]="file === null || entity === 'voucher' && !accountUniqueName"
                 (click)="handleFileUpload(file)"
             >
                 {{ commonLocaleData?.app_next }}

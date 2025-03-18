@@ -271,9 +271,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 quantityGreaterThan: false,
                 includeItemValue: false,
                 itemValue: null,
-                includeItemLessThan: false,
-                includeItemEqualTo: false,
-                includeItemGreaterThan: false
+                itemValueLessThan: false,
+                itemValueEqualTo: false,
+                itemValueGreaterThan: false
             }),
         });
 
@@ -481,45 +481,45 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 break;
             case 'inventoryVal-greaterThan':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-lessThan':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-greaterThanOrEquals':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-lessThanOrEquals':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-equals':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-exclude':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-null':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
         }
     }
@@ -650,6 +650,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
+                } else {
+                    this.isDefaultAccountsLoading = false;
                 }
             });
         } else {
@@ -734,6 +736,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (successCallback) {
                         successCallback(data.body.results);
                     }
+                } else {
+                    this.isDefaultStocksLoading = false;
                 }
             });
         } else {
@@ -794,6 +798,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
+                } else {
+                    this.isDefaultGroupsLoading = false;
                 }
             });
         } else {

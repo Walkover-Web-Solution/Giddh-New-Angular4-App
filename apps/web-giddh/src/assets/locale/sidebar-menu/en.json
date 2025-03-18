@@ -124,6 +124,17 @@
                     }
                 },
                 {
+                    "label": "Receipt Settings ",
+                    "link": "/pages/vouchers/preview/receipt/settings",
+                    "icon": "icon-reciept-new",
+                    "description": "Receipt Settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "Sales Register",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -245,6 +256,17 @@
                     "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "Total, & unused payments",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Payment Settings ",
+                    "link": "/pages/vouchers/preview/payment/settings",
+                    "icon": "icon-reciept-new",
+                    "description": "Payment Settings",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
@@ -617,16 +639,9 @@
                     "icon": "icon-tally-import1"
                 },
                 {
-                    "label": "Multi-currency Report",
-                    "link": "/pages/multi-currency-report",
-                    "icon": "icon-multi-currency",
-                    "description": "Multi-currency report",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2,
-                            "tabIndex": 0
-                        }
-                    }
+                    "label": "Project wise accounting",
+                    "link": "/pages/project-wise-accounting/list",
+                    "icon": "icon-balance-sheet-new"
                 }
             ]
         }

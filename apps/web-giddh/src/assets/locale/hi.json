@@ -208,6 +208,7 @@
         "others": "अन्य"
     },
     "app_duration": {
+        "duration": "अवधि",
         "monthly": "मासिक",
         "quarterly": "तिमाही",
         "half_yearly": "अर्धवार्षिक",
@@ -373,7 +374,8 @@
         "inventory": "इन्वेंटरी",
         "entries": "प्रविष्टियां",
         "trial_balance": "संतुलन परीक्षण",
-        "master": "मास्टर"
+        "master": "मास्टर",
+        "voucher": "वाउचर"
     },
     "app_please_select": "कृपया चयन कीजिए",
     "app_company": "कंपनी",
@@ -738,8 +740,8 @@
     "app_name_placeholder": "नाम दर्ज करें",
     "app_county": "काउंटी",
     "app_period": "अवधि",
-    "app_gst_confirm_message1":"क्या आप भरी हुई जानकारी को ओवरराइड करना चाहते हैं -",
-    "app_gst_confirm_message2":"जब आप हाँ चुनते हैं, तो आपके द्वारा दर्ज की गई सामग्री अधिलेखित हो जाएगी। हालाँकि, आप इसे बाद में संशोधित कर सकते हैं।",
+    "app_gst_confirm_message1": "क्या आप भरी हुई जानकारी को ओवरराइड करना चाहते हैं -",
+    "app_gst_confirm_message2": "जब आप हाँ चुनते हैं, तो आपके द्वारा दर्ज की गई सामग्री अधिलेखित हो जाएगी। हालाँकि, आप इसे बाद में संशोधित कर सकते हैं।",
     "app_expanded": "विस्तारित",
     "app_export_note": "डिफ़ॉल्ट कॉलम 'स्टॉक समूह का नाम, स्टॉक का नाम, अद्वितीय नाम, मूल समूह का नाम, मूल समूह का अद्वितीय नाम, स्टॉक इकाई कोड, स्टॉक इकाई का अद्वितीय नाम' निर्यात किया जाएगा, आपके पास आवश्यकतानुसार कस्टम कॉलम जोड़ने का विकल्प भी है।",
     "app_tax_authority": "टैक्स प्राधिकरण",
@@ -749,7 +751,14 @@
     "app_subscription": "सदस्यता",
     "app_custom_email": "कस्टम ईमेल",
     "app_custom_email_template": "कस्टम ईमेल टेम्पलेट",
-    "app_send_voucher_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] भेजें",
+    "app_send_voucher_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] वाउचर भेजें",
+    "app_send_payment_receipt_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] वाउचर भेजें",
     "app_no_access_limit_module": "वर्तमान में आपके पास इस मॉड्यूल तक पहुंच नहीं है. बिना किसी परेशानी के इसे अनलॉक करने के लिए अपनी योजना को अपग्रेड करें",
-    "app_upgrade": "उन्नत करना"
+    "app_upgrade": "उन्नत करना",
+    "app_click_here": "यहाँ क्लिक करें",
+    "app_upload": "अपलोड",
+    "app_file": "फ़ाइल",
+    "app_choose_file": "फ़ाइल चुनें",
+    "app_password": "पासवर्ड",
+    "app_select_column": "कॉलम चुनें"
 }

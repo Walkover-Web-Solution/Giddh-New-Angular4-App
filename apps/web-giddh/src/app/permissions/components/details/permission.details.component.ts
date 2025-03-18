@@ -198,7 +198,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
 
         } else {
             // copy role scenario
-            response = this.generateUIFromExistedRole();;
+            response = this.generateUIFromExistedRole();
         }
 
         if (response) {

@@ -12,16 +12,6 @@
 .icon-download-circle {
     font-size: 16px;
 }
-
-@media screen and (max-width: 767px) {
-    .filter-band {
-        height: auto !important;
-        .back-button {
-            display: flex;
-        }
-        .filter-row {
-            margin-left: 0;
-            margin-bottom: 10px;
-        }
-    }
+.date-width {
+    min-width: 120px;
 }

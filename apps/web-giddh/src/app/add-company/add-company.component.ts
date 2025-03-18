@@ -368,7 +368,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.moduleRestrictionStatus) {
-                let module = response.moduleRestrictionStatus.find(
+                const module = response.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === RestrictedModules.Users
                 );
                 this.remainingUsers = module.remainingUsers;

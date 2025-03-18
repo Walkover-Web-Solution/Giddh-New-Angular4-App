@@ -239,6 +239,8 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profile = response.body;
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
+                localStorage.setItem('currencyDecimalType', response.body?.balanceDecimalPlaces);
+                localStorage.setItem('currencyNumberType', response.body?.balanceDisplayFormat);
                 return Object.assign({}, state, newState);
             } else if (response?.status === 'error' && response.statusCode === UNAUTHORISED) {
                 return { ...state, updateProfileInProgress: false, getProfileInProgress: false };

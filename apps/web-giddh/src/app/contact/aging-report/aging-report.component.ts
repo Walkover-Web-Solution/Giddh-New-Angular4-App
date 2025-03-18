@@ -32,7 +32,7 @@ import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSe
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -98,7 +98,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Observable if loading in process */
@@ -730,7 +730,26 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @return {*}  {*}
      * @memberof AgingReportComponent
      */
-    public domSantizer(str: string): any {
+    private domSantizer(str: string): any {
         return this.sanitizer.bypassSecurityTrustResourceUrl(str);
+    }
+
+    /**
+     * Redirect to invoice preview by unique name
+     * 
+     * @param voucherUniqueName 
+     * @param voucherDate 
+     * @returns 
+     */
+    public getInvoicePreviewUrl(invoice: any): string {
+        if (invoice) {
+            let url: string = '';
+            if (invoice.voucherNumber !== 'OPENING BALANCE' && invoice.uniqueName && invoice.voucherDate) {
+                url = `/pages/vouchers/view/sales/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
+            } else {
+                url = 'javascript:;';
+            }
+            return this.domSantizer(url);
+        }
     }
 }

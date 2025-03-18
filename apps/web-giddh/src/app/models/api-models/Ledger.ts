@@ -369,6 +369,8 @@ export interface ILedgerAdvanceSearchResponse {
     creditTotal: number;
     debitTransactions: DebitTransaction[];
     creditTransactions: any[];
+    prevToken?: string;
+    nextToken?: string;
 }
 
 export interface Inventory {
@@ -381,9 +383,9 @@ export interface Inventory {
     quantityGreaterThan: boolean;
     includeItemValue: boolean;
     itemValue: number;
-    includeItemLessThan: boolean;
-    includeItemEqualTo: boolean;
-    includeItemGreaterThan: boolean;
+    itemValueLessThan: boolean;
+    itemValueEqualTo: boolean;
+    itemValueGreaterThan: boolean;
 }
 
 export interface IForwardedBalance {

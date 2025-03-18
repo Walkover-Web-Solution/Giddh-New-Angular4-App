@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div
-                class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+                class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
                 *ngIf="showClearFilter"
             >
                 <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
@@ -326,7 +326,7 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_name">
-                    <span class="pd-l15">{{ element.name }}</span>
+                    <span class="pd-l15 text-ellipsis">{{ element.name }}</span>
                 </td>
             </ng-container>
 
@@ -610,20 +610,22 @@
     let-fieldName="fieldName"
     let-formControl="formControl"
 >
-    <div class="align-items-center d-flex" [hidden]="show">
-        <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="search icon">
-            <span class="icon-search"></span>
-        </button>
-        <span>{{ title }}</span>
-    </div>
-    <div [hidden]="!show">
-        <text-field
-            [type]="'text'"
-            [placeholder]="getSearchFieldText(fieldName)"
-            [cssClass]="'form-control search-table mat-field-border'"
-            [formControl]="formControl"
-            [autoFocus]="show"
-        ></text-field>
+    <div class="search-table">
+        <div class="align-items-center d-flex" [hidden]="show">
+            <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="search icon">
+                <span class="icon-search"></span>
+            </button>
+            <span>{{ title }}</span>
+        </div>
+        <div [hidden]="!show">
+            <text-field
+                [type]="'text'"
+                [placeholder]="getSearchFieldText(fieldName)"
+                [cssClass]="'form-control mat-field-border'"
+                [formControl]="formControl"
+                [autoFocus]="show"
+            ></text-field>
+        </div>
     </div>
 </ng-template>
 
@@ -640,14 +642,7 @@
                 <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
                     <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
                         <a
-                            [href]="
-                                item?.voucherNumber !== 'OPENING BALANCE'
-                                    ? '/pages/invoice/preview/sales?voucherUniqueName=' +
-                                      item?.uniqueName +
-                                      '&accountUniqueName=' +
-                                      item?.account?.uniqueName
-                                    : domSantizer('javascript:;')
-                            "
+                            [href]="getInvoicePreviewUrl(item)"
                             [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined"
                             [ngClass]="{ 'cursor-default': item?.voucherNumber === 'OPENING BALANCE' }"
                         >

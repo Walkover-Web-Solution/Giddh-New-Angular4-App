@@ -6,20 +6,21 @@
             <div>
                 <input-field [label]="isLblShow ? localeData?.unique_name_email_label : ''" [type]="'text'"
                     [name]="'emailId'" formControlName="emailId"
-                    [placeholder]="localeData?.unique_name_email_placeholder"
-                    [readonly]="userdata?.uniqueName"></input-field>
+                    [placeholder]="localeData?.unique_name_email_placeholder" [readonly]="userdata?.uniqueName"
+                    [disabled]="isUserRestricted"></input-field>
             </div>
             <div>
-                <reactive-dropdown-field [label]="isLblShow ? localeData?.role_name_label : ''" [name]="'roles'"
-                    [placeholder]="localeData?.role_name_placeholder" [options]="allRoles"
-                    formControlName="roleUniqueName" [labelValue]="userdata?.roleName ?? ''"
-                    [required]="true"></reactive-dropdown-field>
+                <reactive-dropdown-field [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''"
+                    [name]="'roles'" [placeholder]="localeData?.role_name_placeholder" [options]="allRoles"
+                    formControlName="roleUniqueName" [labelValue]="isUserRestricted  ? '' : userdata?.roleName"
+                    [required]="true" [readonly]="isUserRestricted"
+                    [disabled]="isUserRestricted"></reactive-dropdown-field>
             </div>
             <!-- time span -->
             <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true"
                 (clickOutside)="methodForToggleSection('timeSpanSection')">
                 <button mat-button [matMenuTriggerFor]="menu" (click)="showTimeSpan = !showTimeSpan" type="button"
-                    class="mat-select-btn range-wrapper text-left w-100">
+                    class="mat-select-btn range-wrapper text-left w-100" [disabled]="isUserRestricted">
                     <span class="d-flex w-100">
                         {{ selectedTimeSpan }}
                         <span class="ml-auto"><span class="fa fa-caret-down"></span></span>
@@ -48,7 +49,7 @@
                                 <div>
                                     <div class="date-range-wrapper">
                                         <mat-form-field [matDatepickerToggleIcon]="false" appearance="outline"
-                                            (click)="picker.open()" class="w-100">
+                                            (click)="picker?.open()" class="w-100">
                                             <mat-label>{{ localeData?.from_to_label }}</mat-label>
                                             <mat-date-range-input [rangePicker]="picker">
                                                 <input matStartDate [placeholder]="commonLocaleData?.app_start_date"
@@ -83,7 +84,7 @@
                 <div [exclude]="'.ip-addresses-dropdown'" [attachOutsideOnClick]="true"
                     (clickOutside)="methodForToggleSection('rangeSpanSection')">
                     <button mat-button [matMenuTriggerFor]="menurange" (click)="showIPWrap = !showIPWrap" type="button"
-                        class="mat-select-btn range-wrapper text-left w-100">
+                        class="mat-select-btn range-wrapper text-left w-100" [disabled]="isUserRestricted">
                         {{ selectedIPRange }}
                         <span class="pull-right"><span class="fa fa-caret-down"></span></span>
                     </button>
@@ -151,11 +152,7 @@
             <div class="action-button text-right text-xl-left" [ngClass]="{ 'text-xl-right': isUpdtCase }">
                 <div class="add-btn">
                     <button mat-stroked-button color="primary" [ladda]="createPermissionInProcess$ | async" [disabled]="
-                            permissionForm.invalid ||
-                            (remainingUsers === 0 &&
-                                (activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(
-                                    restrictedModules.Users
-                                ))
+                            permissionForm?.invalid || isUserRestricted
                         " class="btn custom-btn">
                         <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                         <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
@@ -171,7 +168,7 @@
             </button>
         </div>
     </div>
-    <restricted-module-message [restrictedModule]="restrictedModules.Users"
-        [remainingCount]="remainingUsers" [useRouterLink]="true">
+    <restricted-module-message [restrictedModule]="restrictedModules.Users" [isUserRestricted]="isUserRestricted"
+        [useRouterLink]="true">
     </restricted-module-message>
 </form>

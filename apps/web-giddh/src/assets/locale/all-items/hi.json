@@ -234,6 +234,17 @@
                     }
                 },
                 {
+                    "label": "रसीद सेटिंग",
+                    "link": "/pages/vouchers/preview/receipt/settings",
+                    "icon": "icon-reciept-new",
+                    "description": "रसीद सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "बिक्री रजिस्टर",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -455,6 +466,17 @@
                     "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "कुल, और अप्रयुक्त भुगतान",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "भुगतान सेटिंग",
+                    "link": "/pages/vouchers/preview/payment/settings",
+                    "icon": "icon-reciept-new",
+                    "description": "भुगतान सेटिंग",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
@@ -896,9 +918,10 @@
                     "icon": "icon-tally-import1"
                 },
                 {
-                    "label": "बहु-मुद्रा रिपोर्ट",
-                    "link": "/pages/multi-currency-report",
-                    "icon": "icon-multi-currency"
+                    "label": "परियोजनावार लेखांकन",
+                    "link": "/pages/project-wise-accounting/list",
+                    "icon": "icon-balance-sheet-new",
+                    "description": "प्रत्येक परियोजना के वित्तीय विवरण को कुशलतापूर्वक ट्रैक, प्रबंधित और विश्लेषण करें।"
                 }
             ]
         },

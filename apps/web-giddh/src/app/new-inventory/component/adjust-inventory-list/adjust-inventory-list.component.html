@@ -10,7 +10,10 @@
     <div class="container-fluid mr-t15 adjust-inventory-list-page">
         <div class="d-flex align-items-center column-gap1 adjust-inventory-header">
             <div
-                *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                *ngIf="
+                    currentCompanyBranches?.length > 2 &&
+                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                "
                 class="branch-width mr-0"
             >
                 <dropdown-field
@@ -51,7 +54,7 @@
                 {{ commonLocaleData?.app_clear }}
             </button>
             <button
-              *ngIf="(!isCompany && !isConsolidatedBranch)"
+                *ngIf="!isCompany && !isConsolidatedBranch"
                 id="add-adjustment-btn"
                 mat-stroked-button
                 color="primary"
@@ -289,7 +292,7 @@
                                     </span>
                                 </button>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                    <button   class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
+                                    <button class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
                                         {{ commonLocaleData?.app_edit }}
                                     </button>
                                     <button
@@ -335,19 +338,21 @@
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div class="d-flex" [hidden]="show">
-        <span> {{ title }}</span>
-        <i class="icon-search d-flex cursor-pointer align-items-center" (click)="toggleSearch(fieldName)"></i>
-    </div>
-    <div class="input-container position-relative" [hidden]="!show">
-        <text-field
-            [type]="'text'"
-            [placeholder]="getSearchFieldText(fieldName)"
-            [cssClass]="'form-control search-table mat-field-border w-100 min-width-unset pd-15 pr-0'"
-            [formControl]="formControl"
-            [autoFocus]="show"
-        >
-        </text-field>
+    <div class="search-table">
+        <div class="d-flex" [hidden]="show">
+            <span> {{ title }}</span>
+            <i class="icon-search d-flex cursor-pointer align-items-center" (click)="toggleSearch(fieldName)"></i>
+        </div>
+        <div class="input-container position-relative" [hidden]="!show">
+            <text-field
+                [type]="'text'"
+                [placeholder]="getSearchFieldText(fieldName)"
+                [cssClass]="'form-control mat-field-border w-100 min-width-unset pd-15 pr-0'"
+                [formControl]="formControl"
+                [autoFocus]="show"
+            >
+            </text-field>
+        </div>
     </div>
 </ng-template>
 <!-- Datepicker template -->

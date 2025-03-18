@@ -2,7 +2,6 @@
 voucher-component,
 create-update-group,
 giddh-datepicker,
-add-company,
 stock-create-edit,
 dropdown-field,
 input-field,
@@ -660,6 +659,16 @@ input-field {
                     }
                 }
             }
+        }
+    }
+}
+
+mat-option {
+    &.dropdown-tick-icon-position {
+        mat-pseudo-checkbox {
+            position: absolute;
+            pointer-events: none;
+            right: 35px;
         }
     }
 }
