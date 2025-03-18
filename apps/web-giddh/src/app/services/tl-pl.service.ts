@@ -120,7 +120,7 @@ export class TlPlService {
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res;
                     data.request = request;
