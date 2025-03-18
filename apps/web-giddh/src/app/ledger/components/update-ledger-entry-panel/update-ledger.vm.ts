@@ -476,7 +476,6 @@ export class UpdateLedgerVm {
         }
 
         this.generateGrandTotal();
-
         this.generateCompoundTotal();
     }
 
@@ -529,7 +528,6 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
-
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
