@@ -13417,6 +13417,9 @@ voucher-component {
     .mdc-text-field__input {
         background-color: var(--color-transparent-background) !important; 
     }
+    .mat-mdc-form-field input {
+        background-color: var(--color-transparent-background) !important; 
+    }
 }
 
 .new-branch-transfer-page {
