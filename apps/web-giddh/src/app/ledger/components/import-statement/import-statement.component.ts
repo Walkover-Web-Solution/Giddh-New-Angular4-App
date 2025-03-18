@@ -14,7 +14,7 @@ import { SAMPLE_FILES_URL } from '../../../app.constant';
 import { saveAs } from 'file-saver';
 import { LedgerComponentStore } from '../../ledger.store';
 import { OptionInterface } from '../../../models/api-models/Voucher';
-import { ImportStepEnum, ImportStatementType } from './import-statement.const';
+import { ImportStepEnum, ImportStatementType, VoucherType } from './import-statement.const';
 import { FileTypeEnum } from '../../../shared/Enums/common.enum';
 
 @Component({
@@ -81,7 +81,7 @@ export class ImportStatementComponent implements OnDestroy {
                 const requestObject = {
                     accountUniqueName: this.inputData?.accountUniqueName,
                     subType: "VOUCHER",
-                    type: "ACCOUNT_WISE_VOUCHER_IMPORT",
+                    type: VoucherType.AccountWiseImport,
                     isHeaderProvided: this.postRequest.isHeaderProvided
                 }
                 this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
@@ -93,7 +93,7 @@ export class ImportStatementComponent implements OnDestroy {
                 this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(importVoucherSuccessResponse));
                 this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
                 this.dialogRef.close(true);
-                this.router.navigate(['/pages/import/voucher']);
+                this.router.navigate(['pages', 'import', VoucherType.AccountWise]);
             }
         });
     }

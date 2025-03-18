@@ -9,6 +9,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { CommonActions } from '../../actions/common.actions';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'import-wizard',
@@ -121,10 +122,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
             if (voucherResponse) {
                 const requestObject = {
-                    accountUniqueName: this.voucherResponse.accountUniqueName,
+                    accountUniqueName: this.voucherResponse.accountUniqueName ?? "",
                     subType: "VOUCHER",
-                    type: "ACCOUNT_WISE_VOUCHER_IMPORT",
-                    isHeaderProvided: this.voucherResponse.isHeaderProvided
+                    type: this.voucherResponse.accountUniqueName ? VoucherType.AccountWiseImport : VoucherType.VoucherWiseImport,
+                    isHeaderProvided: this.voucherResponse.isHeaderProvided,
+                    voucherType: this.voucherResponse.selectVoucher ?? ""
                 }
                 this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
             }
@@ -165,7 +167,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onFileUpload(data: any) {
-        if (this.entity === "voucher") {
+        if ([VoucherType.AccountWise, VoucherType.VoucherWise].includes(this.entity as VoucherType)) {
             this.voucherResponse = data;
             this.ledgerComponentStore.getSignedUrl(this.voucherResponse.file.name);
             return;
