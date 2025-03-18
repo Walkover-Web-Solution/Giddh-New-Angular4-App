@@ -3799,7 +3799,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .download-invoice-ledger {
-    padding-left: 5px;
+    padding-left: 15px;
     align-items: center;
     font-size: var(--font-size-15);
 }
@@ -7739,11 +7739,11 @@ app-header {
 }
 
 .widthVW-100 {
-        width: 100vw;
+    width: 100vw;
 }
 
 .place-content-center {
-    place-content: center;
+    place-content: center !important;
 }
 
 /* my css */

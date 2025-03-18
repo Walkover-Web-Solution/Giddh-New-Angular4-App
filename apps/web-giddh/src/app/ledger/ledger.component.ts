@@ -333,8 +333,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public carouselPrevious: boolean;
     /** Holds carousel next event*/
     public carouselNext: boolean;
-    /** Holds ledger type*/
-    public ledgerType: LedgerType;
 
     constructor(
         private store: Store<AppState>,
@@ -1502,10 +1500,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * Show update ledger panel
      *
      * @param {ITransactionItem} txn
-     * @param {('cr' | 'dr')} ledgerType
+     * @param {LedgerType} ledgerType
      * @memberof LedgerComponent
      */
-    public showUpdateLedgerModal(txn: ITransactionItem, ledgerType): void {
+    public showUpdateLedgerModal(txn: ITransactionItem, ledgerType: LedgerType): void {
         const transactionsList = ledgerType === 'cr' ? this.ledgerTransactions.creditTransactions : this.ledgerTransactions.debitTransactions;
         const txnIndex = transactionsList.findIndex(t => t.entryUniqueName === txn.entryUniqueName);
 
@@ -2860,9 +2858,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * This will keep the track of touch event and will check if double clicked on any transaction, it will open the update ledger modal
      *
      * @param {ITransactionItem} txn
+     * @param {LedgerType} ledgerType
      * @memberof LedgerComponent
      */
-    public showUpdateLedgerModalIpad(txn: ITransactionItem, ledgerType): void {
+    public showUpdateLedgerModalIpad(txn: ITransactionItem, ledgerType: LedgerType): void {
         if (this.touchedTransaction?.entryUniqueName === txn?.entryUniqueName) {
             this.showUpdateLedgerModal(txn, ledgerType);
         } else {
