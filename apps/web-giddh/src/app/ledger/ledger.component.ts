@@ -15,10 +15,10 @@ import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
-import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
+import { AccountRequestV2, AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -51,6 +51,7 @@ import { saveAs } from 'file-saver';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { LedgerComponentStore } from './ledger.store';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
     selector: 'ledger',
@@ -164,7 +165,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Export ledger request object */
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public accountUniquename: any;
+    public accountUniqueName: any;
     /** Transactions dates array */
     public allTransactionsList: any[] = [];
     public allTransactionDates: any[] = [];
@@ -319,9 +320,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Hold ledger grid total columns static value */
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
-    public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    public ledgerGridColumnsValue: number[] = [1, 2, 1];
     /** Observable for post balance success response */
     public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
+    /** Holds ledger view */
+    public ledgerView: TLedgerView = LedgerViewEnum.TView;
+    /** Holds ledger view enum */
+    public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
+    /** Hold ledger grid total columns static value */
+    public ledgerStatementViewGridTotalColumns: number = 9;
+    /** Hold ledger grid total columns value */
+    public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2]
 
     constructor(
         private store: Store<AppState>,
@@ -1176,10 +1185,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
-            if ((this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && this.accountUniquename === 'loanandoverdraft')) && this.selectedTxnAccUniqueName) {
+            if ((this.accountUniqueName === 'cash' || this.accountUniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && this.accountUniqueName === 'loanandoverdraft')) && this.selectedTxnAccUniqueName) {
                 this.getInvoiceLists({ accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid' });
             } else {
-                this.getInvoiceLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
+                this.getInvoiceLists({ accountUniqueName: this.accountUniqueName, status: 'unpaid' });
             }
         }
     }
@@ -1192,7 +1201,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getInvoiceListsForCreditNote(event: any): void {
         const voucherType = (event) ? event[1] : "";
-        if (voucherType && this.selectedTxnAccUniqueName && this.accountUniquename) {
+        if (voucherType && this.selectedTxnAccUniqueName && this.accountUniqueName) {
             let request;
 
             let activeAccount = null;
@@ -1202,7 +1211,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: event[0]?.selectedAccount, voucherType: voucherType, ledgerAccount: activeAccount });
             } else {
                 request = {
-                    accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
+                    accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniqueName],
                     voucherType
                 };
             }
@@ -2255,6 +2264,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getCurrencyRate(res);
     }
 
+    /**
+     * Handle change ledger view
+     *
+     * @param {MatSlideToggleChange} event
+     * @memberof LedgerComponent
+     */
+    public toggleLedgerView(event: MatSlideToggleChange): void {
+        this.ledgerView = event.checked ? LedgerViewEnum.TView : LedgerViewEnum.StatementView;
+
+        this.ledgerComponentStore.updateAccount({
+            model: {
+                ledgerView: this.ledgerView as TLedgerView
+            },
+            accountUniqueName: this.accountUniqueName
+        });
+    }
+
     public getAdvanceSearchTxn() {
         this.isAdvanceSearchImplemented = true;
         if (!this.todaySelected) {
@@ -2659,9 +2685,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 
                 if (data[0] && data[1]) {
-
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
+                    console.log("activeAccount", this.lc.activeAccount);
+
+                    if (data[0]?.ledgerView) {
+                        this.ledgerView = data[0]?.ledgerView;
+                    }
+
                     this.loadDefaultSearchSuggestions();
                     this.profileObj = profile;
                     this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -2673,7 +2704,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     let parentOfAccount = (accountDetails?.parentGroups?.length) ? accountDetails?.parentGroups[0] : null;
 
                     this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
-                    this.accountUniquename = accountDetails?.uniqueName;
+                    this.accountUniqueName = accountDetails?.uniqueName;
 
                     this.isBankOrCashAccount = accountDetails?.parentGroups?.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
                     if (accountDetails?.currency && profile?.baseCurrency) {
@@ -2991,6 +3022,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             event.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
+                console.log(accountUniqueName, data.body);
+
                 txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
                 const taxes = this.generalService.fetchTaxesOnPriority(

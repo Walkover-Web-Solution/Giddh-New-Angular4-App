@@ -5,6 +5,8 @@ import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { LedgerService } from "../services/ledger.service";
 import { SearchService } from "../services/search.service";
+import { AccountService } from "../services/account.service";
+import { AccountRequestV2 } from "../models/api-models/Account";
 
 export interface LedgerState {
     ledgerBalance: any;
@@ -27,7 +29,8 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
 
     constructor(private toasterService: ToasterService,
         private ledgerService: LedgerService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private accountService: AccountService
     ) {
         super(DEFAULT_LEDGER_STATE);
     }
@@ -204,6 +207,33 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                         (error: any) => {
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({ accountSearch: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Update account details patch API call
+     *
+     * @memberof LedgerComponentStore
+     */
+    readonly updateAccount = this.effect((data: Observable<{ model: AccountRequestV2, accountUniqueName: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.accountService.UpdateAccountWithoutAccountUniqueName(req.model, req.accountUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                res.body?.message && this.toasterService.showSnackBar('success', res.body.message);
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
                         }
                     ),
                     catchError((err) => EMPTY)

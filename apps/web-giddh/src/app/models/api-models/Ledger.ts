@@ -441,3 +441,10 @@ export interface IUnpaidInvoiceListResponse {
 export interface IVariant extends IParticular {
     variantDiscount?: any;
 }
+
+export type  TLedgerView  = 'STATEMENT_VIEW' | 'T_VIEW';
+
+export enum LedgerViewEnum  {
+    StatementView = 'STATEMENT_VIEW',
+    TView = 'T_VIEW'
+}
