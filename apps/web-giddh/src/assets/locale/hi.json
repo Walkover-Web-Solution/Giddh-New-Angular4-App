@@ -374,7 +374,9 @@
         "entries": "प्रविष्टियां",
         "trial_balance": "संतुलन परीक्षण",
         "master": "मास्टर",
-        "voucher": "वाउचर"
+        "voucher": "वाउचर",
+        "account_wise": "खाते अनुसार",
+        "voucher_wise": "वाउचर अनुसार"
     },
     "app_please_select": "कृपया चयन कीजिए",
     "app_company": "कंपनी",

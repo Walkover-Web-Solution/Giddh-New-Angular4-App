@@ -66,8 +66,11 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         count: this.defaultCount,
         withStocks: false
     };
-    public selectVoucher: string;
-    public voucherListResponse;
+    /** Stores select voucher name */
+    public selectVoucher: string = "";
+    /** Stores the voucher response */
+    public voucherListResponse : any[] = [];
+    /** Holds a reference to the `VoucherType` enum */
     public voucherType: typeof VoucherType = VoucherType;
 
     constructor(

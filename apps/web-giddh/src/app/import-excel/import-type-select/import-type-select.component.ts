@@ -26,6 +26,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds a reference to the `VoucherType` enum */
     public voucherType: typeof VoucherType = VoucherType;
 
     constructor(

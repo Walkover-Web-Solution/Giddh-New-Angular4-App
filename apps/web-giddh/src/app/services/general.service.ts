@@ -2211,7 +2211,14 @@ export class GeneralService {
         }, url);
     }
 
-    public getVoucherTypeList(commonLocaleData : any) : any[] {
+    /**
+     * Retrieves a list of available voucher types with localized labels.
+     *
+     * @param commonLocaleData 
+     * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
+     * @memberof GeneralService
+     */
+    public getVoucherTypeList(commonLocaleData: any): Array<{ label: string; value: string }> {
         const voucherTypeList = [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'
