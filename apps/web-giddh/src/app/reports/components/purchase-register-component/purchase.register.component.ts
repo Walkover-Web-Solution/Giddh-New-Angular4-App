@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -101,6 +101,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
+        private changeDetectorRef: ChangeDetectorRef,
         private ledgerService: LedgerService) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -301,6 +302,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                    selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
@@ -311,6 +313,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                this.changeDetectorRef.detectChanges();
             }
         });
     }

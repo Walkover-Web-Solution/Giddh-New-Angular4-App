@@ -42,6 +42,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     private allowDiscountValueChanges: boolean = false;
     /** Total discount amount */
     public totalDiscountAmount: number = 0;
+    /** True if field is readonly */
+    @Input() public readonly: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,

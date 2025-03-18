@@ -325,7 +325,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             */
             return;
         }
-        // this.trigger?.closePanel();
+        this.closePanel();
     }
 
     /**
