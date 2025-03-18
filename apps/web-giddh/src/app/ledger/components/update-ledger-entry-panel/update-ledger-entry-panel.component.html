@@ -18,7 +18,7 @@
                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                 branches?.length > 1)
                         "
-                        [cssClass]="'text-white-color text-underline cursor-pointer'"
+                        [cssClass]="'text-color-white text-underline cursor-pointer'"
                         name="entryDate"
                         [showToggleIcon]="false"
                         [(ngModel)]="vm.selectedLedger.entryDate"
@@ -102,7 +102,7 @@
             <div class="col d-flex justify-content-end align-items-center pr-0">
                 <button
                     aria-hidden="true"
-                    class="cross-button text-white-color d-flex align-items-center justify-content-center"
+                    class="cross-button text-color-white d-flex align-items-center justify-content-center"
                     mat-button
                     mat-dialog-close
                     [attr.aria-label]="commonLocaleData?.app_close"
@@ -116,7 +116,7 @@
         <div mat-dialog-content class="position-relative">
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
-                    <h1>{{ localeData?.no_data_found_message }}</h1>
+                    <h1>{{ localeData?.no_transaction_found_message }}</h1>
                     <img
                         class="mr-t1"
                         height="200"
@@ -152,11 +152,6 @@
                                     <table class="width-100 card-table">
                                         <thead class="hidden-xs">
                                             <tr class="thead-background1 row">
-                                                <!-- <th class="col-3 border-top-none">
-                                                    <span class="cursor-pointer">
-                                                        {{ commonLocaleData?.app_date }}
-                                                    </span>
-                                                </th> -->
                                                 <th class="col-9 border-top-none">
                                                     {{ commonLocaleData?.app_particular }}
                                                 </th>
@@ -817,7 +812,6 @@
                                 <thead class="hidden-xs">
                                     <tr class="thead-background1 row">
                                         <th class="col-9 border-top-none">{{ commonLocaleData?.app_particular }}</th>
-
                                         <th class="col-3 text-right border-top-none">
                                             {{ commonLocaleData?.app_amount }}
                                         </th>

@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component, ContentChild, EventEmitter, HostListener, Input, Output, TemplateRef } from '@angular/core';
+import { Component, ContentChild, EventEmitter, HostListener, Input, Output, TemplateRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CarouselInputEnum } from './carousel.constant';
 
 @Component({
     selector: 'giddh-carousel',
@@ -25,7 +26,9 @@ export class CarouselComponent {
     @Output() public navigatePrevious: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emits navigate to next slide */
     @Output() public navigateNext: EventEmitter<boolean> = new EventEmitter<boolean>();
-
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    
     constructor(
     ) { }
 
@@ -54,8 +57,8 @@ export class CarouselComponent {
 
         // Check if the focused element is an input field, textarea, or a contenteditable element
         const isInputFocused = activeElement && (
-            activeElement.tagName === 'INPUT' ||
-            activeElement.tagName === 'TEXTAREA'
+            activeElement.tagName === CarouselInputEnum.Input ||
+            activeElement.tagName === CarouselInputEnum.Textarea
         );
 
         if (!isInputFocused) { // Only navigate if no input field is focused

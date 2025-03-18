@@ -1203,6 +1203,10 @@ textarea {
     }
 }
 
+.border-top {
+    border-top: 1px solid var(--color-common-secondary-border) !important;
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -7734,6 +7738,14 @@ app-header {
     height: 100vh;
 }
 
+.widthVW-100 {
+        width: 100vw;
+}
+
+.place-content-center {
+    place-content: center;
+}
+
 /* my css */
 .new-ledger-text-right .input-wrapper .form-control {
     text-align: right !important;
@@ -13638,7 +13650,7 @@ aside-menu-product-service {
     }
 }
 
-.text-white-color {
+.text-color-white {
     color: var(--white-color) !important;
 }
 
@@ -13853,16 +13865,17 @@ mat-list {
 }
 .mdc-text-field--disabled {
     .mdc-text-field--filled {
-       background-color: transparent;
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
 //Common class to make dialog background transparent add this in panel class
 .dialog-bg-transparent {
     .mat-mdc-dialog-surface {
-        background-color: transparent !important;
+        background-color: var(--color-transparent-background) !important;
     }
 }
+
 .select-multiple-chiplist {
     mat-chip-grid {
         mat-chip-row {

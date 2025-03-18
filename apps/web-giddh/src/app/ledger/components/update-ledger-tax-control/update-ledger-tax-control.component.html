@@ -20,10 +20,10 @@
         [readonly]="readonly"
     ></input-field>
     <mat-menu #taxControlMenu="matMenu">
-        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
-            <div class="discount-checkbox-wrapper d-flex flex-column">
+        <div class="px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
+            <div class="discount-checkbox-wrapper">
                 <ng-container *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
-                    <span
+                    <p
                         (click)="$event.stopPropagation()"
                         class="d-flex align-items-center width-100 m-0 pd-0"
                         [ngClass]="{ 'disabled-label': tax.isDisabled }"
@@ -41,13 +41,14 @@
                             (focusout)="taxLabelBluring(taxLabel)"
                         ></mat-checkbox>
                         <span class="pull-left text-ellipsis">{{ tax.name }}</span>
-                    </span>
+                    </p>
                 </ng-container>
             </div>
         </div>
-        <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+        <div class="border-top pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
             <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
         </div>
         <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
     </mat-menu>
 </span>
+

@@ -334,13 +334,13 @@ p.edit-message {
     background: var(--color-white);
     text-align: center;
     font-size: var(--font-size-32);
-    height: 594px;
+    height: 600px;
     width: 100%;
     padding: 3rem;
     color: var(--color-gray);
 }
 .cross-button {
-    font-size: 2rem;
+    font-size: 32px;
 }
 /* responsive */
 @media only screen and (max-width: 1359px) {
