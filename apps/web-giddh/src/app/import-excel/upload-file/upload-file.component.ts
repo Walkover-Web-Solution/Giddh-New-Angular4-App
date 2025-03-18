@@ -13,6 +13,7 @@ import { AppState } from '../../store';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { cloneDeep } from '../../lodash-optimized';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 @Component({
     selector: 'upload-file',
@@ -69,7 +70,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** Stores select voucher name */
     public selectVoucher: string = "";
     /** Stores the voucher response */
-    public voucherListResponse : any[] = [];
+    public voucherListResponse: IOption[] = [];
     /** Holds a reference to the `VoucherType` enum */
     public voucherType: typeof VoucherType = VoucherType;
 
