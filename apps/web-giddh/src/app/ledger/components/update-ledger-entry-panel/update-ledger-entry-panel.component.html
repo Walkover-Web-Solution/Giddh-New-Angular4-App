@@ -1522,7 +1522,7 @@
                             "
                         >
                             <div
-                                class="width-100 total-detail-table align-items-baseline column-gap1"
+                                class="width-100 total-detail-table align-items-baseline column-gap15"
                                 [ngClass]="{ 'add-multicurrency': vm.isMultiCurrencyAvailable }"
                             >
                                 <ng-template [ngIf]="vm.showNewEntryPanel && vm.stockTrxEntry">
@@ -1890,6 +1890,8 @@
                                         </p>
                                     </div>
                                 </ng-template>
+                            </div>
+                            <div class="pull-right mr-t1">
                                 <div
                                     *ngIf="vm.showNewEntryPanel && isTcsTdsApplicable"
                                     class="text-right table-amount last-table-amount"
@@ -1915,7 +1917,7 @@
                                                 >{{ localeData?.other_tax }}</mat-checkbox
                                             >
                                         </div>
-
+    
                                         <div
                                             *ngIf="vm.selectedLedger.isOtherTaxesApplicable"
                                             class="pl-1 position-relative"
@@ -2220,7 +2222,7 @@
                                         <table class="xs-table-block mb-1">
                                             <tr class="d-flex align-items-center flex-wrap">
                                                 <td class="select2-parent pd-r1">
-                                                    <div class="form-group mrB15">
+                                                    <div class="form-group mr-b15">
                                                         <dropdown-field
                                                             [label]="commonLocaleData?.app_voucher_type"
                                                             [id]="'update-ledger-voucher-type-default'"
@@ -2258,7 +2260,7 @@
                                                             vm.selectedLedger?.voucher?.shortCode == 'jr')
                                                     "
                                                 >
-                                                    <div class="form-group mrB15">
+                                                    <div class="form-group mr-b15">
                                                         <input-field
                                                             [label]="commonLocaleData?.app_number"
                                                             *ngIf="vm.selectedLedger?.voucher?.shortCode === 'sal'"
@@ -2291,7 +2293,7 @@
                                                         vm.selectedLedger?.voucher?.shortCode == 'debit note'
                                                     "
                                                 >
-                                                    <div class="form-group mrB15">
+                                                    <div class="form-group mr-b15">
                                                         <reactive-dropdown-field
                                                             [label]="commonLocaleData?.app_reference_invoice"
                                                             *ngIf="voucherApiVersion === 2"
@@ -2445,7 +2447,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="pd-r1">
-                                                    <div class="form-group mr-b05">
+                                                    <div class="form-group mr-b15">
                                                         <input-field
                                                             [label]="localeData?.voucher_no"
                                                             [id]="'update-ledger-voucher-no'"
@@ -2468,7 +2470,7 @@
                                                         (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
                                                             vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                     "
-                                                    class="pd-r1 pb-1"
+                                                    class="pd-r1 pd-b15"
                                                 >
                                                     <input-field
                                                         [id]="'update-ledger-invoice-number'"
