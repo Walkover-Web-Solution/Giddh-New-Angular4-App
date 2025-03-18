@@ -1,6 +1,12 @@
 <!-- upload And Map Content start-->
 <div class="upload-and-map-content">
-    <h2 class="text-center">{{ localeData?.import }} {{ title | titlecase }}</h2>
+    <h2 class="text-center">{{ localeData?.import }} 
+        {{ (entity === voucherType.AccountWise || entity === voucherType.VoucherWise) 
+            ? (commonLocaleData?.app_import_type?.voucher + ' - ' + 
+               (entity === voucherType.AccountWise 
+                  ? commonLocaleData?.app_import_type?.account_wise 
+                  : commonLocaleData?.app_import_type?.voucher_wise)) 
+            : (title | titlecase) }}</h2>
     <div
         *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
         class="form-group max-width-500 center-block"
@@ -89,7 +95,7 @@
             {{ localeData?.header_provided }}
             <div class="mr-t1">
                 <reactive-dropdown-field
-                    *ngIf="entity === 'account-wise'"
+                    *ngIf="entity === voucherType.AccountWise"
                     [label]="commonLocaleData?.app_select_account"
                     [placeholder]="commonLocaleData?.app_select"
                     [options]="accountSearchResponse"
@@ -103,7 +109,7 @@
                 >
                 </reactive-dropdown-field>
                 <reactive-dropdown-field
-                    *ngIf="entity === 'voucher-wise'"
+                    *ngIf="entity === voucherType.VoucherWise"
                     [label]="commonLocaleData?.app_select_voucher"
                     [placeholder]="commonLocaleData?.app_select"
                     [options]="voucherListResponse"
@@ -137,7 +143,7 @@
                 matTooltipPosition="above"
                 color="primary"
                 [ladda]="isLoading"
-                [disabled]="file === null || entity === 'account-wise' && !accountUniqueName || entity === 'voucher-wise' && !selectVoucher"
+                [disabled]="file === null || entity === voucherType.AccountWise && !accountUniqueName || entity === voucherType.VoucherWise && !selectVoucher"
                 (click)="handleFileUpload(file)"
             >
                 {{ commonLocaleData?.app_next }}

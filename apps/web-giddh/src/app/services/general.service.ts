@@ -2212,8 +2212,6 @@ export class GeneralService {
     }
 
     public getVoucherTypeList(commonLocaleData : any) : any[] {
-        console.log(commonLocaleData.app_voucher_types);
-        
         const voucherTypeList = [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'

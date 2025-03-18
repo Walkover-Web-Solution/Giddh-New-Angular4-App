@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
 import { MatDialog } from '@angular/material/dialog';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'import-type-select',
@@ -25,6 +26,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    public voucherType: typeof VoucherType = VoucherType;
 
     constructor(
         private store: Store<AppState>,

@@ -12,6 +12,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { cloneDeep } from '../../lodash-optimized';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'upload-file',
@@ -67,6 +68,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     };
     public selectVoucher: string;
     public voucherListResponse;
+    public voucherType: typeof VoucherType = VoucherType;
 
     constructor(
         private toasterService: ToasterService,
@@ -134,7 +136,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             if (data) {
                 this.entity = data.type;
                 this.setTitle();
-                if (this.entity === 'account-wise' && !this.accountSearchRequest.isLoading) {
+                if (this.entity === this.voucherType.AccountWise && !this.accountSearchRequest.isLoading) {
                     this.searchAccount();
                 }
                 if (this.entity === "banktransactions") {
