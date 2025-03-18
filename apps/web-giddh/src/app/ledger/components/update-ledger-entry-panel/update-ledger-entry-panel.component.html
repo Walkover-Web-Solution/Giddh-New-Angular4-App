@@ -184,10 +184,10 @@
                                                             'other-account-entry':
                                                                 isPettyCash && txn?.particular?.uniqueName === 'others'
                                                         }"
-                                                        class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                        class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center column-gap5"
                                                     >
                                                         <ng-template [ngIf]="!txn.isDiscount">
-                                                            <div class="d-flex update-ledger-account w-100">
+                                                            <div class="d-flex update-ledger-account w-100 column-gap5">
                                                                 <span
                                                                     *ngIf="
                                                                         (!dbtSelect.isOpen &&
@@ -197,7 +197,7 @@
                                                                     >{{ localeData?.to }}</span
                                                                 >
                                                                 <select-field
-                                                                    class="w-100"
+                                                                    class="w-100 flex-grow-1"
                                                                     [id]="'debit-select-' + i"
                                                                     [cssClass]="'form-control bg-transparent'"
                                                                     [showCreateNew]="true"
@@ -286,6 +286,7 @@
                                                         <ng-template [ngIf]="txn.isDiscount">
                                                             {{ commonLocaleData?.app_to }}
                                                             <text-field
+                                                                class="flex-grow-1"
                                                                 [readonly]="true"
                                                                 [(ngModel)]="txn.particular.name"
                                                                 [cssClass]="'transaction-particular-name border-none'"
@@ -840,10 +841,10 @@
                                                     'other-account-entry':
                                                         isPettyCash && txn?.particular?.uniqueName === 'others'
                                                 }"
-                                                class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center column-gap5"
                                             >
                                                 <ng-template [ngIf]="!txn.isDiscount">
-                                                    <div class="d-flex update-ledger-account w-100">
+                                                    <div class="d-flex update-ledger-account w-100 column-gap5">
                                                         <span
                                                             *ngIf="
                                                                 (!dbtSelect.isOpen && txn?.particular?.uniqueName) ||
@@ -852,7 +853,7 @@
                                                             >{{ localeData?.to }}</span
                                                         >
                                                         <select-field
-                                                            class="w-100"
+                                                            class="w-100 flex-grow-1"
                                                             [id]="'debit-select-' + i"
                                                             [cssClass]="'form-control'"
                                                             [showCreateNew]="true"
@@ -929,6 +930,7 @@
                                                 <ng-template [ngIf]="txn.isDiscount">
                                                     {{ commonLocaleData?.app_to }}
                                                     <text-field
+                                                        class="flex-grow-1"
                                                         [readonly]="true"
                                                         [(ngModel)]="txn.particular.name"
                                                         [cssClass]="'transaction-particular-name border-none'"
@@ -1955,7 +1957,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="clearfix pd-1 text-right bd-rb pr-0">
                                 <span class="in-words font-15">
                                     {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
