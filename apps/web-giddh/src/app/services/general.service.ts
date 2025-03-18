@@ -2229,7 +2229,7 @@ export class GeneralService {
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
     }
-    
+
     /**
     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
     *
@@ -2241,12 +2241,12 @@ export class GeneralService {
     public replacePlaceholders(text: string, ...args: string[]): string {
         return text.replace(/\[.*?\]/g, () => args.shift() || '');
     }
-    
+
     /**
      * Retrieves a list of available voucher types with localized labels.
      *
      * @param commonLocaleData 
-     * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
+     * @returns {IOption[]} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
     public getVoucherTypeList(commonLocaleData: any): IOption[] {
