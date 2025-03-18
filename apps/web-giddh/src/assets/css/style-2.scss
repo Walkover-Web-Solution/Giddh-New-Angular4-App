@@ -13892,3 +13892,10 @@ mat-list {
         }
     }
 }
+.mat-mdc-checkbox {
+    &.mat-mdc-checkbox-disabled {
+        label {
+            color: var(--color-common-primary-text) !important;
+        }
+    }
+}
