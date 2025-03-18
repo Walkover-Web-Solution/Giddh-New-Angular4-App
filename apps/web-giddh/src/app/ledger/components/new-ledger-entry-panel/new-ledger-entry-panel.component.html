@@ -468,7 +468,7 @@
                                                 (selectedOption)="getInvoiceListsData($event)"
                                                 [options]="voucherTypeList | async"
                                                 [(ngModel)]="blankLedger.voucherType"
-                                                [disabled]="isReadOnly"
+                                                [readonly]="isReadOnly"
                                             >
                                             </reactive-dropdown-field>
                                         </div>
@@ -768,7 +768,6 @@
                                                 [disabled]="isReadOnly"
                                                 [appearance]="'outline'"
                                                 [(ngModel)]="blankLedger.tagNames"
-                                                [keepMenuOpenAfterSelect]="true"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [showMatLabel]="true"
                                                 [label]="localeData?.assign_tag"
