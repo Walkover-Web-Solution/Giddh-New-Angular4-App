@@ -208,6 +208,7 @@
         "others": "अन्य"
     },
     "app_duration": {
+        "duration": "अवधि",
         "monthly": "मासिक",
         "quarterly": "तिमाही",
         "half_yearly": "अर्धवार्षिक",
