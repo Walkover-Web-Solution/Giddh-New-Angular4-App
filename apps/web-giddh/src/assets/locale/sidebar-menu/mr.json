@@ -639,18 +639,6 @@
                     "icon": "icon-tally-import1"
                 },
                 {
-                    "label": "बहु-चलन अहवाल",
-                    "link": "/pages/multi-currency-report",
-                    "icon": "icon-multi-currency",
-                    "description": "बहु-चलन अहवाल",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2,
-                            "tabIndex": 0
-                        }
-                    }
-                },
-                {
                     "label": "प्रकल्पनिहाय लेखांकन",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new"

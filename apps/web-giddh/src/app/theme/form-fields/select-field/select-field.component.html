@@ -52,13 +52,13 @@
                 [matTooltip]="option?.label"
                 matTooltipPosition="right"
             >
-                <a href="javascript:;" *ngIf="createNewText"
+                <div *ngIf="createNewText"
                     class="position-sticky d-flex justify-content-between">
                     <div class="item create-new">{{ createNewText }}</div>
                     <div class="item create-new-command" *ngIf="showKeyboardCommand">
                         {{ showKeyboardCommand }}
                     </div>
-                </a>
+                </div>
                 </mat-option
             >
         </ng-container>

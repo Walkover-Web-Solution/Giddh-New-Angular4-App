@@ -639,18 +639,6 @@
                     "icon": "icon-tally-import1"
                 },
                 {
-                    "label": "Multi-currency Report",
-                    "link": "/pages/multi-currency-report",
-                    "icon": "icon-multi-currency",
-                    "description": "Multi-currency report",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2,
-                            "tabIndex": 0
-                        }
-                    }
-                },
-                {
                     "label": "Project wise accounting",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new"

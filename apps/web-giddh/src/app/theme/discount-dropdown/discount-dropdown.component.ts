@@ -11,6 +11,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
     styleUrls: ["./discount-dropdown.component.scss"]
 })
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
+    /** Element ref for mat menu */
     @ViewChild('menuTrigger') public menuTrigger: MatMenuTrigger;
     /** List of discounsts */
     @Input() public discountsList: any[] = [];
@@ -222,5 +223,14 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     public createNew(): void {
         this.createNewDiscount.emit();
+    }
+
+    /**
+     * Close discount menu
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    public closeDiscountMenu(): void {
+        this.menuTrigger.closeMenu();
     }
 }

@@ -918,11 +918,6 @@
                     "icon": "icon-tally-import1"
                 },
                 {
-                    "label": "बहु-मुद्रा रिपोर्ट",
-                    "link": "/pages/multi-currency-report",
-                    "icon": "icon-multi-currency"
-                },
-                {
                     "label": "परियोजनावार लेखांकन",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",

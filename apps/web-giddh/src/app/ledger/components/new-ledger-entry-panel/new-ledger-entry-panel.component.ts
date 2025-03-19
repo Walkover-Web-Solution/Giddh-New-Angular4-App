@@ -26,7 +26,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
@@ -124,9 +123,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Emitter to update the parent when any field other than total is changed */
     @Output() public isTotalChangedChange: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
-    @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
+    /** Holds select discount control component reference */
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
+    /** Holds select multiple fields component reference */
     @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
+    /** Holds select tax control component reference */
     @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
@@ -448,13 +449,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.trigger.closeMenu();
             }
         }, 200);
-    }
-
-    @HostListener('click', ['$event'])
-    public clicked(e) {
-        if (this.sh && e.path && !this.sh.ele?.nativeElement.contains(e.path[3])) {
-            this.sh.hide();
-        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {

@@ -85,9 +85,11 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * prepare discount obj
+     * Prepare discount obj
+     * 
+     * @memberof LedgerDiscountComponent
      */
-    public prepareDiscountList() {
+    public prepareDiscountList(): void {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         }
