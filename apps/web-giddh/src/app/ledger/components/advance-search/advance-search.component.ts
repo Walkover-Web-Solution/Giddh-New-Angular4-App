@@ -616,7 +616,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
-            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            ((typeof query === 'string') || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -642,6 +642,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         ];
                     }
                     this.accounts$ = observableOf(this.accounts);
+                    this.changeDetectionRef.detectChanges();
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {

@@ -1398,9 +1398,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.discountComponent) {
             this.discountComponent.discountMenu = false;
         }
-        if (this.taxControll) {
-            this.taxControll.showTaxPopup = false;
-        }
     }
 
     public hideDiscount(): void {
@@ -1413,7 +1410,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public hideTax(): void {
         if (this.taxControll) {
             this.taxControll.change();
-            this.taxControll.showTaxPopup = false;
         }
     }
 

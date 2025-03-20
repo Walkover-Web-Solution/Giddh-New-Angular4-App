@@ -195,7 +195,6 @@ report-filters,
     }
 
     .mdc-text-field--focused {
-
         .mdc-notched-outline__leading,
         .mdc-notched-outline__notch,
         .mdc-notched-outline__trailing {
@@ -424,12 +423,12 @@ ngx-mat-select-search {
         margin: 0 !important;
     }
 
-    input[type=checkbox][disabled] {
+    input[type="checkbox"][disabled] {
         opacity: 0;
     }
 
-    input[type=checkbox]::before,
-    input[type=checkbox]::after {
+    input[type="checkbox"]::before,
+    input[type="checkbox"]::after {
         display: none;
     }
 }
@@ -460,7 +459,7 @@ ngx-mat-select-search {
     .mdc-radio {
         padding: 0 !important;
 
-        .mdc-radio__native-control:enabled:checked+.mdc-radio__background {
+        .mdc-radio__native-control:enabled:checked + .mdc-radio__background {
             .mdc-radio__outer-circle {
                 border-color: var(--color-giddh-blue) !important;
             }
@@ -471,13 +470,12 @@ ngx-mat-select-search {
         }
 
         &:hover {
-            .mdc-radio__native-control:not([disabled]):not(:focus)~.mdc-radio__background::before {
+            .mdc-radio__native-control:not([disabled]):not(:focus) ~ .mdc-radio__background::before {
                 opacity: 0 !important;
             }
         }
     }
 }
-
 
 /*---- custom ----*/
 .custom-input-field {
@@ -602,7 +600,7 @@ report-filters {
 .mat-mdc-option {
     &.mdc-list-item--disabled {
         .mdc-list-item__primary-text {
-            opacity: .78 !important;
+            opacity: 0.78 !important;
         }
     }
 }
@@ -645,15 +643,17 @@ app-cdk-scroll {
 input-field {
     .prefix-icon-field {
         i {
-            inset: 16px 0 0 0;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
         }
-        &.mat-mdc-form-field  {
+        &.mat-mdc-form-field {
             .mat-mdc-text-field-wrapper {
                 .mat-mdc-form-field-infix {
                     padding-left: 20px !important;
                 }
             }
-            .mdc-text-field--outlined  {
+            .mdc-text-field--outlined {
                 .mdc-notched-outline {
                     .mdc-notched-outline__leading {
                         width: max(40px, var(--mdc-shape-small, 4px)) !important;
@@ -672,6 +672,17 @@ input-field {
     .mat-mdc-form-field,
     .mat-mdc-form-field input{
         background-color: var(--color-primary-input-bar-background) !important;
+    }
+}
+
+reactive-dropdown-field {
+    .dropdown-without-label {
+        mat-form-field {
+            .mat-mdc-text-field-wrapper {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
     }
 }
 
