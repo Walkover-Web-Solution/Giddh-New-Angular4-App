@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -30,8 +30,6 @@ import { cloneDeep } from '../../../lodash-optimized';
     styleUrls: ['./report.details.component.scss']
 })
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
-    /** ViewChild reference to the mat-select element. */
-    @ViewChild('mySelect') mySelect;
     public reportRespone: ReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeFinacialYr: ActiveFinancialYear;

@@ -54,7 +54,7 @@
                 <div class="mr-r15">
                     <mat-form-field appearance="outline" class="duration-dropdown">
                         <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
-                        <mat-select #mySelect [value]="getSelectedDuration()">
+                        <mat-select #durationMatSelect [value]="getSelectedDuration()">
                             <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
                                 {{ commonLocaleData?.app_duration?.monthly }}
                             </mat-option>
@@ -82,7 +82,7 @@
                           <button 
                             mat-menu-item 
                             *ngFor="let month of monthNames"
-                            (click)="mySelect.close(); populateRecords(durationEnum.Weekly, month)"
+                            (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
                             aria-label="Select month"
                           >
                             {{ month | slice: 0:3 }}
