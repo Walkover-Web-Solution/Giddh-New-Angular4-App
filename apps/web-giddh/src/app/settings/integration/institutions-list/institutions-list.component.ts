@@ -137,7 +137,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     * @memberof InstitutionsListComponent
     */
     public openWindow(url: string): void {
-        const width = 700;
+        const width = 800;
         const height = 900;
 
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
