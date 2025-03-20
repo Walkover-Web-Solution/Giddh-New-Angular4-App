@@ -341,7 +341,7 @@ const filterBalanceSheetData = data => {
     return filterPlData;
 };
 
-const prepareBalanceSheetData = (data) => {
+export const prepareBalanceSheetData = (data) => {
     let bsData: BalanceSheetData = filterBalanceSheetData(data.groupDetails);
     bsData.assetTotal = calCulateTotalAssets(bsData.assets);
     bsData.assetTotalEnd = calCulateTotalAssetsEnd(bsData.assets);
