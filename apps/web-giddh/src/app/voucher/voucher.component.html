@@ -62,10 +62,9 @@
                                                             invoiceType !== 'sales' &&
                                                             invoiceType !== 'cash' &&
                                                             invoiceType !== 'purchase' &&
-                                                            (voucherApiVersion === 1 ||
-                                                                (voucherApiVersion === 2 &&
-                                                                    invoiceType !== 'debit note' &&
-                                                                    invoiceType !== 'credit note')))
+                                                            (voucherApiVersion === 2 &&
+                                                              invoiceType !== 'debit note' &&
+                                                              invoiceType !== 'credit note'))
                                                     "
                                                     [defaultValue]="invFormData.voucherDetails.customerName"
                                                     [createNewText]="customerNotFoundText"
@@ -80,6 +79,7 @@
                                                     (scrollEnd)="handleScrollEnd('customer')"
                                                     [scrollableElementId]="'customerId'"
                                                 >
+                                                <!--voucherApiVersion === 1 || -->
                                                     <ng-template #optionTemplate let-option="option">
                                                         <span  aria-label="label value">
                                                             <div class="option-label cursor-pointer">

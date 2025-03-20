@@ -68,6 +68,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Output() public createOption: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Callback for clear selected value */
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
+    /** Holds autocomplete position */
+    @Input() public autoCompletePosition: string = 'auto';
     /** Holds CSS class which applied on mat options tag */
     @Input() public optionClass: string;
     /** Callback for option selected */

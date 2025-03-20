@@ -17,6 +17,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpe
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Injectable()
 export class GeneralService {
@@ -1116,9 +1117,9 @@ export class GeneralService {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
-                if (this.voucherApiVersion !== 2) {
-                    item.exchangeRate = balanceDueAmountConversionRate;
-                }
+                // if (this.voucherApiVersion !== 2) {
+                //     item.exchangeRate = balanceDueAmountConversionRate;
+                // }
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
@@ -2228,7 +2229,7 @@ export class GeneralService {
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
     }
-    
+
     /**
     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
     *
@@ -2239,6 +2240,44 @@ export class GeneralService {
     */
     public replacePlaceholders(text: string, ...args: string[]): string {
         return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+
+    /**
+     * Retrieves a list of available voucher types with localized labels.
+     *
+     * @param commonLocaleData 
+     * @returns {IOption[]} An array of voucher type objects, each containing
+     * @memberof GeneralService
+     */
+    public getVoucherTypeList(commonLocaleData: any): IOption[] {
+        return [{
+            label: commonLocaleData?.app_voucher_types.sales,
+            value: 'sales'
+        }, {
+            label: commonLocaleData?.app_voucher_types.purchase,
+            value: 'purchase'
+        }, {
+            label: commonLocaleData?.app_voucher_types.receipt,
+            value: 'receipt'
+        }, {
+            label: commonLocaleData?.app_voucher_types.payment,
+            value: 'payment'
+        }, {
+            label: commonLocaleData?.app_voucher_types.journal,
+            value: 'journal'
+        }, {
+            label: commonLocaleData?.app_voucher_types.contra,
+            value: 'contra'
+        }, {
+            label: commonLocaleData?.app_voucher_types.debit_note,
+            value: 'debit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.credit_note,
+            value: 'credit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.advance_receipt,
+            value: 'advance-receipt'
+        }];
     }
 }
 

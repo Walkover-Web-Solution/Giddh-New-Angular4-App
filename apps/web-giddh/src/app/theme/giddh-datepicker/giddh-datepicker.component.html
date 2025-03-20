@@ -1,6 +1,7 @@
 <ng-container *ngIf="!hideLabel">
     <div [ngClass]="{ 'readonly-field': disabled }">
         <mat-form-field 
+            class="toggle-Icon"
             [ngClass]="{ 'mat-form-field-invalid': showError }"
             [appearance]="appearance" 
             [floatLabel]="'auto'"
@@ -14,8 +15,8 @@
                 [min]="minDate"
                 (input)="dateInputChange($event)"
                 autocomplete="off"
-                (focus)="emitDatepickerState(true); picker?.open()"
-                (click)="emitDatepickerState(true); picker?.open()"
+                (focus)="toggleDatepicker()"
+                (click)="toggleDatepicker()"
                 (dateChange)="dateChange($event)"
                 [class]="cssClass"
                 [disabled]="disabled"
