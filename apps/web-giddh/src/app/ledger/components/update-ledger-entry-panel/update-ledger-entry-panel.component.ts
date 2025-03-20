@@ -44,7 +44,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
@@ -1076,10 +1075,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openBaseAccountModal() {
-        if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
-            this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
-            return;
-        }
+        // if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
+        //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
+        //     return;
+        // }
         if (this.updateBaseAccount) {
             this.updateBaseAccount.show();
         }
@@ -1203,9 +1202,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
 
-        if (this.voucherApiVersion !== 2) {
-            this.invoiceList = [];
-        }
+        // if (this.voucherApiVersion !== 2) {
+        //     this.invoiceList = [];
+        // }
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {

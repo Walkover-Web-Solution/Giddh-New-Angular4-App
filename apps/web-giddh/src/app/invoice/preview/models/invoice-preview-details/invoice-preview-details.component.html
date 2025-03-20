@@ -31,17 +31,17 @@
                                 aria-labelledby="button-basic2"
                             >
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
+                                    <!-- <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
                                         localeData?.cash_invoice
-                                    }}</a>
+                                    }}</a> -->
                                     <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/cash/create']">{{
                                         localeData?.cash_invoice
                                     }}</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
+                                    <!-- <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
                                         localeData?.sales_invoice
-                                    }}</a>
+                                    }}</a> -->
                                     <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/sales/create']">{{
                                         localeData?.sales_invoice
                                     }}</a>
@@ -448,11 +448,11 @@
                                                     ></a>
                                                 </span>
 
-                                                <span
+                                                <!-- <span
                                                     class="download-file-text"
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type &&
+                                                        attachedDocumentType?.type
                                                         voucherApiVersion !== 2
                                                     "
                                                     [ngClass]="{
@@ -471,7 +471,7 @@
                                                         aria-label="download"
                                                         ><i class="icon-download-circle"></i
                                                     ></a>
-                                                </span>
+                                                </span> -->
 
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a
@@ -487,13 +487,12 @@
                                             <div
                                                 class="history-btn"
                                                 *ngIf="
-                                                    (voucherApiVersion !== 2 &&
-                                                        selectedItem?.voucherType === 'purchase') ||
                                                     (voucherApiVersion === 2 &&
                                                         selectedItem?.voucherType !== 'proformas' &&
                                                         selectedItem?.voucherType !== 'estimates')
                                                 "
                                             >
+                                            <!-- voucherApiVersion !== 2 && selectedItem?.voucherType === 'purchase' ||-->
                                                 <button
                                                     class="btn btn-primary history-button"
                                                     (click)="toggleActivityHistoryAsidePane()"

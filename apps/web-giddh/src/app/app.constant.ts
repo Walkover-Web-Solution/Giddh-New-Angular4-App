@@ -644,3 +644,8 @@ export const BREAKPOINT_SCREEN_SIZE = {
     IPAD_SCREEN_SIZE: '(max-width: 1300px)',
     TAB_SCREEN_SIZE: '(max-width: 1023px)'
 }
+/** HTML tag name  */
+export enum HtmlElementEnum {
+    Input = 'INPUT',
+    Textarea = 'TEXTAREA'
+}

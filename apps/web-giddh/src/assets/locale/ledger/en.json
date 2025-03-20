@@ -215,6 +215,7 @@
     "convert_to_entries": "Convert to entries",
     "connect_bank": "Connect Bank",
     "convert_entries_message": "Are you sure you want to convert selected bank entries into Giddh entities?",
+    "no_transaction_found_message":"No transactions found. Please change the page to get transactions.",
     "import_voucher_heading": "Import Voucher (CSV/EXCEL only)",
     "select_statement": "Select Statement",
     "import_voucher": "Import Voucher",

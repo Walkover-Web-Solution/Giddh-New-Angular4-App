@@ -3,8 +3,9 @@
 }
 
 .edit-icon-position {
-    top: -28px;
-    right: 0;
+    top: -22px;
+    right: 0px;
+    z-index: 1;
 }
 
 .height-30 {
@@ -103,7 +104,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .other-tax {
     justify-content: flex-end;
-    padding-top: 25px;
     display: flex;
     padding-left: 15px;
 }
@@ -296,7 +296,6 @@ p.edit-message {
     background-color: var(--color-filter-background);
     text-align: center;
     padding: 8px 0;
-    border-top: 1px solid var(--color-common-secondary-border);
     font-size: var(--font-size-15);
     font-family: var(--font-semibold);
     margin-top: 0px;
@@ -335,13 +334,13 @@ p.edit-message {
     background: var(--color-white);
     text-align: center;
     font-size: var(--font-size-32);
-    height: 594px;
+    height: 600px;
     width: 100%;
     padding: 3rem;
     color: var(--color-gray);
 }
 .cross-button {
-    font-size: 2rem;
+    font-size: 32px;
 }
 /* responsive */
 @media only screen and (max-width: 1359px) {
