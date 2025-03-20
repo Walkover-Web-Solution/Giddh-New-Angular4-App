@@ -677,10 +677,8 @@ mat-option {
 }
 
 .mdc-text-field {
-    &:not(.mdc-text-field--disabled) {
-        .mdc-floating-label {
-            color: var(--color-popup-list-input-text) !important;
-        }
+    .mdc-floating-label {
+        color: var(--color-popup-list-input-text) !important;
     }
 }
 
