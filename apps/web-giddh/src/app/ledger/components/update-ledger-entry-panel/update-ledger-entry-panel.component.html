@@ -1543,7 +1543,7 @@
                                             [allowDecimalDigitsOnly]="true"
                                             [autocomplete]="'off'"
                                             (onPaste)="vm.inventoryQuantityChanged($event)"
-                                            (input)="handleQuantityChange($event?.target?.value)"
+                                            (change)="handleQuantityChange($event?.target?.value)"
                                         >
                                         </input-field>
                                     </div>
@@ -1665,20 +1665,17 @@
                                         *ngIf="!isAdvanceReceipt"
                                         [type]="'text'"
                                         [cssClass]="'text-right bg-transparent'"
-                                        [name]="'amount'"
+                                        [name]="'update-ledger-amount'"
                                         [mask]="vm.inputMaskFormat"
                                         [autocomplete]="'off'"
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         (focus)="hideDiscountTax()"
-                                        [ngModel]="vm.totalAmount"
-                                        (ngModelChange)="
-                                            vm.totalAmount = $event;
-                                            vm.updateFirstEntryAmount();
-                                            vm.inventoryAmountChanged()
-                                        "
-                                    />
+                                        [(ngModel)]="vm.totalAmount"
+                                        (change)="vm.updateFirstEntryAmount();vm.inventoryAmountChanged()"
+                                   >
+                                </input-field>
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -1783,7 +1780,7 @@
                                 </div>
 
                                 <div
-                                    class="dropdown-container dropdown-left text-right"
+                                    class="dropdown-container dropdown-left text-right min-width-0"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
                                         (vm.companyTaxesList$ | async)?.length &&
@@ -1890,65 +1887,65 @@
                                         </p>
                                     </div>
                                 </ng-template>
-                            </div>
-                            <div class="pull-right mr-t1">
-                                <div
-                                    *ngIf="vm.showNewEntryPanel && isTcsTdsApplicable"
-                                    class="text-right table-amount last-table-amount"
-                                >
-                                    <div class="text-right">
-                                        <div
-                                            *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
-                                            class="other-tax align-items-center"
-                                        >
-                                            <mat-checkbox
-                                                color="primary"
-                                                id="update-ledger-other-tax"
-                                                [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
+                                <div class="pull-right mr-t1 min-width-0">
+                                    <div
+                                        *ngIf="vm.showNewEntryPanel && isTcsTdsApplicable"
+                                        class="text-right table-amount last-table-amount"
+                                    >
+                                        <div class="text-right">
+                                            <div
                                                 *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
-                                                [disabled]="
-                                                    isEinvoiceGenerated ||
-                                                    (!isPettyCash &&
-                                                        (currentOrganizationType === 'COMPANY' ||
-                                                            isConsolidatedBranch) &&
-                                                        branches?.length > 1)
-                                                "
-                                                (change)="toggleOtherTaxesAsideMenu.emit(vm)"
-                                                >{{ localeData?.other_tax }}</mat-checkbox
+                                                class="other-tax align-items-center"
                                             >
-                                        </div>
-    
-                                        <div
-                                            *ngIf="vm.selectedLedger.isOtherTaxesApplicable"
-                                            class="pl-1 position-relative"
-                                        >
-                                            <a
-                                                href="javascript:void(0)"
-                                                class="text-gray position-absolute edit-icon-position"
-                                                (click)="
-                                                    ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                                        branches?.length === 1) ||
-                                                    currentOrganizationType === 'BRANCH'
-                                                        ? toggleOtherTaxesAsideMenu.emit(vm)
-                                                        : ''
-                                                "
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    id="update-ledger-other-tax"
+                                                    [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
+                                                    *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
+                                                    [disabled]="
+                                                        isEinvoiceGenerated ||
+                                                        (!isPettyCash &&
+                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                isConsolidatedBranch) &&
+                                                            branches?.length > 1)
+                                                    "
+                                                    (change)="toggleOtherTaxesAsideMenu.emit(vm)"
+                                                    >{{ localeData?.other_tax }}</mat-checkbox
+                                                >
+                                            </div>
+        
+                                            <div
+                                                *ngIf="vm.selectedLedger.isOtherTaxesApplicable"
+                                                class="pl-1 position-relative"
                                             >
-                                                <i class="icon-edit11 font-12 mr-l05"></i>
-                                            </a>
-                                            <input-field
-                                                [label]="commonLocaleData?.app_other_tax"
-                                                [id]="'update-ledger-other-tax-disabled'"
-                                                [readonly]="true"
-                                                [autocomplete]="'off'"
-                                                [useMask]="true"
-                                                [mask]="vm.inputMaskFormat"
-                                                [prefix]="vm.selectedPrefixForCurrency"
-                                                [cssClass]="'text-right'"
-                                                [suffix]="vm.selectedSuffixForCurrency"
-                                                [(ngModel)]="vm.selectedLedger.otherTaxesSum"
-                                                [name]="'entry.otherTaxesSum'"
-                                            >
-                                            </input-field>
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="text-gray position-absolute edit-icon-position"
+                                                    (click)="
+                                                        ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                                            branches?.length === 1) ||
+                                                        currentOrganizationType === 'BRANCH'
+                                                            ? toggleOtherTaxesAsideMenu.emit(vm)
+                                                            : ''
+                                                    "
+                                                >
+                                                    <i class="icon-edit11 font-12 mr-l05"></i>
+                                                </a>
+                                                <input-field
+                                                    [label]="commonLocaleData?.app_other_tax"
+                                                    [id]="'update-ledger-other-tax-disabled'"
+                                                    [readonly]="true"
+                                                    [autocomplete]="'off'"
+                                                    [useMask]="true"
+                                                    [mask]="vm.inputMaskFormat"
+                                                    [prefix]="vm.selectedPrefixForCurrency"
+                                                    [cssClass]="'text-right'"
+                                                    [suffix]="vm.selectedSuffixForCurrency"
+                                                    [(ngModel)]="vm.selectedLedger.otherTaxesSum"
+                                                    [name]="'entry.otherTaxesSum'"
+                                                >
+                                                </input-field>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2023,7 +2020,6 @@
                                             matInput
                                             id="update-ledger-description"
                                             rows="3"
-                                            matInput
                                             [(ngModel)]="vm.selectedLedger.description"
                                             class="form-control mat-field-border"
                                             [placeholder]="commonLocaleData?.app_description"
@@ -2162,7 +2158,7 @@
                                                         (blur)="adjustedInvoiceAmountChange()"
                                                         *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
-                                                    />
+                                                    ></input-field>
                                                 </div>
                                             </div>
                                             <!-- <div
@@ -2904,7 +2900,7 @@
                         (keypress)="allowAlphanumericChar(passportNumber)"
                         [cssClass]="'width-115 ml-1'"
                         [(ngModel)]="vm.selectedLedger.passportNumber"
-                    />
+                   ></input-field>
                 </div>
             </div>
         </div>
