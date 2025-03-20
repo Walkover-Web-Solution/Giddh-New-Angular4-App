@@ -21,7 +21,7 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { RestrictedModules } from '../../../app.constant';
+import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
 import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
@@ -195,7 +195,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
         }
         this.breakPointObservar.observe([
-            "(max-width: 1300px)",
+            BREAKPOINT_SCREEN_SIZE.IPAD_SCREEN_SIZE,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isTabScreen = result?.matches;
         });

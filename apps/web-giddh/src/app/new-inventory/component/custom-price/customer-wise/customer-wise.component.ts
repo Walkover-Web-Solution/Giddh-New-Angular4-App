@@ -11,6 +11,7 @@ import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service"
 import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component";
 import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { BREAKPOINT_SCREEN_SIZE } from "apps/web-giddh/src/app/app.constant";
 
 /** Inteface for create payload for getAllDiscount API */
 export interface CustomerVendorDiscountBasic {
@@ -157,7 +158,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         });
 
         this.breakPointObservar.observe([
-            "(max-width: 1023px)",
+            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isSmallScreen = result?.matches;
         });

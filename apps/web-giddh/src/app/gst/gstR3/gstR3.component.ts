@@ -20,6 +20,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { BreakpointObserver } from "@angular/cdk/layout";
+import { BREAKPOINT_SCREEN_SIZE } from '../../app.constant';
 
 @Component({
     selector: 'file-gstr3',
@@ -246,7 +247,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
         });
         this.breakPointObservar.observe([
-            "(max-width: 1023px)",
+            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isSmallScreen = result?.matches;
         });
