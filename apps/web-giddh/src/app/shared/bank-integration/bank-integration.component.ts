@@ -493,7 +493,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     * @memberof BankIntegrationComponent
     */
     public openWindow(url: string): void {
-        const width = 700;
+        const width = 800;
         const height = 900;
 
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
