@@ -101,6 +101,7 @@ export const ROUTES: Routes = [
             { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule), canActivate: [NeedsAuthorization] },
             { path: 'group-name', loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule), canActivate: [NeedsAuthorization] },
             { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
+            { path: 'multi-currency-report', loadChildren: () => import('./multi-currency-reports/multi-currency-reports.module').then(module => module.MultiCurrencyReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'project-wise-accounting', loadChildren: () => import('./project-wise-accounting/project-wise-accounting.module').then(module => module.ProjectWiseAccountingModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]

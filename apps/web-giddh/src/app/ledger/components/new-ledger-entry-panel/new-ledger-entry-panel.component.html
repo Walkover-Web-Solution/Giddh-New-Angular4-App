@@ -468,7 +468,7 @@
                                                 (selectedOption)="getInvoiceListsData($event)"
                                                 [options]="voucherTypeList | async"
                                                 [(ngModel)]="blankLedger.voucherType"
-                                                [disabled]="isReadOnly"
+                                                [readonly]="isReadOnly"
                                             >
                                             </reactive-dropdown-field>
                                         </div>
@@ -768,7 +768,6 @@
                                                 [disabled]="isReadOnly"
                                                 [appearance]="'outline'"
                                                 [(ngModel)]="blankLedger.tagNames"
-                                                [keepMenuOpenAfterSelect]="true"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [showMatLabel]="true"
                                                 [label]="localeData?.assign_tag"
@@ -1096,7 +1095,7 @@
     </div>
 </ng-template>
 <ng-template #touristSchemeTemplate>
-    <div class="row font-15 mr-b1" *ngIf="isTouristSchemeApplicable">
+    <div class="row font-15 mr-b1 mr-t15" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
@@ -1122,7 +1121,7 @@
                     type="text"
                     name="passportNumber"
                     [placeholder]="localeData?.passport_number"
-                    class="form-control width-115 ml-1"
+                    class="form-control passport-no-width ml-1"
                     #passportNumber
                     (blur)="allowAlphanumericChar(passportNumber)"
                     (keypress)="allowAlphanumericChar(passportNumber)"

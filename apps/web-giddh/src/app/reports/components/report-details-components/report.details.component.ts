@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -23,6 +23,7 @@ import { BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -97,6 +98,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
+        private changeDetectorRef: ChangeDetectorRef,
         private ledgerService: LedgerService) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -296,17 +298,18 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                    selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
                 if (selectedFinancialYear) {
-                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                    this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
                 this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
                 this.selectedType = currentTimeFilter || this.selectedType;
-                this.activeFinacialYr = activeFinancialYear;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                this.changeDetectorRef.detectChanges();
             }
         });
     }

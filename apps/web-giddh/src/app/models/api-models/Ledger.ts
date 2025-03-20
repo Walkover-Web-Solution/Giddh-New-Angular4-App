@@ -443,6 +443,9 @@ export interface IVariant extends IParticular {
     variantDiscount?: any;
 }
 
+/** Type for ledger type */
+export type LedgerType = 'cr' | 'dr';
+
 export type  TLedgerView  = 'STATEMENT_VIEW' | 'T_VIEW';
 
 export enum LedgerViewEnum  {

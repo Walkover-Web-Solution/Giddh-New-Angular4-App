@@ -264,15 +264,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
         this.onPaste.emit(event);
     }
 
-/**
- * Handles focus event to process content
- *
- * @param {ClipboardEvent} event
- */
+    /**
+     * Handles focus event to process content
+     *
+     * @param {ClipboardEvent} event
+     */
     public handleFocus(event: Clipboard): void {
         this.onFocus.emit(event);
     }
-
 
     /**
      * Emit true if suffix icon or text clicked

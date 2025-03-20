@@ -1,5 +1,5 @@
 :host {
-    &:has(mat-label){
+    &:has(mat-label) {
         display: inherit;
         margin-top: 10px;
     }
