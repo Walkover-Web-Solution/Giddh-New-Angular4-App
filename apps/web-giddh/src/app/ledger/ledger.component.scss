@@ -387,11 +387,7 @@ sh-select:focus {
     padding-left: 5px;
 }
 .ledger-book {
-    .left-col-new {
-        background: var(--color-common-primary-background-for-all-components);
-        padding: 0 0px 350px;
-    }
-    .right-col-new {
+    .left-col-new, .right-col-new, .statement-view {
         background: var(--color-common-primary-background-for-all-components);
         padding: 0 0px 350px;
     }

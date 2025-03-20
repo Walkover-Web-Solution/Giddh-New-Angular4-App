@@ -52,6 +52,7 @@ import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/c
 import { LedgerComponentStore } from './ledger.store';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
     selector: 'ledger',
@@ -120,6 +121,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public debitSelectAll: boolean = false;
     public creditSelectAll: boolean = false;
     public debitCreditSelectAll: boolean = false;
+    /** Holds true when all entries selected in statement view */
+    public statementViewSelectAll: boolean = false;
     public isBankTransactionLoading: boolean = false;
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
@@ -324,7 +327,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Observable for post balance success response */
     public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
     /** Holds ledger view */
-    public ledgerView: TLedgerView = LedgerViewEnum.TView;
+    public ledgerView: TLedgerView | null = null;
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
     /** Hold ledger grid total columns static value */
@@ -752,7 +755,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
                     this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
-
+                
                 this.ledgerTransactions = lt;
 
                 if (this.isMobileScreen) {
@@ -990,6 +993,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.getBankTransactions();
             }
         };
+
+        this.ledgerComponentStore.changeLedgerView$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response){
+                this.getTransactionData();
+            }
+        });
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -1908,19 +1917,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction = [];
         let debitTrx: ITransactionItem[] = [];
         let creditTrx: ITransactionItem[] = [];
+        let debitCreditTransactions: ITransactionItem[] = [];
 
         this.lc.transactionData$.pipe(take(1)).subscribe(s => {
             if (s) {
                 debitTrx = s.debitTransactions;
                 creditTrx = s.creditTransactions;
+                debitCreditTransactions = s.debitCreditTransactions;
             }
         });
 
-        this.entryUniqueNamesForBulkAction.push(
-            ...[
-                ...debitTrx?.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
-                ...creditTrx?.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
-            ]);
+        let entryUniqueNames: string[] = [];
+        if (debitCreditTransactions?.length) {
+            entryUniqueNames = [...debitCreditTransactions?.filter(f => f.isChecked).map(dt => dt.entryUniqueName)];
+        } else {
+            entryUniqueNames = [
+                    ...debitTrx?.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+                    ...creditTrx?.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+                ];
+        }
+        this.entryUniqueNamesForBulkAction.push(...entryUniqueNames);
 
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
             this.toaster.showSnackBar("error", this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
@@ -2026,52 +2042,86 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
 
-    public entrySelected(ev: any, uniqueName: string, type: string) {
-        const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
-            (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
-                (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
-        if (ev?.checked) {
-            this.checkedTrxWhileHovering.push({ type, uniqueName });
-            this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
-            const currentLength = this.isMobileScreen ?
-                this.checkedTrxWhileHovering?.length
-                : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
-            if (currentLength === totalLength) {
-                if (type === 'credit') {
-                    this.creditSelectAll = true;
-                } else if (type === 'debit') {
-                    this.debitSelectAll = true;
+    /**
+     * Handle entry select
+     *
+     * @param {MatCheckboxChange} event
+     * @param {string} uniqueName
+     * @param {string} type
+     * @memberof LedgerComponent
+     */
+    public entrySelected(event: MatCheckboxChange, uniqueName: string, type: string) {
+        if (this.ledgerTransactions.debitCreditTransactions?.length) {
+            const totalLength = this.ledgerTransactions.debitCreditTransactions?.length;
+            if (event?.checked) {
+                this.checkedTrxWhileHovering.push({ type, uniqueName });
+                this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
+                const currentLength = this.isMobileScreen ?
+                    this.checkedTrxWhileHovering?.length
+                    : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
+                this.statementViewSelectAll = currentLength === totalLength;
+            } else {
+                let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
+                this.checkedTrxWhileHovering.splice(itemIndx, 1);
+                const currentLength = this.isMobileScreen ?
+                    this.checkedTrxWhileHovering?.length
+                    : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
+                if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
+                    this.statementViewSelectAll = false;
+                    this.selectedTrxWhileHovering = '';
+                }
+    
+                this.lc.selectedTxnUniqueName = null;
+                this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
+            }
+            
+        } else {
+            const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
+                (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
+                    (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
+            if (event?.checked) {
+                this.checkedTrxWhileHovering.push({ type, uniqueName });
+                this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
+                const currentLength = this.isMobileScreen ?
+                    this.checkedTrxWhileHovering?.length
+                    : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
+                if (currentLength === totalLength) {
+                    if (type === 'credit') {
+                        this.creditSelectAll = true;
+                    } else if (type === 'debit') {
+                        this.debitSelectAll = true;
+                    } else {
+                        this.debitCreditSelectAll = true;
+                    }
                 } else {
-                    this.debitCreditSelectAll = true;
+                    if (type === 'credit') {
+                        this.creditSelectAll = false;
+                    } else if (type === 'debit') {
+                        this.debitSelectAll = false;
+                    } else {
+                        this.debitCreditSelectAll = false;
+                    }
                 }
             } else {
-                if (type === 'credit') {
-                    this.creditSelectAll = false;
-                } else if (type === 'debit') {
-                    this.debitSelectAll = false;
-                } else {
-                    this.debitCreditSelectAll = false;
+                let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
+                this.checkedTrxWhileHovering.splice(itemIndx, 1);
+                const currentLength = this.isMobileScreen ?
+                    this.checkedTrxWhileHovering?.length
+                    : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
+                if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
+                    if (type === 'credit') {
+                        this.creditSelectAll = false;
+                    } else if (type === 'debit') {
+                        this.debitSelectAll = false;
+                    } else {
+                        this.debitCreditSelectAll = false;
+                    }
+                    this.selectedTrxWhileHovering = '';
                 }
+    
+                this.lc.selectedTxnUniqueName = null;
+                this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
             }
-        } else {
-            let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
-            this.checkedTrxWhileHovering.splice(itemIndx, 1);
-            const currentLength = this.isMobileScreen ?
-                this.checkedTrxWhileHovering?.length
-                : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
-            if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
-                if (type === 'credit') {
-                    this.creditSelectAll = false;
-                } else if (type === 'debit') {
-                    this.debitSelectAll = false;
-                } else {
-                    this.debitCreditSelectAll = false;
-                }
-                this.selectedTrxWhileHovering = '';
-            }
-
-            this.lc.selectedTxnUniqueName = null;
-            this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
         }
     }
 

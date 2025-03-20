@@ -212,6 +212,7 @@ export class TransactionsResponse implements ITransactions {
     public convertedClosingBalance?: IClosingBalance;
     public count: number;
     public creditTotal: number;
+    public debitCreditTransactions: ITransactionItem[];
     public convertedCreditTotal?: number;
     public creditTransactions: ITransactionItem[];
     public creditTransactionsCount: number;
