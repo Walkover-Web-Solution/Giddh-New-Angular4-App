@@ -19,6 +19,8 @@ import { GeneralService } from '../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { BREAKPOINT_SCREEN_SIZE } from '../../app.constant';
 
 @Component({
     selector: 'file-gstr3',
@@ -86,6 +88,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public exemptValuesDisplayedColumns: string[] = ['supplyNature', 'interStateSupplies', 'intraStateSupplies'];
     /** Holds exempt values table data */
     public exemptValuesTableData: any[] = [];
+     /** Holds true, if screen size  less than or equals to 1023px */
+    public isSmallScreen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -95,7 +99,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private generalService: GeneralService,
-        public modalService: BsModalService
+        public modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -240,6 +245,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                     this.isMonthSelected = false;
                 }
             }
+        });
+        this.breakPointObservar.observe([
+            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE,
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isSmallScreen = result?.matches;
         });
     }
 

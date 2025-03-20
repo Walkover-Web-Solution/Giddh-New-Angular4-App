@@ -417,9 +417,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 const referNo = localStorage.getItem('refNo');
-                    if (referNo !==null && referNo !== undefined) {
-                        this.componentStore.getRequisition(referNo);
-                    }
+                setTimeout(() => {
+                    if (referNo) {
+                            this.componentStore.getRequisition(referNo);
+                        }
+                    }, 30);
             }
         };
 

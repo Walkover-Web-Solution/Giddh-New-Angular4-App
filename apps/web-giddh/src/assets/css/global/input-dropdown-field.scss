@@ -686,6 +686,13 @@ reactive-dropdown-field {
     }
 }
 
+@media screen and (max-width: 1024px) {
+    .mat-mdc-radio-group {
+        display: flex;
+        column-gap: 5px;
+    }
+}
+
 mat-option {
     &.dropdown-tick-icon-position {
         mat-pseudo-checkbox {
