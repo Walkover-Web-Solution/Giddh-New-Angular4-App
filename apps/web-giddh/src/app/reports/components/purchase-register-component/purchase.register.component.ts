@@ -329,9 +329,9 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     public populateRecords(interval, month?) {
         this.interval = interval;
-        if (interval == this.durationEnum.Weekly && !month) {
+        if (interval === this.durationEnum.Weekly && !month) {
             this.currentActiveFinacialYear.value = this.durationEnum.Monthly;
-            this.populateRecords(this.durationEnum.Monthly, null);
+            this.populateRecords(this.durationEnum.Monthly);
             return;
         }
         if (this.activeFinacialYr) {
