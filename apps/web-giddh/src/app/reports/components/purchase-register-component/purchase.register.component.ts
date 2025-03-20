@@ -30,7 +30,6 @@ import { DurationEnum } from '../../constants/reports.constant';
     styleUrls: ['./purchase.register.component.scss']
 })
 export class PurchaseRegisterComponent implements OnInit, OnDestroy {
-
     bsValue = new Date();
     public reportRespone: PurchaseReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -137,7 +136,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {   
+        this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch?.name,
@@ -309,7 +308,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
-                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
                 this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
@@ -328,6 +327,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     public populateRecords(interval, month?) {
         this.interval = interval;
+        if (interval === this.durationEnum.Weekly && !month) {
+            this.populateRecords(this.durationEnum.Monthly);
+            return;
+        }
         if (this.activeFinacialYr) {
             let startDate = this.activeFinacialYr.financialYearStarts?.toString();
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
@@ -388,7 +391,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
-            
+
         }
     }
 

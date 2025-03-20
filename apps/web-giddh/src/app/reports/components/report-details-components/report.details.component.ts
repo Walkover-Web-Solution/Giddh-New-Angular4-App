@@ -305,7 +305,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
-                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
                 this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
@@ -323,6 +323,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
     public populateRecords(interval, month?) {
         this.interval = interval;
+        if (interval === this.durationEnum.Weekly && !month) {
+            this.populateRecords(this.durationEnum.Monthly);
+            return;
+        }
         if (this.activeFinacialYr) {
             let startDate = this.activeFinacialYr.financialYearStarts?.toString();
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
