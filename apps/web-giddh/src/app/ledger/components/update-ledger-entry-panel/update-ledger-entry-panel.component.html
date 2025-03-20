@@ -1543,7 +1543,7 @@
                                             [allowDecimalDigitsOnly]="true"
                                             [autocomplete]="'off'"
                                             (onPaste)="vm.inventoryQuantityChanged($event)"
-                                            (input)="handleQuantityChange($event?.target?.value)"
+                                            (change)="handleQuantityChange($event?.target?.value)"
                                         >
                                         </input-field>
                                     </div>
@@ -1665,20 +1665,17 @@
                                         *ngIf="!isAdvanceReceipt"
                                         [type]="'text'"
                                         [cssClass]="'text-right bg-transparent'"
-                                        [name]="'amount'"
+                                        [name]="'update-ledger-amount'"
                                         [mask]="vm.inputMaskFormat"
                                         [autocomplete]="'off'"
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         (focus)="hideDiscountTax()"
-                                        [ngModel]="vm.totalAmount"
-                                        (ngModelChange)="
-                                            vm.totalAmount = $event;
-                                            vm.updateFirstEntryAmount();
-                                            vm.inventoryAmountChanged()
-                                        "
-                                    />
+                                        [(ngModel)]="vm.totalAmount"
+                                        (change)="vm.updateFirstEntryAmount();vm.inventoryAmountChanged()"
+                                   >
+                                </input-field>
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -2021,7 +2018,6 @@
                                             matInput
                                             id="update-ledger-description"
                                             rows="3"
-                                            matInput
                                             [(ngModel)]="vm.selectedLedger.description"
                                             class="form-control mat-field-border"
                                             [placeholder]="commonLocaleData?.app_description"
@@ -2160,7 +2156,7 @@
                                                         (blur)="adjustedInvoiceAmountChange()"
                                                         *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
-                                                    />
+                                                    ></input-field>
                                                 </div>
                                             </div>
                                             <!-- <div
@@ -2902,7 +2898,7 @@
                         (keypress)="allowAlphanumericChar(passportNumber)"
                         [cssClass]="'width-115 ml-1'"
                         [(ngModel)]="vm.selectedLedger.passportNumber"
-                    />
+                   ></input-field>
                 </div>
             </div>
         </div>
