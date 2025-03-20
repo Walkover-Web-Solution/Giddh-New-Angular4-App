@@ -24,7 +24,7 @@ export class MobileRestrictedComponent {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-blue-logo.svg';
         this.breakpointObserver.observe([
-            '(min-width: 768px)'
+            '(min-width: 481px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result?.matches) {
                 this.router.navigate(['/home']);
