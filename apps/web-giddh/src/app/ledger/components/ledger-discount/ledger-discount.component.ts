@@ -202,9 +202,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     */
     public toggleDiscountMenu(isOpen: boolean = false) {
         if (isOpen) {
-            this.discountMenu?.openMenu();
+            !this.discountMenu.menuOpen && this.discountMenu?.openMenu();
         } else {
-            this.discountMenu?.closeMenu();
+            this.discountMenu.menuOpen && this.discountMenu?.closeMenu();
         }
     }
 

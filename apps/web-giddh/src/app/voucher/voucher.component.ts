@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
@@ -72,6 +72,7 @@ import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/drop
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { CommonService } from '../services/common.service';
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
+import { ServiceConfig } from '../services/service.config';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -849,6 +850,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private settingsDiscountService: SettingsDiscountService,
         private http: HttpClient,
         public dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private commonService: CommonService
     ) {
@@ -893,7 +895,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -4164,6 +4166,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * Close all tax control dropdown
+     *
+     * @memberof VoucherComponent
+     */
+    public closeTaxControlPopup(): void {
+        if (this.taxControlComponent) {
+            this.taxControlComponent.forEach(taxComp => {
+                taxComp.toggleTaxMenu(false);
+            });
+        }
+    }
 
     public setActiveIndx(indx: number) {
         this.activeIndx = indx;
