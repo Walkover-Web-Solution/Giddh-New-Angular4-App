@@ -75,6 +75,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public calculateTaxInclusively: boolean;
     /** True if advance receipt entry is created */
     @Input() public isAdvanceReceipt: boolean;
+    /** Holds true to show backdrop in discount menu 
+     * so menu close as click outside the menu */
+    @Input() public hasBackdrop: boolean = true;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -218,9 +221,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      */
     public toggleTaxMenu(isOpen: boolean = false) {
         if (isOpen) {
-            this.taxMenu?.openMenu();
+            !this.taxMenu.menuOpen && this.taxMenu?.openMenu();
         } else {
-            this.taxMenu?.closeMenu();
+            this.taxMenu.menuOpen &&  this.taxMenu?.closeMenu();
         }
     }
 

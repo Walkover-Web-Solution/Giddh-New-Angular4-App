@@ -10,7 +10,7 @@
         <a id="tax" class="clearfix">
             <div class="multi-select adjust position-relative" id="tax-control-multi-select">
                 <input
-                    (keydown.enter)="$event.preventDefault()"
+                    (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
                     matInput
                     #taxInputElement
                     type="text"
@@ -22,9 +22,10 @@
                     [(ngModel)]="taxTotalAmount"
                     [ngClass]="{ 'field-disabled': readonly }"
                     (focus)="!readonly ? handleInputFocus() : ''"
+                    [matMenuTriggerFor]="taxMenu"
                 />
                 <input
-                    (keydown.enter)="$event.preventDefault()"
+                    (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
                     matInput
                     #taxInputElement
                     type="text"
@@ -39,12 +40,14 @@
                     [suffix]="suffixInput"
                     [ngClass]="{ 'field-disabled': readonly }"
                     (focus)="!readonly ? handleInputFocus() : ''"
+                    [matMenuTriggerFor]="taxMenu"
                 />
             </div>
         </a>
     </ng-container>
     <ng-container *ngIf="showMatFormField">
         <input-field
+            (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
             [autocomplete]="'off'"
             [prefix]="prefixInput"
             [suffix]="suffixInput"
@@ -55,14 +58,13 @@
             [cssClass]="'cursor-pointer text-right pr-1'"
             [name]="'sum'"
             [(ngModel)]="taxTotalAmount"
-            (onFocus)="taxMenu?.toggle()"
             [readonly]="readonly"
             [label]="customHeading ? customHeading : commonLocaleData?.app_tax"
             [matMenuTriggerFor]="taxMenu"
         ></input-field>
     </ng-container>
 
-    <mat-menu #taxMenu="matMenu" [hasBackdrop]="false">
+    <mat-menu #taxMenu="matMenu" [hasBackdrop]="hasBackdrop">
         <div (click)="$event.stopPropagation()" class="tax-wrapper pd-l1 pd-r1">
             <div *ngIf="taxRenderData.length === 0">
                 <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
