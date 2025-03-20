@@ -3,8 +3,9 @@
 }
 
 .edit-icon-position {
-    top: -28px;
-    right: 0;
+    top: -22px;
+    right: 0px;
+    z-index: 1;
 }
 
 .height-30 {
@@ -103,7 +104,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .other-tax {
     justify-content: flex-end;
-    padding-top: 25px;
     display: flex;
     padding-left: 15px;
 }
