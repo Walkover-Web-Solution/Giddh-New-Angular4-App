@@ -513,12 +513,11 @@ ngx-mat-select-search {
 body {
     .cdk-overlay-container {
         .cdk-overlay-pane {
+            &:has(.email-dropdown-width) {
+                width: 400px !important;
+            }
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
-
-                &:has(.dropdown-width) {
-                    width: 40%;
-                }
             }
         }
     }
@@ -688,44 +687,6 @@ mat-option {
             position: absolute;
             pointer-events: none;
             right: 35px;
-        }
-    }
-}
-
-.mdc-text-field {
-    .mdc-floating-label {
-        color: var(--color-popup-list-input-text) !important;
-    }
-}
-
-.mdc-text-field--outlined {
-        .mdc-notched-outline__leading {
-            border-color: var(--color-fields-border) !important;
-        }
-
-        &.mdc-text-field--focused {
-            .mdc-notched-outline__leading {
-                border-color: var(--color-border-focus) !important;
-            }
-
-            .mdc-notched-outline__notch {
-                border-color: var(--color-border-focus) !important;
-                border-left: none !important;
-            }
-
-            .mdc-notched-outline__trailing {
-                border-color: var(--color-border-focus) !important;
-            }
-        }
-
-        .mdc-notched-outline__notch {
-            border-color: var(--color-fields-border) !important;
-            border-left: none !important;
-        }
-
-    .mdc-notched-outline {
-        .mdc-notched-outline__trailing {
-            border-color: var(--color-fields-border);
         }
     }
 }

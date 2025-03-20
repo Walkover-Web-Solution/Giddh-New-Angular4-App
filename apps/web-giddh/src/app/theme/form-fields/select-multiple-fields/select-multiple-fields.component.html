@@ -53,7 +53,7 @@
                     >
                 </ng-container>
             </mat-option>
-            <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
+            <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length" [class]="optionClass">
                 {{ commonLocaleData?.app_no_result_found }}
             </mat-option>
         </mat-autocomplete>
