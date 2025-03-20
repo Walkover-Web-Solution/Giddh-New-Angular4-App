@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -30,6 +30,8 @@ import { cloneDeep } from '../../../lodash-optimized';
     styleUrls: ['./report.details.component.scss']
 })
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
+    /** ViewChild reference to the mat-select element. */
+    @ViewChild('mySelect') mySelect;
     public reportRespone: ReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeFinacialYr: ActiveFinancialYear;
@@ -305,7 +307,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
-                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;   
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
                 this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
@@ -323,6 +325,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
     public populateRecords(interval, month?) {
         this.interval = interval;
+        if (interval == this.durationEnum.Weekly && !month) {
+            this.currentActiveFinacialYear.value = this.durationEnum.Monthly;
+            this.populateRecords(this.durationEnum.Monthly, null);
+            return;
+        }
         if (this.activeFinacialYr) {
             let startDate = this.activeFinacialYr.financialYearStarts?.toString();
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
