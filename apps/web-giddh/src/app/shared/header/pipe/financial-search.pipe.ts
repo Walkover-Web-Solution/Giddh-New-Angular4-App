@@ -5,7 +5,8 @@ import { ChildGroup } from '../../../models/api-models/Search';
 @Pipe({
     // tslint:disable-next-line:pipe-naming
     name: 'financialSearch',
-    pure: true
+    pure: true,
+    standalone: true
 })
 
 export class FinancialSearchPipe implements PipeTransform {
