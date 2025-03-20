@@ -296,8 +296,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
-                selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions?.find(financialYear => financialYear?.value === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears?.find(financialYear => financialYear?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
@@ -319,7 +319,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === v?.value);
+            let financialYear = this.selectedCompany.financialYears?.find(financialYear => financialYear?.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
