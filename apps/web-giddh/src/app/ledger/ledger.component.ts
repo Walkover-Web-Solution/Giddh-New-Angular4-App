@@ -15,7 +15,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
-import { AccountRequestV2, AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
 import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType } from '../models/api-models/Ledger';
@@ -781,12 +781,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
                     this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
                 }
-
-                let checkedEntriesName: any[] = uniq([
-                    ...lt.debitTransactions?.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: 'debit' })),
-                    ...lt.creditTransactions?.filter(f => f.isChecked).map(ct => ({ uniqueName: ct.entryUniqueName, type: 'credit' })),
-                ]);
-
+                let checkedEntriesName: any[];
+                if (this.ledgerView === LedgerViewEnum.TView) {
+                    checkedEntriesName = uniq([
+                        ...lt.debitTransactions?.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: 'debit' })),
+                        ...lt.creditTransactions?.filter(f => f.isChecked).map(ct => ({ uniqueName: ct.entryUniqueName, type: 'credit' })),
+                    ]);
+                } else {
+                    checkedEntriesName = uniq([
+                        ...lt?.debitCreditTransactions?.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: dt.type }))
+                    ]);
+                }
+                
                 if (checkedEntriesName && checkedEntriesName.length) {
                     checkedEntriesName.forEach(f => {
                         let duplicate = this.checkedTrxWhileHovering.some(s => s?.uniqueName === f?.uniqueName);
@@ -1987,10 +1993,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public selectAllEntries(ev: any, type: 'debit' | 'credit' | 'all') {
-        if (!ev?.checked) {
+    /**
+     * Handle Select all entries
+     *
+     * @param {MatCheckboxChange} ev
+     * @param {('debit' | 'credit' | 'all')} type
+     * @memberof LedgerComponent
+     */
+    public selectAllEntries(event: MatCheckboxChange, type: 'debit' | 'credit' | 'all'): void {
+        if (!event?.checked) {
             if (type === 'all') {
-                this.debitCreditSelectAll = false;
+                if (this.ledgerView === LedgerViewEnum.StatementView) {
+                    this.statementViewSelectAll = false;
+                } else {
+                    this.debitCreditSelectAll = false;
+                }
             } else if (type === 'debit') {
                 this.debitSelectAll = false;
             } else {
@@ -2000,7 +2017,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.checkedTrxWhileHovering = [];
 
-        this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
+        this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, event?.checked));
     }
 
     /**
@@ -2081,15 +2098,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public entrySelected(event: MatCheckboxChange, uniqueName: string, type: string) {
-        if (this.ledgerTransactions.debitCreditTransactions?.length) {
-            const totalLength = this.ledgerTransactions.debitCreditTransactions?.length;
+        if (this.ledgerTransactions?.debitCreditTransactions?.length) {
+            const totalLength = this.ledgerTransactions?.debitCreditTransactions.length;
             if (event?.checked) {
                 this.checkedTrxWhileHovering.push({ type, uniqueName });
                 this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
-                const currentLength = this.isMobileScreen ?
-                    this.checkedTrxWhileHovering?.length
-                    : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
-                this.statementViewSelectAll = currentLength === totalLength;
+                this.statementViewSelectAll = this.ledgerTransactions.debitCreditTransactions.every(transaction => transaction?.isChecked);
             } else {
                 let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
                 this.checkedTrxWhileHovering.splice(itemIndx, 1);
@@ -2767,8 +2781,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (data[0] && data[1]) {
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
-                    console.log("activeAccount", this.lc.activeAccount);
-
                     if (data[0]?.ledgerView) {
                         this.ledgerView = data[0]?.ledgerView;
                     }
@@ -3103,8 +3115,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             event.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
-                console.log(accountUniqueName, data.body);
-
                 txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
                 const taxes = this.generalService.fetchTaxesOnPriority(

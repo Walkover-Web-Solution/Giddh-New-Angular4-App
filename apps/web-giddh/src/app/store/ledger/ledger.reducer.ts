@@ -335,6 +335,16 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return f;
             });
 
+            let debitCreditTransactions = state.transactionsResponse.debitCreditTransactions;
+            debitCreditTransactions.forEach(entry => {
+                res.forEach(response => {
+                    if (response === entry.entryUniqueName) {
+                        entry.isChecked = true;
+                    }
+                });
+                return entry;
+            });
+
             return {
                 ...state,
                 transactionsResponse: state.transactionsResponse,
@@ -362,6 +372,16 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                     }
                 });
                 return f;
+            });
+
+            let debitCreditTransactions = newState.transactionsResponse.creditTransactions;
+            debitCreditTransactions = debitCreditTransactions.map(entry => {
+                res.forEach(response => {
+                    if (response === entry.entryUniqueName) {
+                        entry.isChecked = false;
+                    }
+                });
+                return entry;
             });
 
             return {
@@ -432,51 +452,76 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     let newResponse: TransactionsResponse = Object.assign({}, transactionDetails);
     let key = '';
     let reverse = '';
+    const isStatementView = transactionDetails?.debitCreditTransactions?.length > 0;
 
     if (mode === 'all') {
-        key = 'debitTransactions';
-        reverse = 'creditTransactions';
+        if (isStatementView) {
+            key = 'debitCreditTransactions'
+        } else {
+            key = 'debitTransactions';
+            reverse = 'creditTransactions';
+        }
+
 
         newResponse[key].map(dbt => dbt.isChecked = false);
 
         if (isChecked) {
-            newResponse[key].map(dt => {
-                if (dt.isCompoundEntry) {
-                    newResponse[reverse].map(d => {
-                        if (dt.entryUniqueName === d.entryUniqueName) {
-                            return d.isChecked = true;
-                        }
-                        return d;
-                    });
-                    dt.isChecked = true;
-                } else {
-                    dt.isChecked = true;
-                }
-                return dt;
-            });
+            if (isStatementView) {
+                newResponse[key].map(dt => {
+                    if (dt.isCompoundEntry) {
+                        newResponse[key].map(d => {
+                            if (dt.entryUniqueName === d.entryUniqueName) {
+                                return d.isChecked = true;
+                            }
+                            return d;
+                        });
+                        dt.isChecked = true;
+                    } else {
+                        dt.isChecked = true;
+                    }
+                    return dt;
+                });
+            } else {
+                newResponse[key].map(dt => {
+                    if (dt.isCompoundEntry) {
+                        newResponse[reverse].map(d => {
+                            if (dt.entryUniqueName === d.entryUniqueName) {
+                                return d.isChecked = true;
+                            }
+                            return d;
+                        });
+                        dt.isChecked = true;
+                    } else {
+                        dt.isChecked = true;
+                    }
+                    return dt;
+                });
+            }
         }
 
-        key = 'creditTransactions';
-        reverse = 'debitTransactions';
-
-        newResponse[key].map(dbt => dbt.isChecked = false);
-
-        if (isChecked) {
-            newResponse[key].map(dt => {
-                if (dt.isCompoundEntry) {
-                    newResponse[reverse].map(d => {
-                        if (dt.entryUniqueName === d.entryUniqueName) {
-                            return d.isChecked = true;
-                        }
-                        return d;
-                    });
-                    dt.isChecked = true;
-                } else {
-                    dt.isChecked = true;
-                }
-                return dt;
-            });
+        if (!isStatementView) {
+            key = 'creditTransactions';
+            reverse = 'debitTransactions';
+            
+            newResponse[key].map(dbt => dbt.isChecked = false);
+            if (isChecked) {
+                newResponse[key].map(dt => {
+                    if (dt.isCompoundEntry) {
+                        newResponse[reverse].map(d => {
+                            if (dt.entryUniqueName === d.entryUniqueName) {
+                                return d.isChecked = true;
+                            }
+                            return d;
+                        });
+                        dt.isChecked = true;
+                    } else {
+                        dt.isChecked = true;
+                    }
+                    return dt;
+                });
+            }
         }
+
     } else {
         key = mode === 'debit' ? 'debitTransactions' : 'creditTransactions';
         reverse = mode === 'debit' ? 'creditTransactions' : 'debitTransactions';
@@ -503,4 +548,3 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
 
     return newResponse;
 };
-
