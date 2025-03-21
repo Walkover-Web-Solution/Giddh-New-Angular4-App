@@ -159,12 +159,13 @@
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
-        <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
+        
+        <span matSuffix *ngIf="matSuffix" (click)="handleSuffixClick()">{{ matSuffix }}</span>
         <i
             matSuffixIcon
-            *ngIf="matSuffixIcon && !suffixTooltipText"
+            *ngIf="matSuffixIcon"
             [ngClass]="matSuffixIcon"
-            (click)="!suffixTooltipText && clickOnSuffixIcon()"
+            (click)="handleSuffixClick()"
             [matTooltip]="suffixTooltipText ?? ''"
             matTooltipPosition="above"
             role="button"

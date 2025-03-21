@@ -3,6 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import { HIGH_RATE_FIELD_PRECISION } from '../../../app.constant';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'ledger-discount',
@@ -21,15 +22,14 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public discountAccountsDetails: LedgerDiscountClass[];
     @Input() public ledgerAmount: number = 0;
     @Output() public discountTotalUpdated: EventEmitter<{ discountTotal: number, isActive: any, discount: any }> = new EventEmitter();
-    @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     public discountTotal: number;
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
     public discountPercentageModal: number = 0;
     public discountFixedValueModal: number = 0;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
-
-    @Input() public discountMenu: boolean;
+    /** Holds mat menu reference */
+    @ViewChild(MatMenuTrigger) discountMenu: MatMenuTrigger;
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
@@ -46,11 +46,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     public onFocusLastDiv(el) {
         el.stopPropagation();
         el.preventDefault();
-        if (!this.discountMenu) {
-            this.discountMenu = true;
-            this.hideOtherPopups.emit(true);
-            return;
-        }
         let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
         let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
             (element) => {
@@ -62,7 +57,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
         }
-        this.hideDiscountMenu();
         return false;
     }
 
@@ -91,9 +85,11 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * prepare discount obj
+     * Prepare discount obj
+     * 
+     * @memberof LedgerDiscountComponent
      */
-     public prepareDiscountList() {
+    public prepareDiscountList(): void {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         }
@@ -198,17 +194,17 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         return index;
     }
 
-    public hideDiscountMenu() {
-        this.discountMenu = false;
-    }
-
-    public toggleDiscountMenu() {
-        this.discountMenu = !this.discountMenu;
-    }
-
-    public discountInputBlur(event) {
-        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
-            this.hideDiscountMenu();
+    /**
+    * Toggle discount menu
+    *
+    * @param {boolean} [isOpen=false]
+    * @memberof LedgerDiscountComponent
+    */
+    public toggleDiscountMenu(isOpen: boolean = false) {
+        if (isOpen) {
+            !this.discountMenu.menuOpen && this.discountMenu?.openMenu();
+        } else {
+            this.discountMenu.menuOpen && this.discountMenu?.closeMenu();
         }
     }
 

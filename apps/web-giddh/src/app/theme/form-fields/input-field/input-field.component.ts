@@ -109,6 +109,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Output() public onPaste: EventEmitter<any> = new EventEmitter<any>();
     /** Emits event when content is focus */
     @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits on suffix icon click */
+    @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -264,15 +266,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
         this.onPaste.emit(event);
     }
 
-/**
- * Handles focus event to process content
- *
- * @param {ClipboardEvent} event
- */
+    /**
+     * Handles focus event to process content
+     *
+     * @param {ClipboardEvent} event
+     */
     public handleFocus(event: Clipboard): void {
         this.onFocus.emit(event);
     }
-
 
     /**
      * Emits click on suffix icon
@@ -281,5 +282,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public clickOnSuffixIcon(): void {
         this.clickOnSuffix.emit(true);
+    }
+
+    /**
+     * Emit true if suffix icon or text clicked
+     *
+     * @memberof InputFieldComponent
+     */
+    public handleSuffixClick(): void {
+        this.suffixClick.emit(true);
     }
 }

@@ -64,8 +64,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public disabled: boolean;
     /** Show Mat Label In with appearance outline Icon */
     @Input() public showMatLabel: boolean = false;
-    /** Prevent to close dropdown menu after select */
-    @Input() public keepMenuOpenAfterSelect: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -126,8 +124,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                     }
                     this.filterOptions(search);
                 }
+                this.changeDetection.detectChanges();
             }
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -217,9 +215,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         if (this.lastSearchString?.length) {
             this.searchFormControl.setValue("");
         }
-        if (this.keepMenuOpenAfterSelect) {
-            this.handleItemSelected();
-        }
         const selectOptionValue = option?.option?.value?.label;
         this.writeValue([...this.value, option?.option?.value?.value]);
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
@@ -237,7 +232,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public removeOption(index: number): void {
         if (index >= 0) {
             this.chipList.splice(index, 1);
-            this.writeValue(this.value.splice(index, 1));
+            this.value.splice(index, 1);
+            this.writeValue(this.value);
             // Close the autocomplete dropdown if it's open
             setTimeout(() => {
                 if (this.trigger && this.trigger.panelOpen) {
@@ -359,17 +355,5 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public registerOnTouched(fn: any): void {
         this.onTouched = fn;
-    }
-
-    /**
-     * Reopen dropdown after option selected
-     *
-     * @private
-     * @memberof SelectMultipleFieldsComponent
-     */
-    private handleItemSelected(): void {
-        setTimeout(() => {
-            this.trigger.openPanel();
-        }, 50);
     }
 }

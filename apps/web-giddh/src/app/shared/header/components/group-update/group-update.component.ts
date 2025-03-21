@@ -352,7 +352,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public hideTax(): void {
         if (this.taxControll) {
             this.taxControll.change();
-            this.taxControll.showTaxPopup = false;
         }
     }
 

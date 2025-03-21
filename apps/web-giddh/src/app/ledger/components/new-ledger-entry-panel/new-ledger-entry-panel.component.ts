@@ -26,7 +26,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
@@ -41,6 +40,7 @@ import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { CommonService } from '../../../services/common.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -54,19 +54,7 @@ const NEW_LEDGER_ENTRIES = [
     selector: 'new-ledger-entry-panel',
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%,   0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -135,9 +123,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Emitter to update the parent when any field other than total is changed */
     @Output() public isTotalChangedChange: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
-    @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
+    /** Holds select discount control component reference */
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
-    @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+    /** Holds select multiple fields component reference */
+    @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
+    /** Holds select tax control component reference */
+    @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
 
@@ -460,13 +451,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }, 200);
     }
 
-    @HostListener('click', ['$event'])
-    public clicked(e) {
-        if (this.sh && e.path && !this.sh.ele?.nativeElement.contains(e.path[3])) {
-            this.sh.hide();
-        }
-    }
-
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.currentTxn?.currentValue?.selectedAccount) {
             this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
@@ -571,14 +555,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public addToDrOrCr(type: string, e: Event) {
         e.stopPropagation();
-        if (this.isRcmEntry && !this.validateTaxes()) {
-            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
-                // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement?.nativeElement.classList.add('error-box');
-                return;
-            }
-        }
-
         this.changeTransactionType.emit({
             type,
             warehouse: this.selectedWarehouse
@@ -700,8 +676,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountControl.change();
             }
 
-            if (this.taxControll) {
-                this.taxControll.change();
+            if (this.taxControl) {
+                this.taxControl.change();
             }
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
@@ -792,9 +768,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.discountControl.change();
         }
 
-        if (this.taxControll) {
-            this.taxControll.taxTotalAmount = this.currentTxn.amount;
-            this.taxControll.change();
+        if (this.taxControl) {
+            this.taxControl.taxTotalAmount = this.currentTxn.amount;
+            this.taxControl.change();
         }
 
         if (this.currentTxn?.selectedAccount) {
@@ -848,13 +824,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
-        if ((this.isRcmEntry) && !this.validateTaxes()) {
-            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
-                // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement?.nativeElement.classList.add('error-box');
-                return;
-            }
-        }
         if (this.currentTxn?.isStock && !this.selectedStockVariant.value) {
             return;
         }
@@ -1037,26 +1006,47 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
-    public hideDiscountTax(): void {
-        if (this.discountControl && this.discountControl.discountMenu) {
-            this.discountControl.discountMenu = false;
-        }
-        if (this.taxControll && this.taxControll.showTaxPopup) {
-            this.taxControll.showTaxPopup = false;
+    /**
+     * If click on entry panel body it will hide all dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public hideAllDropdownTax(): void {
+        this.closeAddTagDropdown();
+        this.closeTaxDropdown();
+        this.closeDiscountDropdown();
+    }
+
+    /**
+     * Close Add tag dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeAddTagDropdown(): void {
+        if (this.selectMultipleFieldsRef) {
+            this.selectMultipleFieldsRef?.closePanel();
         }
     }
 
-    public hideDiscount(): void {
-        if (this.discountControl && this.discountControl.discountMenu) {
-            this.discountControl.change();
-            this.discountControl.discountMenu = false;
+    /**
+    * Close tax dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public closeTaxDropdown(): void {
+        if (this.taxControl) {
+            this.taxControl.toggleTaxMenu(false);
         }
     }
 
-    public hideTax(): void {
-        if (this.taxControll && this.taxControll.showTaxPopup) {
-            this.taxControll.change();
-            this.taxControll.showTaxPopup = false;
+    /**
+    * Close discount dropdown
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public closeDiscountDropdown(): void {
+        if (this.discountControl) {
+            this.discountControl.toggleDiscountMenu(false);
         }
     }
 
@@ -1406,8 +1396,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.discountControl) {
             this.discountControl.discountTotal = this.currentTxn.discount;
         }
-        if (this.taxControll) {
-            this.taxControll.taxTotalAmount = this.currentTxn.tax;
+        if (this.taxControl) {
+            this.taxControl.taxTotalAmount = this.currentTxn.tax;
         }
         setTimeout(() => {
             // Set it to false after some time, done as (ngModelChange) is triggered twice for amount field
@@ -2044,8 +2034,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 0) || 0;
         }
         let taxTotal = 0;
-        if (this.taxControll) {
-            taxTotal = this.taxControll.taxRenderData?.filter(f => f.isChecked)
+        if (this.taxControl) {
+            taxTotal = this.taxControl.taxRenderData?.filter(f => f.isChecked)
                 .reduce((pv, cv) => {
                     return Number(pv) + Number(cv.amount);
                 }, 0) || 0;
@@ -2074,9 +2064,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.discountControl.change(null, null, true);
             this.calculateTaxValue();
         }
-        if (this.taxControll) {
-            this.taxControll.totalForTax = this.currentTxn.total;
-            this.taxControll.change(true);
+        if (this.taxControl) {
+            this.taxControl.totalForTax = this.currentTxn.total;
+            this.taxControl.change(true);
             this.calculateTotal();
         }
         if (this.currentTxn?.selectedAccount) {
@@ -2139,5 +2129,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             });
         }
+    }
+
+    /**
+     * Return Warehouse dropdown default value to show
+     *
+     * @return {*}  {string}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getWarehouseLabel(): string {
+        return this.warehouses?.find(item => item.value === this.selectedWarehouse)?.label || '';
     }
 }
