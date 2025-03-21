@@ -219,11 +219,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @param {boolean} [isOpen=false]
      * @memberof TaxControlComponent
      */
-    public toggleTaxMenu(isOpen: boolean = false) {
+    public toggleTaxMenu(isOpen: boolean = false): void {
         if (isOpen) {
             !this.taxMenu.menuOpen && this.taxMenu?.openMenu();
         } else {
-            this.taxMenu.menuOpen &&  this.taxMenu?.closeMenu();
+            this.taxMenu.menuOpen && this.taxMenu?.closeMenu();
         }
     }
 

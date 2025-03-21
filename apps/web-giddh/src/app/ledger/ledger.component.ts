@@ -74,7 +74,7 @@ import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dr
 
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', { static: false }) public updateledgercomponent: ElementViewContainerRef;
-    @ViewChildren(ReactiveDropdownFieldComponent) public dropDowns: QueryList<ReactiveDropdownFieldComponent>;
+    @ViewChildren(ReactiveDropdownFieldComponent) public dropdowns: QueryList<ReactiveDropdownFieldComponent>;
     public imgPath: string = '';
     public lc: LedgerVM;
     public selectedInvoiceList: string[] = [];
@@ -1375,10 +1375,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (event?.type === 'DEBIT') {
-                const debitDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
             } else {
-                const creditDropdowns = this.dropDowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
+                const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
                 creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
             }
         }, 200)
@@ -3160,7 +3160,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public closeAllAccountDropdown(): void {
-        this.dropDowns.forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
+        this.dropdowns.forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
     }
 
     /**
