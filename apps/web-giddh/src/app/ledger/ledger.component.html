@@ -508,14 +508,14 @@
                     </div>
                     <div class="d-flex justify-content-end mr-b15" *ngIf="ledgerView">
                         <div class="d-inline-flex align-items-center column-gap1">
-                            <span class="font-15">Statement View</span>
+                            <span class="font-15">{{ commonLocaleData?.app_ledger_view?.statement_view }}</span>
                             <mat-slide-toggle
                                 aria-label="ledger-view"
                                 color="primary"
-                                [checked]="ledgerView == ledgerViewEnum?.TView"
+                                [checked]="ledgerView === ledgerViewEnum?.TView"
                                 (change)="toggleLedgerView($event)"
                             ></mat-slide-toggle>
-                            <span class="font-15">T View</span>
+                            <span class="font-15">{{ commonLocaleData?.app_ledger_view?.t_view }}</span>
                         </div>
                     </div>
                     <div
@@ -3203,7 +3203,7 @@
                         <!-- Debit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_debit" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
                             <ng-container *ngIf="txn.type === 'DEBIT'">
-                            <div class="p-2 d-flex align-items-center justify-content-end column-gap1 w-100 h-100">
+                            <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
                                 <ng-container *ngTemplateOutlet="amountFieldTemplate; context: { $implicit: txn }"></ng-container>
                             </div>
                         </ng-container>
@@ -3212,7 +3212,7 @@
                         <!-- Credit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_credit" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
                             <ng-container *ngIf="txn.type === 'CREDIT'">
-                            <div class="p-2 d-flex align-items-center justify-content-end column-gap1 w-100 h-100">
+                            <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
                                 <ng-container *ngTemplateOutlet="amountFieldTemplate; context: { $implicit: txn }"></ng-container>
                             </div>
                             </ng-container>

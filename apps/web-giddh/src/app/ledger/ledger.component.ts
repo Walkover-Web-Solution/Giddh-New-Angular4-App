@@ -1522,7 +1522,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public showUpdateLedgerModal(txn: ITransactionItem, ledgerType: LedgerType): void {
-        const transactionsList = ledgerType === 'cr' ? this.ledgerTransactions.creditTransactions : this.ledgerTransactions.debitTransactions;
+        let transactionsList = [];
+        if (this.ledgerTransactions?.debitCreditTransactions?.length) {
+            transactionsList = this.ledgerTransactions.debitCreditTransactions;
+        } else {
+            transactionsList = ledgerType === 'cr' ? this.ledgerTransactions.creditTransactions : this.ledgerTransactions.debitTransactions;
+        }
         const txnIndex = transactionsList.findIndex(t => t.entryUniqueName === txn.entryUniqueName);
 
         if (txn?.adjustmentEntry) {
