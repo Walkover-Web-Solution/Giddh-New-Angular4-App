@@ -7,7 +7,7 @@
 >
     <div validateSectionPermission [hasPermission]="hasLedgerPermission">
         <ng-container *ngIf="localeData?.page_heading && commonLocaleData?.app_ac">
-            <div class="btn-group ledger-ellipse" *ngIf="isMobileScreen">
+            <div class="btn-group ledger-ellipse" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)">
                 <button
                     aria-label="threedots"
                     mat-button
@@ -63,7 +63,7 @@
                                 <!-- please remove hidden attribute after functionality works -->
                                 <div
                                     class="select-all-icons"
-                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                 >
                                     <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0">
                                         <mat-checkbox
@@ -153,9 +153,9 @@
                                     <span
                                         [ngClass]="{
                                             'default-width-input':
-                                                (searchText || isAdvanceSearchImplemented) && isMobileScreen,
+                                                (searchText || isAdvanceSearchImplemented) && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView),
                                             'full-width-input':
-                                                (searchText || !isAdvanceSearchImplemented) && isMobileScreen
+                                                (searchText || !isAdvanceSearchImplemented) && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)
                                         }"
                                     >
                                         <input-field
@@ -174,7 +174,7 @@
                                     <a
                                         aria-label="clear"
                                         class="cp mr-l1 clear-filter-btn"
-                                        *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen"
+                                        *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                         href="javascript:;"
                                         (click)="resetAdvanceSearch()"
                                         [matTooltip]="commonLocaleData?.app_reset_advance_search"
@@ -190,7 +190,7 @@
                                     class="ledger-datepicker"
                                     id="giddh-datepicker-mobile-view mr-r05"
                                     container="body"
-                                    *ngIf="isMobileScreen"
+                                    *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                 >
                                     <img
                                         (click)="showGiddhDatepicker($event)"
@@ -306,7 +306,7 @@
                                     showBranchSwitcher &&
                                     currentCompanyBranches?.length > 2 &&
                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                    isMobileScreen
+                                    isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)
                                 "
                             >
                                 <div class="form-group">
@@ -507,6 +507,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mr-b15" *ngIf="ledgerView">
+                        <b *ngIf="ledgerView == ledgerViewEnum.StatementView" class="blue-heading font-15 mr-auto"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
                         <div class="d-inline-flex align-items-center column-gap1">
                             <span class="font-15">{{ commonLocaleData?.app_ledger_view?.statement_view }}</span>
                             <mat-slide-toggle
@@ -519,7 +520,7 @@
                         </div>
                     </div>
                     <div
-                        *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen"
+                        *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
                         class="advance-search-block mr-t05"
                     >
                         <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
@@ -534,7 +535,7 @@
                         <span class="mr-l15 d-inline-block font-15">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
                     <!-- endregion -->
-                    <div class="custom-tabs mt-2 mb-2">
+                    <div class="custom-tabs mt-2 mb-2" *ngIf="ledgerView == ledgerViewEnum.TView">
                         <ul class="nav nav-tabs pt-0">
                             <li [ngClass]="{ 'active': visibleTransactionTypeMobile === 'all' }">
                                 <a
@@ -1228,12 +1229,12 @@
                         cols="2"
                         rowHeight="50px"
                         class="ledger-head"
-                        *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')"
+                        *ngIf="ledgerView == ledgerViewEnum?.TView && !isMobileScreen || (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile !== 'all')"
                     >
                         <mat-grid-tile
                             [ngClass]="
                                 (Shown && !isMobileScreen) ||
-                                (isMobileScreen && visibleTransactionTypeMobile === 'debit')
+                                (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'debit')
                                     ? 'active'
                                     : ''
                             "
@@ -1245,7 +1246,7 @@
                         <mat-grid-tile
                             [ngClass]="
                                 (!Shown && !isMobileScreen) ||
-                                (isMobileScreen && visibleTransactionTypeMobile === 'credit')
+                                (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'credit')
                                     ? 'active'
                                     : ''
                             "
@@ -1256,7 +1257,7 @@
                         </mat-grid-tile>
                     </mat-grid-list>
                     <!-- endregion -->
-                    <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen">
+                    <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)">
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
                             <ng-container *ngFor="let transactionDate of allTransactionDates">
                                 <div class="border-none pt-0 pb-0">
@@ -1413,7 +1414,7 @@
                     </div>
                     <!-- end mobile view -->
                     <!-- region main transactions-->
-                    <div class="ledger-book" *ngIf="!isMobileScreen && ledgerView">
+                    <div class="ledger-book" *ngIf="!isMobileScreen">
                         <ng-container *ngIf="ledgerView == ledgerViewEnum?.TView; else statementView">
                             <!-- region debit transaction-->
                             <div
