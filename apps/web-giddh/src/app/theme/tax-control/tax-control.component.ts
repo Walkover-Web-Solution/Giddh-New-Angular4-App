@@ -25,6 +25,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { isEqual, orderBy } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -54,7 +55,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public customHeading: string = '';
     /** True, if mandatory asterisk needs to be displayed */
     @Input() public isMandatory: boolean = false;
-    @Input() public showTaxPopup: boolean = false;
+    /** Holds true to show error border */
+    @Input() public showError: boolean = false;
     @Input() public totalForTax: number = 0;
     @Input() public rootClass: string = 'ledger-panel';
 
@@ -65,12 +67,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
+    /** Holds true to show mat form field with label */
+    @Input() public showMatFormField: boolean = false;
     /** True, if current transaction tax needed to be calculated inclusively
      * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */
     @Input() public calculateTaxInclusively: boolean;
     /** True if advance receipt entry is created */
     @Input() public isAdvanceReceipt: boolean;
+    /** Holds true to show backdrop in discount menu 
+     * so menu close as click outside the menu */
+    @Input() public hasBackdrop: boolean = true;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -78,6 +85,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @ViewChild('taxInputElement', { static: false }) public taxInputElement: ElementRef;
+    /** Holds Mat Menu Reference */
+    @ViewChild(MatMenuTrigger) taxMenu: MatMenuTrigger;
 
     public taxSum: number = 0;
     public taxTotalAmount: number = 0;
@@ -205,12 +214,18 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-    * hide menus on outside click of span
-    */
-    public toggleTaxPopup(action: any) {
-        this.showTaxPopup = action;
+     * Toggle tax menu
+     *
+     * @param {boolean} [isOpen=false]
+     * @memberof TaxControlComponent
+     */
+    public toggleTaxMenu(isOpen: boolean = false): void {
+        if (isOpen) {
+            !this.taxMenu.menuOpen && this.taxMenu?.openMenu();
+        } else {
+            this.taxMenu.menuOpen && this.taxMenu?.closeMenu();
+        }
     }
-
 
     public ngOnDestroy() {
         this.taxAmountSumEvent.unsubscribe();
@@ -299,8 +314,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public onFocusLastDiv(el) {
         el.stopPropagation();
         el.preventDefault();
-        if (!this.showTaxPopup) {
-            this.showTaxPopup = true;
+        if (!this.taxMenu?.menuOpen) {
             this.hideOtherPopups.emit(true);
             return;
         }
@@ -316,7 +330,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
         }
-        this.toggleTaxPopup(false);
+        this.toggleTaxMenu(false);
         return false;
     }
 
@@ -326,8 +340,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     public handleInputFocus(): void {
-        this.showTaxPopup = true;
-        this.hideOtherPopups.emit(true);
         this.taxInputElement?.nativeElement.classList.remove('error-box');
     }
 
@@ -375,24 +387,5 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             // Exclusive tax rate
             this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
         }
-    }
-
-    /**
-    * Adds styling on focused Dropdown List
-    *
-    * @param {HTMLElement} taxLabel
-    * @memberof TaxControlComponent
-    */
-    public taxLabelFocusing(taxLabel: HTMLElement): void {
-        this.generalService.dropdownFocusIn(taxLabel);
-    }
-    /**
-     * Removes styling from focused Dropdown List
-     *
-     * @param {HTMLElement} taxLabel
-     * @memberof TaxControlComponent
-     */
-    public taxLabelBluring(taxLabel: HTMLElement): void {
-        this.generalService.dropdownFocusOut(taxLabel);
     }
 }

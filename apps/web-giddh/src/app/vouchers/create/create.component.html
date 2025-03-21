@@ -837,7 +837,7 @@
                                                                         (createOption)="toggleStockAsidePane()"
                                                                         [openDropdown]="entryIndex === activeEntryIndex && !transaction.get('account.uniqueName')?.value"
                                                                         [showOptionDivider]="true"
-                                                                        [showMatLabelWithLabledField]="false"
+                                                                        [showMatLabel]="false"
                                                                         [showCaretIcon]="false" [appearance]="'fill'">
                                                                         <ng-template #optionTemplate
                                                                             let-option="option">
@@ -905,7 +905,7 @@
                                                                                 [options]="stockVariants[entryIndex] | async"
                                                                                 (selectedOption)="selectVariant($event, entryIndex)"
                                                                                 (onClear)="selectVariant($event, entryIndex, true)"
-                                                                                [showMatLabelWithLabledField]="false"
+                                                                                [showMatLabel]="false"
                                                                                 [showCaretIcon]="false"
                                                                                 [appearance]="'fill'">
                                                                             </reactive-dropdown-field>

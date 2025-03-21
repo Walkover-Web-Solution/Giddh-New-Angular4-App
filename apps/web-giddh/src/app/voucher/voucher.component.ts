@@ -4166,10 +4166,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public closeTaxControlPopup() {
+    /**
+     * Close all tax control dropdown
+     *
+     * @memberof VoucherComponent
+     */
+    public closeTaxControlPopup(): void {
         if (this.taxControlComponent) {
             this.taxControlComponent.forEach(taxComp => {
-                taxComp.showTaxPopup = false;
+                taxComp.toggleTaxMenu(false);
             });
         }
     }
