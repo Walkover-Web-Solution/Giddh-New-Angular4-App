@@ -27,6 +27,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
 import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
+import { LedgerViewEnum } from '../../models/api-models/Ledger';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -94,7 +95,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         taxType: '',
         manageInventory: false,
         portalDomain: '',
-        withPay: 'false'
+        withPay: 'false',
+        ledgerView: LedgerViewEnum.TView
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -378,7 +380,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         },
                         companyName: response.name,
                         balanceDecimalPlaces: response.balanceDecimalPlaces,
-                        balanceDisplayFormat: response.balanceDisplayFormat
+                        balanceDisplayFormat: response.balanceDisplayFormat,
+                        ledgerView: response.ledgerView
                     }
                 }
             }
@@ -1213,7 +1216,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 balanceDisplayFormat: profileObj.balanceDisplayFormat,
                 isMultipleCurrency: profileObj.isMultipleCurrency,
                 manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false,
-                withPay: profileObj.withPay
+                withPay: profileObj.withPay,
+                ledgerView: profileObj.ledgerView
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
