@@ -13154,8 +13154,8 @@ body.hide-scroll-body.master-page {
 }
 
 .ledger-main {
-    input {
-        &:disabled {
+    .readonly-field {
+        .mat-mdc-form-field {
             background-color: var(--color-white) !important;
         }
     }
@@ -13889,4 +13889,10 @@ mat-list {
             color: var(--color-common-primary-text) !important;
         }
     }
+}
+
+/** Use this class on black color image (icon) 
+ to  change color in dark theme **/
+.image-as-icon-color {
+    filter: var(--color-image-filter-quaternary);
 }

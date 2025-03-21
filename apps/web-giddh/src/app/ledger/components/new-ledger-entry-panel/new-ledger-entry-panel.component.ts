@@ -258,6 +258,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private openTooltipMenuStatus: boolean = false;
     /** Holds mouse hovered on tooltip text status */
     public tooltipHoveredStatus: boolean = false;
+    /** Holds true to close reactive dropdown menu close as BehaviorSubject */
+    public closeDropdown$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -918,6 +920,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.closeDropdown$.next(false);
+        this.closeDropdown$.complete();
     }
 
     public getReconciledEntries() {
@@ -1014,6 +1018,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.closeAddTagDropdown();
         this.closeTaxDropdown();
         this.closeDiscountDropdown();
+        this.closeDropdown$.next(true);
     }
 
     /**
