@@ -283,14 +283,14 @@ export class AccountService {
     }
 
     /**
-     * Update Account Without account unique name
+     * Update Account Without group unique name
      *
      * @param {AccountRequestV2} model
      * @param {string} accountUniqueName
      * @return {*}  {Observable<BaseResponse<AccountResponseV2, AccountRequestV2>>}
      * @memberof AccountService
      */
-    public UpdateAccountWithoutAccountUniqueName(model: AccountRequestV2, accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
+    public UpdateAccountWithoutGroupUniqueName(model: AccountRequestV2, accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
         return this.http.patch(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE_WITH_ACCOUNT_UNIQUE_NAME
             ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(

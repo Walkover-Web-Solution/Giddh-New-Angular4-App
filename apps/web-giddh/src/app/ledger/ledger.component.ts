@@ -1011,7 +1011,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
 
-        this.ledgerComponentStore.changeLedgerView$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response){
                 this.getTransactionData();
             }
@@ -2001,7 +2001,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Handle Select all entries
      *
-     * @param {MatCheckboxChange} ev
+     * @param {MatCheckboxChange} event
      * @param {('debit' | 'credit' | 'all')} type
      * @memberof LedgerComponent
      */
@@ -2364,14 +2364,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle change ledger view
+     * Handle ledger view change
      *
      * @param {MatSlideToggleChange} event
      * @memberof LedgerComponent
      */
     public toggleLedgerView(event: MatSlideToggleChange): void {
         this.ledgerView = event.checked ? LedgerViewEnum.TView : LedgerViewEnum.StatementView;
-
         this.ledgerComponentStore.updateAccount({
             model: {
                 ledgerView: this.ledgerView as TLedgerView
