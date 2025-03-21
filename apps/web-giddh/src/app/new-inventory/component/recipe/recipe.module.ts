@@ -13,6 +13,7 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     imports: [
@@ -26,7 +27,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
         TranslateDirectiveModule,
         FormsModule,
         MatTooltipModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatSlideToggleModule
     ],
     exports: [
         CreateRecipeComponent,
