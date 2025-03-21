@@ -1641,10 +1641,21 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <div class="pd-l15 pt-3 mr-b5" *ngIf="!queryParams?.stockUniqueName">
+                                    <div class="pd-l15 pt-3" *ngIf="!queryParams?.stockUniqueName">
                                         <button aria-label="recipe btn" mat-stroked-button color="primary" (click)="createStock(true)">
                                             {{ localeData?.save_stock_for_recipe }}
                                         </button>
+                                    </div>
+                                    <div class="d-flex align-items-center column-gap1 pd-l15 mt-3" [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'">
+                                        <mat-slide-toggle
+                                            class="mr-b05"
+                                            color="primary"
+                                            name="runtimeManufacturing"
+                                            [(ngModel)]="stockForm.runtimeManufacturing"
+                                            aria-label="runtime manufacturing"
+                                        >
+                                        </mat-slide-toggle>
+                                        <span>{{ commonLocaleData?.app_allow_manufacturing_sales_transactions }}</span>
                                     </div>
                                     <create-recipe
                                         #createRecipe
