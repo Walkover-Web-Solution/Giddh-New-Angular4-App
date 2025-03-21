@@ -161,7 +161,7 @@
                                             class="
                                                 inline-multiple-input-width
                                                 d-flex
-                                                align-items-center
+                                                align-items-start
                                                 justify-content-space-between
                                             "
                                         >
@@ -176,6 +176,16 @@
                                                     >
                                                     </mat-slide-toggle>
                                                     <label>{{ localeData?.is_it_childgroup }}</label>
+                                                </div>
+                                                <div class="d-flex toggle-childgroup pd-t05 mt-1">
+                                                    <mat-slide-toggle
+                                                        color="primary"
+                                                        name="runtimeManufacturing"
+                                                        formControlName="runtimeManufacturing"
+                                                        aria-label="runtime manufacturing"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                    <span>{{ commonLocaleData?.app_allow_manufacturing_sales_transactions }}</span>
                                                 </div>
                                             </div>
                                             <div class="input-min-width" *ngIf="groupForm.get('isSubGroup')?.value">
