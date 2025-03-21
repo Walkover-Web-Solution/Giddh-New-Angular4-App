@@ -50,6 +50,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public isPurchaseOrder: string = '';
     /** Holds module translation data */
     @Input() public localeData: any = {};
+    /** Holds autocomplete position */
+    @Input() public autoCompletePosition: string = 'auto';
+    /** Holds CSS class which applied on mat options tag */
+    @Input() public optionClass: string;
     /** Holds module translation data */
     @Input() public commonLocaleData: any = {};
     /** True if the component should be used as dynamic search component instead of static search */
@@ -68,10 +72,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Output() public createOption: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Callback for clear selected value */
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
-    /** Holds autocomplete position */
-    @Input() public autoCompletePosition: string = 'auto';
-    /** Holds CSS class which applied on mat options tag */
-    @Input() public optionClass: string;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */

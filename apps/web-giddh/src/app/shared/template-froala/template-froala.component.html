@@ -44,7 +44,8 @@
                                 [autoFocus]="emailFocusStates.isTo"
                                 [name]="emailType.To"
                                 class="select-multiple-chiplist w-100"
-                                [optionClass]="'dropdown-width'"
+                                [optionClass]="'email-dropdown-width'"
+                                [commonLocaleData]="commonLocaleData"
                             ></select-multiple-fields>
                             <div
                                 *ngIf="clickedInsideEmailSection && !showCc && !showBcc"
@@ -83,7 +84,8 @@
                                 [autoFocus]="emailFocusStates.isCc"
                                 [name]="emailType.Cc"
                                 class="select-multiple-chiplist w-100"
-                                [optionClass]="'dropdown-width'"
+                                [optionClass]="'email-dropdown-width'"
+                                [commonLocaleData]="commonLocaleData"
                             ></select-multiple-fields>
 
                             <div class="d-flex column-gap1 justify-content-end">
@@ -115,7 +117,8 @@
                                 [autoFocus]="emailFocusStates.isBcc"
                                 [name]="emailType.Bcc"
                                 class="select-multiple-chiplist w-100"
-                                [optionClass]="'dropdown-width'"
+                                [optionClass]="'email-dropdown-width'"
+                                [commonLocaleData]="commonLocaleData" 
                             ></select-multiple-fields>
 
                             <div class="d-flex column-gap1 justify-content-end">

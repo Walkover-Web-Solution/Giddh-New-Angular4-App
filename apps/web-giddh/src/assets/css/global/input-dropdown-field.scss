@@ -511,12 +511,11 @@ ngx-mat-select-search {
 body {
     .cdk-overlay-container {
         .cdk-overlay-pane {
+            &:has(.email-dropdown-width) {
+                width: 400px !important;
+            }
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
-
-                &:has(.dropdown-width) {
-                    width: 40%;
-                }
             }
         }
     }
@@ -702,7 +701,6 @@ mat-option {
         }
     }
 }
-
 .mdc-text-field {
     .mdc-floating-label {
         color: var(--color-popup-list-input-text) !important;
