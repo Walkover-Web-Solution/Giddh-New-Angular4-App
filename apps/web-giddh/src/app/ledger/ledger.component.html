@@ -2814,143 +2814,6 @@
             <ng-template #attachments>
                 <attachments [selectedItem]="selectedItem"></attachments>
             </ng-template>
-
-            <!-- Account List Dropdown -->
-            <ng-template 
-                #accountSearchTemplate 
-                let-isLedgerEntry 
-                let-txn="txn" 
-                let-index="index"
-                let-cr="cr"
-                let-dr="dr"
-            >
-                <reactive-dropdown-field
-                    [data]="isLedgerEntry ? (cr ? 'CREDIT' : 'DEBIT') : null "
-                    *ngIf="isLedgerEntry || txn.showDropdown"
-                    class="w-100"
-                    [cssClass]="'bg-transparent' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
-                    (keydown.enter)="$event.preventDefault()"
-                    [disabled]="
-                        (currentOrganizationType === 'COMPANY' ||
-                            isConsolidatedBranch) &&
-                        currentCompanyBranches?.length > 2
-                    "
-                    [placeholder]="isLedgerEntry ? (txn?.type === 'DEBIT' ? localeData?.to_select_accounts : localeData?.by_select_accounts) : commonLocaleData?.app_select_accounts"
-                    [(ngModel)]="txn.particular"
-                    [name]="txn.particular+index"
-                    [labelValue]="(txn?.selectedAccount?.label ?? txn?.selectedAccount?.name) | titlecase"
-                    [options]="searchResults"
-                    [showCreateNew]="true"
-                    [enableDynamicSearch]="true"
-                    [isPaginationEnabled]="true"
-                    (scrollEnd)="handleScrollEnd()"
-                    [readonly]="
-                        (currentOrganizationType === 'COMPANY' ||
-                        isConsolidatedBranch) &&
-                        currentCompanyBranches?.length > 2
-                    "
-                    (selectedOption)="
-                        addBrowserConfirmation();
-                        selectAccount($event, txn, false, true);
-                        (isLedgerEntry && showNewLedgerEntryPopup(txn))
-                    "
-                    (dynamicSearchedQuery)="
-                        isAccountSearchData = true;
-                        onSearchQueryChanged($event)
-                    "
-                    (onClear)="selectAccount($event, txn, true, true)"
-                    (createOption)="openLedgerAsidePaneDialog()"
-                    [showOptionDivider]="true"
-                    [showMatLabel]="false"
-                    [showCaretIcon]="false" 
-                    [appearance]="'fill'"
-                    [createNewText]="commonLocaleData?.app_create_new"
-                    [showKeyboardCommand]="commonLocaleData?.app_alt_c"
-                >
-                    <ng-template #optionTemplate
-                        let-option="option">
-                        <ng-container
-                            *ngIf="!option.additional?.stock">
-                            <a href="javascript:;"
-                                class="d-block py-1 text-black">
-                                <div class="font-15">
-                                    {{ option?.label | titlecase }}
-                                </div>
-                                <div class="font-15 text-gray">
-                                    {{ option.additional?.uniqueName
-                                    }}
-                                </div>
-                            </a>
-                        </ng-container>
-                        <ng-container
-                            *ngIf="option.additional?.stock">
-                            <a href="javascript:;"
-                                class="py-1 text-black">
-                                <div class="font-15">
-                                    {{ option?.label | titlecase }}
-                                    <span
-                                        *ngIf="option?.additional?.stock">
-                                        ({{
-                                        option?.additional?.stock?.name
-                                        | titlecase }})
-                                    </span>
-                                </div>
-                                <div class="font-15 text-gray">
-                                    {{ option.additional?.uniqueName
-                                    }}
-                                </div>
-                                <div
-                                    class="text-gray font-12">
-                                    {{ commonLocaleData?.app_stock
-                                    }}: {{
-                                    option.additional?.stock?.uniqueName
-                                    }}
-                                </div>
-                            </a>
-                        </ng-container>
-                    </ng-template>
-                </reactive-dropdown-field>
-            </ng-template>
-            
-            <!-- Branch List Dropdown -->
-            <ng-template #branchSwitcherTemplate>
-                <reactive-dropdown-field
-                    class="w-100"
-                    [label]="commonLocaleData?.app_branch"
-                    [placeholder]="commonLocaleData?.app_select_branch"
-                    [(ngModel)]="currentBranch.uniqueName"
-                    [name]="'branch'"
-                    [options]="currentCompanyBranches"
-                    [labelValue]="currentBranch?.name"
-                    (selectedOption)="handleBranchChange($event)">
-                </reactive-dropdown-field>
-            </ng-template>
-
-            <!-- carousel template -->
-            <ng-template #carousel>
-                <giddh-carousel
-                    (navigatePrevious)="handleCarouselPrevious($event)"
-                    (navigateNext)="handleCarouselNext($event)"
-                >
-                    <ng-template #slideTemplate>
-                        <update-ledger-entry-panel
-                            [defaultSuggestions]="defaultSuggestions"
-                            [tcsOrTds]="tcsOrTds"
-                            [searchResultsPaginationPage]="defaultResultsPaginationData.page"
-                            [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
-                            [activeCompany]="activeCompany"
-                            [entrySide]="entrySide"
-                            [generateEInvoice]="generateEInvoice"
-                            (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
-                            (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
-                            (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
-                            [entryTransactionData]="entryTransactionData"
-                            [carouselPrevious]="carouselPrevious"
-                            [carouselNext]="carouselNext"
-                        ></update-ledger-entry-panel>
-                    </ng-template>
-                </giddh-carousel>
-            </ng-template>
             
             <!-- Ledger Statement View -->
             <ng-template #ledgerStatementView>
@@ -3239,6 +3102,7 @@
         </ng-container>
     </div>
 </ng-container>
+<<<<<<< HEAD
 
 <!-- Account List Dropdown -->
 <ng-template 
@@ -3375,3 +3239,5 @@
         </ng-template>
     </giddh-carousel>
 </ng-template>
+=======
+>>>>>>> 5d89cc88dbd55430a2fedc531f23445c9df89406
