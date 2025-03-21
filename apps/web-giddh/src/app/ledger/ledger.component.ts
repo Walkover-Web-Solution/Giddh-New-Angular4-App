@@ -169,7 +169,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Export ledger request object */
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public accountUniqueName: any;
+    /** Stores account unique name */
+    public accountUniqueName: string;
     /** Transactions dates array */
     public allTransactionsList: any[] = [];
     public allTransactionDates: any[] = [];
@@ -786,8 +787,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     const debitTransactions = lt.debitTransactions ?? [];
                     const creditTransactions = lt.creditTransactions ?? [];
                     checkedEntriesName = uniq([
-                      ...debitTransactions.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: 'debit' })),
-                      ...creditTransactions.filter(f => f.isChecked).map(ct => ({ uniqueName: ct.entryUniqueName, type: 'credit' })),
+                      ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
+                      ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
                     ]);
                 } else {
                     checkedEntriesName = uniq([
@@ -1972,7 +1973,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         let entryUniqueNames: string[] = [];
         if (debitCreditTransactions?.length) {
-            entryUniqueNames = [...debitCreditTransactions?.filter(f => f.isChecked).map(dt => dt.entryUniqueName)];
+            entryUniqueNames = [...debitCreditTransactions?.filter(debitCreditTransaction => debitCreditTransaction.isChecked).map(debitCreditTransaction => debitCreditTransaction.entryUniqueName)];
         } else {
             entryUniqueNames = [
                     ...debitTrx?.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
@@ -2788,7 +2789,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
                     if (data[0]?.ledgerView) {
-                        this.ledgerView = data[0]?.ledgerView;
+                        this.ledgerView = data[0].ledgerView;
                     }
 
                     this.loadDefaultSearchSuggestions();

@@ -513,7 +513,7 @@
                             <mat-slide-toggle
                                 aria-label="ledger-view"
                                 color="primary"
-                                [checked]="ledgerView === ledgerViewEnum?.TView"
+                                [checked]="ledgerView === ledgerViewEnum.TView"
                                 (change)="toggleLedgerView($event)"
                             ></mat-slide-toggle>
                             <span class="font-15">{{ commonLocaleData?.app_ledger_view?.t_view }}</span>
@@ -1415,7 +1415,7 @@
                     <!-- end mobile view -->
                     <!-- region main transactions-->
                     <div class="ledger-book" *ngIf="!isMobileScreen">
-                        <ng-container *ngIf="ledgerView == ledgerViewEnum?.TView; else statementView">
+                        <ng-container *ngIf="ledgerView == ledgerViewEnum.TView; else statementView">
                             <!-- region debit transaction-->
                             <div
                                 [ngClass]="Shown ? 'active' : ''"
@@ -3140,7 +3140,7 @@
                         }"
                         [matTooltip]="txn.description"
                         [matTooltipPosition]="'above'"
-                        matTooltipClass="tooltip-black"
+                        [matTooltipClass]="tooltip-black"
                         (mouseover)="entryHovered(txn.entryUniqueName)"
                         (mouseout)="selectedTrxWhileHovering = ''"
                     >
@@ -3194,7 +3194,7 @@
                                             : txn.voucherNumber || commonLocaleData?.app_not_available
                                     "
                                     [matTooltipPosition]="'right'"
-                                    matTooltipClass="tooltip-black"
+                                    [matTooltipClass]="tooltip-black"
                                 >
                                     <i class="icon-download-circle"></i>
                                 </span>
