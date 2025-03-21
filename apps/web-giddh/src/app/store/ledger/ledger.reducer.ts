@@ -374,7 +374,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return f;
             });
 
-            let debitCreditTransactions = newState.transactionsResponse.creditTransactions;
+            let debitCreditTransactions = newState.transactionsResponse.debitCreditTransactions;
             debitCreditTransactions = debitCreditTransactions.map(entry => {
                 res.forEach(response => {
                     if (response === entry.entryUniqueName) {
@@ -389,7 +389,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 transactionsResponse: {
                     ...state.transactionsResponse,
                     debitTransactions: debitTrx,
-                    creditTransactions: creditTrx
+                    creditTransactions: creditTrx,
+                    debitCreditTransactions: debitCreditTransactions
                 },
                 ledgerBulkActionFailedEntries: []
             };
