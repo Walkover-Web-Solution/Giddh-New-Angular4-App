@@ -272,10 +272,10 @@
                     (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                     (companyTaxesList$ | async)?.length
                     "
-                    (clickOutside)="hideTax()"
-                    (click)="$event.stopPropagation();closeDiscountDropdown(); closeAddTagDropdown()"
+                    (click)="$event.stopPropagation()"
                 >
                     <tax-control
+                        (click)="closeDiscountDropdown(); closeAddTagDropdown();"
                         id="ledger-tax"
                         #tax
                         [taxes]="companyTaxesList$ | async"
@@ -667,7 +667,9 @@
                                             (change)="handleVoucherAdjustment()"
                                             [(ngModel)]="isAdjustVoucherSelected"
                                         ></mat-checkbox>
-                                        {{ localeData?.adjust_voucher | replace: "[VOUCHER_TYPE]":currentVoucherLabel }}
+                                        <span class="text-black">
+                                            {{ localeData?.adjust_voucher | replace: "[VOUCHER_TYPE]":currentVoucherLabel }}
+                                        </span>
                                     </td>
                                     <td
                                         *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt"
@@ -856,7 +858,14 @@
                                     <label for="invoiceFile" class="cp font-15">
                                         <i class="icon-file" *ngIf="!isFileUploading && blankLedger?.attachedFile?.length"></i>
                                         <i class="fa fa-spinner rotate" *ngIf="isFileUploading"></i>
-                                        <img src="assets/icon/attach_file.svg" height="20" width="20" *ngIf="!isFileUploading && !blankLedger?.attachedFile?.length" alt="file" />
+                                        <img 
+                                            *ngIf="!isFileUploading && !blankLedger?.attachedFile?.length" 
+                                            class="image-as-icon-color" 
+                                            src="assets/icon/attach_file.svg" 
+                                            height="20" 
+                                            width="20" 
+                                            alt="file" 
+                                        />
                                         <ng-container *ngIf="!blankLedger?.attachedFile?.length">
                                             {{ localeData?.attach_file }}
                                         </ng-container>
@@ -1148,6 +1157,7 @@
         <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as variants">
             <div *ngIf="variants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <reactive-dropdown-field
+                    id="ledger-variant-dropdown"
                     [name]="'variantDropdown'"
                     [label]="localeData?.select_variant"
                     [placeholder]="localeData?.select_variant"
@@ -1164,7 +1174,8 @@
         </ng-container>
         <div class="col-md-3 mb-2 p-0 pr-2" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
             <reactive-dropdown-field
-                [name]="'variantDropdown'"
+                id="ledger-warehouse-dropdown"
+                [name]="'warehouseDropdown'"
                 [label]="localeData?.select_warehouse"
                 [placeholder]="localeData?.select_warehouse"
                 [options]="warehouses"

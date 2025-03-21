@@ -146,7 +146,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             }
         }
         if (changes?.options) {
-            this.fieldFilteredOptions = changes.options.currentValue;
+            this.fieldFilteredOptions = changes.options.currentValue?.filter(item => item.label !== "" || item.value !== "");;
         }
     }
 
