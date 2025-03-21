@@ -44,7 +44,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     private isByProductExpanded: boolean;
     /** True ifi is by product link expanded*/
     private isByLinkedStockExpanded: boolean;
-    public runtimeManufacturing: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -133,8 +132,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     }
                 }
             ],
-            isEdit: true,
-            runtimeManufacturing: false
+            isEdit: true
         });
 
         if (this.variantsList?.length === 1) {
