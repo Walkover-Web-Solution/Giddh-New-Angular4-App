@@ -17,6 +17,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpe
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Injectable()
@@ -1082,6 +1083,19 @@ export class GeneralService {
         return [
             { label: 'Default', value: 'default-theme' },
             { label: 'Dark', value: 'dark-theme' }
+        ];
+    }
+
+    /**
+     * This will return available ledger view
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getAvailableLedgerView(): IOption[] {
+        return [
+            { label: 'T View', value: LedgerViewEnum.TView },
+            { label: 'Statement View', value: LedgerViewEnum.StatementView }
         ];
     }
 
