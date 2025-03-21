@@ -1573,7 +1573,7 @@
                                                 }}
                                             </div>
 
-                                            <span
+                                            <!-- <span
                                                 class="download-invoice-ledger d-flex"
                                                 *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                                 (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
@@ -1582,8 +1582,8 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
-                                            </span>
-                                            <span
+                                            </span> -->
+                                            <!-- <span
                                                 class="download-invoice-ledger d-flex"
                                                 *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                                 (click)="downloadFiles(txn, 'VOUCHER', $event)"
@@ -1600,7 +1600,7 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
-                                            </span>
+                                            </span> -->
                                             <span
                                                 class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="
@@ -1779,7 +1779,7 @@
                                                     [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                     [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                     (resetBlankLedger)="resetBlankTransaction()"
-                                                    (saveBlankLedger)="saveBlankTransaction()"
+                                                    (saveBlankLedger)="generateLedger()"
                                                     (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                     (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                     [referenceVouchersTotalPages]="referenceVouchersTotalPages"
@@ -1968,7 +1968,7 @@
                                                             : localeData?.to_particular
                                                 }}
                                             </div>
-                                            <span
+                                            <!-- <span
                                                 class="download-invoice-ledger d-flex"
                                                 *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                                 (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
@@ -1977,8 +1977,8 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
-                                            </span>
-                                            <span
+                                            </span> -->
+                                            <!-- <span
                                                 class="download-invoice-ledger d-flex"
                                                 *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                                 (click)="downloadFiles(txn, 'VOUCHER', $event)"
@@ -1995,7 +1995,7 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
-                                            </span>
+                                            </span> -->
                                             <span
                                                 class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="
@@ -2168,7 +2168,7 @@
                                                     [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                                     [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                     (resetBlankLedger)="resetBlankTransaction()"
-                                                    (saveBlankLedger)="saveBlankTransaction()"
+                                                    (saveBlankLedger)="generateLedger()"
                                                     (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                                     (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                     (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"

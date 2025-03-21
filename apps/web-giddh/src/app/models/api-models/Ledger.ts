@@ -446,8 +446,10 @@ export interface IVariant extends IParticular {
 /** Type for ledger type */
 export type LedgerType = 'cr' | 'dr';
 
+/** Type for ledger view */
 export type  TLedgerView  = 'STATEMENT_VIEW' | 'T_VIEW';
 
+/** Enum for ledger view */
 export enum LedgerViewEnum  {
     StatementView = 'STATEMENT_VIEW',
     TView = 'T_VIEW'

@@ -14,7 +14,7 @@ export interface LedgerState {
     uploadVoucherSuccess: boolean;
     importVoucherSuccess: any;
     accountSearch: any;
-    changeLedgerView: boolean;
+    isLedgerViewChange: boolean;
 }
 
 export const DEFAULT_LEDGER_STATE: LedgerState = {
@@ -23,7 +23,7 @@ export const DEFAULT_LEDGER_STATE: LedgerState = {
     uploadVoucherSuccess: false,
     importVoucherSuccess: null,
     accountSearch: null,
-    changeLedgerView: null
+    isLedgerViewChange: null
 };
 
 @Injectable()
@@ -40,7 +40,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
     public uploadVoucherSuccess$ = this.select((state) => state.uploadVoucherSuccess);
     public importVoucherSuccess$ = this.select((state) => state.importVoucherSuccess);
     public accountSearch$ = this.select((state) => state.accountSearch);
-    public changeLedgerView$ = this.select((state) => state.changeLedgerView);
+    public isLedgerViewChange$ = this.select((state) => state.isLedgerViewChange);
 
     /**
      * Get Ledger Balance
@@ -227,21 +227,21 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
     readonly updateAccount = this.effect((data: Observable<{ model: AccountRequestV2, accountUniqueName: string }>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ changeLedgerView: null });
-                return this.accountService.UpdateAccountWithoutAccountUniqueName(req.model, req.accountUniqueName).pipe(
+                this.patchState({ isLedgerViewChange: null });
+                return this.accountService.UpdateAccountWithoutGroupUniqueName(req.model, req.accountUniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 res.body?.message && this.toasterService.showSnackBar('success', res.body.message);
-                                return this.patchState({ changeLedgerView: true });
+                                return this.patchState({ isLedgerViewChange: true });
                             } else {
                                 res?.message && this.toasterService.showSnackBar('error', res.message);
-                                return this.patchState({ changeLedgerView: false });
+                                return this.patchState({ isLedgerViewChange: false });
                             }
                         },
                         (error: any) => {
                             this.toasterService.showSnackBar("error", error);
-                            return this.patchState({ changeLedgerView: false });
+                            return this.patchState({ isLedgerViewChange: false });
                         }
                     ),
                     catchError((err) => EMPTY)
