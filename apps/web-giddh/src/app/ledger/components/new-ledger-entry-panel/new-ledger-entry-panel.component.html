@@ -444,7 +444,6 @@
                     [options]="availableItcList"
                     [(ngModel)]="currentTxn.itcAvailable"
                     [disabled]="isReadOnly"
-                    [closeOnFocusOut]="closeDropdown$ | async"
                 >
                 </reactive-dropdown-field>
             </div>
@@ -471,7 +470,6 @@
                                                 [options]="voucherTypeList | async"
                                                 [(ngModel)]="blankLedger.voucherType"
                                                 [readonly]="isReadOnly"
-                                                [closeOnFocusOut]="closeDropdown$ | async"
                                             >
                                             </reactive-dropdown-field>
                                         </div>
@@ -533,7 +531,6 @@
                                                 [showMatLabel]="true"
                                                 [showCaretIcon]="false" 
                                                 [appearance]="'outline'"
-                                                [closeOnFocusOut]="closeDropdown$ | async"
                                             >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item sh-template">
@@ -1160,6 +1157,7 @@
         <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as variants">
             <div *ngIf="variants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <reactive-dropdown-field
+                    id="ledger-variant-dropdown"
                     [name]="'variantDropdown'"
                     [label]="localeData?.select_variant"
                     [placeholder]="localeData?.select_variant"
@@ -1170,21 +1168,20 @@
                     (selectedOption)="variantChanged($event)"
                     [showError]="!selectedStockVariant.value"
                     [disabled]="isReadOnly"
-                    [closeOnFocusOut]="closeDropdown$ | async"
                 >
                 </reactive-dropdown-field>
             </div>
         </ng-container>
         <div class="col-md-3 mb-2 p-0 pr-2" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
             <reactive-dropdown-field
-                [name]="'variantDropdown'"
+                id="ledger-warehouse-dropdown"
+                [name]="'warehouseDropdown'"
                 [label]="localeData?.select_warehouse"
                 [placeholder]="localeData?.select_warehouse"
                 [options]="warehouses"
                 [(ngModel)]="selectedWarehouse"
                 [labelValue]="getWarehouseLabel()"
                 [disabled]="isReadOnly"
-                [closeOnFocusOut]="closeDropdown$ | async"
             >
             </reactive-dropdown-field>
         </div>
