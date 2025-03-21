@@ -531,7 +531,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     parentStockGroupUniqueName: response.body.parentStockGroup ? response.body.parentStockGroup.uniqueName : '',
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
                     taxes: response.body.taxes,
-                    discounts: response.body.discounts
+                    discounts: response.body.discounts,
+                    runtimeManufacturing: response.body.runtimeManufacturing
                 });
                 this.groupForm.get('discountLabel').patchValue(this.discountsList?.find(discount => discount.uniqueName === response.body.discounts[0])?.name);
                 this.groupForm.updateValueAndValidity();

@@ -4,8 +4,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div class="pd-l15 pt-3">
-        <div *ngIf="newVariants?.length" class="save-recipe">{{ localeData?.save_variants }}</div>
+    <div *ngIf="newVariants?.length" class="pd-l15 pt-3">
+        <div class="save-recipe">{{ localeData?.save_variants }}</div>
     </div>
     <section class="create-recipe">
         <div class="recipe-wrapper">
@@ -68,17 +68,6 @@
                                             "
                                         >
                                         </dropdown-field>
-                                    </div>
-                                    <div class="d-flex column-gap1">
-                                        <mat-slide-toggle
-                                            class="mt-1"
-                                            color="primary"
-                                            name="runtimeManufacturing"
-                                            [(ngModel)]="recipe.runtimeManufacturing"
-                                            aria-label="runtimeManufacturing"
-                                        >
-                                        </mat-slide-toggle>
-                                        <label>Allow manufacturing to proceed during sales transactions.</label>
                                     </div>
                                 </div>
                             </div>
