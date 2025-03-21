@@ -1740,7 +1740,8 @@
                                                             </a>
                                                         </ng-template>
                                                     </sh-select>
-                                                    <sh-select
+                                                    <!-- <sh-select
+                                                        *ngIf="voucherApiVersion !== 2"
                                                         id="update-ledger-invoice-voucher-number"
                                                         [options]="invoiceList"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
@@ -1765,7 +1766,6 @@
                                                         [ItemHeight]="67"
                                                         [showClear]="false"
                                                     >
-                                                    <!-- *ngIf="voucherApiVersion !== 2" -->
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item sh-template">
                                                                 <div class="item">
@@ -1804,7 +1804,7 @@
                                                                 </div>
                                                             </a>
                                                         </ng-template>
-                                                    </sh-select>
+                                                    </sh-select> -->
                                                 </div>
                                             </td>
                                             <td

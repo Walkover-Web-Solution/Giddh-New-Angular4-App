@@ -264,12 +264,10 @@
                         </div>
                         <div class="d-flex ml-auto">
                             <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                            <!--  voucherApiVersion !== 2 && -->
+                            <!--  voucherApiVersion !== 2 &&  selectedItems?.length === 1 &&  selectedVoucher === 'purchase' -->
                             <div
                                 class="desktop-view-btn"
                                 *ngIf="
-                                        selectedItems?.length === 1 &&
-                                        selectedVoucher === 'purchase' ||
                                     (selectedItems?.length > 0 && selectedVoucher !== 'purchase') ||
                                     (voucherApiVersion === 2 && selectedItems?.length > 0)
                                 "

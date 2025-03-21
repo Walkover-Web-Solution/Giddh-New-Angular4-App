@@ -175,15 +175,15 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public onSelectInvoice(invoice: any): void {
         const uniqueName =  invoice.voucherUniqueName;
         // (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName
-        // if (invoice.voucherType === VoucherTypeEnum.purchase) {
-        //     if (uniqueName) {
-        //         if (this.voucherApiVersion !== 2) {
-        //             this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-        //         } else {
-        //             this.router.navigate(['pages', 'vouchers', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-        //         }
-        //     }
-        // } else {
+        if (invoice.voucherType === VoucherTypeEnum.purchase) {
+            if (uniqueName) {
+                // if (this.voucherApiVersion !== 2) {
+                //     this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
+                // } else {
+                    this.router.navigate(['pages', 'vouchers', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
+                // }
+            }
+        } else {
             if (invoice.voucherNumber) {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = uniqueName;
@@ -205,7 +205,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     autoFocus: false
                 });
             }
-        // }
+        }
     }
 
     /**

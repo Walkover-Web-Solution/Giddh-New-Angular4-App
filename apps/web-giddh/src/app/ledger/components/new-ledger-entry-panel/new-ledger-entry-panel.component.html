@@ -596,7 +596,8 @@
                                                     </a>
                                                 </ng-template>
                                             </sh-select>
-                                            <sh-select
+                                            <!-- <sh-select
+                                                *ngIf="voucherApiVersion !== 2"
                                                 [disabled]="isReadOnly"
                                                 [class.disabled-ledger]="isReadOnly"
                                                 id="ledger-voucher-type-debit-note"
@@ -611,7 +612,6 @@
                                                 [ItemHeight]="67"
                                                 [showClear]="false"
                                             >
-                                            <!-- *ngIf="voucherApiVersion !== 2" -->
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item sh-template">
                                                         <div class="item">
@@ -647,7 +647,7 @@
                                                         </div>
                                                     </a>
                                                 </ng-template>
-                                            </sh-select>
+                                            </sh-select> -->
                                         </div>
                                     </td>
                                     <td

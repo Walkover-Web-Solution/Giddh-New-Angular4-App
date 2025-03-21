@@ -6,7 +6,7 @@ import { Environment } from './model';
 enableProdMode();
 
 export const environment: Environment = {
-    production: false,
+    production: true,
     showDevModule: false,
     AppUrl: 'https://test.giddh.com',
     ApiUrl: 'http://localhost:9292/giddh-api/',
