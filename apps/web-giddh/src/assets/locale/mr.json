@@ -761,5 +761,9 @@
     "app_file": "फाईल",
     "app_choose_file": "फाईल निवडा",
     "app_password": "पासवर्ड",
-    "app_select_column": "स्तंभ निवडा"
+    "app_select_column": "स्तंभ निवडा",
+    "app_ledger_view": {
+        "t_view": "टी व्ह्यू",
+        "statement_view": "विधान दृश्य"
+    }
 }
