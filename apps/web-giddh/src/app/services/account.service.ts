@@ -282,6 +282,26 @@ export class AccountService {
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
 
+    /**
+     * Update Account Without account unique name
+     *
+     * @param {AccountRequestV2} model
+     * @param {string} accountUniqueName
+     * @return {*}  {Observable<BaseResponse<AccountResponseV2, AccountRequestV2>>}
+     * @memberof AccountService
+     */
+    public UpdateAccountWithoutAccountUniqueName(model: AccountRequestV2, accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
+        return this.http.patch(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE_WITH_ACCOUNT_UNIQUE_NAME
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+                map((res) => {
+                    let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res;
+                    data.request = model;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)));
+    }
+
 
     public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
