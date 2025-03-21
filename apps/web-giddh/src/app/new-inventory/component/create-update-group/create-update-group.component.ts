@@ -165,7 +165,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             taxes: null,
             discounts: null,
             discountLabel: [''],
-            type: null
+            type: null,
+            runtimeManufacturing: false
         });
 
         if (!this.groupUniqueName && this.activeGroup?.name) {

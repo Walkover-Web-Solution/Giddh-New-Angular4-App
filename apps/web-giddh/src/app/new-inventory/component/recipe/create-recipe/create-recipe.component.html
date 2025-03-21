@@ -69,6 +69,17 @@
                                         >
                                         </dropdown-field>
                                     </div>
+                                    <div class="d-flex column-gap1">
+                                        <mat-slide-toggle
+                                            class="mt-1"
+                                            color="primary"
+                                            name="runtimeManufacturing"
+                                            [(ngModel)]="recipe.runtimeManufacturing"
+                                            aria-label="runtimeManufacturing"
+                                        >
+                                        </mat-slide-toggle>
+                                        <label>Allow manufacturing to proceed during sales transactions.</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

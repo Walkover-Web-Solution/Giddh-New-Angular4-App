@@ -177,6 +177,17 @@
                                                     </mat-slide-toggle>
                                                     <label>{{ localeData?.is_it_childgroup }}</label>
                                                 </div>
+                                                <div class="d-flex toggle-childgroup pd-t05">
+                                                    <mat-slide-toggle
+                                                        class="mt-1"
+                                                        color="primary"
+                                                        name="runtimeManufacturing"
+                                                        formControlName="runtimeManufacturing"
+                                                        aria-label="runtimeManufacturing"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                    <label>Allow manufacturing to proceed during sales transactions.</label>
+                                                </div>
                                             </div>
                                             <div class="input-min-width" *ngIf="groupForm.get('isSubGroup')?.value">
                                                 <dropdown-field
