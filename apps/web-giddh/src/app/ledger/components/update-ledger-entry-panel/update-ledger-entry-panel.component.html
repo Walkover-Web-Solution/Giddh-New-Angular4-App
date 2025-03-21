@@ -7,7 +7,10 @@
 >
     <div id="entryModal" class="w-100">
         <!-- region header -->
-        <div class="modal-header d-flex justify-content-between align-items-center row gap-3 mr-rl" *ngIf="!isPettyCash">
+        <div
+            class="modal-header d-flex justify-content-between align-items-center row gap-3 mr-rl"
+            *ngIf="!isPettyCash"
+        >
             <!-- Left Section -->
             <div class="col d-flex justify-content-start align-items-center pl-0">
                 <span class="update-entry-transaction-date">
@@ -81,16 +84,13 @@
                             <a href="javascript:;" class="flex-column" (click)="changeBaseAccount(option)">
                                 <div class="option-label">
                                     {{ option?.label | titlecase }}
-                                    <span *ngIf="option?.additional?.stock">
-                                        ({{ option?.additional?.stock?.name | titlecase }})
-                                    </span>
                                 </div>
                                 <div class="option-value">
                                     {{ option.additional?.uniqueName }}
                                 </div>
                                 <div class="option-value-stock font-12">
                                     {{ commonLocaleData?.app_stock }}:
-                                    {{ option.additional?.stock?.uniqueName }}
+                                    {{ option.additional?.stock?.name | titlecase }}
                                 </div>
                             </a>
                         </ng-container>
@@ -250,16 +250,6 @@
                                                                             <a href="javascript:;" class="flex-column">
                                                                                 <div class="option-label">
                                                                                     {{ option?.label | titlecase }}
-                                                                                    <span
-                                                                                        *ngIf="
-                                                                                            option?.additional?.stock
-                                                                                        "
-                                                                                    >
-                                                                                        ({{
-                                                                                            option?.additional?.stock
-                                                                                                ?.name | titlecase
-                                                                                        }})
-                                                                                    </span>
                                                                                 </div>
                                                                                 <div class="option-value">
                                                                                     {{ option.additional?.uniqueName }}
@@ -267,8 +257,8 @@
                                                                                 <div class="option-value-stock font-12">
                                                                                     {{ commonLocaleData?.app_stock }}:
                                                                                     {{
-                                                                                        option.additional?.stock
-                                                                                            ?.uniqueName
+                                                                                        option.additional?.stock?.name
+                                                                                            | titlecase
                                                                                     }}
                                                                                 </div>
                                                                             </a>
@@ -578,16 +568,6 @@
                                                                             <a href="javascript:;" class="flex-column">
                                                                                 <div class="option-label">
                                                                                     {{ option?.label | titlecase }}
-                                                                                    <span
-                                                                                        *ngIf="
-                                                                                            option?.additional?.stock
-                                                                                        "
-                                                                                    >
-                                                                                        ({{
-                                                                                            option?.additional?.stock
-                                                                                                ?.name | titlecase
-                                                                                        }})
-                                                                                    </span>
                                                                                 </div>
                                                                                 <div class="option-value">
                                                                                     {{ option.additional?.uniqueName }}
@@ -595,8 +575,8 @@
                                                                                 <div class="option-value-stock font-12">
                                                                                     {{ commonLocaleData?.app_stock }}:
                                                                                     {{
-                                                                                        option.additional?.stock
-                                                                                            ?.uniqueName
+                                                                                        option.additional?.stock?.name
+                                                                                            | titlecase
                                                                                     }}
                                                                                 </div>
                                                                             </a>
@@ -900,19 +880,16 @@
                                                                     <a href="javascript:;" class="flex-column">
                                                                         <div class="option-label">
                                                                             {{ option?.label | titlecase }}
-                                                                            <span *ngIf="option?.additional?.stock">
-                                                                                ({{
-                                                                                    option?.additional?.stock?.name
-                                                                                        | titlecase
-                                                                                }})
-                                                                            </span>
                                                                         </div>
                                                                         <div class="option-value">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
                                                                         <div class="option-value-stock font-12">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock?.uniqueName }}
+                                                                            {{
+                                                                                option.additional?.stock?.name
+                                                                                    | titlecase
+                                                                            }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -1210,19 +1187,16 @@
                                                                     <a href="javascript:;" class="flex-column">
                                                                         <div class="option-label">
                                                                             {{ option?.label | titlecase }}
-                                                                            <span *ngIf="option?.additional?.stock">
-                                                                                ({{
-                                                                                    option?.additional?.stock?.name
-                                                                                        | titlecase
-                                                                                }})
-                                                                            </span>
                                                                         </div>
                                                                         <div class="option-value">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
                                                                         <div class="option-value-stock font-12">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock?.uniqueName }}
+                                                                            {{
+                                                                                option.additional?.stock?.name
+                                                                                    | titlecase
+                                                                            }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -1673,9 +1647,9 @@
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         (focus)="hideDiscountTax()"
                                         [(ngModel)]="vm.totalAmount"
-                                        (change)="vm.updateFirstEntryAmount();vm.inventoryAmountChanged()"
-                                   >
-                                </input-field>
+                                        (change)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
+                                    >
+                                    </input-field>
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -1913,7 +1887,7 @@
                                                     >{{ localeData?.other_tax }}</mat-checkbox
                                                 >
                                             </div>
-        
+
                                             <div
                                                 *ngIf="vm.selectedLedger.isOtherTaxesApplicable"
                                                 class="pl-1 position-relative"
@@ -1922,7 +1896,8 @@
                                                     href="javascript:void(0)"
                                                     class="text-gray position-absolute edit-icon-position"
                                                     (click)="
-                                                        ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                                        ((currentOrganizationType === 'COMPANY' ||
+                                                            isConsolidatedBranch) &&
                                                             branches?.length === 1) ||
                                                         currentOrganizationType === 'BRANCH'
                                                             ? toggleOtherTaxesAsideMenu.emit(vm)
@@ -2206,9 +2181,7 @@
 
                         <div class="col-md-6 pd-t1 accordion-expansion">
                             <mat-accordion multi>
-                                <mat-expansion-panel
-                                    [expanded]="true"
-                                >
+                                <mat-expansion-panel [expanded]="true">
                                     <mat-expansion-panel-header>
                                         <mat-panel-title (click)="getInvoiceLists()">{{
                                             localeData?.more_details
@@ -2900,7 +2873,7 @@
                         (keypress)="allowAlphanumericChar(passportNumber)"
                         [cssClass]="'width-115 ml-1'"
                         [(ngModel)]="vm.selectedLedger.passportNumber"
-                   ></input-field>
+                    ></input-field>
                 </div>
             </div>
         </div>
