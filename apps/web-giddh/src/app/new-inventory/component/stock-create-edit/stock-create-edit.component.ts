@@ -102,6 +102,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         },
         isFsStock: null,
         manufacturingDetails: null,
+        runtimeManufacturing: false,
         accountGroup: null,
         lowStockAlertCount: 0,
         outOfStockSelling: true,
@@ -1282,6 +1283,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.lowStockAlertCount = response.body.lowStockAlertCount;
                 this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
                 this.stockForm.variants = response.body.variants;
+                this.stockForm.runtimeManufacturing = response.body.runtimeManufacturing;
                 this.stockForm.options = response.body.options?.map(option => {
                     option.values = option?.values?.map((optionValue, optionIndex) => {
                         return { index: optionIndex, value: optionValue };
@@ -1733,6 +1735,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             },
             isFsStock: null,
             manufacturingDetails: null,
+            runtimeManufacturing: false,
             accountGroup: null,
             lowStockAlertCount: 0,
             outOfStockSelling: true,

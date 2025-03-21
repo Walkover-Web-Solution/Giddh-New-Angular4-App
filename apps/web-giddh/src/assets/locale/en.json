@@ -767,5 +767,6 @@
     "app_ledger_view": {
         "t_view": "T View",
         "statement_view": "Statement View"
-    }
+    },
+    "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions"
 }

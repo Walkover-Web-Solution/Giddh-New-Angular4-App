@@ -71,13 +71,13 @@ export class MaskService extends MaskApplierService {
         this.actualValue = this.getActualValue(result);
 
         if (
-            (this.maskExpression.startsWith(Separators.SEPARATOR) ||
-                this.maskExpression.startsWith(Separators.DOT_SEPARATOR)) &&
+            (this.maskExpression?.startsWith(Separators.SEPARATOR) ||
+                this.maskExpression?.startsWith(Separators.DOT_SEPARATOR)) &&
             this.dropSpecialCharacters === true
         ) {
             this.maskSpecialCharacters = this.maskSpecialCharacters?.filter((item: string) => item !== ',');
         }
-        if (this.maskExpression.startsWith(Separators.COMMA_SEPARATOR) && this.dropSpecialCharacters === true) {
+        if (this.maskExpression?.startsWith(Separators.COMMA_SEPARATOR) && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters?.filter((item: string) => item !== '.');
         }
 

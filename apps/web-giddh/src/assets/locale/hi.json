@@ -764,5 +764,6 @@
     "app_ledger_view": {
         "t_view": "टी दृश्य",
         "statement_view": "वक्तव्य दृश्य"
-    }
+    },
+    "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें"
 }

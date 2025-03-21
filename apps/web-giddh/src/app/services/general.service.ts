@@ -2207,6 +2207,18 @@ export class GeneralService {
     }
 
     /**
+     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     *
+     * @param {string} text - The string containing placeholders.
+     * @param {string[]} args - The list of values to replace the placeholders.
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof GeneralService
+     */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+    
+    /**
      * Replaces placeholders in a URL with corresponding values from a model object.
      * @param url - The URL containing placeholders like `:key`.
      * @param model - An object containing key-value pairs to replace in the URL.
