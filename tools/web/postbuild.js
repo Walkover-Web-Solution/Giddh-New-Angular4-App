@@ -16,7 +16,7 @@ console.log('\nRunning post-build tasks');
 let rootDirectiory = '';
 for (var i = 0; i < process.argv.length; i++) {
     console.log(process.argv[i]);
-    if (process.argv[i]?.startsWith('--path=')) {
+    if (process.argv[i].startsWith('--path=')) {
 
         rootDirectiory = '../../' + process.argv[i].replace('--path=', '').replace(' ', '');
         console.log("Dist Folder Path = " + rootDirectiory);

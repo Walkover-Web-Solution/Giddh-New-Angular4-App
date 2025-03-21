@@ -249,7 +249,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 debounceTime(300),
                 distinctUntilChanged(),
                 switchMap((term: string) => {
-                    if (term?.startsWith(' ', 0)) {
+                    if (term.startsWith(' ', 0)) {
                         return [];
                     }
                     return this._location.GetCity({
