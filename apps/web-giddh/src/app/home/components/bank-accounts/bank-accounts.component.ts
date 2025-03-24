@@ -343,6 +343,10 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public getLinkBankAccount(): void {
+
+        if (!this.selectedBankUniqueName) {
+            this.router.navigate(['/pages/settings/integration/payment']);
+        }
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
@@ -359,8 +363,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 if (response === 'closeDialog') {
                     dialogRef?.close();
                 } else {
-                    if (response) this.isBankAccountConnected = true; this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                    if (response) this.isBankAccountConnected = true; this.referenceNumber = null; this.getAllBankAccounts();
                 }
+                localStorage.removeItem('refNo');
             })).subscribe();
         }
     }
