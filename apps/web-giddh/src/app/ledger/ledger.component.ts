@@ -3536,8 +3536,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (response === 'closeDialog') {
                     dialogRef?.close();
                 } else {
-                    if (response) this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                    if (response) this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; this.getAllBankAccounts();
                 }
+                localStorage.removeItem('refNo');
             })).subscribe();
         }
     }

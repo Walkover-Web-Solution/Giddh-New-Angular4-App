@@ -345,7 +345,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public getLinkBankAccount(): void {
 
         if (!this.selectedBankUniqueName) {
-            return;
+            this.router.navigate(['/pages/settings/integration/payment']);
         }
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
