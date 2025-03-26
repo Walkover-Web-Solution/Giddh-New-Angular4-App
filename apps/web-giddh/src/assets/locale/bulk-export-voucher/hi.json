@@ -12,5 +12,7 @@
     "invalid_email": "अमान्य ईमेल आईडी [EMAIL]",
     "email_required": "कृपया कम से कम 1 प्राप्तकर्ता ईमेल आईडी दर्ज करें",
     "single_pdf": "एकल पीडीएफ",
-    "multiple_pdf": "कई पीडीएफ"
+    "multiple_pdf": "कई पीडीएफ",
+    "export_attachment": "संलग्नक निर्यात करें",
+    "export_voucher": "वाउचर निर्यात करें"
 }

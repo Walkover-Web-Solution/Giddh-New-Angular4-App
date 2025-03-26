@@ -16,11 +16,14 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
+import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
+import { saveAs } from 'file-saver';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
     styleUrls: ['./export-ledger.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [VoucherComponentStore]
 })
 
 export class ExportLedgerComponent implements OnInit, OnDestroy {
@@ -74,7 +77,13 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         showDescription: false,
         accountUniqueName: '',
         exportType: 'LEDGER_EXPORT',
-        showEntryVoucherNo: false
+        showEntryVoucherNo: false,
+        attachmentExport: false,
+        voucherExport: true,
+        fileNameFormat: '',
+        ledgerView: true,
+        mergePdf: false,
+        copyTypes: []
     }
     /** Stores the voucher API version of the company */
     public voucherApiVersion: 1 | 2;
@@ -86,8 +95,30 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** This will use for export as file type*/
     public fileType: string = 'CSV';
+    /** Holds the current date */
+    public todayDate: any = new Date();
+    /** List of available file formats with predefined values */
+    public fileFormatList = [
+        { uniqueName: 'DATE', name: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { uniqueName: 'ENTRY_NO', name: 'Entry No', showValue: "3824" },
+        { uniqueName: 'ACC_NAME', name: 'Account Name', showValue: "Divyanshu Ji" }
+    ];
+    /** List of selected file formats */
+    public selectedFormatList: any[] = [];
 
-    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
+    constructor(
+        private ledgerService: LedgerService,
+        private toaster: ToasterService,
+        private permissionDataService: PermissionDataService,
+        private store: Store<AppState>,
+        private generalService: GeneralService,
+        @Inject(MAT_DIALOG_DATA) public inputData,
+        public dialogRef: MatDialogRef<any>,
+        private changeDetectorRef: ChangeDetectorRef,
+        private modalService: BsModalService,
+        private router: Router,
+        private componentStore: VoucherComponentStore
+    ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -132,6 +163,16 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 }
             });
         }
+
+        this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = false;
+            if (response?.status === "success" && response?.body) {
+                if (response.body.type === "base64") {
+                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
+                    return saveAs(blob, this.inputData?.voucherType + `.zip`);
+                }
+            }
+        });
     }
 
     /**
@@ -160,12 +201,17 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.to = this.toDate;
             body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
             body.dataToSend.exportType = this.exportRequest.exportType;
-            body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
-            body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
-            body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
-            body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
-            body.dataToSend.showDescription = this.exportRequest.showDescription;
             body.dataToSend.fileType = this.fileType;
+            if (this.emailTypeSelected === this.emailTypeDetail) {
+                body.dataToSend.ledgerView = this.exportRequest.ledgerView ? 'Statement_View' : 'T_View';
+                if (this.exportRequest.ledgerView) {
+                    body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
+                    body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
+                    body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
+                    body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
+                    body.dataToSend.showDescription = this.exportRequest.showDescription;
+                }
+            }
         }
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
@@ -183,6 +229,22 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
+            if (this.emailTypeSelected === 'voucher') {
+                let postRequest: any = {
+                    attachmentExport: this.exportRequest.attachmentExport,
+                    voucherExport: this.exportRequest.voucherExport,
+                    entryUniqueNames: this.inputData?.selectEntryUniqueName
+                };
+                if (this.exportRequest.attachmentExport) {
+                    postRequest.fileNameFormat = this.exportRequest.fileNameFormat;
+                }
+                if (this.exportRequest.voucherExport) {
+                    postRequest.mergePdf = this.exportRequest.mergePdf;
+                    postRequest.copyTypes = this.exportRequest.copyTypes;
+                }
+                this.componentStore.bulkExportVoucher({ getRequest: { accountUniqueName: this.inputData?.accountUniqueName }, postRequest: postRequest });
+                return;
+            }
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
@@ -309,5 +371,40 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Returns a sorted list of file formats.The selected formats appear at the top in the order they were selected.
+     * 
+     * @returns {any []} A sorted array of file formats.
+     * @memberof ExportLedgerComponent
+     */
+    public getSortedFormatList(): any[] {
+        return [...this.fileFormatList].sort((a, b) => {
+            let indexA = this.selectedFormatList.findIndex(item => item.uniqueName === a.uniqueName);
+            let indexB = this.selectedFormatList.findIndex(item => item.uniqueName === b.uniqueName);
+
+            if (indexA === -1) indexA = Infinity;
+            if (indexB === -1) indexB = Infinity;
+
+            return indexA - indexB;
+        });
+    }
+
+    /**
+     * Generates a formatted file name based on selected file formats.
+     *
+     * @returns {string} The formatted file name string.
+     * @memberof ExportLedgerComponent
+     */
+    public getFileFormat(): string {
+        let showFileFormat = "AS";
+        let fileNameFormat = "AS";
+        this.selectedFormatList.forEach((format) => {
+            showFileFormat += `-${format.showValue}`
+            fileNameFormat += "-${" + format.uniqueName + "}";
+        });
+        this.exportRequest.fileNameFormat = fileNameFormat;
+        return showFileFormat;
     }
 }

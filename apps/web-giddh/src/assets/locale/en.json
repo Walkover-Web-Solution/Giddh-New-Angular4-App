@@ -764,5 +764,7 @@
     "app_choose_file": "Choose File",
     "app_password": "Password",
     "app_select_column": "Select Column",
-    "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions"
+    "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
+    "app_file_format": "File Format",
+    "app_select_file": "Select file"
 }
