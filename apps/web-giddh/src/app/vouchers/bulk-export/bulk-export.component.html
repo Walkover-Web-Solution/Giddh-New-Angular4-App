@@ -14,7 +14,60 @@
     <div mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
         <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
-            <div class="pd-b1 mr-b15">
+            <div
+                class="pd-b2 clearfix export-type"
+            >
+                <label class="w150">{{ localeData?.export_attachment }}:</label>
+                    <mat-slide-toggle
+                        color="primary"
+                        name="attachmentExport"
+                        formControlName="attachmentExport"
+                    >
+                        <span>{{
+                            exportForm.get("attachmentExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                        }}</span>
+                    </mat-slide-toggle>
+            </div>
+            <div
+                class="pd-b2 d-flex column-gap15 align-items-center" [hidden]="!exportForm.get('attachmentExport').value"
+            >
+            <div>
+                {{ commonLocaleData?.app_file_format }}
+            </div>
+            <div class="w-50">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{ commonLocaleData?.app_select_file }}</mat-label>
+                    <mat-select
+                        name="fileFormat"
+                        formControlName="selectedFormatList"
+                        multiple
+                        placeholder="{{ commonLocaleData?.app_select }}"
+                    >
+                        <mat-option *ngFor="let fileFormat of getSortedFormatList()" [value]="{ uniqueName: fileFormat?.uniqueName, showValue: fileFormat?.showValue }">
+                            {{ fileFormat?.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="font-12" *ngIf="exportForm.get('selectedFormatList').value?.length">
+                    {{ getFileFormat() }}
+                </div>
+            </div>
+            </div>
+            <div
+                class="pd-b2 clearfix export-type"
+            >
+                <label class="w125">{{ localeData?.export_voucher }}:</label>
+                    <mat-slide-toggle
+                        color="primary"
+                        name="voucherExport"
+                        formControlName="voucherExport"
+                    >
+                        <span>{{
+                            exportForm.get("voucherExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                        }}</span>
+                    </mat-slide-toggle>
+            </div>
+            <div class="pd-b1 mr-b15" *ngIf="exportForm.get('voucherExport').value">
                 <mat-radio-group name="mergePdf" formControlName="mergePdf">
                     <mat-radio-button
                         color="primary"
@@ -41,7 +94,7 @@
                         inputData?.voucherType === 'credit note' ||
                         inputData?.voucherType === 'debit note'
                 }"
-                *ngIf="inputData?.voucherType === 'sales'"
+                *ngIf="inputData?.voucherType === 'sales' && exportForm.get('voucherExport').value"
             >
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.select_copy }}</mat-label>
@@ -68,16 +121,18 @@
                     inputData?.voucherType === 'payment' ||
                     inputData?.voucherType === 'credit note' ||
                     inputData?.voucherType === 'debit note' ||
-                    inputData?.voucherType === 'purchase'
+                    inputData?.voucherType === 'purchase' || 
+                    !exportForm.get('voucherExport').value
                 "
                 class="text-right"
             >
+            <div *ngIf="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value" class="danger font-12">Please select any one Export</div>
                 <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
                     <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
                 </mat-form-field>
                 <button mat-stroked-button color="primary" (click)="exportVouchers(true)" [disabled]="!exportForm.get('copyTypes').value && inputData?.voucherType === 'sales'">{{ commonLocaleData?.app_send_email }}</button> -->
-                <button mat-stroked-button color="primary" (click)="exportVouchers(false)">
+                <button mat-stroked-button color="primary" (click)="exportVouchers(false)" [disabled]="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value">
                     {{ commonLocaleData?.app_download }}
                 </button>
             </div>
