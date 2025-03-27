@@ -12,5 +12,7 @@
     "invalid_email": "Invalid Email Id [EMAIL]",
     "email_required": "Please enter atleast 1 Recipient Email Id",
     "single_pdf": "Single PDF",
-    "multiple_pdf": "Multiple PDF"
+    "multiple_pdf": "Multiple PDF",
+    "export_attachment": "Export Attachment",
+    "export_voucher": "Export Voucher"
 }
