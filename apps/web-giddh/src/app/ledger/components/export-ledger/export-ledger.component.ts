@@ -18,6 +18,8 @@ import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
+import { IOption } from '../../../theme/ng-select/option.interface';
+import { CopyType } from '../../../shared/Enums/common.enum';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -101,10 +103,14 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public fileFormatList = [
         { uniqueName: 'DATE', name: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
         { uniqueName: 'ENTRY_NO', name: 'Entry No', showValue: "3824" },
-        { uniqueName: 'ACC_NAME', name: 'Account Name', showValue: "Divyanshu Ji" }
+        { uniqueName: 'ACC_NAME', name: 'Account Name', showValue: "Walkover" }
     ];
     /** List of selected file formats */
     public selectedFormatList: any[] = [];
+    /** List of copy type */
+    public copyTypes: IOption[] = [];
+    /** Prefix of format file name */
+    public fileFormatPrefix: string = "AS";
 
     constructor(
         private ledgerService: LedgerService,
@@ -169,7 +175,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             if (response?.status === "success" && response?.body) {
                 if (response.body.type === "base64") {
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
-                    return saveAs(blob, this.inputData?.voucherType + `.zip`);
+                    saveAs(blob, this.inputData?.voucherType + `.zip`);
                 }
             }
         });
@@ -398,13 +404,29 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public getFileFormat(): string {
-        let showFileFormat = "AS";
-        let fileNameFormat = "AS";
+        let showFileFormat = this.fileFormatPrefix;
+        let fileNameFormat = this.fileFormatPrefix;
         this.selectedFormatList.forEach((format) => {
             showFileFormat += `-${format.showValue}`
             fileNameFormat += "-${" + format.uniqueName + "}";
         });
         this.exportRequest.fileNameFormat = fileNameFormat;
         return showFileFormat;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ExportLedgerComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.copyTypes = [
+                { value: CopyType.ORIGINAL, label: this.localeData?.invoice_copy_options?.original },
+                { value: CopyType.CUSTOMER, label: this.localeData?.invoice_copy_options?.customer },
+                { value: CopyType.TRANSPORT, label: this.localeData?.invoice_copy_options?.transport }
+            ];
+        }
     }
 }

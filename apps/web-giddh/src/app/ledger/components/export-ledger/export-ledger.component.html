@@ -3,6 +3,7 @@
     [file]="'ledger/export-ledger'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <div id="exportModal" class="disable-ripple">
         <div class="modal-header flex-row-reverse">
@@ -154,9 +155,9 @@
                             <mat-form-field appearance="outline" class="w-100 mr-b15">
                                 <mat-label>{{ localeData?.select_copy }}</mat-label>
                                 <mat-select name="copyTypesSelection" multiple [placeholder]="localeData?.select_copy" [(ngModel)]="exportRequest.copyTypes">
-                                    <mat-option value="ORIGINAL">{{ localeData?.invoice_copy_options?.original }}</mat-option>
-                                    <mat-option value="CUSTOMER">{{ localeData?.invoice_copy_options?.customer }}</mat-option>
-                                    <mat-option value="TRANSPORT">{{ localeData?.invoice_copy_options?.transport }}</mat-option>
+                                    <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
+                                        {{ copyType.label }}
+                                    </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </ng-container>
