@@ -27,6 +27,7 @@ export interface SubscriptionsUser {
     userDetails: UserDetails;
     totalCompanies: number;
     subscriptionId: string;
+    paymentPending?: string;
     balance: number;
     expiry: string;
     startedAt: string;

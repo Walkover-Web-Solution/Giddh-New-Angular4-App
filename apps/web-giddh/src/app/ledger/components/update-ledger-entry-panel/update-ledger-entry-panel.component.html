@@ -1645,9 +1645,13 @@
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        (focus)="hideDiscountTax()"
-                                        [(ngModel)]="vm.totalAmount"
-                                        (change)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
+                                        (onFocus)="hideDiscountTax()"
+                                        [ngModel]="vm.totalAmount"
+                                        (change)="
+                                            vm.updateFirstEntryAmount();
+                                            vm.inventoryAmountChanged();
+                                            vm.totalAmount = $event?.target?.value
+                                        "
                                     >
                                     </input-field>
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
@@ -1691,7 +1695,7 @@
                                     "
                                     class="text-right min-width-0"
                                 >
-                                    <span auto-close="outsideClick">
+                                    <span>
                                         <update-ledger-discount
                                             id="update-ledger-discount-amount"
                                             #discount
@@ -1763,7 +1767,7 @@
                                                 vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                     "
                                 >
-                                    <span auto-close="outsideClick">
+                                    <span>
                                         <update-ledger-tax-control
                                             id="update-ledger-tax-amount"
                                             #tax
