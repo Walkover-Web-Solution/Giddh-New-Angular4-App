@@ -1890,7 +1890,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && !this.isCurrentSubscriptionTrialOrCancelled) {
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && this.subscribedPlan?.paymentPending && !this.isCurrentSubscriptionTrialOrCancelled) {
             return this.localeData?.subscription_expire_renewal_message ?? "";
         }
         return this.getExpiredMessage(

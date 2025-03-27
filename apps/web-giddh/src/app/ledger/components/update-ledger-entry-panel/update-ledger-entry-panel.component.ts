@@ -2506,7 +2506,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.isStockPresent = this.vm.selectedLedger.transactions.some(item =>
             item.inventory && Object.keys(item.inventory).length > 0);
-
         this.changeDetectorRef.detectChanges();
     }
 

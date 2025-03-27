@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { clone, cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
@@ -340,7 +340,6 @@ export class UpdateLedgerVm {
                     tdsTaxPercentage = totalTaxes;
                     this.isAdvanceReceiptWithTds = false;
                 }
-
                 taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
 
                 this.advanceReceiptAmount = taxableValue;
@@ -406,7 +405,6 @@ export class UpdateLedgerVm {
         }
         this.convertedTaxTrxTotal = this.calculateConversionRate(this.taxTrxTotal);
         this.convertedGrandTotal = this.calculateConversionRate(this.grandTotal);
-
         this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
     }
 
@@ -657,7 +655,6 @@ export class UpdateLedgerVm {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
         let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
-
         requestObj.voucherType = requestObj?.voucher?.shortCode;
         requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular?.uniqueName && !p.isDiscount) : [];
         requestObj.generateInvoice = this.selectedLedger?.generateInvoice;
@@ -668,7 +665,6 @@ export class UpdateLedgerVm {
             }
         });
         requestObj.taxes = [...taxes.map(t => t.particular?.uniqueName)];
-
         if (requestObj.isOtherTaxesApplicable) {
             requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
         }
@@ -680,6 +676,7 @@ export class UpdateLedgerVm {
 
         this.getEntryTotal();
         requestObj.total = this.entryTotal.drTotal - this.entryTotal.crTotal;
+        requestObj.taxes = requestObj.taxes?.filter(item => item !== null && item !== undefined);
         return requestObj;
     }
 

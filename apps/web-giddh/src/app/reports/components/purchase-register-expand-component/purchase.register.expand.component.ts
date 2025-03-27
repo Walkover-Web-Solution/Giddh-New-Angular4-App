@@ -205,12 +205,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
         this.voucherNumberInput?.valueChanges
             ?.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
-            .subscribe((s) => {
-                if (s !== null && s !== undefined) {
+            .subscribe((searching) => {
+                if (searching !== null && searching !== undefined) {
                     this.showClearFilter = true;
                     this.getDetailedPurchaseRequestFilter.sort = null;
                     this.getDetailedPurchaseRequestFilter.sortBy = null;
-                    this.getDetailedPurchaseRequestFilter.q = s;
+                    this.getDetailedPurchaseRequestFilter.q = encodeURIComponent(searching);
                     this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
                     this.showSearchInvoiceNo = false;
                 }
