@@ -1327,7 +1327,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 this.createLedgerBalance();
             }
-            this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
+            this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), to: dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) }));
         }
     }
 
