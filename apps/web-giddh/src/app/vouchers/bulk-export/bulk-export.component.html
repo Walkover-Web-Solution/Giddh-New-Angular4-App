@@ -3,6 +3,7 @@
     [file]="'bulk-export-voucher'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <div class="dialog-header">
         <span mat-dialog-title class="font-16"
@@ -99,9 +100,9 @@
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.select_copy }}</mat-label>
                     <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">
-                        <mat-option value="ORIGINAL">{{ localeData?.invoice_copy_options?.original }}</mat-option>
-                        <mat-option value="CUSTOMER">{{ localeData?.invoice_copy_options?.customer }}</mat-option>
-                        <mat-option value="TRANSPORT">{{ localeData?.invoice_copy_options?.transport }}</mat-option>
+                        <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
+                            {{ copyType.label }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <div class="text-right">
@@ -126,7 +127,6 @@
                 "
                 class="text-right"
             >
-            <div *ngIf="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value" class="danger font-12">Please select any one Export</div>
                 <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
                     <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
