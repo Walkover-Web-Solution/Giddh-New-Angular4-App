@@ -219,7 +219,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public onSelectInvoice(invoice: any): void {
         if (invoice?.voucherType !== this.voucherTypeEnum.purchase) {
-            let downloadVoucherRequestObject;
+            // let downloadVoucherRequestObject;
             if (invoice && invoice.account) {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = invoice.voucherUniqueName;

@@ -368,9 +368,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public ngOnInit(): void {
-        // if (this.generalService.voucherApiVersion === 1) {
-        //     this.router.navigate(['pages', 'home']);
-        // }
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['pages', 'home']);
+        }
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.loadDefaultSearchSuggestions();

@@ -301,7 +301,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public openModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+        // This modal show only for version 2
+        if (this.voucherApiVersion === 2) {
+            this.modalRef = this.modalService.show(template);
+        }
     }
 
     public ngOnInit() {
@@ -535,7 +538,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.selectedPerformAdjustPaymentAction) {
                     if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
                         this.showAdvanceReceiptAdjust = true;
-                        this.adjustPaymentModal?.show();
+                        (this.voucherApiVersion === 2) && this.adjustPaymentModal?.show();
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         if (response.account && response.date) {
@@ -576,15 +579,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private getVoucherDetails(voucherType: VoucherTypeEnum, accountUniqueName: string, voucherUniqueName: string): void {
-        const apiCallObservable = this.voucherApiVersion === 2 ?
-            this._receiptServices.getVoucherDetailsV4(accountUniqueName, {
-                invoiceNumber: '',
-                voucherType: voucherType,
-                uniqueName: voucherUniqueName
-            }) :
-            this._receiptServices.GetPurchaseRecordDetails(accountUniqueName, voucherUniqueName);
+        if (this.voucherApiVersion === 1) return; // only for voucher version 2
+        // const apiCallObservable = this.voucherApiVersion === 2 ?
+        //     this._receiptServices.getVoucherDetailsV4(accountUniqueName, {
+        //         invoiceNumber: '',
+        //         voucherType: voucherType,
+        //         uniqueName: voucherUniqueName
+        //     }) :
+        //     this._receiptServices.GetPurchaseRecordDetails(accountUniqueName, voucherUniqueName);
 
-        apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+        this._receiptServices.getVoucherDetailsV4(accountUniqueName, { invoiceNumber: '', voucherType: voucherType, uniqueName: voucherUniqueName }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             if (res && res.body) {
                 if (res.body.date) {
                     this.invoiceSearchRequest.from = res.body.date;
@@ -754,6 +758,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public deleteConfirmedInvoice(selectedVoucher?: any) {
         this.invoiceConfirmationModel?.hide();
+        if (this.voucherApiVersion === 1) return; // only for voucher version 2
         // if (this.selectedVoucher === VoucherTypeEnum.purchase && this.voucherApiVersion !== 2) {
         //     const requestObject = {
         //         uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher?.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice?.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails?.uniqueName) : ''
@@ -773,58 +778,58 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         //         }
         //     });
         // } else {
-            //  It will execute when Bulk delete operation
-            if (this.selectedInvoicesList?.length > 1) {
-                let bulkDeleteModel;
-                let selectedVouchers = [];
+        //  It will execute when Bulk delete operation
+        if (this.selectedInvoicesList?.length > 1) {
+            let bulkDeleteModel;
+            let selectedVouchers = [];
 
-                if (this.voucherApiVersion === 2) {
-                    this.selectedInvoicesList.forEach(item => {
-                        selectedVouchers.push(item?.uniqueName);
-                    });
-                    bulkDeleteModel = {
-                        voucherUniqueNames: selectedVouchers,
-                        voucherType: this.selectedVoucher
-                    }
-                } else {
-                    this.selectedInvoicesList.forEach(item => {
-                        selectedVouchers.push(item?.voucherNumber);
-                    });
-                    bulkDeleteModel = {
-                        voucherNumbers: selectedVouchers,
-                        voucherType: this.selectedVoucher
-                    }
-                }
-                if (selectedVouchers?.length && bulkDeleteModel?.voucherType) {
-                    this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
-                        if (response) {
-                            if (response.status === "success") {
-                                this._toaster.successToast(response.body);
-                                this.getVoucher(false);
-                                this.toggleAllItems(false);
-                            } else {
-                                this._toaster.errorToast(response.message);
-                            }
-                        }
-                    });
-                }
-            } else {
-                let model;
-                if (this.voucherApiVersion === 2) {
-                    model = {
-                        uniqueName: (selectedVoucher) ? selectedVoucher.uniqueName : this.selectedInvoice?.uniqueName,
-                        voucherType: this.selectedVoucher
-                    }
-                } else {
-                    model = {
-                        invoiceNumber: (selectedVoucher) ? selectedVoucher.voucherNumber : this.selectedInvoice?.voucherNumber,
-                        voucherType: this.selectedVoucher
-                    }
-                }
-
-                let account = (selectedVoucher) ? selectedVoucher.account?.uniqueName : this.selectedInvoice.account?.uniqueName;
-                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
+            // if (this.voucherApiVersion === 2) {
+            this.selectedInvoicesList.forEach(item => {
+                selectedVouchers.push(item?.uniqueName);
+            });
+            bulkDeleteModel = {
+                voucherUniqueNames: selectedVouchers,
+                voucherType: this.selectedVoucher
             }
+            // } else {
+            //     this.selectedInvoicesList.forEach(item => {
+            //         selectedVouchers.push(item?.voucherNumber);
+            //     });
+            //     bulkDeleteModel = {
+            //         voucherNumbers: selectedVouchers,
+            //         voucherType: this.selectedVoucher
+            //     }
+            // }
+            if (selectedVouchers?.length && bulkDeleteModel?.voucherType) {
+                this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
+                    if (response) {
+                        if (response.status === "success") {
+                            this._toaster.successToast(response.body);
+                            this.getVoucher(false);
+                            this.toggleAllItems(false);
+                        } else {
+                            this._toaster.errorToast(response.message);
+                        }
+                    }
+                });
+            }
+        } else {
+            let model;
+            // if (this.voucherApiVersion === 2) {
+            model = {
+                uniqueName: (selectedVoucher) ? selectedVoucher.uniqueName : this.selectedInvoice?.uniqueName,
+                voucherType: this.selectedVoucher
+            }
+            // } else {
+            //     model = {
+            //         invoiceNumber: (selectedVoucher) ? selectedVoucher.voucherNumber : this.selectedInvoice?.voucherNumber,
+            //         voucherType: this.selectedVoucher
+            //     }
+            // }
+
+            let account = (selectedVoucher) ? selectedVoucher.account?.uniqueName : this.selectedInvoice.account?.uniqueName;
+            this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
+        }
 
         // }
     }
@@ -1214,6 +1219,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
+        if (this.voucherApiVersion === 1) return; // only for voucher version 2
         this.showAdvanceSearchIcon = true;
         request.from = this.invoiceSearchRequest.from;
         request.to = this.invoiceSearchRequest.to;
@@ -1229,18 +1235,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.sortBy = this.invoiceSearchRequest.sortBy;
         }
 
-        if (this.voucherApiVersion === 2) {
-            request.voucherDate = request.invoiceDate;
-            delete request['invoiceDate'];
-        }
+        // if (this.voucherApiVersion === 2) {
+        request.voucherDate = request.invoiceDate;
+        delete request['invoiceDate'];
+        // }
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.parseBalRes(res);
         });
 
-        if (this.voucherApiVersion === 2) {
-            request.invoiceDate = request.voucherDate;
-        }
+        // if (this.voucherApiVersion === 2) {
+        request.invoiceDate = request.voucherDate;
+        // }
     }
 
     public resetAdvanceSearch() {
@@ -1290,22 +1296,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public sendEmail(obj: any) {
+        if (this.voucherApiVersion === 1) return; // only for voucher version 2
         if (obj.email) {
-            if (this.voucherApiVersion === 2) {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account?.uniqueName, {
-                    email: { to: obj.email.split(',') },
-                    uniqueName: obj?.uniqueName || this.selectedInvoiceForDetails?.uniqueName,
-                    voucherType: this.selectedVoucher,
-                    copyTypes: obj.invoiceType ? obj.invoiceType : []
-                }));
-            } else {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account?.uniqueName, {
-                    emailId: obj.email.split(','),
-                    voucherNumber: [obj.invoiceNumber || this.selectedInvoiceForDetails.voucherNumber],
-                    voucherType: this.selectedVoucher,
-                    typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
-                }));
-            }
+            // if (this.voucherApiVersion === 2) {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account?.uniqueName, {
+                email: { to: obj.email.split(',') },
+                uniqueName: obj?.uniqueName || this.selectedInvoiceForDetails?.uniqueName,
+                voucherType: this.selectedVoucher,
+                copyTypes: obj.invoiceType ? obj.invoiceType : []
+            }));
+            // } else {
+            //     this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account?.uniqueName, {
+            //         emailId: obj.email.split(','),
+            //         voucherNumber: [obj.invoiceNumber || this.selectedInvoiceForDetails.voucherNumber],
+            //         voucherType: this.selectedVoucher,
+            //         typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
+            //     }));
+            // }
         } else {
             this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoiceForDetails.account?.uniqueName, {
                 numbers: obj.numbers.split(',')
@@ -1473,47 +1480,47 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.voucherDetails.voucherUniqueName = item.uniqueName;
         this.changeStatusInvoiceUniqueName = item?.uniqueName;
 
-        if (this.voucherApiVersion === 2) {
-            this._receiptServices.getVoucherDetailsV4(item.account?.uniqueName, {
-                invoiceNumber: item.voucherNumber,
-                voucherType: VoucherTypeEnum.sales,
-                uniqueName: item?.uniqueName
-            }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-                if (response?.status === "success") {
-                    let tcsSum: number = 0;
-                    let tdsSum: number = 0;
-                    response.body?.entries.forEach(entry => {
-                        entry.taxes?.forEach(tax => {
-                            if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
-                                tcsSum += tax.amount?.amountForAccount;
-                            } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
-                                tdsSum += tax.amount?.amountForAccount;
-                            }
-                        });
+        // if (this.voucherApiVersion === 2) {
+        this._receiptServices.getVoucherDetailsV4(item.account?.uniqueName, {
+            invoiceNumber: item.voucherNumber,
+            voucherType: VoucherTypeEnum.sales,
+            uniqueName: item?.uniqueName
+        }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === "success") {
+                let tcsSum: number = 0;
+                let tdsSum: number = 0;
+                response.body?.entries.forEach(entry => {
+                    entry.taxes?.forEach(tax => {
+                        if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
+                            tcsSum += tax.amount?.amountForAccount;
+                        } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
+                            tdsSum += tax.amount?.amountForAccount;
+                        }
                     });
-                    this.invFormData.voucherDetails.tcsTotal = tcsSum;
-                    this.invFormData.voucherDetails.tdsTotal = tdsSum;
+                });
+                this.invFormData.voucherDetails.tcsTotal = tcsSum;
+                this.invFormData.voucherDetails.tdsTotal = tdsSum;
 
-                    this.updateNewAccountInVoucher(item.account);
-                    this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
-                    this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
-                    this.showAdvanceReceiptAdjust = true;
-                    this.adjustPaymentModal?.show();
-                } else {
-                    this._toaster.errorToast(response?.message);
-                }
-            });
-        } else {
-            this.selectedPerformAdjustPaymentAction = true;
-            // To clear receipts voucher store
-            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-            // To get re-assign receipts voucher store
-            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
-                invoiceNumber: item.voucherNumber,
-                voucherType: VoucherTypeEnum.sales,
-                uniqueName: item?.uniqueName
-            }));
-        }
+                this.updateNewAccountInVoucher(item.account);
+                this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
+                this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
+                this.showAdvanceReceiptAdjust = true;
+                this.adjustPaymentModal?.show();
+            } else {
+                this._toaster.errorToast(response?.message);
+            }
+        });
+        // } else {
+        //     this.selectedPerformAdjustPaymentAction = true;
+        //     // To clear receipts voucher store
+        //     this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+        //     // To get re-assign receipts voucher store
+        //     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
+        //         invoiceNumber: item.voucherNumber,
+        //         voucherType: VoucherTypeEnum.sales,
+        //         uniqueName: item?.uniqueName
+        //     }));
+        // }
     }
 
     /**
@@ -1540,13 +1547,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.advanceReceiptAdjustmentData.adjustments.map(item => {
                 item.voucherDate = (item.voucherDate?.toString()?.includes('/')) ? item.voucherDate?.trim()?.replace(/\//g, '-') : item.voucherDate;
                 item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
-
-                if (this.voucherApiVersion === 2) {
-                    item.amount = item.adjustmentAmount;
-                    item.unadjustedAmount = item.balanceDue;
-                    delete item.adjustmentAmount;
-                    delete item.balanceDue;
-                }
+                // if (this.voucherApiVersion === 2) {
+                item.amount = item.adjustmentAmount;
+                item.unadjustedAmount = item.balanceDue;
+                delete item.adjustmentAmount;
+                delete item.balanceDue;
+                // }
             });
         }
         // const apiCallObservable = (this.voucherApiVersion === 2) ? this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData.adjustments, this.changeStatusInvoiceUniqueName) : this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName);
@@ -1603,11 +1609,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             //     };
             //     apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
             // } else {
-                const requestObject = {
-                    accountUniqueName: customerUniqueName,
-                    voucherType: this.selectedVoucher
-                }
-                apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
+            const requestObject = {
+                accountUniqueName: customerUniqueName,
+                voucherType: this.selectedVoucher
+            }
+            apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
             // }
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
@@ -1622,7 +1628,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         // if (this.voucherApiVersion !== 2) {
                         //     this._toaster.warningToast(this.localeData?.no_advance_receipt);
                         // } else {
-                            this._toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
+                        this._toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
                         // }
                     }
                 }
@@ -1809,23 +1815,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public createBulkEInvoice(): void {
         let requestObject;
 
-        if (this.voucherApiVersion === 2) {
-            requestObject = {
-                model: {
-                    voucherUniqueNames: this.selectedInvoicesList.map(item => item?.uniqueName),
-                    voucherType: this.selectedVoucher
-                },
-                actionType: 'einvoice'
-            };
-        } else {
-            requestObject = {
-                model: {
-                    voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
-                    voucherType: this.selectedVoucher
-                },
-                actionType: 'einvoice'
-            };
-        }
+        // if (this.voucherApiVersion === 2) {
+        requestObject = {
+            model: {
+                voucherUniqueNames: this.selectedInvoicesList.map(item => item?.uniqueName),
+                voucherType: this.selectedVoucher
+            },
+            actionType: 'einvoice'
+        };
+        // } else {
+        //     requestObject = {
+        //         model: {
+        //             voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
+        //             voucherType: this.selectedVoucher
+        //         },
+        //         actionType: 'einvoice'
+        //     };
+        // }
 
         this.store.dispatch(this.invoiceActions.generateBulkEInvoice(requestObject));
     }
@@ -2029,7 +2035,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         const postObject: any = {};
         let apiCallObservable;
 
-        if (this.voucherApiVersion === 2) {
+        // if (this.voucherApiVersion === 2) {
             postObject.uniqueName = this.selectedEInvoice?.uniqueName;
             postObject.voucherType = this.selectedVoucher;
 
@@ -2037,16 +2043,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             requestObject.voucherVersion = 2;
 
             apiCallObservable = this._invoiceService.cancelEInvoiceV2(requestObject, postObject);
-        } else {
-            if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
-                requestObject.voucherType = this.selectedVoucher;
-                requestObject.voucherUniqueName = this.selectedEInvoice?.uniqueName;
-            } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
-                requestObject.invoiceUniqueName = this.selectedEInvoice?.uniqueName;
-            }
+        // } else {
+        //     if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
+        //         requestObject.voucherType = this.selectedVoucher;
+        //         requestObject.voucherUniqueName = this.selectedEInvoice?.uniqueName;
+        //     } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
+        //         requestObject.invoiceUniqueName = this.selectedEInvoice?.uniqueName;
+        //     }
 
-            apiCallObservable = this._invoiceService.cancelEInvoice(requestObject);
-        }
+        //     apiCallObservable = this._invoiceService.cancelEInvoice(requestObject);
+        // }
 
         apiCallObservable.pipe(take(1)).subscribe(response => {
             this.getVoucher(this.isUniversalDateApplicable);

@@ -102,14 +102,10 @@
                                                 role="menu"
                                                 aria-labelledby="button-basic"
                                             >
-                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder?.status === 'OPEN'">
+                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder?.status === 'OPEN' && voucherApiVersion === 2">
                                                     <a
                                                         class="dropdown-item"
-                                                        (click)="
-                                                            voucherApiVersion === 2
-                                                                ? openBulkConvert(purchaseBulkConvert)
-                                                                : convertToBill()
-                                                        "
+                                                        (click)="openBulkConvert(purchaseBulkConvert)"
                                                         >{{ localeData?.convert_tobill }}</a
                                                     >
                                                 </li>

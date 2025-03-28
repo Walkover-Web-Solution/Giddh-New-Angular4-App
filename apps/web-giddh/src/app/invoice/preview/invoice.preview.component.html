@@ -222,7 +222,7 @@
                                             gstEInvoiceEnable &&
                                             (selectedVoucher === 'credit note' ||
                                                 selectedVoucher === 'debit note' ||
-                                                selectedVoucher === 'sales')
+                                                selectedVoucher === 'sales') && voucherApiVersion === 2
                                         "
                                     >
                                         <a
@@ -316,7 +316,7 @@
                                                 gstEInvoiceEnable &&
                                                 (selectedVoucher === 'credit note' ||
                                                     selectedVoucher === 'debit note' ||
-                                                    selectedVoucher === 'sales')
+                                                    selectedVoucher === 'sales') && voucherApiVersion === 2
                                             "
                                         >
                                             <a
@@ -1982,10 +1982,10 @@
                         [invoiceSetting]="invoiceSetting"
                         [invoiceSearch]="invoiceSearch"
                         (deleteVoucher)="deleteConfirmedInvoice($event)"
-                        (sendEmail)="sendEmail($event)"
+                        (sendEmail)="voucherApiVersion === 2 && sendEmail($event)"
                         (invoiceSearchEvent)="invoiceSearch = $event"
                         (closeEvent)="invoicePreviewClosed()"
-                        (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
+                        (onOpenAdvanceReceiptModal)="voucherApiVersion === 2 && openAdvanceReceiptModal($event)"
                         [isCompany]="isCompany"
                         [isConsolidatedBranch]="isConsolidatedBranch"
                         (processPaymentEvent)="performActionPopup($event)"
@@ -2069,7 +2069,7 @@
                     [invoiceFormDetails]="invFormData"
                     [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                     (closeModelEvent)="closeAdvanceReceiptModal()"
-                    (submitClicked)="getAdvanceReceiptAdjustData($event)"
+                    (submitClicked)="voucherApiVersion == 2 && getAdvanceReceiptAdjustData($event)"
                     [isVoucherModule]="true && voucherApiVersion !== 2"
                     [voucherForAdjustment]="voucherForAdjustment"
                     [adjustedVoucherType]="selectedVoucher"

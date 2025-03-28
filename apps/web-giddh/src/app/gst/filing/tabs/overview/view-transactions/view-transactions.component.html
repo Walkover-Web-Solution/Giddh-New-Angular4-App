@@ -77,11 +77,12 @@
                     <td mat-cell *matCellDef="let item" class="date-width"> {{ item.voucherDate ?? "-" }} </td>
                 </ng-container>
 
-                <!-- Invoice # Column -->
+                <!-- Invoice # Column --> 
+                 <!-- onSelectInvoice() function is call only for voucher api version 2-->
                 <ng-container matColumnDef="invoiceNumber">
                     <th mat-header-cell *matHeaderCellDef> {{ localeData?.filing?.invoice_no }} </th>
                     <td mat-cell *matCellDef="let item" class="no-wrap"> 
-                        <span [ngClass]="{'btn-link': item.voucherType !== voucherTypeEnum.purchase }" (click)="onSelectInvoice(item)">
+                        <span [ngClass]="{'btn-link': item.voucherType !== voucherTypeEnum.purchase }" (click)="voucherApiVersion === 2 && onSelectInvoice(item)">
                             {{ item.voucherNumber ??  "-" }}
                         </span> 
                     </td>

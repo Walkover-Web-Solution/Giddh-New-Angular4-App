@@ -384,25 +384,26 @@
                             <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
                                 {{ voucherApiVersion === 2 ? payment?.account?.name : payment?.baseAccountName }}
                             </td>
-                            <td class="pl-0" [attr.data-title]="localeData?.payment_mode_label">
+                            <td class="pl-0" [attr.data-title]="localeData?.payment_mode_label" *ngIf="voucherApiVersion === 2">
                                 <!-- <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let paymentMode of payment?.particularNames?.split(',')">
                                         {{ paymentMode }}
                                     </div>
-                                </ng-container> -->
+                                </ng-container>
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     {{ payment?.paymentMode?.name }}
-                                </ng-container>
+                                </ng-container> -->
+                                {{ payment?.paymentMode?.name }}
                             </td>
                             <td
                                 width="13%"
                                 class="text-break pl-0"
-                                *ngIf="payment?.invoices || payment?.adjustments?.length"
+                                *ngIf="(payment?.invoices || payment?.adjustments?.length) && voucherApiVersion === 2"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >
                                 <!-- <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let invoice of payment?.invoices?.split(',')">{{ invoice }}</div>
-                                </ng-container> -->
+                                </ng-container>
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     <ng-container *ngIf="payment.adjustments?.length > 0">
                                         <ng-container *ngFor="let adjustment of payment.adjustments">
@@ -412,7 +413,15 @@
                                     <ng-container *ngIf="!payment.adjustments?.length">{{
                                         commonLocaleData?.app_not_available
                                     }}</ng-container>
+                                </ng-container> -->
+                                <ng-container *ngIf="payment.adjustments?.length > 0">
+                                    <ng-container *ngFor="let adjustment of payment.adjustments">
+                                        {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
+                                    </ng-container>
                                 </ng-container>
+                                <ng-container *ngIf="!payment.adjustments?.length">{{
+                                    commonLocaleData?.app_not_available
+                                }}</ng-container>
                             </td>
                             <td
                                 [attr.data-title]="localeData?.invoice_no_label"

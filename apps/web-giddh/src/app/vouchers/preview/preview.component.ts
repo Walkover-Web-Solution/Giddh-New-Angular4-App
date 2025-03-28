@@ -670,7 +670,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public downloadVoucherPdf(fileType: string = ''): void {
-        if (this.selectedInvoice) {
+        if (this.selectedInvoice && this.generalService.voucherApiVersion === 2) {
             this.isVoucherDownloading = true;
             this.isVoucherDownloadError = false;
             this.shouldShowUploadAttachment = false;

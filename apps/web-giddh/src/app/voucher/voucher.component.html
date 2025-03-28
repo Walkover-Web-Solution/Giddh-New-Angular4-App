@@ -1543,7 +1543,7 @@
                                                         </a>
                                                     </ng-template>
                                                 </dropdown-field>
-                                                <dropdown-field
+                                                <!-- <dropdown-field
                                                     #invoiceListDropdown
                                                     *ngIf="voucherApiVersion !== 2"
                                                     [name]="'invoiceLinking'"
@@ -1575,7 +1575,7 @@
                                                             </div>
                                                         </a>
                                                     </ng-template>
-                                                </dropdown-field>
+                                                </dropdown-field> -->
                                             </div>
                                             <div
                                                 *ngIf="selectedInvoice && !isEinvoiceGenerated"
@@ -3035,7 +3035,7 @@
                                                                                     <div
                                                                                         class="d-flex align-items-center column-gap1 adjustment-height pd-b05"
                                                                                     >
-                                                                                        <div
+                                                                                        <!-- <div
                                                                                             class="clearfix mr-b1 text-left"
                                                                                             *ngIf="
                                                                                                 voucherApiVersion !== 2
@@ -3089,7 +3089,7 @@
                                                                                                     }}
                                                                                                 </mat-radio-button>
                                                                                             </mat-radio-group>
-                                                                                        </div>
+                                                                                        </div> -->
                                                                                         <span>{{
                                                                                             localeData?.adjust_amount
                                                                                         }}</span>
@@ -3622,7 +3622,7 @@
                                                         </amount-field>
                                                     </div>
                                                 </ng-container>
-                                                <ng-container *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
+                                                <!-- <ng-container *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
                                                     <div class="col-7 pr-0">
                                                         {{ localeData?.balance_due }}
                                                         <span *ngIf="isMulticurrencyAccount">{{
@@ -3632,7 +3632,7 @@
                                                     <div class="col-5">
                                                         {{ invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                     </div>
-                                                </ng-container>
+                                                </ng-container> -->
                                             </div>
                                         </div>
                                     </div>
@@ -3739,7 +3739,7 @@
                                                                 >{{ localeData?.create_print }}</a
                                                             >
                                                         </mat-list-item>
-                                                        <mat-list-item *ngIf="voucherApiVersion !== 2">
+                                                        <!-- <mat-list-item *ngIf="voucherApiVersion !== 2">
                                                             <a
                                                                 href="javascript:void(0);"
                                                                 aria-label="generate recurring"
@@ -3750,7 +3750,7 @@
                                                                 "
                                                                 >{{ localeData?.generate_recurring }}</a
                                                             >
-                                                        </mat-list-item>
+                                                        </mat-list-item> -->
                                                     </mat-list>
                                                 </mat-menu>
                                                 <button

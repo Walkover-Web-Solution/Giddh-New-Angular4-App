@@ -924,25 +924,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
-    public downloadInvoice(transaction: any, e: Event) {
-        e.stopPropagation();
-        let downloadRequest = new DownloadLedgerRequest();
-        if (this.voucherApiVersion === 2) {
-            downloadRequest.uniqueName = transaction?.voucherUniqueName;
-        } else {
-            downloadRequest.invoiceNumber = [transaction?.voucherNumber];
-        }
-        downloadRequest.voucherType = (transaction?.voucherGeneratedType) ? transaction?.voucherGeneratedType : transaction?.voucher?.name;
+    //  ->>>> Please check, This function is called only for Voucher Version 1, so I have commented it out.
 
-        this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d?.status === 'success') {
-                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${this.activeAccount.name} - ${transaction?.voucherNumber}.pdf`);
-            } else {
-                this.toaster.showSnackBar("error", d.message);
-            }
-        });
-    }
+    // public downloadInvoice(transaction: any, e: Event) {
+    //     e.stopPropagation();
+    //     let downloadRequest = new DownloadLedgerRequest();
+    //     // if (this.voucherApiVersion === 2) {
+    //         downloadRequest.uniqueName = transaction?.voucherUniqueName;
+    //     // } else {
+    //     //     downloadRequest.invoiceNumber = [transaction?.voucherNumber];
+    //     // }
+    //     downloadRequest.voucherType = (transaction?.voucherGeneratedType) ? transaction?.voucherGeneratedType : transaction?.voucher?.name;
+
+    //     this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+    //         if (d?.status === 'success') {
+    //             let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
+    //             return saveAs(blob, `${this.activeAccount.name} - ${transaction?.voucherNumber}.pdf`);
+    //         } else {
+    //             this.toaster.showSnackBar("error", d.message);
+    //         }
+    //     });
+    // }
 
     public showQuickAccountModal() {
         this.showQuickAccountModalFromUpdateLedger.emit(true);
@@ -965,7 +967,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.baseAccountChanged = true;
         this.accountUniqueName = acc?.value;
 
-        if (this.voucherApiVersion === 2) {
+        // if (this.voucherApiVersion === 2) {
             // get flatten_accounts list && get transactions list && get ledger account list
             observableCombineLatest([this.selectedLedgerStream$, this.accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
                 .pipe(takeUntil(this.destroyed$))
@@ -974,9 +976,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.initEntry(resp, true);
                     }
                 });
-        } else {
-            this.saveLedgerTransaction();
-        }
+        // } else {
+        //     this.saveLedgerTransaction();
+        // }
 
         this.hideBaseAccountModal();
     }
@@ -1219,29 +1221,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         if (event && event.value && event.additional) {
             if (this.vm.selectedLedger) {
-                if (this.voucherApiVersion === 2) {
+                // if (this.voucherApiVersion === 2) {
                     this.vm.selectedLedger.referenceVoucher = {
                         uniqueName: event.value
                     }
-                } else {
-                    this.vm.selectedLedger.invoiceLinkingRequest = {
-                        linkedInvoices: [
-                            {
-                                invoiceUniqueName: event.value,
-                                voucherType: event.additional.voucherType
-                            }
-                        ]
-                    }
-                }
+                // } else {
+                //     this.vm.selectedLedger.invoiceLinkingRequest = {
+                //         linkedInvoices: [
+                //             {
+                //                 invoiceUniqueName: event.value,
+                //                 voucherType: event.additional.voucherType
+                //             }
+                //         ]
+                //     }
+                // }
             }
             this.vm.selectedLedger.generateInvoice = true;
         } else {
             if (this.vm.selectedLedger) {
-                if (this.voucherApiVersion === 2) {
+                // if (this.voucherApiVersion === 2) {
                     this.vm.selectedLedger.referenceVoucher = null;
-                } else {
-                    this.vm.selectedLedger.invoiceLinkingRequest = null;
-                }
+                // } else {
+                //     this.vm.selectedLedger.invoiceLinkingRequest = null;
+                // }
             }
         }
     }
@@ -1250,14 +1252,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
             this.entryAccountUniqueName = "";
 
-            if (this.voucherApiVersion === 2 || !this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
+            // if (this.voucherApiVersion === 2 || !this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
                 this.entryAccountUniqueName = this.vm.selectedLedger.particular?.uniqueName;
                 this.openDropDown = true;
-            } else {
-                this.openDropDown = false;
-                this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
-                return;
-            }
+            // } else {
+            //     this.openDropDown = false;
+            //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
+            //     return;
+            // }
         }
     }
 
@@ -2401,33 +2403,36 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {*} event
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public downloadFiles(downloadOption: string, event: any): void {
-        if (this.voucherApiVersion === 2) {
-            let dataToSend = {
-                voucherType: this.vm.selectedLedger.voucherGeneratedType,
-                entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger?.uniqueName,
-                uniqueName: (this.vm.selectedLedger.voucherUniqueName) ? this.vm.selectedLedger.voucherUniqueName : undefined
-            };
 
-            let fileName = (downloadOption === "VOUCHER") ? this.vm.selectedLedger.voucherNumber + '.pdf' : this.vm.selectedLedger.attachedFile;
+    // -->>  This function is called only for Voucher Version 1, so I have commented it out.
 
-            this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status !== "error") {
-                    saveAs(response, fileName);
-                } else {
-                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
-                }
-            }, (error => {
-                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
-            }));
-        } else {
-            if (downloadOption === "VOUCHER") {
-                this.downloadInvoice(this.vm.selectedLedger, event);
-            } else {
-                this.downloadAttachedFile(this.vm.selectedLedger.attachedFile, event);
-            }
-        }
-    }
+    // public downloadFiles(downloadOption: string, event: any): void {
+    //     if (this.voucherApiVersion === 2) {
+    //         let dataToSend = {
+    //             voucherType: this.vm.selectedLedger.voucherGeneratedType,
+    //             entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger?.uniqueName,
+    //             uniqueName: (this.vm.selectedLedger.voucherUniqueName) ? this.vm.selectedLedger.voucherUniqueName : undefined
+    //         };
+
+    //         let fileName = (downloadOption === "VOUCHER") ? this.vm.selectedLedger.voucherNumber + '.pdf' : this.vm.selectedLedger.attachedFile;
+
+    //         this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+    //             if (response?.status !== "error") {
+    //                 saveAs(response, fileName);
+    //             } else {
+    //                 this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+    //             }
+    //         }, (error => {
+    //             this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+    //         }));
+    //     } else {
+    //         if (downloadOption === "VOUCHER") {
+    //             this.downloadInvoice(this.vm.selectedLedger, event);
+    //         } else {
+    //             this.downloadAttachedFile(this.vm.selectedLedger.attachedFile, event);
+    //         }
+    //     }
+    // }
 
     /**
      * Shows the attachments popup

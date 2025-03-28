@@ -20,7 +20,7 @@
 
             <h3
                 *ngIf="!openDropDown"
-                (dblclick)="!isEinvoiceGenerated ? openHeaderDropDown() : ''"
+                (dblclick)="!isEinvoiceGenerated && voucherApiVersion === 2 ? openHeaderDropDown() : ''"
                 class="d-inline-block mr-1"
             >
                 {{ (baseAccount$ | async)?.name }} {{ commonLocaleData?.app_ac }}
@@ -54,13 +54,13 @@
             >
                 <ng-template #optionTemplate let-option="option">
                     <ng-container *ngIf="!option.additional?.stock">
-                        <a href="javascript:void(0)" (click)="changeBaseAccount(option)" class="bd-rb">
+                        <a href="javascript:void(0)" (click)="voucherApiVersion === 2 && changeBaseAccount(option)" class="bd-rb">
                             <div class="item">{{ option?.label }}</div>
                             <div class="item-unique font-12">{{ option.additional?.uniqueName }}</div>
                         </a>
                     </ng-container>
                     <ng-container *ngIf="option.additional?.stock">
-                        <a href="javascript:void(0)" (click)="changeBaseAccount(option)" class="bd-rb">
+                        <a href="javascript:void(0)" (click)="voucherApiVersion === 2 && changeBaseAccount(option)" class="bd-rb">
                             <div class="item">{{ option?.label }}</div>
                             <div class="item-unique font-12">{{ option.additional?.uniqueName }}</div>
                             <div class="item-stock">Stock: {{ option.additional?.stock.name }}</div>
@@ -1678,7 +1678,7 @@
                                                                 isConsolidatedBranch) &&
                                                             branches?.length > 1
                                                         "
-                                                        (selected)="creditNoteInvoiceSelected($event)"
+                                                        (selected)="voucherApiVersion === 2 && creditNoteInvoiceSelected($event)"
                                                         [multiple]="false"
                                                         [disabled]="
                                                             isEinvoiceGenerated ||
