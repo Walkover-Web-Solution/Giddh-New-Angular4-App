@@ -351,7 +351,8 @@
                         [mask]="inputMaskFormat"
                         [disabled]="isReadOnly"
                         [(ngModel)]="currentTxn.total"
-                        (blur)="calculateAmount()"
+                        (input)="currentTxn.total = $event?.target?.value"
+                        (change)="calculateAmount()"
                     >
                     </input-field>
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
