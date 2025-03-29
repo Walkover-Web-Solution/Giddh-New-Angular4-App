@@ -938,6 +938,10 @@ export class VoucherService {
             }
         });
 
+        if (this.generalService.voucherApiVersion === 2) {
+            contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
+        }
+
         return this.http.post(contextPath, postObject).pipe(
             catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }
