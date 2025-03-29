@@ -14,6 +14,8 @@ import { TabsModule } from "ngx-bootstrap/tabs";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { FormFieldsModule } from "apps/web-giddh/src/app/theme/form-fields/form-fields.module";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -21,6 +23,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     ],
     imports: [
         CommonModule,
+        FormFieldsModule,
         TranslateDirectiveModule,
         FormsModule,
         ReactiveFormsModule,
@@ -37,7 +40,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
             spinnerSize: 30
         }),
         PopoverModule.forRoot(),
-        TooltipModule.forRoot()
+        TooltipModule.forRoot(),
+        MatButtonModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,

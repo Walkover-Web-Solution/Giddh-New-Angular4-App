@@ -5,6 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
+update account------====
     <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm">
         <div>
             <div class="upper-form">
@@ -12,63 +13,85 @@
                     <div class="col-sm-4">
                         <div class="ng-select-wrap select-list select-group disable-select-group">
                             <label>{{ commonLocaleData?.app_group }}<span class="red-text">*</span> </label>
-                            <ng-select
+                            <reactive-dropdown-field
+                                [label]="localeData?.select_group_label"
                                 [placeholder]="localeData?.select_group_label"
-                                [disabled]="true"
-                                [filterPlaceholder]="localeData?.select_group_label"
-                                (selected)="selectGroup($event)"
-                                formControlName="activeGroupUniqueName"
+                                [labelValue]="activeAccountGroup.length === 1 ? activeAccountGroup[0].label : ''"
                                 [options]="activeAccountGroup"
-                                class="wd100"
+                                formControlName="activeGroupUniqueName"
+                                [required]="true"
+                                (selectedOption)="selectGroup($event)"
+                                
                             >
-                                <ng-template #optionTemplate let-option="option">
-                                    <div class="account-list-item">{{ option?.label }}</div>
-                                    <div class="account-list-item font-12">{{ option?.value }}</div>
-                                </ng-template>
-                            </ng-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="col-sm-8">
-                        <div class="form-group">
                             <label>{{ localeData?.account_name }} <sup class="text-danger">*</sup> </label>
-                            <input
+                            <!-- <input
                                 type="text"
                                 class="form-control"
                                 #autoFocusUpdate
                                 formControlName="name"
                                 name="accountName"
                                 [placeholder]="localeData?.account_name"
-                            />
-                        </div>
+                            /> -->
+                            <input-field
+                                [name]="'accountName'"
+                                #autoFocusUpdate
+                                [label]="localeData?.account_name"
+                                [placeholder]="localeData?.account_name"
+                                [type]="'text'"
+                                formControlName="name"
+                            >
+                            </input-field>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group" formGroupName="country">
                             <label>{{ commonLocaleData?.app_country }} <sup class="text-danger">*</sup> </label>
-                            <sh-select
+                            <!-- <sh-select
                                 [options]="countrySource"
                                 [isFilterEnabled]="true"
-                                (viewInitEvent)="onViewReady($event)"
+                                (viewInitEvent)="onViewReady($event)"   <<<<<<<<<<<
                                 formControlName="countryCode"
                                 [defaultValue]="accountCountryName"
                                 (selected)="selectCountry($event)"
                                 [useInBuiltFilterForIOptionTypeItems]="true"
                                 [isRequired]="true"
                                 [disabled]="true"
-                            ></sh-select>
+                            ></sh-select> -->
+                            <reactive-dropdown-field
+                                [label]="commonLocaleData?.app_country"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [labelValue]="accountCountryName"
+                                [options]="countrySource"
+                                formControlName="countryCode"
+                                [required]="true"
+                                (selectedOption)="selectCountry($event)"
+                            >
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label>{{ localeData?.currency }}</label>
-                            <sh-select
+                            <!-- <sh-select
                                 [options]="currencySource$ | async"
                                 defaultValue="{{ selectedCurrency }}"
                                 formControlName="currency"
                                 [isFilterEnabled]="true"
                                 [disabled]="true"
-                            ></sh-select>
+                            ></sh-select> -->
+                            <reactive-dropdown-field
+                                [label]="commonLocaleData?.app_country"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [labelValue]="selectedCurrency"
+                                [options]="currencySource$ | async"
+                                formControlName="currency"
+                            >
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="col-sm-4">
@@ -78,7 +101,7 @@
                                 [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
                                 class="obj-gap"
                             >
-                                <input
+                                <!-- <input
                                     type="number"
                                     min="0"
                                     class="form-control text-right"
@@ -86,7 +109,20 @@
                                     formControlName="openingBalance"
                                     [placeholder]="'0.00'"
                                     [readonly]="company?.isActive"
-                                />
+                                /> -->
+                                <input-field
+                                    [name]="'number'"
+                                    [cssClass]="'text-right'"
+                                    #autoFocusUpdate
+                                    [label]="localeData?.account_name"
+                                    [placeholder]="'0.00'"
+                                    [type]="'number'"
+                                    formControlName="openingBalance"
+                                    [allowDigitsOnly]="true"
+                                    [readonly]="company?.isActive"
+                                    [min]="0"
+                                >
+                                </input-field>
                                 <div
                                     class="input-group-addon"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
@@ -137,7 +173,7 @@
                             [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                             class="obj-gap"
                         >
-                            <input
+                            <!-- <input
                                 type="text"
                                 min="0"
                                 class="form-control text-right"
@@ -145,7 +181,19 @@
                                 [placeholder]="'0.00'"
                                 decimalDigitsDirective
                                 [readonly]="company?.isActive"
-                            />
+                            /> -->
+                            <input-field
+                                [name]="'number'"
+                                [cssClass]="'text-right'"
+                                [label]="localeData?.account_name"
+                                [placeholder]="'0.00'"
+                                [type]="'number'"
+                                formControlName="foreignOpeningBalance"
+                                [allowDigitsOnly]="true"
+                                [readonly]="company?.isActive"
+                                [min]="0"
+                            >
+                            </input-field>
                             <div
                                 class="input-group-addon"
                                 (click)="openingBalanceTypeChanged('DEBIT')"
@@ -214,22 +262,42 @@
                                         }}</label>
                                     </span>
                                 </div>
-                                <input
+                                <!-- <input
                                     type="text"
                                     class="form-control ml-4 bdr"
                                     maxlength="10"
                                     decimalDigitsDirective
                                     formControlName="hsnNumber"
                                     *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
-                                />
-                                <input
+                                /> -->
+                                <input-field
+                                    class="ml-4"
+                                    [label]="'HSN'"
+                                    [placeholder]="'HSN'"
+                                    [type]="'text'"
+                                    formControlName="hsnNumber"
+                                    [allowDigitsOnly]="true"
+                                    *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
+                                >
+                                </input-field>
+                                <!-- <input
                                     type="text"
                                     class="form-control ml-4 bdr"
                                     maxlength="10"
                                     formControlName="sacNumber"
                                     decimalDigitsDirective
                                     *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
-                                />
+                                /> -->
+                                <input-field
+                                    class="ml-4"
+                                    [label]="'SAC'"
+                                    [placeholder]="'SAC'"
+                                    [type]="'text'"
+                                    formControlName="sacNumber"
+                                    [allowDigitsOnly]="true"
+                                    *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
+                                >
+                                </input-field>
                             </div>
                         </div>
                     </div>
@@ -302,7 +370,7 @@
                                                 <sup class="text-danger" *ngIf="isStateRequired">*</sup>
                                             </label>
                                             <div>
-                                                <sh-select
+                                                <!-- <sh-select
                                                     #states
                                                     [options]="statesSource$ | async"
                                                     [isFilterEnabled]="true"
@@ -317,7 +385,17 @@
                                                     class="wd100"
                                                     [useInBuiltFilterForIOptionTypeItems]="true"
                                                 >
-                                                </sh-select>
+                                                </sh-select> -->
+                                                <reactive-dropdown-field
+                                                    [label]="commonLocaleData?.app_state"
+                                                    [placeholder]="commonLocaleData?.app_select"
+                                                    [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst?.value.state.name : ''" 
+                                                    [options]="statesSource$ | async"
+                                                    formControlName="stateCode"
+                                                    [required]="isStateRequired"
+                                                    (selectedOption)="selectedState(gst, $event)"
+                                                >
+                                                </reactive-dropdown-field>
                                             </div>
                                         </div>
                                         <div class="form-group" *ngIf="countyList?.length">
@@ -326,7 +404,7 @@
                                                 <sup class="text-danger" *ngIf="isStateRequired">*</sup>
                                             </label>
                                             <div>
-                                                <sh-select
+                                                <!-- <sh-select
                                                     #states
                                                     [options]="countyList"
                                                     [isFilterEnabled]="true"
@@ -338,7 +416,16 @@
                                                     [attr.required]="isStateRequired"
                                                     [isRequired]="isStateRequired"
                                                 >
-                                                </sh-select>
+                                                </sh-select> -->
+                                                <reactive-dropdown-field
+                                                    [label]="commonLocaleData?.app_region"
+                                                    [placeholder]="commonLocaleData?.app_select"
+                                                    [options]="countyList"
+                                                    formControlName="countyCode"
+                                                    [required]="isStateRequired"
+                                                    (selectedOption)="selectedCounty(gst, $event)"
+                                                >
+                                                </reactive-dropdown-field>
                                             </div>
                                         </div>
                                     </div>
@@ -347,7 +434,7 @@
                                             <label for="gstinNum" class="d-block">{{
                                                 formFields["taxName"]?.label
                                             }}</label>
-                                            <input
+                                            <!-- <input
                                                 type="text"
                                                 class="form-control"
                                                 autocomplete="false"
@@ -358,7 +445,17 @@
                                                 name="gstNumber"
                                                 formControlName="gstNumber"
                                                 [placeholder]="taxNamePlaceholder"
-                                            />
+                                            /> -->
+                                            <input-field
+                                                #gstNumberField
+                                                [name]="'gstNumber'"
+                                                [label]="formFields['taxName']?.label"
+                                                [placeholder]="taxNamePlaceholder"
+                                                [type]="'text'"
+                                                formControlName="gstNumber"
+                                                (blur)="checkGstNumValidation(gstNumberField); getStateCode(gst, states)"
+                                            >
+                                            </input-field>
                                         </div>
                                     </div>
                                     <!-- static code added for the pincode -->
@@ -371,7 +468,7 @@
                                                     ? commonLocaleData?.app_zip_code
                                                     : commonLocaleData?.app_pin_code
                                             }}</label>
-                                            <input
+                                            <!-- <input
                                                 type="number"
                                                 class="form-control"
                                                 autocomplete="false"
@@ -386,7 +483,24 @@
                                                 "
                                                 decimalDigitsDirective
                                                 [preventDecimal]="true"
-                                            />
+                                            /> -->
+                                            <input-field
+                                                [name]="'pinCodeNum'"
+                                                [label]="zipCodeSupportedCountryList.includes(
+                                                    activeCompany.countryV2.alpha2CountryCode
+                                                )
+                                                    ? commonLocaleData?.app_zip_code
+                                                    : commonLocaleData?.app_pin_code"
+                                                [placeholder]="zipCodeSupportedCountryList.includes(
+                                                    activeCompany.countryV2.alpha2CountryCode
+                                                )
+                                                    ? commonLocaleData?.app_enter_zip_code
+                                                    : commonLocaleData?.app_enter_pin_code"
+                                                [type]="'number'"
+                                                formControlName="pincode"
+                                                [allowDigitsOnly]="true"
+                                            >
+                                            </input-field>
                                         </div>
                                     </div>
                                     <!-- end -->
@@ -408,6 +522,14 @@
                                                         formControlName="partyType"
                                                         [isFilterEnabled]="true"
                                                     ></sh-select>
+                                                    <!-- <reactive-dropdown-field
+                                                        [label]="commonLocaleData?.party_type"
+                                                        [placeholder]="commonLocaleData?.app_select"
+                                                        [options]="partyTypeSource"
+                                                        formControlName="partyType"
+                                                        [labelValue]="partyTypeSource?.[0]?.label"
+                                                    >
+                                                    </reactive-dropdown-field> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -495,16 +617,24 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ localeData?.attention_to }}</label>
-                                <input
+                                <!-- <input
                                     type="text"
                                     class="form-control"
                                     formControlName="attentionTo"
                                     name="attention"
-                                />
+                                /> -->
+                                <input-field
+                                    [name]="'attention'"
+                                    [label]="localeData?.attention_to"
+                                    [placeholder]="localeData?.attention_to"
+                                    [type]="'text'"
+                                    formControlName="attentionTo"
+                                >
+                                </input-field>
                             </div>
                         </div>
-                        <div class="col-sm-6 mobile-number-wrapper">
-                            <div class="form-group">
+                        <div class="col-sm-6  mobile-number mobile-number-wrapper">
+                            <!-- <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
                                     <input
@@ -516,18 +646,51 @@
                                         formControlName="mobileNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
                                     />
+                                    <input-field
+                                        [name]="accountDetails.mobileNumber"
+                                        [label]="localeData?.attention_to"
+                                        #initContactUpdate
+                                        [cssClass]="'flag-input'"
+                                        id="init-contact-update"
+                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                        [type]="'tel'"
+                                        formControlName="mobileNo"
+                                    >
+                                    </input-field>
                                 </div>
                                 <span id="init-contact-update-valid-msg" class="d-none"></span>
                                 <span id="init-contact-update-error-msg" class="d-none"></span>
-                            </div>
+                            </div> -->
+                                <input-field
+                                    [name]="'mobile'"
+                                    [type]="'tel'"
+                                    #initContactUpdate
+                                    class="flag-input"
+                                    [id]="'init-contact-update'"
+                                    [label]="commonLocaleData?.app_mobile_number"
+                                    [placeholder]="localeData?.enter_mobile_number"
+                                    [floatLabel]="'always'"
+                                    formControlName="mobileNo"
+                                >
+                                </input-field>
+                                <span id="init-contact-update-valid-msg" class="d-none"></span>
+                                <span id="init-contact-update-error-msg" class="d-none"></span>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }}</label>
-                                <input type="email" class="form-control" formControlName="email" name="emailId" />
+                                <!-- <label>{{ commonLocaleData?.app_email_id }}</label> -->
+                                <!-- <input type="email" class="form-control" formControlName="email" name="emailId" /> -->
+                                <input-field
+                                    [name]="'emailId'"
+                                    [label]="commonLocaleData?.app_email_id"
+                                    [placeholder]="commonLocaleData?.app_email_id"
+                                    [type]="'email'"
+                                    formControlName="email"
+                                >
+                                </input-field>
                                 <span
                                     class="error-msg"
                                     *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
@@ -552,26 +715,45 @@
                     >
                         <div class="col-xl-3 col-lg-5 col-md-5 col-sm-6 unit-equal">
                             <div class="form-group portal-height">
-                                <label>{{ localeData?.portal_attention_to }} </label>
-                                <input
+                                <!-- <label>{{ localeData?.portal_attention_to }} </label> -->
+                                <!-- <input
                                     type="text"
                                     class="form-control"
                                     (input)="portalIndex = i"
                                     formControlName="name"
                                     name="name_{{ i }}"
-                                />
+                                /> -->
+                                <input-field
+                                    [name]="'name_{{ i }}'"
+                                    [label]="localeData?.portal_attention_to"
+                                    [placeholder]="localeData?.portal_attention_to"
+                                    [type]="'email'"
+                                    (input)="portalIndex = i"
+                                    formControlName="name"
+                                >
+                                </input-field>
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-3 col-md-3 col-sm-2 pr-0">
                             <div class="form-group portal-height">
-                                <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
+                                <!-- <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
                                 <input
                                     type="email"
                                     class="form-control"
                                     (input)="portalIndex = i"
                                     formControlName="email"
                                     name="email_{{ i }}"
-                                />
+                                /> -->
+                                <input-field
+                                    [name]="'name_{{ i }}'"
+                                    [label]="commonLocaleData?.app_email_id"
+                                    [placeholder]="commonLocaleData?.app_email_id"
+                                    [type]="'email'"
+                                    (input)="portalIndex = i"
+                                    formControlName="email"
+                                    [required]="true"
+                                >
+                                </input-field>
                                 <span
                                     class="error-msg"
                                     *ngIf="
@@ -832,7 +1014,7 @@
             </tab>
             <tab [heading]="localeData?.tabs?.custom" (selectTab)="tabChanged('custom')">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
-                <ng-container formArrayName="customFields">
+                <ng-container *ngIf="addAccountForm?.get('addresses')?.value?.length" formArrayName="customFields">
                     <ng-container
                         *ngFor="
                             let item of companyCustomFields;
@@ -972,9 +1154,9 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>{{ localeData?.move_to_group }}</label>
-                                <div>
-                                    <span>
-                                        <sh-select
+                                <div class="d-flex justify-content-between align-items-center">
+                                    
+                                        <!-- <sh-select
                                             formControlName="moveto"
                                             [placeholder]="localeData?.group_name_label"
                                             [options]="flatGroupsOptions"
@@ -985,7 +1167,7 @@
                                             (scrollEnd)="handleGroupScrollEnd()"
                                             (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
                                         >
-                                            <!--template for move group typeahead-->
+                                            template for move group typeahead
                                             <ng-template #optionTemplate let-model="option">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ model?.label }}</div>
@@ -994,18 +1176,31 @@
                                                     </div>
                                                 </a>
                                             </ng-template>
-                                        </sh-select>
-                                    </span>
-                                    <span class="pull-right">
-                                        <button
-                                            type="submit"
-                                            class="btn btn-primary merge-btn mr-0"
-                                            [disabled]="moveAccountForm.invalid"
-                                            aria-label="move"
-                                        >
-                                            {{ localeData?.move }}
-                                        </button>
-                                    </span>
+                                        </sh-select> -->
+                                    <reactive-dropdown-field
+                                        class="pull-left width-select"
+                                        [label]="commonLocaleData?.move_to_group"
+                                        [placeholder]="localeData?.group_name_label"
+                                        [options]="flatGroupsOptions"
+                                        formControlName="moveto"
+                                        [enableDynamicSearch]="true"
+                                        [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleGroupScrollEnd()"
+                                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+                                    >
+                                    </reactive-dropdown-field>
+                                    
+                                    
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        type="submit"
+                                        [disabled]="moveAccountForm.invalid"
+                                        aria-label="move"
+                                    >
+                                        {{ localeData?.move }}
+                                    </button>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -1019,31 +1214,43 @@
                             >{{ localeData?.select_account_merge }}
                             <span class="primary-color">{{ (activeAccount$ | async)?.name }}</span></label
                         >
-                        <div class="clearfix" #accountSelect2>
-                            <span>
-                                <sh-select
-                                    class="pull-left width-select"
-                                    [options]="accounts"
-                                    [isFilterEnabled]="true"
-                                    (viewInitEvent)="loadAccountData()"
-                                    [enableDynamicSearch]="true"
-                                    [isPaginationEnabled]="true"
-                                    (scrollEnd)="handleScrollEnd()"
-                                    (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                    [(ngModel)]="selectedaccountForMerge"
-                                    [placeholder]="commonLocaleData?.app_select_accounts"
-                                ></sh-select>
-                            </span>
-                            <span class="pull-right">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary merge-btn mr-0"
-                                    (click)="mergeAccounts()"
-                                    aria-label="merge"
-                                >
-                                    {{ localeData?.merge }}
-                                </button>
-                            </span>
+                        <div class="d-flex justify-content-between align-items-center" #accountSelect2>
+                            
+                            <!-- <sh-select
+                                class="pull-left width-select"
+                                [options]="accounts"
+                                [isFilterEnabled]="true"
+                                (viewInitEvent)="loadAccountData()"  <<<<<<<<<<<<<<<
+                                [enableDynamicSearch]="true"
+                                [isPaginationEnabled]="true"
+                                (scrollEnd)="handleScrollEnd()"
+                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                [(ngModel)]="selectedaccountForMerge"
+                                [placeholder]="commonLocaleData?.app_select_accounts"
+                            ></sh-select> -->
+                            <reactive-dropdown-field
+                                class="width-select"
+                                [label]="localeData?.select_account_merge"
+                                [placeholder]="commonLocaleData?.app_select_accounts"
+                                [options]="accounts"
+                                (selectedOption)="$event && selectedaccountForMerge = $event.value"
+                                [enableDynamicSearch]="true"
+                                [isPaginationEnabled]="true"
+                                (scrollEnd)="handleScrollEnd()"
+                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                            >
+                            </reactive-dropdown-field>
+                            
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                type="submit"
+                                (click)="mergeAccounts()"
+                                aria-label="merge"
+                            >
+                                {{ localeData?.merge }}
+                            </button>
+                            
                         </div>
                         <small class="clearfix">{{ localeData?.merge_account_note }}</small>
 
@@ -1073,28 +1280,34 @@
             <div class="mr-b2 select-box">
                 <div class="form-group">
                     <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
-                    <div class="clearfix">
-                        <span>
-                            <sh-select
+                    <div class="d-flex justify-content-between align-items-center">
+                            <!-- <sh-select
                                 class="pull-left calc-width"
                                 [options]="discountList"
                                 [isFilterEnabled]="true"
-                                [forceClearReactive]="forceClearDiscount$ | async"
+                                [forceClearReactive]="forceClearDiscount$ | async" <<<<<<<
                                 [(ngModel)]="selectedDiscounts"
                                 (selected)="discountSelected()"
                                 [placeholder]="localeData?.select_discounts"
-                            ></sh-select>
-                        </span>
-                        <span class="pull-right">
-                            <button
-                                class="btn btn-primary merge-btn mr-0"
-                                [disabled]="isDiscountSaveDisable$ | async"
-                                (click)="applyDiscounts()"
-                                aria-label="apply"
-                            >
-                                {{ commonLocaleData?.app_apply }}
-                            </button>
-                        </span>
+                            ></sh-select> -->
+                        <reactive-dropdown-field
+                            class="calc-width"
+                            [label]="localeData?.select_discounts"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [options]="discountList"
+                            (selectedOption)="$event && selectedDiscounts = $event.value; discountSelected()"
+                        >
+                        </reactive-dropdown-field>
+                        
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            [disabled]="isDiscountSaveDisable$ | async"
+                            (click)="applyDiscounts()"
+                            aria-label="apply"
+                        >
+                            {{ commonLocaleData?.app_apply }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1137,27 +1350,34 @@
                             <label>{{ commonLocaleData?.app_default_taxes }}</label>
                         </div>
                         <div class="form-group">
-                            <div class="clearfix">
-                                <span class="calc-width pull-left">
-                                    <sh-select
+                            <div class="d-flex justify-content-between align-items-center">
+                                    <!-- <sh-select
                                         [options]="companyTaxDropDown$ | async"
                                         [placeholder]="localeData?.all_applicable_taxes_placeholder"
                                         (selected)="taxesSelected($event)"
                                         [multiple]="true"
                                         formControlName="taxes"
                                     >
-                                    </sh-select>
-                                </span>
-                                <span class="pull-right">
+                                    </sh-select> -->
+                                    <select-multiple-fields
+                                        [label]="localeData?.app_default_taxes"
+                                        [placeholder]="commonLocaleData?.app_select"
+                                        [options]="companyTaxDropDown$ | async"
+                                        (selectedOption)="taxesSelected($event)"
+                                        formControlName="taxes"
+                                        class="calc-width select-multiple-chiplist mobile-margin border-bottom"
+                                    ></select-multiple-fields>
+                                    
                                     <button
                                         [disabled]="isTaxesSaveDisable$ | async"
                                         type="submit"
-                                        class="btn btn-success save-btn mr-0"
+                                        mat-stroked-button
+                                        color="primary"
                                         aria-label="save"
                                     >
                                         {{ commonLocaleData?.app_save }}
                                     </button>
-                                </span>
+                                
                             </div>
                         </div>
                     </form>
@@ -1201,7 +1421,8 @@
                     <button
                         type="button"
                         *ngIf="showDeleteButton"
-                        class="btn btn-danger"
+                        mat-stroked-button
+                        color="primary"
                         (click)="deleteClicked.emit(true)"
                         aria-label="delete"
                     >
@@ -1209,7 +1430,8 @@
                     </button>
                     <button
                         (click)="submit()"
-                        class="btn btn-primary update-btn-zindex"
+                        mat-stroked-button
+                        color="primary"
                         [ladda]="updateAccountInProcess$ | async"
                         [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
                         aria-label="update"
