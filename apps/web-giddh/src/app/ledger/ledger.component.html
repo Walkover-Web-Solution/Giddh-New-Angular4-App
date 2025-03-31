@@ -3163,7 +3163,7 @@
                 <a href="javascript:;"
                     class="d-block py-1 text-black">
                     <div class="font-15">
-                        {{ option?.label | titlecase }}
+                        {{ option?.label }}
                     </div>
                     <div class="font-15 text-gray">
                         {{ option.additional?.uniqueName
@@ -3176,13 +3176,7 @@
                 <a href="javascript:;"
                     class="py-1 text-black">
                     <div class="font-15">
-                        {{ option?.label | titlecase }}
-                        <span
-                            *ngIf="option?.additional?.stock">
-                            ({{
-                            option?.additional?.stock?.name
-                            | titlecase }})
-                        </span>
+                        {{ option?.label }}
                     </div>
                     <div class="font-15 text-gray">
                         {{ option.additional?.uniqueName
@@ -3192,7 +3186,7 @@
                         class="text-gray font-12">
                         {{ commonLocaleData?.app_stock
                         }}: {{
-                        option.additional?.stock?.uniqueName
+                        option.additional?.stock?.name
                         }}
                     </div>
                 </a>
