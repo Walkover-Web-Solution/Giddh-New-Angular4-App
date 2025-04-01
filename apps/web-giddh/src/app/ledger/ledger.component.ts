@@ -609,8 +609,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-
-
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -827,7 +825,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
 
             this.currencyTogglerModel = false;
-            const decodedAccountUniqueName = this.generalService.decodeBase64Value(params['accountUniqueName']);
+            const decodedAccountUniqueName = atob((params['accountUniqueName']));
             if (decodedAccountUniqueName) {
                 this.isShowLedgerColumnarReportTable = false;
                 this.lc.accountUnq = decodedAccountUniqueName;

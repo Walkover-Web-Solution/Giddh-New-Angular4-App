@@ -3,7 +3,6 @@ import {
     TRIAL_BALANCE_VIEWPORT_LIMIT,
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: '[profit-loss-grid-row]',
@@ -25,7 +24,7 @@ export class ProfitLossGridRowComponent implements OnChanges {
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
 
-    constructor(private cd: ChangeDetectorRef, private generalService : GeneralService) {
+    constructor(private cd: ChangeDetectorRef) {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -38,11 +37,10 @@ export class ProfitLossGridRowComponent implements OnChanges {
     }
 
     public entryClicked(acc) {
-        const encodedAccountUniqueName = this.generalService.getEncodedValue(acc?.uniqueNamee);
-        let url = location.href + '?returnUrl=ledger/' + encodedAccountUniqueName + '/' + this.from + '/' + this.to;
+        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + encodedAccountUniqueName + '/' + this.from + '/' + this.to;
+            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
             console.log(ipcRenderer.send('open-url', url));
         } else {
             (window as any).open(url);
