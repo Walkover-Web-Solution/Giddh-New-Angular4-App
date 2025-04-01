@@ -2130,8 +2130,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             : this.advanceFilters?.to;
 
         const accountUniqueName = voucher?.account?.uniqueName;
-        const encodedAccountUniqueName = this.generalService.getEncodedValue(accountUniqueName);
+
         if (accountUniqueName && fromDate && toDate) {
+            const encodedAccountUniqueName = btoa(accountUniqueName);
             const url = `/pages/ledger/${encodedAccountUniqueName}/${fromDate}/${toDate}`;
             this.openUrl(url);
         }
