@@ -825,12 +825,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
 
             this.currencyTogglerModel = false;
-            const decodedAccountUniqueName = atob((params['accountUniqueName']));
-            if (decodedAccountUniqueName) {
+            if (params['accountUniqueName']) {
                 this.isShowLedgerColumnarReportTable = false;
-                this.lc.accountUnq = decodedAccountUniqueName;
+                this.lc.accountUnq = params['accountUniqueName'];
                 if (this.isBankAccount) {
-                    this.getAllBankAccounts(decodedAccountUniqueName);
+                    this.getAllBankAccounts(params['accountUniqueName']);
                 }
                 this.needToShowLoader = true;
                 this.searchText = '';
@@ -843,7 +842,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         if (this.trxRequest && this.trxRequest.q) {
                             this.trxRequest.q = null;
                         }
-                        this.initTrxRequest(decodedAccountUniqueName);
+                        this.initTrxRequest(params['accountUniqueName']);
                     }
                 });
                 this.store.dispatch(this.ledgerActions.setAccountForEdit(this.lc.accountUnq));
