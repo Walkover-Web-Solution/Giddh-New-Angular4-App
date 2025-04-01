@@ -2293,5 +2293,53 @@ export class GeneralService {
             value: 'advance-receipt'
         }];
     }
+
+    /**
+     * This will be use for encode string 
+     *
+     * @param {string} value
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getEncodedValue(value: string): string {
+        if (!value) return ''; // Handle null/undefined cases
+        return btoa(new TextEncoder().encode(value).reduce((acc, byte) => acc + String.fromCharCode(byte), ''));
+    }
+
+    /**
+     * Decodes a Base64 encoded string.//+
+     *
+     * @param {string} encodedName
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public decodeBase64Value(encodedName: string): string {
+        if (!encodedName) return ''; // Handle null/undefined cases
+
+        try {
+            // Check if the string is Base64-encoded before decoding
+            if (!this.isBase64(encodedName)) return encodedName;
+
+            let decodedString = decodeURIComponent(atob(encodedName));
+            return new TextDecoder().decode(Uint8Array.from(decodedString, c => c.charCodeAt(0)));
+        } catch (error) {
+            return encodedName; // Return original value if decoding fails
+        }
+    }
+
+    /**
+     * This will be use for check value is base64
+     *
+     * @param {string} str
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public isBase64(str: string): boolean {
+        try {
+            return btoa(atob(str)) === str;
+        } catch (error) {
+            return false; // Not a valid Base64 string
+        }
+    }
 }
 
