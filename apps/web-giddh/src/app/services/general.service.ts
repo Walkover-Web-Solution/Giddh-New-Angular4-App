@@ -2230,13 +2230,13 @@ export class GeneralService {
      * @return {*}  {string}
      * @memberof GeneralService
      */
-    public getEncodedValue(value: string): string {
+    public getBase64EncodedString(value: string): string {
         if (!value) return ''; // Handle null/undefined cases
         return btoa(new TextEncoder().encode(value).reduce((acc, byte) => acc + String.fromCharCode(byte), ''));
     }
 
     /**
-     * Decodes a Base64 encoded string.//+
+     * Decodes a Base64 encoded string.
      *
      * @param {string} encodedName
      * @return {*}  {string}

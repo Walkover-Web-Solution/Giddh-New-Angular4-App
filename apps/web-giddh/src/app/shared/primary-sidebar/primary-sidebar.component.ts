@@ -101,10 +101,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Holds generic aside menu account dialog Ref */
     public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
-    /** Encodes the account unique name using the general service. */
-    public getEncodedAccountUniqueName(accountUniqueName: string): string {
-        return this.generalService.getEncodedValue(accountUniqueName)
-    }
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -679,5 +675,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             this.commandkDialogRef.close();
         }, 600);
+    }
+
+    /**
+     * Encodes the account unique name using the general service. 
+     *
+     * @param {string} accountUniqueName
+     * @return {*}  {string}
+     * @memberof PrimarySidebarComponent
+     */
+    public getEncodedAccountUniqueName(accountUniqueName: string): string {
+        return this.generalService.getBase64EncodedString(accountUniqueName);
     }
 }
