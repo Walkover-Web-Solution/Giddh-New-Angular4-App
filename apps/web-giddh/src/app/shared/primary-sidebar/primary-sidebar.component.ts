@@ -101,6 +101,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Holds generic aside menu account dialog Ref */
     public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
+    /** Encodes the account unique name using the general service. */
+    public getEncodedAccountUniqueName(accountUniqueName: string): string {
+        return this.generalService.getEncodedValue(accountUniqueName)
+    }
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,

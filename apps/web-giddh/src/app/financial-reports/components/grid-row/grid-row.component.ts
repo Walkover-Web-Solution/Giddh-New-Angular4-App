@@ -18,6 +18,7 @@ import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { SearchService } from '../../../services/search.service';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../constants/trial-balance-profit.constant';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: '[grid-row]',
@@ -53,6 +54,7 @@ export class GridRowComponent implements OnChanges, OnDestroy {
         private cd: ChangeDetectorRef,
         private searchService: SearchService,
         private renderer: Renderer2,
+        private generalService: GeneralService,
         @Inject(DOCUMENT) private document: Document
     ) {
     }
@@ -67,10 +69,11 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     }
 
     public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+        const encodedAccountUniqueName = this.generalService.getEncodedValue(acc?.uniqueNamee);
+        let url = location.href + '?returnUrl=ledger/' + encodedAccountUniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+            url = location.origin + location.pathname + '#./pages/ledger/' + encodedAccountUniqueName + '/' + this.from + '/' + this.to;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
