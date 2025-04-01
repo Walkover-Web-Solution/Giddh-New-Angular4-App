@@ -129,7 +129,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 break;
 
             case 1: // go to ledger
-                let additionalParams = this.generalService.voucherApiVersion === 2 ? `ledger/${this.accountUniqueName}` : 'ledger';
+                const encodedAccountUniqueName = btoa(this.accountUniqueName);
+                let additionalParams = this.generalService.voucherApiVersion === 2 ? `ledger/${encodedAccountUniqueName}` : 'ledger';
                 this.goToRoute(additionalParams, `/${this.from}/${this.to}`);
                 break;
 
