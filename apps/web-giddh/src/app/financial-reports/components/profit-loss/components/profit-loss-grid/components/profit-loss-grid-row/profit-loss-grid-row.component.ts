@@ -38,7 +38,7 @@ export class ProfitLossGridRowComponent implements OnChanges {
     }
 
     public entryClicked(acc) {
-        const encodedAccountUniqueName = this.generalService.getEncodedValue(acc?.uniqueNamee);
+        const encodedAccountUniqueName = this.generalService.getBase64EncodedString(acc?.uniqueNamee);
         let url = location.href + '?returnUrl=ledger/' + encodedAccountUniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;

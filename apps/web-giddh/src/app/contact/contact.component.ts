@@ -586,7 +586,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 1: // go to ledger
-                const encodedAccountUniqueName = this.generalService.getEncodedValue(account?.uniqueName);
+                const encodedAccountUniqueName = this.generalService.getBase64EncodedString(account?.uniqueName);
                 if (this.voucherApiVersion === 2) {
                     const additionalParams = this.fromDate && this.toDate ? `/${encodedAccountUniqueName}/${this.fromDate}/${this.toDate}` : `/${encodedAccountUniqueName}`;
                     this.goToRoute("ledger", additionalParams, encodedAccountUniqueName);
