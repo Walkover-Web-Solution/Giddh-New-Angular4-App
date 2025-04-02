@@ -52,8 +52,8 @@
                                     </div>
                                 </form>
                                 <!--shared with array-->
-                                <div class="row mr-b2" *ngIf="activeAccountSharedWith?.length > 0">
-                                    <div class="col-sm-8">
+                                <div class="row mr-b2 mt-1" *ngIf="activeAccountSharedWith?.length > 0">
+                                    <div class="pd-l15 pd-r1 w-75">
                                         <ul class="shared-list">
                                             <li *ngFor="let val of activeAccountSharedWith" class="clearfix">
                                                 <span class="pull-left">
@@ -89,8 +89,7 @@
                             <div class="input-group d-flex align-items-center mr-t15 mr-b15">
                                 <input-field
                                     class="w-75"
-                                    #magicLinkInput
-                                    [type]="'magicLink'"
+                                    [type]="'text'"
                                     [name]="'userEmail'"
                                     [(ngModel)]="magicLink"
                                     [readonly]="true"
@@ -106,7 +105,8 @@
                                         [disabled]="!magicLink ? 'disabled' : null"
                                         class="share-ledger-button d-flex align-items-center"
                                         (click)="toggleIsCopied()"
-                                        [ngxClipboard]="magicLinkInput"
+                                        ngxClipboard
+                                        [cbContent]="magicLink"
                                     >
                                         {{ commonLocaleData?.app_copy }}
                                     </button>
