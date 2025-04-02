@@ -251,28 +251,13 @@
                 </div>
                 <div 
                     class="align-self-center text-center"
-                    *ngIf="
-                        (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                        (companyTaxesList$ | async)?.length
-                    "
+                    *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                 >
                     <label class="icon-plus"></label>
                 </div>
-                <div 
-                    class="align-self-center text-center"
-                    *ngIf="
-                        (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                        !(companyTaxesList$ | async)?.length
-                    "
-                >
-                    <label class="font-16">=</label>
-                </div>
                  <!-- Tax -->
                 <div
-                    *ngIf="
-                    (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                    (companyTaxesList$ | async)?.length
-                    "
+                    *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                     (click)="$event.stopPropagation()"
                 >
                     <tax-control
@@ -332,10 +317,7 @@
                 </div>
                 <div 
                     class="align-self-center text-center"
-                    *ngIf="
-                        (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                        (companyTaxesList$ | async)?.length
-                    "
+                    *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                 >
                     <label class="font-16">=</label>
                 </div>
