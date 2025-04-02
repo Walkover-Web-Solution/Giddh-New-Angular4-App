@@ -883,6 +883,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.trxRequest.page = 0;
                 this.needToShowLoader = false;
                 if (term || this.trxRequest.q || searchCleared) {
+                    this.trxRequest.paginationToken = "";
                     this.getTransactionData();
                 }
             });
