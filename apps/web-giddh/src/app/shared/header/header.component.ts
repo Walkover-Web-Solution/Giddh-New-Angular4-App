@@ -819,6 +819,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
                     this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
+                    this.subscribedPlan.paymentPending = res.paymentPending;
                 }
                 this.activeCompany = res;
                 this.isUKCompany = res.country === "United Kingdom";
@@ -1890,7 +1891,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && this.subscribedPlan?.paymentPending && !this.isCurrentSubscriptionTrialOrCancelled) {
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && this.selectedPlanStatus === 'expired' && this.subscribedPlan?.paymentPending && !this.isCurrentSubscriptionTrialOrCancelled) {
             return this.localeData?.subscription_expire_renewal_message ?? "";
         }
         return this.getExpiredMessage(
