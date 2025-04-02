@@ -64,43 +64,48 @@
     </ng-container>
 
     <mat-menu #taxMenu="matMenu" [hasBackdrop]="hasBackdrop">
-        <div (click)="$event.stopPropagation()" class="tax-wrapper pd-l1 pd-r1">
-            <div *ngIf="taxRenderData.length === 0">
-                <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
+        <div (click)="$event.stopPropagation()" class="discount-wrapper pd-l1 pd-r1">
+            <div class="tax-wrapper">
+                <div *ngIf="taxRenderData.length === 0">
+                    <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
+                </div>
+                <p *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
+                    <mat-checkbox
+                        (keydown.enter)="$event.preventDefault()"
+                        color="primary"
+                        *ngIf="taxRenderData.length - 1 !== idx"
+                        [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                        class="pull-left w-100"
+                        id="{{ 'tax-control-checkbox-' + idx }}"
+                        name="tax_{{ idx }}"
+                        [(ngModel)]="tax.isChecked"
+                        (change)="change()"
+                        (click)="$event.stopPropagation()"
+                        [disabled]="tax.isDisabled"
+                    >
+                        {{ tax.name }}
+                    </mat-checkbox>
+                    <mat-checkbox
+                        (keydown.enter)="$event.preventDefault()"
+                        color="primary"
+                        *ngIf="taxRenderData.length - 1 === idx"
+                        (click)="$event.stopPropagation()"
+                        [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                        class="pull-left w-100"
+                        id="{{ 'tax-checkbox-' + idx }}"
+                        name="tax_{{ idx }}"
+                        [(ngModel)]="tax.isChecked"
+                        (change)="change()"
+                        (click)="$event.stopPropagation()"
+                        [disabled]="tax.isDisabled"
+                    >
+                        {{ tax.name }}
+                    </mat-checkbox>
+                </p>
             </div>
-            <p *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
-                <mat-checkbox
-                    (keydown.enter)="$event.preventDefault()"
-                    color="primary"
-                    *ngIf="taxRenderData.length - 1 !== idx"
-                    [ngClass]="{ 'disabled-label': tax.isDisabled }"
-                    class="pull-left w-100"
-                    id="{{ 'tax-control-checkbox-' + idx }}"
-                    name="tax_{{ idx }}"
-                    [(ngModel)]="tax.isChecked"
-                    (change)="change()"
-                    (click)="$event.stopPropagation()"
-                    [disabled]="tax.isDisabled"
-                >
-                    {{ tax.name }}
-                </mat-checkbox>
-                <mat-checkbox
-                    (keydown.enter)="$event.preventDefault()"
-                    color="primary"
-                    *ngIf="taxRenderData.length - 1 === idx"
-                    (click)="$event.stopPropagation()"
-                    [ngClass]="{ 'disabled-label': tax.isDisabled }"
-                    class="pull-left w-100"
-                    id="{{ 'tax-checkbox-' + idx }}"
-                    name="tax_{{ idx }}"
-                    [(ngModel)]="tax.isChecked"
-                    (change)="change()"
-                    (click)="$event.stopPropagation()"
-                    [disabled]="tax.isDisabled"
-                >
-                    {{ tax.name }}
-                </mat-checkbox>
-            </p>
+            <div *ngIf="showCreateNew" class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+            </div>
         </div>
     </mat-menu>
 </span>

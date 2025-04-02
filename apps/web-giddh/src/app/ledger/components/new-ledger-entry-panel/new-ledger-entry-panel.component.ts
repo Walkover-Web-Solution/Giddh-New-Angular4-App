@@ -41,6 +41,10 @@ import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.inter
 import { CommonService } from '../../../services/common.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
+import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
+import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
+import { CompanyActions } from '../../../actions/company.actions';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -54,7 +58,8 @@ const NEW_LEDGER_ENTRIES = [
     selector: 'new-ledger-entry-panel',
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [VoucherComponentStore]
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -258,6 +263,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private openTooltipMenuStatus: boolean = false;
     /** Holds mouse hovered on tooltip text status */
     public tooltipHoveredStatus: boolean = false;
+    /** Discount dialog ref */
+    public discountDialogRef: MatDialogRef<any>;
+    /** Discounts list Observable */
+    public discountsList$: Observable<any> = this.componentStore.discountsList$;
+    /** Tax dialog ref */
+    public taxDialogRef: MatDialogRef<any>;
+    /** Template Reference for Create Tax aside menu */
+    @ViewChild("createTax") public createTax: TemplateRef<any>;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -271,7 +284,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsDiscountService: SettingsDiscountService,
         private ledgerUtilityService: LedgerUtilityService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private componentStore: VoucherComponentStore,
+        private settingsTaxesAction: SettingsTaxesActions,
+        private companyActions: CompanyActions
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -1080,7 +1096,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef) {
             return;
         }
 
@@ -2139,5 +2155,58 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getWarehouseLabel(): string {
         return this.warehouses?.find(item => item.value === this.selectedWarehouse)?.label || '';
+    }
+
+    /**
+    * Shows create new discount dialog
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public showCreateDiscountDialog(): void {
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+
+        this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStore.getDiscountsList();
+
+                this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(discountsList => {
+                    if (discountsList) {
+                        this.currentTxn.discounts = discountsList;
+                        this.cdRef.detectChanges();
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Shows create new tax dialog
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public showCreateTaxDialog(): void {
+        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
+        this.taxDialogRef = this.dialog.open(this.createTax, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+    /**
+     * Close tax dialog
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeTaxDialog(): void {
+        this.store.dispatch(this.companyActions.getTax());
+        this.taxDialogRef.close();
+        this.cdRef.detectChanges();
     }
 }

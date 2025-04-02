@@ -764,7 +764,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultGroupScrollApiCall &&
-            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            ((typeof query === "string") || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -793,6 +793,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     this.groups$ = observableOf(this.searchedGroups);
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    this.changeDetectionRef.detectChanges();
                     if (successCallback) {
                         successCallback(data.body.results);
                     } else {
