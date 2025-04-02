@@ -762,6 +762,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultGroupScrollApiCall &&
             ((typeof query === "string") || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
