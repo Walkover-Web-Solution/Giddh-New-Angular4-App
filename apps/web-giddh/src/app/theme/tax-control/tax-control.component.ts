@@ -78,11 +78,15 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     /** Holds true to show backdrop in discount menu 
      * so menu close as click outside the menu */
     @Input() public hasBackdrop: boolean = true;
+    /** True if we need to show create new label */
+    @Input() public showCreateNew: boolean = false;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Emitter for create new tax */
+    @Output() public createNewTax: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @ViewChild('taxInputElement', { static: false }) public taxInputElement: ElementRef;
     /** Holds Mat Menu Reference */
@@ -387,5 +391,14 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             // Exclusive tax rate
             this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
         }
+    }
+
+    /**
+     * Emits create new tax event
+     *
+     * @memberof TaxControlComponent
+     */
+    public createNew(): void {
+        this.createNewTax.emit();
     }
 }

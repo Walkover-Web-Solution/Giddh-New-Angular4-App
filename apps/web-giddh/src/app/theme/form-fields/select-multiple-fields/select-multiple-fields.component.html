@@ -36,7 +36,16 @@
             [disabled]="disabled"
         />
     </mat-chip-grid>
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''" optionsScroll (optionsScroll)="onScroll()" autoActiveFirstOption multiple>
+    <mat-autocomplete
+        #auto="matAutocomplete"
+        multiple
+        optionsScroll
+        autoActiveFirstOption
+        (opened)="panelOpened()"
+        (closed)="panelClosed()"
+        (optionsScroll)="onScroll()"
+        (optionSelected)="selectOption($event); selectField.value = ''"
+    >
         <mat-option (click)="$event.stopPropagation()" [class]="optionClass" [ngClass]="{'po-options-line': isPurchaseOrder }"
         *ngFor="let option of fieldFilteredOptions$ | async" [value]="option">
             <ng-container *ngIf="!isPurchaseOrder">{{ option.label }}</ng-container>

@@ -234,6 +234,7 @@
                         [commonLocaleData]="commonLocaleData"
                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                         (discountTotalUpdated)="calculateDiscount($event)"
+                        (createNewDiscount)="showCreateDiscountDialog()"
                     >
                     </ledger-discount>
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -312,6 +313,8 @@
                         [allowedSelectionOfAType]="allowedSelectionOfAType"
                         [commonLocaleData]="commonLocaleData"
                         [showError]="isRcmEntry && !validateTaxes()"
+                        [showCreateNew]="true"
+                        (createNewTax)="showCreateTaxDialog()"
                     >
                     </tax-control>
 
@@ -1187,4 +1190,15 @@
             </reactive-dropdown-field>
         </div>
     </div>
+</ng-template>
+
+ <!-- Create Tax Aside Pane -->
+ <ng-template #createTax>
+    <aside-menu-create-tax-component
+        [class]="'in'"
+        [localeData]="localeData"
+        [otherTax]="true"
+        [commonLocaleData]="commonLocaleData"
+        (closeEvent)="closeTaxDialog()"
+    ></aside-menu-create-tax-component>
 </ng-template>
