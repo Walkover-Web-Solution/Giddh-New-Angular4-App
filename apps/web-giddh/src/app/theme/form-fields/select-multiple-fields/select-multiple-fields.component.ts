@@ -50,6 +50,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public isPurchaseOrder: string = '';
     /** Holds module translation data */
     @Input() public localeData: any = {};
+    /** Holds autocomplete position */
+    @Input() public autoCompletePosition: string = 'auto';
+    /** Holds CSS class which applied on mat options tag */
+    @Input() public optionClass: string;
     /** Holds module translation data */
     @Input() public commonLocaleData: any = {};
     /** True if the component should be used as dynamic search component instead of static search */
