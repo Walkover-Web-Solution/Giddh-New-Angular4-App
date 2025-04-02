@@ -566,11 +566,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.assignPrefixAndSuffixForCurrency();
     }
 
-    public ngAfterViewInit() {
+    /**
+     * Lifecycle hook that is called after a component's view has been fully initialized.
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public ngAfterViewInit(): void {
         this.vm.discountComponent = this.discountComponent;
         this.transaction = this.entryTransactionData?.transaction;
         this.index = this.entryTransactionData?.index;
         this.transactionsList = this.entryTransactionData?.transactionsList;
+        setTimeout(() => {
+            this.hideTax();
+            this.hideDiscount();
+            this.changeDetectorRef.detectChanges();
+        }, 2000);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {

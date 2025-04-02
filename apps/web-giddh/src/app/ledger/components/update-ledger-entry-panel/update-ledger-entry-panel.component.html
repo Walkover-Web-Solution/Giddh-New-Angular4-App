@@ -1646,11 +1646,10 @@
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         (onFocus)="hideDiscountTax()"
-                                        [ngModel]="vm.totalAmount"
+                                        [(ngModel)]="vm.totalAmount"
                                         (change)="
                                             vm.updateFirstEntryAmount();
                                             vm.inventoryAmountChanged();
-                                            vm.totalAmount = $event?.target?.value
                                         "
                                     >
                                     </input-field>
