@@ -705,8 +705,7 @@
                                     </td>
                                     <td
                                         (click)="isReadOnly ? '' : handleVoucherAdjustment()"
-                                        class="cursor-pointer pt-2 pr-0 w-auto"
-                                        [ngClass]="{ 'pt-3' : currentTxn?.voucherAdjustments?.totalAdjustmentAmount < 1000000000 }"
+                                        class="cursor-pointer pr-0 w-auto"
                                         *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
                                     >
                                         <div class="text-gray advance-receipt-edit mr-l1 d-flex align-items-baseline ">
