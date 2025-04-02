@@ -1017,6 +1017,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response){
                 this.getTransactionData();
+                this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
         });
     }
