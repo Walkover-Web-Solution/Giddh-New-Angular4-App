@@ -326,7 +326,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         let tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
-        if (!this.hideLinkEntity) {
+        if (!this.hideLinkEntity || this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
             if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
                 let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                     return item = item.uniqueName;
@@ -366,7 +366,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 hideLinkEntity: this.hideLinkEntity
             });
         }
-        if (!this.hideLinkEntity) {
+        if (!this.hideLinkEntity || this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
             this.addressForm.get('linkedEntity').patchValue(tempAddressFormData);
         }
     }

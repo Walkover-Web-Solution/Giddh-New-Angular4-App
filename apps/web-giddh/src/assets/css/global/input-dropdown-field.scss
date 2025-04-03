@@ -517,8 +517,12 @@ ngx-mat-select-search {
 body {
     .cdk-overlay-container {
         .cdk-overlay-pane {
+            &:has(.email-dropdown-width) {
+                width: 400px !important;
+            }
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
+
             }
         }
     }
