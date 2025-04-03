@@ -184,7 +184,7 @@
                         [suffix]="selectedSuffixForCurrency"
                         [useMask]="true"
                         [mask]="inputMaskFormat"
-                        [disabled]="true"
+                        [disabled]="isReadOnly"
                         [(ngModel)]="currentTxn.taxInclusiveAmount"
                         (focus)="hideDiscountTax()"
                         (keyup)="amountChanged(); calculateTotal()"
@@ -334,10 +334,10 @@
                         [suffix]="selectedSuffixForCurrency"
                         [useMask]="true"
                         [mask]="inputMaskFormat"
-                        [disabled]="isReadOnly"
+                        [disabled]="isAdvanceReceipt ? 'disabled' : null"
                         [(ngModel)]="currentTxn.total"
                         (input)="currentTxn.total = $event?.target?.value"
-                        (change)="calculateAmount()"
+                        (onChange)="calculateAmount()"
                     >
                     </input-field>
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
