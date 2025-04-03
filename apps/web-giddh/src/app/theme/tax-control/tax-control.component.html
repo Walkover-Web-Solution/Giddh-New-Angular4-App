@@ -67,7 +67,7 @@
         <div (click)="$event.stopPropagation()" class="discount-wrapper pd-l1 pd-r1">
             <div class="tax-wrapper">
                 <div *ngIf="taxRenderData.length === 0">
-                    <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
+                    <p class="lead pd font-14 text-center">{{ commonLocaleData?.app_no_tax_found }}</p>
                 </div>
                 <p *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
                     <mat-checkbox

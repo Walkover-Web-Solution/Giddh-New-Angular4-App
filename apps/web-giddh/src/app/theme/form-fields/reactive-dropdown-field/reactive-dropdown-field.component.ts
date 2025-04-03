@@ -310,4 +310,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
         }
     }
+
+    /**
+     * Handle mat autocomplete panel opened
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public panelOpened(): void {
+        if (!this.enableDynamicSearch) {
+            this.fieldFilteredOptions$ = this.filterOptions("");
+        }
+    }
 }
