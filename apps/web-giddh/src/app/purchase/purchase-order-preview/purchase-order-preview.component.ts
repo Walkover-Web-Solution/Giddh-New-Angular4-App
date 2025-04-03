@@ -465,24 +465,21 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      *
      * @memberof PurchaseOrderPreviewComponent
      */
+    public convertToBill(): void {
+        let purchaseNumbers = [this.purchaseOrder.number];
+        let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company?.uniqueName };
+        let bulkUpdatePostParams = { purchaseNumbers: purchaseNumbers };
 
-    // ->>>> Please check, This function is called only for Voucher Version 1, so I have commented it out.
-    
-    // public convertToBill(): void {
-    //     let purchaseNumbers = [this.purchaseOrder.number];
-    //     let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company?.uniqueName };
-    //     let bulkUpdatePostParams = { purchaseNumbers: purchaseNumbers };
-
-    //     this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-    //         if (res) {
-    //             if (res.status === 'success') {
-    //                 this.toaster.successToast(res.body);
-    //             } else {
-    //                 this.toaster.errorToast(res.message);
-    //             }
-    //         }
-    //     });
-    // }
+        this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                if (res.status === 'success') {
+                    this.toaster.successToast(res.body);
+                } else {
+                    this.toaster.errorToast(res.message);
+                }
+            }
+        });
+    }
 
     /**
      * This will get pdf preview

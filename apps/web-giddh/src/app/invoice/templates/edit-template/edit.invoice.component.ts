@@ -663,6 +663,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public templateType: any;
     /** True if user has invoice template permissions */
     public hasInvoiceTemplatePermissions: boolean = true;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
 
     constructor(
         private _toasty: ToasterService,
@@ -689,11 +691,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.invoiceActions.getTemplateState());
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            // only of for voucher version 2
-            if (params && params.module === 'templates' && this.generalService.voucherApiVersion === 2) {
-                // && (this.generalService.voucherApiVersion === 2 && params.module === 'templates') || (this.generalService.voucherApiVersion === 1)
+            if (params && (this.voucherApiVersion === 2 && params.module === 'templates') || (this.voucherApiVersion === 1)) {
                 if (params.selectedType) {
                     if (params.selectedType === VoucherTypeEnum.creditNote || params.selectedType === VoucherTypeEnum.debitNote) {
                         this.voucherTypeChanged(params.selectedType);

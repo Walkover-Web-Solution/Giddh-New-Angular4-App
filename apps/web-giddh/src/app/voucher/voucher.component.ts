@@ -2588,7 +2588,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
             data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
-            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(typeof(data.voucherDetails.voucherDate) === "object" ? dayjs(data.voucherDetails.voucherDate).toDate() : dayjs(data.voucherDetails.voucherDate , GIDDH_DATE_FORMAT), 'd')) {
+            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(typeof (data.voucherDetails.voucherDate) === "object" ? dayjs(data.voucherDetails.voucherDate).toDate() : dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.isShowLoader = false;
                 this.startLoader(false);
                 let dateText = this.commonLocaleData?.app_invoice;
@@ -4808,14 +4808,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if (this.showVATNo) {
             if (data?.account) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
+                if (this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE') {
                     delete data.account?.billingDetails?.state;
                     delete data.account?.billingDetails?.stateCode;
                     delete data.account?.billingDetails?.stateName;
                 }
                 delete data.account?.billingDetails?.gstNumber;
 
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
+                if (this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE') {
                     delete data.account?.shippingDetails?.state;
                     delete data.account?.shippingDetails?.stateCode;
                     delete data.account?.shippingDetails?.stateName;
@@ -4823,14 +4823,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 delete data.account?.shippingDetails?.gstNumber;
             }
             if (data?.accountDetails) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
+                if (this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE') {
                     delete data.accountDetails?.billingDetails?.state;
                     delete data.accountDetails?.billingDetails?.stateCode;
                     delete data.accountDetails?.billingDetails?.stateName;
                 }
                 delete data.accountDetails?.billingDetails?.gstNumber;
 
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
+                if (this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE') {
                     delete data.accountDetails?.shippingDetails?.state;
                     delete data.accountDetails?.shippingDetails?.stateCode;
                     delete data.accountDetails?.shippingDetails?.stateName;
@@ -4839,7 +4839,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
 
             if (data?.company) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
+                if (this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE') {
                     delete data.company?.billingDetails?.state;
                     delete data.company?.billingDetails?.stateCode;
                     delete data.company?.billingDetails?.stateName;
@@ -4852,14 +4852,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 delete data.company?.shippingDetails?.gstNumber;
             }
             if (data?.companyDetails) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
+                if (this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE') {
                     delete data.companyDetails?.billingDetails?.state;
                     delete data.companyDetails?.billingDetails?.stateCode;
                     delete data.companyDetails?.billingDetails?.stateName;
                 }
                 delete data.companyDetails?.billingDetails?.gstNumber;
 
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
+                if (this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE') {
                     delete data.companyDetails?.shippingDetails?.state;
                     delete data.companyDetails?.shippingDetails?.stateCode;
                     delete data.companyDetails?.shippingDetails?.stateName;
@@ -6199,9 +6199,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let countryCode = null;
                 if (name === 'United Kingdom') {
                     countryCode = 'GB';
-                }else if (name === 'Zimbabwe') {
+                } else if (name === 'Zimbabwe') {
                     countryCode = 'ZW';
-                }else if (name === 'Kenya') {
+                } else if (name === 'Kenya') {
                     countryCode = 'KE';
                 }
                 this.getOnboardingForm(countryCode);

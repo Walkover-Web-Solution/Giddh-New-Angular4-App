@@ -494,13 +494,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
-                // if (this.voucherApiVersion === 1) {
-                //     this.showDepreciationMessage = true;
-                //     document.querySelector("body")?.classList?.add("depreciation-message");
-                // } else {
-                //     this.showDepreciationMessage = false;
-                //     document.querySelector("body")?.classList?.remove("depreciation-message");
-                // }
+                if (this.voucherApiVersion === 1) {
+                    this.showDepreciationMessage = true;
+                    document.querySelector("body")?.classList?.add("depreciation-message");
+                } else {
+                    this.showDepreciationMessage = false;
+                    document.querySelector("body")?.classList?.remove("depreciation-message");
+                }
                 if (this.voucherApiVersion === 2) {
                     this.showDepreciationMessage = false;
                     document.querySelector("body")?.classList?.remove("depreciation-message");

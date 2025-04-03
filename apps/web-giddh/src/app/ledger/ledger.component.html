@@ -1984,6 +1984,7 @@
                                                             "
                                                             >{{ localeData?.to }}
                                                         </span>
+                                                        <!-- Disable action for v1 for new ledger -->
                                                         <sh-select
                                                             [id]="'select-account-dr-' + i"
                                                             [idEl]="txn.id"
@@ -1997,6 +1998,7 @@
                                                             [notFoundMsg]="noResultsFoundLabel"
                                                             [options]="searchResults"
                                                             [(ngModel)]="txn.particular"
+                                                            [disabled]="voucherApiVersion ===1"
                                                             tabindex="-1"
                                                             #select
                                                             [showClear]="false"
@@ -2456,6 +2458,7 @@
                                                             "
                                                             >{{ localeData?.by }}</span
                                                         >
+                                                        <!-- Disable action for v1 for new ledger -->
                                                         <sh-select
                                                             [id]="'select-account-cr-' + i"
                                                             [idEl]="txn.id"
@@ -2479,6 +2482,7 @@
                                                                 selectAccount($event, txn);
                                                                 showNewLedgerEntryPopup(txn)
                                                             "
+                                                            [disabled]="voucherApiVersion ===1"
                                                             (onClear)="selectAccount($event, txn, true)"
                                                             [showClear]="false"
                                                             [placeholder]="localeData?.by_select_accounts"

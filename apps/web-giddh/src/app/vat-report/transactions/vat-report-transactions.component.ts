@@ -173,29 +173,28 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
-        const uniqueName = invoice.voucherUniqueName;
-        // (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName
+        const uniqueName = (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName;
         if (invoice.voucherType === VoucherTypeEnum.purchase) {
             if (uniqueName) {
-                // if (this.voucherApiVersion !== 2) {
-                //     this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-                // } else {
-                this.router.navigate(['pages', 'vouchers', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-                // }
+                if (this.voucherApiVersion !== 2) {
+                    this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
+                } else {
+                    this.router.navigate(['pages', 'vouchers', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
+                }
             }
         } else {
             if (invoice.voucherNumber) {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = uniqueName;
 
-                // if (this.voucherApiVersion !== 2) {
-                //     let downloadVoucherRequestObject = {
-                //         voucherNumber: [invoice.voucherNumber],
-                //         voucherType: invoice.voucherType,
-                //         accountUniqueName: invoice.accountUniqueName
-                //     };
-                //     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-                // }
+                if (this.voucherApiVersion !== 2) {
+                    let downloadVoucherRequestObject = {
+                        voucherNumber: [invoice.voucherNumber],
+                        voucherType: invoice.voucherType,
+                        accountUniqueName: invoice.accountUniqueName
+                    };
+                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                }
 
                 this.dialog.open(this.downloadOrSendMailModel, {
                     height: '80vh',
@@ -214,7 +213,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public loadDownloadOrSendMailComponent(): void {
-        if (this.voucherApiVersion === 1) return;
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
         let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
         viewContainerRef.remove();
@@ -260,26 +258,25 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: any): void {
-        if (this.voucherApiVersion === 1) return;
+        public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-            // if (this.voucherApiVersion === 2) {
+            if (this.voucherApiVersion === 2) {
                 this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice?.accountUniqueName, {
                     email: { to: userResponse.emails },
                     uniqueName: this.selectedInvoice?.uniqueName,
                     copyTypes: userResponse.typeOfInvoice,
                     voucherType: this.selectedInvoice?.voucherType
                 }));
-            // } else {
-            //     this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice?.accountUniqueName, {
-            //         emailId: userResponse.emails,
-            //         voucherNumber: [this.selectedInvoice?.voucherNumber],
-            //         typeOfInvoice: userResponse.typeOfInvoice,
-            //         voucherType: this.selectedInvoice?.voucherType
-            //     }));
-            // }
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice?.accountUniqueName, {
+                    emailId: userResponse.emails,
+                    voucherNumber: [this.selectedInvoice?.voucherNumber],
+                    typeOfInvoice: userResponse.typeOfInvoice,
+                    voucherType: this.selectedInvoice?.voucherType
+                }));
+            }
         } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
             this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice?.account?.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice?.voucherNumber));
         }
@@ -292,8 +289,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public ondownloadInvoiceEvent(invoiceCopy: any): void {
-        if (this.voucherApiVersion === 1) return;
-        // if (this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             let dataToSend = {
                 voucherType: this.selectedInvoice?.voucherType,
                 voucherNumber: [this.selectedInvoice?.voucherNumber],
@@ -312,25 +308,25 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
             });
-        // } else {
-        //     let dataToSend = {
-        //         voucherNumber: [this.selectedInvoice?.voucherNumber],
-        //         typeOfInvoice: invoiceCopy,
-        //         voucherType: this.selectedInvoice?.voucherType
-        //     };
+        } else {
+            let dataToSend = {
+                voucherNumber: [this.selectedInvoice?.voucherNumber],
+                typeOfInvoice: invoiceCopy,
+                voucherType: this.selectedInvoice?.voucherType
+            };
 
-        //     this.invoiceService.DownloadInvoice(this.selectedInvoice?.accountUniqueName, dataToSend)
-        //         .subscribe(res => {
-        //             if (res) {
-        //                 if (dataToSend.typeOfInvoice?.length > 1) {
-        //                     return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
-        //                 }
-        //                 return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
-        //             } else {
-        //                 this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
-        //             }
-        //         });
-        // }
+            this.invoiceService.DownloadInvoice(this.selectedInvoice?.accountUniqueName, dataToSend)
+                .subscribe(res => {
+                    if (res) {
+                        if (dataToSend.typeOfInvoice?.length > 1) {
+                            return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
+                        }
+                        return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+                    } else {
+                        this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
+                    }
+                });
+        }
     }
 
     /**

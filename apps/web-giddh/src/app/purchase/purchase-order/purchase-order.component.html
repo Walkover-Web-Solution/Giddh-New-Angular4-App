@@ -10,13 +10,13 @@
         <div class="d-flex purchase-order-header justify-content-between">
             <div class="d-flex date-advance-search">
                 <div class="btn-wrapper">
-                    <!-- <button
+                    <button
                         *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                         class="btn btn-sky-blue desktop-view-btn"
                         [routerLink]="['/pages/purchase-management/purchase-order/new']"
                     >
                         {{ localeData?.new_order }}
-                    </button> -->
+                    </button>
                     <button
                         *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                         class="btn btn-sky-blue desktop-view-btn"
@@ -73,11 +73,15 @@
                                     >{{ localeData?.bulk_update }}</a
                                 >
                             </li>
-                            <li role="menuitem" *ngIf="voucherApiVersion === 2">
+                            <li role="menuitem">
                                 <a
                                     class="dropdown-item cp"
                                     href="javascript:void(0)"
-                                    (click)="openBulkConvert(purchaseBulkConvert)"
+                                    (click)="
+                                        voucherApiVersion === 2
+                                            ? openBulkConvert(purchaseBulkConvert)
+                                            : bulkUpdate('create_purchase_bill')
+                                    "
                                 >
                                     {{ localeData?.convert_tobill }}</a
                                 >
@@ -136,11 +140,15 @@
                                 >{{ localeData?.bulk_update }}</a
                             >
                         </li>
-                        <li role="menuitem" *ngIf="voucherApiVersion === 2">
+                        <li role="menuitem">
                             <a
                                 class="dropdown-item cp"
                                 href="javascript:void(0)"
-                                (click)="openBulkConvert(purchaseBulkConvert)"
+                                (click)="
+                                    voucherApiVersion === 2
+                                        ? openBulkConvert(purchaseBulkConvert)
+                                        : bulkUpdate('create_purchase_bill')
+                                "
                             >
                                 {{ localeData?.convert_tobill }}</a
                             >
@@ -388,8 +396,12 @@
                             >
                                 <a
                                     [tooltip]="localeData?.convert_tobill"
-                                    *ngIf="item?.status === 'open' && (!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                    (click)="openBulkConvert(purchaseBulkConvert, item)"
+                                    *ngIf="item?.status === 'open' && (!isCompany && !isConsolidatedBranch)"
+                                    (click)="
+                                        voucherApiVersion === 2
+                                            ? openBulkConvert(purchaseBulkConvert, item)
+                                            : bulkUpdate('create_purchase_bill', item.voucherNumber)
+                                    "
                                 >
                                     <span class="icon-tick font-12"></span>
                                 </a>

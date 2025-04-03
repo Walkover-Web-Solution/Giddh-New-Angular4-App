@@ -448,9 +448,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      */
     private fetchPaymentsData(): void {
         this.fetchAllPayments(this.searchQueryParams).subscribe((response) => this.handleFetchAllPaymentResponse(response));
-        if (this.voucherApiVersion === 2) {
-            this.fetchSummary().pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleSummaryResponse(response));
-        }
+        this.fetchSummary().pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleSummaryResponse(response));
     }
 
     /**
@@ -537,22 +535,22 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     private fetchSummary(): Observable<BaseResponse<any, PaymentSummaryRequest>> {
-        // if (this.voucherApiVersion === 2) {
-        const requestObj = {
-            from: this.fromDate,
-            to: this.toDate,
-            q: this.searchQueryParams.q
-        };
-        return this.receiptService.getAllReceiptBalanceDue(requestObj, "payment");
-        // } else {
-        //     const requestObject: PaymentSummaryRequest = {
-        //         companyUniqueName: this.activeCompanyUniqueName,
-        //         from: this.fromDate,
-        //         to: this.toDate,
-        //         branchUniqueName: this.currentBranch?.uniqueName
-        //     };
-        //     return this.receiptService.fetchSummary(requestObject);
-        // }
+        if (this.voucherApiVersion === 2) {
+            const requestObj = {
+                from: this.fromDate,
+                to: this.toDate,
+                q: this.searchQueryParams.q
+            };
+            return this.receiptService.getAllReceiptBalanceDue(requestObj, "payment");
+        } else {
+            const requestObject: PaymentSummaryRequest = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                branchUniqueName: this.currentBranch?.uniqueName
+            };
+            return this.receiptService.fetchSummary(requestObject);
+        }
     }
 
     /**

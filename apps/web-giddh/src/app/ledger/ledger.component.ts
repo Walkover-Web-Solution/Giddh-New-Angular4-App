@@ -1405,29 +1405,28 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    // ->>>> Please check, This function is called only for Voucher Version 1, so I have commented it out.
 
-    // public downloadInvoice(transaction: any, e: Event) {
-    //     e.stopPropagation();
-    //     let activeAccount = null;
-    //     this.lc.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
-    //     let downloadRequest = new DownloadLedgerRequest();
-    //     if (this.voucherApiVersion === 2) {
-    //         downloadRequest.uniqueName = transaction?.voucherUniqueName;
-    //     } else {
-    //         downloadRequest.invoiceNumber = [transaction?.voucherNumber];
-    //     }
-    //     downloadRequest.voucherType = transaction?.voucherGeneratedType;
+    public downloadInvoice(transaction: any, e: Event) {
+        e.stopPropagation();
+        let activeAccount = null;
+        this.lc.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
+        let downloadRequest = new DownloadLedgerRequest();
+        if (this.voucherApiVersion === 2) {
+            downloadRequest.uniqueName = transaction?.voucherUniqueName;
+        } else {
+            downloadRequest.invoiceNumber = [transaction?.voucherNumber];
+        }
+        downloadRequest.voucherType = transaction?.voucherGeneratedType;
 
-    //     this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-    //         if (d?.status === 'success') {
-    //             let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-    //             download(`${activeAccount.name} - ${transaction?.voucherNumber}.pdf`, blob, 'application/pdf');
-    //         } else {
-    //             this.toaster.showSnackBar("error", d.message);
-    //         }
-    //     });
-    // }
+        this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+            if (d?.status === 'success') {
+                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
+                download(`${activeAccount.name} - ${transaction?.voucherNumber}.pdf`, blob, 'application/pdf');
+            } else {
+                this.toaster.showSnackBar("error", d.message);
+            }
+        });
+    }
 
     public resetBlankTransaction() {
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -2930,36 +2929,33 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {string} downloadOption
      * @memberof LedgerComponent
      */
+    public downloadFiles(transaction: any, downloadOption: string, event: any): void {
+        if (this.voucherApiVersion === 2) {
+            let dataToSend = {
+                voucherType: transaction?.voucherGeneratedType,
+                entryUniqueName: (transaction?.voucherUniqueName) ? undefined : transaction?.entryUniqueName,
+                uniqueName: (transaction?.voucherUniqueName) ? transaction?.voucherUniqueName : undefined
+            };
 
-    // ->>>> Please check, This function is called only for Voucher Version 1, so I have commented it out.
+            let fileName = (downloadOption === "VOUCHER") ? transaction?.voucherNumber + '.pdf' : transaction?.attachedFileName;
 
-    // public downloadFiles(transaction: any, downloadOption: string, event: any): void {
-    //     if (this.voucherApiVersion === 2) {
-    //         let dataToSend = {
-    //             voucherType: transaction?.voucherGeneratedType,
-    //             entryUniqueName: (transaction?.voucherUniqueName) ? undefined : transaction?.entryUniqueName,
-    //             uniqueName: (transaction?.voucherUniqueName) ? transaction?.voucherUniqueName : undefined
-    //         };
-
-    //         let fileName = (downloadOption === "VOUCHER") ? transaction?.voucherNumber + '.pdf' : transaction?.attachedFileName;
-
-    //         this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
-    //             if (response?.status !== "error") {
-    //                 saveAs(response, fileName);
-    //             } else {
-    //                 this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
-    //             }
-    //         }, (error => {
-    //             this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
-    //         }));
-    //     } else {
-    //         if (downloadOption === "VOUCHER") {
-    //             this.downloadInvoice(transaction, event);
-    //         } else {
-    //             this.downloadAttachedFile(transaction?.attachedFileUniqueName, event);
-    //         }
-    //     }
-    // }
+            this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status !== "error") {
+                    saveAs(response, fileName);
+                } else {
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }
+            }, (error => {
+                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }));
+        } else {
+            if (downloadOption === "VOUCHER") {
+                this.downloadInvoice(transaction, event);
+            } else {
+                this.downloadAttachedFile(transaction?.attachedFileUniqueName, event);
+            }
+        }
+    }
 
     /**
      * Shows the attachments popup
@@ -3039,7 +3035,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean): void {
-        if (this.voucherApiVersion === 1) return;
         let requestObject;
         if (event.additional?.stock) {
             requestObject = {
@@ -3108,16 +3103,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 //#region unit rates logic
                 if (txn?.selectedAccount?.stock) {
-                    // const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
-                    const defaultUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
+                    const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {
                         stockUnitCode: defaultUnitRates[0].stockUnitCode,
                         code: defaultUnitRates[0].stockUnitCode,
                         rate: defaultUnitRates[0].rate,
                         name: txn.selectedAccount.stock.name
                     };
-                    // const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
-                    const unitRates = defaultUnitRates;
+                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
                     txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     stockName = defaultUnit.name;
                     rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));

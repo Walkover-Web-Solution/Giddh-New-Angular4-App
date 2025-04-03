@@ -154,8 +154,7 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
 
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index;
-        // this.generalService.voucherApiVersion === 1
-        if (!item.additional.stock && this.generalService.voucherApiVersion === 2) {
+        if (!item.additional.stock || this.generalService.voucherApiVersion === 1) {
             index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
         } else {
             if (this.generalService.voucherApiVersion === 2 && item.variants?.length === 1) {
