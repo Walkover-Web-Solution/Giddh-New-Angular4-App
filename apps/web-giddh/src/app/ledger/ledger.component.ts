@@ -767,7 +767,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
                     this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
-                
+
                 this.ledgerTransactions = lt;
 
                 if (this.isMobileScreen) {
@@ -787,15 +787,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     const debitTransactions = lt.debitTransactions ?? [];
                     const creditTransactions = lt.creditTransactions ?? [];
                     checkedEntriesName = uniq([
-                      ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
-                      ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
+                        ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
+                        ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
                     ]);
                 } else {
                     checkedEntriesName = uniq([
                         ...lt?.debitCreditTransactions?.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: dt.type }))
                     ]);
                 }
-                
+
                 if (checkedEntriesName && checkedEntriesName.length) {
                     checkedEntriesName.forEach(f => {
                         let duplicate = this.checkedTrxWhileHovering.some(s => s?.uniqueName === f?.uniqueName);
@@ -1016,7 +1016,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
 
         this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response){
+            if (response) {
+                if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
                 this.getTransactionData();
                 this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
@@ -1978,9 +1983,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             entryUniqueNames = [...debitCreditTransactions?.filter(debitCreditTransaction => debitCreditTransaction.isChecked).map(debitCreditTransaction => debitCreditTransaction.entryUniqueName)];
         } else {
             entryUniqueNames = [
-                    ...debitTrx?.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
-                    ...creditTrx?.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
-                ];
+                ...debitTrx?.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+                ...creditTrx?.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+            ];
         }
         this.entryUniqueNamesForBulkAction.push(...entryUniqueNames);
 
@@ -2124,11 +2129,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.statementViewSelectAll = false;
                     this.selectedTrxWhileHovering = '';
                 }
-    
+
                 this.lc.selectedTxnUniqueName = null;
                 this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
             }
-            
+
         } else {
             const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
                 (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
@@ -2172,7 +2177,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     this.selectedTrxWhileHovering = '';
                 }
-    
+
                 this.lc.selectedTxnUniqueName = null;
                 this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([uniqueName]));
             }
