@@ -43,26 +43,29 @@
         autoActiveFirstOption
         (opened)="panelOpened()"
         (closed)="panelClosed()"
+        [enableDynamicSearch]="enableDynamicSearch"
         (optionsScroll)="onScroll()"
         (optionSelected)="selectOption($event); selectField.value = ''"
     >
-        <mat-option (click)="$event.stopPropagation()" [class]="optionClass" [ngClass]="{'po-options-line': isPurchaseOrder }"
-        *ngFor="let option of fieldFilteredOptions$ | async" [value]="option">
-            <ng-container *ngIf="!isPurchaseOrder">{{ option.label }}</ng-container>
-            <ng-container *ngIf="isPurchaseOrder">
-                <span class="po-option-label"> {{ option?.label }}</span>
-                <span class="po-option-value" *ngIf="option?.additional?.pending">
-                    {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
-                >
-                <span class="po-option-value" *ngIf="option.additional?.grandTotal">
-                    {{ commonLocaleData?.app_amount }}:
-                    {{ option?.additional?.grandTotal }}</span
-                >
-            </ng-container>
-        </mat-option>
-        <mat-option disabled (click)="$event.stopPropagation()" *ngIf="!(fieldFilteredOptions$ | async)?.length" [class]="optionClass">
-            {{ commonLocaleData?.app_no_result_found }}
-        </mat-option>
+        <span (click)="$event.stopPropagation()">
+            <mat-option [class]="optionClass" [ngClass]="{'po-options-line': isPurchaseOrder }"
+            *ngFor="let option of fieldFilteredOptions$ | async" [value]="option">
+                <ng-container *ngIf="!isPurchaseOrder">{{ option.label }}</ng-container>
+                <ng-container *ngIf="isPurchaseOrder">
+                    <span class="po-option-label"> {{ option?.label }}</span>
+                    <span class="po-option-value" *ngIf="option?.additional?.pending">
+                        {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                    >
+                    <span class="po-option-value" *ngIf="option.additional?.grandTotal">
+                        {{ commonLocaleData?.app_amount }}:
+                        {{ option?.additional?.grandTotal }}</span
+                    >
+                </ng-container>
+            </mat-option>
+            <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length" [class]="optionClass">
+                {{ commonLocaleData?.app_no_result_found }}
+            </mat-option>
+        </span>
     </mat-autocomplete>
 </mat-form-field>
 </div>
