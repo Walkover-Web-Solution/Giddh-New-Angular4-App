@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { merge, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -78,11 +78,17 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** Observable to store the Tax Number */
     public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
     /** True if current company or branch has tax number */
-    public hasTaxNumber: boolean = false;
+    public hasTaxNumber: boolean | null = null;
     /** Observable to store the HMRC portal url */
     public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
     /** Observable to store the data of obligation */
     public obligationList$ = this.componentStore.select(state => state.obligationList);
+    /** Stores the current company */
+    public activeCompany: any = {};
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -98,6 +104,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
+                this.activeCompany = activeCompany;
+                this.isTaxRestrictedModule = activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
             }
         });
     }
@@ -156,7 +164,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
-                this.getURLHMRCAuthorization();
+                if (!this.isTaxRestrictedModule) {
+                    this.getURLHMRCAuthorization();
+                }
             }
         });
 
@@ -204,6 +214,17 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  ObligationsComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        if (subscriptionId) {
+            this.route.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
+        }
     }
 
     /**

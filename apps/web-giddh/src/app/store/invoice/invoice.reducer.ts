@@ -294,6 +294,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 newState.settings.proformaSettings = form.proformaSettings;
                 const broadcast = new BroadcastChannel("tabs");
                 broadcast.postMessage({ autoGenerateVoucherFromEntry: form.invoiceSettings.autoGenerateVoucherFromEntry });
+                const broadcastSettings = new BroadcastChannel("settings");
+                broadcastSettings.postMessage({ form: form });
                 return Object.assign({}, state, newState);
             }
             return state;

@@ -48,6 +48,7 @@
 /*--- mat-option ---*/
 .mat-mdc-option .mdc-list-item__primary-text {
     color: var(--color-common-primary-text) !important;
+    width: 100%;
 }
 
 /*--- mat-card ---*/
@@ -126,13 +127,40 @@ $listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors
     }
 }
 
+// Add class editable-table to the table to make the form fields border invisible when the row is not active (hovered)
+table {
+    &.editable-table {
+        tbody {
+            tr {
+                &:not(.active-row) {
+                    td {
+                        mat-form-field {
+                            mat-label,
+                            .dropdown-bg,
+                            .mdc-notched-outline {
+                                visibility: hidden;
+                            }
+                        }
+                        .editable-table-hide-element {
+                            visibility: hidden;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 table {
     &.mat-mdc-table {
         tr {
             th,
             td {
-                word-break: keep-all !important;
-                white-space: normal !important;
+                width: fit-content !important;
+                max-width: 194px !important;
+            }
+            .table-date-width {
+                width: 125px !important;
             }
         }
     }

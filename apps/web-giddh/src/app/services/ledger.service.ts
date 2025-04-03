@@ -14,17 +14,21 @@ import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
     private companyUniqueName: string;
+    private httpClient: HttpClient
 
     constructor(
         private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
+        public handler: HttpBackend,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private toaster: ToasterService) {
+        this.httpClient = new HttpClient(handler);
     }
 
     /**
@@ -516,24 +520,35 @@ export class LedgerService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
     }
 
-    public GetLedgerBalance(model: TransactionsRequest): Observable<BaseResponse<any, any>> {
+    public getLedgerBalance(model: TransactionsRequest, payload: any = null): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_BALANCE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
             ?.replace(':from', model.from)?.replace(':to', model.to)
-            ?.replace(':accountCurrency', model.accountCurrency?.toString());
+            ?.replace(':accountCurrency', model.accountCurrency?.toString())
+            ?.replace(':q', model.q?.toString() ?? '');
         if (model.branchUniqueName) {
             model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
-        return this.http.get(url).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = model;
-                data.queryString = { model };
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        if (payload) {
+            return this.http.post(url, payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        } else {
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    data.queryString = { model };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        }
     }
 
     /**
@@ -768,5 +783,51 @@ export class LedgerService {
         const url = this.config.apiUrl + LEDGER_API.GET_STOCK_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
         return this.http.get(url).pipe(map((res) => res.body), catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
+
+    /**
+     * Retrieves a signed URL for downloading an attachment.
+     *
+     * @param {string} fileName, File name
+     * @memberof LedgerService
+     */
+    public getSignedUrl(fileName: string): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.generalService.replaceUrlPlaceholders(LEDGER_API.GET_DOWNLOAD_ATTACHMENT, { fileName: fileName })).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                data.request = "";
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, fileName, { fileName })));
+    }
+
+    /**
+     * Uploads a voucher file to the given URL.
+     *
+     * @param {string} Url, The URL to upload the file to.
+     * @param {File} File, The file to upload.
+     * @memberof LedgerService
+     */
+    public uploadVoucher(url: string, file: File): any {
+        return this.httpClient.put(url, file, { observe: 'response' }).pipe(
+            map((res) => res),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, ''))
+        );
+    }
+
+    /**
+     * Import voucher
+     *
+     * @param {any} params, Request URL parameters.
+     * @param {any} data, The signed URL response data.
+     * @memberof LedgerService
+     */
+    public importVoucher(params: any, data: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.generalService.replaceUrlPlaceholders(LEDGER_API.IMPORT_VOUCHER, params), data).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }

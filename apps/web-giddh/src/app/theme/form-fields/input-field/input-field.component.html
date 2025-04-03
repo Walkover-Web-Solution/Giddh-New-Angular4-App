@@ -5,8 +5,13 @@
         [floatLabel]="floatLabel"
     >
         <mat-label>
-            {{ label || placeholder }} 
-            <i *ngIf="showLabelIcon" [class]="labelIconClass" [matTooltip]="labelIconTooltip" matTooltipPosition="above"></i>
+            {{ label || placeholder }}
+            <i
+                *ngIf="showLabelIcon"
+                [class]="labelIconClass"
+                [matTooltip]="labelIconTooltip"
+                matTooltipPosition="above"
+            ></i>
         </mat-label>
         <input
             matInput
@@ -16,6 +21,8 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -51,6 +58,8 @@
             [attr.min]="min"
             [attr.max]="max"
             *ngIf="allowDecimalDigitsOnly && !useMask"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [customDecimalPlaces]="customDecimalPlaces"
             decimalDigitsDirective
             #textField
@@ -67,6 +76,8 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -105,6 +116,8 @@
             [suffix]="suffix"
             [mask]="mask"
             [allowUnsupportedPrefix]="allowUnsupportedPrefix"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [validation]="false"
             *ngIf="!allowDigitsOnly && useMask"
             #textField
@@ -121,6 +134,8 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -145,5 +160,6 @@
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
+        <i matSuffixIcon [matTooltip]="suffixTooltipText"  matTooltipPosition="above" *ngIf="matSuffixIcon" [ngClass]="matSuffixIcon"matSuffix ></i>
     </mat-form-field>
 </div>

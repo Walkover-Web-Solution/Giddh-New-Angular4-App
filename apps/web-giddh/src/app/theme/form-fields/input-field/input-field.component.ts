@@ -99,6 +99,14 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
+    /** It will show tooltip text in suffix icon */
+    @Input() public suffixTooltipText: string = "";
+    /** It will show Icon suffix in the text field */
+    @Input() public matSuffixIcon: string = "";
+    /** Emits event when content is pasted */
+    @Output() public onPaste: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits event when content is focus */
+    @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -244,4 +252,23 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     public emitBlurEvent(): void {
         this.onChange.emit(this.value);
     }
+
+    /**
+     * Handles paste event to process pasted content
+     *
+     * @param {ClipboardEvent} event
+     */
+    public handlePaste(event: Clipboard): void {
+        this.onPaste.emit(event);
+    }
+
+/**
+ * Handles focus event to process content
+ *
+ * @param {ClipboardEvent} event
+ */
+    public handleFocus(event: Clipboard): void {
+        this.onFocus.emit(event);
+    }
+
 }

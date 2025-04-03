@@ -831,7 +831,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             delete data['uniqueName'];
-            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template') {
+            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template' && data.templateType?.toLowerCase() !== 'tally_template') {
                 delete data?.sections?.header?.data?.showCompanyAddress;
                 delete data?.sections?.header?.data?.showQrCode;
                 delete data?.sections?.header?.data?.showEInvoiceDetails;
@@ -839,6 +839,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 delete data?.sections?.footer?.data?.showNotesAtLastPage;
                 delete data?.sections?.footer?.data?.showMessage2;
                 delete data?.sections?.footer?.data?.textUnderSlogan;
+            }
+
+            if (vouchertyp === 'voucher') {
+                data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
+                data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
+            } else {
+                data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
+                data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
             }
 
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
