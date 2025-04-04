@@ -183,12 +183,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe(s => {
-            if (s !== null && s !== undefined) {
+        ).subscribe(searching => {
+            if (searching !== null && searching !== undefined) {
                 this.showClearFilter = true;
                 this.getDetailedsalesRequestFilter.sort = null;
                 this.getDetailedsalesRequestFilter.sortBy = null;
-                this.getDetailedsalesRequestFilter.q = s;
+                this.getDetailedsalesRequestFilter.q = encodeURIComponent(searching);
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
                 this.showSearchInvoiceNo = false;
             }
