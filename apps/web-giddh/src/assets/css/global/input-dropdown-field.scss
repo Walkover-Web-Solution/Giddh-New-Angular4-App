@@ -24,8 +24,8 @@ report-filters,
             }
 
             .mat-mdc-form-field-infix {
-                min-height: 48px;
-                max-height: 48px;
+                min-height: var(--mat-form-field-height);
+                max-height: var(--mat-form-field-height);
                 padding: 12px 0 !important;
 
                 .mat-mdc-input-element {
@@ -344,7 +344,7 @@ voucher-component {
 
         .mat-form-field-infix {
             .mat-input-element {
-                padding-left: 48px !important;
+                padding-left: var(--mat-form-field-height) !important;
             }
         }
 
@@ -507,21 +507,26 @@ ngx-mat-select-search {
     }
 }
 
-/*----- dropdown-color ----*/
 body {
     .cdk-overlay-container {
         .cdk-overlay-pane {
             &:has(.email-dropdown-width) {
                 width: 400px !important;
             }
+            &:has(.menu-width-150) {
+                width: 150px !important;
+            }
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
             }
         }
     }
-
-    div.mat-mdc-select-panel {
-        background-color: var(--color-body-background);
+    
+    /*----- dropdown-color ----*/
+    div {
+        &.mat-mdc-select-panel {
+            background-color: var(--color-body-background);
+        }
     }
 }
 

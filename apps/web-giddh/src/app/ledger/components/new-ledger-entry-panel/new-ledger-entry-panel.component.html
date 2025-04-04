@@ -100,6 +100,7 @@
                                     currentTxn?.inventory?.unit?.stockUnitUniqueName ||
                                     currentTxn?.inventory?.unit?.uniqueName
                                 "
+                                panelClass="menu-width-150"
                             >
                                 <mat-option
                                     *ngFor="let item of currentTxn?.unitRate"
@@ -354,7 +355,7 @@
                 </div>
             </div>
         </div>
-        <div class="row warehouse-field mr-b05">
+        <div class="row warehouse-field mr-b05 mr-t15">
             <div class="col-md-12">
                 <div class="text-right" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">

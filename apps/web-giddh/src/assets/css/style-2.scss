@@ -2831,7 +2831,7 @@ modal-container.modal {
 
     &.custom-new-datepicker {
         input {
-            height: 48px;
+            height: var(--mat-form-field-height);
             border-radius: 0.5rem;
         }
 
@@ -4167,7 +4167,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .w125 {
-    width: 125px;
+    width: 125px !important;
 }
 
 .multi-select {
@@ -11594,15 +11594,6 @@ body {
         position: relative;
     }
 
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        position: absolute;
-        width: 104%;
-        top: -50px;
-        padding-top: 5px !important;
-        margin: 0;
-        left: -16px;
-        right: 0;
-    }
 
     .sub-filter-nav-band .nav-tabs {
         overflow-x: auto;
@@ -13703,7 +13694,7 @@ aside-menu-product-service {
 // This Class will use globllay for border like mat input field
 .mat-form-field-border {
     &.mat-form-field-height {
-        height: 48px !important;
+        height: var(--mat-form-field-height) !important;
     }
 
     border-radius: 4px !important;

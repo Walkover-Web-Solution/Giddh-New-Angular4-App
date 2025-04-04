@@ -7,41 +7,8 @@
 >
     <div validateSectionPermission [hasPermission]="hasLedgerPermission">
         <ng-container *ngIf="localeData?.page_heading && commonLocaleData?.app_ac">
-            <div class="btn-group ledger-ellipse" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)">
-                <button
-                    aria-label="threedots"
-                    mat-button
-                    id="button-basic"
-                    [matMenuTriggerFor]="menu"
-                    type="button"
-                    class="dropdown-toggle btn mr-0"
-                >
-                    <i class="icon-dots-three-vertical"></i>
-                </button>
-                <mat-menu #menu="matMenu">
-                    <button aria-label="share" mat-menu-item>
-                        <a
-                            aria-label="share"
-                            class="dropdown-item p-0"
-                            id="share-ledger"
-                            href="javascript:void(0)"
-                            (click)="showShareLedgerModal()"
-                            >{{ localeData?.share_ledger }}</a
-                        >
-                    </button>
-                    <button aria-label="export" mat-menu-item disabled>
-                        <a
-                            class="dropdown-item p-0"
-                            id="export-ledger-mobile-view"
-                            aria-label="export"
-                            href="javascript:void(0)"
-                            (click)="showExportLedgerModal()"
-                            >{{ commonLocaleData?.app_export }}</a
-                        >
-                    </button>
-                </mat-menu>
-            </div>
             <hamburger-menu
+                class="position-absolute"
                 [pageHeading]="
                     lc?.activeAccount?.name
                         ? (!isMobileScreen ? localeData?.page_heading : '') +
@@ -52,20 +19,51 @@
                 "
             >
             </hamburger-menu>
-            <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
+            <section class="container-fluid ledger-section pd-t15" [hidden]="isShowLedgerColumnarReportTable">
+                <div class="custom-tabs mt-2 mb-2 position-static" *ngIf="isMobileScreen && ledgerView == ledgerViewEnum.TView">
+                    <ul class="nav nav-tabs pt-0">
+                        <li [ngClass]="{ 'active': visibleTransactionTypeMobile === 'all' }">
+                            <a
+                                aria-label="all"
+                                href="javascript:void(0)"
+                                id="ledger-all-tab"
+                                (click)="toggleMobileTransactionType('all')"
+                                >{{ commonLocaleData?.app_all }}</a
+                            >
+                        </li>
+                        <li role="presentation" [ngClass]="{ 'active': visibleTransactionTypeMobile === 'debit' }">
+                            <a
+                                aria-label="debit"
+                                href="javascript:void(0)"
+                                id="ledger-debit-tab"
+                                (click)="toggleMobileTransactionType('debit')"
+                                >{{ commonLocaleData?.app_debit }}</a
+                            >
+                        </li>
+                        <li role="presentation" [ngClass]="{ 'active': visibleTransactionTypeMobile === 'credit' }">
+                            <a
+                                aria-label="credit"
+                                href="javascript:void(0)"
+                                id="ledger-credit-tab"
+                                (click)="toggleMobileTransactionType('credit')"
+                                >{{ commonLocaleData?.app_credit }}</a
+                            >
+                        </li>
+                    </ul>
+                </div>
                 <!-- region ledger table-->
-                <div class="ledg-head transactions-page mr-t15 position-relative">
+                <div class="ledg-head transactions-page position-relative">
                     <!-- region ledger header -->
                     <div class="clearfix row mr-b15" [ngClass]="{ 'mr-b5': currentCompanyBranches?.length > 2 }">
                         <!-- region currency toggle -->
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
-                            <div class="d-flex search-ledger-field">
+                            <div class="d-flex column-gap1 search-ledger-field">
                                 <!-- please remove hidden attribute after functionality works -->
                                 <div
                                     class="select-all-icons"
-                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen"
                                 >
-                                    <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0">
+                                    <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0 && (ledgerView == ledgerViewEnum.TView)">
                                         <mat-checkbox
                                             color="primary"
                                             *ngIf="visibleTransactionTypeMobile === 'all'"
@@ -99,6 +97,7 @@
                                                 currentCompanyBranches?.length > 2
                                             "
                                             id="delete-ledger-mobile-view"
+                                            class="min-width-unset"
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
@@ -150,27 +149,18 @@
                                     />
                                 </div>
                                 <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering?.length === 0">
-                                    <span
-                                        [ngClass]="{
-                                            'default-width-input':
-                                                (searchText || isAdvanceSearchImplemented) && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView),
-                                            'full-width-input':
-                                                (searchText || !isAdvanceSearchImplemented) && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)
-                                        }"
+                                    <input-field
+                                        [type]="'text'"
+                                        [name]="'searchText'"
+                                        [(ngModel)]="searchText"
+                                        (keyup)="search(searchText)"
+                                        [label]="commonLocaleData?.app_search"
+                                        [placeholder]="localeData?.search_ledger"
+                                        [matPrefixIcon]="'icon-search font-15'"
+                                        (suffixClick)="searchText = ''; search(searchText)"
+                                        [matSuffixIcon]="searchText ? 'icon-cross font-12' : ''"
                                     >
-                                        <input-field
-                                            [type]="'text'"
-                                            [name]="'searchText'"
-                                            [(ngModel)]="searchText"
-                                            (keyup)="search(searchText)"
-                                            [label]="commonLocaleData?.app_search"
-                                            [placeholder]="localeData?.search_ledger"
-                                            [matPrefixIcon]="'icon-search font-15'"
-                                            (suffixClick)="searchText = ''; search(searchText)"
-                                            [matSuffixIcon]="searchText ? 'icon-cross font-12' : ''"
-                                        >
-                                        </input-field>
-                                    </span>
+                                    </input-field>
                                     <a
                                         aria-label="clear"
                                         class="cp mr-l1 clear-filter-btn"
@@ -215,7 +205,7 @@
                                     id="advance-filter"
                                     mat-stroked-button
                                     (click)="onOpenAdvanceSearch()"
-                                    class="advance-icon d-flex advance-search-filter icon-button-width pointer"
+                                    class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'above'"
                                     matTooltipClass="tooltip-black"
@@ -299,6 +289,42 @@
                                         class="d-none"
                                     />
                                 </div>
+
+                                <ng-container *ngIf="isMobileScreen">
+                                    <button
+                                        aria-label="threedots"
+                                        mat-stroked-button
+                                        id="button-basic"
+                                        [matMenuTriggerFor]="menu"
+                                        type="button"
+                                        class="min-width-unset icon-button-width ml-auto"
+                                    >
+                                        <i class="icon-dots-three-vertical"></i>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button aria-label="share" mat-menu-item>
+                                            <a
+                                                aria-label="share"
+                                                class="dropdown-item p-0"
+                                                id="share-ledger"
+                                                href="javascript:void(0)"
+                                                (click)="showShareLedgerModal()"
+                                                >{{ localeData?.share_ledger }}</a
+                                            >
+                                        </button>
+                                        <button aria-label="export" mat-menu-item>
+                                            <a
+                                                class="dropdown-item p-0"
+                                                id="export-ledger-mobile-view"
+                                                aria-label="export"
+                                                href="javascript:void(0)"
+                                                (click)="showExportLedgerModal()"
+                                                >{{ commonLocaleData?.app_export }}</a
+                                            >
+                                        </button>
+                                    </mat-menu>
+                                </ng-container>
+
                             </div>
                             <div
                                 class="form-group mr-r15 linked-entities"
@@ -316,7 +342,7 @@
                         </div>
 
                         <div
-                            class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center date-range-options"
+                            class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center date-range-options d-flex justify-content-center align-items-center"
                             *ngIf="!isMobileScreen"
                         >
                             <div
@@ -342,22 +368,10 @@
                         </div>
                         <!-- endregion -->
                         <div
-                            class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-right C-flex-end search-options"
+                            class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-right C-flex-end align-items-center search-options"
                             *ngIf="!isMobileScreen"
                         >
                             <div class="d-flex xs-width-100 ledger-head-top">
-                                <div
-                                    class="form-group mr-r15 linked-entities"
-                                    *ngIf="
-                                        showBranchSwitcher &&
-                                        currentCompanyBranches?.length > 2 &&
-                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                                    "
-                                >
-                                    <div class="form-group">
-                                        <ng-container *ngTemplateOutlet="branchSwitcherTemplate" ></ng-container>
-                                    </div>
-                                </div>
                                 <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
                                     <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
                                     <div class="toggle d-inline-block currency-toggler" data-key="disabled">
@@ -506,9 +520,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end mr-b15" *ngIf="ledgerView">
-                        <b *ngIf="ledgerView == ledgerViewEnum.StatementView" class="blue-heading font-15 mr-auto"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
-                        <div class="d-inline-flex align-items-center column-gap1">
+                    <div class="d-flex justify-content-between align-items-center mr-b15" *ngIf="ledgerView">
+                        <!-- Branch Switch Dropdown -->
+                        <ng-container *ngIf="
+                            showBranchSwitcher &&
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                            "
+                        >
+                            <ng-container *ngTemplateOutlet="branchSwitcherTemplate" ></ng-container>
+                        </ng-container>
+                       
+                        <!-- Ledger View Toggle Button -->
+                        <div class="d-inline-flex align-items-center column-gap1 ml-auto">
                             <span class="font-15">{{ commonLocaleData?.app_ledger_view?.statement_view }}</span>
                             <mat-slide-toggle
                                 aria-label="ledger-view"
@@ -535,37 +559,6 @@
                         <span class="mr-l15 d-inline-block font-15">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
                     <!-- endregion -->
-                    <div class="custom-tabs mt-2 mb-2" *ngIf="ledgerView == ledgerViewEnum.TView">
-                        <ul class="nav nav-tabs pt-0">
-                            <li [ngClass]="{ 'active': visibleTransactionTypeMobile === 'all' }">
-                                <a
-                                    aria-label="all"
-                                    href="javascript:void(0)"
-                                    id="ledger-all-tab"
-                                    (click)="toggleMobileTransactionType('all')"
-                                    >{{ commonLocaleData?.app_all }}</a
-                                >
-                            </li>
-                            <li role="presentation" [ngClass]="{ 'active': visibleTransactionTypeMobile === 'debit' }">
-                                <a
-                                    aria-label="debit"
-                                    href="javascript:void(0)"
-                                    id="ledger-debit-tab"
-                                    (click)="toggleMobileTransactionType('debit')"
-                                    >{{ commonLocaleData?.app_debit }}</a
-                                >
-                            </li>
-                            <li role="presentation" [ngClass]="{ 'active': visibleTransactionTypeMobile === 'credit' }">
-                                <a
-                                    aria-label="credit"
-                                    href="javascript:void(0)"
-                                    id="ledger-credit-tab"
-                                    (click)="toggleMobileTransactionType('credit')"
-                                    >{{ commonLocaleData?.app_credit }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
 
                     <!-- region bank ledgers-->
                     <div class="clearfix"></div>
@@ -1256,12 +1249,23 @@
                             <span class="dr-cr-category font-15 pull-right">{{ localeData?.cr }}</span>
                         </mat-grid-tile>
                     </mat-grid-list>
+                    <ng-container *ngIf="ledgerView == ledgerViewEnum?.StatementView">
+                        <p class="ledger-head text-center pd-t1 pd-b1 mt-2">
+                            <!-- Current Account Name in Statement view -->
+                            <b *ngIf="ledgerView == ledgerViewEnum.StatementView" class="blue-heading font-15 mr-auto"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
+                           </p>
+                        <div class="ledger-book" *ngIf="isMobileScreen">
+                            <!-- Statement View for Mobile -->
+                            <ng-container *ngTemplateOutlet="ledgerStatementView"></ng-container>
+                        </div>
+                    </ng-container>
+                    
                     <!-- endregion -->
-                    <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)">
+                    <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.TView)">
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
                             <ng-container *ngFor="let transactionDate of allTransactionDates">
-                                <div class="border-none pt-0 pb-0">
-                                    <div class="transaction-date pd-l15 pd-r15 pd-t2 bold">
+                                <div class="border-none pt-0 pb-0 pd-l15 pd-r15">
+                                    <div class="transaction-date pd-t2 bold">
                                         {{ transactionDate }}
                                     </div>
                                     <mat-grid-list cols="2" rowHeight="55px">
@@ -1273,7 +1277,7 @@
                                         >
                                             <mat-grid-tile>
                                                 <div
-                                                    class="pd-l15 pd-r15 relative w-100 text-center"
+                                                    class="relative w-100 text-center d-flex align-items-center"
                                                     [ngClass]="{
                                                         'compound-entry':
                                                             transactions.entryUniqueName === lc.selectedTxnUniqueName ||
@@ -1283,18 +1287,18 @@
                                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                                     (mouseout)="selectedTrxWhileHovering = ''"
                                                 >
-                                                    <span class="pull-left account-holder-checkbox">
+                                                    <span class="account-holder-checkbox">
                                                         <mat-checkbox
                                                             color="primary"
                                                             [id]="'mobile-view-select-entry-cr-' + i"
                                                             [ngClass]="{
-                                                                'd-none':
+                                                                'invisible':
                                                                     selectedTrxWhileHovering !==
                                                                         transactions.entryUniqueName &&
                                                                     !transactions.isChecked &&
                                                                     checkedTrxWhileHovering?.length === 0
                                                             }"
-                                                            class="d-none"
+                                                            class="invisible"
                                                             [(ngModel)]="transactions.isChecked"
                                                             (change)="
                                                                 entrySelected(
@@ -2815,6 +2819,136 @@
             <ng-template #attachments>
                 <attachments [selectedItem]="selectedItem"></attachments>
             </ng-template>
+
+            <!-- Account List Dropdown -->
+            <ng-template 
+                #accountSearchTemplate 
+                let-isLedgerEntry 
+                let-txn="txn" 
+                let-index="index"
+                let-cr="cr"
+                let-dr="dr"
+            >
+                <reactive-dropdown-field
+                    [data]="isLedgerEntry ? (cr ? 'CREDIT' : 'DEBIT') : null "
+                    *ngIf="isLedgerEntry || txn.showDropdown"
+                    class="w-100"
+                    [cssClass]="'bg-transparent' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
+                    (keydown.enter)="$event.preventDefault()"
+                    [disabled]="
+                        (currentOrganizationType === 'COMPANY' ||
+                            isConsolidatedBranch) &&
+                        currentCompanyBranches?.length > 2
+                    "
+                    [placeholder]="isLedgerEntry ? (txn?.type === 'DEBIT' ? localeData?.to_select_accounts : localeData?.by_select_accounts) : commonLocaleData?.app_select_accounts"
+                    [(ngModel)]="txn.particular"
+                    [name]="txn.particular+index"
+                    [labelValue]="(txn?.selectedAccount?.label ?? txn?.selectedAccount?.name) | titlecase"
+                    [options]="searchResults"
+                    [showCreateNew]="true"
+                    [enableDynamicSearch]="true"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleScrollEnd()"
+                    [readonly]="
+                        (currentOrganizationType === 'COMPANY' ||
+                        isConsolidatedBranch) &&
+                        currentCompanyBranches?.length > 2
+                    "
+                    (selectedOption)="
+                        addBrowserConfirmation();
+                        selectAccount($event, txn, false, true);
+                        (isLedgerEntry && showNewLedgerEntryPopup(txn))
+                    "
+                    (dynamicSearchedQuery)="
+                        isAccountSearchData = true;
+                        onSearchQueryChanged($event)
+                    "
+                    (onClear)="selectAccount($event, txn, true, true)"
+                    (createOption)="openLedgerAsidePaneDialog()"
+                    [showOptionDivider]="true"
+                    [showMatLabel]="false"
+                    [showCaretIcon]="false" 
+                    [appearance]="'fill'"
+                    [createNewText]="commonLocaleData?.app_create_new"
+                    [showKeyboardCommand]="commonLocaleData?.app_alt_c"
+                >
+                    <ng-template #optionTemplate
+                        let-option="option">
+                        <ng-container
+                            *ngIf="!option.additional?.stock">
+                            <a href="javascript:;"
+                                class="d-block py-1 text-black">
+                                <div class="font-15">
+                                    {{ option?.label }}
+                                </div>
+                                <div class="font-15 text-gray">
+                                    {{ option.additional?.uniqueName
+                                    }}
+                                </div>
+                            </a>
+                        </ng-container>
+                        <ng-container
+                            *ngIf="option.additional?.stock">
+                            <a href="javascript:;"
+                                class="py-1 text-black">
+                                <div class="font-15">
+                                    {{ option?.label }}
+                                </div>
+                                <div class="font-15 text-gray">
+                                    {{ option.additional?.uniqueName
+                                    }}
+                                </div>
+                                <div
+                                    class="text-gray font-12">
+                                    {{ commonLocaleData?.app_stock
+                                    }}: {{
+                                    option.additional?.stock?.name
+                                    }}
+                                </div>
+                            </a>
+                        </ng-container>
+                    </ng-template>
+                </reactive-dropdown-field>
+            </ng-template>
+            
+            <!-- Branch List Dropdown -->
+            <ng-template #branchSwitcherTemplate>
+                <reactive-dropdown-field
+                    [label]="commonLocaleData?.app_branch"
+                    [placeholder]="commonLocaleData?.app_select_branch"
+                    [(ngModel)]="currentBranch.uniqueName"
+                    [name]="'branch'"
+                    [options]="currentCompanyBranches"
+                    [labelValue]="currentBranch?.name"
+                    (selectedOption)="handleBranchChange($event)">
+                </reactive-dropdown-field>
+            </ng-template>
+
+            <!-- carousel template -->
+            <ng-template #carousel>
+                <giddh-carousel
+                    (navigatePrevious)="handleCarouselPrevious($event)"
+                    (navigateNext)="handleCarouselNext($event)"
+                >
+                    <ng-template #slideTemplate>
+                        <update-ledger-entry-panel
+                            [defaultSuggestions]="defaultSuggestions"
+                            [tcsOrTds]="tcsOrTds"
+                            [searchResultsPaginationPage]="defaultResultsPaginationData.page"
+                            [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
+                            [activeCompany]="activeCompany"
+                            [entrySide]="entrySide"
+                            [generateEInvoice]="generateEInvoice"
+                            (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
+                            (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+                            (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
+                            [entryTransactionData]="entryTransactionData"
+                            [carouselPrevious]="carouselPrevious"
+                            [carouselNext]="carouselNext"
+                        ></update-ledger-entry-panel>
+                    </ng-template>
+                </giddh-carousel>
+            </ng-template>
             
             <!-- Ledger Statement View -->
             <ng-template #ledgerStatementView>
@@ -3073,133 +3207,3 @@
         </ng-container>
     </div>
 </ng-container>
-
-<!-- Account List Dropdown -->
-<ng-template 
-    #accountSearchTemplate 
-    let-isLedgerEntry 
-    let-txn="txn" 
-    let-index="index"
-    let-cr="cr"
-    let-dr="dr"
->
-    <reactive-dropdown-field
-        [data]="isLedgerEntry ? (cr ? 'CREDIT' : 'DEBIT') : null "
-        *ngIf="isLedgerEntry || txn.showDropdown"
-        class="w-100"
-        [cssClass]="'bg-transparent' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
-        (keydown.enter)="$event.preventDefault()"
-        [disabled]="
-            (currentOrganizationType === 'COMPANY' ||
-                isConsolidatedBranch) &&
-            currentCompanyBranches?.length > 2
-        "
-        [placeholder]="isLedgerEntry ? (txn?.type === 'DEBIT' ? localeData?.to_select_accounts : localeData?.by_select_accounts) : commonLocaleData?.app_select_accounts"
-        [(ngModel)]="txn.particular"
-        [name]="txn.particular+index"
-        [labelValue]="(txn?.selectedAccount?.label ?? txn?.selectedAccount?.name) | titlecase"
-        [options]="searchResults"
-        [showCreateNew]="true"
-        [enableDynamicSearch]="true"
-        [isPaginationEnabled]="true"
-        (scrollEnd)="handleScrollEnd()"
-        [readonly]="
-            (currentOrganizationType === 'COMPANY' ||
-            isConsolidatedBranch) &&
-            currentCompanyBranches?.length > 2
-        "
-        (selectedOption)="
-            addBrowserConfirmation();
-            selectAccount($event, txn, false, true);
-            (isLedgerEntry && showNewLedgerEntryPopup(txn))
-        "
-        (dynamicSearchedQuery)="
-            isAccountSearchData = true;
-            onSearchQueryChanged($event)
-        "
-        (onClear)="selectAccount($event, txn, true, true)"
-        (createOption)="openLedgerAsidePaneDialog()"
-        [showOptionDivider]="true"
-        [showMatLabel]="false"
-        [showCaretIcon]="false" 
-        [appearance]="'fill'"
-        [createNewText]="commonLocaleData?.app_create_new"
-        [showKeyboardCommand]="commonLocaleData?.app_alt_c"
-    >
-        <ng-template #optionTemplate
-            let-option="option">
-            <ng-container
-                *ngIf="!option.additional?.stock">
-                <a href="javascript:;"
-                    class="d-block py-1 text-black">
-                    <div class="font-15">
-                        {{ option?.label }}
-                    </div>
-                    <div class="font-15 text-gray">
-                        {{ option.additional?.uniqueName
-                        }}
-                    </div>
-                </a>
-            </ng-container>
-            <ng-container
-                *ngIf="option.additional?.stock">
-                <a href="javascript:;"
-                    class="py-1 text-black">
-                    <div class="font-15">
-                        {{ option?.label }}
-                    </div>
-                    <div class="font-15 text-gray">
-                        {{ option.additional?.uniqueName
-                        }}
-                    </div>
-                    <div
-                        class="text-gray font-12">
-                        {{ commonLocaleData?.app_stock
-                        }}: {{
-                        option.additional?.stock?.name
-                        }}
-                    </div>
-                </a>
-            </ng-container>
-        </ng-template>
-    </reactive-dropdown-field>
-</ng-template>
-
-<!-- Branch List Dropdown -->
-<ng-template #branchSwitcherTemplate>
-    <reactive-dropdown-field
-        class="w-100"
-        [label]="commonLocaleData?.app_branch"
-        [placeholder]="commonLocaleData?.app_select_branch"
-        [(ngModel)]="currentBranch.uniqueName"
-        [name]="'branch'"
-        [options]="currentCompanyBranches"
-        [labelValue]="currentBranch?.name"
-        (selectedOption)="handleBranchChange($event)">
-    </reactive-dropdown-field>
-</ng-template>
-<!-- carousel template -->
-<ng-template #carousel>
-    <giddh-carousel
-        (navigatePrevious)="handleCarouselPrevious($event)"
-        (navigateNext)="handleCarouselNext($event)"
-    >
-        <ng-template #slideTemplate>
-            <update-ledger-entry-panel
-                [defaultSuggestions]="defaultSuggestions"
-                [tcsOrTds]="tcsOrTds"
-                [searchResultsPaginationPage]="defaultResultsPaginationData.page"
-                [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
-                [activeCompany]="activeCompany"
-                [entrySide]="entrySide"
-                [generateEInvoice]="generateEInvoice"
-                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
-                (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
-                (showQuickAccountModalFromUpdateLedger)="openLedgerAsidePaneDialog()"
-                [entryTransactionData]="entryTransactionData"
-                [carouselPrevious]="carouselPrevious"
-                [carouselNext]="carouselNext"
-            ></update-ledger-entry-panel>
-        </ng-template>
-    </giddh-carousel>
-</ng-template>

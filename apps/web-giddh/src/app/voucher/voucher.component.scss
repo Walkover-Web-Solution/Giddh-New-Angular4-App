@@ -187,7 +187,7 @@
 
             #init-contact-wrapper {
                 input {
-                    height: 48px;
+                    height: var(--mat-form-field-height);
                 }
             }
 
@@ -295,7 +295,7 @@
                 max-width: calc(100% - 36px);
 
                 .vouchers-attachment {
-                    height: 48px;
+                    height: var(--mat-form-field-height);
 
                     .attachment-add-icon {
                         width: 36px;
