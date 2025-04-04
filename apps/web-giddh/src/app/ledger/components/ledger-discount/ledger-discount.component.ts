@@ -84,6 +84,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.change();
         }
+        if ('discountsList' in changes && changes.discountsList.currentValue !== changes.discountsList.previousValue) {
+            this.prepareDiscountList();
+        }
     }
 
     /**
