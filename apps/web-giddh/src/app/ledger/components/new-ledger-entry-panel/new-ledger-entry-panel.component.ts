@@ -42,7 +42,6 @@ import { CommonService } from '../../../services/common.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
-import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
 import { CompanyActions } from '../../../actions/company.actions';
 
@@ -58,8 +57,7 @@ const NEW_LEDGER_ENTRIES = [
     selector: 'new-ledger-entry-panel',
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [VoucherComponentStore]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -265,8 +263,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public tooltipHoveredStatus: boolean = false;
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
-    /** Discounts list Observable */
-    public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Tax dialog ref */
     public taxDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
@@ -287,7 +283,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private settingsDiscountService: SettingsDiscountService,
         private ledgerUtilityService: LedgerUtilityService,
         private commonService: CommonService,
-        private componentStore: VoucherComponentStore,
         private settingsTaxesAction: SettingsTaxesActions,
         private companyActions: CompanyActions
     ) {
@@ -402,13 +397,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[2].label = this.localeData?.others;
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-
-        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
-            }
-        });
-
+        this.getAllDiscounts();
         if (this.voucherApiVersion === 2) {
             this.manualGenerateVoucherChecked = true;
         } else {
@@ -426,6 +415,21 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedStockVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
                 this.cdRef.detectChanges();
                 this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
+            }
+        });
+    }
+
+    /**
+     * Get all discounts API call
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private getAllDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+                this.cdRef.detectChanges();
             }
         });
     }
@@ -2176,14 +2180,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.componentStore.getDiscountsList();
-
-                this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(discountsList => {
-                    if (discountsList) {
-                        this.currentTxn.discounts = discountsList;
-                        this.cdRef.detectChanges();
-                    }
-                });
+                this.getAllDiscounts();
             }
             this.discountDialogRef = undefined;
         });
