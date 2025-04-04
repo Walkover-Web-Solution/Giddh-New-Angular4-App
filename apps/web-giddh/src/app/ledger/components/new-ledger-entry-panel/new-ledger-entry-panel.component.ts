@@ -269,6 +269,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Tax dialog ref */
     public taxDialogRef: MatDialogRef<any>;
+    /** Delete attached file dialog ref */
+    public deleteAttachedFileDialogRef: MatDialogRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
 
@@ -881,7 +883,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public showDeleteAttachedFileModal() {
-        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+        this.deleteAttachedFileDialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '630px',
             data: {
                 title: this.commonLocaleData?.app_delete,
@@ -892,10 +894,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.deleteAttachedFileDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.deleteAttachedFile();
+                this.clickedOutsideEvent.emit(false);
             }
+            this.deleteAttachedFileDialogRef = undefined;
         });
     }
 
@@ -1096,7 +1100,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef) {
             return;
         }
 
