@@ -4479,7 +4479,8 @@
                                         </div>
                                         {{ localeData?.pur_bill }}
                                     </ng-template>
-                                    <div class="tabs-box-content py-3" formGroupName="purchaseBillSettings">
+                                    <div class="tabs-box-content py-3">
+                                        <ng-container formGroupName="purchaseBillSettings">
                                         <h4 class="font-16 border-bottom pb-2 mb-3">{{ localeData?.purchase_bill }}</h4>
                                         <giddh-datepicker
                                             type="text"
@@ -4520,6 +4521,7 @@
                                         >
                                             {{ getWhatsappSettingLabel("purchase bill") }}
                                         </mat-slide-toggle>
+                                        </ng-container>
                                         <ng-container formGroupName="invoiceSettings">
                                             <mat-slide-toggle
                                                 aria-label="purchase roundOff"
