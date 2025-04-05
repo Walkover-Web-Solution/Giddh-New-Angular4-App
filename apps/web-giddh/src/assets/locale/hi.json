@@ -755,6 +755,8 @@
     "app_send_payment_receipt_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] वाउचर भेजें",
     "app_no_access_limit_module": "वर्तमान में आपके पास इस मॉड्यूल तक पहुंच नहीं है. बिना किसी परेशानी के इसे अनलॉक करने के लिए अपनी योजना को अपग्रेड करें",
     "app_upgrade": "उन्नत करना",
+    "app_link_account": "खाते लिंक करें",
+    "app_bank_accounts":"बैंक खाते",
     "app_click_here": "यहाँ क्लिक करें",
     "app_upload": "अपलोड",
     "app_file": "फ़ाइल",

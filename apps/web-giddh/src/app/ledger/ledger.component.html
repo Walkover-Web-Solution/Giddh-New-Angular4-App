@@ -476,6 +476,53 @@
                                 </div>
 
                                 <div class="d-flex">
+                                    <ng-container *ngIf="!isGocardlessSupportedCountry && isBankAccount && !isBankTransactionLoading">
+                                        <a
+                                            *ngIf="
+                                                lc.bankTransactionsDebitData?.length ||
+                                                lc.bankTransactionsCreditData?.length"
+                                            aria-label="refresh-bank-transactions"
+                                            mat-button
+                                            href="javascript:void(0)"
+                                            id="refresh"
+                                            class="icomoon-ico d-flex align-items-center"
+                                            [matTooltip]="commonLocaleData?.app_refresh"
+                                            [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
+                                            (click)="getBankTransactions()"
+                                        >
+                                            <i aria-hidden="true" class="icon-refresh lh-0"></i>
+                                        </a>
+                                    </ng-container>
+                                    <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && isBankAccount && !isBankTransactionLoading">
+                                        <a
+                                           *ngIf="isBankAccountConnected"
+                                            aria-label="refresh-bank-transactions"
+                                            mat-button
+                                            href="javascript:void(0)"
+                                            id="refresh"
+                                            class="icomoon-ico d-flex align-items-center"
+                                            [matTooltip]="commonLocaleData?.app_refresh"
+                                            [matTooltipPosition]="'above'"
+                                            matTooltipClass="tooltip-black"
+                                            (click)="refreshBankTransactions()"
+                                            [disabled]="(isBankRefreshing$ | async)"
+                                        >
+                                            <i aria-hidden="true" class="icon-refresh lh-0"></i>
+                                        </a>
+                                        <a
+                                            mat-button
+                                            aria-label="connect-bank"
+                                            id="connect-bank"
+                                            class="icomoon-ico d-flex align-items-center"
+                                            [matTooltip]="localeData?.connect_bank"
+                                            matTooltipClass="tooltip-black"
+                                            [matTooltipPosition]="'above'"
+                                            (click)="openBankLinkDialog()"
+                                        >
+                                            <i  aria-hidden="true" class="icon-plus"></i>
+                                        </a>
+                                    </ng-container>
                                     <a
                                         aria-label="show"
                                         mat-button
@@ -483,8 +530,8 @@
                                         id="upload"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
-                                        [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
+                                        [matTooltipPosition]="'above'"
                                         (click)="showUploadBankStatementModal()"
                                     >
                                         <i class="icon-upload lh-0"></i>
@@ -557,48 +604,11 @@
                                             alt="autopaid-icon"
                                         />
                                     </a>
-                                    <span
-                                        class="bank-menu"
-                                        *ngIf="
-                                            lc.bankTransactionsDebitData?.length ||
-                                            lc.bankTransactionsCreditData?.length ||
-                                            bankAccount?.reLoginRequired
-                                        "
-                                    >
-                                        <button
-                                            mat-icon-button
-                                            [matMenuTriggerFor]="menu"
-                                            class="company-name"
-                                            aria-label="name"
-                                        >
-                                            <span class="icon-dots-three-vertical"></span>
-                                        </button>
-                                        <mat-menu #menu="matMenu">
-                                            <button
-                                                aria-label="bank"
-                                                mat-menu-item
-                                                (click)="getPlaidLinkToken(bankAccount?.itemId)"
-                                                *ngIf="bankAccount?.reLoginRequired"
-                                            >
-                                                <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
-                                            </button>
-                                            <button
-                                                aria-label="transactions"
-                                                mat-menu-item
-                                                (click)="getBankTransactions()"
-                                                *ngIf="
-                                                    lc.bankTransactionsDebitData?.length ||
-                                                    lc.bankTransactionsCreditData?.length
-                                                "
-                                            >
-                                                <span>{{ localeData?.reload_bank_transactions }}</span>
-                                            </button>
-                                        </mat-menu>
-                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div
                         *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen"
                         class="advance-search-block mr-t05"
@@ -3263,8 +3273,6 @@
             <ng-template #attachments>
                 <attachments [selectedItem]="selectedItem"></attachments>
             </ng-template>
-        </ng-container>
-    </div>
 </ng-container>
 
 <!-- carousel template -->

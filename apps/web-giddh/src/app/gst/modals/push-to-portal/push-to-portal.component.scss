@@ -31,3 +31,11 @@
         text-decoration: underline;
     }
 }
+@media screen and (max-width: 997px) {
+   .left-side {
+        width: 450px;
+   } 
+   .right-side {
+        width: 322px;
+   }    
+}
