@@ -771,5 +771,6 @@
     },
     "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें",
     "app_file_format": "फाइल प्रारूप",
-    "app_select_file": "फाइल चुनें"
+    "app_select_file": "फाइल चुनें",
+    "app_bank_accounts":"बैंक खाते"    
 }
