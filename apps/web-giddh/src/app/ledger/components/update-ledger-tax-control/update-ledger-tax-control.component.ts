@@ -1,4 +1,5 @@
 import {
+    AfterViewInit,
     Component,
     ElementRef,
     EventEmitter,
@@ -39,7 +40,8 @@ export class UpdateLedgerTaxData {
     styleUrls: [`./update-ledger-tax-control.component.scss`],
     providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
-export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
+export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges, AfterViewInit {
+
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
     /* This will hold common JSON data */
@@ -85,6 +87,10 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     private selectedTaxes: UpdateLedgerTaxData[] = [];
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Emitter for create new tax selected */
+    @Output() public createNewTax: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Emitter for component init */
+    @Output() public viewInitEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private generalService: GeneralService) {
 
@@ -109,12 +115,18 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             this.calculateInclusiveOrExclusiveFormattedTax();
             this.taxAmountSumEvent.emit(this.sum);
         }
+
+        if ('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
+            this.prepareTaxObject();
+            this.change();
+        }
     }
 
     /**
      * prepare taxObject as per needed
      */
     public prepareTaxObject() {
+
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
             this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
@@ -353,5 +365,23 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      */
     public taxLabelBluring(taxLabel: HTMLElement): void {
         this.generalService.dropdownFocusOut(taxLabel);
+    }
+
+    /**
+     * Emits create new tax event
+     *
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public createNew(): void {
+        this.createNewTax.emit();
+    }
+
+    /**
+     *  Lifecycle hook that is called after a component's view has been fully initialized.
+     *
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public ngAfterViewInit(): void {
+        this.viewInitEvent.emit(true);
     }
 }

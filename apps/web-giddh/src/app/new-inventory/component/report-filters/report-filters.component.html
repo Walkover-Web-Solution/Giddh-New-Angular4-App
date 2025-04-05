@@ -86,20 +86,20 @@
         </span>
     </div>
     <ng-container *ngIf="moduleName === 'GROUP_WISE_REPORT'">
-            <span class="ml-auto">
-                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
-            </span>
-        </ng-container>
-        <ng-container *ngIf="moduleName === 'ITEM_WISE_REPORT'">
-            <span class="ml-auto">
-                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
-            </span>
-        </ng-container>
-        <ng-container *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
-            <span class="ml-auto">
-                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
-            </span>
-        </ng-container>
+        <span class="ml-auto">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
+        </span>
+    </ng-container>
+    <ng-container *ngIf="moduleName === 'ITEM_WISE_REPORT'">
+        <span class="ml-auto">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
+        </span>
+    </ng-container>
+    <ng-container *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
+        <span class="ml-auto">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
+        </span>
+    </ng-container>
 </div>
 <div class="inventory-filter-bar">
     <div class="search-control align-items-center">
@@ -180,7 +180,8 @@
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
             <button mat-button class="advance-filter-button" (click)="exportReport()" [disabled]="isLoading$ | async">
                 <i class="icon-download-circle mr-1"></i>
-                {{ commonLocaleData?.app_export }}</button>
+                {{ commonLocaleData?.app_export }}
+            </button>
             <button mat-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-1"></i>
                 {{ localeData?.header?.advance_filter }}
@@ -190,6 +191,7 @@
                 [customiseColumns]="customiseColumns"
                 (isLoading)="isLoading = $event"
                 (selectedColumns)="setDisplayColumns($event)"
+                (selectedDynamicColumns)="setDisplayDynamicColumns($event)"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
                 [iconClass]="'icon-options mr-2'"

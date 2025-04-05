@@ -62,7 +62,7 @@ export class CancelEInvoiceDialogComponent implements OnInit, OnDestroy {
 
         this.componentStore.cancelEInvoiceIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.dialogRef.close();
+                this.dialogRef.close(true);
             }
         });
     }

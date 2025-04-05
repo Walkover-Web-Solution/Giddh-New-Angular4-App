@@ -101,6 +101,8 @@ input {
     &:first-child {
         padding-top: 5px !important;
         padding-bottom: 5px !important;
+        padding-left: 2px;
+        padding-right: 2px;
     }
 }
 .transaction-mapped-table .mat-grid-tile {

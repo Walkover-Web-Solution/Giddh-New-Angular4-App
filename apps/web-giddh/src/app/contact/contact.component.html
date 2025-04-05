@@ -610,7 +610,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_customer_name
+                                                    title: commonLocaleData?.app_name
                                                 }
                                             "
                                         ></ng-container>
@@ -629,6 +629,8 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="localeData?.customer"
+                            [matTooltip]="account?.name"
+                            matTooltipPosition="above"
                         >
                             <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
@@ -641,7 +643,7 @@
                                         (change)="selectAccount($event, account)"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="text-ellipsis">{{ account.name }}</span>
                                 </div>
 
                                 <button
@@ -892,7 +894,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state" [matTooltip]="account?.state?.name" matTooltipPosition="above">
                             {{ account?.state?.name || "-" }}
                         </td>
                     </ng-container>
@@ -965,7 +967,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_vendor_name
+                                                    title: commonLocaleData?.app_name
                                                 }
                                             "
                                         ></ng-container>
@@ -985,6 +987,8 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
+                            [matTooltip]="account?.name"
+                            matTooltipPosition="above"
                         >
                             <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
@@ -997,7 +1001,7 @@
                                         [(ngModel)]="account.isSelected"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="text-ellipsis">{{ account.name }}</span>
                                 </div>
                                 <button
                                     mat-icon-button
@@ -1343,7 +1347,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state" [matTooltip]="account?.state?.name" matTooltipPosition="above">
                             {{ account?.state?.name || "-" }}
                         </td>
                     </ng-container>

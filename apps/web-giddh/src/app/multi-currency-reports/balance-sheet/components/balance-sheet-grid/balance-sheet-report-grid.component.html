@@ -1,0 +1,180 @@
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance/balance-sheet/grid'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div  class="tb-wrapper mr-t2 clearfix">
+        <div class="table-container" *ngIf="!hideData">
+            <div class="income mr-b1">
+                <div class="clearfix profit-loss">
+                    <table class="mr-b05 table basic bs-table-grid">
+                        <thead>
+                            <tr>
+                                <th class="p-0 font-16" width="33.33%">
+                                    <div
+                                        #searchContainer
+                                        (clickOutside)="clickedOutside($event, searchContainer)"
+                                    >
+                                        <div
+                                            [ngClass]="{ 'd-none': showClearSearch }"
+                                            class="d-flex align-items-center"
+                                        >
+                                            <span class="mr-l15 mr-r05">{{ localeData?.particular }}</span>
+                                            <i class="icon-search" (click)="toggleSearch()"></i>
+                                        </div>
+                                        <div [hidden]="!showClearSearch">
+                                            <input
+                                                matInput
+                                                type="search"
+                                                #searchInputEl
+                                                class="form-control"
+                                                [placeholder]="commonLocaleData?.app_search"
+                                                aria-label="search"
+                                                [formControl]="bsSearchControl"
+                                            />
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="text-right font-16" width="33.33%">
+                                    {{ commonLocaleData?.app_as_of }}
+                                    <span
+                                        *ngIf="lastSyncDate && dayjs(lastSyncDate)?.isValid()"
+                                    >  
+                                        {{ lastSyncDate }}</span
+                                    >
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="m-10">
+                        <strong class="font-15">{{ localeData?.equity_liabilities }}</strong>
+                    </div>
+                    <ng-template #groupDetails let-list let-padding="padding">
+                        <ng-container *ngFor="let grp of list">
+                            <section
+                                *ngIf="grp.isVisible"
+                                balance-sheet-report-grid-row
+                                [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                [groupDetail]="grp"
+                                [padding]="padding"
+                                [search]="search"
+                                [expandAll]="expandAll"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        groupDetails;
+                                        context: { $implicit: grp.childGroups, padding: padding + 20 }
+                                    "
+                                >
+                                </ng-container>
+                            </section>
+                        </ng-container>
+                    </ng-template>
+
+                    <ng-container
+                        *ngTemplateOutlet="
+                            groupDetails;
+                            context: { $implicit: bsData?.liabilities | financialSearch: search, padding: 10 }
+                        "
+                    >
+                    </ng-container>
+                    <div class="top-bar row clearfix">
+                        <div class="col-4 group">
+                            <strong class="font-15">{{ localeData?.total_liabilities }}</strong>
+                        </div>
+                        <div class="col-4 group text-right">
+                            <strong class="font-15">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="bsData?.liabTotal"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </strong>
+                        </div>
+                        <div class="col-4 group text-right">
+                            <strong class="font-15">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="bsData?.liabTotalEnd"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expenses">
+                <div class="clearfix profit-loss">
+                    <div class="m-10">
+                        <strong class="font-15">{{ localeData?.ii_assets }}</strong>
+                    </div>
+                    <ng-template #groupDetails let-list let-padding="padding">
+                        <ng-container *ngFor="let grp of list">
+                            <section
+                                *ngIf="grp.isVisible"
+                                balance-sheet-report-grid-row
+                                [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                [groupDetail]="grp"
+                                [padding]="padding"
+                                [search]="search"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        groupDetails;
+                                        context: { $implicit: grp.childGroups, padding: padding + 20 }
+                                    "
+                                >
+                                </ng-container>
+                            </section>
+                        </ng-container>
+                    </ng-template>
+                    <ng-container
+                        *ngTemplateOutlet="
+                            groupDetails;
+                            context: { $implicit: bsData?.assets | financialSearch: search, padding: 10 }
+                        "
+                    >
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="top-bar row clearfix">
+                <div class="col-4 group">
+                    <strong class="font-15">{{ localeData?.total_assets }}</strong>
+                </div>
+                <div class="col-4 group text-right">
+                    <strong class="font-15">
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="bsData?.assetTotal"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </strong>
+                </div>
+                <div class="col-4 group text-right">
+                    <strong class="font-15">
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="bsData?.assetTotalEnd"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
