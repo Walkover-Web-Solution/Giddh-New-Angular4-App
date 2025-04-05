@@ -208,6 +208,7 @@
         "others": "Others"
     },
     "app_duration": {
+        "duration": "Duration",
         "monthly": "Monthly",
         "quarterly": "Quarterly",
         "half_yearly": "Half-Yearly",
@@ -764,5 +765,6 @@
     "app_file": "File",
     "app_choose_file": "Choose File",
     "app_password": "Password",
-    "app_select_column": "Select Column"
+    "app_select_column": "Select Column",
+    "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions"
 }

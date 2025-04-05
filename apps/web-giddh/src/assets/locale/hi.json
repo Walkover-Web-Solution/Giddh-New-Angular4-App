@@ -208,6 +208,7 @@
         "others": "अन्य"
     },
     "app_duration": {
+        "duration": "अवधि",
         "monthly": "मासिक",
         "quarterly": "तिमाही",
         "half_yearly": "अर्धवार्षिक",
@@ -761,5 +762,6 @@
     "app_file": "फ़ाइल",
     "app_choose_file": "फ़ाइल चुनें",
     "app_password": "पासवर्ड",
-    "app_select_column": "कॉलम चुनें"
+    "app_select_column": "कॉलम चुनें",
+    "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें"
 }

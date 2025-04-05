@@ -633,3 +633,9 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
 };
 /** Gst utility download portal link */
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
+
+/** HTML tag name  */
+export enum HtmlElementEnum {
+    Input = 'INPUT',
+    Textarea = 'TEXTAREA'
+}

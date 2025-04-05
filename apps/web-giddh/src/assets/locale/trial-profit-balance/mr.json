@@ -3,5 +3,7 @@
         "trial_balance": "चाचणी शिल्लक",
         "profit_loss": "नफा तोटा",
         "balance_sheet": "ताळेबंद"
-    }
+    },
+    "company_list": "कंपनी यादी",
+    "currency_list": "चलन यादी"
 }
