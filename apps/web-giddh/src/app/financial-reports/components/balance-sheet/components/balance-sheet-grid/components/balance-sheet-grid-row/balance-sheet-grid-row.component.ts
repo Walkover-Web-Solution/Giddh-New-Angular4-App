@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import {
     TRIAL_BALANCE_VIEWPORT_LIMIT,
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
@@ -22,8 +23,11 @@ export class BalanceSheetGridRowComponent implements OnChanges {
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
+    /** Hold current url */
+    private currentUrl: string = "";
 
-    constructor(private cd: ChangeDetectorRef) {
+    constructor(private cd: ChangeDetectorRef, private router: Router) {
+        this.currentUrl = this.router.url;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -42,6 +46,7 @@ export class BalanceSheetGridRowComponent implements OnChanges {
             url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
             console.log(ipcRenderer.send('open-url', url));
         } else {
+            url = url + `?redirectUrl=${this.currentUrl}`;
             (window as any).open(url);
         }
 
