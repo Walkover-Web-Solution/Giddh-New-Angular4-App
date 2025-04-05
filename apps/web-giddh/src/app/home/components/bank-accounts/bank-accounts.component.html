@@ -9,7 +9,7 @@
         <div class="panel-heading d-flex justify-content-space-between">
             <strong>{{ localeData?.chart_title }}</strong>
             <div
-                class="dashboard-filter"
+                class="dashboard-filter d-inline-flex align-items-center"
                 [ngClass]="{ 'pointer-event-none cursor-disable': (isBankRefreshing$ | async) }"
                 (click)="refreshBankTransactions()"
                 aria-label="{{ localeData?.refresh_bank_accounts }}"

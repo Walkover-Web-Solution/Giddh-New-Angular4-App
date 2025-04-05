@@ -10,11 +10,13 @@ p.bank-balance {
     display: flex;
     justify-content: space-between;
 }
+
 .single-bank-detail {
     border-bottom: 1px solid var(--color-common-primary-border);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
+
 a.connect-bank {
     color: var(--color-common-primary-text);
     font-size: var(--font-size-15);
@@ -22,11 +24,13 @@ a.connect-bank {
     padding-top: 5px;
     display: block;
 }
+
 .bank-details-block {
     cdk-virtual-scroll-viewport {
         height: 334px;
     }
 }
+
 .add-bank-details {
     display: flex;
     height: 300px;
@@ -34,26 +38,26 @@ a.connect-bank {
     align-items: center;
     flex-direction: column;
 }
+
 p {
     color: var(--color-abbey);
 }
-.banks-scrollbar-wrapper{
+
+.banks-scrollbar-wrapper {
     row-gap: 0;
 }
+
 .bank-menu {
     top: -39px;
     float: right;
 }
+
 .width-86 {
     width: 86% !important;
 }
-.dashboard-filter {
-    display: inline-flex;
-    color: var(--color-abbey);
-    align-items: center;
-}
 
-.dashboard-filter { 
+.dashboard-filter {
+    color: var(--color-abbey);
     .icon-collapse-icon {
         margin-left: 8px;
         font-size: var(--font-size-15);

@@ -105,7 +105,8 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private toasty: ToasterService,
         public dialog: MatDialog
-    ) {}
+    ) { }
+    
     /**
     * This function will use for get institutions details
     *
@@ -152,7 +153,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {

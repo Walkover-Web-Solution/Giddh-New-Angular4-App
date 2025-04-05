@@ -384,7 +384,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private ledgerComponentStore: LedgerComponentStore
     ) {
-        localStorage.setItem('refNo', null);
+        if (window.localStorage) {
+            localStorage.setItem('refNo', null);
+        }
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
