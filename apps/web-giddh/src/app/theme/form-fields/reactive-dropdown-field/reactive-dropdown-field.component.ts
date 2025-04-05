@@ -290,9 +290,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public openDropdownPanel(): void {
-        this.trigger?.openPanel();
+        this.selectField?.nativeElement?.focus();
         setTimeout(() => {
-            this.selectField?.nativeElement?.focus();
+            this.trigger?.openPanel();
         }, 10);
     }
 
