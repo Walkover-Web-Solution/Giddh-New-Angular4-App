@@ -645,10 +645,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         } else {
             if (part === 'ledger') {
                 url = url + `?redirectUrl=${this.currentUrl}`;
-                (window as any).open(url);
-            } else {
-                (window as any).open(url);
             }
+            (window as any).open(url);
         }
     }
 
