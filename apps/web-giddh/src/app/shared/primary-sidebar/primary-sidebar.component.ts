@@ -101,6 +101,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Holds generic aside menu account dialog Ref */
     public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -209,6 +211,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
+        this.currentUrl = this.router.url;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -675,5 +678,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             this.commandkDialogRef.close();
         }, 600);
+    }
+
+    /**
+     * This will be use for get redirect url. 
+     *
+     * @param {string} accountUniqueName
+     * @return {*}  {string}
+     * @memberof PrimarySidebarComponent
+     */
+    public getRedirectUrl(accountUniqueName: string): string {
+        return `/pages/ledger/${accountUniqueName}?redirectUrl=${this.currentUrl}`;
     }
 }
