@@ -184,6 +184,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         };
     }
 
+    /**
+     * Get Banks
+     *
+     * @memberof BankAccountsComponent
+     */
     public getBank(): void {
         if (!this.unlinkBankList?.length) {
             this.openInstitutionsDialog();
@@ -212,10 +217,20 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * This will get all accounts of giddh
      *
+     * @private
+     * @param {string} fromDate
+     * @param {string} toDate
+     * @param {string} groupUniqueName
+     * @param {number} [pageNumber]
+     * @param {string} [requestedFrom]
+     * @param {string} [refresh]
+     * @param {number} [count=200]
+     * @param {string} [query]
+     * @param {string} [sortBy='']
+     * @param {string} [order='asc']
      * @memberof BankAccountsComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 200, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -338,7 +353,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be yse get bank account by its unique name
+     * This will be use for get bank account by its unique name
      *
      * @memberof BankAccountsComponent
      */
@@ -360,10 +375,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response === 'closeDialog') {
-                    dialogRef?.close();
-                } else {
-                    if (response) this.isBankAccountConnected = true; this.referenceNumber = null; this.getAllBankAccounts();
+                if (response && response !== 'closeDialog') {
+                    this.isBankAccountConnected = true; this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
                 }
                 localStorage.removeItem('refNo');
             })).subscribe();

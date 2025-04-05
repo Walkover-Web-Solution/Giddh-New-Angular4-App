@@ -389,7 +389,7 @@
     margin-left: 7px;
 }
 
-.action-div {
+.action-wrapper {
     position: relative;
     margin-top: 9px;
     vertical-align: top;
@@ -400,7 +400,7 @@
     }
 }
 
-.user-action-div {
+.user-action-wrapper {
     a {
         color: var(--color-primary-setting-integration-action-anchor);
     }
