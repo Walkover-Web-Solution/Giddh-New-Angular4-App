@@ -1424,8 +1424,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
                 creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
             }
-        }, 200)
-
+        }, 0);
     }
 
     public downloadAttachedFile(fileName: string, e: Event) {
