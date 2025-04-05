@@ -1,20 +1,19 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject } from '@angular/core';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InstitutionsRequest } from '../../../models/api-models/SettingsIntegraion';
-import { SettingIntegrationComponentStore } from '../utility/setting.integration.store';
-import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BankIntegrationComponentStore } from '../utility/bank-integration.store';
 
 @Component({
     selector: 'institutions-list',
     styleUrls: ['./institutions-list.component.scss'],
     templateUrl: './institutions-list.component.html',
-    providers: [SettingIntegrationComponentStore],
+    providers: [BankIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class InstitutionsListComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -34,13 +33,13 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
     /** Holds Store Institutions list provider company API success state as observable*/
     public institutionsListInProgress$: Observable<any> = this.componentStore.select(state => state.institutionsListInProgress);
+    /** Instance for form group*/
+    public searchForm: FormGroup;
     /** Hold filetered item from bank list*/
     public filteredBanks: any[] = [];
-    /** Search field form control */
-    public searchFormControl = new UntypedFormControl();
 
     constructor(
-        private componentStore: SettingIntegrationComponentStore,
+        private componentStore: BankIntegrationComponentStore, 
         public dialogRef: MatDialogRef<InstitutionsListComponent>,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -48,6 +47,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public inputData
     ) {
+        this.initializeForm();
     }
 
     /**
@@ -56,8 +56,6 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
      * @memberof InstitutionsListComponent
      */
     public ngOnInit(): void {
-        this.localeData = this.inputData?.localeData;
-        this.commonLocaleData = this.inputData?.commonLocaleData;
         this.getAllInstitutionsList();
         this.institutionsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -74,7 +72,21 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
                 this.changeDetection.detectChanges();
             }
         });
-            this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(searchTerm => this.filterInstitutions(searchTerm));
+
+        this.searchForm.get('search')?.valueChanges
+            .pipe(debounceTime(300))
+            .subscribe(searchTerm => this.filterInstitutions(searchTerm));
+    }
+
+    /**
+     * This will be use for initialization form
+     *
+     * @memberof InstitutionsListComponent
+     */
+    public initializeForm(): void {
+        this.searchForm = this.formBuilder.group({
+            search: ['']
+        });
     }
 
     /**
@@ -122,7 +134,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     * @memberof InstitutionsListComponent
     */
     public openWindow(url: string): void {
-        const width = 800;
+        const width = 700;
         const height = 900;
 
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
@@ -136,14 +148,5 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * This will be use for close dialog
-     *
-     * @memberof InstitutionsListComponent
-     */
-    public closeDialog(): void {
-        this.dialogRef.close();
     }
 }

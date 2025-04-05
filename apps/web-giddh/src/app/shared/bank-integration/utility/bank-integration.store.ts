@@ -3,44 +3,37 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
-import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsIntegrationService } from "../../../services/settings.integration.service";
 
-export interface SettingIntegrationState {
+export interface BankIntegrationState {
     institutionList: any;
     requisitionList: any;
     institutionsListInProgress: boolean;
     requistionListInProgress: boolean;
     createEndUserAgreementSuccess: any;
     deleteAccountSuccess: any;
-    updateAccount: any;
-    getAllBankAccountsList: any;
 }
 
-export const DEFAULT_SETTING_INTEGRATION_STATE: SettingIntegrationState = {
+export const DEFAULT_BANK_INTEGRATION_STATE: BankIntegrationState = {
     institutionList: null,
     requisitionList: null,
     institutionsListInProgress: null,
     requistionListInProgress: null,
     createEndUserAgreementSuccess: null,
-    deleteAccountSuccess: null,
-    updateAccount: false,
-    getAllBankAccountsList: null
+    deleteAccountSuccess: null
 };
 
 @Injectable()
-export class SettingIntegrationComponentStore extends ComponentStore<SettingIntegrationState> implements OnDestroy {
+export class BankIntegrationComponentStore extends ComponentStore<BankIntegrationState> implements OnDestroy {
 
     constructor(
         private toasterService: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService
     ) {
-        super(DEFAULT_SETTING_INTEGRATION_STATE);
+        super(DEFAULT_BANK_INTEGRATION_STATE);
     }
 
-    public updateAccount$ = this.select((state) => state.updateAccount);
-    public getAllBankAccountsList$ = this.select((state) => state.getAllBankAccountsList);
     /**
      * Get All Institutions
      *
@@ -169,6 +162,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
+                                res.body && this.toasterService.showSnackBar('success', res.body);
                                 return this.patchState({
                                     deleteAccountSuccess: true
                                 });
@@ -185,82 +179,6 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 deleteAccountSuccess: false
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
-    /**
-     * This will link all the connected bank accounts
-     *
-     * @memberof SettingIntegrationComponentStore
-     */
-    readonly updateAccount = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({ updateAccount: false });
-                return this.settingsIntegrationService.updateAccount(req.accountForm, req.request).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success' && res?.body?.message) {
-                                this.toasterService.clearAllToaster();
-                                this.toasterService.showSnackBar('success', res?.body.message);
-                                return this.patchState({
-                                    updateAccount: true
-                                });
-                            } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    updateAccount: false
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                updateAccount: false
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
-    /**
-     * This will get all connected bank accounts
-     *
-     * @memberof SettingIntegrationComponentStore
-     */
-    readonly getAllBankAccounts = this.effect((data: Observable<void>) => {
-        return data.pipe(
-            switchMap(() => {
-                this.patchState({ getAllBankAccountsList: null });
-                return this.settingsIntegrationService.getAllBankAccounts().pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success' && res?.body) {
-                                return this.patchState({
-                                    getAllBankAccountsList: res
-                                });
-                            } else {
-                                res?.message && this.toasterService.showSnackBar('error', res.message);
-                                return this.patchState({
-                                    getAllBankAccountsList: null
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                getAllBankAccountsList: null
                             });
                         }
                     ),

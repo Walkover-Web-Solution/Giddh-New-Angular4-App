@@ -13805,6 +13805,11 @@ import-wizard {
     }
 }
 
+.rotate-icon-130deg {
+    .mdc-button__label {
+        transform: rotate(130deg);
+    }
+}
 .z-index-0 {
     z-index: 0;
 }

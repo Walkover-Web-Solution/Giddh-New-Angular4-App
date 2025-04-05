@@ -5,5 +5,7 @@
     "dr_heading": "डेबिट",
     "connect_bank": "बैंक अकाउंट शामिल करें",
     "no_banks_found": "बैंक विवरण जोड़ना शेष है",
-    "in_bank": "[BANK_NAME] में"
+    "in_bank": "[BANK_NAME] में",
+    "connected_bank": "जुड़ा हुआ बैंक",
+    "link_bank": "लिंक बैंक"
 }

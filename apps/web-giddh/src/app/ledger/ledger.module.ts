@@ -60,6 +60,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
 import { MatIconModule } from '@angular/material/icon';
 import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/giddh-ledger-paginator.module';
+import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { CarouselComponent } from '../shared/carousel/carousel.component';
 
 @NgModule({
@@ -138,6 +139,7 @@ import { CarouselComponent } from '../shared/carousel/carousel.component';
         StockCreateEditModule,
         MatIconModule,
         GiddhLedgerPaginatorModule,
+        BankIntegrationModule,
         CarouselComponent
     ]
 })
