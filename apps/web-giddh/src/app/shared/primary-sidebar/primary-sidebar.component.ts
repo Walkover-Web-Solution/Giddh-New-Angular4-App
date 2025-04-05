@@ -3,7 +3,7 @@ import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@ang
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -103,6 +103,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
     /** Hold current url */
     private currentUrl: string = "";
+    /** Hold previous url */
+    private previousUrl: string = "";
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -206,12 +208,24 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Get clean current url
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof PrimarySidebarComponent
+     */
+    private getCleanCurrentUrl(): string {
+        const urlTree = this.router.parseUrl(this.router.url);
+        delete urlTree.queryParams['redirectUrl']; // remove redirectUrl param
+        return this.router.serializeUrl(urlTree);
+    }
+
+    /**
      * Initializes the component
      *
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
-        this.currentUrl = this.router.url;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -288,9 +302,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
+                this.previousUrl = this.currentUrl; // store old before updating
+                this.currentUrl = this.getCleanCurrentUrl(); // always clean
                 const queryParamsIndex = this.router.url?.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
-                    this.router.url.slice(0, queryParamsIndex);
+                this.router.url.slice(0, queryParamsIndex);
                 this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
@@ -472,9 +488,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 // direct account scenario
                 let url = `ledger/${item.uniqueName}`;
-                if (!isCtrlClicked) {
-                    this.router.navigate([url]); // added link in routerLink
-                }
+                this.router.navigate([url], {
+                    queryParams: { redirectUrl: encodeURIComponent(this.previousUrl) }
+                });
             }
             // save data to db
             item.time = +new Date();
@@ -678,16 +694,5 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             this.commandkDialogRef.close();
         }, 600);
-    }
-
-    /**
-     * This will be use for get redirect url. 
-     *
-     * @param {string} accountUniqueName
-     * @return {*}  {string}
-     * @memberof PrimarySidebarComponent
-     */
-    public getRedirectUrl(accountUniqueName: string): string {
-        return `/pages/ledger/${accountUniqueName}?redirectUrl=${this.currentUrl}`;
     }
 }
