@@ -82,7 +82,7 @@
                         <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
-                                    [href]="'/pages/ledger/'+ acc?.uniqueName"
+                                    [href]="getRedirectUrl(acc?.uniqueName)"
                                     aria-label="account"
                                     [routerLinkActive]="['active']"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
