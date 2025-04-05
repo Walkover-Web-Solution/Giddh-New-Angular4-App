@@ -70,7 +70,6 @@ import { MatButtonModule } from '@angular/material/button';
         BalanceSheetGridComponent,
         BalanceSheetGridRowComponent,
         FinancialAccordionDirective,
-        FinancialSearchPipe,
         AccountsFilterPipe
     ],
     exports: [
@@ -113,6 +112,7 @@ import { MatButtonModule } from '@angular/material/button';
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
         AsideMenuAccountModule,
+        FinancialSearchPipe,
         MatButtonModule
     ],
 })

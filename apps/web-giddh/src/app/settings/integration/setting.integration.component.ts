@@ -18,7 +18,7 @@ import { EcommerceService } from '../../services/ecommerce.service';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
@@ -30,6 +30,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
 import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { BankIntegrationComponent } from '../../shared/bank-integration/bank-integration.component';
 
 @Component({
     selector: 'setting-integration',
@@ -1243,7 +1244,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
@@ -1516,7 +1518,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     * @memberof SettingIntegrationComponent
     */
     public openWindow(url: string): void {
-        const width = 700;
+        const width = 800;
         const height = 900;
 
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);

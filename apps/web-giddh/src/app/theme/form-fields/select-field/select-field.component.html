@@ -27,12 +27,6 @@
         #auto="matAutocomplete"
         [ngClass]="customPanelClass"
     >
-        <a href="javascript:;" role="option" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
-            <div class="item create-new">{{ createNewText }}</div>
-            <div class="item create-new-command">
-                {{ commonLocaleData?.app_alt_c }}
-            </div>
-        </a>
         <ng-container *ngIf="fieldFilteredOptions?.length <= 5; else scrollData">
             <mat-option
                 *ngFor="let option of fieldFilteredOptions"
@@ -58,9 +52,14 @@
                 [matTooltip]="option?.label"
                 matTooltipPosition="right"
             >
-                <a href="javascript:;" role="option" class="options-class-create">
-                    {{ commonLocaleData?.app_create_new }}
-                </a></mat-option
+                <div *ngIf="createNewText"
+                    class="position-sticky d-flex justify-content-between">
+                    <div class="item create-new">{{ createNewText }}</div>
+                    <div class="item create-new-command" *ngIf="showKeyboardCommand">
+                        {{ showKeyboardCommand }}
+                    </div>
+                </div>
+                </mat-option
             >
         </ng-container>
 

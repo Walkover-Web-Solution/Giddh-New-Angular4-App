@@ -11,7 +11,7 @@
             mat-stretch-tabs="false"
             mat-align-tabs="start"
             [selectedIndex]="selectedTabIndex"
-            (selectedIndexChange)="tabChanged($event)"
+            (selectedTabChange)="tabChanged($event)"
             class="table-header-sticky"
         >
             <!-- estimate-content-start -->
@@ -2397,7 +2397,7 @@
                                         href="javascript:;"
                                         class="btn-link-2"
                                         (click)="showVoucherPreview(element?.uniqueName)"
-                                        [matTooltip]="element?.voucherNumber" 
+                                        [matTooltip]="element?.voucherNumber"
                                         matTooltipPosition="above"
                                         >{{
                                             element?.voucherNumber
@@ -3519,7 +3519,7 @@
                                                             settingForm.get('invoiceSettings.email').value?.length < 4)
                                                     "
                                                     (click)="
-                                                        verfiyEmail(
+                                                        verifyEmail(
                                                             settingForm.get('invoiceSettings.email').value,
                                                             'invoice'
                                                         )
@@ -3537,7 +3537,7 @@
                                                     mat-stroked-button
                                                     class="mat-icon-md-btn"
                                                     [ngClass]="{
-                                                        'delete-icon-opacity':
+                                                        'opacity-5':
                                                             !settingForm.get('invoiceSettings.email').value ||
                                                             settingForm.get('invoiceSettings.email').value?.length < 4,
                                                         'cursor-pointer': !(
@@ -4346,7 +4346,7 @@
                                                 mat-stroked-button
                                                 class="mat-icon-md-btn"
                                                 [ngClass]="{
-                                                    'delete-icon-opacity':
+                                                    'opacity-5':
                                                         !settingForm.get('purchaseBillSettings.email').value ||
                                                         settingForm.get('purchaseBillSettings.email').value?.length < 4,
                                                     'cursor-pointer': !(
