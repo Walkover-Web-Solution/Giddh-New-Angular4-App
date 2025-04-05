@@ -88,8 +88,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public exemptValuesDisplayedColumns: string[] = ['supplyNature', 'interStateSupplies', 'intraStateSupplies'];
     /** Holds exempt values table data */
     public exemptValuesTableData: any[] = [];
-     /** Holds true, if screen size  less than or equals to 1023px */
-    public isSmallScreen: boolean = false;
+     /** Holds true, if screen size  less than or equals to 1024px */
+    public isTabScreen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -249,7 +249,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.breakPointObservar.observe([
             BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isSmallScreen = result?.matches;
+            this.isTabScreen = result?.matches;
         });
     }
 

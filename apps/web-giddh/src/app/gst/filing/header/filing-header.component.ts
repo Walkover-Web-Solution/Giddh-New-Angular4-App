@@ -117,8 +117,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public restrictedModules: any = RestrictedModules;
     /** Holds Tax Service Enum */
     public taxServiceEnum = TaxServiceEnum;
-    /** Holds true, if screen size  less than or equals to 1300px */
-    public isTabScreen: boolean = false;
+    /** Holds true, if screen size  less than or equals to 1366px */
+    public isSmallDesktop: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -197,9 +197,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
         }
         this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.IPAD_SCREEN_SIZE,
+            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isTabScreen = result?.matches;
+            this.isSmallDesktop = result?.matches;
         });
     }
 
