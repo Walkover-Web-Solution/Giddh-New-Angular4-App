@@ -641,8 +641,8 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
 /** BrearkPoint screen size values */
 export const BREAKPOINT_SCREEN_SIZE = {
-    IPAD_SCREEN_SIZE: '(max-width: 1300px)',
-    TAB_SCREEN_SIZE: '(max-width: 1023px)'
+    SMALL_DESKTOP_SCREEN_SIZE: '(max-width: 1366px)',
+    TAB_SCREEN_SIZE: '(max-width: 1024px)'
 }
 /** HTML tag name  */
 export enum HtmlElementEnum {

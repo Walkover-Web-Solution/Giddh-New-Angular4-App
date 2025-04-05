@@ -93,8 +93,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public showSaveDiscardButton: boolean = false;
     /** Holds list of stock/variant */
     public stockVariants: any[] = [];
-    /** Holds true, if screen size  less than or equals to 1023px */
-    public isSmallScreen: boolean = false;
+    /** Holds true, if screen size  less than or equals to 1024px */
+    public isTabScreen: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -160,7 +160,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.breakPointObservar.observe([
             BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isSmallScreen = result?.matches;
+            this.isTabScreen = result?.matches;
         });
 
     }
