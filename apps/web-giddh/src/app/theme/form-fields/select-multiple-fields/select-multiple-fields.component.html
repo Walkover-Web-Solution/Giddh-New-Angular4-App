@@ -46,6 +46,7 @@
         [enableDynamicSearch]="enableDynamicSearch"
         (optionsScroll)="onScroll()"
         (optionSelected)="selectOption($event); selectField.value = ''"
+        class="py-0"
     >
         <span (click)="$event.stopPropagation()">
             <mat-option [class]="optionClass" [ngClass]="{'po-options-line': isPurchaseOrder }"
