@@ -901,7 +901,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.deleteAttachedFileDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.deleteAttachedFile();
-                this.clickedOutsideEvent.emit(false);
             }
             this.deleteAttachedFileDialogRef = undefined;
         });
