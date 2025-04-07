@@ -776,16 +776,17 @@ update account------====
                             <div class="form-group portal-height">
                                 <label>{{ commonLocaleData?.app_mobile_number }} </label>
                                 <div class="d-flex">
-                                    <input
-                                        name="contactNo_{{ i }}"
-                                        type="tel"
+                                    <input-field
+                                        [name]="'contactNo_{{ i }}'"
+                                        [type]="'tel'"
                                         #initContactAdd2
-                                        class="flag-input"
-                                        id="init-contact-portal_{{ i }}"
+                                        [cssClass]="'flag-input'"
+                                        [id]="'init-contact-portal_{{ i }}'"
                                         formControlName="contactNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
                                         (input)="portalIndex = i"
-                                    />
+                                    >
+                                    </input-field>
                                 </div>
                                 <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
                                 <span id="init-contact-portal_{{ i }}-error-msg" class="d-none"> </span>
@@ -795,7 +796,9 @@ update account------====
                             <div class="inc-dec">
                                 <div class="plus-minus w-100">
                                     <button
-                                        class="btn mr-0"
+                                        mat-stroked-button
+                                        color="primary"
+                                        class="mr-0"
                                         (click)="removePortalUser(domain, i)"
                                         aria-label="delete icon"
                                     >
@@ -841,14 +844,14 @@ update account------====
                                 }"
                                 *ngIf="selectedCountryCode === 'AE'"
                             >
-                                <label for="">{{ localeData?.beneficiary_name_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="localeData?.beneficiary_name_placeholder"
-                                    name="beneficiaryName_{{ i }}"
+                                    [label]="localeData?.beneficiary_name_label"                    
+                                    [name]="'beneficiaryName_{{ i }}'"
                                     formControlName="beneficiaryName"
-                                />
+                                >
+                                </input-field>
                             </div>
                             <div
                                 class="form-group col-sm-6"
@@ -857,71 +860,74 @@ update account------====
                                     'col-sm-6': selectedCountryCode === 'AE'
                                 }"
                             >
-                                <label>{{ localeData?.bank_name_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="localeData?.bank_name_placeholder"
-                                    name="bankName_{{ i }}"
+                                    [label]="localeData?.bank_name_label"
+                                    [name]="'bankName_{{ i }}'"
                                     formControlName="bankName"
-                                />
+                                >
+                                </input-field>
                             </div>
                             <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
                                 <div>
-                                    <label>{{ localeData?.branch_name_label }}</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
+                                    <input-field
+                                        [type]="'text'"
                                         [placeholder]="localeData?.branch_name_placeholder"
-                                        name="branchName_{{ i }}"
+                                        [label]="localeData?.branch_name_label"
+                                        [name]="'branchName_{{ i }}'"
                                         formControlName="branchName"
-                                    />
+                                    >
+                                    </input-field>
                                 </div>
                             </div>
                             <div class="form-group col-sm-4">
                                 <div>
-                                    <label *ngIf="selectedCountryCode === 'IN'">{{
+                                    <!-- <label *ngIf="selectedCountryCode === 'IN'">{{
                                         commonLocaleData?.app_account_number
                                     }}</label>
-                                    <label *ngIf="selectedCountryCode !== 'IN'">{{ commonLocaleData?.app_iban }}</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
+                                    <label *ngIf="selectedCountryCode !== 'IN'">{{ commonLocaleData?.app_iban }}</label> -->
+                                    <input-field
+                                        [type]="'text'"
                                         #bankaccount
                                         [placeholder]="commonLocaleData?.app_account_number_placeholder"
+                                        [label]="selectedCountryCode === 'IN' ? commonLocaleData?.app_account_number : commonLocaleData?.app_iban"
                                         [maxlength]="bankIbanNumberMaxLength"
                                         [minlength]="bankIbanNumberMinLength"
-                                        name="accountNum_{{ i }}"
+                                        [name]="'accountNum_{{ i }}'"
                                         (blur)="showBankDetailsValidation(bankaccount, 'bankAccountNo')"
                                         (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')"
                                         formControlName="bankAccountNo"
-                                    />
+                                    >
+                                    </input-field>
                                 </div>
                             </div>
                             <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
-                                <label>{{ commonLocaleData?.app_swift_code_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <!-- <label>{{ commonLocaleData?.app_swift_code_label }}</label> -->
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="commonLocaleData?.app_swift_code_placeholder"
-                                    maxlength="11"
-                                    minlength="8"
+                                    [label]="commonLocaleData?.app_swift_code_label"
+                                    [maxlength]="11"
+                                    [minlength]="8"
                                     #swiftcode
-                                    name="swiftCode_{{ i }}"
+                                    [name]="'swiftCode_{{ i }}'"
                                     (blur)="showBankDetailsValidation(swiftcode, 'swiftCode')"
                                     (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')"
                                     formControlName="swiftCode"
-                                />
+                                >
+                                </input-field>
                             </div>
                             <div *ngIf="selectedCountryCode !== 'AE'" class="form-group col-sm-3">
-                                <label>{{ commonLocaleData?.app_ifsc_code_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <!-- <label>{{ commonLocaleData?.app_ifsc_code_label }}</label> -->
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="commonLocaleData?.app_ifsc_code_placeholder"
-                                    name="ifsc_{{ i }}"
+                                    [label]="commonLocaleData?.app_ifsc_code_label"
+                                    [name]="'ifsc_{{ i }}'"
                                     formControlName="ifsc"
-                                />
+                                >
+                                </input-field>
                             </div>
                         </div>
                     </div>
