@@ -42,9 +42,20 @@
                         </a>
                     </span>
                 </mat-autocomplete>
-                <div *ngIf="showCaretIcon" class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+                <div *ngIf="showCaretIcon && !value" class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
                     <span class="arrow-dropdown"></span>
                 </div>
+                <i
+                    matSuffix
+                    *ngIf="showClearIcon && value"
+                    [ngClass]="'icon-cross'"
+                    (click)="clearDropdownValue(); $event.stopPropagation()"
+                    [matTooltip]="'clear'"
+                    matTooltipPosition="above"
+                    role="button"
+                    [attr.aria-label]="'clear'"
+                >
+                </i>
             </mat-form-field>
         </div>
     </ng-container>

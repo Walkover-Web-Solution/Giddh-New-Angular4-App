@@ -19,6 +19,7 @@
                             [options]="taxesOptions"
                             [required]="true"
                             [labelValue]="defaultOtherTaxesModal?.appliedOtherTax?.name"
+                            [showClearIcon]="true"
                             (onClear)="selectedTaxUniqueName = null; defaultOtherTaxesModal.appliedOtherTax = null"
                             (selectedOption)="applyTax($event)">
                         </reactive-dropdown-field>

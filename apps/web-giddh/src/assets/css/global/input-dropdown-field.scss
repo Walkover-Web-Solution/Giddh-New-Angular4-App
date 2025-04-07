@@ -73,7 +73,7 @@ report-filters,
     .mat-form-field-appearance-outline {
         .mat-mdc-form-field-icon-suffix {
             margin-left: 0;
-            margin-right: 10px;
+            margin-right: 15px;
         }
     }
 
@@ -524,7 +524,7 @@ body {
             }
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
-                
+                padding-block: 0 !important;
             }
         }
     }
