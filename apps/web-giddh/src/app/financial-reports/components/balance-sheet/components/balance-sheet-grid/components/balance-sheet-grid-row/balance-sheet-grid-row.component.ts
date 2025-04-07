@@ -38,18 +38,30 @@ export class BalanceSheetGridRowComponent implements OnChanges {
             this.cd.detectChanges();
         }
     }
+    
+    /**
+     *  This will be redirect to ledger
+     *
+     * @param {*} acc
+     * @return {*}  {void}
+     * @memberof BalanceSheetGridRowComponent
+     */
+    public entryClicked(acc: any): void {
+        if (!acc?.uniqueName) return;
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+        // Base return URL
+        const returnUrl = `ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+        const encodedRedirectUrl = encodeURIComponent(this.currentUrl);
+
+        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${encodedRedirectUrl}`;
+
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
-            console.log(ipcRenderer.send('open-url', url));
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
+            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+            ipcRenderer.send('open-url', electronUrl);
         } else {
-            url = url + `?redirectUrl=${this.currentUrl}`;
-            (window as any).open(url);
+            (window as any).open(url, '_blank');
         }
-
     }
 
     /**
