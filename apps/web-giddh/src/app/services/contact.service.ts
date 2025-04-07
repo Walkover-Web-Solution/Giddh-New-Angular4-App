@@ -130,10 +130,28 @@ export class ContactService {
     }
 
     /**
-     * Send bulk email template to specified customers or vendors
-     * @param model Request payload containing customer/vendor unique names and template type
-     * @returns Observable<BaseResponse<any, string>> API response
+     * Refresh go-cardless bank transactions
+     * 
+     * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
+     * @memberof ContactService
      */
+    public refreshGoCardlessBankTransactions(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, string>> {
+        let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        url = url.replace(':accountUniqueName', encodeURIComponent(accountUniqueName ?? ''));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
+    }
+
+    /**
+    * Send bulk email template to specified customers or vendors
+    * @param model Request payload containing customer/vendor unique names and template type
+    * @returns Observable<BaseResponse<any, string>> API response
+    */
     public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
         return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
             map((res) => {
@@ -143,22 +161,5 @@ export class ContactService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
         );
-    }
-
-     /**
-     * Refresh go-cardless bank transactions
-     *
-     * @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
-     * @memberof ContactService
-     */
-     public refreshGoCardlessBankTransactions(): Observable<BaseResponse<IBankRefreshResponse, any>> {
-        let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
-        url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
-        return this.http.get(url).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
     }
 }
