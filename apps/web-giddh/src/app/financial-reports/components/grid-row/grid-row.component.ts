@@ -18,6 +18,7 @@ import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { SearchService } from '../../../services/search.service';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../constants/trial-balance-profit.constant';
+import { Router } from '@angular/router';
 
 @Component({
     selector: '[grid-row]',
@@ -48,13 +49,17 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     @Output() public openAccountModal: EventEmitter<any> = new EventEmitter();
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(
         private cd: ChangeDetectorRef,
         private searchService: SearchService,
         private renderer: Renderer2,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private router: Router
     ) {
+        this.currentUrl = this.router.url;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -66,14 +71,28 @@ export class GridRowComponent implements OnChanges, OnDestroy {
         }
     }
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+    /**
+      *  This will be redirect to ledger
+      *
+      * @param {*} acc
+      * @return {*}  {void}
+      * @memberof GridRowComponent
+      */
+    public entryClicked(acc: any): void {
+        if (!acc?.uniqueName) return;
+
+        // Base return URL
+        const returnUrl = `ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+        const encodedRedirectUrl = encodeURIComponent(this.currentUrl);
+
+        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${encodedRedirectUrl}`;
+
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
-            ipcRenderer.send('open-url', url);
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
+            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+            ipcRenderer.send('open-url', electronUrl);
         } else {
-            (window as any).open(url);
+            (window as any).open(url, '_blank');
         }
     }
 

@@ -10,6 +10,7 @@ import { AccountService } from '../../services/account.service';
 import { CompanyService } from '../../services/company.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: '[account-detail-modal-component]',
@@ -78,14 +79,18 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public activeGroupUniqueName: string = "";
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(
         private _companyServices: CompanyService,
         private _toaster: ToasterService,
         private _accountService: AccountService,
         private changeDetectorRef: ChangeDetectorRef,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private router: Router
     ) {
+        this.currentUrl = this.router.url;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -271,6 +276,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             }
             ipcRenderer.send('open-url', url);
         } else {
+            if (part?.includes('ledger')) {
+                url = url + `?redirectUrl=${this.currentUrl}`;
+            }
             (window as any).open(url);
         }
     }
