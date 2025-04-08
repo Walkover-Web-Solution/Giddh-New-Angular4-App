@@ -1230,12 +1230,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public closeAsideMenuStateForOtherTax(): void {
         this.asideMenuStateForOtherTaxesDialogRef.close();
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-        if (this.blankLedger.otherTaxesSum > 0) {
-            this.blankLedger.isOtherTaxesApplicable = true;
-        } else {
-            this.blankLedger.isOtherTaxesApplicable = false;
-        }
     }
 
     public toggleOtherTaxesAsidePane(modalBool: boolean) {
