@@ -459,6 +459,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+                if (this.activeModule === 'templates') {
+                    document.querySelector('body').classList.add('template-wrapper');
+                } else {
+                    document.querySelector('body').classList.remove('template-wrapper');
+                }
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
