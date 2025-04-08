@@ -8,7 +8,7 @@ import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
@@ -97,6 +97,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Purchase Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private store: Store<AppState>,
@@ -201,12 +203,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
         this.voucherNumberInput?.valueChanges
             ?.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
-            .subscribe((s) => {
-                if (s !== null && s !== undefined) {
+            .subscribe((searching) => {
+                if (searching !== null && searching !== undefined) {
                     this.showClearFilter = true;
                     this.getDetailedPurchaseRequestFilter.sort = null;
                     this.getDetailedPurchaseRequestFilter.sortBy = null;
-                    this.getDetailedPurchaseRequestFilter.q = s;
+                    this.getDetailedPurchaseRequestFilter.q = encodeURIComponent(searching);
                     this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
                     this.showSearchInvoiceNo = false;
                 }
@@ -623,7 +625,10 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public handlePageChange(event: any): void {
-        this.getDetailedPurchaseRequestFilter.page = event.pageIndex + 1
-        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+        if (event) {
+            this.getDetailedPurchaseRequestFilter.count = event.pageSize;
+            this.getDetailedPurchaseRequestFilter.page = event.pageIndex + 1
+            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+        }
     }
 }

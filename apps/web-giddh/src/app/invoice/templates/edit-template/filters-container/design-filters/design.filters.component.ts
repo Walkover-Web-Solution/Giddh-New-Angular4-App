@@ -387,7 +387,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
             if (this.customTemplate.fontSize) {
                 this.presetFontsSize.map(fontSize => {
-                    if (fontSize?.value === this.customTemplate.fontSize) {
+                    if (fontSize?.value == this.customTemplate.fontSize) {
                         this.selectedFontSize = fontSize.label;
                     }
                 });

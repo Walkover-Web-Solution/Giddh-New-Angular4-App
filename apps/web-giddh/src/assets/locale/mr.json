@@ -208,6 +208,7 @@
         "others": "इतर"
     },
     "app_duration": {
+        "duration": "कालावधी",
         "monthly": "मासिक",
         "quarterly": "त्रैमासिक",
         "half_yearly": "सहामाही",
@@ -760,5 +761,6 @@
     "app_file": "फाईल",
     "app_choose_file": "फाईल निवडा",
     "app_password": "पासवर्ड",
-    "app_select_column": "स्तंभ निवडा"
+    "app_select_column": "स्तंभ निवडा",
+    "app_allow_manufacturing_sales_transactions": "विक्री व्यवहारांच्या दरम्यान उत्पादन सुरू ठेवण्याची परवानगी द्या"
 }

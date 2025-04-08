@@ -179,4 +179,46 @@ export class TlPlService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+    /**
+     * Fetches the multi-currency report for the given report type.
+     * 
+     * @param {string} reportType - The type of report to fetch (e.g., "TrialBalance", "ProfitLoss").
+     * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the report data.
+     * @memberof TlPlService
+     */
+    public getMultiCurrencyReport(reportType: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', reportType)).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+
+    /**
+      * Creates the multi-currency report for the given report type and payload.
+      * 
+      * @param {string} reportType - The type of report to create (e.g., "TrialBalance", "ProfitLoss").
+      * @param {any} payload - The payload data to send in the request.
+      * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the status of the report creation.
+      * @memberof TlPlService
+      */
+    public creatMultiCurrencyReport(reportType: string, payload: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', reportType), payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
 }

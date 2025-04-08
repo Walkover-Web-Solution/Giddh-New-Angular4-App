@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
@@ -17,7 +17,7 @@ export class UpdateLedgerDiscountData {
     styleUrls: ['./update-ledger-discount.component.scss']
 })
 
-export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy {
+export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
     /* This will hold common JSON data */
@@ -49,6 +49,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     private discountsList: any[] = [];
     /** True if get discounts list api call in progress */
     private getDiscountsLoading: boolean = false;
+    /** Emitter for create new discount */
+    @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Emitter for component init */
+    @Output() public viewInitEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private settingsDiscountService: SettingsDiscountService
@@ -90,7 +94,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     /**
      * prepare discount obj
      */
-     public prepareDiscountList() {
+    public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         } else {
@@ -218,5 +222,23 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Emits create new discount event
+     *
+     * @memberof UpdateLedgerDiscountComponent
+     */
+    public createNew(): void {
+        this.createNewDiscount.emit();
+    }
+
+    /**
+     *  Lifecycle hook that is called after a component's view has been fully initialized.
+     *
+     * @memberof UpdateLedgerDiscountComponent
+     */
+    public ngAfterViewInit(): void {
+        this.viewInitEvent.emit(true);
     }
 }

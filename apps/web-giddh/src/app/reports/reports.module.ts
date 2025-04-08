@@ -18,11 +18,9 @@ import { ColumnarReportComponent } from './components/columnar-report-component/
 import { ColumnarReportTableComponent } from './components/columnar-report-table-component/columnar.report.table.component';
 import { PurchaseRegisterComponent } from './components/purchase-register-component/purchase.register.component';
 import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';
-import { PurchaseRegisterTableComponent } from './components/purchase-register-table-component/purchase.register.table.component';
 import { ReceiptAdvanceSearchComponent } from './components/receipt-advance-search/receipt-advance-search.component';
 import { ReportsDashboardComponent } from './components/report-dashboard/reports.dashboard.component';
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
-import { ReportsTableComponent } from './components/report-table-components/report.table.component';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
 import { SalesRegisterExpandComponent } from './components/sales-register-expand-component/sales.register.expand.component';
 import { ReportsComponent } from './reports.component';
@@ -50,16 +48,16 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { MatSortModule } from '@angular/material/sort';
+import { GiddhTableModule } from '../shared/common-table/giddh.table.module';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [
         ReportsComponent,
         ReportsDetailsComponent,
-        ReportsTableComponent,
         SalesRegisterExpandComponent,
         ReportsDashboardComponent,
         PurchaseRegisterComponent,
-        PurchaseRegisterTableComponent,
         PurchaseRegisterExpandComponent,
         ReverseChargeReport,
         ColumnarReportComponent,
@@ -114,7 +112,9 @@ import { MatSortModule } from '@angular/material/sort';
         MatPaginatorModule,
         MatInputModule,
         SerialNumberPipe,
-        MatSortModule
+        MatSortModule,
+        GiddhTableModule,
+        MatSelectModule
     ]
 })
 
