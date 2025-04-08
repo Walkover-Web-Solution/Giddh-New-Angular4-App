@@ -456,6 +456,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.activeModule = params.module;
                 if (this.activeModule === 'templates') {
                     document.querySelector('body').classList.add('template-wrapper');
+                } else {
+                    document.querySelector('body').classList.remove('template-wrapper');
                 }
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -1539,9 +1541,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (window.localStorage) {
             localStorage.removeItem('universalSelectedDate');
             localStorage.removeItem('invoiceSelectedDate');
-        }
-        if (this.activeModule === 'templates') {
-            document.querySelector('body').classList.remove('template-wrapper');
         }
         this.destroyed$.next(true);
         this.destroyed$.complete();
