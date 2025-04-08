@@ -251,8 +251,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** True for only once when get route response */
     public hasNavigated: boolean = false;
-    /** Hold current url */
-    private currentUrl: string = "";
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -283,7 +281,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.currentUrl = this.router.url;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;

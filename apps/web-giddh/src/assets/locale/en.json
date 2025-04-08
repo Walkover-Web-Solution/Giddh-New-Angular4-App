@@ -758,6 +758,8 @@
     "app_send_payment_receipt_type_whatsapp": "Send [VOUCHER_TYPE] voucher via whatsapp",
     "app_no_access_limit_module": "You currently don't have access to this module. Upgrade your plan to unlock it without any hassle",
     "app_upgrade": "Upgrade",
+    "app_link_account":"Link Account",
+    "app_bank_accounts":"Bank Accounts",
     "app_click_here": "Click here",
     "app_upload": "Upload",
     "app_file": "File",

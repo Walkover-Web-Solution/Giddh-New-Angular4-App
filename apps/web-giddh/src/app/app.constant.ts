@@ -634,6 +634,12 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
 /** Gst utility download portal link */
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
 
+/** Break Point Screen Size*/
+export const BREAKPOINT_SCREEN_SIZE = {
+    SMALL_DESKTOP_SCREEN_SIZE: '(max-width: 1366px)',
+    TAB_SCREEN_SIZE: '(max-width: 1024px)'
+}
+
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',
