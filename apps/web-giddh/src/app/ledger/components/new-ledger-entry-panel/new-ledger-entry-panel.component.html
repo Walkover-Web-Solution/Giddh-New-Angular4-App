@@ -1134,7 +1134,7 @@
     </div>
 </ng-template>
 <ng-template #touristSchemeTemplate>
-    <div class="row font-15 mr-b1" *ngIf="isTouristSchemeApplicable">
+    <div class="row font-15 mr-b1 mr-t15" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
@@ -1160,7 +1160,7 @@
                     type="text"
                     name="passportNumber"
                     [placeholder]="localeData?.passport_number"
-                    class="form-control width-115 ml-1"
+                    class="form-control passport-no-width ml-1"
                     #passportNumber
                     (blur)="allowAlphanumericChar(passportNumber)"
                     (keypress)="allowAlphanumericChar(passportNumber)"
