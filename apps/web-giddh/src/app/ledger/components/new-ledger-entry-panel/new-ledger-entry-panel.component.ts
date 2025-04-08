@@ -1229,7 +1229,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public closeAsideMenuStateForOtherTax(): void {
-        this.asideMenuStateForOtherTaxesDialogRef.close();
+        this.closeOtherTaxesDialog();
         if (this.blankLedger.otherTaxesSum > 0) {
             this.blankLedger.isOtherTaxesApplicable = true;
         } else {
@@ -1251,7 +1251,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.otherTaxModal.itemLabel = this.currentTxn?.selectedAccount ? this.currentTxn.selectedAccount?.stock ? `${this.currentTxn?.selectedAccount?.name}(${this.currentTxn?.selectedAccount?.stock?.name})` : this.currentTxn?.selectedAccount?.name : '';
 
         if (this.asideMenuStateForOtherTaxesDialogRef && this.dialog.getDialogById(this.asideMenuStateForOtherTaxesDialogRef.id)) {
-            this.asideMenuStateForOtherTaxesDialogRef.close();
+            this.closeOtherTaxesDialog();
         } else {
             this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
                 position: {
@@ -1264,6 +1264,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 disableClose: true
             });
         }
+    }
+
+    /**
+     * Close other taxes dialog
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private closeOtherTaxesDialog(): void {
+        this.asideMenuStateForOtherTaxesDialogRef.close();
+        setTimeout(() => {
+            this.asideMenuStateForOtherTaxesDialogRef = undefined;
+        }, 800);
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
