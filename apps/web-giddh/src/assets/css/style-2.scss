@@ -1195,7 +1195,7 @@ textarea {
                 background-color: var(--color-transparent-background) !important;
             }
         }
-        .readonly-field { 
+        .readonly-field {
             .mat-mdc-form-field {
                 background-color: var(--color-transparent-background) !important;
             }
@@ -1205,6 +1205,16 @@ textarea {
 
 .border-top {
     border-top: 1px solid var(--color-common-secondary-border) !important;
+}
+
+body {
+    &.template-wrapper {
+        mat-tab-body {
+            &.mat-mdc-tab-body-active {
+                z-index: unset !important;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -13418,12 +13428,12 @@ voucher-component {
     .dropdown-bg {
         background-color: var(--color-transparent-background) !important;
     }
-    
+
     .mdc-text-field__input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
     .mat-mdc-form-field input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
