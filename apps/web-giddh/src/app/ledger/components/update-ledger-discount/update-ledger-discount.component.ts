@@ -46,7 +46,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
-    @Input() private discountsList: any[] = [];
+    @Input() public discountsList: any[] = [];
     /** True if get discounts list api call in progress */
     private getDiscountsLoading: boolean = false;
     /** Emitter for create new discount */
