@@ -1714,6 +1714,7 @@
                                             (discountTotalUpdated)="
                                                 vm.handleDiscountEntry($event); vm.generateGrandTotal()
                                             "
+                                            [discountsList]="discountsList"
                                             (hideOtherPopups)="hideTax()"
                                             [readonly]="isEinvoiceGenerated"
                                             (createNewDiscount)="showCreateDiscountDialog()"

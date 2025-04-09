@@ -70,6 +70,7 @@ import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/s
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatSelect } from '@angular/material/select';
+import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -321,8 +322,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isTabScreen: boolean = false;
     /** Discount dialog ref */
     public discountDialogRef: MatDialogRef<any>;
-    /** Discounts list Observable */
-    public discountsList$: Observable<any> = this.componentStore.discountsList$;
+    /** List of discounts */
+    public discountsList: any[] = [];
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Create tax dialog ref  */
@@ -365,7 +366,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private adjustmentUtilityService: AdjustmentUtilityService,
         private ledgerUtilityService: LedgerUtilityService,
         private invoiceAction: InvoiceActions,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.breakPointObservar.observe([
             '(max-width: 991px)'
@@ -402,7 +404,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
         }
-
+        this.getAllDiscounts();
         if (this.generalService.voucherApiVersion === 2) {
             this.allowParentGroup.push("loanandoverdraft");
         }
@@ -2833,14 +2835,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.componentStore.getDiscountsList();
+                this.getAllDiscounts();
+            }
+            this.discountDialogRef = undefined;
+        });
+    }
 
-                this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(discountsList => {
-                    if (discountsList) {
-                        this.vm.discountArray = discountsList;
-                        this.changeDetectorRef.detectChanges();
-                    }
-                });
+/**
+ * Get all discounts API call
+ *
+ * @private
+ * @memberof UpdateLedgerEntryPanelComponent
+ */
+    private getAllDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+                this.changeDetectorRef.detectChanges();
             }
         });
     }
