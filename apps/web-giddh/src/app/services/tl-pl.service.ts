@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
-import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossDateRangeResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -89,9 +89,35 @@ export class TlPlService {
     }
 
     /**
+     * Get Compared Profit/Loss
+     *
+     * @param {ProfitLossRequest} request
+     * @return {*}  {Observable<BaseResponse<AccountDetails, ProfitLossRequest>>}
+     * @memberof TlPlService
+     */
+    public GetComparedProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
+        let filteredRequest = (Object.keys(request)
+            ?.filter(key => request[key] != null)
+            .reduce((params, item) => ({ ...params, [item]: request[item] }), {}));
+
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COMPARED_PROFIT_LOSS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
+                    data.request = request;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<AccountDetails, ProfitLossRequest>(e, request)));
+    }
+
+    /**
      * get Profit/Loss
      */
-    public GetCogs(request: GetCogsRequest): Observable<BaseResponse<GetCogsResponse, GetCogsRequest>> {
+    public GetCogs(request: GetCogsRequest): Observable<BaseResponse<ProfitLossDateRangeResponse<GetCogsResponse>, GetCogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let filteredRequest = (Object.keys(request)
             ?.filter(p => request[p] != null)
@@ -100,11 +126,11 @@ export class TlPlService {
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COGS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data: BaseResponse<GetCogsResponse, GetCogsRequest> = res;
+                    let data: BaseResponse<ProfitLossDateRangeResponse<GetCogsResponse>, GetCogsRequest> = res;
                     data.request = request;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<GetCogsResponse, { from: string; to: string }>(e, request)));
+                catchError((e) => this.errorHandler.HandleCatch<ProfitLossDateRangeResponse<GetCogsResponse>, GetCogsRequest>(e, request)));
     }
 
     /**

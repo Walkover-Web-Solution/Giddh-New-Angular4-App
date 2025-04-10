@@ -35,7 +35,7 @@ export class DataFormatter {
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
-            row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
+            row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance[Object.keys(obj.closingBalance)[0]])}\r\n)])}\r\n`;
             total = this.calculateTotal(obj, total);
         });
         csv += `${row}\r\n`;
@@ -113,13 +113,13 @@ export class DataFormatter {
                 for (i = j = 0, ref = index; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
                     strIndex += 3;
                 }
-                if (group.closingBalance.amount !== 0) {
+                if (group.closingBalance[Object.keys(group.closingBalance)[0]].amount !== 0) {
                     let data1: any[] = [];
                     data1.push(group.groupName?.toUpperCase());
                     data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
                     data1.push(group.debitTotal);
                     data1.push(group.creditTotal);
-                    data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance)}`);
+                    data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance[Object.keys(group.closingBalance)[0]])}`);
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
                     if (group.accounts?.length > 0) {
@@ -159,10 +159,10 @@ export class DataFormatter {
         } else {
             total.ob = total.ob - group.forwardedBalance.amount;
         }
-        if (group.closingBalance.type === 'DEBIT') {
-            total.cb = total.cb + group.closingBalance.amount;
+        if (group.closingBalance[Object.keys(group.closingBalance)[0]].type === 'DEBIT') {
+            total.cb = total.cb + group.closingBalance[Object.keys(group.closingBalance)[0]].amount;
         } else {
-            total.cb = total.cb - group.closingBalance.amount;
+            total.cb = total.cb - group.closingBalance[Object.keys(group.closingBalance)[0]].amount;
         }
 
         total.cr += group.creditTotal;

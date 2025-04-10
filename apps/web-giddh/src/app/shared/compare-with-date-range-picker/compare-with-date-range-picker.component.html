@@ -1,0 +1,40 @@
+<div class="compare-with-wrapper">
+    <text-field
+        type="text"
+        name="compareWith"
+        [cssClass]="'form-control'"
+        [formControl]="compareWith"
+        [matMenuTriggerFor]="menu"
+    ></text-field>
+
+    <mat-menu #menu="matMenu">
+        <div
+            class="compare-with-menu overflow-y-auto pd-1 d-flex flex-column align-items-center"
+            (click)="$event.stopPropagation()"
+        >
+            <div class="w-100">
+                <span matListItemTitle>Compare with</span>
+                <mat-selection-list #shoes [multiple]="false" color="primary">
+                    <mat-list-option [disabled]="shouldDisableOption('none')" value="null">None</mat-list-option>
+                    <mat-list-option value="1">1 {{ compareWithLabel }}</mat-list-option>
+                    <mat-list-option value="2">2 {{ compareWithLabel }}</mat-list-option>
+                    <mat-list-option value="3">3 {{ compareWithLabel }}</mat-list-option>
+                    <mat-list-option value="3">4 {{ compareWithLabel }}</mat-list-option>
+                    <mat-list-option value="10">Enter a different number</mat-list-option>
+                </mat-selection-list>
+            </div>
+            <div class="w-100">
+                <span matListItemTitle>Previous</span>
+                <mat-selection-list #shoes [multiple]="false" color="primary">
+                    <mat-list-option [disabled]="true" value="MONTH" togglePosition="before">Month</mat-list-option>
+                    <mat-list-option value="QUARTER" togglePosition="before">Quarter</mat-list-option>
+                    <mat-list-option value="YEAR" togglePosition="before">Year</mat-list-option>
+                    <mat-list-option value="PERIOD" togglePosition="before"
+                        >Custom date range <span *ngIf="22">({{ 22 }} days)</span></mat-list-option
+                    >
+                </mat-selection-list>
+                <p class="m-0">Options are disabled because the report date range is longer.</p>
+            </div>
+        </div>
+    </mat-menu>
+</div>

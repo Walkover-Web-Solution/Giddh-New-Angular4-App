@@ -241,4 +241,12 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
             }
         });
     }
+    
+    public getKeys(obj): string[] | [] {
+        if (obj) {
+            return Object.keys(obj);
+        } else {
+            return [];
+        }
+    }
 }

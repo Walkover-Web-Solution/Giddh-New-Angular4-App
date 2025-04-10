@@ -58,4 +58,12 @@ export class ProfitLossGridRowComponent implements OnChanges {
     public trackByFn(index, item: Account): string {
         return item?.uniqueName;
     }
+
+    public getKeys(obj): string[] | [] {
+        if (obj) {
+            return Object.keys(obj);
+        } else {
+            return [];
+        }
+    }
 }

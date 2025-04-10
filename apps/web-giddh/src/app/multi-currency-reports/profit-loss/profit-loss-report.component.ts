@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../models/api-models/tb-pl-bs';
+import { GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse, ProfitLossRequest } from '../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ProfitLossGridComponent } from '../../financial-reports/components/profit-loss/components/profit-loss-grid/profit-loss-grid.component';
 import { cloneDeep } from '../../lodash-optimized';
@@ -50,11 +50,11 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      */
     public ngOnInit(): void {
         this.componentStore.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
+            if (response) {                
                 let data = prepareProfitLossData(cloneDeep(response)) as ProfitLossData;
                 let cogs;
                 if (data && data.incomeStatement && data.incomeStatement.costOfGoodsSold) {
-                    cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as GetCogsResponse;
+                    cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;
                 } else {
                     cogs = null;
                 }
@@ -69,13 +69,15 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                     cogsGrp.uniqueName = 'cogs';
                     cogsGrp.groupName = 'Less: Cost of Goods Sold';
                     cogsGrp.closingBalance = {
-                        amount: cogs.cogs,
-                        type: 'DEBIT'
+                        [Object.keys(cogs)[0]]: {
+                            amount: cogs[Object.keys(cogs)[0]].cogs,// ===== Need to check this logic
+                            type: 'DEBIT'
+                        }
                     };
                     cogsGrp.accounts = [];
                     cogsGrp.childGroups = [];
 
-                    Object.keys(cogs)?.filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
+                    Object.keys(cogs[Object.keys(cogs)[0]])?.filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
                         let childGroup = new ChildGroup();
                         childGroup.isCreated = false;
                         childGroup.isVisible = false;
@@ -85,8 +87,10 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                         childGroup.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
                         childGroup.category = f === 'income';
                         childGroup.closingBalance = {
-                            amount: cogs[f],
-                            type: 'CREDIT'
+                            [Object.keys(cogs)[0]]: {
+                                amount: cogs[Object.keys(cogs)[0]][f],// ===== Need to check this logic
+                                type: 'CREDIT'
+                            }
                         };
                         childGroup.accounts = [];
                         childGroup.childGroups = [];
@@ -134,12 +138,12 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                     });
                 }
 
-                if (data?.incomeStatement?.grossProfit?.type === "DEBIT" && data.incomeStatement.grossProfit.amount) {
-                    data.incomeStatement.grossProfit.amount = "-" + data.incomeStatement.grossProfit.amount;
+                if (data?.incomeStatement?.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]]?.type === "DEBIT" && data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount) {
+                    data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount = "-" + data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount;
                 }
 
-                if (data?.incomeStatement?.operatingProfit?.type === "DEBIT" && data.incomeStatement.operatingProfit.amount) {
-                    data.incomeStatement.operatingProfit.amount = "-" + data.incomeStatement.operatingProfit.amount;
+                if (data?.incomeStatement?.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]]?.type === "DEBIT" && data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount) {
+                    data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount = "-" + data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount;
                 }
 
                 this.data = data;

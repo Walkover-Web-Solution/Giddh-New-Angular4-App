@@ -3,7 +3,7 @@
 }
 
 :host ::ng-deep .table-container .profit-loss section div > div {
-    padding-left: 8px;
+    padding-inline: 0px;
 }
 
 :host ::ng-deep .basic {
@@ -34,7 +34,7 @@
     th {
         border: none !important;
         border-bottom: 1px solid var(--color-table-primary-header-bar-border) !important;
-        padding: 13px 8px 14px 0 !important;
+        padding: 13px 0 14px 0 !important;
         &:first-child {
             padding: 0 !important;
         }

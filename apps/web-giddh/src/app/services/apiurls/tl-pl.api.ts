@@ -3,6 +3,7 @@ export const TB_PL_BS_API = {
     GET_TRIAL_BALANCE: 'v2/company/:companyUniqueName/multibranch/trial-balance', // get call
     GET_BALANCE_SHEET: 'v2/company/:companyUniqueName/multibranch/balance-sheet',
     GET_PROFIT_LOSS: 'v2/company/:companyUniqueName/multibranch/profit-loss?tax=30', // tax by Shubhendra sir
+    GET_COMPARED_PROFIT_LOSS: 'v2/company/:companyUniqueName/multibranch/compared-profit-loss?tax=30&compareValue=3&compareType=month',
     GET_COGS: 'v2/company/:companyUniqueName/cogs', // tax by Shubhendra sir
     DOWNLOAD_TRIAL_BALANCE_EXCEL: 'company/:companyUniqueName/trial-balance-export',
     DOWNLOAD_BALANCE_SHEET_EXCEL: 'company/:companyUniqueName/v2/balance-sheet-collapsed-download',
