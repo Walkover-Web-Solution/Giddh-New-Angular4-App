@@ -733,6 +733,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
         observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+
             if (!Array.isArray(resp[0])) {
                 return;
             }
@@ -1910,7 +1911,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for load update ledger component 
+     * This will be use for load update ledger component
      *
      * @param {ITransactionItem} transaction
      * @param {number} index
@@ -2922,7 +2923,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
                     this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response && this.router.url === `/pages/ledger/${this.lc.accountUnq}`) {
+                        if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
                             this.getAllBankAccounts();
                             this.isDirectlyIntegrated = true;
                             this.componentStore.setState(state => ({
