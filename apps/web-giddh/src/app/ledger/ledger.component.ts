@@ -620,7 +620,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.router.url === `/pages/ledger/${this.lc.accountUnq}`) {
+            if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
                 this.getAllBankAccounts();
                 this.isDirectlyIntegrated = true;
                 this.componentStore.setState(state => ({
