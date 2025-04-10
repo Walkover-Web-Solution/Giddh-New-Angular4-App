@@ -600,7 +600,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.router.url === `/pages/ledger/${this.lc.accountUnq}`) {
+            if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
                 this.getAllBankAccounts();
                 this.isDirectlyIntegrated = true;
                 this.componentStore.setState(state => ({
@@ -744,6 +744,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
         observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+
             if (!Array.isArray(resp[0])) {
                 return;
             }
