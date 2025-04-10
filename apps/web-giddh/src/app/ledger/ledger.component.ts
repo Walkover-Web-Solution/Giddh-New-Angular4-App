@@ -599,6 +599,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
+                this.getAllBankAccounts();
+                this.isDirectlyIntegrated = true;
+                this.componentStore.setState(state => ({
+                    ...state,
+                    requisitionList: null
+                }));
+            }
+        });
+
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
@@ -1127,7 +1138,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
                 const referNo = localStorage.getItem('refNo');
-                if (this.isDirectlyIntegrated && referNo) {
+                if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
                     this.getLinkBankAccount();
                 }
             }
@@ -2922,16 +2933,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                         this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                     }
-                    this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
-                            this.getAllBankAccounts();
-                            this.isDirectlyIntegrated = true;
-                            this.componentStore.setState(state => ({
-                                ...state,
-                                requisitionList: null
-                            }));
-                        }
-                    });
                 }
             });
         }
@@ -3400,6 +3401,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getLinkBankAccount(): void {
+        if (!this.selectedAccountUniquename) {
+            this.redirectToBankIntegration();
+        }
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
@@ -3413,10 +3417,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response === 'closeDialog') {
-                    dialogRef?.close();
-                } else {
-                    if (response) this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                if (response && response !== 'closeDialog') {
+                    this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
                 }
             })).subscribe();
         }

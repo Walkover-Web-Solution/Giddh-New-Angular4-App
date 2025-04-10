@@ -118,7 +118,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         };
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && response?.body) {
                 this.bankList = response.body;
                 if (response.body.some(item => item.account?.uniqueName === this.selectedBankUniqueName)) {
                     this.isBankAccountConnected = true;
@@ -210,7 +210,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                     } else if (response === 'link') {
                         this.getLinkBankAccount();
                     }
-                    this.bankIntegrationDialogRef?.close();
                 }
                 this.changeDetectionRef.detectChanges();
             });
@@ -358,6 +357,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public getLinkBankAccount(): void {
+
+        if (!this.selectedBankUniqueName) {
+            this.router.navigate(['/pages/settings/integration/payment']);
+        }
+
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
