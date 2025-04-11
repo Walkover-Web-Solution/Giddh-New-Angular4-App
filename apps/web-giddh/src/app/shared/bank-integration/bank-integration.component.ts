@@ -355,6 +355,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             width: '1000px'
         });
     }
+
     /**
     * This will open the create new account user modal
     *
