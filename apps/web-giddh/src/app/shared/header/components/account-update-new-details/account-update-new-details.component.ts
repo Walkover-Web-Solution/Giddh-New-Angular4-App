@@ -584,8 +584,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public onViewReady(ev) {
-        console.log("run");
-
         let accountCountry = this.addAccountForm.get('country').get('countryCode')?.value;
         this.selectedCountryCode = accountCountry;
         if (accountCountry) {
@@ -1638,7 +1636,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
         const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
-        if (customField && customField?.length < customFieldLength) {
+        if (customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -1668,7 +1666,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
-        customFieldForm?.forEach(item => {
+        customFieldForm.forEach(item => {
             this.renderCustomFieldDetails(item, customFieldForm?.length);
         });
     }

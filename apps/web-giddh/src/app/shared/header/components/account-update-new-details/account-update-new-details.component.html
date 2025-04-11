@@ -10,55 +10,51 @@
             <div class="upper-form">
                 <div class="row pd-b2">
                     <div class="col-sm-4">
-                            <reactive-dropdown-field
-                                [label]="commonLocaleData?.app_group"
-                                [placeholder]="localeData?.select_group_label"
-                                [labelValue]="activeAccountGroup.length === 1 ? activeAccountGroup[0].label : ''"
-                                [options]="activeAccountGroup"
-                                formControlName="activeGroupUniqueName"
-                                [required]="true"
-                                (selectedOption)="selectGroup($event)"
-                            >
-                            </reactive-dropdown-field>
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_group"
+                            [placeholder]="localeData?.select_group_label"
+                            [labelValue]="activeAccountGroup.length === 1 ? activeAccountGroup[0].label : ''"
+                            [options]="activeAccountGroup"
+                            formControlName="activeGroupUniqueName"
+                            [required]="true"
+                            (selectedOption)="selectGroup($event)"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-8">
-                            <input-field
-                                [name]="'accountName'"
-                                #autoFocusUpdate
-                                [label]="localeData?.account_name"
-                                [placeholder]="localeData?.account_name"
-                                [type]="'text'"
-                                formControlName="name"
-                            >
-                            </input-field>
+                        <input-field
+                            [name]="'accountName'"
+                            #autoFocusUpdate
+                            [label]="localeData?.account_name"
+                            [placeholder]="localeData?.account_name"
+                            [type]="'text'"
+                            formControlName="name"
+                        >
+                        </input-field>
                     </div>
                 </div>
                 <div class="row pd-b2">
-                    <div class="col-sm-4">
-                        <div class="form-group" formGroupName="country">
-                            <reactive-dropdown-field
-                                [label]="commonLocaleData?.app_country"
-                                [placeholder]="commonLocaleData?.app_select"
-                                [labelValue]="accountCountryName"
-                                [options]="countrySource"
-                                formControlName="countryCode"
-                                [required]="true"
-                                (selectedOption)="selectCountry($event)"
-                            >
-                            </reactive-dropdown-field>
-                        </div>
+                    <div class="col-sm-4" formGroupName="country">
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_country"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [labelValue]="accountCountryName"
+                            [options]="countrySource"
+                            formControlName="countryCode"
+                            [required]="true"
+                            (selectedOption)="selectCountry($event)"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
-                        <div class="form-group">
-                            <reactive-dropdown-field
-                                [label]="localeData?.currency"
-                                [placeholder]="commonLocaleData?.app_select"
-                                [labelValue]="selectedCurrency"
-                                [options]="currencySource$ | async"
-                                formControlName="currency"
-                            >
-                            </reactive-dropdown-field>
-                        </div>
+                        <reactive-dropdown-field
+                            [label]="localeData?.currency"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [labelValue]="selectedCurrency"
+                            [options]="currencySource$ | async"
+                            formControlName="currency"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
                         <div class="cr-dr-account">
@@ -118,8 +114,9 @@
                                 href="javascript:;"
                                 (click)="openBulkAddDialog()"
                                 class="font-14 cursor-pointer text-primary"
-                                >{{ localeData?.bulk_add }}</span
                             >
+                                {{ localeData?.bulk_add }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -172,8 +169,9 @@
                                 href="javascript:;"
                                 (click)="openBulkAddDialog()"
                                 class="font-14 cursor-pointer text-primary"
-                                >{{ localeData?.bulk_add }}</span
                             >
+                                {{ localeData?.bulk_add }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -185,7 +183,7 @@
                                     color="primary"
                                     [value]="'hsn'"
                                 >
-                                {{ commonLocaleData?.app_hsn }}
+                                    {{ commonLocaleData?.app_hsn }}
                                 </mat-radio-button>
                                 <mat-radio-button
                                     color="primary"
@@ -220,7 +218,6 @@
             </div>
         </div>
 
-        <!-- <tabset #staticTabs class="custom-tabs" id="asidePaneFormTabs"> -->
         <mat-tab-group
             #staticTabs
             mat-stretch-tabs="false"
@@ -277,46 +274,41 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mr-b05">
                             <div class="col-sm-4">
-                                <div class="form-group" *ngIf="(statesSource$ | async)?.length">
-                                    <reactive-dropdown-field
-                                        [label]="commonLocaleData?.app_state"
-                                        [placeholder]="commonLocaleData?.app_select"
-                                        [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst?.value.state.name : ''" 
-                                        [options]="statesSource$ | async"
-                                        formControlName="stateCode"
-                                        [required]="isStateRequired"
-                                        (selectedOption)="selectedState(gst, $event)"
-                                    >
-                                    </reactive-dropdown-field>
-                                </div>
-                                <div class="form-group" *ngIf="countyList?.length">
-                                    <div>
-                                        <reactive-dropdown-field
-                                            [label]="commonLocaleData?.app_region"
-                                            [placeholder]="commonLocaleData?.app_select"
-                                            [options]="countyList"
-                                            formControlName="countyCode"
-                                            [required]="isStateRequired"
-                                            (selectedOption)="selectedCounty(gst, $event)"
-                                        >
-                                        </reactive-dropdown-field>
-                                    </div>
-                                </div>
+                                <reactive-dropdown-field
+                                    *ngIf="(statesSource$ | async)?.length"
+                                    [label]="commonLocaleData?.app_state"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst?.value.state.name : ''" 
+                                    [options]="statesSource$ | async"
+                                    formControlName="stateCode"
+                                    [required]="isStateRequired"
+                                    (selectedOption)="selectedState(gst, $event)"
+                                >
+                                </reactive-dropdown-field>
+                                
+                                <reactive-dropdown-field
+                                    *ngIf="countyList?.length"
+                                    [label]="commonLocaleData?.app_region"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [options]="countyList"
+                                    formControlName="countyCode"
+                                    [required]="isStateRequired"
+                                    (selectedOption)="selectedCounty(gst, $event)"
+                                >
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
-                                <div class="form-group mr-b05">
-                                    <input-field
-                                        [name]="'gstNumber'"
-                                        [label]="formFields['taxName']?.label"
-                                        [placeholder]="taxNamePlaceholder"
-                                        [type]="'text'"
-                                        [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
-                                        (blur)="checkGstNumValidation(gstNumberField); getStateCode(gst, states)"
-                                    >
-                                    </input-field>
-                                </div>
+                                <input-field
+                                    [name]="'gstNumber'"
+                                    [label]="formFields['taxName']?.label"
+                                    [placeholder]="taxNamePlaceholder"
+                                    [type]="'text'"
+                                    [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
+                                    (blur)="checkGstNumValidation(gstNumberField); getStateCode(gst, states)"
+                                >
+                                </input-field>
                             </div>
                             <!-- static code added for the pincode -->
                             <div class="col-sm-4">
@@ -339,26 +331,16 @@
                                 </input-field>
                             </div>
                             <!-- end -->
-                            <ng-container
-                                *ngIf="
-                                    companyCountry === 'IN' ||
-                                    companyCountry === 'ZW' ||
-                                    companyCountry === 'KE'
-                                "
-                            >
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="position-relative" *ngIf="partyTypeSource.length">
-                                            <reactive-dropdown-field
-                                                [label]="commonLocaleData?.party_type"
-                                                [placeholder]="commonLocaleData?.app_select"
-                                                [options]="partyTypeSource"
-                                                [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType"
-                                                [labelValue]="partyTypeSource?.[0]?.label"
-                                            >
-                                            </reactive-dropdown-field>
-                                        </div>
-                                    </div>
+                            <ng-container *ngIf="['IN', 'ZW', 'KE'].includes(companyCountry)">
+                                <div class="col-sm-4 mr-t2" *ngIf="partyTypeSource.length">
+                                    <reactive-dropdown-field
+                                        [label]="commonLocaleData?.party_type"
+                                        [placeholder]="commonLocaleData?.app_select"
+                                        [options]="partyTypeSource"
+                                        [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType"
+                                        [labelValue]="partyTypeSource?.[0]?.label"
+                                    >
+                                    </reactive-dropdown-field>
                                 </div>
 
                                 <!-- <div
@@ -380,20 +362,15 @@
                                     </div>
                                 </div> -->
                             </ng-container>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <span class="text-right">
-                                        <button
-                                            mat-stroked-button
-                                            color="primary"
-                                            *ngIf="!f"
-                                            (click)="removeGstDetailsForm(i)"
-                                            class="grey-color btn-danger"
-                                        >
-                                            <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
-                                        </button>
-                                    </span>
-                                </div>
+                            <div class="col-sm-12 mr-t2" *ngIf="!f">
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    (click)="removeGstDetailsForm(i)"
+                                    class="grey-color btn-danger text-left"
+                                >
+                                    <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
+                                </button>
                             </div>
                         </div>
                         <div
