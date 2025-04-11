@@ -621,7 +621,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
-                this.getAllBankAccounts();
+                this.getAllBankAccounts(this.lc.accountUnq);
                 this.isDirectlyIntegrated = true;
                 this.componentStore.setState(state => ({
                     ...state,
@@ -634,7 +634,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 const referNo = localStorage.getItem('refNo');
-                if (referNo !== null && referNo !== undefined) {
+            if (referNo !== null && referNo !== undefined) {
                     setTimeout(() => {
                         this.componentStore.getRequisition(referNo);
                     }, 100);
@@ -3539,28 +3539,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getLinkBankAccount(): void {
-        if (!this.selectedAccountUniquename) {
-            this.redirectToBankIntegration();
-        }
-        if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
-            this.linkBankAccount();
-        } else {
-            const data = {
-                bankList: this.bankList ?? [],
-                accountUniqueName: this.lc.accountUnq
-            }
-            const dialogRef = this.dialog.open(BankLinkComponent, {
-                data: data,
-                panelClass: ['mat-dialog-md'],
-                disableClose: true
-            });
-            dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response && response !== 'closeDialog') {
-                    this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+            if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
+                this.linkBankAccount();
+            } else {
+                const data = {
+                    bankList: this.bankList ?? [],
+                    accountUniqueName: this.lc.accountUnq
                 }
-                localStorage.removeItem('refNo');
-            })).subscribe();
-        }
+                const dialogRef = this.dialog.open(BankLinkComponent, {
+                    data: data,
+                    panelClass: ['mat-dialog-md'],
+                    disableClose: true
+                });
+                dialogRef.afterClosed().pipe(take(1), tap(response => {
+                    if (response && response !== 'closeDialog') {
+                        this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                    }
+                })).subscribe();
+            }
     }
 
     /**
