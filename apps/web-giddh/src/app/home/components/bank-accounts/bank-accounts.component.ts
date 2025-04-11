@@ -360,25 +360,25 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         if (!this.selectedBankUniqueName) {
             this.router.navigate(['/pages/settings/integration/payment']);
-        }
-        if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
-            this.linkBankAccount();
         } else {
-            const data = {
-                bankList: this.bankList ?? [],
-                accountUniqueName: this.selectedBankUniqueName
-            }
-            const dialogRef = this.dialog.open(BankLinkComponent, {
-                data: data,
-                panelClass: ['mat-dialog-md'],
-                disableClose: true
-            });
-            dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response && response !== 'closeDialog') {
-                    this.isBankAccountConnected = true; this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+            if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
+                this.linkBankAccount();
+            } else {
+                const data = {
+                    bankList: this.bankList ?? [],
+                    accountUniqueName: this.selectedBankUniqueName
                 }
-                localStorage.removeItem('refNo');
-            })).subscribe();
+                const dialogRef = this.dialog.open(BankLinkComponent, {
+                    data: data,
+                    panelClass: ['mat-dialog-md'],
+                    disableClose: true
+                });
+                dialogRef.afterClosed().pipe(take(1), tap(response => {
+                    if (response && response !== 'closeDialog') {
+                        this.isBankAccountConnected = true; this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                    }
+                })).subscribe();
+            }
         }
     }
 

@@ -3541,25 +3541,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getLinkBankAccount(): void {
         if (!this.selectedAccountUniquename) {
             this.redirectToBankIntegration();
-        }
-        if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
-            this.linkBankAccount();
         } else {
-            const data = {
-                bankList: this.bankList ?? [],
-                accountUniqueName: this.lc.accountUnq
-            }
-            const dialogRef = this.dialog.open(BankLinkComponent, {
-                data: data,
-                panelClass: ['mat-dialog-md'],
-                disableClose: true
-            });
-            dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response && response !== 'closeDialog') {
-                    this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+            if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
+                this.linkBankAccount();
+            } else {
+                const data = {
+                    bankList: this.bankList ?? [],
+                    accountUniqueName: this.lc.accountUnq
                 }
-                localStorage.removeItem('refNo');
-            })).subscribe();
+                const dialogRef = this.dialog.open(BankLinkComponent, {
+                    data: data,
+                    panelClass: ['mat-dialog-md'],
+                    disableClose: true
+                });
+                dialogRef.afterClosed().pipe(take(1), tap(response => {
+                    if (response && response !== 'closeDialog') {
+                        this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                    }
+                })).subscribe();
+            }
         }
     }
 
