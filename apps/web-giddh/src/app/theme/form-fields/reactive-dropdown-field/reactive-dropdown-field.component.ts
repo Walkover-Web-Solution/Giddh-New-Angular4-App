@@ -306,7 +306,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     private setLabelValue(): void {
         if (this.value !== undefined && this.value !== null) {
-            let val = this.options.find(search => search.value === this.value);
+            let val = this.options.find(search => search?.value === this.value);
             if (val) {
                 this.labelValue = val.label;
             }

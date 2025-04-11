@@ -2219,7 +2219,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public closeTaxDialog(): void {
         this.store.dispatch(this.companyActions.getTax());
-        this.taxDialogRef.close();
+        this.taxDialogRef?.close();
         this.cdRef.detectChanges();
         this.taxDialogRef = undefined;
     }
