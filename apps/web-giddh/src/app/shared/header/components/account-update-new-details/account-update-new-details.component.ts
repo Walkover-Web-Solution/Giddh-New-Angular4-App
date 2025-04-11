@@ -61,6 +61,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     selector: 'account-update-new-details',
@@ -584,7 +585,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public onViewReady(ev) {
         console.log("run");
-        
+
         let accountCountry = this.addAccountForm.get('country').get('countryCode')?.value;
         this.selectedCountryCode = accountCountry;
         if (accountCountry) {
@@ -602,10 +603,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public tabChanged(activeTab: string) {
-        if (activeTab) {
-            this.selectedTab = activeTab;
-            if (activeTab === 'others') {
+    public tabChanged(event: MatTabChangeEvent) {
+        if (event) {
+            this.selectedTab = event.tab.textLabel;
+            if (event.tab.textLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
                 this.isOtherSelectedTab = false;
