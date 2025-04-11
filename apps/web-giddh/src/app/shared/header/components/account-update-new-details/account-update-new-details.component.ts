@@ -61,6 +61,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     selector: 'account-update-new-details',
@@ -207,7 +208,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         query: ''
     };
     /** Stores the active account group */
-    public activeAccountGroup: IOption[] | INameUniqueName[] = [];
+    public activeAccountGroup: IOption[] = [];
     /** This holds account country name */
     public accountCountryName: string = "";
     /** True if custom fields api call in progress */
@@ -482,6 +483,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             }
         });
+        this.onViewReady(true);
+        this.loadAccountData();
     }
 
     public ngAfterViewInit() {
@@ -581,6 +584,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public onViewReady(ev) {
+        console.log("run");
+
         let accountCountry = this.addAccountForm.get('country').get('countryCode')?.value;
         this.selectedCountryCode = accountCountry;
         if (accountCountry) {
@@ -598,10 +603,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public tabChanged(activeTab: string) {
-        if (activeTab) {
-            this.selectedTab = activeTab;
-            if (activeTab === 'others') {
+    public tabChanged(event: MatTabChangeEvent) {
+        if (event) {
+            this.selectedTab = event.tab.textLabel;
+            if (event.tab.textLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
                 this.isOtherSelectedTab = false;
@@ -1633,7 +1638,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
         const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
-        if (customField?.length < customFieldLength) {
+        if (customField && customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -1663,7 +1668,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
-        customFieldForm.forEach(item => {
+        customFieldForm?.forEach(item => {
             this.renderCustomFieldDetails(item, customFieldForm?.length);
         });
     }
