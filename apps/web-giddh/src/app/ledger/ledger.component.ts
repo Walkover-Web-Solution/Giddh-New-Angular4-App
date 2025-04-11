@@ -601,7 +601,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
-                this.getAllBankAccounts();
+                this.getAllBankAccounts(this.lc.accountUnq);
                 this.isDirectlyIntegrated = true;
                 this.componentStore.setState(state => ({
                     ...state,
@@ -614,7 +614,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.callBackBroadcast.onmessage = (event) => {
             if (event?.data?.success) {
                 const referNo = localStorage.getItem('refNo');
-                if (referNo !== null && referNo !== undefined) {
+            if (referNo !== null && referNo !== undefined) {
                     setTimeout(() => {
                         this.componentStore.getRequisition(referNo);
                     }, 100);
@@ -3401,9 +3401,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getLinkBankAccount(): void {
-        if (!this.selectedAccountUniquename) {
-            this.redirectToBankIntegration();
-        } else {
             if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
                 this.linkBankAccount();
             } else {
@@ -3422,7 +3419,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 })).subscribe();
             }
-        }
     }
 
     /**
