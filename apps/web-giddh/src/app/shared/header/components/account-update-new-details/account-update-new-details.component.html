@@ -280,7 +280,7 @@
                                     *ngIf="(statesSource$ | async)?.length"
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_select"
-                                    [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst?.value.state.name : ''" 
+                                    [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name : ''" 
                                     [options]="statesSource$ | async"
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
@@ -665,7 +665,7 @@
                                 [label]="localeData?.account_uniquename"
                                 [placeholder]="localeData?.account_uniquename"
                                 formControlName="uniqueName"
-                                [name]="'accUnqname'"
+                                [name]="'accUniqueName'"
                             >
                             </input-field>
                         </div>
