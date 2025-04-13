@@ -114,6 +114,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group mr-r15" *ngIf="plBsExportXLS">
+                        <giddh-compare-with-date-range-picker
+                            [startDate]="fromDate"
+                            [endDate]="toDate"
+                            (onChange)="handleCompareWithEvent($event)"
+                        >
+                        </giddh-compare-with-date-range-picker>
+                    </div>
                     <div class="form-group" *ngIf="!showLoader">
                         <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="!isProjectWiseAccounting && tags?.length">
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
@@ -131,7 +139,7 @@
                                 [width]="'170px'"
                             >
                             </sh-select>
-                        </div>
+                        </div>                        
                         <!-- Filter by Tag -->
                         <div class="form-group pull-left">
                             <a
@@ -154,11 +162,10 @@
                             </a>
                         </div>
                     </div>
-                    <div class="form-group mr-l15">
-                        <giddh-compare-with-date-range-picker
-                        >
-                        </giddh-compare-with-date-range-picker>
-                    </div>
+
+                    <button class="mr-l15" mat-stroked-button color="primary" type="submit">
+                        {{ commonLocaleData?.app_search }}
+                    </button>
                 </form>
                 <div class="d-flex align-items-center column-gap1 download-data-icon">
                     <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">

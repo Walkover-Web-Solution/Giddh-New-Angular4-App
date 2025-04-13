@@ -6085,8 +6085,21 @@ input[type="checkbox"][disabled]:after {
     border-left: 6px solid var(--color-table-primary-header-bar-border);
 }
 
-.table-container .account {
-    background: var(--color-table-primary-footer);
+.table-container {
+    .account {
+        background: var(--color-table-primary-footer);
+        .pl-sticky-group {
+            background: var(--color-table-primary-footer);
+        }
+    }
+}
+
+.pl-sticky-group {
+    // position: sticky;
+    // left: 0;
+    // z-index: 9;
+    // background: var(--color-body-background);
+    max-width: 400px;
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {

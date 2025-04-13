@@ -5,7 +5,7 @@
     [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
 >
     <div
-        class="col-4 group"
+        class="col-4 group pl-sticky-group"
         [innerHTML]="groupDetail.groupName | highlight: search"
         [ngStyle]="{ 'padding-left': padding + 'px' }"
     ></div>

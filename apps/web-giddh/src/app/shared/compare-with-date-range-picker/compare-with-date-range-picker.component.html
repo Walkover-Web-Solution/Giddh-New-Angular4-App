@@ -1,42 +1,89 @@
 <div class="compare-with-wrapper">
-    <text-field
+    <input
+        matInput
         type="text"
+        readonly
         name="compareWith"
-        [cssClass]="'form-control'"
-        [formControl]="compareWithField"
+        class="form-control"
         [matMenuTriggerFor]="menu"
-    ></text-field>
+        [formControl]="compareWithField"
+    />
 
     <mat-menu #menu="matMenu">
         <form
-          class="compare-with-menu overflow-y-auto d-flex flex-column align-items-center"
-          (click)="$event.stopPropagation()"
-          [formGroup]="compareOptionsForm"
+            class="compare-with-menu overflow-y-auto d-flex flex-column align-items-center"
+            (click)="$event.stopPropagation()"
+            [formGroup]="compareOptionsForm"
         >
-          <div class="w-100">
-            <label class="pd-l15 pd-r15 font-12 color-primary" matListItemTitle>Compare with</label>
-            <mat-selection-list [multiple]="false" [hideSingleSelectionIndicator]="true" color="primary" formControlName="compareValue">
-                <mat-list-option value="0" [disabled]="shouldDisableOption('none')" [selected]="compareOptionsForm.get('compareValue')?.value == 0">None</mat-list-option>
-                <mat-list-option value="1" [disabled]="shouldDisableOption('1')">1 {{ compareOptionsForm.get('compareType')?.value }}</mat-list-option>
-                <mat-list-option value="2" [disabled]="shouldDisableOption('2')">2 {{ compareOptionsForm.get('compareType')?.value }}</mat-list-option>
-                <mat-list-option value="3" [disabled]="shouldDisableOption('3')">3 {{ compareOptionsForm.get('compareType')?.value }}</mat-list-option>
-                <mat-list-option value="4" [disabled]="shouldDisableOption('4')">4 {{ compareOptionsForm.get('compareType')?.value }}</mat-list-option>
-                <mat-list-option value="10" [disabled]="shouldDisableOption('10')">Enter a different number</mat-list-option>
-              </mat-selection-list>
-          </div>
-          <mat-divider class="w-100"></mat-divider>
-          <div class="w-100">
-            <label class="pd-l15 pd-r15 font-12 color-primary" matListItemTitle>Previous</label>
-            <mat-selection-list [multiple]="false" color="primary" formControlName="compareType">
-                <mat-list-option [disabled]="shouldDisableOption('month')" [value]="'month'" togglePosition="before" [selected]="compareOptionsForm.get('compareType')?.value == 'month'">Month</mat-list-option>
-              <mat-list-option [disabled]="shouldDisableOption('quarter')" [value]="'quarter'" togglePosition="before" [selected]="compareOptionsForm.get('compareType')?.value == 'quarter'">Quarter</mat-list-option>
-              <mat-list-option [disabled]="shouldDisableOption('year')" [value]="'year'" togglePosition="before" [selected]="compareOptionsForm.get('compareType')?.value == 'year'">Year ({{compareOptionsForm.get('compareType')?.value}})</mat-list-option>
-              <mat-list-option [disabled]="shouldDisableOption('period')" [value]="'period'" togglePosition="before" [selected]="compareOptionsForm.get('compareType')?.value == 'period'">
-                Custom date range <span *ngIf="dateRangeInfo.dayCount > 0">({{ dateRangeInfo.dayCount }} days)</span>
-              </mat-list-option>
-            </mat-selection-list>
-            <p class="m-0 pd-l15 pd-r15 text-gray">Options are disabled because the report date range is longer.</p>
-          </div>
+            <div class="w-100">
+                <label class="pd-l15 pd-r15 font-12 color-primary" matListItemTitle>Compare with</label>
+                <mat-selection-list
+                    [multiple]="false"
+                    [hideSingleSelectionIndicator]="true"
+                    color="primary"
+                    formControlName="compareValue"
+                >
+                    <mat-list-option value="0" [selected]="compareOptionsForm.get('compareValue')?.value == 0"
+                        >None</mat-list-option
+                    >
+                    <mat-list-option (click)="toggleMenu(false)" value="1">1 {{ compareOptionsForm.get("compareType")?.value }}</mat-list-option>
+                    <mat-list-option (click)="toggleMenu(false)" value="2">2 {{ compareOptionsForm.get("compareType")?.value }}</mat-list-option>
+                    <mat-list-option (click)="toggleMenu(false)" value="3">3 {{ compareOptionsForm.get("compareType")?.value }}</mat-list-option>
+                    <mat-list-option (click)="toggleMenu(false)" value="4">4 {{ compareOptionsForm.get("compareType")?.value }}</mat-list-option>
+                    <mat-list-option (click)="showCustomInput = true; $event.preventDefault()">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Enter a different number</span>
+                            <div class="d-inline-flex align-items-center column-gap5" *ngIf="showCustomInput">
+                                <text-field
+                                    [type]="'number'"
+                                    [name]="'number'"
+                                    [cssClass]="'form-control max-width-50'"
+                                    [allowDigitsOnly]="true"
+                                    formControlName="compareValue"
+                                ></text-field>
+                                <span>period/s</span>
+                            </div>
+                        </div>
+                    </mat-list-option>
+                </mat-selection-list>
+            </div>
+            <mat-divider class="w-100"></mat-divider>
+            <div class="w-100">
+                <label class="pd-l15 pd-r15 font-12 color-primary" matListItemTitle>Previous</label>
+                <mat-selection-list [multiple]="false" color="primary" formControlName="compareType">
+                    <mat-list-option
+                        [disabled]="hasDisable('month')"
+                        [value]="compareTypeEnum.month"
+                        togglePosition="before"
+                        [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.month"
+                        >Month</mat-list-option
+                    >
+                    <mat-list-option
+                        [disabled]="hasDisable('quarter')"
+                        [value]="compareTypeEnum.quarter"
+                        togglePosition="before"
+                        [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.quarter"
+                        >Quarter</mat-list-option
+                    >
+                    <mat-list-option
+                        [disabled]="hasDisable('year')"
+                        [value]="compareTypeEnum.year"
+                        togglePosition="before"
+                        [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.year"
+                        >Year</mat-list-option
+                    >
+                    <mat-list-option
+                        [disabled]="hasDisable('period')"
+                        [value]="compareTypeEnum.period"
+                        togglePosition="before"
+                        [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.period"
+                    >
+                        Custom date range
+                        <span *ngIf="dateRangeInfo.dayCount > 0">({{ dateRangeInfo.dayCount }} days)</span>
+                    </mat-list-option>
+                </mat-selection-list>
+                <p class="m-0 pd-l15 pd-r15 text-gray">Options are disabled because the report date range is longer.</p>
+            </div>
         </form>
-      </mat-menu>
+    </mat-menu>
 </div>

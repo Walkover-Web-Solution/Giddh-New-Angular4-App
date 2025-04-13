@@ -21,7 +21,7 @@
                             <table class="table basic pl-table-grid">
                                 <thead>
                                     <tr>
-                                        <th class="p-0 font-16" width="33.35%">
+                                        <th class="p-0 font-16 pl-sticky-group" width="33.35%">
                                             <div
                                                 #searchContainer
                                                 (clickOutside)="clickedOutside($event, searchContainer)"
@@ -113,7 +113,7 @@
                                 </ng-container>
                                 <section class="row-1">
                                     <div class="pl-grid-row row">
-                                        <div class="col-4 group pd-l1">{{ localeData?.total_cost_of_goods_sold }}</div>
+                                        <div class="col-4 group pl-sticky-group  pd-l1">{{ localeData?.total_cost_of_goods_sold }}</div>
                                         <div class="col-8 bd-rl group text-right pull-right px-0">
                                             <ng-container *ngFor="let key of getKeys(cogsData?.closingBalance)">
                                                 <span>
@@ -133,7 +133,7 @@
                                 <!--/Grid-->
                             </div>
                             <div class="account clearfix row" *ngIf="plData && plData.incomeStatement && !hideData">
-                                <div class="col-4 group pd-1">
+                                <div class="col-4 group pl-sticky-group  pd-1">
                                     <strong class="font-15">{{ localeData?.gross_profit }}</strong>
                                 </div>
                                 <div class="col-8 group text-right pull-right bd-rl pd-t1 pd-b1 px-0">
@@ -182,7 +182,7 @@
                                         </section>
                                         <section class="row-1" *ngIf="grp.groupName && grp?.uniqueName === 'revenue'">
                                             <div class="pl-grid-row row">
-                                                <div class="col-4 group pd-l1">{{ localeData?.total_revenue }}</div>
+                                                <div class="col-4 group pl-sticky-group  pd-l1">{{ localeData?.total_revenue }}</div>
                                                 <div class="col-8 bd-rl group text-right pull-right px-0">
                                                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.revenue)">
                                                         <span>
@@ -213,7 +213,7 @@
                                             class="group clearfix row"
                                             *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                                         >
-                                            <div class="col-4 group pd-l1">
+                                            <div class="col-4 group pl-sticky-group  pd-l1">
                                                 {{ localeData?.total_operating_expenses }}
                                             </div>
                                             <div class="col-8 group text-right pull-right bd-rl pd-t1 pd-b1 px-0">
@@ -247,7 +247,7 @@
                                             class="account clearfix font-15 row"
                                             *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                                         >
-                                            <div class="col-4 group pd-1">
+                                            <div class="col-4 group pl-sticky-group  pd-1">
                                                 <strong class="font-15">{{ localeData?.operating_profit_loss }}</strong>
                                             </div>
                                             <div class="col-8 group text-right pull-right bd-rl pd-t1 pd-b1 px-0">
@@ -272,7 +272,7 @@
                                             *ngIf="grp.groupName && grp?.uniqueName === 'otherexpenses'"
                                         >
                                             <div class="pl-grid-row row">
-                                                <div class="col-4 group pd-l1">
+                                                <div class="col-4 group pl-sticky-group  pl-sticky-group pd-l1">
                                                     {{ localeData?.total_other_expense }} zero
                                                 </div>
                                                 <div class="col-8 bd-rl group text-right pull-right pd-t1 pd-b1 px-0">
@@ -319,7 +319,7 @@
                         </div>
                     </div>
                     <div class="account clearfix row" *ngIf="plData && plData?.incomeStatement && !hideData">
-                        <div class="col-4 group pd-1">
+                        <div class="col-4 group pl-sticky-group  pl-sticky-group pd-1">
                             <strong class="font-15">{{ localeData?.income_before_taxes }}</strong>
                         </div>
                         <div class="col-8 group text-right pull-right bd-rl pd-t1 pd-b1 px-0">
@@ -355,7 +355,7 @@
                             "
                         >
                             <div class="group clearfix font-15 row">
-                                <div class="col-4 group pd-l1">
+                                <div class="col-4 group pl-sticky-group  pl-sticky-group pd-l1">
                                     {{ localeData?.taxes_30 }}
                                 </div>
                                 <div class="col-8 group text-right pull-right bd-rl pd-t1 pd-b1 px-0">
