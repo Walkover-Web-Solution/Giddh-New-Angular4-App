@@ -128,6 +128,6 @@ export class BankLinkComponent implements OnInit, OnDestroy {
      * @memberof BankLinkComponent
      */
     public closeDialog(): void {
-        this.dialogRef.close('closeDialog');
+        this.dialogRef.close(false);
     }
 }
