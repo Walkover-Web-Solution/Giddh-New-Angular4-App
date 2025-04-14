@@ -88,6 +88,12 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     @ViewChild('editAccountUserModal', { static: true }) public editAccountUserModal: TemplateRef<any>;
     /** Instance of delete account user modal */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Holds Store Save payment provider company API success state as observable*/
+    public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
+    /** This will use for open window */
+    public openedWindow: Window | null = null;
+    /** Hold reconnect bank response */
+    public reconnectBankResponse: any = null;
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
 
@@ -106,7 +112,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         public dialog: MatDialog
     ) { }
-    
+
     /**
     * This function will use for get institutions details
     *
@@ -172,6 +178,14 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.openWindow(response.link);
+                localStorage.setItem('refNo', response.reference);
+                this.referenceNumber = response.reference;
+            }
+        });
+
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
@@ -233,7 +247,12 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
 
         this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.loadPaymentData();
+                if (this.reconnectBankResponse && this.reconnectBankResponse.institutionId) {
+                    this.componentStore.createEndUserAgreementByInstitutionId(this.reconnectBankResponse.institutionId);
+                } else {
+                    this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
+                    this.loadPaymentData();
+                }
             }
         });
 
@@ -330,6 +349,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             width: '1000px'
         });
     }
+
     /**
     * This will open the create new account user modal
     *
@@ -449,6 +469,30 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
                 this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }
         });
+    }
+
+    /**
+ * This will be use for reconnect bank
+ *
+ * @param {*} bank
+ * @memberof BankIntegrationComponent
+ */
+    public reconnectBank(bank: any): void {
+        this.reconnectBankResponse = bank;
+        this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
+    }
+
+    /**
+    * This will be open window by url
+    *
+    * @param {string} url
+    * @memberof BankIntegrationComponent
+    */
+    public openWindow(url: string): void {
+        const width = 800;
+        const height = 900;
+
+        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
     }
 
     /**
