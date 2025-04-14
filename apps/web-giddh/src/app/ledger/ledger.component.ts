@@ -368,6 +368,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public carouselPrevious: boolean;
     /** Holds carousel next event*/
     public carouselNext: boolean;
+    /** True if update account is bank account */
+    public isUpdateAccount: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -848,8 +850,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.isBankAccountConnected = true;
+                this.isUpdateAccount = true;
+                this.getAllBankAccounts();
                 this.getBankTransactions()
-                this.getAllBankAccountsList();
                 this.cdRf.detectChanges();
             }
         });
@@ -1126,13 +1129,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.length) {
                 this.bankList = response.body;
-                if (response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
-                    this.isBankAccountConnected = true;
-                }
-                this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
-                const referNo = localStorage.getItem('refNo');
-                if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
-                    this.getLinkBankAccount();
+                if (!this.isUpdateAccount) {
+                    if (response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
+                        this.isBankAccountConnected = true;
+                    }
+                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
+                    const referNo = localStorage.getItem('refNo');
+                    if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
+                        this.getLinkBankAccount();
+                    }
                 }
             }
         });
@@ -3405,25 +3410,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
             });
             dialogRef.afterClosed().pipe(take(1), tap(response => {
                 if (response && response !== 'closeDialog') {
-                    this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null);
-                    this.getAllBankAccountsList();
+                    this.isUpdateAccount = true;
+                    this.isBankAccountConnected = true;
+                    this.getBankTransactions();
+                    this.referenceNumber = null;
+                    localStorage.setItem('refNo', null);
+                    this.getAllBankAccounts();
                 }
             })).subscribe();
         }
-    }
-
-    /**
-     * This will get all bank accounts list
-     *
-     * @memberof LedgerComponent
-     */
-    public getAllBankAccountsList(): void {
-        this.settingIntegrationComponentStore.getAllBankAccounts();
-        this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body?.length) {
-                this.bankList = response.body;
-            }
-        });
     }
 
     /**
