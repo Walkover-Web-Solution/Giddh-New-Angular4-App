@@ -8,7 +8,7 @@
         <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
             <mat-tab
                 [label]="localeData?.portal_information"
-                *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2"
+                *ngIf="voucherApiVersion === 2"
             >
                 <div class="box clearfix mb-2">
                     <form novalidate name="profileForm" [formGroup]="profileForm">
@@ -21,6 +21,7 @@
                                     formControlName="portalDomain"
                                     [type]="'text'"
                                     [label]="'Portal Domain'"
+                                    [readonly]="organizationType !== 'COMPANY'"
                                     #domain
                                 >
                                 </input-field>
@@ -38,7 +39,7 @@
                                         <a class="portal-url" [href]="portalLoginUrl" target="_blank"
                                             >{{ portalUrl }}{{ profileData.portalDomain }}
                                         </a>
-                                        <span class="input-group-btn mr-l05">
+                                        <span class="input-group-btn mr-l05 cursor-pointer">
                                             <i
                                                 class="icon-copy-file"
                                                 (click)="copyUrl()"
@@ -179,8 +180,8 @@
                                 <div class="d-flex align-items-center column-gap15">
                                     <dropdown-field
                                         class="linked-account"
-                                        [name]="'account'"
-                                        [scrollableElementId]="'linkedAccount'"
+                                        [name]="'paypalAccount'"
+                                        [scrollableElementId]="'paypalLinkedAccount'"
                                         [label]="localeData?.collection?.link_account_label"
                                         [placeholder]="localeData?.collection?.link_account_placeholder"
                                         [options]="paypalAccounts"
