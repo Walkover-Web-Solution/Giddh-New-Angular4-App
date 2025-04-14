@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NgxPlaidLinkService, PlaidLinkHandler, LegacyPlaidConfig } from "ngx-plaid-link";
-import { SettingsIntegrationService } from "../../services/settings.integraion.service";
+import { SettingsIntegrationService } from "../../services/settings.integration.service";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { ToasterService } from "../../services/toaster.service";
 import { BROADCAST_CHANNELS } from "../../app.constant";

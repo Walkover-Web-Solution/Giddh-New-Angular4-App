@@ -106,7 +106,7 @@ input {
     }
 }
 .transaction-mapped-table .mat-grid-tile {
-    padding: 10px 15px !important;
+    padding: 10px !important;
     border-bottom: 1px solid var(--color-iron) !important;
 }
 table.ledger-footer-1 td[class*="col-"] {
@@ -778,6 +778,12 @@ sh-select:focus {
 }
 .icon-upload {
     font-size: 14px;
+}
+.icon-refresh, .icon-plus {
+    font-size: var(--font-size-15);
+}
+.icon-link {
+    font-weight: 800;
 }
 .account-placeholder {
     padding-left: 12px;

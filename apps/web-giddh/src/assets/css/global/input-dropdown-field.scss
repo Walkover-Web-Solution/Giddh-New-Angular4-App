@@ -717,3 +717,10 @@ mat-option {
         }
     }
 }
+
+@media screen and (max-width: 1024px) {
+    .mat-mdc-radio-group {
+        display: flex;
+        column-gap: 5px;
+    }
+}

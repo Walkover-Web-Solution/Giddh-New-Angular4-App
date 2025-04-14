@@ -134,7 +134,10 @@
         "institutions": "संस्था",
         "bank_list": "बँक यादी",
 		"banks": "बँका",
-        "permission_message":"तुम्हाला या मॉड्यूलमध्ये प्रवेश करण्याची परवानगी नाही."
+        "permission_message":"तुम्हाला या मॉड्यूलमध्ये प्रवेश करण्याची परवानगी नाही.",
+		"link_bank": "लिंक बँक",
+		"link": "दुवा",
+		"all_bank_are_linked" : "सर्व बँका जोडलेल्या आहेत"
 	},
     "communication": {
         "tab_heading": "संवाद"

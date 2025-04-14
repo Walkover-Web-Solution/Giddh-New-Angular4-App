@@ -5,5 +5,7 @@
     "dr_heading": "डेबिट",
     "connect_bank": "कनेक्ट बँक",
     "no_banks_found": "अद्याप बँक तपशील जोडा",
-    "in_bank": "[BANK_NAME] मध्ये"
+    "in_bank": "[BANK_NAME] मध्ये",
+    "connected_bank": "जोडलेली बँक",
+    "link_bank": "लिंक बँक"
 }
