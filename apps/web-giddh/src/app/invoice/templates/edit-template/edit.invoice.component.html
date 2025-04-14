@@ -32,7 +32,7 @@
                     Click to add a template from our gallery. You can customize the template title, columns,and headers
                     in line item table.
                 </small>
-                <button class="btn pull-left isActive mt-4 add-new-btn" (click)="onOpenTemplateModal()" aria-label="add new">Add New</button>
+                <button class="btn pull-left isActive mt-4 add-new-btn" (click)="onOpenTemplateModal()" aria-label="add new" *ngIf="voucherApiVersion === 2">Add New</button>
             </div>
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
                 <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType === 'sales'">
@@ -123,24 +123,27 @@
         </div>
         <div class="sticky-footer pd-2">
             <!--<button class="btn btn-default">Preview</button>-->
-            <div class="pull-right mr-r4" *ngIf="voucherType === 'sales'">
+            <div class="pull-right mr-r4" *ngIf="voucherType === 'sales' && voucherApiVersion === 2">
                 <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'"
                     class="btn btn-success" (click)="createTemplate('invoice')" aria-label="save">
                     Save
                 </button>
-                <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'"
+                <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update' && voucherApiVersion === 2"
                     class="btn btn-success" (click)="updateTemplate('invoice')" aria-label="update template">
                     Update Template
                 </button>
                 <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
-            <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
+            <div class="pull-right mr-r4" *ngIf="(voucherType === 'credit note' || voucherType === 'debit note') && voucherApiVersion === 2">
                 <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')" aria-label="save">
                     Save
                 </button>
-                <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('voucher')" aria-label="update template">
+                <button *ngIf="transactionMode == 'update' && voucherApiVersion === 2" class="btn btn-success" (click)="updateTemplate('voucher')" aria-label="update template">
                     Update Template
                 </button>
+                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
+            </div>
+            <div class="pull-right mr-r4" *ngIf="voucherApiVersion === 1">
                 <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
         </div>
