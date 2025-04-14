@@ -26,8 +26,8 @@
         </mat-grid-tile>
         <form class="map-unit-value-form">
             <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
-                <div class="unit-value overflow-hidden">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
-                <div class="map-unit-value">
+                <div class="unit-value overflow-hidden pd-l1">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
+                <div class="map-unit-value pd-r1">
                     <dropdown-field
                         [label]="commonLocaleData?.app_unit"
                         [placeholder]="localeData?.select_unit"
