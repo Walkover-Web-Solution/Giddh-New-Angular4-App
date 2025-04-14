@@ -8,7 +8,7 @@ import { debounceTime, ReplaySubject, takeUntil } from 'rxjs';
 import { MatDividerModule } from '@angular/material/divider';
 import * as dayjs from 'dayjs';
 import { ToasterService } from '../../services/toaster.service';
-import { E } from '@angular/cdk/keycodes';
+import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
 enum CompareTypeEnum {
@@ -33,11 +33,12 @@ interface DateCheckResult {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FormFieldsModule,
+    ReactiveFormsModule,
+    TranslateDirectiveModule,
     MatMenuModule,
     MatListModule,
-    MatDividerModule
+    MatDividerModule,
   ]
 })
 export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
@@ -55,6 +56,10 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
   public compareTypeEnum = CompareTypeEnum;
   /** Holds show custom input */
   public showCustomInput: boolean = false;
+  /* This will hold local JSON data */
+  public localeData: any = {};
+  /* This will hold common JSON data */
+  public commonLocaleData: any = {};
   /** Holds destroyed$ */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   /** Holds start date */
@@ -97,7 +102,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       }
 
       if (compareValue > 36) {
-        this.toaster.showSnackBar('warning', "Up to 36 periods can be compared");
+        this.toaster.showSnackBar('warning', this.localeData?.up_to_36_periods_can_be_compared);
         this.compareOptionsForm.get('compareValue').patchValue  ([36]);
         return;
       }
@@ -133,6 +138,18 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
     }
 
     /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public translationComplete(event: boolean): void {
+      if (event) {
+        this.compareWithField.setValue(this.localeData?.none);
+      }
+    }
+
+    /**
      * This method will be use for setting compare values
      *
      * @memberof CompareWithDateRangePickerComponent
@@ -162,7 +179,29 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
      * @memberof CompareWithDateRangePickerComponent
      */
     private setCompareWithField(compareValue: number, compareType: compareType): void {
-        this.compareWithField.setValue(`Compare with ${compareValue} ${compareType}`);
+        this.compareWithField.setValue(`${this.localeData?.compare_with} ${compareValue} ${this.getTranslatedType(compareType)}`);
+    }
+
+    /**
+     * This method will be use for getting translated type
+     *
+     * @param {compareType} type
+     * @returns {string}
+     * @memberof CompareWithDateRangePickerComponent
+     */
+    public getTranslatedType(type: compareType): string {      
+      switch(type) {
+        case 'month':
+          return this.localeData?.compare_types?.month;
+        case 'quarter':
+          return this.localeData?.compare_types?.quarter;
+        case 'year':
+          return this.localeData?.compare_types?.year;
+        case 'period':
+          return this.localeData?.compare_types?.period;
+        default:
+          return '';
+      }
     }
 
   /**
