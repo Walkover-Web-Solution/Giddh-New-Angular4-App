@@ -21,6 +21,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public customiseColumns: any[] = [];
     /** Holds default columns list for customised columns */
     @Input() public dynamicCustomColumns: any[] = [];
+    /** Holds default value for call new report filter API */
+    @Input() public customColumns: boolean = true;
     /** Holds inventory type module  */
     @Input() public moduleType: string = "";
     /** Holds module name for customised columns */
@@ -156,10 +158,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     * @memberof SelectTableColumnComponent
     */
     public getSelectedColumns(): void {
-        this.commonService.getSelectedTableColumns(this.moduleType)
+        this.commonService.getSelectedTableColumns(this.moduleType, this.customColumns)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
-                if (response && response.body && response.status === 'success') {
+                if (response?.status === 'success' && response.body?.reportFilterColumns) {
                     if (this.moduleType === InventoryModuleName.stock || this.moduleType === InventoryModuleName.variant || this.moduleType === InventoryModuleName.bulk) {
                         this.dynamicCustomColumns = [];
                         if (response.body.reportFilterColumns) {
