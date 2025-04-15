@@ -49,7 +49,8 @@
         "paypal_update_successfully":"Paypal account details have been updated successfully.",
         "unlinked_account_successfully":"Paypal account details have been unlink successfully.",
         "paypal_tab_heading": "Paypal",
-        "razorpay_tab_heading": "Razorpay"
+        "razorpay_tab_heading": "Razorpay",
+        "delete_credentials_message": "Are you sure you want to delete the credentials?"
     },
     "ecommerce": {
         "tab_heading": "E-Comm",

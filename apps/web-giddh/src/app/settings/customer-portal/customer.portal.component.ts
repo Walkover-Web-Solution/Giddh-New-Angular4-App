@@ -4,7 +4,7 @@ import { PayPalClass, RazorPayClass } from '../../models/api-models/SettingsInte
 import { cloneDeep, find } from '../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, of as observableOf, pairwise, ReplaySubject, Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, Observable, of as observableOf, pairwise, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
 import { AppState } from '../../store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
@@ -16,6 +16,8 @@ import { OrganizationProfile } from '../constants/settings.constant';
 import { ClipboardService } from 'ngx-clipboard';
 import { Organization } from '../../models/api-models/Company';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'customer-portal',
@@ -140,6 +142,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         private toasty: ToasterService,
         private formBuilder: FormBuilder,
         private clipboardService: ClipboardService,
+        public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions
     ) {
         this.initProfileForm();
@@ -351,7 +354,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     */
 
     public paypalOnAccountSearchQueryChanged(query: string = "", page: number = 1, successCallback?: Function): void {
-        query = query.trim();
+        query = query?.trim();
 
         if (query === this.previousPaypalSearchQuery) {
             return;
@@ -448,7 +451,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
  * @memberof CustomerPortalComponent
  */
     public onAccountSearchQueryChanged(query: string = "", page: number = 1, successCallback?: Function): void {
-        query = query.trim();
+        query = query?.trim();
 
         if (query === this.previousAccountSearchQuery) {
             return;
@@ -539,7 +542,21 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     }
 
     public deleteRazorPayDetails() {
-        this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
+        let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.collection?.delete_credentials_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
+            }
+        });
     }
 
     /**
@@ -601,8 +618,22 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public deletePaypalDetails(): void {
-        this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
-        this.linkedAccountLabel = '';
+        let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: 'Are you sure you want to delete the credentials?',
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
+                this.linkedAccountLabel = '';
+            }
+        });
     }
 
     /**
