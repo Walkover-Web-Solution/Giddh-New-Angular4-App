@@ -1,15 +1,3 @@
-.input-group-btn {
-    font-size: 21px;
-    color: var(--color-rectangular-tab-active-primary-text) !important;
-    cursor: pointer;
-    margin-right: 5px;
-    padding-top: 5px;
-}
-
-.magic-link-container {
-    margin-bottom: 0 !important;
-    padding-left: 0 !important;
-}
 
 .doc-link {
     a {
@@ -27,4 +15,21 @@
 }
 .link-color {
     color: var(--color-ledger-heading);
+}
+
+.tally-url {
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.input-group-btn {
+    font-size: var(--font-size-24);
+    color: var(--color-rectangular-tab-active-primary-text) !important;
+}
+
+.copy-text-position {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    transform: translateX(90%);
 }

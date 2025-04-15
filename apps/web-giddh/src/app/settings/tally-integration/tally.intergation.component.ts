@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SYNC_TALLY_HELP_DOC_URL } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { ReplaySubject } from 'rxjs';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
     selector: 'tally-integration',
@@ -22,7 +23,7 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private generalService: GeneralService,) {
+    constructor(private generalService: GeneralService, private clipboardService: ClipboardService) {
     }
 
     /**
@@ -33,14 +34,17 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         let companyUniqueName = this.generalService.companyUniqueName;
         this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
+        console.log(this.apiUrl);
     }
 
     /**
      *This will use for copy api url link and display copied
-     *
-     * @memberof TallyIntegrationComponent
-     */
+    *
+    * @memberof TallyIntegrationComponent
+    */
     public copyUrl(): void {
+        const urlToCopy = this.apiUrl;
+        this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
         setTimeout(() => {
             this.isCopied = false;

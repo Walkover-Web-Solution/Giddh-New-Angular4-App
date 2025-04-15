@@ -1,3 +1,13 @@
+.integration {
+    min-height: calc(100vh - 120px);
+
+    .initial-screen {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
 #inlnImg img {
     max-height: 18px;
 }
