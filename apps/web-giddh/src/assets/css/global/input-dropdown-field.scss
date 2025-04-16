@@ -291,7 +291,16 @@ giddh-datepicker,
     giddh-datepicker {
         .mat-mdc-form-field {
             min-width: 71px;
-            max-width: 100px;
+            max-width: 111px;
+        }
+        .mat-datepicker-input {
+            position: absolute;
+            margin-top: 12px;
+        }
+
+        .mat-datepicker-toggle {
+            position: relative;
+            left: 75px;
         }
     }
 }
