@@ -5,57 +5,61 @@
     [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
 >
     <div
-        class="col-8 group"
+        class="col-4 group pl-sticky-group"
         [innerHTML]="groupDetail.groupName | highlight: search"
         [ngStyle]="{ 'padding-left': padding + 'px' }"
     ></div>
-    <div class="col-4 bd-rl group pull-right" *ngIf="!groupDetail.level1">
-        <div class="row">
-            <span
-                class="col-sm-6 col-12 text-right"
-                [ngClass]="{
-                    'invisible':
-                        groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
-                }"
-            >
-                <span
-                    *ngIf="
+    <div class="col bd-rl group pull-right px-0" *ngIf="!groupDetail.level1">
+        <span class="d-flex justify-content-between">
+            <ng-container *ngFor="let key of getKeys(groupDetail.closingBalance)">
+                <div class="row w-100 pl-content-width">
+                    <span
+                        class="col text-right px-0"
+                        [ngClass]="{
+                            'invisible':
+                                groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
+                        }"
+                    >
+                        <span
+                            *ngIf="
                         groupDetail.category === 'income' &&
-                        groupDetail.closingBalance.type === 'DEBIT' &&
-                        groupDetail.closingBalance.amount !== 0
-                    "
-                    >-</span
-                >
-                <span
-                    *ngIf="
+                        groupDetail.closingBalance[key].type === 'DEBIT' &&
+                        groupDetail.closingBalance[key].amount !== 0
+                            "
+                            >-</span
+                        >
+                        <span
+                            *ngIf="
                         groupDetail.category === 'expenses' &&
-                        groupDetail.closingBalance.type === 'CREDIT' &&
-                        groupDetail.closingBalance.amount !== 0
-                    "
-                    >-</span
-                >
-                <span class="d-inline-flex">
-                    <amount-field
-                        [amount]="groupDetail.closingBalance.amount"
-                        [currencySymbol]="false"
-                        [currencyCode]="false"
-                    >
-                    </amount-field>
-                </span>
-            </span>
-            <span class="col-sm-6 col-12 invisible">
-                <span class="d-inline-flex">
-                    <amount-field
-                        [amount]="groupDetail.closingBalance.amount"
-                        [currencySymbol]="false"
-                        [currencyCode]="false"
-                    >
-                    </amount-field>
-                </span>
-            </span>
-        </div>
-    </div>
-    <div class="col-4 bd-rl group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
+                        groupDetail.closingBalance[key].type === 'CREDIT' &&
+                        groupDetail.closingBalance[key].amount !== 0
+                            "
+                            >-</span
+                        >
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="groupDetail.closingBalance[key].amount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </span>
+                    <span class="col-sm-6 col-12 invisible">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                [amount]="groupDetail.closingBalance[key].amount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                                >
+                            </amount-field>
+                        </span> 
+                    </span>
+                </div>
+            </ng-container>
+        </span>
+</div>
+    <div class="col bd-rl group text-right pull-right px-0" *ngIf="groupDetail.level1">&nbsp;</div>
 </div>
 <cdk-virtual-scroll-viewport
     *ngIf="
@@ -90,13 +94,13 @@
     >
         <div class="row">
             <div
-                class="col-8"
+                class="col-4"
                 [ngStyle]="{ 'padding-left': padding + 20 + 'px' }"
                 [innerHTML]="account.name | lowercase | highlight: search"
             ></div>
-            <div class="col-4 bd-rl text-left pull-right">
+            <div class="col bd-rl text-left pull-right px-0">
                 <div class="row d-flex">
-                    <span class="col-sm-6 col-12 text-right">
+                    <span class="col text-right px-0">
                         <span
                             *ngIf="
                                 account.category === 'income' &&

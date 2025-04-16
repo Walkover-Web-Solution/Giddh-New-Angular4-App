@@ -1127,7 +1127,7 @@ textarea {
     }
 
     .filter-dropdown-branch {
-        max-width: 350px;
+        max-width: 300px;
     }
 
     .branch-options {
@@ -6095,8 +6095,26 @@ input[type="checkbox"][disabled]:after {
     border-left: 6px solid var(--color-table-primary-header-bar-border);
 }
 
-.table-container .account {
-    background: var(--color-table-primary-footer);
+.table-container {
+    .account {
+        background: var(--color-table-primary-footer);
+        overflow: visible;
+        min-height: 42px;
+        .pl-sticky-group {
+            background: var(--color-table-primary-footer);
+        }
+    }
+}
+
+.pl-sticky-group {
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    background: var(--color-body-background);
+    max-width: 300px !important;
+    min-width: 300px !important;
+    padding-block: 10px !important;
+    padding-left: 15px !important;
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
@@ -9718,6 +9736,9 @@ span#HW_badge_cont:nth-child(3) {
 
 .flex-wrap {
     flex-wrap: wrap;
+}
+.flex-no-wrap {
+    flex-wrap: nowrap !important;
 }
 
 /*flex css start*/

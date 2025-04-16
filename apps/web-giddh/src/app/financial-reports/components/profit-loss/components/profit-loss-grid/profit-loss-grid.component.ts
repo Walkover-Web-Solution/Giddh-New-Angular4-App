@@ -191,4 +191,17 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
     }
+
+    /**
+     * Get the keys of an object
+     * @param obj - The object to get the keys of
+     * @returns The keys of the object
+     */
+    public getKeys(obj): string[] | [] {
+        if (obj) {
+            return Object.keys(obj);
+        } else {
+            return [];
+        }
+    }
 }

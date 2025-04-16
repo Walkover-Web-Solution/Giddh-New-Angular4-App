@@ -1,0 +1,138 @@
+<ng-container
+    appTranslate
+    [file]="'compare-with-date-range-picker'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="compare-with-wrapper">
+        <input
+            matInput
+            type="text"
+            readonly
+            name="compareWith"
+            class="form-control"
+            [matMenuTriggerFor]="menu"
+            [formControl]="compareWithField"
+        />
+
+        <mat-menu #menu="matMenu">
+            <form
+                class="compare-with-menu overflow-y-auto d-flex flex-column align-items-center"
+                (click)="$event.stopPropagation()"
+                [formGroup]="compareOptionsForm"
+            >
+                <div class="w-100">
+                    <label class="pd-l15 pd-r15 font-12 color-primary" matListItemTitle>{{
+                        localeData?.compare_with
+                    }}</label>
+                    <mat-selection-list
+                        [multiple]="false"
+                        [hideSingleSelectionIndicator]="true"
+                        color="primary"
+                        formControlName="compareValue"
+                    >
+                        <mat-list-option
+                            class="text-black"
+                            value="0"
+                            [selected]="compareOptionsForm.get('compareValue')?.value == 0"
+                            (click)="toggleMenu(false)"
+                            >{{ localeData?.none }}</mat-list-option
+                        >
+                        <mat-list-option (click)="toggleMenu(false)" value="1">
+                            <span class="text-black">
+                                {{ commonLocaleData?.app_numbers?.one }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}
+                            </span>
+                        </mat-list-option>
+                        <mat-list-option (click)="toggleMenu(false)" value="2">
+                            <span class="text-black">
+                                {{ commonLocaleData?.app_numbers?.two }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}
+                            </span>
+                        </mat-list-option>
+                        <mat-list-option (click)="toggleMenu(false)" value="3">
+                            <span class="text-black">
+                                {{ commonLocaleData?.app_numbers?.three }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}
+                            </span>
+                        </mat-list-option>
+                        <mat-list-option (click)="toggleMenu(false)" value="4">
+                            <span class="text-black"
+                                >{{ commonLocaleData?.app_numbers?.four }}
+                                {{ getTranslatedType(compareOptionsForm.get("compareType")?.value?.[0]) }}</span
+                            >
+                        </mat-list-option>
+                        <mat-list-option (click)="showCustomInput = true; $event.preventDefault()">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-black">{{ localeData?.enter_a_different_number }}</span>
+                                <div class="d-inline-flex align-items-center column-gap5" *ngIf="showCustomInput">
+                                    <text-field
+                                        [type]="'number'"
+                                        [name]="'number'"
+                                        [cssClass]="'form-control max-width-50'"
+                                        [allowDigitsOnly]="true"
+                                        formControlName="compareValue"
+                                    ></text-field>
+                                    <span class="text-black">{{ localeData?.periods }}</span>
+                                </div>
+                            </div>
+                        </mat-list-option>
+                    </mat-selection-list>
+                </div>
+                <mat-divider class="w-100"></mat-divider>
+                <div class="w-100">
+                    <label class="pd-l15 pd-r15 font-12 color-primary" matListItemTitle>{{
+                        localeData?.previous
+                    }}</label>
+                    <mat-selection-list [multiple]="false" color="primary" formControlName="compareType">
+                        <mat-list-option
+                            [disabled]="hasDisable('month')"
+                            [value]="compareTypeEnum.month"
+                            togglePosition="before"
+                            [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.month"
+                            >
+                            <span class="text-black">
+                                {{ localeData?.compare_types?.month }}
+                            </span>
+                        </mat-list-option>
+                        <mat-list-option
+                            [disabled]="hasDisable('quarter')"
+                            [value]="compareTypeEnum.quarter"
+                            togglePosition="before"
+                            [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.quarter"
+                            >
+                            <span class="text-black">
+                                {{ localeData?.compare_types?.quarter }}
+                            </span>
+                        </mat-list-option>
+                        <mat-list-option
+                            [disabled]="hasDisable('year')"
+                            [value]="compareTypeEnum.year"
+                            togglePosition="before"
+                            [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.year"
+                            >
+                            <span class="text-black">
+                                {{ localeData?.compare_types?.year }}
+                            </span>
+                        </mat-list-option>
+                        <mat-list-option
+                            [disabled]="hasDisable('period')"
+                            [value]="compareTypeEnum.period"
+                            togglePosition="before"
+                            [selected]="compareOptionsForm.get('compareType')?.value == compareTypeEnum.period"
+                        >
+                            <span class="text-black">
+                                {{ localeData?.compare_types?.custom_date_range }}
+                            </span>
+                            <span class="text-black" *ngIf="dateRangeInfo?.dayCount > 0">
+                                ({{ localeData?.dateRangeInfo?.dayCount }} {{ commonLocaleData?.app_days }})
+                            </span>
+                        </mat-list-option>
+                    </mat-selection-list>
+                    <p class="m-0 pd-l15 pd-r15 text-gray">{{ localeData?.options_are_disabled_message }}</p>
+                </div>
+            </form>
+        </mat-menu>
+    </div>
+</ng-container>
