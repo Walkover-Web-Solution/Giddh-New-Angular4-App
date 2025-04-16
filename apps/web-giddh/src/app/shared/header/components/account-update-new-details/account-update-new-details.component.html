@@ -256,7 +256,7 @@
                                                 (change)="
                                                     isDefaultAddressSelected(gst.get('isDefault')?.value, i)
                                                 "
-                                                aria-label="defaultGst"
+                                                aria-label="default gst"
                                             >
                                             </mat-slide-toggle>
                                         </span>
@@ -846,7 +846,6 @@
                 (click)="submit()"
                 mat-stroked-button
                 color="primary"
-                [ladda]="updateAccountInProcess$ | async"
                 [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberInvalid"
                 aria-label="update"
             >
@@ -955,7 +954,7 @@
                     <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
                     <div class="d-flex justify-content-between align-items-center pd-t1">
                         <reactive-dropdown-field
-                            class="calc-width"
+                            class="adjusted-content-width"
                             [label]="localeData?.select_discounts"
                             [placeholder]="commonLocaleData?.app_select"
                             [options]="discountList"
@@ -1019,7 +1018,7 @@
                                 [options]="companyTaxDropDown$ | async"
                                 (selectedOption)="taxesSelected($event)"
                                 formControlName="taxes"
-                                class="calc-width select-multiple-chiplist mobile-margin border-bottom"
+                                class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
                             ></select-multiple-fields>
                             <button
                                 [disabled]="isTaxesSaveDisable$ | async"
@@ -1081,7 +1080,6 @@
                 (click)="submit()"
                 mat-stroked-button
                 color="primary"
-                [ladda]="updateAccountInProcess$ | async"
                 [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
                 aria-label="update"
             >
