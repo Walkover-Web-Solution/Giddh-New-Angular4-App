@@ -90,8 +90,9 @@ export class SettingsTagsComponent implements OnInit {
      * @memberof SettingsTagsComponent
      */
     public createTag(event: MatChipInputEvent): void {
-        if (event?.value?.length) {
-            this.tagForm.get('name').patchValue(event.value);
+        const value = event?.value?.trim();
+        if (value.length) {
+            this.tagForm.get('name').patchValue(value);
             const formValue = this.tagForm.value;
             this.settingsTagService.CreateTag(formValue).pipe(take(1)).subscribe(response => {
                 if (response) {

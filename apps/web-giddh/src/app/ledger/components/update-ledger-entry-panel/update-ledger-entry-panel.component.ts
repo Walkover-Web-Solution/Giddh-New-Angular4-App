@@ -43,7 +43,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
 import { UpdateLedgerVm } from './update-ledger.vm';
@@ -52,6 +51,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
+import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
@@ -404,6 +404,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
         }
+
         this.getAllDiscounts();
         if (this.generalService.voucherApiVersion === 2) {
             this.allowParentGroup.push("loanandoverdraft");
@@ -2843,12 +2844,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
-/**
- * Get all discounts API call
- *
- * @private
- * @memberof UpdateLedgerEntryPanelComponent
- */
+    /**
+     * Get all discounts API call
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     private getAllDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
