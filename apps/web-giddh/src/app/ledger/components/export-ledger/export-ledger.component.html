@@ -152,14 +152,16 @@
                                     </mat-radio-button>
                                 </mat-radio-group>
                             </div>
-                            <mat-form-field appearance="outline" class="w-100 mr-b15">
-                                <mat-label>{{ localeData?.select_copy }}</mat-label>
-                                <mat-select name="copyTypesSelection" multiple [placeholder]="localeData?.select_copy" [(ngModel)]="exportRequest.copyTypes">
-                                    <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
-                                        {{ copyType.label }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                            <div [ngClass]="{'mat-form-field-invalid': !exportRequest.copyTypes?.length && !isValidForm }">
+                                <mat-form-field appearance="outline" class="w-100 mr-b15">
+                                    <mat-label>{{ localeData?.select_copy }}</mat-label>
+                                    <mat-select name="copyTypesSelection" multiple [placeholder]="localeData?.select_copy" [(ngModel)]="exportRequest.copyTypes">
+                                        <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
+                                            {{ copyType.label }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
                         </ng-container>
                     </ng-container>
                     <div
