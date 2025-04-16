@@ -775,5 +775,6 @@
     "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
     "app_file_format": "File Format",
     "app_select_file": "Select file",
-    "app_bank_accounts":"Bank Accounts"    
+    "app_bank_accounts":"Bank Accounts",
+    "go_to_company_mode": "To edit, go to company mode."
 }

@@ -4,7 +4,7 @@ import { PayPalClass, RazorPayClass } from '../../models/api-models/SettingsInte
 import { cloneDeep, find } from '../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, of as observableOf, pairwise, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, Observable, of as observableOf, pairwise, ReplaySubject, startWith, Subject, take, takeUntil } from 'rxjs';
 import { AppState } from '../../store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
@@ -178,18 +178,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        if (this.organizationType === 'COMPANY') {
-            this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
-                takeUntil(this.destroyed$),
-                debounceTime(700),
-                pairwise(),
-                filter(([prev, curr]) => prev !== curr && curr !== this.profileData.portalDomain)
-            ).subscribe(([prev, curr]) => {
-                this.store.dispatch(this.settingsProfileActions.PatchProfile({ portalDomain: curr }));
-            });
-
-        }
-
         // getting all page data of integration page
         this.store.pipe(select(data => data?.settings?.integration), takeUntil(this.destroyed$)).subscribe((response) => {
             // set razor pay form data
@@ -236,6 +224,20 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                 this.portalLoginUrl = `${this.portalUrl}${portalDomain}/${this.region}/login`;
             }
         });
+
+        if (this.organizationType === 'COMPANY') {
+            const initialValue = this.profileForm?.get('portalDomain')?.value;
+            this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
+                startWith(initialValue),
+                debounceTime(700),
+                pairwise(),
+                filter(([prev, curr]) => prev !== curr && curr !== this.profileData.portalDomain),
+                takeUntil(this.destroyed$)
+            ).subscribe(([prev, curr]) => {
+                this.store.dispatch(this.settingsProfileActions.PatchProfile({ portalDomain: curr }));
+            });
+        }
+
     }
 
     /**
@@ -354,7 +356,8 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     */
 
     public paypalOnAccountSearchQueryChanged(query: string = "", page: number = 1, successCallback?: Function): void {
-        query = query?.trim();
+
+        query = query?.trim() || "";
 
         if (query === this.previousPaypalSearchQuery) {
             return;
@@ -451,9 +454,10 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
  * @memberof CustomerPortalComponent
  */
     public onAccountSearchQueryChanged(query: string = "", page: number = 1, successCallback?: Function): void {
-        query = query?.trim();
 
-        if (query === this.previousAccountSearchQuery) {
+        query = query?.trim() || "";
+
+        if (query === this.previousAccountSearchQuery ) {
             return;
         }
 
