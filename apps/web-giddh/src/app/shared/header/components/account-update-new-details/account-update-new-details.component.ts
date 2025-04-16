@@ -601,7 +601,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public tabChanged(event: MatTabChangeEvent) {
+    /**
+     * Handles tab change
+     *
+     * @param {any} event 
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTab = event.tab.textLabel;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
