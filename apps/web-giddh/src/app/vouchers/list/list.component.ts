@@ -39,6 +39,7 @@ import { TemplateFroalaComponent } from '../../shared/template-froala/template-f
 import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -335,6 +336,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public isRouteApplied: boolean = false;
     /** Holds true if update setting mode */
     public isSettingUpdateMode: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -395,6 +398,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        this.currentUrl = this.router.url;
         this.settingForm.get('invoiceSettings.autoPaid')?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -453,6 +457,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+                if (this.activeModule === 'templates') {
+                    document.querySelector('body').classList.add('template-wrapper');
+                } else {
+                    document.querySelector('body').classList.remove('template-wrapper');
+                }
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
@@ -466,7 +475,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         companyInventorySettings: this.settingResponse.companyInventorySettings || {}
                     });
                 }
-                if (this.isEInvoiceEnabled === null) {
+                if (this.isEInvoiceEnabled === null || params?.voucherType) {
                     this.initSettingObj();
                 }
                 if (this.queryParams.page) {
@@ -1279,9 +1288,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} selectedTabIndex
      * @memberof VoucherListComponent
      */
-    public tabChanged(selectedTabIndex: any): void {
-        this.selectedTabIndex = selectedTabIndex;
-        this.redirectToSelectedTab(selectedTabIndex);
+    public tabChanged(event: MatTabChangeEvent): void {
+        this.selectedTabIndex = event.index;
+        this.redirectToSelectedTab(event.index);
     }
 
     /**
@@ -2132,7 +2141,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const accountUniqueName = voucher?.account?.uniqueName;
 
         if (accountUniqueName && fromDate && toDate) {
-            const url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            let url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            url = url + `?redirectUrl=${this.currentUrl}`;
             this.openUrl(url);
         }
     }

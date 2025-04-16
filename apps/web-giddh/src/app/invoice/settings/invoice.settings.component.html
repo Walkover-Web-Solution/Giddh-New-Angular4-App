@@ -129,7 +129,7 @@
                                                         <span *ngIf="invoiceSetting.emailVerified"
                                                             class="verified-text">{{ localeData?.verified }}</span>
                                                         <span class="delete-verified-icon" [ngClass]="{
-                                                                'delete-icon-opacity':
+                                                                'opacity-5':
                                                                     !invoiceSetting.email ||
                                                                     invoiceSetting.email?.length < 4,
                                                                 'cursor-pointer': !(

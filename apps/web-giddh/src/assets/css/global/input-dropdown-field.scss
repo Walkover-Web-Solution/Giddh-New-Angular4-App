@@ -15,6 +15,9 @@ report-filters,
     }
 
     .mat-mdc-form-field {
+        background-color: var(--color-transparent-background) !important;
+        border-radius: 4px;
+
         .mat-mdc-text-field-wrapper {
             .mat-form-field-underline {
                 display: block !important;
@@ -525,8 +528,12 @@ ngx-mat-select-search {
 body {
     .cdk-overlay-container {
         .cdk-overlay-pane {
+            &:has(.email-dropdown-width) {
+                width: 400px !important;
+            }
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
+
             }
         }
     }
@@ -669,5 +676,60 @@ input-field {
                 }
             }
         }
+    }
+}
+
+mat-option {
+    &.dropdown-tick-icon-position {
+        mat-pseudo-checkbox {
+            position: absolute;
+            pointer-events: none;
+            right: 35px;
+        }
+    }
+}
+
+.mdc-text-field {
+    .mdc-floating-label {
+        color: var(--color-popup-list-input-text) !important;
+    }
+}
+
+.mdc-text-field--outlined {
+        .mdc-notched-outline__leading {
+            border-color: var(--color-fields-border) !important;
+        }
+
+        &.mdc-text-field--focused {
+            .mdc-notched-outline__leading {
+                border-color: var(--color-border-focus) !important;
+            }
+
+            .mdc-notched-outline__notch {
+                border-color: var(--color-border-focus) !important;
+                border-left: none !important;
+            }
+
+            .mdc-notched-outline__trailing {
+                border-color: var(--color-border-focus) !important;
+            }
+        }
+
+        .mdc-notched-outline__notch {
+            border-color: var(--color-fields-border) !important;
+            border-left: none !important;
+        }
+
+    .mdc-notched-outline {
+        .mdc-notched-outline__trailing {
+            border-color: var(--color-fields-border);
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .mat-mdc-radio-group {
+        display: flex;
+        column-gap: 5px;
     }
 }

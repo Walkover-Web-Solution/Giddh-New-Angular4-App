@@ -172,11 +172,12 @@
                         >
                             <span class="d-inline-flex">
                                 <amount-field
-                                    [amount]="item.grossTotal"
+                                    [amount]="item?.grossTotal?.amount"
                                     [useGiddhCurrencyPipe]="false"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 ></amount-field>
+                                  <span *ngIf=" item?.grossTotal?.type" class="mr-l05"> {{ item.grossTotal.type === "DEBIT" ? "dr" : "cr" }}</span>
                             </span>
                         </td>
                     </ng-container>
