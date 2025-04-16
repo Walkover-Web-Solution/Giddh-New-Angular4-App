@@ -28,15 +28,8 @@ import { MatTabsModule } from "@angular/material/tabs";
         ReactiveFormsModule,
         MatSlideToggleModule,
         RouterModule,
-        ModalModule.forRoot(),
         ConfirmModalModule,
         ConfirmationModalModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
-        PopoverModule.forRoot(),
-        TooltipModule.forRoot(),
         MatButtonModule,
         MatRadioModule,
         MatTabsModule
