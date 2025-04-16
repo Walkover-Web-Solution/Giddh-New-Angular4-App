@@ -126,7 +126,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof BulkExportComponent
      */
     public exportVouchers(sendMail: boolean): void {
-        if (this.exportForm.invalid) {
+        if (this.exportForm.invalid && this.exportForm.get('voucherExport').value) {
             return;
         }
 
@@ -193,7 +193,11 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         if (!postRequest.copyTypes) {
             postRequest.copyTypes = ["ORIGINAL"];
         }
-
+        
+        if (!this.exportForm.get('selectedFormatList').value?.length) {
+            postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].uniqueName + "}-${" + this.fileFormatList[1].uniqueName + "}-${" + this.fileFormatList[2].uniqueName + "}";
+        }
+        
         this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
     }
 
