@@ -242,6 +242,11 @@ export class ProfitLossReportGridComponent implements OnInit, OnChanges, OnDestr
         });
     }
     
+    /**
+     * Get the keys of an object
+     * @param obj - The object to get the keys of
+     * @returns The keys of the object
+     */
     public getKeys(obj): string[] | [] {
         if (obj) {
             return Object.keys(obj);

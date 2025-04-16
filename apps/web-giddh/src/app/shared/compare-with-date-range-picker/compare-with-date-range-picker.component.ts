@@ -86,9 +86,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    */
   public ngOnInit(): void {
     this.compareOptionsForm.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
-        if(value.compareValue == 0){
-            return;
-        }
+      if (value.compareValue?.[0] == 'undefined') {
+        return;
+      }
 
       const compareValue = value.compareValue?.[0] ??  value.compareValue;
       if (compareValue > 0) {

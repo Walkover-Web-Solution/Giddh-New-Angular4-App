@@ -3,13 +3,8 @@
 }
 
 :host ::ng-deep .table-container .profit-loss section div > div {
-    padding-inline: 0px;
     min-width: 275px;
-    max-width: 275px;
-
-    &:first-child {
-        max-width: 400px;
-    }
+    
 }
 
 :host ::ng-deep .basic {
@@ -45,8 +40,9 @@
 
         &:first-child {
             padding: 0 !important;
-            min-width: 400px;
-            max-width: 400px;
+            min-width: 300px;
+            max-width: 300px;
+            width: 300px;
         }
         i.glyphicon-search {
             position: relative;
@@ -68,6 +64,17 @@
     max-width: 70%;
     overflow: auto;
     margin: auto;
+}
+.account {
+    .col {
+        min-width: 275px;
+        padding-block: 10px;
+        background: var(--color-table-primary-footer);
+    }
+}
+
+.pl-content-width {
+    min-width: 275px;
 }
 
 @media (max-width: 1024px) {

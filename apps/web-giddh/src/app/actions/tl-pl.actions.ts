@@ -80,7 +80,7 @@ export class TBPlBsActions {
             ofType(TBPlBsActions.GET_COGS_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._tlPlService.GetCogs(action.payload).pipe(
-                    map((r) => this.validateResponse<ProfitLossDateRangeResponse<GetCogsResponse>, GetCogsRequest>(r, {
+                    map((r) => this.validateResponse<GetCogsResponse, GetCogsRequest>(r, {
                         type: TBPlBsActions.GET_COGS_RESPONSE,
                         payload: r?.body
                     }, true, {

@@ -36,6 +36,7 @@
                             class="text-black"
                             value="0"
                             [selected]="compareOptionsForm.get('compareValue')?.value == 0"
+                            (click)="toggleMenu(false)"
                             >{{ localeData?.none }}</mat-list-option
                         >
                         <mat-list-option (click)="toggleMenu(false)" value="1">

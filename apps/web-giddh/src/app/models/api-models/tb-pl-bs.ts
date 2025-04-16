@@ -18,7 +18,7 @@ export interface TrialBalanceRequest {
     view?: string;
 }
 export interface ComparedProfitLossRequest {
-    compareType?: 'MONTH' |'YEAR' |'QUARTER' |'PERIOD';
+    compareType?: 'month' |'year' |'quarter' |'period';
     compareValue?: number;
 }
 

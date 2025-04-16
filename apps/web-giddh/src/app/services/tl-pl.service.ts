@@ -117,7 +117,7 @@ export class TlPlService {
     /**
      * get Profit/Loss
      */
-    public GetCogs(request: GetCogsRequest): Observable<BaseResponse<ProfitLossDateRangeResponse<GetCogsResponse>, GetCogsRequest>> {
+    public GetCogs(request: GetCogsRequest): Observable<BaseResponse<GetCogsResponse, GetCogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let filteredRequest = (Object.keys(request)
             ?.filter(p => request[p] != null)
@@ -126,11 +126,11 @@ export class TlPlService {
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COGS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data: BaseResponse<ProfitLossDateRangeResponse<GetCogsResponse>, GetCogsRequest> = res;
+                    let data: BaseResponse<GetCogsResponse, GetCogsRequest> = res;
                     data.request = request;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<ProfitLossDateRangeResponse<GetCogsResponse>, GetCogsRequest>(e, request)));
+                catchError((e) => this.errorHandler.HandleCatch<GetCogsResponse, { from: string; to: string }>(e, request)));
     }
 
     /**

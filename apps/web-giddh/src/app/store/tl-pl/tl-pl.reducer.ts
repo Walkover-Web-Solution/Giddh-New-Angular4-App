@@ -213,8 +213,8 @@ const filterProfitLossData = (data, statement) => {
     let revenueGroup: any = revenueParentGrp(new ParentGrp(), incomeStatement.revenue[Object.keys(incomeStatement.revenue)[0]]);
     let operatingGrp: any = operatingExpParentGrp(new ParentGrp(), incomeStatement.operatingExpenses[Object.keys(incomeStatement.operatingExpenses)[0]]);
     let otherExpGrp: any = otherExpParentGrp(new ParentGrp(), incomeStatement.otherExpenses[Object.keys(incomeStatement.otherExpenses)[0]]);
-
-    each(data, (grp: any, idx) => {
+    
+   each(data, (grp: any, idx) => {
         grp.isVisible = false;
         switch (grp.category) {
             case 'income':
@@ -254,7 +254,6 @@ export const prepareProfitLossData = (data) => {
         if (plData.incomeTotal < plData.expenseTotal) {
             plData.inProfit = false;
         }
-        // ============Need to check this logic ==================
         if (data.groupInfo.closingBalance[Object.keys(data.groupInfo.closingBalance)[0]].type === 'CREDIT') {
             plData.closingBalanceClass = true;
         } else {

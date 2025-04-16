@@ -68,38 +68,44 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                     cogsGrp.level1 = false;
                     cogsGrp.uniqueName = 'cogs';
                     cogsGrp.groupName = 'Less: Cost of Goods Sold';
-                    cogsGrp.closingBalance = {
-                        [Object.keys(cogs)[0]]: {
-                            amount: cogs[Object.keys(cogs)[0]].cogs,// ===== Need to check this logic
+                    cogsGrp.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                        acc[key] = {
+                            amount: cogs[key].cogs,
                             type: 'DEBIT'
-                        }
-                    };
+                        };
+                        return acc;
+                    }, {});
                     cogsGrp.accounts = [];
                     cogsGrp.childGroups = [];
 
-                    Object.keys(cogs[Object.keys(cogs)[0]])?.filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
-                        let childGroup = new ChildGroup();
-                        childGroup.isCreated = false;
-                        childGroup.isVisible = false;
-                        childGroup.isIncludedInSearch = true;
-                        childGroup.isOpen = false;
-                        childGroup.uniqueName = f;
-                        childGroup.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
-                        childGroup.category = f === 'income';
-                        childGroup.closingBalance = {
-                            [Object.keys(cogs)[0]]: {
-                                amount: cogs[Object.keys(cogs)[0]][f],// ===== Need to check this logic
-                                type: 'CREDIT'
-                            }
-                        };
-                        childGroup.accounts = [];
-                        childGroup.childGroups = [];
-                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
-                            childGroup.groupName = `+ ${childGroup.groupName}`;
-                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
-                            childGroup.groupName = `- ${childGroup.groupName}`;
+                    Object.keys(cogs).forEach((cogsKey, i) => {
+                        if (i === 0) {
+                            Object.keys(cogs[cogsKey])?.filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
+                                let childGroup = new ChildGroup();
+                                childGroup.isCreated = false;
+                                childGroup.isVisible = false;
+                                childGroup.isIncludedInSearch = true;
+                                childGroup.isOpen = false;
+                                childGroup.uniqueName = f;
+                                childGroup.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
+                                childGroup.category = f === 'income';
+                                childGroup.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                                    acc[key] = {
+                                        amount: cogs[key][f],
+                                        type: 'CREDIT'
+                                    };
+                                    return acc;
+                                }, {});
+                                childGroup.accounts = [];
+                                childGroup.childGroups = [];
+                                if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
+                                childGroup.groupName = `+ ${childGroup.groupName}`;
+                                } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
+                                    childGroup.groupName = `- ${childGroup.groupName}`;
+                                }
+                                cogsGrp.childGroups.push(childGroup);
+                            });
                         }
-                        cogsGrp.childGroups.push(childGroup);
                     });
 
                     this.cogsData = cogsGrp;
