@@ -355,13 +355,16 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         //         this.filterVouchers(this.searchElement.nativeElement.value);
         //     }
         // } else {
+        // only of for voucher version 2
+        if (this.voucherApiVersion === 2) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate) {
                 this.router.navigate(['/pages/vouchers/estimates/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
-            } else if(this.voucherType === VoucherTypeEnum.generateProforma) {
+            } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.router.navigate(['/pages/vouchers/proformas/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
             } else {
                 this.router.navigate(['/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.uniqueName + '/edit']);
             }
+        }
         // }
     }
 
@@ -742,7 +745,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public goToInvoice(type?: string) {
         // remove fixed class because we are navigating to invoice generate page where user can scroll the page
-        document.querySelector('body').classList.remove('fixed');
+        // only of for voucher version 2
+        if (this.voucherApiVersion === 2) {
+            document.querySelector('body').classList.remove('fixed');
         // if (this.voucherApiVersion === 1) {
         //     if (type === 'cash') {
         //         this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
@@ -756,6 +761,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.router.navigate(['/pages/vouchers/'+ this.voucherType.replace(/\s+/g, "-") +'/create']);
             }
         // }
+        }
     }
 
     /**

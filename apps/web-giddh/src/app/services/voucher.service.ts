@@ -781,11 +781,11 @@ export class VoucherService {
                     ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                     ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
                     ?.replace(':fileType', fileType);
-                // if (downloadOption && this.generalService.voucherApiVersion === 1) 
-                // {
-                //     const delimiter = apiUrl.includes('?') ? '&' : '?';
-                //     apiUrl = apiUrl.concat(`${delimiter}downloadOption=${downloadOption}`);
-                // }
+                if (downloadOption && this.generalService.voucherApiVersion === 1) 
+                {
+                    const delimiter = apiUrl.includes('?') ? '&' : '?';
+                    apiUrl = apiUrl.concat(`${delimiter}downloadOption=${downloadOption}`);
+                }
                 apiUrl = this.generalService.addVoucherVersion(apiUrl, this.generalService.voucherApiVersion);
                 delete apiParams.accountUniqueName;
             }

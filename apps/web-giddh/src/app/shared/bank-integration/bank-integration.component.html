@@ -1,207 +1,303 @@
- <ng-container
-  appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
+<ng-container
+    appTranslate
+    [file]="'settings/integration'"
+    (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
-    >
+>
     <div class="clearfix box mat-tab-bottom-spacing">
-        <ng-container  *ngIf="isIciciBankSupportedCountry">
-            <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
-            <div class="mb-2 bank-logo">
-                <img src="{{ imgPath }}ICICI-logo.png" alt="ICICI Bank Logo"/>
-            </div>
-            <div class="row">
-                <div class="form-group mr-l2">
-                    <button type="button" mat-stroked-button color="primary" class="mr-r2"
-                        (click)="openCreateNewAccountModal()">
-                        {{ localeData?.payment?.connect_new_account }}
+        <div *ngIf="!isLoading && connectedBankAccounts?.length === 0">
+            <div class="integration box clearfix section-center position-relative overflow-visible">
+                <div class="form-group initial-screen position-absolute text-center mb-5">
+                    <button
+                        aria-label="connect bank"
+                        mat-stroked-button
+                        class="mr-r2"
+                        color="primary"
+                        (click)="openInstitutionsDialog()"
+                    >
+                        {{ localeData?.payment?.connect_bank }}
                     </button>
-                    <span class="button-separator">|</span> <br />
-                    <a href="https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh" target="_blank"
-                        class="font-12">{{ localeData?.payment?.learn_connect }}</a>
-                </div>
-                <div class="form-group mr-l1">
-                    <p class="mb-4 mr-l05 font-12">
-                        <a class="btn icici-button"
-                            href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/"
-                            target="_blank"><span class="icon-icici-logo"><span class="path1"></span><span
-                                    class="path2"></span><span class="path3"></span></span>
-                            {{ localeData?.payment?.open_new_current_account }}</a>
-                    </p>
                 </div>
             </div>
-        </ng-container>
-        <!-- This is not using no due to gocardless -->
-        <!-- <ng-container *ngIf="isPlaidSupportedCountry">
+        </div>
+        <div *ngIf="!isLoading && connectedBankAccounts?.length > 0">
+            <ng-container *ngIf="isIciciBankSupportedCountry">
+                <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
+                <div class="mb-2 bank-logo">
+                    <img src="{{ imgPath }}ICICI-logo.png" alt="ICICI Bank Logo" />
+                </div>
+                <div class="row">
+                    <div class="form-group mr-l2">
+                        <button
+                            type="button"
+                            mat-stroked-button
+                            color="primary"
+                            class="mr-r2"
+                            (click)="openCreateNewAccountModal()"
+                        >
+                            {{ localeData?.payment?.connect_new_account }}
+                        </button>
+                        <span class="button-separator">|</span> <br />
+                        <a
+                            href="https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh"
+                            target="_blank"
+                            class="font-12"
+                            >{{ localeData?.payment?.learn_connect }}</a
+                        >
+                    </div>
+                    <div class="form-group mr-l1">
+                        <p class="mb-4 mr-l05 font-12">
+                            <a
+                                class="btn icici-button"
+                                href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/"
+                                target="_blank"
+                                ><span class="icon-icici-logo"
+                                    ><span class="path1"></span><span class="path2"></span><span class="path3"></span
+                                ></span>
+                                {{ localeData?.payment?.open_new_current_account }}</a
+                            >
+                        </p>
+                    </div>
+                </div>
+            </ng-container>
+            <!-- This is not using no due to gocardless -->
+            <!-- <ng-container *ngIf="isPlaidSupportedCountry">
             <div class="form-group">
                 <button aria-label="connect bank" mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
                     {{ localeData?.payment?.connect_bank }}
                 </button>
             </div>
         </ng-container> -->
-        <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
-            <div class="form-group">
-                <button aria-label="connect bank" mat-stroked-button class="mr-r2" color="primary"
-                    (click)="openInstitutionsDialog()">
-                    {{ localeData?.payment?.connect_bank }}
-                </button>
-            </div>
-        </ng-container>
-        <ng-container *ngIf="!hasIntegrationScope">
-            <h3 class="mb-1">{{localeData?.payment?.permission_message}}</h3>
-        </ng-container>
-        <div class="connected-accounts">
-            <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
-                localeData?.payment?.connected_accounts
-                }}
-            </b>
-            <br />
-            <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
-            <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
-                <div class="account-wrapper"
-                    *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName">
-                    <div class="account-info-background width-100 font-15 row align-items-center">
-                        <div class="col-4">
-                            <span class="field-label">{{ bankAccount?.bankName }}</span><br />
-                            <span *ngIf="bankAccount?.bankResource?.accountNumber" class="account-number mt-2 font-15 inline">
-                                <b>
-                                    <span *ngIf="!isIciciBankSupportedCountry">{{ commonLocaleData?.app_ac }} #</span>
-                                    {{ bankAccount?.bankResource?.accountNumber | accountNumberMask }}
-                                </b>
-                            </span>
-                        </div>
-                        <div class="col-4">
-                            <span *ngIf="isIciciBankSupportedCountry" class="width-100 view-only-field inline">{{
-                                bankAccount?.account?.name }}</span>
-                            <dropdown-field [readonly]="!hasIntegrationScope"
-                                [label]="localeData?.payment?.linked_account"
-                                [defaultValue]="bankAccount?.account?.name" *ngIf="!isIciciBankSupportedCountry"
-                                [cssClass]="'input-background'" [name]="'bankAccountUniqueName'"
-                                [placeholder]="localeData?.payment?.link_account_placeholder"
-                                [options]="bankAccounts$ | async" (selectedOption)="
-                                    bankAccount?.account.uniqueName = $event.value;
-                                    selectBankAccount($event, bankAccount)
-                                "></dropdown-field>
-                        </div>
-                        <span class="mr-l1 action-wrapper" *ngIf="!isIciciBankSupportedCountry">
-                            <a *ngIf="!isGocardlessSupportedCountry && hasIntegrationScope" href="javascript:;"
-                                class="icon-edit-pencil" (click)="openEditAccountModal(bankAccount)"></a>
-                            <i *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
-                                (click)="deleteBankAccount(bankAccount)"
-                                class="icon-trash ml-1 mr-r2 cursor-pointer"></i>
-                            <ng-container *ngIf="bankAccount.reLoginRequired">
-                                <button aria-label="dots" mat-icon-button [matMenuTriggerFor]="menu"
-                                    class="company-name bank-menu">
-                                    <span class="icon-dots-three-vertical"></span>
-                                </button>
-                                <mat-menu #menu="matMenu">
-                                    <button aria-label="renew bank connection" mat-menu-item
-                                        (click)="getPlaidLinkToken(bankAccount?.itemId)">
-                                        <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
-                                    </button>
-                                </mat-menu>
-                            </ng-container>
-                        </span>
-                        <div class="col-4 d-flex flex-column" *ngIf="isIciciBankSupportedCountry">
-                            <span class="field-label">{{ localeData?.payment?.payment_updates }}<br /></span>
-                            <span class="payment-updates view-only-field inline"
-                                *ngIf="bankAccount?.bankResource?.paymentAlerts?.length > 0">
-                                <ng-container *ngFor="
-                                        let alert of bankAccount?.bankResource?.paymentAlerts;
-                                        let i = index;
-                                        trackBy: trackByAlertUniqueName
-                                    ">{{ alert?.name
-                                    }}{{
-                                    i < bankAccount?.bankResource?.paymentAlerts?.length - 1 ? ", " : ""
-                                        }}</ng-container>
-                            </span>
-                            <span class="mr-l1 action-wrapper">
-                                <a href="javascript:;" class="icon-edit-pencil"
-                                    (click)="openEditAccountModal(bankAccount)"></a>
-                            </span>
-                        </div>
-                    </div>
-                    <ng-container *ngIf="bankAccount?.message">
-                        <div class="mt-2 mr-l1">
-                            <p class="error-message">
-                                {{ bankAccount?.message }}
-                                <a
-                                    class="cursor-pointer text-underline"
-                                    href="javascript:;"
-                                    (click)="reconnectBank(bankAccount)"
-                                    >{{ commonLocaleData?.app_click_here }}</a
-                                >
-                            </p>
-                        </div>
-                    </ng-container>
-                    <div class="font-15">
-                        <ng-container *ngIf="bankAccount?.bankResource?.payor?.length > 0">
-                            <div class="mt-2" *ngFor="
-                                    let payor of bankAccount?.bankResource?.payor;
-                                    trackBy: trackByPayorUniqueName
-                                ">
-                                <div class="width-100">
-                                    <div class="col-4 v-align-top inline">
-                                        <span class="field-label">{{
-                                            localeData?.payment?.login_id_label
-                                            }}</span><br />
-                                        <span class="width-100 disabled-field inline">{{
-                                            payor?.loginId
-                                            }}</span><br />
-                                        <span class="font-12 field-label">{{ payor?.user?.name }}</span>
-                                    </div>
-                                    <div class="col-4 v-align-top inline">
-                                        <span class="limit-upto field-label">{{
-                                            localeData?.payment?.limit_upto
-                                            }}</span><br />
-                                        <span class="width-100 disabled-field inline limit-upto">{{
-                                            payor?.duration === unlimitedLimit
-                                            ? commonLocaleData?.app_amount_limit?.unlimited
-                                            : activeCompany?.baseCurrencySymbol +
-                                            " " +
-                                            (payor?.maxAmount | giddhCurrency)
-                                            }}
-                                            <span class="pull-right payor-duration font-12"
-                                                *ngIf="payor?.duration !== unlimitedLimit">/ {{ payor?.duration |
-                                                titlecase }}</span></span><br />
-                                        <span class="limit-upto font-12 field-label">{{ localeData?.payment?.used }}
-                                            {{ payor?.usedAmount | giddhCurrency }}</span>
-                                    </div>
-                                    <div class="col-4 v-align-top inline mt-2">
-                                        <br />
-                                        <span class="account-approval-status pending-approval"
-                                            *ngIf="!payor?.isConnected"><i class="icon-alert-2"></i>
-                                            {{ localeData?.payment?.pending_self_approval }}</span>
-                                        <span class="account-approval-status approved" *ngIf="payor?.isConnected"><i
-                                                class="icon-success"></i>
-                                            {{ localeData?.payment?.connected }}</span>
-                                        <span class="mr-l15 user-action-wrapper">
-                                            <a *ngIf="payor?.isConnected" href="javascript:;" class="icon-edit-pencil"
-                                                (click)="openEditAccountUserModal(bankAccount, payor)"></a>
-                                            <a href="javascript:;" class="fa fa-trash mr-l2" (click)="
-                                                    showDeleteBankAccountLoginConfirmationModal(
-                                                        bankAccount,
-                                                        payor
-                                                    )
-                                                "></a>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="inline mt-2 mb-2" *ngIf="!payor?.isConnected">
-                                    <div class="col-md-12">
-                                        <p class="font-12" [innerHTML]="localeData?.payment?.approval_request_sent"></p>
-                                        <p class="font-9">
-                                            {{ localeData?.payment?.approval_request_accepted }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <button aria-label="users" type="button" mat-stroked-button color="primary"
-                                class="bold font-15 mt-2 mr-l15" (click)="openCreateNewAccountUserModal(bankAccount)">
-                                {{ localeData?.payment?.add_more_users }}
-                            </button>
-                        </ng-container>
-                    </div>
+            <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
+                <div class="form-group">
+                    <button
+                        aria-label="connect bank"
+                        mat-stroked-button
+                        class="mr-r2"
+                        color="primary"
+                        (click)="openInstitutionsDialog()"
+                    >
+                        {{ localeData?.payment?.connect_bank }}
+                    </button>
                 </div>
             </ng-container>
+            <ng-container *ngIf="!hasIntegrationScope">
+                <h3 class="mb-1">{{ localeData?.payment?.permission_message }}</h3>
+            </ng-container>
+            <div class="connected-accounts">
+                <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0"
+                    >{{ localeData?.payment?.connected_accounts }}
+                </b>
+                <br />
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+                <ng-container *ngIf="!isLoading && connectedBankAccounts?.length > 0">
+                    <div
+                        class="account-wrapper"
+                        *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
+                    >
+                        <div class="account-info-background width-100 font-15 row align-items-center">
+                            <div class="col-4">
+                                <span class="field-label">{{ bankAccount?.bankName }}</span
+                                ><br />
+                                <span
+                                    *ngIf="bankAccount?.bankResource?.accountNumber"
+                                    class="account-number mt-2 font-15 inline"
+                                >
+                                    <b>
+                                        <span *ngIf="!isIciciBankSupportedCountry"
+                                            >{{ commonLocaleData?.app_ac }} #</span
+                                        >
+                                        {{ bankAccount?.bankResource?.accountNumber | accountNumberMask }}
+                                    </b>
+                                </span>
+                            </div>
+                            <div class="col-4">
+                                <span *ngIf="isIciciBankSupportedCountry" class="width-100 view-only-field inline">{{
+                                    bankAccount?.account?.name
+                                }}</span>
+                                <dropdown-field
+                                    [readonly]="!hasIntegrationScope"
+                                    [label]="localeData?.payment?.linked_account"
+                                    [defaultValue]="bankAccount?.account?.name"
+                                    *ngIf="!isIciciBankSupportedCountry"
+                                    [cssClass]="'input-background'"
+                                    [name]="'bankAccountUniqueName'"
+                                    [placeholder]="localeData?.payment?.link_account_placeholder"
+                                    [options]="bankAccounts$ | async"
+                                    (selectedOption)="
+                                        bankAccount?.account.uniqueName = $event.value;
+                                        selectBankAccount($event, bankAccount)
+                                    "
+                                ></dropdown-field>
+                            </div>
+                            <span class="mr-l1 action-wrapper" *ngIf="!isIciciBankSupportedCountry">
+                                <a
+                                    *ngIf="!isGocardlessSupportedCountry && hasIntegrationScope"
+                                    href="javascript:;"
+                                    class="icon-edit-pencil"
+                                    (click)="openEditAccountModal(bankAccount)"
+                                ></a>
+                                <i
+                                    *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
+                                    (click)="deleteBankAccount(bankAccount)"
+                                    class="icon-trash ml-1 mr-r2 cursor-pointer"
+                                ></i>
+                                <ng-container *ngIf="bankAccount.reLoginRequired">
+                                    <button
+                                        aria-label="dots"
+                                        mat-icon-button
+                                        [matMenuTriggerFor]="menu"
+                                        class="company-name bank-menu"
+                                    >
+                                        <span class="icon-dots-three-vertical"></span>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button
+                                            aria-label="renew bank connection"
+                                            mat-menu-item
+                                            (click)="getPlaidLinkToken(bankAccount?.itemId)"
+                                        >
+                                            <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
+                                        </button>
+                                    </mat-menu>
+                                </ng-container>
+                            </span>
+                            <div class="col-4 d-flex flex-column" *ngIf="isIciciBankSupportedCountry">
+                                <span class="field-label">{{ localeData?.payment?.payment_updates }}<br /></span>
+                                <span
+                                    class="payment-updates view-only-field inline"
+                                    *ngIf="bankAccount?.bankResource?.paymentAlerts?.length > 0"
+                                >
+                                    <ng-container
+                                        *ngFor="
+                                            let alert of bankAccount?.bankResource?.paymentAlerts;
+                                            let i = index;
+                                            trackBy: trackByAlertUniqueName
+                                        "
+                                        >{{ alert?.name
+                                        }}{{
+                                            i < bankAccount?.bankResource?.paymentAlerts?.length - 1 ? ", " : ""
+                                        }}</ng-container
+                                    >
+                                </span>
+                                <span class="mr-l1 action-wrapper">
+                                    <a
+                                        href="javascript:;"
+                                        class="icon-edit-pencil"
+                                        (click)="openEditAccountModal(bankAccount)"
+                                    ></a>
+                                </span>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="bankAccount?.message">
+                            <div class="mt-2 mr-l1">
+                                <p class="error-message">
+                                    {{ bankAccount?.message }}
+                                    <a
+                                        class="cursor-pointer text-underline"
+                                        href="javascript:;"
+                                        (click)="reconnectBank(bankAccount)"
+                                        >{{ commonLocaleData?.app_click_here }}</a
+                                    >
+                                </p>
+                            </div>
+                        </ng-container>
+                        <div class="font-15">
+                            <ng-container *ngIf="bankAccount?.bankResource?.payor?.length > 0">
+                                <div
+                                    class="mt-2"
+                                    *ngFor="
+                                        let payor of bankAccount?.bankResource?.payor;
+                                        trackBy: trackByPayorUniqueName
+                                    "
+                                >
+                                    <div class="width-100">
+                                        <div class="col-4 v-align-top inline">
+                                            <span class="field-label">{{ localeData?.payment?.login_id_label }}</span
+                                            ><br />
+                                            <span class="width-100 disabled-field inline">{{ payor?.loginId }}</span
+                                            ><br />
+                                            <span class="font-12 field-label">{{ payor?.user?.name }}</span>
+                                        </div>
+                                        <div class="col-4 v-align-top inline">
+                                            <span class="limit-upto field-label">{{
+                                                localeData?.payment?.limit_upto
+                                            }}</span
+                                            ><br />
+                                            <span class="width-100 disabled-field inline limit-upto"
+                                                >{{
+                                                    payor?.duration === unlimitedLimit
+                                                        ? commonLocaleData?.app_amount_limit?.unlimited
+                                                        : activeCompany?.baseCurrencySymbol +
+                                                          " " +
+                                                          (payor?.maxAmount | giddhCurrency)
+                                                }}
+                                                <span
+                                                    class="pull-right payor-duration font-12"
+                                                    *ngIf="payor?.duration !== unlimitedLimit"
+                                                    >/ {{ payor?.duration | titlecase }}</span
+                                                ></span
+                                            ><br />
+                                            <span class="limit-upto font-12 field-label"
+                                                >{{ localeData?.payment?.used }}
+                                                {{ payor?.usedAmount | giddhCurrency }}</span
+                                            >
+                                        </div>
+                                        <div class="col-4 v-align-top inline mt-2">
+                                            <br />
+                                            <span
+                                                class="account-approval-status pending-approval"
+                                                *ngIf="!payor?.isConnected"
+                                                ><i class="icon-alert-2"></i>
+                                                {{ localeData?.payment?.pending_self_approval }}</span
+                                            >
+                                            <span class="account-approval-status approved" *ngIf="payor?.isConnected"
+                                                ><i class="icon-success"></i> {{ localeData?.payment?.connected }}</span
+                                            >
+                                            <span class="mr-l15 user-action-wrapper">
+                                                <a
+                                                    *ngIf="payor?.isConnected"
+                                                    href="javascript:;"
+                                                    class="icon-edit-pencil"
+                                                    (click)="openEditAccountUserModal(bankAccount, payor)"
+                                                ></a>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="fa fa-trash mr-l2"
+                                                    (click)="
+                                                        showDeleteBankAccountLoginConfirmationModal(bankAccount, payor)
+                                                    "
+                                                ></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="inline mt-2 mb-2" *ngIf="!payor?.isConnected">
+                                        <div class="col-md-12">
+                                            <p
+                                                class="font-12"
+                                                [innerHTML]="localeData?.payment?.approval_request_sent"
+                                            ></p>
+                                            <p class="font-9">
+                                                {{ localeData?.payment?.approval_request_accepted }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button
+                                    aria-label="users"
+                                    type="button"
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="bold font-15 mt-2 mr-l15"
+                                    (click)="openCreateNewAccountUserModal(bankAccount)"
+                                >
+                                    {{ localeData?.payment?.add_more_users }}
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
         </div>
     </div>
 </ng-container>
@@ -209,8 +305,11 @@
 <ng-template #createNewAccountModal>
     <div class="account-modal">
         <div class="modal-content">
-            <icici-account-create-edit [commonLocaleData]="commonLocaleData" (getAllBankAccounts)="getAllBankAccounts()"
-                (closeModalEvent)="createNewAccountDialogRef?.close()">
+            <icici-account-create-edit
+                [commonLocaleData]="commonLocaleData"
+                (getAllBankAccounts)="getAllBankAccounts()"
+                (closeModalEvent)="createNewAccountDialogRef?.close()"
+            >
             </icici-account-create-edit>
         </div>
     </div>

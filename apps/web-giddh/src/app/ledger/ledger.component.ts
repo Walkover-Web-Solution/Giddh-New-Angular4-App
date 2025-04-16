@@ -387,6 +387,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerStatementViewGridTotalColumns: number = 9;
     /** Hold ledger grid total columns value */
     public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2]
+    /** True if update account is bank account */
+    public isUpdateAccount: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -597,20 +599,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * This will be use for when use update account and get response
-     *
-     * @memberof LedgerComponent
-     */
-    public updateAccountResponse(): void {
-        this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.isBankAccountConnected = true;
-                this.cdRf.detectChanges();
-            }
-        });
-    }
-
     public ngOnInit() {
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -621,7 +609,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
-                this.getAllBankAccounts();
+                this.getAllBankAccounts(this.lc.accountUnq);
                 this.isDirectlyIntegrated = true;
                 this.componentStore.setState(state => ({
                     ...state,
@@ -880,7 +868,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.updateAccountResponse();
+        this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.isBankAccountConnected = true;
+                this.isUpdateAccount = true;
+                this.getAllBankAccounts();
+                this.getBankTransactions()
+                this.cdRf.detectChanges();
+            }
+        });
 
         this.lc.transactionData$.pipe(takeUntil(this.destroyed$)).subscribe((lt: any) => {
             if (lt) {
@@ -1163,13 +1159,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.length) {
                 this.bankList = response.body;
-                if (response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
-                    this.isBankAccountConnected = true;
-                }
-                this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
-                const referNo = localStorage.getItem('refNo');
-                if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
-                    this.getLinkBankAccount();
+                if (!this.isUpdateAccount) {
+                    if (response.body.some(item => item.account?.uniqueName === (this.lc.accountUnq ?? this.selectedAccountUniquename))) {
+                        this.isBankAccountConnected = true;
+                    }
+                    this.unlinkBankList = response.body.filter(bank => Object.keys(bank.account).length === 0);
+                    const referNo = localStorage.getItem('refNo');
+                    if (this.isDirectlyIntegrated && referNo !== null && referNo !== undefined) {
+                        this.getLinkBankAccount();
+                    }
                 }
             }
         });
@@ -1630,6 +1628,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+
     public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let activeAccount = null;
@@ -1823,7 +1822,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
-                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName}))
+                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName }))
             },
             role: 'alertdialog',
             ariaLabel: 'export'
@@ -3525,10 +3524,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.openInstitutionsDialog();
                     } else if (response === 'link') {
                         this.getLinkBankAccount();
-                    } else if (response === 'closeDialog') {
-                        this.bankIntegrationDialogRef?.close();
                     }
-                    this.bankIntegrationDialogRef?.close();
                 }
             });
         }
@@ -3540,9 +3536,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getLinkBankAccount(): void {
-        if (!this.selectedAccountUniquename) {
-            this.redirectToBankIntegration();
-        }
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
@@ -3557,9 +3550,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             });
             dialogRef.afterClosed().pipe(take(1), tap(response => {
                 if (response && response !== 'closeDialog') {
-                    this.isBankAccountConnected = true; this.getBankTransactions(); this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
+                    this.isUpdateAccount = true;
+                    this.isBankAccountConnected = true;
+                    this.getBankTransactions();
+                    this.referenceNumber = null;
+                    localStorage.setItem('refNo', null);
+                    this.getAllBankAccounts();
                 }
-                localStorage.removeItem('refNo');
             })).subscribe();
         }
     }

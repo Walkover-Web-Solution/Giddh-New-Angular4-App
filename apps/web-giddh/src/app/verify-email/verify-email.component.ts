@@ -85,13 +85,14 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
      */
     private emailVerificationCompleted(params: any): void {
         let redirect = "/pages/home";
-
-        if (params?.module === "invoice") {
-            // redirect = this.generalService.voucherApiVersion === 1 ? "/pages/invoice/preview/settings/sales" : "/pages/vouchers/preview/sales/settings";
-            redirect = "/pages/vouchers/preview/sales/settings";
-        } else if (params?.module === "purchase") {
-            // redirect = this.generalService.voucherApiVersion === 1 ? "/pages/purchase-management/purchase/settings" : "/pages/vouchers/preview/purchase/settings";
-            redirect = "/pages/vouchers/preview/purchase/settings";
+        if (this.generalService.voucherApiVersion === 2) {
+            if (params?.module === "invoice") {
+                // redirect = this.generalService.voucherApiVersion === 1 ? "/pages/invoice/preview/settings/sales" : "/pages/vouchers/preview/sales/settings";
+                redirect = "/pages/vouchers/preview/sales/settings";
+            } else if (params?.module === "purchase") {
+                // redirect = this.generalService.voucherApiVersion === 1 ? "/pages/purchase-management/purchase/settings" : "/pages/vouchers/preview/purchase/settings";
+                redirect = "/pages/vouchers/preview/purchase/settings";
+            }
         }
 
         this.router.navigate([redirect]);

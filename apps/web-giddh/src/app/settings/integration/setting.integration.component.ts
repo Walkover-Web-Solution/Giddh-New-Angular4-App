@@ -396,9 +396,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngAfterViewInit(): void {
-        if (this.selectedTabParent) {
-            this.loadTabData(this.selectedTabParent);
-        }
+        this.loadPaymentData();
     }
 
     public setDummyData() {
@@ -917,7 +915,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
             this.isAddAndManageOpenedFromOutside = result;
         });
-        if (event && event instanceof TabDirective || !event) {
+        if (event || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());

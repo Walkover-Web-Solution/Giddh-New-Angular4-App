@@ -13,7 +13,8 @@
         }
     }
 }
-.action-btn{
+
+.action-btn {
     min-width: 42px;
 }
 
@@ -296,13 +297,33 @@
     flex-direction: column;
     row-gap: 30px;
 }
+
+::ng-deep {
+    .mat-mdc-table {
+        tbody {
+            .mat-mdc-row {
+                &:hover {
+                    .mat-mdc-cell {
+                        .icon-visibility {
+                            visibility: visible !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media (max-width: 1024px) and (min-width: 768px) {
+
     .discount-form-setting-tab label,
     .discount-form-setting-tab br {
         display: none !important;
     }
 }
+
 @media (max-width: 767px) {
+
     .discount-form-setting-tab label,
     .discount-form-setting-tab br {
         display: none !important;

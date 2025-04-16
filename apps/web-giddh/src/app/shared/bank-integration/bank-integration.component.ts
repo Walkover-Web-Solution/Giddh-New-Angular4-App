@@ -478,11 +478,11 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for reconnect bank
-     *
-     * @param {*} bank
-     * @memberof BankIntegrationComponent
-     */
+ * This will be use for reconnect bank
+ *
+ * @param {*} bank
+ * @memberof BankIntegrationComponent
+ */
     public reconnectBank(bank: any): void {
         this.reconnectBankResponse = bank;
         this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
