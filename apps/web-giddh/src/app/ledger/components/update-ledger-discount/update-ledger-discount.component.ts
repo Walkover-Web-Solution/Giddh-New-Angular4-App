@@ -144,11 +144,12 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-        this.defaultDiscount.amount = parseFloat(val);
-        this.defaultDiscount.discountValue = parseFloat(val);
+        this.defaultDiscount.amount = parseFloat(String(val)?.replace(/,/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();
+
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -156,11 +157,12 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             this.discountFromPer = false;
             this.discountFromVal = true;
         }
-        if (!Number(val)) {
+        if (!val) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;
         }
+
     }
 
     /**
