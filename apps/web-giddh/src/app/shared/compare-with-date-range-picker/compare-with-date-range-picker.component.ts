@@ -38,7 +38,7 @@ interface DateCheckResult {
     TranslateDirectiveModule,
     MatMenuModule,
     MatListModule,
-    MatDividerModule,
+    MatDividerModule
   ]
 })
 export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
@@ -86,7 +86,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    */
   public ngOnInit(): void {
     this.compareOptionsForm.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
-      if (value.compareValue?.[0] == 'undefined') {
+      if (value?.compareValue?.[0] == 'undefined') {
         return;
       }
 
@@ -293,7 +293,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       isRandomDateSelected: !isSameMonth || !startDate.isSame(startOfMonth, 'day') || !endDate.isSame(endOfMonth, 'day') ||
         !isSameYear || !startDate.isSame(startOfYear, 'day') || !endDate.isSame(endOfYear, 'day') ||
         !isSameQuarter || !startDate.isSame(startOfQuarter, 'day') || !endDate.isSame(endOfQuarter, 'day'),
-      dayCount: dayCount,
+      dayCount: dayCount
     };
   }
 
@@ -309,7 +309,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       isYearSelected: false,
       isQuarterSelected: false,
       isRandomDateSelected: false,
-      dayCount: 0,
+      dayCount: 0
     };
   }
 

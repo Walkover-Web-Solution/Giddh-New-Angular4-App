@@ -35,7 +35,8 @@ export class DataFormatter {
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
-            row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance[Object.keys(obj.closingBalance)[0]])}\r\n)])}\r\n`;
+            const balanceObj = obj.closingBalance[Object.keys(obj.closingBalance)[0]];
+            row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance?.amount} ${this.recType.transform(obj.forwardedBalance)}, ${obj.debitTotal},${obj.creditTotal}, ${balanceObj?.amount} ${this.recType.transform(balanceObj)}\r\n`;
             total = this.calculateTotal(obj, total);
         });
         csv += `${row}\r\n`;
@@ -113,13 +114,14 @@ export class DataFormatter {
                 for (i = j = 0, ref = index; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
                     strIndex += 3;
                 }
-                if (group.closingBalance[Object.keys(group.closingBalance)[0]].amount !== 0) {
+                const key = Object.keys(group.closingBalance)[0];
+                if (group.closingBalance[key].amount !== 0) {
                     let data1: any[] = [];
                     data1.push(group.groupName?.toUpperCase());
                     data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
                     data1.push(group.debitTotal);
                     data1.push(group.creditTotal);
-                    data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance[Object.keys(group.closingBalance)[0]])}`);
+                    data1.push(`${group.closingBalance[key].amount} ${this.recType.transform(group.closingBalance[key])}`);
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
                     if (group.accounts?.length > 0) {
@@ -129,7 +131,7 @@ export class DataFormatter {
                                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
                                 data1.push(acc.debitTotal);
                                 data1.push(acc.creditTotal);
-                                data1.push(`${acc.closingBalance.amount}${this.recType.transform(acc.closingBalance)}`);
+                                data1.push(`${acc.closingBalance[key].amount}${this.recType.transform(acc.closingBalance[key])}`);
                                 formatable.setRowData(data1, strIndex);
                                 data1 = [];
                             }
@@ -154,15 +156,17 @@ export class DataFormatter {
     }
 
     public calculateTotal = (group: ChildGroup, total: Total, decimalPlaces?: number): Total => {
+        const key = Object.keys(group.closingBalance)[0];
+
         if (group.forwardedBalance.type === 'DEBIT') {
             total.ob = total.ob + group.forwardedBalance.amount;
         } else {
             total.ob = total.ob - group.forwardedBalance.amount;
         }
-        if (group.closingBalance[Object.keys(group.closingBalance)[0]].type === 'DEBIT') {
-            total.cb = total.cb + group.closingBalance[Object.keys(group.closingBalance)[0]].amount;
+        if (group.closingBalance[key].type === 'DEBIT') {
+            total.cb = total.cb + group.closingBalance[key].amount;
         } else {
-            total.cb = total.cb - group.closingBalance[Object.keys(group.closingBalance)[0]].amount;
+            total.cb = total.cb - group.closingBalance[key].amount;
         }
 
         total.cr += group.creditTotal;
