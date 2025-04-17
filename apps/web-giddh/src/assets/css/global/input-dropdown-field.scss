@@ -284,6 +284,7 @@ giddh-datepicker,
             min-width: 71px;
             max-width: 111px;
         }
+
         .mat-datepicker-input {
             position: absolute;
             margin-top: 12px;
@@ -291,7 +292,15 @@ giddh-datepicker,
 
         .mat-datepicker-toggle {
             position: relative;
-            left: 75px;
+            left: 86px;
+
+            .mdc-icon-button {
+                svg {
+                    position: absolute;
+                    top: 12px;
+                    left: 0px;
+                }
+            }
         }
     }
 }
@@ -522,7 +531,7 @@ body {
             }
         }
     }
-    
+
     /*----- dropdown-color ----*/
     div {
         &.mat-mdc-select-panel {
