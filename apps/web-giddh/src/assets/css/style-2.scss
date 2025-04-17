@@ -1185,6 +1185,38 @@ textarea {
     }
 }
 
+.update-entry-transaction-date {
+    giddh-datepicker {
+        .mat-mdc-text-field-wrapper {
+            padding-left: 5px !important;
+        }
+        .mdc-text-field--disabled {
+            &.mdc-text-field--filled {
+                background-color: var(--color-transparent-background) !important;
+            }
+        }
+        .readonly-field { 
+            .mat-mdc-form-field {
+                background-color: var(--color-transparent-background) !important;
+            }
+        }
+    }
+}
+
+.border-top {
+    border-top: 1px solid var(--color-common-secondary-border) !important;
+}
+
+body {
+    &.template-wrapper {
+        mat-tab-body {
+            &.mat-mdc-tab-body-active {
+                z-index: unset !important;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -3081,10 +3113,6 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 /*btn end*/
-.ledger-main .form-control {
-    background: var(--color-table-input-background) !important;
-}
-
 .ledger-header thead th {
     background: var(--color-white);
     border-right: 1px solid var(--color-iron);
@@ -3639,6 +3667,10 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-24) !important;
 }
 
+.icon-font-48 {
+    font-size: var(--font-size-48) !important;
+}
+
 .word-wrap {
     word-break: normal;
     white-space: nowrap;
@@ -3897,6 +3929,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .pointer-event-none {
     pointer-events: none !important;
+}
+
+.pointer-event-all {
+    pointer-events: all !important;
 }
 
 .cursor-default {
@@ -4304,7 +4340,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: var(--color-primary-header-background) !important;
-    color: var(--color-white);
+    color: var(--color-white-tertiary);
     border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
@@ -6312,6 +6348,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     margin: 0 !important;
     min-width: auto !important;
     background: transparent !important;
+    height: auto;
 }
 
 /**new modal design**/
@@ -7713,6 +7750,14 @@ app-header {
 
 .heightVH-100 {
     height: 100vh;
+}
+
+.widthVW-100 {
+    width: 100vw;
+}
+
+.place-content-center {
+    place-content: center !important;
 }
 
 /* my css */
@@ -9286,6 +9331,9 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .update-ledger-account input {
     padding-left: 4px !important;
+    text-overflow: ellipsis;
+    border: none;
+    min-width: 100%;
 }
 
 .select2-parent.select2-ledger .update-ledger-account sh-select .header.open input:placeholder-shown {
@@ -11492,7 +11540,6 @@ body {
         flex: 1;
         max-width: 100%;
         height: 50px !important;
-        left: 4px;
         min-height: auto !important;
 
         .menu-list {
@@ -12118,7 +12165,7 @@ body.prevent-body-scroll {
     min-height: 60px;
 }
 
-.delete-icon-opacity {
+.opacity-5 {
     opacity: 0.5;
 }
 
@@ -12178,7 +12225,6 @@ body.prevent-body-scroll {
     fill: var(--color-toast-primary-text);
 }
 
-.mat-datepicker-toggle,
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
     color: var(--color-toast-primary-text) !important;
@@ -12785,7 +12831,7 @@ hamburger-menu {
             }
 
             .customise-width {
-                width: 33%;
+                width: 39%;
             }
 
             .customise-filter-button {
@@ -13116,7 +13162,7 @@ body.hide-scroll-body.master-page {
     color: var(--color-secondary-input-bar-border);
 }
 
-.mat-datepicker-input:disabled {
+.mat-datepicker:disabled {
     color: var(--color-primary-input-bar-text) !important;
     background-color: var(--color-primary-input-bar-background) !important;
 }
@@ -13378,7 +13424,14 @@ voucher-component {
     }
 
     .dropdown-bg {
-        background-color: transparent !important;
+        background-color: var(--color-transparent-background) !important;
+    }
+    
+    .mdc-text-field__input {
+        background-color: var(--color-transparent-background) !important; 
+    }
+    .mat-mdc-form-field input {
+        background-color: var(--color-transparent-background) !important; 
     }
 }
 
@@ -13394,7 +13447,7 @@ voucher-component {
         font-size: var(--font-size-16) !important;
         font-family: var(--font-semibold) !important;
         color: var(--color-toast-primary-text) !important;
-        padding: 0;
+        padding: 0 15px 0 15px;
         line-height: 55px !important;
     }
 
@@ -13609,11 +13662,15 @@ aside-menu-product-service {
     }
 }
 
+.text-color-white {
+    color: var(--white-color) !important;
+}
+
 .text-underline {
-    text-decoration: underline;
+    text-decoration: underline !important;
 
     &:hover {
-        text-decoration: underline;
+        text-decoration: underline !important;
     }
 }
 
@@ -13756,6 +13813,11 @@ import-wizard {
     }
 }
 
+.rotate-icon-130deg {
+    .mdc-button__label {
+        transform: rotate(130deg);
+    }
+}
 .z-index-0 {
     z-index: 0;
 }
@@ -13816,5 +13878,44 @@ mat-list {
 [mat-sort-header].cdk-program-focused {
     .mat-sort-header-container {
         border-bottom: none !important;
+    }
+}
+.mdc-text-field--disabled {
+    .mdc-text-field--filled {
+        background-color: var(--color-transparent-background) !important;
+    }
+}
+
+//Common class to make dialog background transparent add this in panel class
+.dialog-bg-transparent {
+    .mat-mdc-dialog-surface {
+        background-color: var(--color-transparent-background) !important;
+    }
+}
+
+.select-multiple-chiplist {
+    mat-chip-grid {
+        mat-chip-row {
+            &.mat-mdc-chip {
+                &:not(.mdc-evolution-chip--disabled) {
+                    --mdc-chip-elevated-container-color: var(--color-filter-background) !important;
+                    border: 1px solid var( --color-primary-button-border);
+
+                    .mdc-evolution-chip__text-label {
+                        --mdc-chip-label-text-color: var(--color-tab-secondary-text) !important;
+                    }
+                    .mdc-evolution-chip__icon--trailing {
+                        --mdc-chip-with-trailing-icon-trailing-icon-color: var(--color-tab-secondary-text) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.mat-mdc-checkbox {
+    &.mat-mdc-checkbox-disabled {
+        label {
+            color: var(--color-common-primary-text) !important;
+        }
     }
 }

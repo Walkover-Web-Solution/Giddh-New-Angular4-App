@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { FormControl, NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -52,7 +52,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     /** Custom field unique name in edit mode */
     public customFieldUniqueName: string = "";
     /** Selected modules */
-    public selectedModules: any[] = [];
+    public selectedModules: FormControl = new FormControl([]);
     /** True if loader is visible */
     public showLoader: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -84,6 +84,16 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
                 this.getCustomField(params?.customFieldUniqueName);
             }
         });
+
+        this.selectedModules.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedModules => {
+            if (selectedModules) {
+                let modules: any[] = [];
+                this.selectedModules.value.forEach(uniqueName => {
+                    modules.push(this.fieldModules?.find(module => module.uniqueName === uniqueName));
+                });
+                this.customFieldRequest.modules = modules;
+            }
+        })
     }
 
     /**
@@ -114,7 +124,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
                 if (response.status === 'success') {
                     this.customFieldRequest = cloneDeep(response.body);
                     this.selectFieldType({ label: this.customFieldRequest.fieldType?.name, value: this.customFieldRequest.fieldType?.type });
-                    this.selectedModules = this.customFieldRequest?.modules?.map(module => module?.uniqueName);
+                    this.selectedModules.setValue(this.customFieldRequest?.modules?.map(module => module?.uniqueName));
                 } else if (response.message) {
                     this.toasterService.errorToast(response.message);
                 }
@@ -230,25 +240,6 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      */
     public redirectToGetAllPage(): void {
         this.router.navigate(["/pages/custom-fields/list"]);
-    }
-
-    /**
-     * Toggles the modules selection
-     *
-     * @param {*} selectedModule
-     * @memberof CustomFieldsCreateEditComponent
-     */
-    public setModules(selectedModule: any): void {
-        if (!this.customFieldRequest.modules?.length) {
-            this.customFieldRequest.modules = [];
-        }
-
-        let isModuleSelected = this.customFieldRequest.modules?.filter(module => module?.uniqueName === selectedModule?.uniqueName);
-        if (isModuleSelected?.length > 0) {
-            this.customFieldRequest.modules = this.customFieldRequest.modules?.filter(module => module?.uniqueName !== selectedModule?.uniqueName);
-        } else {
-            this.customFieldRequest.modules.push(selectedModule);
-        }
     }
 
     /**

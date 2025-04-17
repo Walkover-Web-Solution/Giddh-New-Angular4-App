@@ -367,13 +367,6 @@
                         >
                             <img class="image-preview w-100" [src]="imagePreviewSource" />
                         </div>
-
-                        <div
-                            *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
-                            class="error danger text-center"
-                        >
-                            <span>{{ localeData?.invoice_preview_unavailable }}</span>
-                        </div>
                         <div
                             *ngIf="attachedDocumentType?.type === 'unsupported'"
                         >
@@ -417,6 +410,12 @@
                     <h5 class="pd-l15 pd-t1 pd-b1">
                         <strong class="text-blue">{{ localeData?.auto_generated_purchase_bill }}</strong>
                     </h5>
+                    <div
+                        *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
+                        class="error danger text-center mt-5"
+                    >
+                        <span>{{ localeData?.invoice_preview_unavailable }}</span>
+                    </div>
                     <iframe
                         *ngIf="!(isVoucherDownloading$ | async) && sanitizedPdfFileUrl"
                         #pdfContainer

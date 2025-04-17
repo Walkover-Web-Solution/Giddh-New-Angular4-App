@@ -19,6 +19,7 @@ import { InvoiceTemplatePreviewModelComponent } from './edit-template/modals/tem
 import { DesignFiltersContainerComponent } from './edit-template/filters-container/design-filters/design.filters.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { TallyTemplateComponent } from './edit-template/out-tempate/templates/tally-template/tally-template.component';
 import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
@@ -46,7 +47,8 @@ import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
         ThermalTemplateComponent,
         EditInvoiceComponent,
         InvoiceTemplateModalComponent,
-        EditFiltersContainersComponent
+        EditFiltersContainersComponent,
+        TallyTemplateComponent
     ],
     exports: [
         OutTemplateComponent,

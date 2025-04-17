@@ -10,9 +10,7 @@
     color: var(--color-danger);
     top: 0px;
 }
-#import-statement-modal label.radio-inline.p-0 {
-    width: 287px;
-}
+
 .browse-file-btn {
     display: flex;
     align-items: flex-start;
@@ -38,10 +36,11 @@
         padding-left: 5px;
     }
 }
+
 .import-field-label {
     width: 170px;
-    vertical-align: bottom;
 }
+
 .sample-file-buttons {
     margin-left: 50px;
     width: auto;
@@ -53,3 +52,19 @@
         }
     }
 }
+
+.statement-card {
+    >div {
+        height: 230px;
+        p {
+            color: var(--color-nero);
+        }
+    }
+
+    &:hover {
+        >div {
+            background-color: var(--color-primary-popup-background-hover);
+        }
+    }
+}
+

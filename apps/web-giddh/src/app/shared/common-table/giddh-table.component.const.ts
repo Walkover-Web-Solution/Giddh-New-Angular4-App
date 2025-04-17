@@ -1,0 +1,1 @@
+export type ColumnDefinition = [string, boolean, string?, boolean?];

@@ -208,6 +208,7 @@
         "others": "इतर"
     },
     "app_duration": {
+        "duration": "कालावधी",
         "monthly": "मासिक",
         "quarterly": "त्रैमासिक",
         "half_yearly": "सहामाही",
@@ -373,7 +374,8 @@
         "inventory": "यादी",
         "entries": "नोंदी",
         "trial_balance": "चाचणी शिल्लक",
-        "master": "मास्टर"
+        "master": "मास्टर",
+        "voucher": "व्हाउचर"
     },
     "app_please_select": "कृपया निवडा",
     "app_company": "कंपनी",
@@ -755,5 +757,13 @@
     "app_no_access_limit_module": "तुम्हाला सध्या या मॉड्यूलमध्ये प्रवेश नाही. तुमची योजना कोणत्याही अडचणीशिवाय अनलॉक करण्यासाठी अपग्रेड करा",
     "app_upgrade": "अपग्रेड करा",
     "app_click_here": "येथे क्लिक करा",
-    "go_to_company_mode": "संपादित करण्यासाठी, कंपनी मोडवर जा."
+    "go_to_company_mode": "संपादित करण्यासाठी, कंपनी मोडवर जा.",
+    "app_link_account": "दुवा खाते",
+    "app_bank_accounts":"बँक खाती",
+    "app_upload": "अपलोड",
+    "app_file": "फाईल",
+    "app_choose_file": "फाईल निवडा",
+    "app_password": "पासवर्ड",
+    "app_select_column": "स्तंभ निवडा",
+    "app_allow_manufacturing_sales_transactions": "विक्री व्यवहारांच्या दरम्यान उत्पादन सुरू ठेवण्याची परवानगी द्या"
 }

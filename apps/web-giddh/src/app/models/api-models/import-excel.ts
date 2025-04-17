@@ -45,6 +45,7 @@ export interface ImportExcelResponseData {
     data: ResponseData;
     giddhHeaders?: string[];
     isHeaderProvided?: boolean;
+    sameDebitCreditAmountColumn?: boolean;
     requestId?: any;
     accountUniqueName?: string;
 }
