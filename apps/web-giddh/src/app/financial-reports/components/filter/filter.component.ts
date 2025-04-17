@@ -126,7 +126,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             branchUniqueName: [this.generalService.currentBranchUniqueName ?? ''],
             selectedFinancialYearOption: [''],
             refresh: [false],
-            tagName: ['']
+            tagName: [''],
+            compareValue: [null],
+            compareType: [null]
         });
 
         this.newTagForm = this.fb.group({
@@ -495,5 +497,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.tags = orderBy(response?.body, 'name');
             }
         });
+    }
+    
+    /**
+     * Handle compare with event
+     *
+     * @param {any} event
+     * @memberof FinancialReportsFilterComponent
+     */
+    public handleCompareWithEvent(event: any): void {
+        this.filterForm.patchValue(event);
     }
 }
