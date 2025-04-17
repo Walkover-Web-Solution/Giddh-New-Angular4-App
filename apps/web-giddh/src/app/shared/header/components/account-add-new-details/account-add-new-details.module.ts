@@ -13,6 +13,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTabsModule } from '@angular/material/tabs';
+import { FormFieldsModule } from 'apps/web-giddh/src/app/theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -24,8 +27,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
             spinnerSize: 30
         }),
         ReactiveFormsModule,
-        SelectModule,
-        ShSelectModule,
         TabsModule.forRoot(),
         TranslateDirectiveModule,
         MatSlideToggleModule,
@@ -33,7 +34,10 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
         MatDialogModule,
         MatButtonModule,
         FormsModule,
-        TooltipModule.forRoot()
+        MatRadioModule,
+        MatTabsModule,
+        TooltipModule.forRoot(),
+        FormFieldsModule
     ]
 })
 export class AccountAddNewDetailsModule { }
