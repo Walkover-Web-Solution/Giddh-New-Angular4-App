@@ -118,7 +118,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
     }
-
+    
     /**
     * This function will use for get institutions details
     *
