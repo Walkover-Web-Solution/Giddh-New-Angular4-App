@@ -65,7 +65,7 @@ export class TBPlBsActions {
         .pipe(
             ofType(TBPlBsActions.GET_PROFIT_LOSS_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._tlPlService.GetComparedProfitLoss(action.payload).pipe(
+                return this._tlPlService.getComparedProfitLoss(action.payload).pipe(
                     map((r) => this.validateResponse<AccountDetails, ProfitLossRequest>(r, {
                         type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
                         payload: r?.body

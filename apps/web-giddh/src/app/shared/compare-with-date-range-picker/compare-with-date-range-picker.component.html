@@ -68,6 +68,7 @@
                                 <span class="text-black">{{ localeData?.enter_a_different_number }}</span>
                                 <div class="d-inline-flex align-items-center column-gap5" *ngIf="showCustomInput">
                                     <text-field
+                                        [min]="1"
                                         [type]="'number'"
                                         [name]="'number'"
                                         [cssClass]="'form-control max-width-50'"

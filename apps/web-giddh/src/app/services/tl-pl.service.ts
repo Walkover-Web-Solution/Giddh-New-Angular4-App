@@ -95,7 +95,7 @@ export class TlPlService {
      * @return {*}  {Observable<BaseResponse<AccountDetails, ProfitLossRequest>>}
      * @memberof TlPlService
      */
-    public GetComparedProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
+    public getComparedProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
             delete request.branchUniqueName;
