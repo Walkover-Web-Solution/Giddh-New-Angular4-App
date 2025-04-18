@@ -88,6 +88,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds the index of the current transaction in the blank ledger */
+    @Input() public blankLedgerIndex: number;
     /** Stores true, if the total value is modified by the user */
     @Input() public isTotalChanged: boolean;
     @ViewChild('webFileInput', { static: true }) public webFileInput: ElementRef;
@@ -687,6 +689,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public amountChanged() {
         this.isInclusiveEntry = false;
         if (this.currentTxn?.selectedAccount) {
+            if (this.currentTxn.type === 'DEBIT') {
+                this.blankLedger.transactions[this.blankLedgerIndex].debitAmount = this.currentTxn.amount;
+            } else {
+                this.blankLedger.transactions[this.blankLedgerIndex].creditAmount = this.currentTxn.amount;
+            }
             if (this.currentTxn.selectedAccount?.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
                     this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
