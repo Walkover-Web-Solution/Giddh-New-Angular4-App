@@ -45,6 +45,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public copyTypes: IOption[] = [];
     /** Prefix of format file name */
     public fileFormatPrefix: string = "AS";
+    /* Will check if form is valid */
+    public isValidForm: boolean = true;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -126,6 +128,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof BulkExportComponent
      */
     public exportVouchers(sendMail: boolean): void {
+        this.isValidForm = this.exportForm.valid;
         if (this.exportForm.invalid && this.exportForm.get('voucherExport').value) {
             return;
         }
