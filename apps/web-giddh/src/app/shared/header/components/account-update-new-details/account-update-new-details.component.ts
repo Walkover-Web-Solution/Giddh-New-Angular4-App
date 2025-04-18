@@ -1376,10 +1376,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.openMergedAccountDeleteDialog();
     }
 
-    openMergedAccountDeleteDialog() {
+    /**
+     * Delete merge account dialog open
+     *
+     * @returns {void}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public openMergedAccountDeleteDialog(): void {
         const configuration = this.generalService.getVoucherDeleteConfiguration(this.localeData?.delete_merged_account_title, this.deleteMergedAccountModalBody, '', this.commonLocaleData);
-        let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
+        const confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
             data: {
                 configuration: configuration
             },
