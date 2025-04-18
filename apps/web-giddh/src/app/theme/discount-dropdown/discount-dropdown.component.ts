@@ -231,6 +231,6 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof DiscountDropdownComponent
      */
     public closeDiscountMenu(): void {
-        this.menuTrigger.closeMenu();
+        this.menuTrigger?.closeMenu();
     }
 }
