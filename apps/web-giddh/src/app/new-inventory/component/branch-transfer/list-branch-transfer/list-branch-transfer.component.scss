@@ -7,7 +7,7 @@
     }
     .custom-datepicker {
         input {
-            height: 48px;
+            height: var(--mat-form-field-height);
         }
     }
     .clear-filter {

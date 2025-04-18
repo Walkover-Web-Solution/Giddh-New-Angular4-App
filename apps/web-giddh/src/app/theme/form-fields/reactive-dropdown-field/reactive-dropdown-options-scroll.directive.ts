@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatAutocomplete } from '@angular/material/autocomplete';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { fromEvent, ReplaySubject } from 'rxjs';
+import { debounceTime, takeUntil, tap } from 'rxjs/operators';
 
 export interface IAutoCompleteScrollEvent {
     autoComplete: MatAutocomplete;
@@ -28,10 +28,14 @@ export class OptionsScrollDirective implements OnDestroy {
                     setTimeout(() => {
                         this.removeScrollEventListener();
                         if (this.enableDynamicSearch) {
-                            this.autoComplete?.panel?.nativeElement?.addEventListener(
-                                'scroll',
-                                this.onScroll.bind(this)
-                            );
+                            fromEvent(this.autoComplete?.panel?.nativeElement, 'scroll')
+                                .pipe(
+                                    debounceTime(200),
+                                    takeUntil(this.destroyed$)
+                                )
+                                .subscribe((event) => {
+                                    this.onScroll(event as HTMLElementEventMap['scroll']);
+                                });
                         }
                     }, 0);
                 }),
