@@ -46,7 +46,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     /** Prefix of format file name */
     public fileFormatPrefix: string = "AS";
     /* Will check if form is valid */
-    public isValidForm: boolean = true;
+    public isValidForm: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
