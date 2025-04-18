@@ -50,7 +50,7 @@
                         <reactive-dropdown-field
                             [label]="localeData?.currency"
                             [placeholder]="commonLocaleData?.app_select"
-                            [labelValue]="selectedCurrency"
+                            [labelValue]="selectedCurrency ?? ''"
                             [options]="currencySource$ | async"
                             formControlName="currency"
                         >
@@ -66,7 +66,6 @@
                                     [name]="'number'"
                                     [cssClass]="'text-right'"
                                     #autoFocusUpdate
-                                    [label]="localeData?.account_name"
                                     [placeholder]="'0.00'"
                                     [label]="localeData?.opening_balance"
                                     [type]="'number'"
@@ -181,13 +180,13 @@
                             <mat-radio-group name="hsnOrSac" formControlName="hsnOrSac">
                                 <mat-radio-button
                                     color="primary"
-                                    [value]="'hsn'"
+                                    value="hsn"
                                 >
                                     {{ commonLocaleData?.app_hsn }}
                                 </mat-radio-button>
                                 <mat-radio-button
                                     color="primary"
-                                    [value]="'sac'"
+                                    value="sac"
                                 >
                                     {{ commonLocaleData?.app_sac }}
                                 </mat-radio-button>
@@ -195,7 +194,7 @@
                         </div>
                         <input-field
                             class="ml-4"
-                            [label]="'HSN'"
+                            [label]="commonLocaleData?.app_hsn"
                             [placeholder]="'HSN'"
                             [type]="'text'"
                             formControlName="hsnNumber"
@@ -205,7 +204,7 @@
                         </input-field>
                         <input-field
                             class="ml-4"
-                            [label]="'SAC'"
+                            [label]="commonLocaleData?.app_sac"
                             [placeholder]="'SAC'"
                             [type]="'text'"
                             formControlName="sacNumber"
@@ -365,7 +364,7 @@
                             <div class="col-sm-12 mr-t2" *ngIf="!f">
                                 <button
                                     mat-stroked-button
-                                    color="primary"
+                                    color="warn"
                                     (click)="removeGstDetailsForm(i)"
                                     class="grey-color btn-danger text-left"
                                 >
@@ -406,11 +405,10 @@
                     </ng-container>
                 </div>
             </mat-tab>
-
+            <!-- *ngIf="isHsnSacEnabledAcc" -->
             <mat-tab
                 [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
-                *ngIf="isHsnSacEnabledAcc"
             >
                 <div class="pd-t15 overflow-hidden">
                     <div class="row pd-b2">
@@ -432,8 +430,9 @@
                                 class="flag-input"
                                 [id]="'init-contact-update'"
                                 [label]="commonLocaleData?.app_mobile_number"
-                                [placeholder]="localeData?.enter_mobile_number"
+                                [placeholder]="localeData?.mobile_no_placeholder"
                                 [floatLabel]="'always'"
+                                (keydown.enter)="$event.preventDefault()"
                                 formControlName="mobileNo"
                             >
                             </input-field>
@@ -1085,20 +1084,6 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-        </div>
-        <!--deleteMergedAccount account modal  -->
-        <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <confirm-modal
-                        [title]="localeData?.delete_merged_account_title"
-                        [body]="deleteMergedAccountModalBody"
-                        (cancelCallBack)="hideDeleteMergedAccountModal()"
-                        (successCallBack)="deleteMergedAccount()"
-                    >
-                    </confirm-modal>
-                </div>
-            </div>
         </div>
         <!--moveMergedAccount account modal  -->
         <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">

@@ -9,6 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { AbstractControl, FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -62,6 +63,7 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'account-update-new-details',
@@ -92,7 +94,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
     public moveAccountForm: UntypedFormGroup;
     public taxGroupForm: UntypedFormGroup;
-    @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: ModalDirective;
+    /** Instance of delete account modal */
+    @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: TemplateRef<any>;
     @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
@@ -1370,11 +1373,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content;
         this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
-        this.deleteMergedAccountModal?.show();
+        this.openMergedAccountDeleteDialog();
     }
 
-    public hideDeleteMergedAccountModal() {
-        this.deleteMergedAccountModal?.hide();
+    openMergedAccountDeleteDialog() {
+        const configuration = this.generalService.getVoucherDeleteConfiguration(this.localeData?.delete_merged_account_title, this.deleteMergedAccountModalBody, '', this.commonLocaleData);
+        let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: configuration
+            },
+            disableClose: true
+        });
+        confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+            if (result) {
+                this.deleteMergedAccount();
+            }
+        });
     }
 
     public deleteMergedAccount() {
@@ -1384,7 +1399,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         obj.uniqueNames = [this.selectedAccountForDelete];
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
-        this.hideDeleteMergedAccountModal();
     }
     public loadAccountData() {
         this.activeAccount$.pipe(take(1)).subscribe(p => {
@@ -1468,7 +1482,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         obj.moveTo = this.selectedAccountForMove;
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
-        this.hideDeleteMergedAccountModal();
         this.hideMoveMergedAccountModal();
     }
 
