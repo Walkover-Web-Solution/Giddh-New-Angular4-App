@@ -55,7 +55,6 @@
                         >
                         </reactive-dropdown-field>
                     </div>
-
                     <div class="col-sm-4">
                         <div
                             [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
@@ -66,7 +65,6 @@
                                 [id]="'numbertel'"
                                 [cssClass]="'text-right'"
                                 #autoFocusUpdate
-                                [label]="localeData?.account_name"
                                 [placeholder]="'0.00'"
                                 [label]="localeData?.opening_balance"
                                 [type]="'number'"
@@ -113,74 +111,73 @@
                             }}</span>
                         </div>
                     </div>
-                    <div
-                        class="row pd-b2"
-                        *ngIf="addAccountForm.get('currency')?.value !== companyCurrency"
-                    >
-                        <div class="form-group col-xs-12 col-sm-4">
-                            <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }">
-                                <input-field
-                                    [name]="'number'"
-                                    [id]="'accountnumber'"
-                                    [cssClass]="'text-right'"
-                                    [label]="localeData?.foreign_opening_balance"
-                                    [placeholder]="'0.00'"
-                                    [type]="'tel'"
-                                    formControlName="foreignOpeningBalance"
-                                    [allowDigitsOnly]="true"
-                                    [readonly]="company?.isActive"
-                                    [min]="0"
-                                >
-                                </input-field>
-                                <div
-                                    class="input-group-addon"
-                                    (click)="openingBalanceTypeChanged('DEBIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cursor-pointer':
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                                </div>
-                                <div
-                                    class="input-group-addon"
-                                    (click)="openingBalanceTypeChanged('CREDIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cursor-pointer':
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
-                                </div>
+                </div>
+                <div
+                    class="row pd-b2"
+                    *ngIf="addAccountForm.get('currency')?.value !== companyCurrency"
+                >
+                    <div class="form-group col-xs-12 col-sm-4">
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }">
+                            <input-field
+                                [name]="'number'"
+                                [id]="'accountnumber'"
+                                [cssClass]="'text-right'"
+                                [label]="localeData?.foreign_opening_balance"
+                                [placeholder]="'0.00'"
+                                [type]="'tel'"
+                                formControlName="foreignOpeningBalance"
+                                [allowDigitsOnly]="true"
+                                [readonly]="company?.isActive"
+                                [min]="0"
+                            >
+                            </input-field>
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChanged('DEBIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn':
+                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                    'cursor-pointer':
+                                        addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                }"
+                                *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                            >
+                                {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
-                            <div *ngIf="company?.isActive" class="d-flex justify-content-end">
-                                <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
-                                    localeData?.bulk_add
-                                }}</span>
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChanged('CREDIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn':
+                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                    'cursor-pointer':
+                                        addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                }"
+                                *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                            >
+                                {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
+                        </div>
+                        <div *ngIf="company?.isActive" class="d-flex justify-content-end">
+                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
+                                localeData?.bulk_add
+                            }}</span>
                         </div>
                     </div>
                 </div>
-
                 <ng-container *ngIf="isHsnSacEnabledAcc">
                     <div class="row pd-l2 d-flex"> 
                         <div class="d-flex align-items-center">
                             <mat-radio-group name="hsnOrSac" formControlName="hsnOrSac">
                                 <mat-radio-button
                                     color="primary"
-                                    [value]="'hsn'"
+                                    value="hsn"
                                 >
                                     {{ commonLocaleData?.app_hsn }}
                                 </mat-radio-button>
                                 <mat-radio-button
                                     color="primary"
-                                    [value]="'sac'"
+                                    value="sac"
                                 >
                                     {{ commonLocaleData?.app_sac }}
                                 </mat-radio-button>
@@ -188,7 +185,7 @@
                         </div>
                         <input-field
                             class="ml-4"
-                            [label]="'HSN'"
+                            [label]="commonLocaleData?.app_hsn"
                             [placeholder]="'HSN'"
                             [type]="'text'"
                             formControlName="hsnNumber"
@@ -199,7 +196,7 @@
                         </input-field>
                         <input-field
                             class="ml-4"
-                            [label]="'SAC'"
+                            [label]="commonLocaleData?.app_sac"
                             [placeholder]="'SAC'"
                             [type]="'text'"
                             formControlName="sacNumber"
@@ -241,7 +238,7 @@
                                         <span class="pull-left" *ngIf="!f">
                                             <button
                                                 mat-stroked-button
-                                                color="primary"
+                                                color="warn"
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="grey-color btn-danger text-left"
                                             >
@@ -421,16 +418,6 @@
                         <div class="col-sm-6 mobile-number-wrapper">
                             <div class="form-group">
                                 <div class="d-flex">
-                                    <!-- <input
-                                        name="accountDetails.mobileNumber"
-                                        id="accountDetails"
-                                        type="tel"
-                                        #initContactAdd
-                                        class="flag-input"
-                                        id="init-contact-add"
-                                        formControlName="mobileNo"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
-                                    /> -->
                                     <input-field
                                         [name]="'accountDetails.mobileNumber'"
                                         [type]="'tel'"
@@ -523,19 +510,7 @@
                             </span>
                         </div>
                         <div class="w-30 pl-2 mobile-number-portal-wrapper">
-                                <!-- <input
-                                    id="contact"
-                                    name="contactNo_{{ i }}"
-                                    (input)="portalIndex = i"
-                                    type="tel"
-                                    #initContactAdd2
-                                    class="flag-input"
-                                    id="init-contact-portal_{{ i }}"
-                                    formControlName="contactNo"
-                                    [placeholder]="localeData?.mobile_no_placeholder"
-                                /> -->
                                 <input-field
-                                    [id]="'contact'"
                                     [name]="'contactNo_' + i"
                                     [type]="'tel'"
                                     #initContactAdd2
@@ -550,19 +525,15 @@
                             <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
                             <span id="init-contact-portal_{{ i }}-error-msg" class="d-none"> </span>
                         </div>
-                        <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
-                            <div class="inc-dec">
-                                <div class="plus-minus w-100">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary" 
-                                        aria-label="delete icon" 
-                                        (click)="removePortalUser(i)"
-                                    >
-                                        <i class="icon-trash delete"></i>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="pl-2">
+                            <button
+                                mat-stroked-button
+                                color="primary" 
+                                aria-label="delete icon" 
+                                (click)="removePortalUser(i)"
+                            >
+                                <i class="icon-trash delete"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="row pd-b2">

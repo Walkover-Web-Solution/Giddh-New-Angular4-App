@@ -29,8 +29,7 @@ import { MatTabsModule } from "@angular/material/tabs";
         ConfirmationModalModule,
         MatButtonModule,
         MatRadioModule,
-        MatTabsModule,
-        ModalModule.forRoot()
+        MatTabsModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,
