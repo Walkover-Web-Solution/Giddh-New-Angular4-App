@@ -3234,7 +3234,7 @@
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerStatementViewGridColumnsValue[1]}} (mousedown)="showNewLedgerEntryPopup(txn)">
                                 <div class="p-2 d-flex align-items-center justify-content-between column-gap1 w-100 h-100">
                                     <div class="ledger-account-label d-flex column-gap5">
-                                        <span *ngIf="txn?.particular">{{ txn.type === 'CREDIT' ? localeData?.by : localeData?.to  }} </span>
+                                        <span *ngIf="txn?.particular">{{ txn.type === 'CREDIT' ? localeData?.by : localeData?.to }}</span>
                                         <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, cr: txn.type === 'CREDIT', dr: txn.type === 'DEBIT'}"></ng-container>
                                     </div>
                                     <ul
@@ -3248,94 +3248,90 @@
                 
                             <!-- Debit Column -->
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_debit" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
-                                <ng-container *ngIf="txn.type === 'DEBIT'">
-                                    <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
-                                        <input
-                                            matInput
-                                            class="text-right form-control"
-                                            type="text"
-                                            id="enter-bank-amount-cr"
-                                            [prefix]="selectedPrefixForCurrency"
-                                            [suffix]="selectedSuffixForCurrency"
-                                            [mask]="inputMaskFormat"
-                                            [(ngModel)]="txn.total"
-                                            *ngIf="
-                                                txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
-                                                txn?.selectedAccount?.stock?.variant
-                                                    ?.purchaseTaxInclusive ||
-                                                txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
-                                            "
-                                            (input)="isTotalChanged = true; handleAmountInput(txn, true)"
-                                            (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
-                                            autocomplete="off"
-                                        />
-                                        <input
-                                            matInput
-                                            class="text-right form-control"
-                                            type="text"
-                                            id="enter-bank-amount-cr"
-                                            [prefix]="selectedPrefixForCurrency"
-                                            [suffix]="selectedSuffixForCurrency"
-                                            [mask]="inputMaskFormat"
-                                            [(ngModel)]="txn.amount"
-                                            *ngIf="
-                                                !txn?.selectedAccount?.stock?.variant?.salesTaxInclusive &&
-                                                !txn.selectedAccount?.stock?.variant
-                                                    ?.purchaseTaxInclusive &&
-                                                !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
-                                            "
-                                            (input)="handleAmountInput(txn)"
-                                            (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
-                                            autocomplete="off"
-                                        />
-                                    </div>
-                                </ng-container>
+                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
+                                    <input
+                                        matInput
+                                        class="text-right form-control"
+                                        type="text"
+                                        id="enter-bank-amount-cr"
+                                        [prefix]="selectedPrefixForCurrency"
+                                        [suffix]="selectedSuffixForCurrency"
+                                        [mask]="inputMaskFormat"
+                                        [(ngModel)]="txn.debitTotal"
+                                        *ngIf="
+                                            txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                            txn?.selectedAccount?.stock?.variant
+                                                ?.purchaseTaxInclusive ||
+                                            txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                        "
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); txn.creditTotal = 0; lc.changeTransactionType('DEBIT', i); txn.total = txn.debitTotal"
+                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        autocomplete="off"
+                                    />
+                                    <input
+                                        matInput
+                                        class="text-right form-control"
+                                        type="text"
+                                        id="enter-bank-amount-cr"
+                                        [prefix]="selectedPrefixForCurrency"
+                                        [suffix]="selectedSuffixForCurrency"
+                                        [mask]="inputMaskFormat"
+                                        [(ngModel)]="txn.debitAmount"
+                                        *ngIf="
+                                            !txn?.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                            !txn.selectedAccount?.stock?.variant
+                                                ?.purchaseTaxInclusive &&
+                                            !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                        "
+                                        (input)="handleAmountInput(txn); txn.creditAmount = 0; lc.changeTransactionType('DEBIT', i); txn.amount = txn.debitAmount"
+                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        autocomplete="off"
+                                    />
+                                </div>
                             </mat-grid-tile>
                             
                             <!-- Credit Column -->
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_credit" colspan="{{ledgerStatementViewGridColumnsValue[3]}}" (mousedown)="showNewLedgerEntryPopup(txn)">
-                                <ng-container *ngIf="txn.type === 'CREDIT'">
-                                    <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
-                                        <input
-                                            matInput
-                                            class="text-right form-control"
-                                            type="text"
-                                            id="enter-bank-amount-cr"
-                                            [prefix]="selectedPrefixForCurrency"
-                                            [suffix]="selectedSuffixForCurrency"
-                                            [mask]="inputMaskFormat"
-                                            [(ngModel)]="txn.total"
-                                            *ngIf="
-                                                txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
-                                                txn?.selectedAccount?.stock?.variant
-                                                    ?.purchaseTaxInclusive ||
-                                                txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
-                                            "
-                                            (input)="isTotalChanged = true; handleAmountInput(txn, true)"
-                                            (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
-                                            autocomplete="off"
-                                        />
-                                        <input
-                                            matInput
-                                            class="text-right form-control"
-                                            type="text"
-                                            id="enter-bank-amount-cr"
-                                            [prefix]="selectedPrefixForCurrency"
-                                            [suffix]="selectedSuffixForCurrency"
-                                            [mask]="inputMaskFormat"
-                                            [(ngModel)]="txn.amount"
-                                            *ngIf="
-                                                !txn?.selectedAccount?.stock?.variant?.salesTaxInclusive &&
-                                                !txn.selectedAccount?.stock?.variant
-                                                    ?.purchaseTaxInclusive &&
-                                                !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
-                                            "
-                                            (input)="handleAmountInput(txn)"
-                                            (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
-                                            autocomplete="off"
-                                        />
-                                    </div>
-                                </ng-container>
+                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
+                                    <input
+                                        matInput
+                                        class="text-right form-control"
+                                        type="text"
+                                        id="enter-bank-amount-cr"
+                                        [prefix]="selectedPrefixForCurrency"
+                                        [suffix]="selectedSuffixForCurrency"
+                                        [mask]="inputMaskFormat"
+                                        [(ngModel)]="txn.creditTotal"
+                                        *ngIf="
+                                            txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                            txn?.selectedAccount?.stock?.variant
+                                                ?.purchaseTaxInclusive ||
+                                            txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                        "
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); txn.debitTotal = 0; lc.changeTransactionType('CREDIT', i); txn.total = txn.creditTotal"
+                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        autocomplete="off"
+                                    />
+                                    <input
+                                        matInput
+                                        class="text-right form-control"
+                                        type="text"
+                                        id="enter-bank-amount-cr"
+                                        [prefix]="selectedPrefixForCurrency"
+                                        [suffix]="selectedSuffixForCurrency"
+                                        [mask]="inputMaskFormat"
+                                        [(ngModel)]="txn.creditAmount"
+                                        *ngIf="
+                                            !txn?.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                            !txn.selectedAccount?.stock?.variant
+                                                ?.purchaseTaxInclusive &&
+                                            !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                        "
+                                        (input)="handleAmountInput(txn); txn.debitAmount = 0; lc.changeTransactionType('CREDIT', i); txn.amount = txn.creditAmount"
+                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        autocomplete="off"
+                                    />
+                                </div>
                             </mat-grid-tile>
                         </mat-grid-list>
                         <!--new-ledger-entry-panel menu-->
@@ -3350,6 +3346,7 @@
                         >
                             <new-ledger-entry-panel
                                 #newLedPanel
+                                [blankLedgerIndex]="i"
                                 [blankLedger]="lc.blankLedger"
                                 [currentTxn]="lc.currentBlankTxn"
                                 [needToReCalculate]="needToReCalculate"

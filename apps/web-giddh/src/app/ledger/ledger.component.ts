@@ -727,10 +727,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (this.currentOrganizationType === OrganizationType.Branch ||
                         (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
                         // Add the blank transaction only if it is branch mode or company with single branch
-                        this.lc.blankLedger.transactions = [
-                            this.lc?.addNewTransaction('DEBIT'),
-                            this.lc?.addNewTransaction('CREDIT')
-                        ]
+                        this.setBlankLedgerTransactions();
                     }
                 } else {
                     if (this.generalService.companyUniqueName) {
@@ -1566,12 +1563,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.closeAllAccountDropdown();
 
         setTimeout(() => {
-            if (event?.type === 'DEBIT') {
-                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+            if (this.ledgerView === LedgerViewEnum.StatementView) {
+                // this.dropdowns[this.dropdowns?.length - 1]?.openDropdownPanel();
+                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT') || dropdown?.cssClass?.includes('CREDIT'));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
             } else {
-                const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
-                creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
+                if (event?.type === 'DEBIT') {
+                    const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+                    debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
+                } else {
+                    const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
+                    creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
+                }
             }
         }, 0);
     }
@@ -1610,15 +1613,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public resetBlankTransaction() {
-        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-        this.lc.blankLedger = this.lc.getBlankLedger();
-        this.lc.blankLedger.transactions =
-            (this.currentOrganizationType === OrganizationType.Branch ||
-                (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
+    /**
+     * Set the blank ledger transactions
+     * 
+     * @returns {void}
+     */
+    private setBlankLedgerTransactions(): void {
+        if (this.ledgerView === LedgerViewEnum.StatementView) {
+            this.lc.blankLedger.transactions = [
+                this.lc?.addNewTransaction('DEBIT')
+            ];
+        } else {
+            this.lc.blankLedger.transactions = [
                 this.lc?.addNewTransaction('DEBIT'),
                 this.lc?.addNewTransaction('CREDIT')
-            ] : [];
+            ];
+        }
+    }
+
+    /**
+     * Reset the blank transaction
+     * 
+     * @returns {void}
+     */
+    public resetBlankTransaction(): void {
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.lc.blankLedger = this.lc.getBlankLedger();
+        if (this.currentOrganizationType === OrganizationType.Branch || (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+            this.setBlankLedgerTransactions();
+        } else {
+            this.lc.blankLedger.transactions = [];
+        }
+
         this.lc.blankLedger.voucherType = null;
         this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
         this.lc.blankLedger.valuesInAccountCurrency = (this.selectedCurrency === 0);
@@ -2547,6 +2573,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             },
             accountUniqueName: this.accountUniqueName
         });
+        if (this.currentOrganizationType === OrganizationType.Branch ||
+            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+            this.setBlankLedgerTransactions();
+        }
     }
 
     public getAdvanceSearchTxn() {
@@ -2956,6 +2986,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.lc.activeAccount = data[0];
                     if (data[0]?.ledgerView) {
                         this.ledgerView = data[0].ledgerView;
+                        if (this.currentOrganizationType === OrganizationType.Branch ||
+                            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+                            this.setBlankLedgerTransactions();
+                        }
                     }
 
                     if (this.isBankAccount) {
