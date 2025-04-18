@@ -67,7 +67,7 @@ report-filters,
         .mdc-notched-outline__notch {
             border-color: var(--color-fields-border) !important;
             border-left: none !important;
-        }          
+        }
     }
 
     .mat-form-field-appearance-outline {
@@ -201,6 +201,7 @@ report-filters,
         .mdc-notched-outline__trailing {
             border-width: 1px;
         }
+
         .mdc-notched-outline__notch {
             border-left: none !important;
         }
@@ -291,7 +292,25 @@ giddh-datepicker,
     giddh-datepicker {
         .mat-mdc-form-field {
             min-width: 71px;
-            max-width: 100px;
+            max-width: 111px;
+        }
+
+        .mat-datepicker-input {
+            position: absolute;
+            margin-top: 12px;
+        }
+
+        .mat-datepicker-toggle {
+            position: relative;
+            left: 86px;
+
+            .mdc-icon-button {
+                svg {
+                    position: absolute;
+                    top: 12px;
+                    left: 0px;
+                }
+            }
         }
     }
 }
@@ -522,6 +541,7 @@ body {
             &:has(.email-dropdown-width) {
                 width: 400px !important;
             }
+
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
 
@@ -633,6 +653,7 @@ app-cdk-scroll {
     &:not(.mdc-text-field--disabled) {
         .mdc-text-field__input {
             color: var(--color-common-primary-text);
+
             &::placeholder {
                 color: var(--color-gray) !important;
             }
@@ -653,13 +674,15 @@ input-field {
         i {
             inset: 16px 0 0 0;
         }
-        &.mat-mdc-form-field  {
+
+        &.mat-mdc-form-field {
             .mat-mdc-text-field-wrapper {
                 .mat-mdc-form-field-infix {
                     padding-left: 20px !important;
                 }
-            } 
-            .mdc-text-field--outlined  {
+            }
+
+            .mdc-text-field--outlined {
                 .mdc-notched-outline {
                     .mdc-notched-outline__leading {
                         width: max(40px, var(--mdc-shape-small, 4px)) !important;
@@ -687,29 +710,29 @@ mat-option {
 }
 
 .mdc-text-field--outlined {
+    .mdc-notched-outline__leading {
+        border-color: var(--color-fields-border) !important;
+    }
+
+    &.mdc-text-field--focused {
         .mdc-notched-outline__leading {
-            border-color: var(--color-fields-border) !important;
-        }
-
-        &.mdc-text-field--focused {
-            .mdc-notched-outline__leading {
-                border-color: var(--color-border-focus) !important;
-            }
-
-            .mdc-notched-outline__notch {
-                border-color: var(--color-border-focus) !important;
-                border-left: none !important;
-            }
-
-            .mdc-notched-outline__trailing {
-                border-color: var(--color-border-focus) !important;
-            }
+            border-color: var(--color-border-focus) !important;
         }
 
         .mdc-notched-outline__notch {
-            border-color: var(--color-fields-border) !important;
+            border-color: var(--color-border-focus) !important;
             border-left: none !important;
         }
+
+        .mdc-notched-outline__trailing {
+            border-color: var(--color-border-focus) !important;
+        }
+    }
+
+    .mdc-notched-outline__notch {
+        border-color: var(--color-fields-border) !important;
+        border-left: none !important;
+    }
 
     .mdc-notched-outline {
         .mdc-notched-outline__trailing {

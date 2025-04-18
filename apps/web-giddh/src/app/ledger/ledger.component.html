@@ -711,11 +711,11 @@
                                         <mat-grid-list cols="2" rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
-                                                <span class="pull-right">{{ localeData?.dr }}</span>
+                                                <span>{{ localeData?.dr }}</span>
                                             </mat-grid-tile>
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_credit }}
-                                                <span class="pull-right">{{ localeData?.cr }}</span>
+                                                <span>{{ localeData?.cr }}</span>
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
@@ -781,8 +781,8 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                                <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span">
+                                                                <div class="d-flex align-items-center custom-input-field">
+                                                                    <span class="checkbox-span position-absolute mr-l1">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -818,12 +818,14 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field pd-t1">
+                                                                    <span class="custom-input-field mr-l05" [ngClass]="{'pd-l2': !(selectedBankTrxWhileHovering !==
+                                                                    txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
                                                                             (datepickerState)="datepickerState($event)"
+                                                                            [showToggleIcon] = "true"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
@@ -1146,8 +1148,8 @@
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}}>
-                                                                <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span">
+                                                              <div class="d-flex align-items-center custom-input-field">
+                                                                    <span class="checkbox-span checked mr-l1">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
@@ -1183,12 +1185,13 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field pd-t1">
+                                                                    <span class="custom-input-field ml-1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
                                                                             (dateSelected)="onChangeEntryDate(item)"
                                                                             (datepickerState)="datepickerState($event)"
+                                                                            [showToggleIcon] = "true"
                                                                         ></giddh-datepicker>
                                                                     </span>
                                                                 </div>
