@@ -93,7 +93,8 @@
                         inputData?.voucherType === 'receipt' ||
                         inputData?.voucherType === 'payment' ||
                         inputData?.voucherType === 'credit note' ||
-                        inputData?.voucherType === 'debit note'
+                        inputData?.voucherType === 'debit note',
+                    'mat-form-field-invalid': !exportForm.get('copyTypes').value?.length && !isValidForm
                 }"
                 *ngIf="inputData?.voucherType === 'sales' && exportForm.get('voucherExport').value"
             >
@@ -110,7 +111,6 @@
                         mat-stroked-button
                         color="primary"
                         (click)="exportVouchers(false)"
-                        [disabled]="!exportForm.get('copyTypes').value"
                     >
                         {{ commonLocaleData?.app_download }}
                     </button>
