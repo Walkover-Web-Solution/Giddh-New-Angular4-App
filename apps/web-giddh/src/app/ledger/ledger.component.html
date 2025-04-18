@@ -2119,8 +2119,8 @@
                                                             (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
                                                             autocomplete="off"
                                                         />
-                                                        <input
-                                                            matInput
+                                                            <input
+                                                                matInput
                                                             class="text-right form-control"
                                                             type="text"
                                                             id="enter-bank-amount-cr"
@@ -3253,7 +3253,7 @@
                                         matInput
                                         class="text-right form-control"
                                         type="text"
-                                        id="enter-bank-amount-cr"
+                                        [id]="'enter-bank-amount-cr-' + txn.id"
                                         [prefix]="selectedPrefixForCurrency"
                                         [suffix]="selectedSuffixForCurrency"
                                         [mask]="inputMaskFormat"
@@ -3272,7 +3272,7 @@
                                         matInput
                                         class="text-right form-control"
                                         type="text"
-                                        id="enter-bank-amount-cr"
+                                        [id]="'enter-bank-amount-cr-' + txn.id"
                                         [prefix]="selectedPrefixForCurrency"
                                         [suffix]="selectedSuffixForCurrency"
                                         [mask]="inputMaskFormat"
@@ -3297,7 +3297,7 @@
                                         matInput
                                         class="text-right form-control"
                                         type="text"
-                                        id="enter-bank-amount-cr"
+                                        [id]="'enter-bank-amount-cr-' + txn.id"
                                         [prefix]="selectedPrefixForCurrency"
                                         [suffix]="selectedSuffixForCurrency"
                                         [mask]="inputMaskFormat"
@@ -3316,7 +3316,7 @@
                                         matInput
                                         class="text-right form-control"
                                         type="text"
-                                        id="enter-bank-amount-cr"
+                                        [id]="'enter-bank-amount-cr-' + txn.id"
                                         [prefix]="selectedPrefixForCurrency"
                                         [suffix]="selectedSuffixForCurrency"
                                         [mask]="inputMaskFormat"
