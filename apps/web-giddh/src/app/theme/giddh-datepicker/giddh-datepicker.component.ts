@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef , ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { DateAdapter } from '@angular/material/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -25,6 +25,8 @@ const noop = () => { };
 })
 
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {
+    /** Instance of picker from datepicker */
+    @ViewChild('picker') picker!: MatDatepicker<any>;
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
     /** Min date */
@@ -194,16 +196,31 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         this.onTouchedCallback = fn;
     }
 
-     /**
-     * Get current value on input
-     *
-     * @param event
-     */
+    /**
+    * Get current value on input
+    *
+    * @param event
+    */
     public dateInputChange(event: Event): void {
         if (event) {
             const inputElement = event.target as HTMLInputElement;
             const inputValue = inputElement.value;
             this.inputChange = inputValue;
+        }
+    }
+
+    /**
+     * This will be use for focus click event on input
+     *
+     * @memberof GiddhDatepickerComponent
+     */
+    public toggleDatepicker() {
+        if (this.showToggleIcon) {
+            this.emitDatepickerState(false);
+            this.picker?.close();
+        } else {
+            this.emitDatepickerState(true);
+            this.picker?.open();
         }
     }
 }

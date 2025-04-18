@@ -12,6 +12,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transform: translateX(-45%);
+        }
+        .checked {
+            display: contents;
         }
         .ledger-row {
             $columns: 50;
@@ -25,7 +29,7 @@
 
             &.highlighted-transaction {
                 .mat-grid-tile {
-                    background-color: var(--color-success-enable-bg-light);
+                    background-color: var(--color-success-enable-bg-light) !important;
                 }
             }
             &:not(.highlighted-transaction) {
