@@ -405,10 +405,10 @@
                     </ng-container>
                 </div>
             </mat-tab>
-            <!-- *ngIf="isHsnSacEnabledAcc" -->
             <mat-tab
                 [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
+                *ngIf="isHsnSacEnabledAcc"
             >
                 <div class="pd-t15 overflow-hidden">
                     <div class="row pd-b2">
@@ -432,7 +432,6 @@
                                 [label]="commonLocaleData?.app_mobile_number"
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [floatLabel]="'always'"
-                                (keydown.enter)="$event.preventDefault()"
                                 formControlName="mobileNo"
                             >
                             </input-field>
