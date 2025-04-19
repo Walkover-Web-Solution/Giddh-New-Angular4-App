@@ -767,7 +767,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * Handles page change events and makes an API call to fetch data for the new page.
      *
      * @param {PageEvent} event - The event containing pagination details.
-     * @memberof ProjectWiseAccountingListComponent
+     * @memberof EWayBillComponent
      */
     public handlePageChange(event: PageEvent): void {
         this.EwayBillfilterRequest.count = event.pageSize;
