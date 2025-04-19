@@ -84,6 +84,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -179,7 +180,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         DeleteTemplateConfirmationModalModule,
         MatMenuModule,
         MatTooltipModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatPaginatorModule
     ],
     exports: [
         InvoiceRoutingModule,

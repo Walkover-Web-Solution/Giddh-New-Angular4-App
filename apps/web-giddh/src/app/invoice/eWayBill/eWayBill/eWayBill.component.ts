@@ -17,7 +17,7 @@ import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, UntypedFormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -26,6 +26,7 @@ import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { cloneDeep } from '../../../lodash-optimized';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -150,6 +151,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public cancelDialogRef: MatDialogRef<any>;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Holds page size options for pagination */
+    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private store: Store<AppState>,
@@ -165,7 +168,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private gstReconcileService: GstReconcileService,
         public dialog: MatDialog
     ) {
-        this.EwayBillfilterRequest.count = 20;
+        this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
         this.EwayBillfilterRequest.page = 1;
 
         this.isGetAllEwaybillRequestInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess), takeUntil(this.destroyed$));
@@ -460,7 +463,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             panelClass: "mat-dialog-md",
             disableClose: true
         };
-    
+
         if (dialogType === 'vehicle') {
             this.dialog.open(this.vehicleDialog, dialogConfig);
         } else if (dialogType === 'cancel') {
@@ -758,5 +761,17 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
         }
+    }
+
+    /**
+     * Handles page change events and makes an API call to fetch data for the new page.
+     *
+     * @param {PageEvent} event - The event containing pagination details.
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public handlePageChange(event: PageEvent): void {
+        this.EwayBillfilterRequest.count = event.pageSize;
+        this.EwayBillfilterRequest.page = event.pageIndex + 1;
+        this.getAllFilteredInvoice();
     }
 }
