@@ -19,7 +19,6 @@ import { FormFieldsModule } from 'apps/web-giddh/src/app/theme/form-fields/form-
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        TabsModule.forRoot(),
         TranslateDirectiveModule,
         MatSlideToggleModule,
         RouterModule,
