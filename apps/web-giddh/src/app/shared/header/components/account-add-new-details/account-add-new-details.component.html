@@ -186,7 +186,7 @@
                         <input-field
                             class="ml-4"
                             [label]="commonLocaleData?.app_hsn"
-                            [placeholder]="'HSN'"
+                            [placeholder]="commonLocaleData?.app_hsn"
                             [type]="'text'"
                             formControlName="hsnNumber"
                             [maxlength]="10"
@@ -197,7 +197,7 @@
                         <input-field
                             class="ml-4"
                             [label]="commonLocaleData?.app_sac"
-                            [placeholder]="'SAC'"
+                            [placeholder]="commonLocaleData?.app_sac"
                             [type]="'text'"
                             formControlName="sacNumber"
                             [allowDigitsOnly]="true"
@@ -235,12 +235,12 @@
                                 <div class="add-address-default">
                                     <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                     <div class="remove-radio-btn">
-                                        <span class="pull-left" *ngIf="!f">
+                                        <span class="pd-r1" *ngIf="!f">
                                             <button
                                                 mat-stroked-button
                                                 color="warn"
                                                 (click)="removeGstDetailsForm(i)"
-                                                class="grey-color btn-danger text-left"
+                                                class="bg-white"
                                             >
                                                 <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
                                             </button>

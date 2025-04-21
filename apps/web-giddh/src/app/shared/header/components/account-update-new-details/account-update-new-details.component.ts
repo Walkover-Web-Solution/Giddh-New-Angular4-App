@@ -1373,7 +1373,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content;
         this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
-        this.openMergedAccountDeleteDialog();
+        this.openDeleteMergedAccountDialog();
     }
 
     /**
@@ -1382,7 +1382,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @returns {void}
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public openMergedAccountDeleteDialog(): void {
+    public openDeleteMergedAccountDialog(): void {
         const configuration = this.generalService.getVoucherDeleteConfiguration(this.localeData?.delete_merged_account_title, this.deleteMergedAccountModalBody, '', this.commonLocaleData);
         const confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
