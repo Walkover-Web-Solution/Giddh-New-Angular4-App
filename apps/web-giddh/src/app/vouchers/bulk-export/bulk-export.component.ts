@@ -48,7 +48,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         this.exportForm = this.formBuilder.group({
             copyTypes: [''],
             recipients: [''],
-            mergePdf: new FormControl<boolean>(false, { nonNullable: true })
+            mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
+            exportType: new FormControl<'excel' | 'csv'>('excel', { nonNullable: true })
         });
 
         this.getRecipientEmail();
@@ -170,5 +171,38 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         }
 
         this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
+    }
+
+    /**
+     * Export Excel/CSV File and Download
+     *
+     * @return {*}  {*}
+     * @memberof BulkExportComponent
+     */
+    public exportDownload(): any {
+        let exportRequest = { 
+            from: '', 
+            to: '', 
+            dataToSend: null,
+            showAccountCustomFields: false,
+            showVoucherCustomFields: false,            
+            showBillingTaxNumber: false,
+            showBillingPinCode: false,
+            showBillingStateName: false,
+            showBillingCountryName: false,            
+            showShippingAddress: false,
+            showShippingTaxNumber: false,
+            showShippingPinCode: false,
+            showShippingStateName: false,
+            showShippingCountryName: false
+        };
+        exportRequest.from = this.inputData?.advanceFilters?.from;
+        exportRequest.to = this.inputData?.advanceFilters?.to;
+        let dataTosend = { uniqueNames: [], type: this.inputData?.voucherType };
+        if (this.inputData?.selectedVouchers?.length) {
+            dataTosend.uniqueNames = this.inputData?.voucherUniqueNames;
+            exportRequest.dataToSend = dataTosend;
+            this.componentStore.exportVouchers(exportRequest);
+        }
     }
 }

@@ -30,6 +30,31 @@
                     >
                         {{ localeData?.single_pdf }}
                     </mat-radio-button>
+                    <mat-radio-button
+                        color="primary"
+                        [value]="null"
+                        aria-label="Export as CSV/Excel"
+                    >
+                        {{ "Export CSV/Excle" }}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div class="pd-b1 mr-b15">
+                <mat-radio-group name="exportType" formControlName="exportType" [hidden]="exportForm.get('mergePdf').value !== null">
+                    <mat-radio-button
+                        color="primary"
+                        [value]="'excel'"
+                        aria-label="Export as Excel"
+                    >
+                        {{ "localeData?.excel" }}
+                    </mat-radio-button>
+                    <mat-radio-button
+                        color="primary"
+                        [value]="'csv'"
+                        aria-label="Export as CSV"
+                    >
+                        {{ "localeData?.csv" }}
+                    </mat-radio-button>
                 </mat-radio-group>
             </div>
             <div
@@ -42,6 +67,7 @@
                         inputData?.voucherType === 'debit note'
                 }"
                 *ngIf="inputData?.voucherType === 'sales'"
+                [hidden]="exportForm.get('mergePdf').value !== null"
             >
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.select_copy }}</mat-label>
