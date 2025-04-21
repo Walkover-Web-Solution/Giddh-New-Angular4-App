@@ -14,5 +14,23 @@
 	"single_pdf": "एकल पीडीएफ",
 	"multiple_pdf": "अनेक पीडीएफ",
 	"export_attachment": "संलग्नक निर्यात करा",
-    "export_voucher": "व्हाउचर निर्यात करा"
+    "export_voucher": "व्हाउचर निर्यात करा",
+    "export_type": "निर्यात प्रकार",
+    "excel_file_type": "एक्सेल फ़ाइल प्रकार",
+    "file_type_format": {
+        "xlsx": "XLSX",
+        "csv": "CSV"
+    },
+    "account_custom_fields": "खाता स्वचालित क्षेत्र",
+    "voucher_custom_fields": "वाउचर स्वचालित क्षेत्र",
+    "billing_tax_number": "बिलिंग कर संख्या",
+    "billing_pin_code": "बिलिंग पिन कोड",
+    "billing_state_name": "बिलिंग राज्य नाम",
+    "billing_country_name": "बिलिंग देश नाम",
+    "shipping_address": "शिपिंग पता",
+    "shipping_tax_number": "शिपिंग कर संख्या",
+    "shipping_pin_code": "शिपिंग पिन कोड",
+    "shipping_state_name": "शिपिंग राज्य नाम",
+    "shipping_country_name": "शिपिंग देश नाम",
+    "export_note": "डिफ़ॉल्ट कॉलम 'दिनांक, वाउचर नंबर, ग्राहक, देय तिथि, वाउचर राशि, वाउचर देय, स्थिति, शिपिंग तिथि, शिपिंग वाईज़, ट्रैकिंग नंबर, नोट' निर्यात किए जाएंगे, आपके पास वांछित कॉलम जोड़ने का विकल्प भी है।"
 }

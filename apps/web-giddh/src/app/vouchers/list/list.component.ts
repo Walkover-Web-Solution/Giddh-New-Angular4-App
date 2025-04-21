@@ -629,16 +629,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.handleGetAllVoucherResponse(response);
             });
 
-        this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                const blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`;
-                this.selectedVouchers = [];
-                this.allVouchersSelected = false;
-                return saveAs(blob, fileName);
-            }
-        });
-
         this.componentStore.eInvoiceGenerated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.componentStore.resetGenerateEInvoice();
@@ -1429,24 +1419,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
     /**
-     * Export CSV File and Download
-     *
-     * @return {*}  {*}
-     * @memberof VoucherListComponent
-     */
-    public exportCsvDownload(): any {
-        let exportCsvRequest = { from: '', to: '', dataToSend: null };
-        exportCsvRequest.from = this.advanceFilters.from;
-        exportCsvRequest.to = this.advanceFilters.to;
-        let dataTosend = { uniqueNames: [], type: this.voucherType };
-        if (this.selectedVouchers?.length) {
-            dataTosend.uniqueNames = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
-            exportCsvRequest.dataToSend = dataTosend;
-            this.componentStore.exportVouchers(exportCsvRequest);
-        }
-    }
-
-    /**
      * Generate E-Invoice API Call
      *
      * @memberof VoucherListComponent
@@ -1567,15 +1539,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(BulkExportComponent, {
-            width: '600px',
+        const dialogRef = this.dialog.open(BulkExportComponent, {
+            width: '760px',
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
                 voucherType: this.voucherType,
                 advanceFilters: this.advanceFilters,
-                totalItems: this.selectedVouchers?.length || this.totalResults
+                totalItems: this.selectedVouchers?.length || this.totalResults,
+                allVouchersSelected: this.allVouchersSelected,
+                localeData: this.localeData
             },
             disableClose: true
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+            }
         });
     }
 
