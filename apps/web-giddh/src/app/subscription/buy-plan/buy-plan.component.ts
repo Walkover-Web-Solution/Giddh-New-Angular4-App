@@ -25,7 +25,6 @@ import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ServiceConfig } from '../../services/service.config';
-import { cloneDeep } from '../../lodash-optimized';
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -222,14 +221,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public callBackEvent: boolean = false;
     /** Hold create subscription success event */
     public createSubscriptionSuccess: any;
-    public createSubscriptionResponse: any;
-    public changePlanDetailsResponse: any;
-    public generateOrderIdResponse: any;
-    public razorpayError: boolean = false;
+    /** Request object for generate order id */
     public generateOrderIdRequest: any
     // Add retry count for Razorpay payment failures
-    private razorpayRetryCount: number = 0;
-    private readonly maxRazorpayRetryCount: number = 3;
+    public razorpayRetryCount: number = 0;
+    public maxRazorpayRetryCount: number = 3;
 
     constructor(
         public dialog: MatDialog,
@@ -416,11 +412,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     } else {
                         if ((response?.duration === 'MONTHLY' || response?.duration === 'DAILY') && response?.region?.code !== 'GBR') {
                             if (response.razorpayCustomerId && this.payType === 'buy') {
-                                this.createSubscriptionResponse = {
-                                    data: response,
-                                    razorpayCustomerId: response.razorpayCustomerId,
-                                    payType: cloneDeep(this.payType)
-                                }
                                 this.initializePayment(response, 'createSubscription');
                             } else {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
@@ -1658,9 +1649,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     this.componentStore.createSubscription(this.subscriptionRequest);
                 }
-            }, 1000);
+            }, 3000);
         } else {
-            this.toasterService.showSnackBar('error', 'There is an error with Razorpay. Please contact support.');
+            this.toasterService.showSnackBar('error', this.localeData?.razorpay_error_message);
         }
     }
 
