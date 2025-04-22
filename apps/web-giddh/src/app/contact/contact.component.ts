@@ -236,7 +236,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** This will use for displayed table columns */
     public displayedColumns: any[] = [];
     /** This will use for customise column check values */
-    public customiseColumns = [];
+    public dynamicCustomColumns = [];
     /** Holds inventory type module  */
     public moduleType: string = '';
     /** Holds true if current company country is plaid supported country */
@@ -348,73 +348,73 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.setActiveTab("aging-report");
                 }
 
-                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
-                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "customer_name",
-                            "label": "Customer Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "sales",
-                            "label": "Sales",
-                            "checked": true
-                        },
-                        {
-                            "value": "receipt",
-                            "label": "Receipt",
-                            "checked": true
-                        }
-                    );
-                    this.moduleType = ContactsTab.customer;
-                    this.displayedColumns = [];
-                }
-                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "vendor_name",
-                            "label": "Vendor Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "purchase",
-                            "label": "Purchase",
-                            "checked": true
-                        },
-                        {
-                            "value": "payment",
-                            "label": "Payment",
-                            "checked": true
-                        }
-                    );
+                // this.dynamicCustomColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+                // if (this.activeTab === ContactsTab.customer.toLowerCase()) {
+                //     this.dynamicCustomColumns.splice(0, 0,
+                //         {
+                //             "value": "customer_name",
+                //             "label": "Customer Name",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "parent_group",
+                //             "label": "Parent Group",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "opening",
+                //             "label": "Opening",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "sales",
+                //             "label": "Sales",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "receipt",
+                //             "label": "Receipt",
+                //             "checked": true
+                //         }
+                //     );
+                //     this.moduleType = ContactsTab.customer;
+                //     this.displayedColumns = [];
+                // }
+                // if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                //     this.dynamicCustomColumns.splice(0, 0,
+                //         {
+                //             "value": "vendor_name",
+                //             "label": "Vendor Name",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "parent_group",
+                //             "label": "Parent Group",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "opening",
+                //             "label": "Opening",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "purchase",
+                //             "label": "Purchase",
+                //             "checked": true
+                //         },
+                //         {
+                //             "value": "payment",
+                //             "label": "Payment",
+                //             "checked": true
+                //         }
+                //     );
 
-                    this.moduleType = ContactsTab.vendor;
-                    this.displayedColumns = [];
-                }
-                if (lastTabType) {
-                    this.translationComplete(true);
-                }
+                //     this.moduleType = ContactsTab.vendor;
+                //     this.displayedColumns = [];
+                // }
+                // if (lastTabType) {
+                //     this.translationComplete(true);
+                // }
             }
 
         });
@@ -437,19 +437,19 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.isICICIIntegrated = false;
             }
-            if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                let customiseColumns = cloneDeep(this.customiseColumns);
-                if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
-                    let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
-                    if (!filteredCustomisColumns.length) {
-                        this.customiseColumns.push({ value: "action", label: "Action", checked: true });
-                    }
-                } else {
-                    this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
-                }
-                const values = this.customiseColumns.map(item => item.value);
-                this.showSelectedHeaderColumns(values);
-            }
+            // if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+            //     let dynamicCustomColumns = cloneDeep(this.dynamicCustomColumns);
+            //     if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
+            //         let filteredCustomisColumns = dynamicCustomColumns.filter(item => item.value === "action");
+            //         if (!filteredCustomisColumns.length) {
+            //             this.dynamicCustomColumns.push({ value: "action", label: "Action", checked: true });
+            //         }
+            //     } else {
+            //         this.dynamicCustomColumns = dynamicCustomColumns.filter(item => item.value !== "action");
+            //     }
+            //     const values = this.dynamicCustomColumns.map(item => item.value);
+            //     this.showSelectedHeaderColumns(values);
+            // }
             this.cdRef.detectChanges();
         });
 
@@ -1300,14 +1300,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
-                        // let customFields = [];
-                        // element.customFields?.forEach(field => {
-                        //     customFields[field?.uniqueName] = [];
-                        //     customFields[field?.uniqueName] = field;
-                        // });
-
-                        // element.customFields = customFields;
-
                         let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1328,14 +1320,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
-                        // let customFields = [];
-                        // element.customFields?.forEach(field => {
-                        //     customFields[field?.uniqueName] = [];
-                        //     customFields[field?.uniqueName] = field;
-                        // });
-
-                        // element.customFields = customFields;
-
                         let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1506,19 +1490,28 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.getAccounts(this.fromDate, this.toDate, this.checkboxInfo.selectedPage, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
-    /**
-     * This will use for show hide main table headers from customise columns
-     *
-     * @param {*} event
-     * @memberof PurchaseRegisterExpandComponent
-     */
-    public showSelectedHeaderColumns(columns: string[]): void {
-        if (columns) {
-            this.displayedColumns = columns;
-        }
-        this.cdRef.detectChanges();
+    /** Returns only the columns marked as checked */
+    public get visibledynamicCustomColumns(): any[] {
+        return this.dynamicCustomColumns?.filter(col => col.checked) || [];
     }
 
+    /**
+    * This will use for show hide main table headers from dynamic columns with new columns
+    *
+    * @param {*} event
+    * @memberof ContactComponent
+    */
+    public getCustomiseDynamicHeaderColumns(event: any): void {
+        this.dynamicCustomColumns = [];
+        this.displayedColumns = [];
+        if (event) {
+            this.dynamicCustomColumns = event;
+            this.displayedColumns = event
+                .filter(item => item?.checked)
+                .map(item => item.value);
+                this.cdRef.detectChanges();
+        }
+    }
 
     /**
      * Branch change handler
@@ -1593,10 +1586,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-            this.customiseColumns = this.customiseColumns?.map(column => {
-                column.label = this.localeData[column.value];
-                return column;
-            });
+            // this.dynamicCustomColumns = this.dynamicCustomColumns?.map(column => {
+            //     column.label = this.localeData[column.value];
+            //     return column;
+            // });
         }
     }
 

@@ -18,7 +18,7 @@
     bottom: 0;
     min-height: calc(100vh - 60px);
     background-color: var(--color-white);
-    width: 60px;
+    width: var(--primary-sidebar-width);
     left: 0;
     z-index: 991;
     box-shadow: 1px 0px 4px var(--color-sidebar-primary-box-shadow) !important;
@@ -28,14 +28,6 @@
     padding-top: 0;
 }
 
-.nav-left-bar.open {
-    left: 0;
-    width: 240px;
-
-    &.width-60 {
-        width: 60px;
-    }
-}
 
 .menu-wrapper {
     max-height: 100%;

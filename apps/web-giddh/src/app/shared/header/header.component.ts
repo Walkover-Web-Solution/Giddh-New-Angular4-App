@@ -602,6 +602,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (response) {
                 this.expandSidebar(true);
+
             } else {
                 this.collapseSidebar(true);
             }
@@ -1335,8 +1336,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
      * Navigates to obligation
-     * 
-     * @returns {*} 
+     *
+     * @returns {*}
      * @memberof HeaderComponent
      */
     public goToObligation(): void {
@@ -1358,7 +1359,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * Placeholders are denoted as `[placeholder]` and replaced sequentially.
      *
      * @param {string} text
-     * @param {string[]} args 
+     * @param {string[]} args
      * @returns {string} A string where placeholders are replaced with corresponding arguments.
      * @memberof HeaderComponent
      */
@@ -1627,6 +1628,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sideBarStateChange(true);
             this.sidebarForcelyExpanded = true;
         }
+        document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "240px");
         this.isSidebarExpanded = true;
         this.generalService.expandSidebar();
     }
@@ -1648,11 +1650,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         if (forceCollapse) {
             this.sideMenu.isExpanded = false;
+            document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "60px");
         } else {
             if (!this.sideMenu.isopen) {
                 this.sideMenu.isExpanded = false;
+                document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "60px");
             } else {
                 this.sideMenu.isExpanded = true;
+                document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "240px");
             }
         }
 
@@ -1660,6 +1665,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
             this.generalService.collapseSidebar();
+            document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "60px");
         }
     }
 

@@ -138,7 +138,7 @@ export class CommonService {
      */
     public saveSelectedTableColumns(model: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS;
+        let url = this.config.apiUrl + COMMON_API.SAVE_MODULE_WISE_COLUMNS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':module', model.module);
         return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -154,9 +154,13 @@ export class CommonService {
     * @return {*}  {Observable<BaseResponse<any, string>>}
     * @memberof CommonService
     */
-    public getSelectedTableColumns(module: string): Observable<BaseResponse<any, string>> {
+    public getSelectedTableColumns(module: string, customColumns? :boolean): Observable<BaseResponse<any, string>> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS
+            ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            ?.replace(':module', module)
+            ?.replace(':customColumns', encodeURIComponent(customColumns))
+        ).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             data.queryString = {};
