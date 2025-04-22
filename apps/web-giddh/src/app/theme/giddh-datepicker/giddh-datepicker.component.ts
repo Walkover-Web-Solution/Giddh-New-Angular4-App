@@ -223,3 +223,4 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
             this.picker?.open();
         }
     }
+}
