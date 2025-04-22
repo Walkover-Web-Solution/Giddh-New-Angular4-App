@@ -51,3 +51,16 @@ sup.mandatory-asterisk {
     max-height: 102px;
     min-height: 134px
 }
+.show-caret-icon {
+    background-image: var(--color-caret-image) !important;
+    background-color: var(--color-white) !important;
+    background-position: 97% !important;
+    background-size: 10px !important;
+    background-repeat: no-repeat;
+}
+
+.tax-wrapper {
+    max-height: 156px;
+    min-width: 200px;
+    overflow-y: auto;
+}

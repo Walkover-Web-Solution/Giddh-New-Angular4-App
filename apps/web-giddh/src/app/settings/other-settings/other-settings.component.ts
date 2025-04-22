@@ -10,6 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { OrganizationProfile } from '../constants/settings.constant';
+import { LedgerViewEnum } from '../../models/api-models/Ledger';
 
 @Component({
     selector: 'other-settings',
@@ -52,7 +53,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         balanceDisplayFormat: '',
         taxType: '',
         manageInventory: false,
-        withPay: false
+        withPay: false,
+        ledgerView: LedgerViewEnum.TView
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -70,14 +72,18 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public showLanguageChangeMessage: boolean = false;
     /** List of available themes */
     public availableThemes: IOption[] = [];
+    /** List of available ledger view */
+    public availableLedgerView: IOption[] = [];
     /** Stores the company decimal system */
     public inventoryType: IOption[] = [];
     /** This holds the active theme */
     public activeTheme: string = "";
-    /** Holds Current Theme Label  */
+    /** Holds Current Theme Label */
     public currentThemeLabel: string;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Holds ledger view enum */
+    public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -109,6 +115,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.translationLocales = this.generalService.getSupportedLocales();
         this.availableThemes = this.generalService.getAvailableThemes();
+        this.availableLedgerView = this.generalService.getAvailableLedgerView();
 
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
