@@ -298,7 +298,7 @@
                         [isAdvanceReceipt]="isAdvanceReceipt"
                         [allowedSelectionOfAType]="allowedSelectionOfAType"
                         [commonLocaleData]="commonLocaleData"
-                        [showError]="isRcmEntry && !validateTaxes()"
+                        [showError]="showRcmEntryError && isRcmEntry && !validateTaxes()"
                         [showCreateNew]="true"
                         (createNewTax)="showCreateTaxDialog()"
                     >
