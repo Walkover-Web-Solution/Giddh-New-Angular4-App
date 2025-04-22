@@ -1196,7 +1196,7 @@ textarea {
                 background-color: var(--color-transparent-background) !important;
             }
         }
-        .readonly-field { 
+        .readonly-field {
             .mat-mdc-form-field {
                 background-color: var(--color-transparent-background) !important;
             }
@@ -13401,12 +13401,12 @@ voucher-component {
     .dropdown-bg {
         background-color: var(--color-transparent-background) !important;
     }
-    
+
     .mdc-text-field__input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
     .mat-mdc-form-field input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
@@ -13895,8 +13895,14 @@ mat-list {
     }
 }
 
-/** Use this class on black color image (icon) 
+/** Use this class on black color image (icon)
  to  change color in dark theme **/
 .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
+}
+
+.content-width{
+    width: calc(100vw - var(--primary-sidebar-width));
+    position: sticky;
+    left: var(--primary-sidebar-width);
 }
