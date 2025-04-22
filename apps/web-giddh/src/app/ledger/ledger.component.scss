@@ -108,6 +108,9 @@ input {
         padding-left: 2px;
         padding-right: 2px;
     }
+    &:has(reactive-dropdown-field) {
+        padding-inline: 0px;
+    }
 }
 .transaction-mapped-table .mat-grid-tile {
     padding: 10px !important;
@@ -789,7 +792,6 @@ sh-select:focus {
     font-weight: 800;
 }
 .account-placeholder {
-    padding-left: 12px;
     font-size: var(--font-size-15);
     min-height: 49px;
     padding-top: 14px;
