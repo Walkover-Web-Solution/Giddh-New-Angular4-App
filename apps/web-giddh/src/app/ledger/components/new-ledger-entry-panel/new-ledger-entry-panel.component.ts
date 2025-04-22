@@ -171,6 +171,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedWarehouse: any;
     /** True, if subvoucher is RCM */
     public isRcmEntry: boolean = false;
+    /** True, if subvoucher is RCM and taxes are not selected */
+    public showRcmEntryError: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: ConfirmationModalConfiguration;
     /** True, if the selected voucher type is 'Receipt' */
@@ -846,6 +848,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        if ((this.isRcmEntry) && !this.validateTaxes()) {
+            this.showRcmEntryError = true;
+            return;
+        }
         if (this.currentTxn?.isStock && !this.selectedStockVariant.value) {
             return;
         }
