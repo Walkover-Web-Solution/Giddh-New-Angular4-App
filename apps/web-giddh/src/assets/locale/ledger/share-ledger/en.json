@@ -3,5 +3,6 @@
     "share_with": "Share with",
     "get_shareable_link": "Get shareable link",
     "copied": "Copied...",
-    "share_note": "Anyone can see the ledger who gets this URL."
+    "share_note": "Anyone can see the ledger who gets this URL.",
+    "url": "URL"
 }

@@ -212,6 +212,7 @@ export class TransactionsResponse implements ITransactions {
     public convertedClosingBalance?: IClosingBalance;
     public count: number;
     public creditTotal: number;
+    public debitCreditTransactions: ITransactionItem[];
     public convertedCreditTotal?: number;
     public creditTransactions: ITransactionItem[];
     public creditTransactionsCount: number;
@@ -444,3 +445,12 @@ export interface IVariant extends IParticular {
 
 /** Type for ledger type */
 export type LedgerType = 'cr' | 'dr';
+
+/** Type for ledger view */
+export type  TLedgerView  = 'STATEMENT_VIEW' | 'T_VIEW';
+
+/** Enum for ledger view */
+export enum LedgerViewEnum  {
+    StatementView = 'STATEMENT_VIEW',
+    TView = 'T_VIEW'
+}

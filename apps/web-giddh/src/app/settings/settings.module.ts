@@ -50,12 +50,10 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
@@ -72,6 +70,11 @@ import { MatListModule } from '@angular/material/list';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { TriggersComponent } from './triggers/triggers.component';
+import { ShopifyIntegrationComponent } from './shopify-integration/shopify.intergation.component';
+import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
+import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [
@@ -88,6 +91,10 @@ import { NewConfirmModalModule } from '../theme/new-confirm-modal';
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
+        TriggersComponent,
+        ShopifyIntegrationComponent,
+        CustomerPortalComponent,
+        TallyIntegrationComponent,
         SettingTriggerComponent,
         WarehouseComponent,
         CreateWarehouseComponent,
@@ -96,7 +103,6 @@ import { NewConfirmModalModule } from '../theme/new-confirm-modal';
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
-        SettingCampaignComponent,
         InstitutionsListComponent
     ],
     imports: [
@@ -138,6 +144,7 @@ import { NewConfirmModalModule } from '../theme/new-confirm-modal';
         MatSlideToggleModule,
         MatRadioModule,
         MatTooltipModule,
+        MatDividerModule,
         MatMenuModule,
         MatDatepickerModule,
         NgxPlaidLinkModule,

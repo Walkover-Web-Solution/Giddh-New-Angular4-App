@@ -88,5 +88,7 @@
     "sales_tax_list": "सभी निर्मित बिक्री कर की सूची",
     "create_sales_tax": "बिक्री कर बनाएं",
     "update_sales_tax": "बिक्री कर अपडेट करें",
-    "company_sales_tax_list": "कंपनी में बनाए गए और लिंक किए गए सभी बिक्री करों की सूची"
+    "company_sales_tax_list": "कंपनी में बनाए गए और लिंक किए गए सभी बिक्री करों की सूची",
+    "ledger_default_view": "लेजर डिफ़ॉल्ट दृश्य",
+    "select_view": "वियु चुनें"
 }
