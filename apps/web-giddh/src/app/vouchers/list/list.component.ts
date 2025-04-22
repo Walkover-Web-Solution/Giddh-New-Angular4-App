@@ -1532,16 +1532,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
+        let voucherType = this.voucherType;
+        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+            voucherType = this.voucherType === VoucherTypeEnum.generateEstimate ? VoucherTypeEnum.estimate : VoucherTypeEnum.proforma;
+        }
         const dialogRef = this.dialog.open(BulkExportComponent, {
-            width: '760px',
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                voucherType: this.voucherType,
+                voucherType: voucherType,
                 advanceFilters: this.advanceFilters,
                 totalItems: this.selectedVouchers?.length || this.totalResults,
                 allVouchersSelected: this.allVouchersSelected,
                 localeData: this.localeData
             },
+            panelClass: ['mat-dialog-md'],
             disableClose: true
         });
 

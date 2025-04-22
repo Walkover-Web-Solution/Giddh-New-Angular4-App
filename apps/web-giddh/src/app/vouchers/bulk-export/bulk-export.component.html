@@ -15,74 +15,57 @@
     <div mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
         <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
-            <div
-                class="pd-b2 clearfix export-type"
-            >
+            <div class="pd-b2 clearfix export-type">
                 <label class="w125">{{ localeData?.export_voucher }}:</label>
-                    <mat-slide-toggle
-                        color="primary"
-                        name="voucherExport"
-                        formControlName="voucherExport"
-                    >
-                        <span>{{
-                            exportForm.get("voucherExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                        }}</span>
-                    </mat-slide-toggle>
+                <mat-slide-toggle color="primary" name="voucherExport" formControlName="voucherExport">
+                    <span>{{
+                        exportForm.get("voucherExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                    }}</span>
+                </mat-slide-toggle>
             </div>
             <div class="d-flex align-items-center column-gap15 mr-b15" *ngIf="exportForm.get('voucherExport').value">
                 <label>{{ localeData?.export_type }}:</label>
-                <mat-radio-group name="mergePdf" formControlName="mergePdf">
+                <mat-radio-group name="mergePdf" formControlName="exportType">
                     <mat-radio-button
                         color="primary"
-                        [value]="false"
+                        [value]="exportTypeEnum.multiplePdf"
+                        (change)="exportForm?.get('mergePdf')?.setValue($event.value === exportTypeEnum.multiplePdf)"
                         aria-label="Export as multiple PDFs in single zip file"
                     >
                         {{ localeData?.multiple_pdf }}
                     </mat-radio-button>
                     <mat-radio-button
                         color="primary"
-                        [value]="true"
+                        [value]="exportTypeEnum.singlePdf"
+                        (change)="exportForm?.get('mergePdf')?.setValue($event.value === exportTypeEnum.singlePdf)"
                         aria-label="Export as single PDF"
                     >
                         {{ localeData?.single_pdf }}
                     </mat-radio-button>
-                    <mat-radio-button
-                        color="primary"
-                        [value]="null"
-                        aria-label="Export as Excel"
-                    >
+                    <mat-radio-button color="primary" [value]="exportTypeEnum.excel" aria-label="Export as Excel">
                         {{ commonLocaleData?.app_excel }}
                     </mat-radio-button>
                 </mat-radio-group>
             </div>
 
             <!-- Export Excel Columns -->
-             <ng-container *ngIf="exportForm.get('mergePdf').value === null">
+            <ng-container *ngIf="exportForm.get('exportType').value === exportTypeEnum.excel">
                 <div class="d-flex align-items-center column-gap15 mr-t2 mr-b2">
                     <label>{{ localeData?.excel_file_type }}:</label>
                     <mat-radio-group name="fileType" formControlName="fileType">
-                        <mat-radio-button
-                            color="primary"
-                            [value]="fileTypeEnum.XLSX"
-                            aria-label="Export as xlsx"
-                        >
+                        <mat-radio-button color="primary" [value]="fileTypeEnum.XLSX" aria-label="Export as xlsx">
                             {{ localeData?.file_type_format?.xlsx }}
                         </mat-radio-button>
-                        <mat-radio-button
-                            color="primary"
-                            [value]="fileTypeEnum.CSV"
-                            aria-label="Export as csv"
-                        >
+                        <mat-radio-button color="primary" [value]="fileTypeEnum.CSV" aria-label="Export as csv">
                             {{ localeData?.file_type_format?.csv }}
                         </mat-radio-button>
                     </mat-radio-group>
-                    
                 </div>
                 <div class="font-15 mr-b2">
                     {{ localeData?.export_note }}
                 </div>
                 <mat-divider></mat-divider>
-                 <table class="column-setting w-100">
+                <table class="column-setting w-100">
                     <tr>
                         <td width="50%">
                             <div class="d-flex justify-content-between align-items-center">
@@ -93,7 +76,9 @@
                                     formControlName="showAccountCustomFields"
                                 >
                                     <span>{{
-                                        exportForm.get("showAccountCustomFields").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showAccountCustomFields").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -107,7 +92,9 @@
                                     formControlName="showVoucherCustomFields"
                                 >
                                     <span>{{
-                                        exportForm.get("showVoucherCustomFields").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showVoucherCustomFields").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -123,7 +110,9 @@
                                     formControlName="showBillingTaxNumber"
                                 >
                                     <span>{{
-                                        exportForm.get("showBillingTaxNumber").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showBillingTaxNumber").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -137,7 +126,9 @@
                                     formControlName="showBillingPinCode"
                                 >
                                     <span>{{
-                                        exportForm.get("showBillingPinCode").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showBillingPinCode").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -153,7 +144,9 @@
                                     formControlName="showBillingStateName"
                                 >
                                     <span>{{
-                                        exportForm.get("showBillingStateName").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showBillingStateName").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -167,7 +160,9 @@
                                     formControlName="showBillingCountryName"
                                 >
                                     <span>{{
-                                        exportForm.get("showBillingCountryName").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showBillingCountryName").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -183,7 +178,9 @@
                                     formControlName="showShippingAddress"
                                 >
                                     <span>{{
-                                        exportForm.get("showShippingAddress").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showShippingAddress").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -197,13 +194,15 @@
                                     formControlName="showShippingTaxNumber"
                                 >
                                     <span>{{
-                                        exportForm.get("showShippingTaxNumber").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showShippingTaxNumber").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
                         </td>
                     </tr>
-                     <tr>
+                    <tr>
                         <td width="50%">
                             <div class="d-flex justify-content-between align-items-center">
                                 <label>{{ localeData?.shipping_pin_code }}:</label>
@@ -213,7 +212,9 @@
                                     formControlName="showShippingPinCode"
                                 >
                                     <span>{{
-                                        exportForm.get("showShippingPinCode").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showShippingPinCode").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
@@ -227,13 +228,15 @@
                                     formControlName="showShippingStateName"
                                 >
                                     <span>{{
-                                        exportForm.get("showShippingStateName").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showShippingStateName").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
                         </td>
                     </tr>
-                     <tr>
+                    <tr>
                         <td width="50%">
                             <div class="d-flex justify-content-between align-items-center">
                                 <label>{{ localeData?.shipping_country_name }}:</label>
@@ -243,17 +246,18 @@
                                     formControlName="showShippingCountryName"
                                 >
                                     <span>{{
-                                        exportForm.get("showShippingCountryName").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportForm.get("showShippingCountryName").value
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </div>
                         </td>
-                        <td width="50%">
-                        </td>
+                        <td width="50%"></td>
                     </tr>
-                 </table>
-                 <mat-divider></mat-divider>
-             </ng-container>
+                </table>
+                <mat-divider></mat-divider>
+            </ng-container>
 
             <!-- Select copy -->
             <div
@@ -266,7 +270,11 @@
                         inputData?.voucherType === 'debit note',
                     'mat-form-field-invalid': !exportForm.get('copyTypes').value?.length && !isValidForm
                 }"
-                *ngIf="(exportForm.get('mergePdf').value !== null) && inputData?.voucherType === 'sales' && exportForm.get('voucherExport').value"
+                *ngIf="
+                    exportForm.get('exportType').value !== exportTypeEnum.excel &&
+                    inputData?.voucherType === 'sales' &&
+                    exportForm.get('voucherExport').value
+                "
             >
                 <mat-form-field appearance="outline" class="w-100 mr-b1 mr-t15">
                     <mat-label>{{ localeData?.select_copy }}</mat-label>
@@ -279,73 +287,58 @@
             </div>
 
             <!-- Export attachment -->
-            <div
-                class="pd-b2 pd-t15 clearfix export-type"
-                
-            >
+            <div class="pd-b2 pd-t15 clearfix export-type">
                 <label class="w150">{{ localeData?.export_attachment }}:</label>
-                    <mat-slide-toggle
-                        color="primary"
-                        name="attachmentExport"
-                        formControlName="attachmentExport"
-                    >
-                        <span>{{
-                            exportForm.get("attachmentExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                        }}</span>
-                    </mat-slide-toggle>
+                <mat-slide-toggle color="primary" name="attachmentExport" formControlName="attachmentExport">
+                    <span>{{
+                        exportForm.get("attachmentExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                    }}</span>
+                </mat-slide-toggle>
             </div>
             <div
-                class="pd-b2 d-flex column-gap15 align-items-center" [hidden]="!exportForm.get('attachmentExport').value"
+                class="pd-b2 d-flex column-gap15 align-items-center"
+                [hidden]="!exportForm.get('attachmentExport').value"
             >
-            <div>
-                {{ commonLocaleData?.app_file_format }}
-            </div>
-            <div class="w-50 custom-mat-form-field">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{ commonLocaleData?.app_select_file }}</mat-label>
-                    <mat-select
-                        name="fileFormat"
-                        formControlName="selectedFormatList"
-                        multiple
-                        placeholder="{{ commonLocaleData?.app_select }}"
-                    >
-                        <mat-option *ngFor="let fileFormat of getSortedFormatList()" [value]="{ uniqueName: fileFormat?.uniqueName, showValue: fileFormat?.showValue }">
-                            {{ fileFormat?.name }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <div class="font-12" *ngIf="exportForm.get('selectedFormatList').value?.length">
-                    {{ getFileFormat() }}
+                <div>
+                    {{ commonLocaleData?.app_file_format }}
+                </div>
+                <div class="w-50 custom-mat-form-field">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{ commonLocaleData?.app_select_file }}</mat-label>
+                        <mat-select
+                            name="fileFormat"
+                            formControlName="selectedFormatList"
+                            multiple
+                            placeholder="{{ commonLocaleData?.app_select }}"
+                        >
+                            <mat-option
+                                *ngFor="let fileFormat of getSortedFormatList()"
+                                [value]="{ uniqueName: fileFormat?.uniqueName, showValue: fileFormat?.showValue }"
+                            >
+                                {{ fileFormat?.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="font-12" *ngIf="exportForm.get('selectedFormatList').value?.length">
+                        {{ getFileFormat() }}
+                    </div>
                 </div>
             </div>
-            </div>
 
-            <div class="text-right" *ngIf="inputData?.voucherType === 'sales' && exportForm.get('voucherExport').value">
+            <div class="text-right">
                 <button
                     mat-stroked-button
                     color="primary"
                     (click)="exportVouchers(false)"
+                    [disabled]="
+                        (['receipt', 'payment', 'credit note', 'debit note', 'purchase'].includes(
+                            inputData?.voucherType
+                        ) ||
+                            !exportForm.get('voucherExport').value) &&
+                        !exportForm.get('attachmentExport').value &&
+                        !exportForm.get('voucherExport').value
+                    "
                 >
-                    {{ commonLocaleData?.app_download }}
-                </button>
-            </div>
-            <div
-                *ngIf="
-                    inputData?.voucherType === 'receipt' ||
-                    inputData?.voucherType === 'payment' ||
-                    inputData?.voucherType === 'credit note' ||
-                    inputData?.voucherType === 'debit note' ||
-                    inputData?.voucherType === 'purchase' || 
-                    !exportForm.get('voucherExport').value
-                "
-                class="text-right"
-            >
-                <!-- <mat-form-field appearance="outline" class="w-100 mr-b15">
-                    <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
-                    <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
-                </mat-form-field>
-                <button mat-stroked-button color="primary" (click)="exportVouchers(true)" [disabled]="!exportForm.get('copyTypes').value && inputData?.voucherType === 'sales'">{{ commonLocaleData?.app_send_email }}</button> -->
-                <button mat-stroked-button color="primary" (click)="exportVouchers(false)" [disabled]="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value">
                     {{ commonLocaleData?.app_download }}
                 </button>
             </div>

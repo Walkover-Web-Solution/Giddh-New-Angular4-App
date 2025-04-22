@@ -15,6 +15,13 @@ import { CopyType, FileTypeEnum } from '../../shared/Enums/common.enum';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { VouchersUtilityService } from '../utility/vouchers.utility.service';
 
+type ExportType = 'SINGLE_PDF' | 'MULTIPLE_PDF' | 'EXCEL';
+enum ExportTypeEnum {
+    singlePdf = 'SINGLE_PDF',
+    multiplePdf = 'MULTIPLE_PDF',
+    excel = 'EXCEL'
+};
+
 @Component({
     selector: 'app-bulk-export',
     templateUrl: './bulk-export.component.html',
@@ -50,6 +57,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public isValidForm: boolean = true;
     /** Holds the file type enum */
     public fileTypeEnum = FileTypeEnum;
+    /** Holds the export type enum */
+    public exportTypeEnum = ExportTypeEnum;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
@@ -70,7 +79,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         this.exportForm = this.formBuilder.group({
             copyTypes: [''],
             recipients: [''],
-            mergePdf: new FormControl<boolean | null>(false), // Null for excel export
+            exportType: new FormControl<ExportType>(ExportTypeEnum.multiplePdf),
+            mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
             attachmentExport: false,
             voucherExport: true,
             selectedFormatList: [null],
@@ -114,10 +124,17 @@ export class BulkExportComponent implements OnInit, OnDestroy {
 
         this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                const blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.inputData?.voucherType, this.inputData?.allVouchersSelected, this.inputData?.localeData)}.${this.exportForm.get('fileType').value === FileTypeEnum.CSV ? FileTypeEnum.CSV : FileTypeEnum.XLSX}`;
+                if (response.message) {
+                    this.toasterService.showSnackBar("success", response.message);
+                } else {
+                    const mimeType = this.exportForm.get('fileType').value === FileTypeEnum.CSV
+                        ? 'text/csv'
+                        : 'application/vnd.ms-excel';
+                    const blob = this.generalService.base64ToBlob(response, mimeType, 512);
+                    const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.inputData?.voucherType, this.inputData?.allVouchersSelected, this.inputData?.localeData)}.${this.exportForm.get('fileType').value === FileTypeEnum.CSV ? FileTypeEnum.CSV : FileTypeEnum.XLSX}`;
+                    saveAs(blob, fileName);
+                }
                 this.dialogRef.close(true);
-                return saveAs(blob, fileName);
             }
         });
     }
@@ -153,16 +170,15 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof BulkExportComponent
      */
     public exportVouchers(sendMail: boolean): void {
-        this.isValidForm = this.exportForm.valid;
-
-        if (this.exportForm.get('mergePdf').value === null) {
+        if (this.exportForm.get('exportType').value === ExportTypeEnum.excel) {
             this.exportExcelDownload();
+            return;
         }
-
+        
+        this.isValidForm = this.exportForm.valid;
         if (this.exportForm.invalid && this.exportForm.get('voucherExport').value) {
             return;
         }
-
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
         getRequest.from = this.inputData?.advanceFilters?.from;
         getRequest.to = this.inputData?.advanceFilters?.to;
@@ -309,29 +325,25 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             showShippingCountryName
         } = this.exportForm.value;
 
-        let dataTosend = {
-            uniqueNames: this.inputData?.voucherUniqueNames,
-            type: this.inputData?.voucherType,
-            showAccountCustomFields,
-            showVoucherCustomFields,
-            showBillingTaxNumber,
-            showBillingPinCode,
-            showBillingStateName,
-            showBillingCountryName,
-            showShippingAddress,
-            showShippingTaxNumber,
-            showShippingPinCode,
-            showShippingStateName,
-            showShippingCountryName
-        };
-
-        let exportRequest = {
-            from: this.inputData?.advanceFilters?.from,
+        this.componentStore.exportVouchers({
             to: this.inputData?.advanceFilters?.to,
-            dataToSend: dataTosend,
-            fileType
-        };
-
-        this.componentStore.exportVouchers(exportRequest);
+            from: this.inputData?.advanceFilters?.from,
+            fileType,
+            dataToSend: {
+                type: this.inputData?.voucherType,
+                uniqueNames: this.inputData?.voucherUniqueNames,
+                showAccountCustomFields,
+                showVoucherCustomFields,
+                showBillingPinCode,
+                showBillingTaxNumber,
+                showBillingStateName,
+                showBillingCountryName,
+                showShippingAddress,
+                showShippingTaxNumber,
+                showShippingPinCode,
+                showShippingStateName,
+                showShippingCountryName
+            }
+        });
     }
 }
