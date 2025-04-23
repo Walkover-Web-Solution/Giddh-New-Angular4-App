@@ -588,8 +588,11 @@ button.btn.btn-filter {
     height: 360px;
     width: 489px;
 }
-/*responsive*/
 
+.left-15 {
+    left: 15px;
+}
+/*responsive*/
 @media screen and (max-width: 1280px) {
     .min-width-230 {
         min-width: 195px !important;
