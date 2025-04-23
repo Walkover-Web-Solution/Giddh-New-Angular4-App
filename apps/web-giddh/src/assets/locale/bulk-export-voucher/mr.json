@@ -17,10 +17,7 @@
     "export_voucher": "व्हाउचर निर्यात करा",
     "export_type": "निर्यात प्रकार",
     "excel_file_type": "एक्सेल फ़ाइल प्रकार",
-    "file_type_format": {
-        "xlsx": "XLSX",
-        "csv": "CSV"
-    },
+    "csv": "CSV",
     "account_custom_fields": "खाता स्वचालित क्षेत्र",
     "voucher_custom_fields": "वाउचर स्वचालित क्षेत्र",
     "billing_tax_number": "बिलिंग कर संख्या",

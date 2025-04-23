@@ -14,12 +14,15 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { CopyType, FileTypeEnum } from '../../shared/Enums/common.enum';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { VouchersUtilityService } from '../utility/vouchers.utility.service';
+import { MatRadioChange } from '@angular/material/radio';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-type ExportType = 'SINGLE_PDF' | 'MULTIPLE_PDF' | 'EXCEL';
+type ExportType = 'SINGLE_PDF' | 'MULTIPLE_PDF' | 'EXCEL' | 'CSV';
 enum ExportTypeEnum {
     singlePdf = 'SINGLE_PDF',
     multiplePdf = 'MULTIPLE_PDF',
-    excel = 'EXCEL'
+    excel = FileTypeEnum.XLSX,
+    csv = FileTypeEnum.CSV
 };
 
 @Component({
@@ -59,6 +62,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public fileTypeEnum = FileTypeEnum;
     /** Holds the export type enum */
     public exportTypeEnum = ExportTypeEnum;
+    /** Holds the vouchers only support excel export */
+    public vouchersOnlySupportExcelExport: string[] = [VoucherTypeEnum.estimate, VoucherTypeEnum.proforma, 'purchase order'];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
@@ -96,8 +101,11 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             showShippingPinCode: new FormControl<boolean>(false, { nonNullable: true }),
             showShippingStateName: new FormControl<boolean>(false, { nonNullable: true }),
             showShippingCountryName: new FormControl<boolean>(false, { nonNullable: true }),
-            fileType: new FormControl<FileTypeEnum.XLSX | FileTypeEnum.CSV | 'base64'>(FileTypeEnum.XLSX, { nonNullable: true }),
         });
+
+        if (this.vouchersOnlySupportExcelExport.includes(this.inputData?.voucherType)) {
+            this.exportForm.get('exportType').setValue(ExportTypeEnum.excel);
+        }
 
         this.getRecipientEmail();
 
@@ -127,11 +135,11 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                 if (response.message) {
                     this.toasterService.showSnackBar("success", response.message);
                 } else {
-                    const mimeType = this.exportForm.get('fileType').value === FileTypeEnum.CSV
+                    const mimeType = this.exportForm.get('exportType').value === ExportTypeEnum.csv
                         ? 'text/csv'
                         : 'application/vnd.ms-excel';
                     const blob = this.generalService.base64ToBlob(response, mimeType, 512);
-                    const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.inputData?.voucherType, this.inputData?.allVouchersSelected, this.inputData?.localeData)}.${this.exportForm.get('fileType').value === FileTypeEnum.CSV ? FileTypeEnum.CSV : FileTypeEnum.XLSX}`;
+                    const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.inputData?.voucherType, this.inputData?.allVouchersSelected, this.inputData?.localeData)}.${this.exportForm.get('exportType').value === FileTypeEnum.CSV ? FileTypeEnum.CSV : FileTypeEnum.XLSX}`;
                     saveAs(blob, fileName);
                 }
                 this.dialogRef.close(true);
@@ -170,11 +178,11 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @memberof BulkExportComponent
      */
     public exportVouchers(sendMail: boolean): void {
-        if (this.exportForm.get('exportType').value === ExportTypeEnum.excel) {
+        if (this.exportForm.get('exportType').value === ExportTypeEnum.excel || this.exportForm.get('exportType').value === ExportTypeEnum.csv) {
             this.exportExcelDownload();
             return;
         }
-        
+
         this.isValidForm = this.exportForm.valid;
         if (this.exportForm.invalid && this.exportForm.get('voucherExport').value) {
             return;
@@ -311,7 +319,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      */
     private exportExcelDownload(): void {
         const {
-            fileType,
+            exportType,
             showAccountCustomFields,
             showVoucherCustomFields,
             showBillingTaxNumber,
@@ -328,7 +336,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         this.componentStore.exportVouchers({
             to: this.inputData?.advanceFilters?.to,
             from: this.inputData?.advanceFilters?.from,
-            fileType,
+            exportType,
             dataToSend: {
                 type: this.inputData?.voucherType,
                 uniqueNames: this.inputData?.voucherUniqueNames,
@@ -345,5 +353,34 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                 showShippingCountryName
             }
         });
+    }
+
+    /**
+     * Callback for export type change
+     *
+     * @param {MatRadioChange} event
+     * @memberof BulkExportComponent
+     */
+    public onExportTypeChange(event: MatRadioChange): void {
+        if (event.value === this.exportTypeEnum.excel || event.value === this.exportTypeEnum.csv) {
+            this.exportForm.get('attachmentExport').setValue(false);
+            this.exportForm.get('attachmentExport').disable();
+        } else {
+            this.exportForm.get('attachmentExport').enable();
+        }
+    }
+
+    /**
+     * Callback for voucher export change
+     *
+     * @param {MatSlideToggleChange} event
+     * @memberof BulkExportComponent
+     */
+    public onVoucherExportChange(event: MatSlideToggleChange): void {
+        if (event.checked) {
+            this.exportForm.get('exportType').setValue(this.exportTypeEnum.multiplePdf);
+        } else {
+            this.exportForm.get('attachmentExport').enable();
+        }
     }
 }

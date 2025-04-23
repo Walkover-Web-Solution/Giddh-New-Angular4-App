@@ -1535,6 +1535,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         let voucherType = this.voucherType;
         if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
             voucherType = this.voucherType === VoucherTypeEnum.generateEstimate ? VoucherTypeEnum.estimate : VoucherTypeEnum.proforma;
+        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+            voucherType = "purchase order";
         }
         const dialogRef = this.dialog.open(BulkExportComponent, {
             data: {
