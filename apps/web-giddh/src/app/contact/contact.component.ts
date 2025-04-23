@@ -399,7 +399,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.dynamicCustomColumns = dynamicCustomColumns;
                     this.displayedColumns = displayedColumns;
                 }
-            }, 700);
+            }, 1000);
 
             this.cdRef.detectChanges();
         });
@@ -1293,7 +1293,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
             setTimeout(() => {
                 this.isGetAccountsInProcess = false;
-            }, 2000);
+            }, 3000);
         });
     }
 
