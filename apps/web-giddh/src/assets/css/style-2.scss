@@ -13900,9 +13900,3 @@ mat-list {
 .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
 }
-
-.content-width{
-    width: calc(100vw - var(--primary-sidebar-width));
-    position: sticky;
-    left: var(--primary-sidebar-width);
-}

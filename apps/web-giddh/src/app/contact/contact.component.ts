@@ -235,7 +235,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public defaultLoad: boolean = true;
     /** This will use for displayed table columns */
     public displayedColumns: any[] = [];
-    /** This will use for customise column check values */
+    /** This will use for dynamic customise column check values */
     public dynamicCustomColumns = [];
     /** Holds inventory type module  */
     public moduleType: string = '';
@@ -253,6 +253,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public hasNavigated: boolean = false;
     /** Hold current url */
     private currentUrl: string = "";
+    /** Returns only the columns marked as checked */
+    public get visibledynamicCustomColumns(): any[] {
+        return this.dynamicCustomColumns?.filter(col => col.checked) || [];
+    }
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -1438,11 +1442,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.getAccounts(this.fromDate, this.toDate, this.checkboxInfo.selectedPage, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
-    /** Returns only the columns marked as checked */
-    public get visibledynamicCustomColumns(): any[] {
-        return this.dynamicCustomColumns?.filter(col => col.checked) || [];
-    }
-
     /**
     * This will use for show hide main table headers from dynamic columns with new columns
     *
@@ -1534,10 +1533,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-            // this.dynamicCustomColumns = this.dynamicCustomColumns?.map(column => {
-            //     column.label = this.localeData[column.value];
-            //     return column;
-            // });
         }
     }
 

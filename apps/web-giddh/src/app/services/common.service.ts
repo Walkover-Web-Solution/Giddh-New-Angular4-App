@@ -151,10 +151,11 @@ export class CommonService {
     * This will use for get selected  columns data
     *
     * @param {string} module
+    * @param {boolean} customColumns
     * @return {*}  {Observable<BaseResponse<any, string>>}
     * @memberof CommonService
     */
-    public getSelectedTableColumns(module: string, customColumns? :boolean): Observable<BaseResponse<any, string>> {
+    public getSelectedTableColumns(module: string, customColumns?: boolean): Observable<BaseResponse<any, string>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))

@@ -1628,7 +1628,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sideBarStateChange(true);
             this.sidebarForcelyExpanded = true;
         }
-        document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "240px");
         this.isSidebarExpanded = true;
         this.generalService.expandSidebar();
     }
@@ -1650,14 +1649,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         if (forceCollapse) {
             this.sideMenu.isExpanded = false;
-            document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "60px");
         } else {
             if (!this.sideMenu.isopen) {
                 this.sideMenu.isExpanded = false;
-                document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "60px");
             } else {
                 this.sideMenu.isExpanded = true;
-                document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "240px");
             }
         }
 
@@ -1665,7 +1661,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
             this.generalService.collapseSidebar();
-            document.querySelector("body")?.style?.setProperty("--primary-sidebar-width", "60px");
         }
     }
 
