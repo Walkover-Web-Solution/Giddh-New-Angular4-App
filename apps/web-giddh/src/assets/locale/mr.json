@@ -759,8 +759,9 @@
     "app_send_payment_receipt_type_whatsapp": "व्हाट्सएप द्वारे [VOUCHER_TYPE] व्हाउचर पाठवा",
     "app_no_access_limit_module": "तुम्हाला सध्या या मॉड्यूलमध्ये प्रवेश नाही. तुमची योजना कोणत्याही अडचणीशिवाय अनलॉक करण्यासाठी अपग्रेड करा",
     "app_upgrade": "अपग्रेड करा",
-    "app_link_account": "दुवा खाते",
     "app_click_here": "येथे क्लिक करा",
+    "go_to_company_mode": "संपादित करण्यासाठी, कंपनी मोडवर जा.",
+    "app_link_account": "दुवा खाते",
     "app_upload": "अपलोड",
     "app_file": "फाईल",
     "app_choose_file": "फाईल निवडा",
@@ -773,6 +774,5 @@
     "app_allow_manufacturing_sales_transactions": "विक्री व्यवहारांच्या दरम्यान उत्पादन सुरू ठेवण्याची परवानगी द्या",
     "app_file_format": "फाइल स्वरूप",
     "app_select_file": "फाइल निवडा",
-    "app_bank_accounts":"बँक खाती",
-    "go_to_company_mode": "संपादित करण्यासाठी, कंपनी मोडवर जा."
+    "app_bank_accounts":"बँक खाती"
 }

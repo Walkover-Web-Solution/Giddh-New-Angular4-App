@@ -173,6 +173,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedWarehouse: any;
     /** True, if subvoucher is RCM */
     public isRcmEntry: boolean = false;
+    /** True, if subvoucher is RCM and taxes are not selected */
+    public showRcmEntryError: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: ConfirmationModalConfiguration;
     /** True, if the selected voucher type is 'Receipt' */
@@ -689,10 +691,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public amountChanged() {
         this.isInclusiveEntry = false;
         if (this.currentTxn?.selectedAccount) {
-            if (this.currentTxn.type === 'DEBIT') {
-                this.blankLedger.transactions[this.blankLedgerIndex].debitAmount = this.currentTxn.amount;
-            } else {
-                this.blankLedger.transactions[this.blankLedgerIndex].creditAmount = this.currentTxn.amount;
+            if ( this.blankLedgerIndex !== undefined) {
+                if (this.currentTxn.type === 'DEBIT') {
+                        this.blankLedger.transactions[this.blankLedgerIndex].debitAmount = this.currentTxn.amount;
+                } else {
+                    this.blankLedger.transactions[this.blankLedgerIndex].creditAmount = this.currentTxn.amount;
+                }
             }
             if (this.currentTxn.selectedAccount?.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
@@ -853,6 +857,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        if ((this.isRcmEntry) && !this.validateTaxes()) {
+            this.showRcmEntryError = true;
+            return;
+        }
         if (this.currentTxn?.isStock && !this.selectedStockVariant.value) {
             return;
         }
