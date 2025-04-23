@@ -483,7 +483,7 @@ export class VoucherService {
         ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         ?.replace(':from', encodeURIComponent(model.from))
         ?.replace(':to', encodeURIComponent(model.to))
-        ?.replace(':fileType', model?.fileType ?? 'base64');
+        ?.replace(':fileType', model?.exportType ?? 'base64');
 
         delete model.dataToSend.from;
         delete model.dataToSend.to;

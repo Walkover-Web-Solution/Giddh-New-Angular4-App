@@ -17,10 +17,7 @@
     "export_voucher": "Export Voucher",
     "export_type": "Export Type",
     "excel_file_type": "Excel file type",
-    "file_type_format": {
-        "xlsx": "XLSX",
-        "csv": "CSV"
-    },
+    "csv": "CSV",
     "account_custom_fields": "Account Custom Fields",
     "voucher_custom_fields": "Voucher Custom Fields",
     "billing_tax_number": "Billing Tax Number",

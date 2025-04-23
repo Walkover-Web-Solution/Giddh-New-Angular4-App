@@ -62,6 +62,9 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                     </div>
                     <div class="table-responsive overflow-visible">
@@ -329,6 +332,9 @@
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                     </div>
@@ -1480,6 +1486,9 @@
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
@@ -1683,6 +1692,9 @@
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                     </div>
@@ -2815,6 +2827,9 @@
                                     <span class="icon-cross font-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
