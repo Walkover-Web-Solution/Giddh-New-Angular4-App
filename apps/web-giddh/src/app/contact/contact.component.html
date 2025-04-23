@@ -399,7 +399,7 @@
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
 
-                                <giddh-page-loader *ngIf="!isMobileScreen && isGetAccountsInProcess && !dynamicCustomColumns?.length">
+                                <giddh-page-loader *ngIf="!isMobileScreen && isGetAccountsInProcess">
                                 </giddh-page-loader>
 
                                 <div *ngIf="isMobileScreen">
@@ -578,7 +578,7 @@
         <div class="table-responsive vendor-page all-table overflow-visible">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
-                    *ngIf="searchStr || (sundryDebtorsAccounts?.length && dynamicCustomColumns?.length)"
+                    *ngIf="searchStr || (sundryDebtorsAccounts?.length)"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
                     class="w-100"
@@ -987,7 +987,7 @@
 
             <ng-container *ngIf="activeTab === 'vendor'" class="sticky-table">
                 <table
-                    *ngIf="searchStr || (sundryCreditorsAccounts?.length && dynamicCustomColumns?.length)"
+                    *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
                     class="w-100"

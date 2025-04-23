@@ -56,10 +56,10 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
+import { ContactsTab } from './contacts.enum';
 
 @Component({
     selector: "contact-detail",
@@ -322,7 +322,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             let queryParams = result[1];
             let lastTabType = this.moduleType;
             this.moduleType = (params.type)?.toUpperCase();
-
             if (params) {
                 if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
                     const activeTab = this.activeTab;
@@ -348,73 +347,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.setActiveTab("aging-report");
                 }
 
-                // this.dynamicCustomColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
-                // if (this.activeTab === ContactsTab.customer.toLowerCase()) {
-                //     this.dynamicCustomColumns.splice(0, 0,
-                //         {
-                //             "value": "customer_name",
-                //             "label": "Customer Name",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "parent_group",
-                //             "label": "Parent Group",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "opening",
-                //             "label": "Opening",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "sales",
-                //             "label": "Sales",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "receipt",
-                //             "label": "Receipt",
-                //             "checked": true
-                //         }
-                //     );
-                //     this.moduleType = ContactsTab.customer;
-                //     this.displayedColumns = [];
-                // }
-                // if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                //     this.dynamicCustomColumns.splice(0, 0,
-                //         {
-                //             "value": "vendor_name",
-                //             "label": "Vendor Name",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "parent_group",
-                //             "label": "Parent Group",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "opening",
-                //             "label": "Opening",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "purchase",
-                //             "label": "Purchase",
-                //             "checked": true
-                //         },
-                //         {
-                //             "value": "payment",
-                //             "label": "Payment",
-                //             "checked": true
-                //         }
-                //     );
-
-                //     this.moduleType = ContactsTab.vendor;
-                //     this.displayedColumns = [];
-                // }
-                // if (lastTabType) {
-                //     this.translationComplete(true);
-                // }
+                if (lastTabType) {
+                    this.translationComplete(true);
+                }
             }
 
         });
@@ -437,19 +372,31 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.isICICIIntegrated = false;
             }
-            // if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-            //     let dynamicCustomColumns = cloneDeep(this.dynamicCustomColumns);
-            //     if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
-            //         let filteredCustomisColumns = dynamicCustomColumns.filter(item => item.value === "action");
-            //         if (!filteredCustomisColumns.length) {
-            //             this.dynamicCustomColumns.push({ value: "action", label: "Action", checked: true });
-            //         }
-            //     } else {
-            //         this.dynamicCustomColumns = dynamicCustomColumns.filter(item => item.value !== "action");
-            //     }
-            //     const values = this.dynamicCustomColumns.map(item => item.value);
-            //     this.showSelectedHeaderColumns(values);
-            // }
+
+            setTimeout(() => {
+                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                    let dynamicCustomColumns = this.dynamicCustomColumns.filter(col => col.value !== 'action');
+                    let displayedColumns = this.displayedColumns.filter(col => col !== 'action');
+
+                    const shouldAddAction = !this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry);
+
+                    if (shouldAddAction) {
+                        const actionColumn = {
+                            checked: true,
+                            dataType: "STRING",
+                            label: "Action",
+                            value: "action"
+                        };
+
+                        dynamicCustomColumns.push(actionColumn);
+                        displayedColumns.push("action");
+                    }
+
+                    this.dynamicCustomColumns = dynamicCustomColumns;
+                    this.displayedColumns = displayedColumns;
+                }
+            }, 700);
+
             this.cdRef.detectChanges();
         });
 
@@ -476,7 +423,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
@@ -1341,7 +1287,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
                 this.detectChanges();
             }
-            this.isGetAccountsInProcess = false;
+            setTimeout(() => {
+                this.isGetAccountsInProcess = false;
+            }, 2000);
         });
     }
 
@@ -1509,7 +1457,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.displayedColumns = event
                 .filter(item => item?.checked)
                 .map(item => item.value);
-                this.cdRef.detectChanges();
+            this.cdRef.detectChanges();
         }
     }
 
