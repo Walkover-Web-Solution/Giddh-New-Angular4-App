@@ -100,7 +100,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             showShippingTaxNumber: new FormControl<boolean>(false, { nonNullable: true }),
             showShippingPinCode: new FormControl<boolean>(false, { nonNullable: true }),
             showShippingStateName: new FormControl<boolean>(false, { nonNullable: true }),
-            showShippingCountryName: new FormControl<boolean>(false, { nonNullable: true }),
+            showShippingCountryName: new FormControl<boolean>(false, { nonNullable: true })
         });
 
         if (this.vouchersOnlySupportExcelExport.includes(this.inputData?.voucherType)) {
@@ -118,14 +118,14 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             if (response) {
                 if (response?.status === "success" && response?.body) {
                     if (response.body.type === "base64") {
-                        this.dialogRef.close();
+                        this.dialogRef?.close();
                         let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
                         return saveAs(blob, this.inputData?.voucherType + `.zip`);
                     } else {
-                        this.dialogRef.close();
+                        this.dialogRef?.close();
                     }
                 } else {
-                    this.dialogRef.close();
+                    this.dialogRef?.close();
                 }
             }
         });
@@ -142,7 +142,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                     const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.inputData?.voucherType, this.inputData?.allVouchersSelected, this.inputData?.localeData)}.${this.exportForm.get('exportType').value === FileTypeEnum.CSV ? FileTypeEnum.CSV : FileTypeEnum.XLSX}`;
                     saveAs(blob, fileName);
                 }
-                this.dialogRef.close(true);
+                this.dialogRef?.close(true);
             }
         });
     }

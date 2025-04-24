@@ -332,14 +332,7 @@
                     mat-stroked-button
                     color="primary"
                     (click)="exportVouchers(false)"
-                    [disabled]="
-                        (['receipt', 'payment', 'credit note', 'debit note', 'purchase'].includes(
-                            inputData?.voucherType
-                        ) ||
-                            !exportForm.get('voucherExport').value) &&
-                        !exportForm.get('attachmentExport').value &&
-                        !exportForm.get('voucherExport').value
-                    "
+                    [disabled]="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value"
                 >
                     {{ commonLocaleData?.app_download }}
                 </button>
