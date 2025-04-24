@@ -296,7 +296,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.setBroadcastEvent();
-                const value = response?.region?.code !== 'IND' ? 1 : 10;
+                const value = response?.region?.code !== 'IND' ? 1 : response?.duration === 'MONTHLY' ? 1 : 10;
                 if (response.dueAmount >= value) {
                     this.initializePayment(response, 'generateOrderId');
                 } else {
@@ -536,7 +536,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeSubscriptionId = response?.subscriptionId;
                 this.upgradeRegion = response?.region?.code;
             }
-            const value = response?.region?.code !== 'IND' ? 1 : 10;
+            const value = response?.region?.code !== 'IND' ? 1 : this.firstStepForm.get('duration')?.value === 'MONTHLY' ? 1 : 10;
             if (response && response.dueAmount >= value) {
                 if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
                     let model = {
