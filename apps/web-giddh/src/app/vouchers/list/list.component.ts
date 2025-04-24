@@ -1516,6 +1516,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             localStorage.removeItem('universalSelectedDate');
             localStorage.removeItem('invoiceSelectedDate');
         }
+        document.querySelector('body').classList.remove('template-wrapper');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
