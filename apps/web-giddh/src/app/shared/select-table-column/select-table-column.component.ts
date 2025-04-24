@@ -4,7 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
 import { InventoryModuleName } from "../../new-inventory/inventory.enum";
-
+import { ContactsTab } from "../../contact/contacts.enum";
 @Component({
     selector: "select-table-column",
     styleUrls: ["./select-table-column.component.scss"],
@@ -59,8 +59,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         InventoryModuleName.stock,
         InventoryModuleName.variant,
         InventoryModuleName.bulk,
-        'CUSTOMER',
-        'VENDOR'
+        ContactsTab.customer,
+        ContactsTab.vendor
     ]);
     /** Get dynamic mode */
     public get isDynamicMode(): boolean {
