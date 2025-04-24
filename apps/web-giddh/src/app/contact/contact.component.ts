@@ -61,7 +61,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../services/service.config';
-import { ContactsTab } from './contacts.enum';
+import { ContactsTab, ContactsColumn } from './contacts.enum';
 
 @Component({
     selector: "contact-detail",
@@ -256,9 +256,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Hold current url */
     private currentUrl: string = "";
     /** Returns only the columns marked as checked */
-    public get visibledynamicCustomColumns(): any[] {
+    public get visibleDynamicCustomColumns(): any[] {
         return this.dynamicCustomColumns?.filter(col => col.checked) || [];
     }
+    public ContactsColumn = ContactsColumn;
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,

@@ -160,7 +160,7 @@ export class CommonService {
         return this.http.get(this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':module', module)
-            ?.replace(':customColumns', encodeURIComponent(customColumns))
+            ?.replace(':customColumns', encodeURIComponent(customColumns ? 'true' : 'false'))
         ).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
