@@ -946,12 +946,12 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.exportVouchers(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res.status === "success") {
+                            if (res?.status === "success") {
                                 return this.patchState({
                                     exportVouchersFile: res.body
                                 });
                             } else {
-                                res.message && this.toaster.showSnackBar("error", res.message);
+                                res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({
                                     exportVouchersFile: null
                                 });
