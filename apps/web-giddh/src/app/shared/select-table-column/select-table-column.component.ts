@@ -159,7 +159,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         this.commonService.getSelectedTableColumns(this.moduleType)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
-                if (response && response.body && response.status === 'success') {
+                if (response?.status === 'success' && response.body?.reportFilterColumns) {
                     if (this.moduleType === InventoryModuleName.stock || this.moduleType === InventoryModuleName.variant || this.moduleType === InventoryModuleName.bulk) {
                         this.dynamicCustomColumns = [];
                         if (response.body.reportFilterColumns) {

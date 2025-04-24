@@ -118,7 +118,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         };
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && response?.body) {
                 this.bankList = response.body;
                 if (response.body.some(item => item.account?.uniqueName === this.selectedBankUniqueName)) {
                     this.isBankAccountConnected = true;
@@ -154,13 +154,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         })
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.router.url === '/pages/home') {
-                this.getAllBanks();
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc')
-                this.isDirectlyIntegrated = true;
-                this.componentStore.setState(state => ({
-                    ...state,
-                    requisitionList: null
-                }));
+                if (!this.selectedBankUniqueName) {
+                    this.router.navigate(['/pages/settings/integration/payment']);
+                } else {
+                    this.getAllBanks();
+                    this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc')
+                    this.isDirectlyIntegrated = true;
+                    this.componentStore.setState(state => ({
+                        ...state,
+                        requisitionList: null
+                    }));
+                }
             }
         });
 
@@ -210,7 +214,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                     } else if (response === 'link') {
                         this.getLinkBankAccount();
                     }
-                    this.bankIntegrationDialogRef?.close();
                 }
                 this.changeDetectionRef.detectChanges();
             });

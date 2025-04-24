@@ -294,6 +294,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
         this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
         this.offset = this.adjustPayment.balanceDue;
+        this.calculateBalanceDue();
     }
 
     /**

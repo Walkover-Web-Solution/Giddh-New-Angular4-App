@@ -12,6 +12,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transform: translateX(-45%);
+        }
+        .checked {
+            display: contents;
         }
         .ledger-row {
             $columns: 50;
@@ -25,7 +29,7 @@
 
             &.highlighted-transaction {
                 .mat-grid-tile {
-                    background-color: var(--color-success-enable-bg-light);
+                    background-color: var(--color-success-enable-bg-light) !important;
                 }
             }
             &:not(.highlighted-transaction) {
@@ -103,6 +107,9 @@ input {
         padding-bottom: 5px !important;
         padding-left: 2px;
         padding-right: 2px;
+    }
+    &:has(reactive-dropdown-field) {
+        padding-inline: 0px;
     }
 }
 .transaction-mapped-table .mat-grid-tile {
@@ -217,10 +224,6 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledger-stat .row {
     display: flex;
     flex-wrap: wrap;
-}
-.icomoon-ico {
-    margin-left: 0;
-    margin-right: 8px !important;
 }
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
@@ -387,11 +390,7 @@ sh-select:focus {
     padding-left: 5px;
 }
 .ledger-book {
-    .left-col-new {
-        background: var(--color-common-primary-background-for-all-components);
-        padding: 0 0px 350px;
-    }
-    .right-col-new {
+    .left-col-new, .right-col-new, .statement-view {
         background: var(--color-common-primary-background-for-all-components);
         padding: 0 0px 350px;
     }
@@ -403,9 +402,6 @@ sh-select:focus {
 .left-col-new .mat-grid-list .mat-grid-title:first-child,
 .left-col-new .mat-grid-list .mat-grid-title:first-child {
     border-left: 1px solid var(--color-iron) !important;
-}
-.custom-tabs {
-    display: none;
 }
 .ledg-head .icomoon-ico {
     color: var(--color-abbey);
@@ -435,11 +431,19 @@ sh-select:focus {
     width: 100%;
 }
 .ledger-section {
-    display: flex;
+    max-width: 1280px;
     .particular-label {
         width: 80% !important;
         min-width: 80% !important;
         max-width: 80% !important;
+    }
+
+    .custom-tabs {
+        .nav.nav-tabs {
+            position: static !important;
+            background-color: var(--color-body-background) !important;
+            padding: 0 5px !important;
+        }
     }
 }
 .advance-search-block .icon-search {
@@ -464,6 +468,7 @@ sh-select:focus {
     display: inline-flex;
     position: relative;
     min-width: 252px;
+    height: var(--mat-form-field-height);
 }
 .advance-search-by-date:before {
     position: absolute;
@@ -552,6 +557,7 @@ sh-select:focus {
 .d-flex.search-ledger-field {
     align-items: center;
     margin-right: 0;
+    min-height: var(--mat-form-field-height);
 }
 .clear-filter-btn {
     border-radius: 5px;
@@ -786,7 +792,6 @@ sh-select:focus {
     font-weight: 800;
 }
 .account-placeholder {
-    padding-left: 12px;
     font-size: var(--font-size-15);
     min-height: 49px;
     padding-top: 14px;
@@ -927,9 +932,6 @@ input#ledger-search {
         position: absolute;
         top: 41px;
         right: 0;
-    }
-    .mr-b5 {
-        margin-bottom: 50px !important;
     }
 }
 @media (max-width: 1190px) {
@@ -1072,23 +1074,12 @@ input#ledger-search {
     .justify-content-between {
         justify-content: inherit;
     }
-    .custom-tabs {
-        display: block;
-    }
     .ledg-head {
         .ipad-view-datepicker {
             display: block;
         }
         .single-search-box {
             position: relative;
-            width: calc(100% - 240px);
-            margin-right: 13px;
-            .full-width-input {
-                width: 100%;
-            }
-            .default-width-input {
-                width: calc(100% - 36px);
-            }
             input[type="search"] {
                 min-width: 150px;
                 border-radius: 20px !important;
@@ -1108,9 +1099,6 @@ input#ledger-search {
                 }
             }
         }
-    }
-    .ledger-section {
-        padding-top: 30px;
     }
     .transaction-in-short {
         margin-bottom: 0;
@@ -1159,14 +1147,12 @@ input#ledger-search {
         display: flex;
         align-items: center;
         button {
-            border-radius: 50%;
-            height: 32px;
-            width: 32px;
+            height: 36px;
+            width: 36px;
         }
     }
     .search-ledger-wrapper {
         width: 100% !important;
-        margin-top: 7px;
         .single-search-box {
             .full-width-input {
                 .mat-form-field {
@@ -1176,7 +1162,8 @@ input#ledger-search {
         }
     }
     .download-invoice-ledger {
-        top: 0px;
+        top: 50%;
+        transform: translateY(-50%);
         right: 0;
         margin: 0 10px;
         padding: 0;
