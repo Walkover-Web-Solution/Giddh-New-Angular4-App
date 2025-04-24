@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import * as dayjs from 'dayjs';
 import { ToasterService } from '../../services/toaster.service';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
+import { DatePickerDefaultRangeEnum } from '../../app.constant';
 
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
 enum CompareTypeEnum {
@@ -66,6 +67,8 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
   @Input() public startDate: string;
   /** Holds end date */
   @Input() public endDate: string;
+  /** Holds universal date range label */
+  @Input() public universalDateRangeLabel: DatePickerDefaultRangeEnum;
   /** Emits on date change event */
   @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -90,12 +93,12 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
         return;
       }
 
-      const compareValue = value.compareValue?.[0] ??  value.compareValue;
+      const compareValue = value.compareValue?.[0] ?? value.compareValue;
       if (compareValue > 0) {
         this.setCompareWithField(compareValue, value.compareType?.[0]);
         // Execute if value set by list option 
         if (value.compareValue?.[0]) {
-            this.showCustomInput = false;
+          this.showCustomInput = false;
         }
       } else {
         this.compareWithField.setValue('None');
@@ -103,17 +106,17 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
 
       if (compareValue > 36) {
         this.toaster.showSnackBar('warning', this.localeData?.up_to_36_periods_can_be_compared);
-        this.compareOptionsForm.get('compareValue').patchValue  ([36]);
+        this.compareOptionsForm.get('compareValue').patchValue([36]);
         return;
       }
 
       if (this.compareOptionsForm.valid && compareValue > 0) {
-        this.onChange.emit( {
+        this.onChange.emit({
           compareValue: +compareValue,
           compareType: value.compareType[0]
         });
-      } else if(compareValue == 0) {
-        this.onChange.emit( {
+      } else if (compareValue == 0) {
+        this.onChange.emit({
           compareValue: null,
           compareType: null
         });
@@ -128,81 +131,82 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof AccountAsVoucherComponent
    */
   public ngOnChanges(changes: SimpleChanges): void {
-      if (('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) || ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue)) {
-        const startDateObj = dayjs(this.startDate, 'DD-MM-YYYY');
-        const endDateObj = dayjs(this.endDate, 'DD-MM-YYYY');
-        if (startDateObj.isValid() && endDateObj.isValid() && endDateObj.isSameOrAfter(startDateObj, 'day')) {
-          this.setCompareValues();
-        }
+    if (('startDate' in changes) || ('endDate' in changes) || ('universalDateRangeLabel' in changes)) {
+      const startDateObj = dayjs(this.startDate, 'DD-MM-YYYY');
+      const endDateObj = dayjs(this.endDate, 'DD-MM-YYYY');
+      if (startDateObj.isValid() && endDateObj.isValid()) {
+        this.setCompareValues();
       }
+    }
+  }
+
+  /**
+   * Callback for translation response complete
+   *
+   * @param {boolean} event
+   * @memberof LedgerComponent
+   */
+  public translationComplete(event: boolean): void {
+    if (event) {
+      this.compareWithField.setValue(this.localeData?.none);
+    }
+  }
+
+  /**
+   * This method will be use for setting compare values
+   *
+   * @memberof CompareWithDateRangePickerComponent
+   */
+  private setCompareValues(): void {
+    this.dateRangeInfo = this.checkDateSelectionRange(this.startDate, this.endDate);
+    if (this.dateRangeInfo.isMonthSelected && !this.isThisQuarterToDate() && !this.isThisFinancialYearToDate()) {
+      this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.month]);
+    } else if (this.dateRangeInfo.isQuarterSelected && !this.isThisFinancialYearToDate()) {
+      this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.quarter]);
+    } else if (this.dateRangeInfo.isYearSelected) {
+      this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.year]);
+    } else if (this.dateRangeInfo.isRandomDateSelected) {
+      this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.period]);
     }
 
-    /**
-     * Callback for translation response complete
-     *
-     * @param {boolean} event
-     * @memberof LedgerComponent
-     */
-    public translationComplete(event: boolean): void {
-      if (event) {
-        this.compareWithField.setValue(this.localeData?.none);
-      }
+    const compareValue = this.compareOptionsForm.get('compareValue')?.value?.[0] ?? this.compareOptionsForm.get('compareValue')?.value;
+    if (compareValue > 0) {
+      this.setCompareWithField(compareValue, this.compareOptionsForm.get('compareType')?.value?.[0]);
     }
+  }
 
-    /**
-     * This method will be use for setting compare values
-     *
-     * @memberof CompareWithDateRangePickerComponent
-     */
-    private setCompareValues(): void {
-      this.dateRangeInfo = this.checkDateSelectionRange(this.startDate, this.endDate);
-      const compareValue = this.compareOptionsForm.get('compareValue')?.value?.[0] ?? this.compareOptionsForm.get('compareValue')?.value;
-      if (this.dateRangeInfo.isMonthSelected) {
-        this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.month]);
-      } else if (this.dateRangeInfo.isQuarterSelected) {
-        this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.quarter]);
-      } else if (this.dateRangeInfo.isYearSelected) {
-        this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.year]);
-      } else if (this.dateRangeInfo.isRandomDateSelected) {
-        this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.period]);
-      }
-      if (compareValue > 0) {
-          this.setCompareWithField(compareValue, this.compareOptionsForm.get('compareType')?.value?.[0]);
-      }
-    }
+  /**
+   * This method will be use for setting compare with field
+   *
+   * @param {number} compareValue
+   * @param {compareType} compareType
+   * @memberof CompareWithDateRangePickerComponent
+   */
+  private setCompareWithField(compareValue: number, compareType: compareType): void {
+    this.compareWithField.setValue(`${this.localeData?.compare_with} ${compareValue} ${this.getTranslatedType(compareType)}`);
+  }
 
-    /**
-     * This method will be use for setting compare with field
-     *
-     * @param {number} compareValue
-     * @param {compareType} compareType
-     * @memberof CompareWithDateRangePickerComponent
-     */
-    private setCompareWithField(compareValue: number, compareType: compareType): void {
-        this.compareWithField.setValue(`${this.localeData?.compare_with} ${compareValue} ${this.getTranslatedType(compareType)}`);
+  /**
+   * This method will be use for getting translated type
+   *
+   * @param {compareType} type
+   * @returns {string}
+   * @memberof CompareWithDateRangePickerComponent
+   */
+  public getTranslatedType(type: compareType): string {
+    switch (type) {
+      case 'month':
+        return this.localeData?.compare_types?.month;
+      case 'quarter':
+        return this.localeData?.compare_types?.quarter;
+      case 'year':
+        return this.localeData?.compare_types?.year;
+      case 'period':
+        return this.localeData?.compare_types?.period;
+      default:
+        return '';
     }
-
-    /**
-     * This method will be use for getting translated type
-     *
-     * @param {compareType} type
-     * @returns {string}
-     * @memberof CompareWithDateRangePickerComponent
-     */
-    public getTranslatedType(type: compareType): string {      
-      switch(type) {
-        case 'month':
-          return this.localeData?.compare_types?.month;
-        case 'quarter':
-          return this.localeData?.compare_types?.quarter;
-        case 'year':
-          return this.localeData?.compare_types?.year;
-        case 'period':
-          return this.localeData?.compare_types?.period;
-        default:
-          return '';
-      }
-    }
+  }
 
   /**
    * This method will be use for toggling menu
@@ -239,17 +243,16 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       case 'month':
         return !this.dateRangeInfo.isMonthSelected;
       case 'year':
-        return !this.dateRangeInfo.isYearSelected && !this.dateRangeInfo.isQuarterSelected && !this.dateRangeInfo.isMonthSelected;
+        return !this.dateRangeInfo.isYearSelected;
       case 'quarter':
-        return !this.dateRangeInfo.isQuarterSelected && !
-        this.dateRangeInfo.isMonthSelected;
+        return !this.dateRangeInfo.isQuarterSelected;
       case 'period':
-        return this.dateRangeInfo.isMonthSelected || this.dateRangeInfo.isYearSelected || this.dateRangeInfo.isQuarterSelected;
+        return !this.dateRangeInfo.isRandomDateSelected;
       default:
         return false;
     }
   }
-
+  
   /**
    * This method will be use for checking if the date selection range is valid
    *
@@ -274,27 +277,72 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
     }
 
     const startOfMonth = startDate.startOf('month');
-    const endOfMonth = startDate.endOf('month');
-
-    const startOfYear = startDate.startOf('year');
-    const endOfYear = startDate.endOf('year');
+    const endOfMonth = endDate.endOf('month');
 
     const startOfQuarter = startDate.startOf('quarter');
-    const endOfQuarter = startDate.endOf('quarter');
+    const endOfQuarter = endDate.endOf('quarter');
 
-    const isSameMonth = startDate.isSame(startOfMonth, 'day') && endDate.isSame(endOfMonth, 'day');
-    const isSameYear = startDate.isSame(startOfYear, 'day') && endDate.isSame(endOfYear, 'day');
-    const isSameQuarter = startDate.isSame(startOfQuarter, 'day') && endDate.isSame(endOfQuarter, 'day');
+    const isSameMonth =
+      (startDate.isSame(startOfMonth, 'day') &&
+        endDate.isSame(endOfMonth, 'day') &&
+        startDate.isSame(endDate, 'month') &&
+        startDate.isSame(endDate, 'year')) ||
+      (startDate.isSame(startOfMonth, 'day') &&
+        endDate.isSame(dayjs().toDate(), 'day') &&
+        startDate.isSame(endDate, 'month') &&
+        startDate.isSame(endDate, 'year')) ||
+      this.isThisMonth();
 
+    const isSameQuarter =
+      (startDate.isSame(startOfQuarter, 'day') &&
+        endDate.isSame(endOfQuarter, 'day') &&
+        startDate.isSame(endDate, 'quarter') &&
+        startDate.isSame(endDate, 'year')) ||
+      this.isThisQuarterToDate();
+
+    const isYearSelected =
+      ((startDate.isSame(startOfMonth, 'day') &&
+        endDate.isSame(endOfMonth, 'day')) &&
+        (dayCount === 365 || dayCount === 366)) ||
+      this.isThisFinancialYearToDate();
+    
     return {
-      isMonthSelected: isSameMonth && startDate.isSame(endDate, 'month'),
-      isYearSelected: isSameYear && startDate.isSame(endDate, 'year'),
-      isQuarterSelected: isSameQuarter && startDate.isSame(endDate, 'quarter'),
-      isRandomDateSelected: !isSameMonth || !startDate.isSame(startOfMonth, 'day') || !endDate.isSame(endOfMonth, 'day') ||
-        !isSameYear || !startDate.isSame(startOfYear, 'day') || !endDate.isSame(endOfYear, 'day') ||
-        !isSameQuarter || !startDate.isSame(startOfQuarter, 'day') || !endDate.isSame(endOfQuarter, 'day'),
-      dayCount: dayCount
+      isMonthSelected: isSameMonth || (!isSameMonth && !isYearSelected && !isSameQuarter && dayCount <= 31),
+      isQuarterSelected: isSameQuarter || (!isSameQuarter && !isYearSelected && dayCount <= 90),
+      isYearSelected: isYearSelected || (!isYearSelected && dayCount <= 365),
+      isRandomDateSelected: !isSameMonth && !isYearSelected && !isSameQuarter,
+      dayCount: dayCount,
     };
+  }
+
+  /**
+   * This method will be use for checking if the universal date range label is this month
+   *
+   * @returns {boolean}
+   * @memberof CompareWithDateRangePickerComponent
+   */
+  private isThisMonth(): boolean {
+    return this.universalDateRangeLabel === DatePickerDefaultRangeEnum.ThisMonth;
+  }
+
+  /**
+   * This method will be use for checking if the universal date range label is this quarter
+   *
+   * @returns {boolean}
+   * @memberof CompareWithDateRangePickerComponent
+   */
+  private isThisQuarterToDate(): boolean {
+    return this.universalDateRangeLabel === DatePickerDefaultRangeEnum.ThisQuarterToDate;
+  }
+
+  /**
+   * This method will be use for checking if the universal date range label is this financial year
+   *
+   * @returns {boolean}
+   * @memberof CompareWithDateRangePickerComponent
+   */
+  private isThisFinancialYearToDate(): boolean {
+    return this.universalDateRangeLabel === DatePickerDefaultRangeEnum.ThisFinancialYearToDate;
   }
 
   /**

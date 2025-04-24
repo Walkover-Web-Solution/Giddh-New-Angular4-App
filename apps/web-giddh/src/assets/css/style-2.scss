@@ -13929,7 +13929,14 @@ mat-list {
     }
 }
 
-/** Use this class on black color image (icon)
+// For CompareWithDateRangePickerComponent 
+.compare-with-menu {
+    .mdc-list-item__start {
+        margin-right: 0px !important;
+    }
+}
+
+/** Use this class on black color image (icon) 
  to  change color in dark theme **/
 .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
