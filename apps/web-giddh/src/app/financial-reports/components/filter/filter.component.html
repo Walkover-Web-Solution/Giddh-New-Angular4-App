@@ -116,8 +116,9 @@
                     </div>
                     <div class="form-group mr-r15" *ngIf="plBsExportXLS">
                         <giddh-compare-with-date-range-picker
-                            [startDate]="fromDate"
                             [endDate]="toDate"
+                            [startDate]="fromDate"
+                            [universalDateRangeLabel]="selectedRangeLabel"
                             (onChange)="handleCompareWithEvent($event)"
                         >
                         </giddh-compare-with-date-range-picker>

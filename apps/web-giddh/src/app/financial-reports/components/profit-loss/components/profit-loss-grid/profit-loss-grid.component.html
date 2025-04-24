@@ -17,7 +17,7 @@
                 <!--Main Grid-->
                 <div class="table-container">
                     <div class="income">
-                        <div class="clearfix profit-loss">
+                        <section class="clearfix profit-loss">
                             <table class="table basic pl-table-grid">
                                 <thead>
                                     <tr>
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
                     </div>
                     <div class="expenses">
                         <div class="clearfix profit-loss table-responsive overflow-visible">
@@ -303,33 +303,37 @@
                             </div>
                         </div>
                     </div>
-                    <div class="account clearfix row flex-no-wrap" *ngIf="plData && plData?.incomeStatement && !hideData">
-                        <div class="col-4 group pl-sticky-group">
-                            <strong class="font-15">{{ localeData?.income_before_taxes }}</strong>
-                        </div>
-                        <div class="col group text-right pull-right bd-rl p-0">
-                            <div class="row flex-no-wrap">
-                                <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.incomeBeforeTaxes)">
-                                    <strong class="font-15 col px-0">
-                                        <span
-                                            *ngIf="
-                                                plData?.incomeStatement.incomeBeforeTaxes[key].type === 'DEBIT' &&
-                                                plData?.incomeStatement.incomeBeforeTaxes[key].amount !== 0
-                                            "
-                                            >-</span
-                                        >
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="plData?.incomeStatement.incomeBeforeTaxes[key].amount"
-                                                [currencySymbol]="false"
-                                                [currencyCode]="false"
-                                            >
-                                            </amount-field>
-                                        </span>
-                                    </strong>
-                                </ng-container>
+                    <div class="income-before-taxes">
+                        <section class="clearfix profit-loss">
+                            <div class="account clearfix row flex-no-wrap" *ngIf="plData && plData?.incomeStatement && !hideData">
+                                <div class="col-4 group pl-sticky-group">
+                                    <strong class="font-15">{{ localeData?.income_before_taxes }}</strong>
+                                </div>
+                                <div class="col group text-right pull-right bd-rl p-0">
+                                    <div class="row flex-no-wrap">
+                                        <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.incomeBeforeTaxes)">
+                                            <strong class="font-15 col px-0">
+                                                <span
+                                                    *ngIf="
+                                                        plData?.incomeStatement.incomeBeforeTaxes[key].type === 'DEBIT' &&
+                                                        plData?.incomeStatement.incomeBeforeTaxes[key].amount !== 0
+                                                    "
+                                                    >-</span
+                                                >
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="plData?.incomeStatement.incomeBeforeTaxes[key].amount"
+                                                        [currencySymbol]="false"
+                                                        [currencyCode]="false"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </strong>
+                                        </ng-container>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </section>
                     </div>
                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.incomeBeforeTaxes)">
                         <ng-template

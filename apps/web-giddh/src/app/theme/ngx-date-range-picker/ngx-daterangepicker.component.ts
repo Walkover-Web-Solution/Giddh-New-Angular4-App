@@ -947,8 +947,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (this.chosenLabel) {
             this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
-
-        this.emitSelectedDates(false);
+        
+        this.emitSelectedDates(false, true);
         this.hide();
     }
 
@@ -2012,11 +2012,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @param {boolean} sendBlankDates
      * @memberof NgxDaterangepickerComponent
      */
-    public emitSelectedDates(sendBlankDates: boolean): void {
+    public emitSelectedDates(sendBlankDates: boolean, resetRangeLabel: boolean = false): void {
         if (sendBlankDates === true) {
             this.datesUpdated.emit({ name: '', startDate: null, endDate: null, event: 'save' });
         } else {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
+            this.datesUpdated.emit({ name: resetRangeLabel ? '' : this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
     }
 
