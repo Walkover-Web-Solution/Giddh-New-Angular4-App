@@ -1,8 +1,19 @@
-.compare-with-menu {
-    width: 340px;
-    height: 620px;
-    max-height: 90vh;
+.compare-with-wrapper {
+    min-width: 200px;
 }
-.mdc-list-item__start {
-    margin-right: 0px !important;
+
+.compare-with-menu {
+    width: 310px;
+    max-width: 310px;
+    max-height: 90vh;
+
+    .mdc-list-item {
+        border-left: 3px solid transparent;
+        &.mdc-list-item--with-one-line {
+            --mdc-list-list-item-one-line-container-height: 42px;
+        }
+        &.active-option {
+            border-left-color: 3px solid var(--color-blue);
+        }
+    }
 }

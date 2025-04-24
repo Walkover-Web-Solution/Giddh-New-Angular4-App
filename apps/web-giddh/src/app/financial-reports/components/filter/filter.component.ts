@@ -299,7 +299,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectedDate(value: any) {
         this.filterForm.controls['from'].setValue(dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT));
         this.filterForm.controls['to'].setValue(dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT));
-        this.filterData();
     }
 
     public selectFinancialYearOption(v: IOption) {
@@ -312,6 +311,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                     from: financialYear.financialYearStarts,
                     fy: index === 0 ? 0 : index * -1
                 });
+                this.toDate = financialYear.financialYearEnds;
+                this.fromDate = financialYear.financialYearStarts;
             }
         } else {
             this.filterForm?.patchValue({
@@ -319,8 +320,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 from: '',
                 fy: ''
             });
+            this.toDate = '';
+            this.fromDate = '';
         }
-        this.filterData();
     }
 
     public filterData() {
@@ -449,10 +451,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             return;
         }
         this.selectedRangeLabel = "";
-
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
+
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -461,7 +463,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
-            this.filterData();
         }
     }
 

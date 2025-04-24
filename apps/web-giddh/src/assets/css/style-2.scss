@@ -13931,3 +13931,10 @@ mat-list {
         }
     }
 }
+
+// For CompareWithDateRangePickerComponent 
+.compare-with-menu {
+    .mdc-list-item__start {
+        margin-right: 0px !important;
+    }
+}
