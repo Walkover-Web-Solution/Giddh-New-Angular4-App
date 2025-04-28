@@ -245,6 +245,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
         exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+        exportRequest.from = this.fromDate;
+        exportRequest.to = this.toDate;
 
         this.dialogRef.close({
             isShowColumnarTable: true,
