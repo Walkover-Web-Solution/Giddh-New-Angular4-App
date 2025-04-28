@@ -2728,14 +2728,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        event.exportRequest.from = dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-        event.exportRequest.to = dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
 
-        this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
-        this.columnarReportExportRequest = event.exportRequest;
+        if (!event.isShowColumnarTable) {
+            event.exportRequest.from = dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+            event.exportRequest.to = dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
+        }
 
-        this.cdRf.detectChanges();
-    }
+            this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
+            this.columnarReportExportRequest = event.exportRequest;
+
+            this.cdRf.detectChanges();
+        }
 
     /**
      * This will toggle transaction type for mobile
