@@ -15,7 +15,7 @@
                 [min]="minDate"
                 (input)="dateInputChange($event)"
                 autocomplete="off"
-                (focus)="toggleDatepicker()"
+                (focus)="closeDatepickerOnFocus ? picker?.close() : toggleDatepicker()"
                 (click)="toggleDatepicker()"
                 (dateChange)="dateChange($event)"
                 [class]="cssClass"
