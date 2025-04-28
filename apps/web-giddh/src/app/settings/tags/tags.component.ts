@@ -42,6 +42,8 @@ export class SettingsTagsComponent implements OnInit {
     public readonly separatorKeysCodes: any = [ENTER, COMMA] as const;
     /** Holds announcer for mat chip */
     public announcer: any = inject(LiveAnnouncer);
+    /** True if api call in progress */
+    public isApiCallInProgress: boolean = false;
 
     constructor(
         private settingsTagService: SettingsTagService,
@@ -90,8 +92,13 @@ export class SettingsTagsComponent implements OnInit {
      * @memberof SettingsTagsComponent
      */
     public createTag(event: MatChipInputEvent): void {
-        if (event?.value?.length) {
-            this.tagForm.get('name').patchValue(event.value);
+        if (this.isApiCallInProgress) {
+            return;
+        }
+        this.isApiCallInProgress = true;
+        const value = event?.value?.trim();
+        if (value.length) {
+            this.tagForm.get('name').patchValue(value);
             const formValue = this.tagForm.value;
             this.settingsTagService.CreateTag(formValue).pipe(take(1)).subscribe(response => {
                 if (response) {
@@ -99,6 +106,7 @@ export class SettingsTagsComponent implements OnInit {
                     event.chipInput!.clear();
                     this.showToaster(this.commonLocaleData?.app_messages?.tag_created, response);
                 }
+                this.isApiCallInProgress = false;
             });
         }
     }
@@ -111,12 +119,17 @@ export class SettingsTagsComponent implements OnInit {
      * @memberof SettingsTagsComponent
      */
     public updateTag(tag: TagInterface, event: MatChipEditedEvent): void {
+        if (this.isApiCallInProgress) {
+            return;
+        }
+        this.isApiCallInProgress = true;
         tag.name = event.value.trim();
         this.setTagValue(tag);
         this.settingsTagService.UpdateTag(tag).pipe(take(1)).subscribe(response => {
             if (response) {
                 this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
             }
+            this.isApiCallInProgress = false;
         });
     }
 

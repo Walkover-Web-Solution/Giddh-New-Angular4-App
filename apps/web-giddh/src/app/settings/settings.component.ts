@@ -139,7 +139,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
-            }            
+            }
             if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
                 this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
