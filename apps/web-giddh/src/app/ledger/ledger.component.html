@@ -2985,6 +2985,13 @@
                                 {{ commonLocaleData?.app_credit }}
                             </div>
                         </mat-grid-tile>
+
+                        <!-- Balance Column -->
+                        <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
+                            <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
+                                {{ commonLocaleData?.app_closing_balance }}
+                            </div>
+                        </mat-grid-tile>
                     </mat-grid-list>
 
                     <!-- Mat grid list #2 (Select all checkbox and Forwarded Balance in header)-->
@@ -3072,6 +3079,11 @@
                                 </div>
                             </ng-container>
                         </mat-grid-tile>
+
+                        <!-- Balance Column -->
+                        <mat-grid-tile colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                        </mat-grid-tile>
+
                         <ng-template #zeroAmount>
                             <amount-field
                                 [amount]="0"
@@ -3185,6 +3197,29 @@
                                 </div>
                             </ng-container>
                         </mat-grid-tile>
+
+                        <!-- Balance Column -->
+                        <mat-grid-tile [attr.data-title]="commonLocaleData?.app_closing_balance" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                                <div class="p-2 w-100 text-right">
+                                    <amount-field
+                                        [amount]="txn?.closing?.amount"
+                                        [currencySymbol]="txn?.currencySymbol"
+                                        [currencyCode]="txn?.currencyCode"
+                                    >
+                                    </amount-field>
+                                      &nbsp;
+                                      <span>
+                                    {{
+                                            txn?.closing?.amount > 0
+                                                ? txn?.closing?.type === "DEBIT"
+                                                    ? localeData?.dr
+                                                    : localeData?.cr
+                                                : ""
+                                    }}
+                                    </span>
+                                </div>
+                        </mat-grid-tile>
+
                         <ng-template #amountFieldTemplate let-txn>
                             <amount-field
                                 [amount]="txn.amount"
