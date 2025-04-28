@@ -324,6 +324,49 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
+        combineLatest([this.route.params, this.route.queryParams])
+            .pipe(debounceTime(50), takeUntil(this.destroyed$))
+            .subscribe(([params, queryParams]) => {
+                const lastTabType = this.moduleType;
+                const typeParam = params?.type?.toLowerCase();
+                const tabQueryParam = queryParams?.tab?.toLowerCase();
+
+                this.moduleType = params.type?.toUpperCase();
+                console.log("this.moduleType", this.moduleType);
+                console.log("params", params);
+                console.log("queryParams", queryParams);
+                console.log("typeParam", typeParam);
+                console.log("tabQueryParam", tabQueryParam);
+                console.log("lastTabType", lastTabType);
+                console.log("activeTab", this.activeTab);
+
+
+                const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
+                const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
+
+                if (params) {
+                    const activeTab = typeParam?.includes('customer') ? 'customer' : 'vendor';
+
+                    if (isCustomer) {
+                        if (activeTab !== 'customer') {
+                            this.setActiveTab('customer');
+                        }
+                        this.resetSearchIfSwitched('vendor');
+                    } else if (isVendor) {
+                        if (activeTab !== 'vendor') {
+                            this.setActiveTab('vendor');
+                        }
+                        this.resetSearchIfSwitched('customer');
+                    } else {
+                        this.setActiveTab('aging-report');
+                    }
+
+                    if (lastTabType) {
+                        this.translationComplete(true);
+                    }
+                }
+            });
+
         combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
@@ -1292,10 +1335,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
-                this.detectChanges();
             }
             setTimeout(() => {
                 this.isGetAccountsInProcess = false;
+                this.detectChanges();
             }, 3000);
         });
     }
@@ -1730,5 +1773,20 @@ export class ContactComponent implements OnInit, OnDestroy {
                 };
             }
         });
+    }
+
+ /**
+  * Helper to reset name search if tab switched
+  *
+  * @private
+  * @param {string} previousTab
+  * @memberof ContactComponent
+  */
+    private resetSearchIfSwitched(previousTab: string): void {
+        if (this.activeTab === previousTab && this.localeData?.page_heading) {
+            this.showNameSearch = false;
+            this.searchedName?.reset();
+            this.translationComplete(true);
+        }
     }
 }
