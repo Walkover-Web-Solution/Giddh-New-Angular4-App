@@ -27,6 +27,7 @@
                         [(ngModel)]="vm.selectedLedger.entryDate"
                         (dateSelected)="resetInvoiceList()"
                         (datepickerState)="datepickerState($event)"
+                        [closeDatepickerOnFocus]="true"
                     >
                     </giddh-datepicker>
                 </span>
@@ -1758,7 +1759,7 @@
                                     class="dropdown-container dropdown-left text-right min-width-0"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (!vm.isPaymentReceipt || 
+                                        (!vm.isPaymentReceipt ||
                                         (vm.isPaymentReceipt && vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                     "
                                 >
