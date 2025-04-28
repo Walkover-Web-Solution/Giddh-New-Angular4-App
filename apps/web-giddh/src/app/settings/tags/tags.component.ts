@@ -95,11 +95,11 @@ export class SettingsTagsComponent implements OnInit {
         if (this.isApiCallInProgress) {
             return;
         }
-        this.isApiCallInProgress = true;
         const value = event?.value?.trim();
         if (value.length) {
             this.tagForm.get('name').patchValue(value);
             const formValue = this.tagForm.value;
+            this.isApiCallInProgress = true;
             this.settingsTagService.CreateTag(formValue).pipe(take(1)).subscribe(response => {
                 if (response) {
                     this.tagForm.reset();
@@ -122,15 +122,17 @@ export class SettingsTagsComponent implements OnInit {
         if (this.isApiCallInProgress) {
             return;
         }
-        this.isApiCallInProgress = true;
         tag.name = event.value.trim();
         this.setTagValue(tag);
-        this.settingsTagService.UpdateTag(tag).pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
-            }
-            this.isApiCallInProgress = false;
-        });
+        if (tag) {
+            this.isApiCallInProgress = true;
+            this.settingsTagService.UpdateTag(tag).pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
+                }
+                this.isApiCallInProgress = false;
+            });
+        }
     }
 
     /**
