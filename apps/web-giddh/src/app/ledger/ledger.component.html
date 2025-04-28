@@ -530,7 +530,7 @@
                         >
                             <ng-container *ngTemplateOutlet="branchSwitcherTemplate" ></ng-container>
                         </ng-container>
-                       
+
                         <!-- Ledger View Toggle Button -->
                         <div class="d-inline-flex align-items-center column-gap1 ml-auto">
                             <span class="font-15">{{ commonLocaleData?.app_ledger_view?.statement_view }}</span>
@@ -1259,7 +1259,7 @@
                             <ng-container *ngTemplateOutlet="ledgerStatementView"></ng-container>
                         </div>
                     </ng-container>
-                    
+
                     <!-- endregion -->
                     <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.TView)">
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
@@ -2821,10 +2821,10 @@
             </ng-template>
 
             <!-- Account List Dropdown -->
-            <ng-template 
-                #accountSearchTemplate 
-                let-isLedgerEntry 
-                let-txn="txn" 
+            <ng-template
+                #accountSearchTemplate
+                let-isLedgerEntry
+                let-txn="txn"
                 let-index="index"
                 let-cr="cr"
                 let-dr="dr"
@@ -2868,7 +2868,7 @@
                     (createOption)="openLedgerAsidePaneDialog()"
                     [showOptionDivider]="true"
                     [showMatLabel]="false"
-                    [showCaretIcon]="false" 
+                    [showCaretIcon]="false"
                     [appearance]="'fill'"
                     [createNewText]="commonLocaleData?.app_create_new"
                     [showKeyboardCommand]="commonLocaleData?.app_alt_c"
@@ -2912,7 +2912,7 @@
                     </ng-template>
                 </reactive-dropdown-field>
             </ng-template>
-            
+
             <!-- Branch List Dropdown -->
             <ng-template #branchSwitcherTemplate>
                 <reactive-dropdown-field
@@ -2951,13 +2951,13 @@
                     </ng-template>
                 </giddh-carousel>
             </ng-template>
-            
+
             <!-- Ledger Statement View -->
             <ng-template #ledgerStatementView>
                 <section class="statement-view">
                     <!-- Mat grid list #1 (Statement Header) -->
-                    <mat-grid-list 
-                        cols={{ledgerStatementViewGridTotalColumns}} 
+                    <mat-grid-list
+                        cols={{ledgerStatementViewGridTotalColumns}}
                         rowHeight="50px"
                     >
                         <!-- Date Column -->
@@ -2966,38 +2966,45 @@
                                 {{ commonLocaleData?.app_date }}
                             </div>
                         </mat-grid-tile>
-            
+
                         <!-- Particular Column -->
                         <mat-grid-tile class="bold" colspan={{ledgerStatementViewGridColumnsValue[1]}}>
                             <div class="p-2 d-flex align-items-center column-gap5 w-100 h-100">
                                 {{ commonLocaleData?.app_particular }}
                             </div>
                         </mat-grid-tile>
-            
+
                         <!-- Debit Column -->
                         <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
                             <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
                                 {{ commonLocaleData?.app_debit }}
                             </div>
                         </mat-grid-tile>
-            
+
                         <!-- Credit Column -->
                         <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
                             <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
                                 {{ commonLocaleData?.app_credit }}
                             </div>
                         </mat-grid-tile>
+
+                        <!-- Balance Column -->
+                        <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
+                            <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
+                                {{ commonLocaleData?.app_closing_balance }}
+                            </div>
+                        </mat-grid-tile>
                     </mat-grid-list>
-        
+
                     <!-- Mat grid list #2 (Select all checkbox and Forwarded Balance in header)-->
                     <mat-grid-list
                         cols={{ledgerStatementViewGridTotalColumns}}
                         rowHeight="50px"
                     >
                         <!-- Date Column -->
-                        <mat-grid-tile 
-                            [attr.data-title]="commonLocaleData?.app_select_all" 
-                            colspan={{ledgerStatementViewGridColumnsValue[0]}} 
+                        <mat-grid-tile
+                            [attr.data-title]="commonLocaleData?.app_select_all"
+                            colspan={{ledgerStatementViewGridColumnsValue[0]}}
                         >
                             <div class="p-2 d-flex align-items-center column-gap5 w-100 h-100">
                                 <mat-checkbox
@@ -3009,21 +3016,21 @@
                                 ></mat-checkbox>
                             </div>
                         </mat-grid-tile>
-        
+
                         <!-- Particular Column -->
                         <mat-grid-tile colspan={{ledgerStatementViewGridColumnsValue[1]}}>
-                            <div 
-                                *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && (lc.transactionData$ | async)?.page <= 1" 
+                            <div
+                                *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && (lc.transactionData$ | async)?.page <= 1"
                                 class="p-2 d-flex align-items-center column-gap5 w-100 h-100"
                             >
                                 <span>{{ localeData?.to_balance_bf }}</span>
                             </div>
                         </mat-grid-tile>
-        
+
                         <!-- Debit Column -->
                         <mat-grid-tile colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
                             <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0">
-                                <div 
+                                <div
                                     class="p-2 d-flex flex-column align-items-end justify-content-center w-100 h-100"
                                 >
                                     <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' && (lc.transactionData$ | async)?.page <= 1; else zeroAmount">
@@ -3048,11 +3055,11 @@
                                 </div>
                             </ng-container>
                         </mat-grid-tile>
-        
+
                         <!-- Credit Column -->
                         <mat-grid-tile colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
                             <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0">
-                                <div 
+                                <div
                                     class="p-2 d-flex flex-column align-items-end justify-content-center w-100 h-100"
                                 >
                                     <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT' && (lc.transactionData$ | async)?.page <= 1; else zeroAmount">
@@ -3074,6 +3081,11 @@
                                 </div>
                             </ng-container>
                         </mat-grid-tile>
+
+                        <!-- Balance Column -->
+                        <mat-grid-tile colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                        </mat-grid-tile>
+
                         <ng-template #zeroAmount>
                             <amount-field
                                 [amount]="0"
@@ -3091,10 +3103,10 @@
                             </span>
                         </ng-template>
                     </mat-grid-list>
-        
+
                     <!-- Mat grid list #3 (Statement Content) -->
-                    <mat-grid-list 
-                        cols={{ledgerStatementViewGridTotalColumns}} 
+                    <mat-grid-list
+                        cols={{ledgerStatementViewGridTotalColumns}}
                         rowHeight="50px"
                         tabindex="-1"
                         *ngFor="
@@ -3128,7 +3140,7 @@
                                 <span>{{ txn.entryDate }}</span>
                             </div>
                         </mat-grid-tile>
-            
+
                         <!-- Particular Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerStatementViewGridColumnsValue[1]}}>
                             <div class="p-2 d-flex align-items-center justify-content-between column-gap1 w-100 h-100">
@@ -3169,7 +3181,7 @@
                                 </span>
                             </div>
                         </mat-grid-tile>
-            
+
                         <!-- Debit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_debit" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
                             <ng-container *ngIf="txn.type === 'DEBIT'">
@@ -3178,7 +3190,7 @@
                                 </div>
                             </ng-container>
                         </mat-grid-tile>
-                        
+
                         <!-- Credit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_credit" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
                             <ng-container *ngIf="txn.type === 'CREDIT'">
@@ -3187,6 +3199,29 @@
                                 </div>
                             </ng-container>
                         </mat-grid-tile>
+
+                        <!-- Balance Column -->
+                        <mat-grid-tile [attr.data-title]="commonLocaleData?.app_closing_balance" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                                <div class="p-2 w-100 text-right">
+                                    <amount-field
+                                        [amount]="txn?.closing?.amount"
+                                        [currencySymbol]="txn?.currencySymbol"
+                                        [currencyCode]="txn?.currencyCode"
+                                    >
+                                    </amount-field>
+                                      &nbsp;
+                                      <span>
+                                    {{
+                                            txn?.closing?.amount > 0
+                                                ? txn?.closing?.type === "DEBIT"
+                                                    ? localeData?.dr
+                                                    : localeData?.cr
+                                                : ""
+                                    }}
+                                    </span>
+                                </div>
+                        </mat-grid-tile>
+
                         <ng-template #amountFieldTemplate let-txn>
                             <amount-field
                                 [amount]="txn.amount"
