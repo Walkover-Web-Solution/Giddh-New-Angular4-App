@@ -129,7 +129,7 @@
             </div>
         </div>
         <div class="expenses">
-            <div class="clearfix profit-loss table-responsive overflow-visible">
+            <section class="clearfix profit-loss table-responsive overflow-visible">
                 <ng-template #groupDetails let-list let-padding="padding">
                     <ng-container *ngFor="let grp of list">
                         <section
@@ -275,7 +275,7 @@
                     "
                 >
                 </ng-container>
-            </div>
+            </section>
         </div>
         <div class="account clearfix row flex-no-wrap" *ngIf="plData && plData?.incomeStatement && !hideData">
             <div class="col-4 group pl-sticky-group">
