@@ -33,11 +33,11 @@
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.select_vendor : localeData?.select_customer"
-                                                formControlName="uniqueName" 
+                                                formControlName="uniqueName"
                                                 [name]="'account'"
-                                                [options]="voucherAccountResults$ | async" 
+                                                [options]="voucherAccountResults$ | async"
                                                 [showCreateNew]="true"
-                                                [enableDynamicSearch]="true" 
+                                                [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="!invoiceType.isPurchaseOrder && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isPaymentInvoice ? localeData?.add_customer : localeData?.add_vendor"
@@ -1432,7 +1432,7 @@
                                             <div class="container px-0">
                                                 <div class="row">
                                                     <div class="col-12"
-                                                        *ngIf="(invoiceType.isCashInvoice || (!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && (vouchersForAdjustment?.length || isAdjustAmount))) && (!isUpdateMode || (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount)))))">
+                                                        *ngIf="(invoiceType.isCashInvoice || (!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount))) && (!isUpdateMode || (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount)))))">
                                                         <mat-card>
                                                             <mat-card-header
                                                                 *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
@@ -1831,6 +1831,8 @@
                                         <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && invoiceType.isDebitNote" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_dn_update_account }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isDebitNote" (click)="generateVoucher()">{{ localeData?.generate_dn }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder)" (click)="generateVoucher()">{{ commonLocaleData?.app_save }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isReceiptInvoice" (click)="generateVoucher()">{{ localeData?.create_receipt }}</button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPaymentInvoice" (click)="generateVoucher()">{{ localeData?.create_payment }}</button>
                                         <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice"><i class="caret"></i></button>
                                         <mat-menu #moreOptions="matMenu">
                                             <button mat-menu-item (click)="createSendVoucher()">{{ localeData?.create_send

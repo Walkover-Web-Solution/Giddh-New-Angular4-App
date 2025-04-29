@@ -245,6 +245,17 @@
                     }
                 },
                 {
+                    "label": "नवीन पावती",
+                    "link": "/pages/vouchers/receipt/create",
+                    "icon": "icon-reciept-new",
+                    "description": "पावती तयार करा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "विक्री नोंदणी",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -463,6 +474,17 @@
                 },
                 {
                     "label": "पेमेंट",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-debit-note-new",
+                    "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "पेमेंट",
                     "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
@@ -477,6 +499,17 @@
                     "link": "/pages/vouchers/preview/payment/settings",
                     "icon": "icon-reciept-new",
                     "description": "पेमेंट सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "नवीन पेमेंट",
+                    "link": "/pages/vouchers/payment/create",
+                    "icon": "icon-reciept-new",
+                    "description": "पेमेंट व्युत्पन्न करा",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2

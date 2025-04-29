@@ -570,6 +570,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 //     this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                 // }
 
+                this.getVoucherType();
                 this.resetVoucherForm(!params?.uniqueName, true);
 
                 /** Open account dropdown on create */
@@ -1296,7 +1297,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDateLabel = this.localeData?.dr_note_date;
         } else if (this.invoiceType.isPurchaseInvoice) {
             this.voucherDateLabel = this.localeData?.bill_date;
-            this.voucherDueDateLabel = this.localeData?.due_date;
         } else if (this.invoiceType.isReceiptInvoice) {
             this.voucherDateLabel = this.localeData?.receipt_date;
         } else if (this.invoiceType.isPaymentInvoice) {
@@ -1988,7 +1988,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && this.account?.baseCurrency !== accountData.currency) {
-            this.componentStore.getBriefAccounts({ currency: accountData?.currency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
+            this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
         }
 
         this.account.countryName = accountData.country?.countryName;
@@ -4165,7 +4165,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         };
 
         this.invoiceForm.get('type').patchValue(this.voucherType);
-        this.invoiceForm.get('exchangeRate').patchValue(exchangeRate);
         this.invoiceForm.get('date')?.patchValue(this.universalDate);
         this.invoiceForm.get('roundOffApplicable')?.patchValue(this.applyRoundOff);
         this.isVoucherDateChanged = false;
