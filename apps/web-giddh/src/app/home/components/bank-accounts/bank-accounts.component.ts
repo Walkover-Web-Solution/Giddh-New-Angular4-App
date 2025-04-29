@@ -118,7 +118,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         };
 
         this.settingIntegrationComponentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && response?.body) {
                 this.bankList = response.body;
                 if (response.body.some(item => item.account?.uniqueName === this.selectedBankUniqueName)) {
                     this.isBankAccountConnected = true;
@@ -154,13 +154,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         })
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.router.url === '/pages/home') {
-                this.getAllBanks();
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc')
-                this.isDirectlyIntegrated = true;
-                this.componentStore.setState(state => ({
-                    ...state,
-                    requisitionList: null
-                }));
+                if (!this.selectedBankUniqueName) {
+                    this.router.navigate(['/pages/settings/integration/payment']);
+                } else {
+                    this.getAllBanks();
+                    this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc')
+                    this.isDirectlyIntegrated = true;
+                    this.componentStore.setState(state => ({
+                        ...state,
+                        requisitionList: null
+                    }));
+                }
             }
         });
 
@@ -184,6 +188,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         };
     }
 
+    /**
+     * Get Banks
+     *
+     * @memberof BankAccountsComponent
+     */
     public getBank(): void {
         if (!this.unlinkBankList?.length) {
             this.openInstitutionsDialog();
@@ -205,17 +214,26 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                     } else if (response === 'link') {
                         this.getLinkBankAccount();
                     }
-                    this.bankIntegrationDialogRef?.close();
                 }
                 this.changeDetectionRef.detectChanges();
             });
         }
     }
 
-
     /**
      * This will get all accounts of giddh
      *
+     * @private
+     * @param {string} fromDate
+     * @param {string} toDate
+     * @param {string} groupUniqueName
+     * @param {number} [pageNumber]
+     * @param {string} [requestedFrom]
+     * @param {string} [refresh]
+     * @param {number} [count=200]
+     * @param {string} [query]
+     * @param {string} [sortBy='']
+     * @param {string} [order='asc']
      * @memberof BankAccountsComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 200, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -338,15 +356,11 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be yse get bank account by its unique name
+     * This will be use for get bank account by its unique name
      *
      * @memberof BankAccountsComponent
      */
     public getLinkBankAccount(): void {
-
-        if (!this.selectedBankUniqueName) {
-            this.router.navigate(['/pages/settings/integration/payment']);
-        }
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
@@ -360,12 +374,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             dialogRef.afterClosed().pipe(take(1), tap(response => {
-                if (response === 'closeDialog') {
-                    dialogRef?.close();
-                } else {
-                    if (response) this.isBankAccountConnected = true; this.referenceNumber = null; this.getAllBankAccounts();
+                if (response && response !== 'closeDialog') {
+                    this.isBankAccountConnected = true; this.referenceNumber = null; localStorage.setItem('refNo', null); this.getAllBankAccounts();
                 }
-                localStorage.removeItem('refNo');
             })).subscribe();
         }
     }

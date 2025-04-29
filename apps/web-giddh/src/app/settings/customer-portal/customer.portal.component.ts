@@ -4,8 +4,7 @@ import { PayPalClass, RazorPayClass } from '../../models/api-models/SettingsInte
 import { cloneDeep, find } from '../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { debounceTime, filter, Observable, of as observableOf, pairwise, ReplaySubject, Subject, takeUntil } from 'rxjs';
-import { IForceClear } from '../../models/api-models/Sales';
+import { debounceTime, distinctUntilChanged, filter, map, Observable, of as observableOf, pairwise, ReplaySubject, startWith, Subject, take, takeUntil } from 'rxjs';
 import { AppState } from '../../store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
@@ -17,6 +16,8 @@ import { OrganizationProfile } from '../constants/settings.constant';
 import { ClipboardService } from 'ngx-clipboard';
 import { Organization } from '../../models/api-models/Company';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'customer-portal',
@@ -28,10 +29,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /* This will clear the selected linked account */
-    public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
-    /* This will clear the selected paypal linked account */
-    public paypalForceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
     /** Stores the search results pagination details */
     public paypalAccountsSearchResultsPaginationData: any = {
         page: 0,
@@ -127,6 +124,14 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     public updateRazor: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public accounts$: Observable<IOption[]>;
+    /** True if default accounts api call in progress */
+    public isDefaultAccountsLoading: boolean = true;
+    /** True if default paypal accounts api call in progress */
+    public isDefaultPaypalAccountsLoading: boolean = true;
+    /** Hold previous paypal search value */
+    private previousPaypalSearchQuery: string = null;
+    /** Hold previous account search value */
+    private previousAccountSearchQuery: string = null;
 
     constructor(
         private generalService: GeneralService,
@@ -137,6 +142,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         private toasty: ToasterService,
         private formBuilder: FormBuilder,
         private clipboardService: ClipboardService,
+        public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions
     ) {
         this.initProfileForm();
@@ -158,6 +164,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
 
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+
             if (organization) {
                 if (organization.type === OrganizationType.Branch || this.isConsolidatedBranch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
@@ -171,17 +178,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        if (this.organizationType === 'COMPANY') {
-            this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
-                takeUntil(this.destroyed$),
-                debounceTime(700),
-                pairwise(),
-                filter(([prev, curr]) => prev !== curr)
-            ).subscribe(([prev, curr]) => {
-                this.store.dispatch(this.settingsProfileActions.PatchProfile(this.profileData));
-            });
-        }
-
         // getting all page data of integration page
         this.store.pipe(select(data => data?.settings?.integration), takeUntil(this.destroyed$)).subscribe((response) => {
             // set razor pay form data
@@ -190,7 +186,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                     this.razorPayObj = cloneDeep(response?.razorPayForm);
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
-                        this.forceClearLinkAccount$ = observableOf({ status: true });
                     }
                     this.razorPayObj.password = response?.razorPayForm?.userName ? 'YOU_ARE_NOT_ALLOWED' : '';
                 }
@@ -207,7 +202,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                     this.linkedAccountLabel = this.paypalObj?.account?.name;
                     if (this.paypalObj && this.paypalObj.account === null) {
                         this.paypalObj.account = { name: null, uniqueName: null };
-                        this.paypalForceClearLinkAccount$ = observableOf({ status: true });
                     }
                 }
                 this.updatePaypal = true;
@@ -217,12 +211,33 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response.portalDomain) {
-                this.profileForm.get('portalDomain').patchValue(response.portalDomain);
-                this.profileData.portalDomain = response.portalDomain;
+        this.store.pipe(
+            select(appState => appState.settings.profile),
+            map(response => response?.portalDomain),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((portalDomain) => {
+            if (portalDomain) {
+                this.profileForm.get('portalDomain').patchValue(portalDomain, { emitEvent: false });
+                this.profileData.portalDomain = portalDomain;
+                this.region = localStorage.getItem('Country-Region') === 'GB' ? 'uk' : 'in';
+                this.portalLoginUrl = `${this.portalUrl}${portalDomain}/${this.region}/login`;
             }
         });
+
+        if (this.organizationType === 'COMPANY') {
+            const initialValue = this.profileForm?.get('portalDomain')?.value;
+            this.profileForm?.get('portalDomain')?.valueChanges?.pipe(
+                startWith(initialValue),
+                debounceTime(700),
+                pairwise(),
+                filter(([prev, curr]) => prev !== curr && curr !== this.profileData.portalDomain),
+                takeUntil(this.destroyed$)
+            ).subscribe(([prev, curr]) => {
+                this.store.dispatch(this.settingsProfileActions.PatchProfile({ portalDomain: curr }));
+            });
+        }
+
     }
 
     /**
@@ -260,6 +275,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.paypalLoadDefaultAccountsSuggestions();
         this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
         this.store.dispatch(this.settingsIntegrationActions.getPaypalDetails());
+
     }
 
     public setDummyData() {
@@ -269,7 +285,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.razorPayObj.account = { name: null, uniqueName: null };
             this.razorPayObj.autoCapturePayment = true;
         }
-        this.forceClearLinkAccount$ = observableOf({ status: true });
     }
 
     /**
@@ -301,7 +316,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.paypalObj.email = null;
             this.paypalObj.account = { name: null, uniqueName: null };
         }
-        this.paypalForceClearLinkAccount$ = observableOf({ status: true });
     }
 
     /**
@@ -328,7 +342,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                     }
                 });
         }
-        this.changeDetectionRef.detectChanges();
     }
 
 
@@ -341,53 +354,68 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     * @param {Function} successCallback Callback to carry out further operation
     * @memberof CustomerPortalComponent
     */
-    public paypalOnAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+
+    public paypalOnAccountSearchQueryChanged(query: string = "", page: number = 1, successCallback?: Function): void {
+
+        query = query?.trim() || "";
+
+        if (query === this.previousPaypalSearchQuery) {
+            return;
+        }
+
+        this.previousPaypalSearchQuery = query;
         this.paypalAccountsSearchResultsPaginationData.query = query;
+
         if (!this.paypalPreventDefaultScrollApiCall &&
             (query || (this.paypalDefaultAccountSuggestions && this.paypalDefaultAccountSuggestions.length === 0) || successCallback)) {
-            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page
-            }
+            };
+
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
+                if (data?.body?.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
                             value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
+
                     if (page === 1) {
                         this.paypalAccounts = searchResults;
                     } else {
-                        this.paypalAccounts = [
-                            ...this.paypalAccounts,
-                            ...searchResults
-                        ];
+                        this.paypalAccounts = [...this.paypalAccounts, ...searchResults];
                     }
+
                     this.paypalAccounts$ = observableOf(this.paypalAccounts);
                     this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
                     this.paypalAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+
                     if (successCallback) {
                         successCallback(data.body.results);
                     } else {
                         this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
                         this.paypalAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     }
+                } else {
+                    this.isDefaultPaypalAccountsLoading = false;
                 }
             });
+
         } else {
             this.paypalAccounts = [...this.paypalDefaultAccountSuggestions];
             this.paypalAccountsSearchResultsPaginationData.page = this.paypalDefaultAccountPaginationData.page;
             this.paypalAccountsSearchResultsPaginationData.totalPages = this.paypalDefaultAccountPaginationData.totalPages;
+
             this.paypalPreventDefaultScrollApiCall = true;
             setTimeout(() => {
                 this.paypalPreventDefaultScrollApiCall = false;
             }, 500);
         }
-        this.changeDetectionRef.detectChanges();
     }
+
 
     /**
  * Scroll end handler
@@ -425,52 +453,67 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
  * @param {Function} successCallback Callback to carry out further operation
  * @memberof CustomerPortalComponent
  */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string = "", page: number = 1, successCallback?: Function): void {
+
+        query = query?.trim() || "";
+
+        if (query === this.previousAccountSearchQuery ) {
+            return;
+        }
+
+        this.previousAccountSearchQuery = query;
         this.accountsSearchResultsPaginationData.query = query;
+
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page
-            }
+            };
+
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
+                if (data?.body?.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
                             value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
+
                     if (page === 1) {
                         this.accounts = searchResults;
                     } else {
-                        this.accounts = [
-                            ...this.accounts,
-                            ...searchResults
-                        ];
+                        this.accounts = [...this.accounts, ...searchResults];
                     }
+
                     this.accounts$ = observableOf(this.accounts);
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+
                     if (successCallback) {
                         successCallback(data.body.results);
                     } else {
                         this.defaultAccountPaginationData.page = data.body.page;
                         this.defaultAccountPaginationData.totalPages = data.body.totalPages;
                     }
+                } else {
+                    this.isDefaultAccountsLoading = false;
                 }
             });
+
         } else {
             this.accounts = [...this.defaultAccountSuggestions];
             this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
             this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+
             this.preventDefaultScrollApiCall = true;
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
         }
     }
+
 
     public selectAccount(event: IOption) {
         if (event?.value) {
@@ -503,7 +546,21 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     }
 
     public deleteRazorPayDetails() {
-        this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
+        let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.collection?.delete_credentials_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
+            }
+        });
     }
 
     /**
@@ -565,8 +622,22 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public deletePaypalDetails(): void {
-        this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
-        this.linkedAccountLabel = '';
+        let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: 'Are you sure you want to delete the credentials?',
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
+                this.linkedAccountLabel = '';
+            }
+        });
     }
 
     /**
@@ -607,6 +678,8 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
             this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
             this.accounts = [...this.defaultAccountSuggestions];
+            this.isDefaultAccountsLoading = false;
+            this.changeDetectionRef.detectChanges();
         });
     }
 
@@ -627,8 +700,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.paypalDefaultAccountPaginationData.page = this.paypalAccountsSearchResultsPaginationData.page;
             this.paypalDefaultAccountPaginationData.totalPages = this.paypalAccountsSearchResultsPaginationData.totalPages;
             this.paypalAccounts = [...this.paypalDefaultAccountSuggestions];
+            this.isDefaultPaypalAccountsLoading = false;
+            this.changeDetectionRef.detectChanges();
         });
-        this.changeDetectionRef.detectChanges();
     }
 
     /**

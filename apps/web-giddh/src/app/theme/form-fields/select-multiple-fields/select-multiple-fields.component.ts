@@ -115,12 +115,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                     this.dynamicSearchedQuery.emit(search);
                     if (!search) {
                         this.onClear.emit({ label: "", value: "" });
-                        this.writeValue("");
                     }
                 } else {
                     if (search === "") {
                         this.onClear.emit({ label: "", value: "" });
-                        this.writeValue("");
                     }
                     this.filterOptions(search);
                 }
@@ -355,5 +353,27 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public registerOnTouched(fn: any): void {
         this.onTouched = fn;
+    }
+
+    /**
+     * Handle mat autocomplete panel closed
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public panelClosed(): void {
+        this.searchFormControl.setValue(null);
+    }
+
+    /**
+     * Handle mat autocomplete panel opened
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public panelOpened(): void {
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchedQuery.emit("");
+        } else {
+            this.filterOptions("");
+        }
     }
 }

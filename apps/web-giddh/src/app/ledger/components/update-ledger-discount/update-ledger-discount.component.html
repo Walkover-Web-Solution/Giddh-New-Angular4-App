@@ -1,21 +1,21 @@
 <div class="multi-select adjust">
-        <input-field
-            matInput
-            [label]="commonLocaleData?.app_discount"
-            [type]="'text'"
-            [prefix]="prefixInput"
-            [id]="'update-ledger-discount'"
-            [suffix]="suffixInput"
-            [useMask]="true"
-            [mask]="maskInput"
-            [name]="'discountTotal'"
-            [(ngModel)]="discountTotal"
-            [matMenuTriggerFor]="discountControlMenu"
-            [ngClass]="{ 'field-disabled': readonly }"
-            [autocomplete]="'off'"
-            [cssClass]="'text-right'"
-            [readonly]="readonly"
-       ></input-field>
+    <input-field
+        [label]="commonLocaleData?.app_discount"
+        [type]="'text'"
+        [prefix]="prefixInput"
+        [id]="'update-ledger-discount'"
+        [suffix]="suffixInput"
+        [useMask]="true"
+        [mask]="maskInput"
+        [name]="'discountTotal'"
+        [(ngModel)]="discountTotal"
+        [matMenuTriggerFor]="discountControlMenu"
+        [ngClass]="{ 'field-disabled': readonly }"
+        (onFocus)="hideOtherPopups.emit(true)"
+        [autocomplete]="'off'"
+        [cssClass]="'text-right'"
+        [readonly]="readonly"
+    ></input-field>
     <mat-menu #discountControlMenu="matMenu">
         <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
             <div class="value-wrapper">

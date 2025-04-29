@@ -73,6 +73,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showMatLabel: boolean = true;
     /** Show Caret Icon */
     @Input() public showCaretIcon: boolean = true;
+    /** Show Cross Icon to clear selection */
+    @Input() public showClearIcon: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -114,14 +116,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
                 this.dynamicSearchedQuery.emit(search);
                 if (!search) {
-                    this.onClear.emit({ label: "", value: "" });
+                    this.clearDropdownValue();
                     this.writeValue("");
                 }
             });
         } else {
             this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
                 if (!search) {
-                    this.onClear.emit({ label: "", value: "" });
+                    this.clearDropdownValue();
                     this.writeValue("");
                 }
                 this.fieldFilteredOptions$ = this.filterOptions(String(search));
@@ -290,9 +292,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public openDropdownPanel(): void {
-        this.trigger?.openPanel();
+        this.selectField?.nativeElement?.focus();
         setTimeout(() => {
-            this.selectField?.nativeElement?.focus();
+            this.trigger?.openPanel();
         }, 10);
     }
 
@@ -304,10 +306,31 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     private setLabelValue(): void {
         if (this.value !== undefined && this.value !== null) {
-            let val = this.options.find(search => search.value === this.value);
+            let val = this.options.find(search => search?.value === this.value);
             if (val) {
                 this.labelValue = val.label;
             }
         }
+    }
+
+    /**
+     * Handle mat autocomplete panel opened
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public panelOpened(): void {
+        if (!this.enableDynamicSearch) {
+            this.fieldFilteredOptions$ = this.filterOptions("");
+        }
+    }
+
+    /**
+     * Emits on clear event
+     *
+     * @param {*} [value={ label: "", value: "" }]
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public clearDropdownValue(value: any = { label: "", value: "" }): void {
+        this.onClear.emit(value);
     }
 }

@@ -7,7 +7,7 @@ import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
-import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
+import { GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-loss-grid.component';
@@ -94,7 +94,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         let data = this.projectUniqueName ? prepareProfitLossData(cloneDeep(response)) as ProfitLossData : cloneDeep(response) as ProfitLossData;
         let cogs;
         if (data?.incomeStatement?.costOfGoodsSold) {
-            cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as GetCogsResponse;
+            cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;;
         } else {
             cogs = null;
         }
@@ -113,34 +113,45 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             cogsGrp.level1 = false;
             cogsGrp.uniqueName = 'cogs';
             cogsGrp.groupName = 'Less: Cost of Goods Sold';
-            cogsGrp.closingBalance = {
-                amount: cogs.cogs,
-                type: 'DEBIT'
-            };
+            cogsGrp.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                acc[key] = {
+                    amount: cogs[key].cogs,
+                    type: 'DEBIT'
+                };
+                return acc;
+            }, {});
             cogsGrp.accounts = [];
             cogsGrp.childGroups = [];
 
-            Object.keys(cogs)?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(f => {
-                let childGroup = new ChildGroup();
-                childGroup.isCreated = false;
-                childGroup.isVisible = false;
-                childGroup.isIncludedInSearch = true;
-                childGroup.isOpen = false;
-                childGroup.uniqueName = f;
-                childGroup.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
-                childGroup.category = f === 'income';
-                childGroup.closingBalance = {
-                    amount: cogs[f],
-                    type: 'CREDIT'
-                };
-                childGroup.accounts = [];
-                childGroup.childGroups = [];
-                if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
-                    childGroup.groupName = `+ ${childGroup.groupName}`;
-                } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
-                    childGroup.groupName = `- ${childGroup.groupName}`;
+            Object.keys(cogs).forEach((cogsKey, i) => {
+                if (i === 0) {
+                    Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(f => {
+                        let childGroup = new ChildGroup();
+                        childGroup.isCreated = false;
+                        childGroup.isVisible = false;
+                        childGroup.isIncludedInSearch = true;
+                        childGroup.isOpen = false;
+                        childGroup.uniqueName = f;
+                        childGroup.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
+                        childGroup.category = f === 'income';
+                        childGroup.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                            acc[key] = {
+                                amount: cogs[key][f],
+                                type: 'CREDIT'
+                            };
+                            return acc;
+                        }, {});
+                        childGroup.accounts = [];
+                        childGroup.childGroups = [];
+                        
+                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
+                            childGroup.groupName = `+ ${childGroup.groupName}`;
+                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
+                            childGroup.groupName = `- ${childGroup.groupName}`;
+                        }
+                        cogsGrp.childGroups.push(childGroup);
+                    });
                 }
-                cogsGrp.childGroups.push(childGroup);
             });
 
             this.cogsData = cogsGrp;
@@ -179,12 +190,12 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         }
 
-        if (data?.incomeStatement?.grossProfit?.type === "DEBIT" && data.incomeStatement.grossProfit.amount) {
-            data.incomeStatement.grossProfit.amount = "-" + data.incomeStatement.grossProfit.amount;
+        if (data?.incomeStatement?.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]]?.type === "DEBIT" && data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount) {
+            data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount = "-" + data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount;
         }
 
-        if (data?.incomeStatement?.operatingProfit?.type === "DEBIT" && data.incomeStatement.operatingProfit.amount) {
-            data.incomeStatement.operatingProfit.amount = "-" + data.incomeStatement.operatingProfit.amount;
+        if (data?.incomeStatement?.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]]?.type === "DEBIT" && data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount) {
+            data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount = "-" + data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount;
         }
 
         this.data = data;

@@ -57,11 +57,11 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../services/service.config';
+import { ContactsTab, ContactsColumn } from './contacts.enum';
 
 @Component({
     selector: "contact-detail",
@@ -237,8 +237,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public defaultLoad: boolean = true;
     /** This will use for displayed table columns */
     public displayedColumns: any[] = [];
-    /** This will use for customise column check values */
-    public customiseColumns = [];
+    /** This will use for dynamic customise column check values */
+    public dynamicCustomColumns = [];
     /** Holds inventory type module  */
     public moduleType: string = '';
     /** Holds true if current company country is plaid supported country */
@@ -253,6 +253,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** True for only once when get route response */
     public hasNavigated: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** Returns only the columns marked as checked */
+    public get visibleDynamicCustomColumns(): any[] {
+        return this.dynamicCustomColumns?.filter(col => col.checked) || [];
+    }
+    public ContactsColumn = ContactsColumn;
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -283,6 +290,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.currentUrl = this.router.url;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
@@ -316,12 +324,54 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
+        combineLatest([this.route.params, this.route.queryParams])
+            .pipe(debounceTime(50), takeUntil(this.destroyed$))
+            .subscribe(([params, queryParams]) => {
+                const lastTabType = this.moduleType;
+                const typeParam = params?.type?.toLowerCase();
+                const tabQueryParam = queryParams?.tab?.toLowerCase();
+
+                this.moduleType = params.type?.toUpperCase();
+                console.log("this.moduleType", this.moduleType);
+                console.log("params", params);
+                console.log("queryParams", queryParams);
+                console.log("typeParam", typeParam);
+                console.log("tabQueryParam", tabQueryParam);
+                console.log("lastTabType", lastTabType);
+                console.log("activeTab", this.activeTab);
+
+
+                const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
+                const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
+
+                if (params) {
+                    const activeTab = typeParam?.includes('customer') ? 'customer' : 'vendor';
+
+                    if (isCustomer) {
+                        if (activeTab !== 'customer') {
+                            this.setActiveTab('customer');
+                        }
+                        this.resetSearchIfSwitched('vendor');
+                    } else if (isVendor) {
+                        if (activeTab !== 'vendor') {
+                            this.setActiveTab('vendor');
+                        }
+                        this.resetSearchIfSwitched('customer');
+                    } else {
+                        this.setActiveTab('aging-report');
+                    }
+
+                    if (lastTabType) {
+                        this.translationComplete(true);
+                    }
+                }
+            });
+
         combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
             this.moduleType = (params.type)?.toUpperCase();
-
             if (params) {
                 if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
                     const activeTab = this.activeTab;
@@ -347,70 +397,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.setActiveTab("aging-report");
                 }
 
-                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
-                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "customer_name",
-                            "label": "Customer Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "sales",
-                            "label": "Sales",
-                            "checked": true
-                        },
-                        {
-                            "value": "receipt",
-                            "label": "Receipt",
-                            "checked": true
-                        }
-                    );
-                    this.moduleType = ContactsTab.customer;
-                    this.displayedColumns = [];
-                }
-                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "vendor_name",
-                            "label": "Vendor Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "purchase",
-                            "label": "Purchase",
-                            "checked": true
-                        },
-                        {
-                            "value": "payment",
-                            "label": "Payment",
-                            "checked": true
-                        }
-                    );
-
-                    this.moduleType = ContactsTab.vendor;
-                    this.displayedColumns = [];
-                }
                 if (lastTabType) {
                     this.translationComplete(true);
                 }
@@ -436,19 +422,31 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.isICICIIntegrated = false;
             }
-            if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                let customiseColumns = cloneDeep(this.customiseColumns);
-                if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
-                    let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
-                    if (!filteredCustomisColumns.length) {
-                        this.customiseColumns.push({ value: "action", label: "Action", checked: true });
+
+            setTimeout(() => {
+                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                    let dynamicCustomColumns = this.dynamicCustomColumns.filter(col => col.value !== 'action');
+                    let displayedColumns = this.displayedColumns.filter(col => col !== 'action');
+
+                    const shouldAddAction = !this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry);
+
+                    if (shouldAddAction) {
+                        const actionColumn = {
+                            checked: true,
+                            dataType: "STRING",
+                            label: "Action",
+                            value: "action"
+                        };
+
+                        dynamicCustomColumns.push(actionColumn);
+                        displayedColumns.push("action");
                     }
-                } else {
-                    this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
+
+                    this.dynamicCustomColumns = dynamicCustomColumns;
+                    this.displayedColumns = displayedColumns;
                 }
-                const values = this.customiseColumns.map(item => item.value);
-                this.showSelectedHeaderColumns(values);
-            }
+            }, 1000);
+
             this.cdRef.detectChanges();
         });
 
@@ -475,7 +473,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
@@ -640,6 +637,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (isElectron) {
             this.router.navigate([`/pages/${part}/${accUniqueName}`]);
         } else {
+            if (part === 'ledger') {
+                url = url + `?redirectUrl=${this.currentUrl}`;
+            }
             (window as any).open(url);
         }
     }
@@ -1296,14 +1296,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
-                        // let customFields = [];
-                        // element.customFields?.forEach(field => {
-                        //     customFields[field?.uniqueName] = [];
-                        //     customFields[field?.uniqueName] = field;
-                        // });
-
-                        // element.customFields = customFields;
-
                         let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1324,14 +1316,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
-                        // let customFields = [];
-                        // element.customFields?.forEach(field => {
-                        //     customFields[field?.uniqueName] = [];
-                        //     customFields[field?.uniqueName] = field;
-                        // });
-
-                        // element.customFields = customFields;
-
                         let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1351,9 +1335,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
-                this.detectChanges();
             }
-            this.isGetAccountsInProcess = false;
+            setTimeout(() => {
+                this.isGetAccountsInProcess = false;
+                this.detectChanges();
+            }, 3000);
         });
     }
 
@@ -1503,18 +1489,22 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for show hide main table headers from customise columns
-     *
-     * @param {*} event
-     * @memberof PurchaseRegisterExpandComponent
-     */
-    public showSelectedHeaderColumns(columns: string[]): void {
-        if (columns) {
-            this.displayedColumns = columns;
+    * This will use for show hide main table headers from dynamic columns with new columns
+    *
+    * @param {*} event
+    * @memberof ContactComponent
+    */
+    public getCustomiseDynamicHeaderColumns(event: any): void {
+        this.dynamicCustomColumns = [];
+        this.displayedColumns = [];
+        if (event) {
+            this.dynamicCustomColumns = event;
+            this.displayedColumns = event
+                .filter(item => item?.checked)
+                .map(item => item.value);
+            this.cdRef.detectChanges();
         }
-        this.cdRef.detectChanges();
     }
-
 
     /**
      * Branch change handler
@@ -1589,10 +1579,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-            this.customiseColumns = this.customiseColumns?.map(column => {
-                column.label = this.localeData[column.value];
-                return column;
-            });
         }
     }
 
@@ -1787,5 +1773,20 @@ export class ContactComponent implements OnInit, OnDestroy {
                 };
             }
         });
+    }
+
+ /**
+  * Helper to reset name search if tab switched
+  *
+  * @private
+  * @param {string} previousTab
+  * @memberof ContactComponent
+  */
+    private resetSearchIfSwitched(previousTab: string): void {
+        if (this.activeTab === previousTab && this.localeData?.page_heading) {
+            this.showNameSearch = false;
+            this.searchedName?.reset();
+            this.translationComplete(true);
+        }
     }
 }

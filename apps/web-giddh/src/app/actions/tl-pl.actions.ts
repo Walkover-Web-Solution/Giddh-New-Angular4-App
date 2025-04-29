@@ -6,7 +6,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { TlPlService } from '../services/tl-pl.service';
-import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossDateRangeResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { CustomActions } from '../store/custom-actions';
 
 @Injectable()
@@ -65,7 +65,7 @@ export class TBPlBsActions {
         .pipe(
             ofType(TBPlBsActions.GET_PROFIT_LOSS_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._tlPlService.GetProfitLoss(action.payload).pipe(
+                return this._tlPlService.getComparedProfitLoss(action.payload).pipe(
                     map((r) => this.validateResponse<AccountDetails, ProfitLossRequest>(r, {
                         type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
                         payload: r?.body

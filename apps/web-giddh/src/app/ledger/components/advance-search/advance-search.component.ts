@@ -614,7 +614,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        if (this.accountsSearchResultsPaginationData.query === query && this.accountsSearchResultsPaginationData.page === page) {
+            return;
+        }
         this.accountsSearchResultsPaginationData.query = query;
+        this.accountsSearchResultsPaginationData.page = page;
         if (!this.preventDefaultScrollApiCall &&
             ((typeof query === 'string') || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -703,7 +707,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        if (this.stocksSearchResultsPaginationData.query === query && this.stocksSearchResultsPaginationData.page === page) {
+            return;
+        }
         this.stocksSearchResultsPaginationData.query = query;
+        this.stocksSearchResultsPaginationData.page = page;
         if (!this.preventDefaultStockScrollApiCall &&
             (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -762,9 +770,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        if (this.groupsSearchResultsPaginationData.query === query && this.groupsSearchResultsPaginationData.page === page) {
+            return;
+        }
         this.groupsSearchResultsPaginationData.query = query;
+        this.groupsSearchResultsPaginationData.page = page;
         if (!this.preventDefaultGroupScrollApiCall &&
-            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            ((typeof query === "string") || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -793,6 +805,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     this.groups$ = observableOf(this.searchedGroups);
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    this.changeDetectionRef.detectChanges();
                     if (successCallback) {
                         successCallback(data.body.results);
                     } else {

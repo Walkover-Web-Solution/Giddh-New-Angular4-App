@@ -18,6 +18,9 @@
                             [(ngModel)]="selectedTaxUniqueName"
                             [options]="taxesOptions"
                             [required]="true"
+                            [labelValue]="defaultOtherTaxesModal?.appliedOtherTax?.name"
+                            [showClearIcon]="true"
+                            (onClear)="selectedTaxUniqueName = null; defaultOtherTaxesModal.appliedOtherTax = null"
                             (selectedOption)="applyTax($event)">
                         </reactive-dropdown-field>
 
@@ -34,6 +37,7 @@
                         [placeholder]="commonLocaleData?.app_select_method"
                         [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
                         [options]="calculationMethodOptions"
+                        [labelValue]="calculationMethodLabel"
                         [required]="true">
                     </reactive-dropdown-field>
                 </div>

@@ -1127,7 +1127,7 @@ textarea {
     }
 
     .filter-dropdown-branch {
-        max-width: 350px;
+        max-width: 300px;
     }
 
     .branch-options {
@@ -1195,7 +1195,7 @@ textarea {
                 background-color: var(--color-transparent-background) !important;
             }
         }
-        .readonly-field { 
+        .readonly-field {
             .mat-mdc-form-field {
                 background-color: var(--color-transparent-background) !important;
             }
@@ -1205,6 +1205,16 @@ textarea {
 
 .border-top {
     border-top: 1px solid var(--color-common-secondary-border) !important;
+}
+
+body {
+    &.template-wrapper {
+        mat-tab-body {
+            &.mat-mdc-tab-body-active {
+                z-index: unset !important;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -2831,7 +2841,7 @@ modal-container.modal {
 
     &.custom-new-datepicker {
         input {
-            height: 48px;
+            height: var(--mat-form-field-height);
             border-radius: 0.5rem;
         }
 
@@ -3360,6 +3370,10 @@ input[type="checkbox"]:checked:after {
 
 .lh-0 {
     line-height: 0 !important;
+}
+
+.lh-1 {
+    line-height: 1 !important;
 }
 
 .btn-success-green {
@@ -4167,7 +4181,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .w125 {
-    width: 125px;
+    width: 125px !important;
 }
 
 .multi-select {
@@ -4755,7 +4769,7 @@ label {
     color: var(--dark-blue01) !important;
 }
 
-.calc-width {
+.adjusted-content-width {
     width: calc(100% - 112px) !important;
 }
 
@@ -6085,8 +6099,26 @@ input[type="checkbox"][disabled]:after {
     border-left: 6px solid var(--color-table-primary-header-bar-border);
 }
 
-.table-container .account {
-    background: var(--color-table-primary-footer);
+.table-container {
+    .account {
+        background: var(--color-table-primary-footer);
+        overflow: visible;
+        min-height: 42px;
+        .pl-sticky-group {
+            background: var(--color-table-primary-footer);
+        }
+    }
+}
+
+.pl-sticky-group {
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    background: var(--color-body-background);
+    max-width: 300px !important;
+    min-width: 300px !important;
+    padding-block: 10px !important;
+    padding-left: 15px !important;
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
@@ -9709,6 +9741,9 @@ span#HW_badge_cont:nth-child(3) {
 .flex-wrap {
     flex-wrap: wrap;
 }
+.flex-no-wrap {
+    flex-wrap: nowrap !important;
+}
 
 /*flex css start*/
 .select-border-bottom {
@@ -11594,15 +11629,6 @@ body {
         position: relative;
     }
 
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        position: absolute;
-        width: 104%;
-        top: -50px;
-        padding-top: 5px !important;
-        margin: 0;
-        left: -16px;
-        right: 0;
-    }
 
     .sub-filter-nav-band .nav-tabs {
         overflow-x: auto;
@@ -13408,12 +13434,12 @@ voucher-component {
     .dropdown-bg {
         background-color: var(--color-transparent-background) !important;
     }
-    
+
     .mdc-text-field__input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
     .mat-mdc-form-field input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
@@ -13599,7 +13625,7 @@ aside-menu-product-service {
 }
 
 .mat-dialog-md {
-    width: 700px;
+    width: 760px;
 }
 
 // material-pagination
@@ -13703,7 +13729,7 @@ aside-menu-product-service {
 // This Class will use globllay for border like mat input field
 .mat-form-field-border {
     &.mat-form-field-height {
-        height: 48px !important;
+        height: var(--mat-form-field-height) !important;
     }
 
     border-radius: 4px !important;
@@ -13900,6 +13926,13 @@ mat-list {
         label {
             color: var(--color-common-primary-text) !important;
         }
+    }
+}
+
+// For CompareWithDateRangePickerComponent 
+.compare-with-menu {
+    .mdc-list-item__start {
+        margin-right: 0px !important;
     }
 }
 

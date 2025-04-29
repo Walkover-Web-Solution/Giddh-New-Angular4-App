@@ -118,6 +118,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
     }
+    
     /**
     * This function will use for get institutions details
     *
@@ -354,6 +355,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             width: '1000px'
         });
     }
+
     /**
     * This will open the create new account user modal
     *
@@ -476,11 +478,11 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for reconnect bank
-     *
-     * @param {*} bank
-     * @memberof BankIntegrationComponent
-     */
+ * This will be use for reconnect bank
+ *
+ * @param {*} bank
+ * @memberof BankIntegrationComponent
+ */
     public reconnectBank(bank: any): void {
         this.reconnectBankResponse = bank;
         this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);

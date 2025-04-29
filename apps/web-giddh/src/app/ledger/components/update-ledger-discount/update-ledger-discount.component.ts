@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
@@ -17,7 +17,7 @@ export class UpdateLedgerDiscountData {
     styleUrls: ['./update-ledger-discount.component.scss']
 })
 
-export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy {
+export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
     /* This will hold common JSON data */
@@ -46,11 +46,13 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
-    private discountsList: any[] = [];
+    @Input() public discountsList: any[] = [];
     /** True if get discounts list api call in progress */
     private getDiscountsLoading: boolean = false;
     /** Emitter for create new discount */
     @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Emitter for component init */
+    @Output() public viewInitEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private settingsDiscountService: SettingsDiscountService
@@ -86,6 +88,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                 }
             }
             this.change();
+        }
+
+        if ('discountsList' in changes && changes.discountsList.currentValue !== changes.discountsList.previousValue) {
+            this.prepareDiscountList();
         }
     }
 
@@ -138,11 +144,12 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-        this.defaultDiscount.amount = parseFloat(val);
-        this.defaultDiscount.discountValue = parseFloat(val);
+        this.defaultDiscount.amount = parseFloat(String(val)?.replace(/,/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();
+
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -150,11 +157,12 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             this.discountFromPer = false;
             this.discountFromVal = true;
         }
-        if (!Number(val)) {
+        if (!val) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;
         }
+
     }
 
     /**
@@ -229,5 +237,14 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
      */
     public createNew(): void {
         this.createNewDiscount.emit();
+    }
+
+    /**
+     *  Lifecycle hook that is called after a component's view has been fully initialized.
+     *
+     * @memberof UpdateLedgerDiscountComponent
+     */
+    public ngAfterViewInit(): void {
+        this.viewInitEvent.emit(true);
     }
 }

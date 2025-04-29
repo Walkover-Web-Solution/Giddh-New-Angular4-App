@@ -42,6 +42,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
+    /** Emitter for create new discount */
+    @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public onFocusLastDiv(el) {
         el.stopPropagation();
@@ -81,6 +83,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
                 this.discountPercentageModal = this.defaultDiscount.amount;
             }
             this.change();
+        }
+        if ('discountsList' in changes && changes.discountsList.currentValue !== changes.discountsList.previousValue) {
+            this.prepareDiscountList();
         }
     }
 
@@ -206,6 +211,15 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.discountMenu.menuOpen && this.discountMenu?.closeMenu();
         }
+    }
+
+    /**
+     * Emits create new discount event
+     *
+     * @memberof LedgerDiscountComponent
+     */
+    public createNew(): void {
+        this.createNewDiscount.emit();
     }
 
     public ngOnDestroy(): void {

@@ -100,6 +100,7 @@
                                     currentTxn?.inventory?.unit?.stockUnitUniqueName ||
                                     currentTxn?.inventory?.unit?.uniqueName
                                 "
+                                panelClass="menu-width-150"
                             >
                                 <mat-option
                                     *ngFor="let item of currentTxn?.unitRate"
@@ -117,7 +118,7 @@
                     <!-- Price -->
                     <div>
                         <input-field
-                            id="ledger-price"
+                            [id]="'ledger-price'"
                             [type]="'text'"
                             [name]="'unitPrice'"
                             [label]="localeData?.price"
@@ -156,7 +157,7 @@
                 <div *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
                     <input-field
                         *ngIf="!isAdvanceReceipt"
-                        id="new-ledger-enter-amount"
+                        [id]="'new-ledger-enter-amount'"
                         [type]="'text'"
                         [name]="'amount'"
                         [label]="commonLocaleData?.app_amount"
@@ -174,7 +175,7 @@
                     </input-field>
                     <input-field
                         *ngIf="isAdvanceReceipt"
-                        id="new-ledger-enter-amount-advance-receipt"
+                        [id]="'new-ledger-enter-amount-advance-receipt'"
                         [type]="'text'"
                         [name]="'advanceAmount'"
                         [label]="commonLocaleData?.app_amount"
@@ -184,7 +185,7 @@
                         [suffix]="selectedSuffixForCurrency"
                         [useMask]="true"
                         [mask]="inputMaskFormat"
-                        [disabled]="true"
+                        [disabled]="isReadOnly"
                         [(ngModel)]="currentTxn.taxInclusiveAmount"
                         (focus)="hideDiscountTax()"
                         (keyup)="amountChanged(); calculateTotal()"
@@ -234,6 +235,7 @@
                         [commonLocaleData]="commonLocaleData"
                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                         (discountTotalUpdated)="calculateDiscount($event)"
+                        (createNewDiscount)="showCreateDiscountDialog()"
                     >
                     </ledger-discount>
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -250,28 +252,13 @@
                 </div>
                 <div 
                     class="align-self-center text-center"
-                    *ngIf="
-                        (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                        (companyTaxesList$ | async)?.length
-                    "
+                    *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                 >
                     <label class="icon-plus"></label>
                 </div>
-                <div 
-                    class="align-self-center text-center"
-                    *ngIf="
-                        (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                        !(companyTaxesList$ | async)?.length
-                    "
-                >
-                    <label class="font-16">=</label>
-                </div>
                  <!-- Tax -->
                 <div
-                    *ngIf="
-                    (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                    (companyTaxesList$ | async)?.length
-                    "
+                    *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                     (click)="$event.stopPropagation()"
                 >
                     <tax-control
@@ -311,7 +298,9 @@
                         [isAdvanceReceipt]="isAdvanceReceipt"
                         [allowedSelectionOfAType]="allowedSelectionOfAType"
                         [commonLocaleData]="commonLocaleData"
-                        [showError]="isRcmEntry && !validateTaxes()"
+                        [showError]="showRcmEntryError && isRcmEntry && !validateTaxes()"
+                        [showCreateNew]="true"
+                        (createNewTax)="showCreateTaxDialog()"
                     >
                     </tax-control>
 
@@ -329,17 +318,14 @@
                 </div>
                 <div 
                     class="align-self-center text-center"
-                    *ngIf="
-                        (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
-                        (companyTaxesList$ | async)?.length
-                    "
+                    *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                 >
                     <label class="font-16">=</label>
                 </div>
                 <!-- Total -->
                 <div *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
                     <input-field
-                        id="ledger-total-amount"
+                        [id]="'ledger-total-amount'"
                         [type]="'text'"
                         [name]="'totalAmount'"
                         [label]="commonLocaleData?.app_total"
@@ -349,9 +335,10 @@
                         [suffix]="selectedSuffixForCurrency"
                         [useMask]="true"
                         [mask]="inputMaskFormat"
-                        [disabled]="isReadOnly"
+                        [disabled]="isAdvanceReceipt ? 'disabled' : null"
                         [(ngModel)]="currentTxn.total"
-                        (blur)="calculateAmount()"
+                        (input)="currentTxn.total = $event?.target?.value"
+                        (onChange)="calculateAmount()"
                     >
                     </input-field>
                     <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -368,7 +355,7 @@
                 </div>
             </div>
         </div>
-        <div class="row warehouse-field mr-b05">
+        <div class="row warehouse-field mr-b05 mr-t15">
             <div class="col-md-12">
                 <div class="text-right" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
@@ -418,7 +405,7 @@
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
                 <input-field
-                    id="ledger-taxable-amount"
+                    [id]="'ledger-taxable-amount'"
                     [type]="'text'"
                     [name]="'taxable-amount'"
                     [label]="localeData?.taxable_amount"
@@ -481,12 +468,12 @@
                                             blankLedger.voucherType === 'pay' ||
                                             blankLedger.voucherType === 'rcpt' ||
                                             blankLedger.voucherType === 'advance-receipt' ||
-                                            blankLedger.voucherType == 'jr'
+                                            (voucherApiVersion === 2 && blankLedger.voucherType == 'jr')
                                         "
                                     >
                                         <div class="form-group">
                                             <input-field
-                                                id="ledger-invoice-number"
+                                                [id]="'ledger-invoice-number'"
                                                 [type]="'text'"
                                                 [disabled]="isReadOnly"
                                                 [placeholder]="voucherApiVersion === 2 ? commonLocaleData?.app_number : commonLocaleData?.app_invoice_no"
@@ -622,8 +609,8 @@
                                     <td
                                         *ngIf="
                                             (blankLedger.voucherType === 'credit note' ||
-                                                blankLedger.voucherType === 'debit note') &&
-                                            selectedInvoiceForCreditNote
+                                            blankLedger.voucherType === 'debit note') &&
+                                            (voucherApiVersion === 2 || selectedInvoiceForCreditNote)
                                         "
                                         [style.width.px]="selectedInvoiceForCreditNote ? 250 : 180"
                                         class="cp remove-invoice hidden-xs d-flex align-items-center"
@@ -639,7 +626,7 @@
                                             *ngIf="voucherApiVersion === 2"
                                         >
                                             <input-field
-                                                id="ledger-invoice-number"
+                                                [id]="'ledger-invoice-number'"
                                                 [type]="'text'"
                                                 [disabled]="isReadOnly"
                                                 [label]="commonLocaleData?.app_number"
@@ -701,8 +688,7 @@
                                     </td>
                                     <td
                                         (click)="isReadOnly ? '' : handleVoucherAdjustment()"
-                                        class="cursor-pointer pt-2 pr-0 w-auto"
-                                        [ngClass]="{ 'pt-3' : currentTxn?.voucherAdjustments?.totalAdjustmentAmount < 1000000000 }"
+                                        class="cursor-pointer pr-0 w-auto"
                                         *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
                                     >
                                         <div class="text-gray advance-receipt-edit mr-l1 d-flex align-items-baseline ">
@@ -729,7 +715,7 @@
                                     <tr>
                                         <td>
                                             <input-field
-                                                id="ledger-cheque-number"
+                                                [id]="'ledger-cheque-number'"
                                                 [type]="'text'"
                                                 [disabled]="isReadOnly"
                                                 [label]="commonLocaleData?.app_cheque_number"
@@ -1186,4 +1172,15 @@
             </reactive-dropdown-field>
         </div>
     </div>
+</ng-template>
+
+ <!-- Create Tax Aside Pane -->
+ <ng-template #createTax>
+    <aside-menu-create-tax-component
+        [class]="'in'"
+        [localeData]="localeData"
+        [otherTax]="true"
+        [commonLocaleData]="commonLocaleData"
+        (closeEvent)="closeTaxDialog()"
+    ></aside-menu-create-tax-component>
 </ng-template>

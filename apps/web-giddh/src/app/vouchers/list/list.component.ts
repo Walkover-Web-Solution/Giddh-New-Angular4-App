@@ -337,6 +337,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public isSettingUpdateMode: boolean = false;
     /** Hold route params */
     public isRouteApplied: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -398,6 +400,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        this.currentUrl = this.router.url;
         this.settingForm.get('invoiceSettings.autoPaid')?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -456,6 +459,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+                if (this.activeModule === 'templates') {
+                    document.querySelector('body').classList.add('template-wrapper');
+                } else {
+                    document.querySelector('body').classList.remove('template-wrapper');
+                }
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
@@ -620,16 +628,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.handleGetAllVoucherResponse(response);
             });
-
-        this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                const blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`;
-                this.selectedVouchers = [];
-                this.allVouchersSelected = false;
-                return saveAs(blob, fileName);
-            }
-        });
 
         this.componentStore.eInvoiceGenerated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -1421,24 +1419,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
     /**
-     * Export CSV File and Download
-     *
-     * @return {*}  {*}
-     * @memberof VoucherListComponent
-     */
-    public exportCsvDownload(): any {
-        let exportCsvRequest = { from: '', to: '', dataToSend: null };
-        exportCsvRequest.from = this.advanceFilters.from;
-        exportCsvRequest.to = this.advanceFilters.to;
-        let dataTosend = { uniqueNames: [], type: this.voucherType };
-        if (this.selectedVouchers?.length) {
-            dataTosend.uniqueNames = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
-            exportCsvRequest.dataToSend = dataTosend;
-            this.componentStore.exportVouchers(exportCsvRequest);
-        }
-    }
-
-    /**
      * Generate E-Invoice API Call
      *
      * @memberof VoucherListComponent
@@ -1536,6 +1516,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             localStorage.removeItem('universalSelectedDate');
             localStorage.removeItem('invoiceSelectedDate');
         }
+        document.querySelector('body').classList.remove('template-wrapper');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1559,15 +1540,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(BulkExportComponent, {
-            width: '600px',
+        let voucherType = this.voucherType;
+        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+            voucherType = this.voucherType === VoucherTypeEnum.generateEstimate ? VoucherTypeEnum.estimate : VoucherTypeEnum.proforma;
+        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+            voucherType = "purchase order";
+        }
+        const dialogRef = this.dialog.open(BulkExportComponent, {
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                voucherType: this.voucherType,
+                voucherType: voucherType,
                 advanceFilters: this.advanceFilters,
-                totalItems: this.selectedVouchers?.length || this.totalResults
+                totalItems: this.selectedVouchers?.length || this.totalResults,
+                allVouchersSelected: this.allVouchersSelected,
+                localeData: this.localeData
             },
+            panelClass: ['mat-dialog-md'],
             disableClose: true
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+            }
         });
     }
 
@@ -2132,7 +2128,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const accountUniqueName = voucher?.account?.uniqueName;
 
         if (accountUniqueName && fromDate && toDate) {
-            const url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            let url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            url = url + `?redirectUrl=${this.currentUrl}`;
             this.openUrl(url);
         }
     }

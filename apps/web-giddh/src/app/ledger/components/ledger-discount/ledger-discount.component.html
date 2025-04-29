@@ -17,7 +17,7 @@
     ></input-field>
     
     <mat-menu #discountMenu="matMenu" [hasBackdrop]="false">
-        <div (click)="$event.stopPropagation()" class="pd-1">
+        <div (click)="$event.stopPropagation()" class="discount-wrapper pd-1">
             <div class="value-wrapper">
                 <div class="mr-b1">
                     <input-field
@@ -74,6 +74,9 @@
                         </li>
                     </ng-container>
                 </ul>
+            </div>
+            <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
             </div>
         </div>
     </mat-menu>

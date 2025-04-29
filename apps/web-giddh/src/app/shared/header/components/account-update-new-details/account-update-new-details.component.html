@@ -8,85 +8,73 @@
     <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm">
         <div>
             <div class="upper-form">
-                <div class="row">
+                <div class="row pd-b2">
                     <div class="col-sm-4">
-                        <div class="ng-select-wrap select-list select-group disable-select-group">
-                            <label>{{ commonLocaleData?.app_group }}<span class="red-text">*</span> </label>
-                            <ng-select
-                                [placeholder]="localeData?.select_group_label"
-                                [disabled]="true"
-                                [filterPlaceholder]="localeData?.select_group_label"
-                                (selected)="selectGroup($event)"
-                                formControlName="activeGroupUniqueName"
-                                [options]="activeAccountGroup"
-                                class="wd100"
-                            >
-                                <ng-template #optionTemplate let-option="option">
-                                    <div class="account-list-item">{{ option?.label }}</div>
-                                    <div class="account-list-item font-12">{{ option?.value }}</div>
-                                </ng-template>
-                            </ng-select>
-                        </div>
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_group"
+                            [placeholder]="localeData?.select_group_label"
+                            [labelValue]="activeAccountGroup.length === 1 ? activeAccountGroup[0].label : ''"
+                            [options]="activeAccountGroup"
+                            formControlName="activeGroupUniqueName"
+                            [required]="true"
+                            (selectedOption)="selectGroup($event)"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-8">
-                        <div class="form-group">
-                            <label>{{ localeData?.account_name }} <sup class="text-danger">*</sup> </label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                #autoFocusUpdate
-                                formControlName="name"
-                                name="accountName"
-                                [placeholder]="localeData?.account_name"
-                            />
-                        </div>
+                        <input-field
+                            [name]="'accountName'"
+                            #autoFocusUpdate
+                            [label]="localeData?.account_name"
+                            [placeholder]="localeData?.account_name"
+                            [type]="'text'"
+                            formControlName="name"
+                        >
+                        </input-field>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group" formGroupName="country">
-                            <label>{{ commonLocaleData?.app_country }} <sup class="text-danger">*</sup> </label>
-                            <sh-select
-                                [options]="countrySource"
-                                [isFilterEnabled]="true"
-                                (viewInitEvent)="onViewReady($event)"
-                                formControlName="countryCode"
-                                [defaultValue]="accountCountryName"
-                                (selected)="selectCountry($event)"
-                                [useInBuiltFilterForIOptionTypeItems]="true"
-                                [isRequired]="true"
-                                [disabled]="true"
-                            ></sh-select>
-                        </div>
+                <div class="row pd-b2">
+                    <div class="col-sm-4" formGroupName="country">
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_country"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [labelValue]="accountCountryName"
+                            [options]="countrySource"
+                            formControlName="countryCode"
+                            [required]="true"
+                            (selectedOption)="selectCountry($event)"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
-                        <div class="form-group">
-                            <label>{{ localeData?.currency }}</label>
-                            <sh-select
-                                [options]="currencySource$ | async"
-                                defaultValue="{{ selectedCurrency }}"
-                                formControlName="currency"
-                                [isFilterEnabled]="true"
-                                [disabled]="true"
-                            ></sh-select>
-                        </div>
+                        <reactive-dropdown-field
+                            [label]="localeData?.currency"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [labelValue]="selectedCurrency ?? ''"
+                            [options]="currencySource$ | async"
+                            formControlName="currency"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
                         <div class="cr-dr-account">
-                            <label>{{ localeData?.opening_balance }}</label>
                             <div
                                 [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
                                 class="obj-gap"
                             >
-                                <input
-                                    type="number"
-                                    min="0"
-                                    class="form-control text-right"
-                                    digitsOnlyDirective
-                                    formControlName="openingBalance"
+                                <input-field
+                                    [name]="'number'"
+                                    [cssClass]="'text-right'"
+                                    #autoFocusUpdate
                                     [placeholder]="'0.00'"
+                                    [label]="localeData?.opening_balance"
+                                    [type]="'number'"
+                                    formControlName="openingBalance"
+                                    [allowDigitsOnly]="true"
                                     [readonly]="company?.isActive"
-                                />
+                                    [min]="0"
+                                >
+                                </input-field>
                                 <div
                                     class="input-group-addon"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
@@ -125,27 +113,30 @@
                                 href="javascript:;"
                                 (click)="openBulkAddDialog()"
                                 class="font-14 cursor-pointer text-primary"
-                                >{{ localeData?.bulk_add }}</span
                             >
+                                {{ localeData?.bulk_add }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="row" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
+                <div class="row pd-b2" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
                     <div class="form-group col-xs-12 col-sm-4">
-                        <label for="">{{ localeData?.foreign_opening_balance }}</label>
                         <div
                             [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                             class="obj-gap"
                         >
-                            <input
-                                type="text"
-                                min="0"
-                                class="form-control text-right"
-                                formControlName="foreignOpeningBalance"
+                            <input-field
+                                [name]="'number'"
+                                [cssClass]="'text-right'"
+                                [label]="localeData?.foreign_opening_balance"
                                 [placeholder]="'0.00'"
-                                decimalDigitsDirective
+                                [type]="'number'"
+                                formControlName="foreignOpeningBalance"
+                                [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
-                            />
+                                [min]="0"
+                            >
+                            </input-field>
                             <div
                                 class="input-group-addon"
                                 (click)="openingBalanceTypeChanged('DEBIT')"
@@ -177,450 +168,371 @@
                                 href="javascript:;"
                                 (click)="openBulkAddDialog()"
                                 class="font-14 cursor-pointer text-primary"
-                                >{{ localeData?.bulk_add }}</span
                             >
+                                {{ localeData?.bulk_add }}
+                            </span>
                         </div>
                     </div>
                 </div>
                 <ng-container *ngIf="isHsnSacEnabledAcc">
-                    <div class="row">
-                        <div class="col-8 col-sm-8 form-group">
-                            <div class="input-group d-flex">
-                                <div class="d-flex">
-                                    <span class="mr-r15">
-                                        <input
-                                            type="radio"
-                                            class="radio-custom radio-theme"
-                                            name="hsnOrSac"
-                                            id="hsnCodeType"
-                                            formControlName="hsnOrSac"
-                                            value="hsn"
-                                        />
-                                        <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn
-                                        }}</label>
-                                    </span>
-                                    <span>
-                                        <input
-                                            type="radio"
-                                            class="radio-custom radio-theme"
-                                            name="hsnOrSac"
-                                            id="sacCodeType"
-                                            formControlName="hsnOrSac"
-                                            value="sac"
-                                        />
-                                        <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac
-                                        }}</label>
-                                    </span>
-                                </div>
-                                <input
-                                    type="text"
-                                    class="form-control ml-4 bdr"
-                                    maxlength="10"
-                                    decimalDigitsDirective
-                                    formControlName="hsnNumber"
-                                    *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
-                                />
-                                <input
-                                    type="text"
-                                    class="form-control ml-4 bdr"
-                                    maxlength="10"
-                                    formControlName="sacNumber"
-                                    decimalDigitsDirective
-                                    *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
-                                />
-                            </div>
+                    <div class="row pd-l2 d-flex"> 
+                        <div class="d-flex align-items-center">
+                            <mat-radio-group name="hsnOrSac" formControlName="hsnOrSac">
+                                <mat-radio-button
+                                    color="primary"
+                                    value="hsn"
+                                >
+                                    {{ commonLocaleData?.app_hsn }}
+                                </mat-radio-button>
+                                <mat-radio-button
+                                    color="primary"
+                                    value="sac"
+                                >
+                                    {{ commonLocaleData?.app_sac }}
+                                </mat-radio-button>
+                            </mat-radio-group>
                         </div>
+                        <input-field
+                            class="ml-4"
+                            [label]="commonLocaleData?.app_hsn"
+                            [placeholder]="commonLocaleData?.app_hsn"
+                            [type]="'text'"
+                            formControlName="hsnNumber"
+                            [allowDigitsOnly]="true"
+                            *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
+                        >
+                        </input-field>
+                        <input-field
+                            class="ml-4"
+                            [label]="commonLocaleData?.app_sac"
+                            [placeholder]="commonLocaleData?.app_sac"
+                            [type]="'text'"
+                            formControlName="sacNumber"
+                            [allowDigitsOnly]="true"
+                            *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
+                        >
+                        </input-field>
                     </div>
                 </ng-container>
             </div>
         </div>
 
-        <tabset #staticTabs class="custom-tabs" id="asidePaneFormTabs">
-            <ng-container>
-                <tab
-                    [heading]="localeData?.tabs?.address"
-                    [active]="!isHsnSacEnabledAcc"
-                    [disabled]="isHsnSacEnabledAcc"
-                    [customClass]="isHsnSacEnabledAcc ? 'd-none' : ''"
-                    class="gstin-address"
-                    (selectTab)="tabChanged('address')"
-                >
-                    <ng-container>
-                        <div class="gstin-form" formArrayName="addresses">
-                            <ng-container
-                                *ngFor="
-                                    let gst of addAccountForm.get('addresses')['controls']
-                                        | slice : 0 : gstDetailsLength;
-                                    let i = index;
-                                    let f = first;
-                                    let l = last
-                                "
-                                [formGroupName]="i"
-                            >
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="add-address-default">
-                                            <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
-                                            <div class="inputRadio">
-                                                <span
-                                                    [tooltip]="localeData?.address_tooltip"
-                                                    class="pull-right is-default-address"
-                                                    placement="left"
-                                                >
-                                                    <mat-slide-toggle
-                                                        formControlName="isDefault"
-                                                        name="defaultGst_{{ i }}"
-                                                        color="primary"
-                                                        (change)="
-                                                            isDefaultAddressSelected(gst.get('isDefault')?.value, i)
-                                                        "
-                                                        aria-label="defaultGst"
-                                                    >
-                                                    </mat-slide-toggle>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>{{ commonLocaleData?.app_street }}</label>
-                                            <textarea
-                                                name="gstAddr_{{ i }}"
-                                                formControlName="address"
-                                                rows="4"
-                                                cols="5"
-                                                class="form-control"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group" *ngIf="(statesSource$ | async)?.length">
-                                            <label
-                                                >{{ commonLocaleData?.app_state }}
-                                                <sup class="text-danger" *ngIf="isStateRequired">*</sup>
-                                            </label>
-                                            <div>
-                                                <sh-select
-                                                    #states
-                                                    [options]="statesSource$ | async"
-                                                    [isFilterEnabled]="true"
-                                                    [defaultValue]="
-                                                        gst?.value.state.code
-                                                            ? gst?.value.state.code + ' - ' + gst?.value.state.name
-                                                            : ''
-                                                    "
-                                                    (selected)="selectedState(gst, $event)"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    formControlName="stateCode"
-                                                    class="wd100"
-                                                    [useInBuiltFilterForIOptionTypeItems]="true"
-                                                >
-                                                </sh-select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" *ngIf="countyList?.length">
-                                            <label
-                                                >{{ commonLocaleData?.app_region }}
-                                                <sup class="text-danger" *ngIf="isStateRequired">*</sup>
-                                            </label>
-                                            <div>
-                                                <sh-select
-                                                    #states
-                                                    [options]="countyList"
-                                                    [isFilterEnabled]="true"
-                                                    (selected)="selectedCounty(gst, $event)"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    formControlName="countyCode"
-                                                    class="w-100"
-                                                    [useInBuiltFilterForIOptionTypeItems]="true"
-                                                    [attr.required]="isStateRequired"
-                                                    [isRequired]="isStateRequired"
-                                                >
-                                                </sh-select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
-                                        <div class="form-group mr-b05">
-                                            <label for="gstinNum" class="d-block">{{
-                                                formFields["taxName"]?.label
-                                            }}</label>
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                autocomplete="false"
-                                                #gstNumberField
-                                                (blur)="
-                                                    checkGstNumValidation(gstNumberField); getStateCode(gst, states)
-                                                "
-                                                name="gstNumber"
-                                                formControlName="gstNumber"
-                                                [placeholder]="taxNamePlaceholder"
-                                            />
-                                        </div>
-                                    </div>
-                                    <!-- static code added for the pincode -->
-                                    <div class="col-sm-4">
-                                        <div class="form-group mr-b05">
-                                            <label for="pinCodeNum" class="d-block">{{
-                                                zipCodeSupportedCountryList.includes(
-                                                    activeCompany.countryV2?.alpha2CountryCode
-                                                )
-                                                    ? commonLocaleData?.app_zip_code
-                                                    : commonLocaleData?.app_pin_code
-                                            }}</label>
-                                            <input
-                                                type="number"
-                                                class="form-control"
-                                                autocomplete="false"
-                                                name="pinCodeNum"
-                                                formControlName="pincode"
-                                                [placeholder]="
-                                                    zipCodeSupportedCountryList.includes(
-                                                        activeCompany.countryV2?.alpha2CountryCode
-                                                    )
-                                                        ? commonLocaleData?.app_enter_zip_code
-                                                        : commonLocaleData?.app_enter_pin_code
-                                                "
-                                                decimalDigitsDirective
-                                                [preventDecimal]="true"
-                                            />
-                                        </div>
-                                    </div>
-                                    <!-- end -->
-                                    <ng-container
-                                        *ngIf="
-                                            companyCountry === 'IN' ||
-                                            companyCountry === 'ZW' ||
-                                            companyCountry === 'KE'
-                                        "
-                                    >
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label
-                                                    >{{ localeData?.party_type }}<span class="red-text">*</span></label
-                                                >
-                                                <div class="position-relative">
-                                                    <sh-select
-                                                        [options]="partyTypeSource"
-                                                        formControlName="partyType"
-                                                        [isFilterEnabled]="true"
-                                                    ></sh-select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- <div
-                                            class="col-sm-4"
-                                            *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
+        <mat-tab-group
+            #staticTabs
+            mat-stretch-tabs="false"
+            (selectedTabChange)="tabChanged($event)"
+        >
+            <mat-tab
+                [label]="localeData?.tabs?.address"
+                *ngIf="!isHsnSacEnabledAcc"
+                class="gstin-address"
+            >
+                <div class="pd-t15 overflow-hidden" formArrayName="addresses">
+                    <ng-container
+                        *ngFor="
+                            let gst of addAccountForm.get('addresses')['controls']
+                                | slice : 0 : gstDetailsLength;
+                            let i = index;
+                            let f = first;
+                            let l = last
+                        "
+                        [formGroupName]="i"
+                    >
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="add-address-default">
+                                    <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
+                                    <div class="inputRadio">
+                                        <span
+                                            [tooltip]="localeData?.address_tooltip"
+                                            class="pull-right is-default-address"
+                                            placement="left"
                                         >
-                                            <div class="form-group">
-                                                <label class="d-block">&nbsp;</label>
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="isComposite"
-                                                        formControlName="isComposite"
-                                                    /><label
-                                                        >&nbsp;
-                                                        {{ localeData?.is_composite }}
-                                                    </label></label
-                                                >
-                                            </div>
-                                        </div> -->
-                                    </ng-container>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <span class="text-right">
-                                                <a
-                                                    href="javascript:void(0);"
-                                                    *ngIf="!f"
-                                                    (click)="removeGstDetailsForm(i)"
-                                                    class="grey-color btn btn-danger"
-                                                >
-                                                    <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
-                                                </a>
-                                            </span>
-                                        </div>
+                                            <mat-slide-toggle
+                                                formControlName="isDefault"
+                                                name="defaultGst_{{ i }}"
+                                                color="primary"
+                                                (change)="
+                                                    isDefaultAddressSelected(gst.get('isDefault')?.value, i)
+                                                "
+                                                aria-label="default gst"
+                                            >
+                                            </mat-slide-toggle>
+                                        </span>
                                     </div>
                                 </div>
-                                <div
-                                    class="row"
-                                    *ngIf="
-                                        l &&
-                                        addAccountForm.get('addresses')['controls']?.length > 3 &&
-                                        !moreGstDetailsVisible
-                                    "
+                                <div class="form-group">
+                                    <label>{{ commonLocaleData?.app_street }}</label>
+                                    <textarea
+                                        name="gstAddr_{{ i }}"
+                                        formControlName="address"
+                                        rows="4"
+                                        cols="5"
+                                        class="form-control"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pd-b2">
+                            <div class="col-sm-4">
+                                <reactive-dropdown-field
+                                    *ngIf="(statesSource$ | async)?.length"
+                                    [label]="commonLocaleData?.app_state"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name : ''" 
+                                    [options]="statesSource$ | async"
+                                    formControlName="stateCode"
+                                    [required]="isStateRequired"
+                                    (selectedOption)="selectedState(gst, $event)"
                                 >
-                                    <a
-                                        href="javascript:void(0);"
-                                        class="text-left col-6 cursor-pointer"
-                                        (click)="showMoreGst()"
-                                        >{{ commonLocaleData?.app_show_all }} ({{
-                                            addAccountForm.get("addresses")["controls"]?.length
-                                        }})</a
+                                </reactive-dropdown-field>
+                                
+                                <reactive-dropdown-field
+                                    *ngIf="countyList?.length"
+                                    [label]="commonLocaleData?.app_region"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [options]="countyList"
+                                    formControlName="countyCode"
+                                    [required]="isStateRequired"
+                                    (selectedOption)="selectedCounty(gst, $event)"
+                                >
+                                </reactive-dropdown-field>
+                            </div>
+                            <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
+                                <input-field
+                                    [name]="'gstNumber'"
+                                    [label]="formFields['taxName']?.label"
+                                    [placeholder]="taxNamePlaceholder"
+                                    [type]="'text'"
+                                    [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
+                                    (blur)="checkGstNumValidation(gstNumberField); getStateCode(gst, states)"
+                                >
+                                </input-field>
+                            </div>
+                            <!-- static code added for the pincode -->
+                            <div class="col-sm-4">
+                                <input-field
+                                    [name]="'pinCodeNum'"
+                                    [label]="zipCodeSupportedCountryList.includes(
+                                        activeCompany.countryV2.alpha2CountryCode
+                                    )
+                                        ? commonLocaleData?.app_zip_code
+                                        : commonLocaleData?.app_pin_code"
+                                    [placeholder]="zipCodeSupportedCountryList.includes(
+                                        activeCompany.countryV2.alpha2CountryCode
+                                    )
+                                        ? commonLocaleData?.app_enter_zip_code
+                                        : commonLocaleData?.app_enter_pin_code"
+                                    [type]="'number'"
+                                    [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
+                                    [allowDigitsOnly]="true"
+                                >
+                                </input-field>
+                            </div>
+                            <!-- end -->
+                            <ng-container *ngIf="['IN', 'ZW', 'KE'].includes(companyCountry)">
+                                <div class="col-sm-4 mr-t2" *ngIf="partyTypeSource.length">
+                                    <reactive-dropdown-field
+                                        [label]="commonLocaleData?.party_type"
+                                        [placeholder]="commonLocaleData?.app_select"
+                                        [options]="partyTypeSource"
+                                        [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType"
+                                        [labelValue]="partyTypeSource?.[0]?.label"
                                     >
-                                    <a
-                                        href="javascript:void(0);"
-                                        class="text-left col-6 cursor-pointer"
-                                        (click)="showLessGst()"
-                                        >{{ commonLocaleData?.app_show_less }}</a
-                                    >
+                                    </reactive-dropdown-field>
                                 </div>
-                                <div *ngIf="l">
-                                    <a
-                                        class="text-right btn btn-primary add-address-btn add-new-btn"
-                                        href="javascript:void(0);"
-                                        (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
-                                    >
-                                        <i class="icon-plus"></i> {{ localeData?.add_address }}
-                                    </a>
-                                </div>
+
+                                <!-- <div
+                                    class="col-sm-4"
+                                    *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
+                                >
+                                    <div class="form-group">
+                                        <label class="d-block">&nbsp;</label>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="isComposite"
+                                                formControlName="isComposite"
+                                            /><label
+                                                >&nbsp;
+                                                {{ localeData?.is_composite }}
+                                            </label></label
+                                        >
+                                    </div>
+                                </div> -->
                             </ng-container>
+                            <div class="col-sm-12 mr-t2" *ngIf="!f">
+                                <button
+                                    mat-stroked-button
+                                    color="warn"
+                                    (click)="removeGstDetailsForm(i)"
+                                    class="grey-color btn-danger text-left"
+                                >
+                                    <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="d-flex justify-content-between column-gap15"
+                            *ngIf="l && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
+                        >
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="text-left w-50 pd-r2"
+                                (click)="showMoreGst()"
+                            > {{ commonLocaleData?.app_show_all }} ({{
+                                    addAccountForm.get("addresses")["controls"]?.length
+                                }})
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="text-left w-50"
+                                (click)="showLessGst()"
+                            > {{ commonLocaleData?.app_show_less }}
+                            </button>
+                        </div>
+                        <div *ngIf="l" class="pd-t1">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="add-address-btn add-new-btn"
+                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
+                            > + {{ localeData?.add_address }}
+                            </button>
                         </div>
                     </ng-container>
-                </tab>
-            </ng-container>
-
-            <tab
-                [heading]="localeData?.tabs?.contact"
+                </div>
+            </mat-tab>
+            <mat-tab
+                [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
-                [active]="isHsnSacEnabledAcc"
-                (selectTab)="tabChanged('contacts')"
+                *ngIf="isHsnSacEnabledAcc"
             >
-                <div class="contact-form">
-                    <div class="row">
+                <div class="pd-t15 overflow-hidden">
+                    <div class="row pd-b2">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ localeData?.attention_to }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    formControlName="attentionTo"
-                                    name="attention"
-                                />
-                            </div>
+                            <input-field
+                                [name]="'attention'"
+                                [label]="localeData?.attention_to"
+                                [placeholder]="localeData?.attention_to"
+                                [type]="'text'"
+                                formControlName="attentionTo"
+                            >
+                            </input-field>
                         </div>
-                        <div class="col-sm-6 mobile-number-wrapper">
-                            <div class="form-group">
-                                <label>{{ commonLocaleData?.app_mobile_number }}</label>
-                                <div class="d-flex">
-                                    <input
-                                        name="accountDetails.mobileNumber"
-                                        type="tel"
-                                        #initContactUpdate
-                                        class="flag-input"
-                                        id="init-contact-update"
-                                        formControlName="mobileNo"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
-                                    />
-                                </div>
-                                <span id="init-contact-update-valid-msg" class="d-none"></span>
-                                <span id="init-contact-update-error-msg" class="d-none"></span>
-                            </div>
+                        <div class="col-sm-6 mobile-number mobile-number-wrapper">
+                            <input-field
+                                [name]="'mobile'"
+                                [type]="'tel'"
+                                #initContactUpdate
+                                class="flag-input"
+                                [id]="'init-contact-update'"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                [placeholder]="localeData?.mobile_no_placeholder"
+                                [floatLabel]="'always'"
+                                formControlName="mobileNo"
+                            >
+                            </input-field>
+                            <span id="init-contact-update-valid-msg" class="d-none"></span>
+                            <span id="init-contact-update-error-msg" class="d-none"></span>
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row pd-b2">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }}</label>
-                                <input type="email" class="form-control" formControlName="email" name="emailId" />
-                                <span
-                                    class="error-msg"
-                                    *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
-                                    >{{ localeData?.email_id_error }}</span
-                                >
-                            </div>
+                            <input-field
+                                [name]="'emailId'"
+                                [label]="commonLocaleData?.app_email_id"
+                                [placeholder]="commonLocaleData?.app_email_id"
+                                [type]="'email'"
+                                formControlName="email"
+                            >
+                            </input-field>
+                            <span
+                                class="error-msg"
+                                *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
+                                >{{ localeData?.email_id_error }}</span
+                            >
                         </div>
                     </div>
                 </div>
-            </tab>
-            <tab
-                [heading]="localeData?.tabs?.portal"
+            </mat-tab>
+            <mat-tab
+                [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
                 *ngIf="voucherApiVersion === 2 && isDebtorCreditor"
-                (selectTab)="tabChanged('portal')"
             >
-                <div formArrayName="portalDomain">
+                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden">
                     <div
-                        class="row align-items-center"
+                        class="row align-items-center pd-b2"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
                         [formGroupName]="i"
                     >
-                        <div class="col-xl-3 col-lg-5 col-md-5 col-sm-6 unit-equal">
-                            <div class="form-group portal-height">
-                                <label>{{ localeData?.portal_attention_to }} </label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    (input)="portalIndex = i"
-                                    formControlName="name"
-                                    name="name_{{ i }}"
-                                />
-                            </div>
+                        <div class="w-25 pl-3">
+                            <input-field
+                                [name]="'name_' + i"
+                                [label]="localeData?.portal_attention_to"
+                                [placeholder]="localeData?.portal_attention_to"
+                                [type]="'email'"
+                                (input)="portalIndex = i"
+                                formControlName="name"
+                            >
+                            </input-field>
                         </div>
-                        <div class="col-xl-4 col-lg-3 col-md-3 col-sm-2 pr-0">
-                            <div class="form-group portal-height">
-                                <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    (input)="portalIndex = i"
-                                    formControlName="email"
-                                    name="email_{{ i }}"
-                                />
-                                <span
-                                    class="error-msg"
-                                    *ngIf="
-                                        domain.get('email').dirty &&
-                                        (domain.get('email').hasError('required') || domain.get('email').invalid) &&
-                                        !domain.get('email').hasError('duplicate')
-                                    "
-                                    id="emailError_{{ i }}"
-                                    >{{ localeData?.email_id_error }}
-                                </span>
-                                <span
-                                    class="error-msg"
-                                    *ngIf="domain.get('email').hasError('duplicate') && i === lastDuplicateEmailIndex"
-                                    id="emailValidationError_{{ i }}"
-                                    >{{ localeData?.duplicate_email }}
-                                </span>
-                            </div>
+                        <div class="w-30 pl-2">
+                            <input-field
+                                [name]="'name_' + i"
+                                [label]="commonLocaleData?.app_email_id"
+                                [placeholder]="commonLocaleData?.app_email_id"
+                                [type]="'email'"
+                                (input)="portalIndex = i"
+                                formControlName="email"
+                                [required]="true"
+                            >
+                            </input-field>
+                            <span
+                                class="error-msg"
+                                *ngIf="
+                                    domain.get('email').dirty &&
+                                    (domain.get('email').hasError('required') || domain.get('email').invalid) &&
+                                    !domain.get('email').hasError('duplicate')
+                                "
+                                id="emailError_{{ i }}"
+                                >{{ localeData?.email_id_error }}
+                            </span>
+                            <span
+                                class="error-msg"
+                                *ngIf="domain.get('email').hasError('duplicate') && i === lastDuplicateEmailIndex"
+                                id="emailValidationError_{{ i }}"
+                                >{{ localeData?.duplicate_email }}
+                            </span>
                         </div>
-                        <div class="col-xl-4 col-lg-3 col-md-3 col-sm-3 pr-0 mobile-number-portal-wrapper">
-                            <div class="form-group portal-height">
-                                <label>{{ commonLocaleData?.app_mobile_number }} </label>
-                                <div class="d-flex">
-                                    <input
-                                        name="contactNo_{{ i }}"
-                                        type="tel"
-                                        #initContactAdd2
-                                        class="flag-input"
-                                        id="init-contact-portal_{{ i }}"
-                                        formControlName="contactNo"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
-                                        (input)="portalIndex = i"
-                                    />
-                                </div>
-                                <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
-                                <span id="init-contact-portal_{{ i }}-error-msg" class="d-none"> </span>
-                            </div>
+                        <div class="w-30 pl-2 mobile-number-portal-wrapper">
+                            <input-field
+                                [name]="'contactNo_' + i"
+                                [type]="'tel'"
+                                [cssClass]="'flag-input'"
+                                [id]="'init-contact-portal_' + i"
+                                formControlName="contactNo"
+                                [placeholder]="localeData?.mobile_no_placeholder"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                (input)="portalIndex = i"
+                                [floatLabel]="'always'"
+                            ></input-field>
+                            <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
+                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span>
                         </div>
-                        <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
-                            <div class="inc-dec">
-                                <div class="plus-minus w-100">
-                                    <button
-                                        class="btn mr-0"
-                                        (click)="removePortalUser(domain, i)"
-                                        aria-label="delete icon"
-                                    >
-                                        <i class="icon-trash delete"></i>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="pl-2">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                (click)="removePortalUser(domain, i)"
+                                aria-label="delete icon"
+                            >
+                                <i class="icon-trash delete"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="row">
@@ -631,15 +543,14 @@
                         </div>
                     </div>
                 </div>
-            </tab>
+            </mat-tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
-            <tab
-                [heading]="localeData?.tabs?.bank_details"
+            <mat-tab
+                [label]="localeData?.tabs?.bank_details"
                 class="bank-details-form"
                 *ngIf="showBankDetail"
-                (selectTab)="tabChanged('bank')"
             >
-                <div *ngIf="showBankDetail">
+                <div *ngIf="showBankDetail" class="pd-t15 overflow-hidden">
                     <div formArrayName="accountBankDetails">
                         <div
                             class="row"
@@ -659,14 +570,14 @@
                                 }"
                                 *ngIf="selectedCountryCode === 'AE'"
                             >
-                                <label for="">{{ localeData?.beneficiary_name_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="localeData?.beneficiary_name_placeholder"
-                                    name="beneficiaryName_{{ i }}"
+                                    [label]="localeData?.beneficiary_name_label"                    
+                                    [name]="'beneficiaryName_' + i"
                                     formControlName="beneficiaryName"
-                                />
+                                >
+                                </input-field>
                             </div>
                             <div
                                 class="form-group col-sm-6"
@@ -675,107 +586,101 @@
                                     'col-sm-6': selectedCountryCode === 'AE'
                                 }"
                             >
-                                <label>{{ localeData?.bank_name_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="localeData?.bank_name_placeholder"
-                                    name="bankName_{{ i }}"
+                                    [label]="localeData?.bank_name_label"
+                                    [name]="'bankName_' + i"
                                     formControlName="bankName"
-                                />
+                                >
+                                </input-field>
                             </div>
                             <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
                                 <div>
-                                    <label>{{ localeData?.branch_name_label }}</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
+                                    <input-field
+                                        [type]="'text'"
                                         [placeholder]="localeData?.branch_name_placeholder"
-                                        name="branchName_{{ i }}"
+                                        [label]="localeData?.branch_name_label"
+                                        [name]="'branchName_' + i"
                                         formControlName="branchName"
-                                    />
+                                    >
+                                    </input-field>
                                 </div>
                             </div>
                             <div class="form-group col-sm-4">
                                 <div>
-                                    <label *ngIf="selectedCountryCode === 'IN'">{{
-                                        commonLocaleData?.app_account_number
-                                    }}</label>
-                                    <label *ngIf="selectedCountryCode !== 'IN'">{{ commonLocaleData?.app_iban }}</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
+                                    <input-field
+                                        [type]="'text'"
                                         #bankaccount
                                         [placeholder]="commonLocaleData?.app_account_number_placeholder"
+                                        [label]="selectedCountryCode === 'IN' ? commonLocaleData?.app_account_number : commonLocaleData?.app_iban"
                                         [maxlength]="bankIbanNumberMaxLength"
                                         [minlength]="bankIbanNumberMinLength"
-                                        name="accountNum_{{ i }}"
+                                        [name]="'accountNum_' + i"
                                         (blur)="showBankDetailsValidation(bankaccount, 'bankAccountNo')"
                                         (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')"
                                         formControlName="bankAccountNo"
-                                    />
+                                    >
+                                    </input-field>
                                 </div>
                             </div>
                             <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
-                                <label>{{ commonLocaleData?.app_swift_code_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="commonLocaleData?.app_swift_code_placeholder"
-                                    maxlength="11"
-                                    minlength="8"
+                                    [label]="commonLocaleData?.app_swift_code_label"
+                                    [maxlength]="11"
+                                    [minlength]="8"
                                     #swiftcode
-                                    name="swiftCode_{{ i }}"
+                                    [name]="'swiftCode_' + i"
                                     (blur)="showBankDetailsValidation(swiftcode, 'swiftCode')"
                                     (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')"
                                     formControlName="swiftCode"
-                                />
+                                >
+                                </input-field>
                             </div>
                             <div *ngIf="selectedCountryCode !== 'AE'" class="form-group col-sm-3">
-                                <label>{{ commonLocaleData?.app_ifsc_code_label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="commonLocaleData?.app_ifsc_code_placeholder"
-                                    name="ifsc_{{ i }}"
+                                    [label]="commonLocaleData?.app_ifsc_code_label"
+                                    [name]="'ifsc_' + i"
                                     formControlName="ifsc"
-                                />
+                                >
+                                </input-field>
                             </div>
                         </div>
                     </div>
                 </div>
-            </tab>
+            </mat-tab>
 
-            <tab [heading]="localeData?.tabs?.others" class="other-form-wrap" (selectTab)="tabChanged('others')">
-                <div class="other-form">
+            <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap"> 
+                <div class="pd-t15 overflow-hidden">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ localeData?.account_uniquename }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    textCaseChangeDirective
-                                    UniqueNameDirective
-                                    formControlName="uniqueName"
-                                    name="accUnqname"
-                                />
-                            </div>
+                            <input-field
+                                [type]="'text'"
+                                [label]="localeData?.account_uniquename"
+                                [placeholder]="localeData?.account_uniquename"
+                                formControlName="uniqueName"
+                                [name]="'accUniqueName'"
+                            >
+                            </input-field>
                         </div>
 
                         <div class="form-group col-sm-6">
-                            <label>{{ localeData?.balance_for_trigger }}</label>
                             <div
                                 class="input-group"
                                 [ngClass]="{
                                     'input-group': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                 }"
                             >
-                                <input
-                                    type="number"
-                                    min="0"
-                                    class="form-control text-right"
+                                <input-field
+                                    [type]="'number'"
+                                    [min]="'0'"
+                                    [cssClass]="'text-right'"
                                     formControlName="closingBalanceTriggerAmount"
+                                    [label]="localeData?.balance_for_trigger"
                                     [placeholder]="
                                         commonLocaleData?.app_numbers?.zero +
                                         '' +
@@ -785,7 +690,8 @@
                                         '' +
                                         commonLocaleData?.app_numbers?.zero
                                     "
-                                />
+                                >
+                                </input-field>
                                 <div
                                     class="input-group-addon"
                                     (click)="closingBalanceTypeChanged('DEBIT')"
@@ -829,133 +735,120 @@
                         </div>
                     </div>
                 </div>
-            </tab>
-            <tab [heading]="localeData?.tabs?.custom" (selectTab)="tabChanged('custom')">
+            </mat-tab>
+            <mat-tab [label]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
-                <ng-container formArrayName="customFields">
-                    <ng-container
-                        *ngFor="
-                            let item of companyCustomFields;
-                            let companyCustomFieldIndex = index;
-                            let first = first;
-                            let last = last
-                        "
-                        [formGroupName]="companyCustomFieldIndex"
-                    >
+                <div class="pd-t15 overflow-hidden">
+                    <ng-container *ngIf="addAccountForm?.get('addresses')?.value?.length" formArrayName="customFields">
                         <ng-container
                             *ngFor="
-                                let customFieldsItem of addAccountForm.get('customFields')['controls'];
-                                let index = index
+                                let item of companyCustomFields;
+                                let companyCustomFieldIndex = index;
+                                let first = first;
+                                let last = last
                             "
+                            [formGroupName]="companyCustomFieldIndex"
                         >
-                            <div
-                                class="row mr-b15"
-                                *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
+                            <ng-container
+                                *ngFor="
+                                    let customFieldsItem of addAccountForm.get('customFields')['controls'];
+                                    let index = index
+                                "
                             >
-                                <div class="col-lg-8">
-                                    <div class="name-of-field">
-                                        <label
-                                            >{{ item.fieldName }}
-                                            <span class="red-text" *ngIf="item.isMandatory">*</span>
-                                        </label>
-                                        <input
-                                            *ngIf="
-                                                item.fieldType?.type === availableFieldTypes.String ||
-                                                item.fieldType?.type === availableFieldTypes.Barcode
-                                            "
-                                            type="text"
-                                            name="values{{ index }}"
-                                            formControlName="value"
-                                            class="form-control custom-field"
-                                            [maxLength]="item.dataRange?.max"
-                                            [attr.pattern]="item.regex"
-                                            [required]="item.isMandatory"
-                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
-                                        />
-                                        <input
-                                            *ngIf="item.fieldType?.type === availableFieldTypes.Number"
-                                            type="number"
-                                            name="values{{ index }}"
-                                            formControlName="value"
-                                            class="form-control custom-field"
-                                            [min]="item.dataRange?.min"
-                                            [max]="item.dataRange?.max"
-                                            decimalDigitsDirective
-                                            [attr.pattern]="item.regex"
-                                            [required]="item.isMandatory"
-                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
-                                        />
-                                        <div
-                                            *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
-                                            class="clearfix"
-                                        >
-                                            <span class="d-inline-block">
-                                                <input
-                                                    id="yes{{ index }}"
-                                                    class="radio-custom cp ml-0"
-                                                    type="radio"
-                                                    [checked]="customFieldsItem.get('value')?.value === 'true'"
-                                                    (change)="selectedBooleanCustomField('true', index)"
-                                                    name="booleanType{{ index }}"
-                                                />
-                                                <label for="yes{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_true?.toUpperCase()
-                                                }}</label>
-                                            </span>
-
-                                            <span class="d-inline-block">
-                                                <input
-                                                    id="no{{ index }}"
-                                                    class="radio-custom cp ml-0"
-                                                    type="radio"
-                                                    [checked]="customFieldsItem.get('value')?.value === 'false'"
-                                                    (change)="selectedBooleanCustomField('false', index)"
-                                                    name="booleanType{{ index }}"
-                                                />
-                                                <label for="no{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_false?.toUpperCase()
-                                                }}</label>
-                                            </span>
+                                <div
+                                    class="row mr-b15"
+                                    *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
+                                >
+                                    <div class="col-lg-8">
+                                        <div class="name-of-field">
+                                            <label
+                                                >{{ item.fieldName }}
+                                                <span class="red-text" *ngIf="item.isMandatory">*</span>
+                                            </label>
+                                            <input-field
+                                                *ngIf="
+                                                    item.fieldType?.type === availableFieldTypes.String ||
+                                                    item.fieldType?.type === availableFieldTypes.Barcode
+                                                "
+                                                [type]="'text'"
+                                                [name]="'values' + index"
+                                                formControlName="value"
+                                                [cssClass]="'custom-field'"
+                                                [maxLength]="item.dataRange?.max"
+                                                [attr.pattern]="item.regex"
+                                                [required]="item.isMandatory"
+                                                [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
+                                                [label]="localeData?.enter_value"
+                                            >
+                                            </input-field>
+                                            <input-field
+                                                *ngIf="item.fieldType?.type === availableFieldTypes.Number"
+                                                [type]="'number'"
+                                                [name]="'values' + index"
+                                                formControlName="value"
+                                                [cssClass]="'custom-field'"
+                                                [min]="item.dataRange?.min"
+                                                [max]="item.dataRange?.max"
+                                                [allowDecimalDigitsOnly]="true"
+                                                [attr.pattern]="item.regex"
+                                                [required]="item.isMandatory"
+                                                [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
+                                                [label]="localeData?.enter_value"
+                                            >
+                                            </input-field>
+                                            <mat-radio-group name="ownerPermission" [value]="customFieldsItem.get('value')?.value" *ngIf="item.fieldType?.type === availableFieldTypes.Boolean" class="d-flex flex-column">
+                                                <mat-radio-button
+                                                    color="primary"
+                                                    [value]="true"
+                                                    (change)="selectedBooleanCustomField($event.value, index)"
+                                                    >{{ commonLocaleData?.app_true?.toUpperCase() }}
+                                                </mat-radio-button>
+                                                <mat-radio-button
+                                                    color="primary"
+                                                    [value]="false"
+                                                    (change)="selectedBooleanCustomField($event.value, index)"
+                                                >
+                                                    {{ commonLocaleData?.app_false?.toUpperCase() }}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </ng-container>
                         </ng-container>
                     </ng-container>
-                </ng-container>
+                </div>
                 <a
                     href="javascript:;"
-                    class="btn-link"
+                    class="btn-link mr-t15"
                     [routerLink]="'/pages/custom-fields/list'"
                     *ngIf="!companyCustomFields?.length"
                     (click)="closeMaster()"
                     >{{ commonLocaleData?.app_create_custom_field }}</a
                 >
-            </tab>
-        </tabset>
-        <div class="row" *ngIf="!isOtherSelectedTab">
-            <div class="col-sm-12 mr-t3">
-                <div class="button-group">
-                    <button
-                        type="button"
-                        *ngIf="showDeleteButton"
-                        class="btn btn-danger"
-                        (click)="deleteClicked.emit(true)"
-                        aria-label="delete"
-                    >
-                        {{ commonLocaleData?.app_delete }}
-                    </button>
-                    <button
-                        (click)="submit()"
-                        class="btn btn-primary update-btn-zindex"
-                        [ladda]="updateAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberInvalid"
-                        aria-label="update"
-                    >
-                        {{ commonLocaleData?.app_update }}
-                    </button>
-                </div>
-            </div>
+            </mat-tab>
+        <!-- </tabset> -->
+        </mat-tab-group>
+        <div class="d-flex column-gap15 pd-t15" *ngIf="!isOtherSelectedTab">
+            <button
+                *ngIf="showDeleteButton"
+                type="button"
+                mat-stroked-button
+                color="primary"
+                (click)="deleteClicked.emit(true)"
+                aria-label="delete"
+            >
+                {{ commonLocaleData?.app_delete }}
+            </button>
+            <button
+                (click)="submit()"
+                mat-stroked-button
+                color="primary"
+                [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberInvalid"
+                aria-label="update"
+            >
+                {{ commonLocaleData?.app_update }}
+            </button>
         </div>
     </form>
     <div class="form" *ngIf="isOtherSelectedTab">
@@ -972,40 +865,28 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>{{ localeData?.move_to_group }}</label>
-                                <div>
-                                    <span>
-                                        <sh-select
-                                            formControlName="moveto"
-                                            [placeholder]="localeData?.group_name_label"
-                                            [options]="flatGroupsOptions"
-                                            [customFilter]="customMoveGroupFilter"
-                                            class="pull-left width-select"
-                                            [enableDynamicSearch]="true"
-                                            [isPaginationEnabled]="true"
-                                            (scrollEnd)="handleGroupScrollEnd()"
-                                            (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                                        >
-                                            <!--template for move group typeahead-->
-                                            <ng-template #optionTemplate let-model="option">
-                                                <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">{{ model?.label }}</div>
-                                                    <div class="item-unique">
-                                                        {{ model?.value }}
-                                                    </div>
-                                                </a>
-                                            </ng-template>
-                                        </sh-select>
-                                    </span>
-                                    <span class="pull-right">
-                                        <button
-                                            type="submit"
-                                            class="btn btn-primary merge-btn mr-0"
-                                            [disabled]="moveAccountForm.invalid"
-                                            aria-label="move"
-                                        >
-                                            {{ localeData?.move }}
-                                        </button>
-                                    </span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <reactive-dropdown-field
+                                        class="pull-left width-select"
+                                        [label]="commonLocaleData?.move_to_group"
+                                        [placeholder]="localeData?.group_name_label"
+                                        [options]="flatGroupsOptions"
+                                        formControlName="moveto"
+                                        [enableDynamicSearch]="true"
+                                        [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleGroupScrollEnd()"
+                                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+                                    >
+                                    </reactive-dropdown-field>
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        type="submit"
+                                        [disabled]="moveAccountForm.invalid"
+                                        aria-label="move"
+                                    >
+                                        {{ localeData?.move }}
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -1019,34 +900,30 @@
                             >{{ localeData?.select_account_merge }}
                             <span class="primary-color">{{ (activeAccount$ | async)?.name }}</span></label
                         >
-                        <div class="clearfix" #accountSelect2>
-                            <span>
-                                <sh-select
-                                    class="pull-left width-select"
-                                    [options]="accounts"
-                                    [isFilterEnabled]="true"
-                                    (viewInitEvent)="loadAccountData()"
-                                    [enableDynamicSearch]="true"
-                                    [isPaginationEnabled]="true"
-                                    (scrollEnd)="handleScrollEnd()"
-                                    (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                    [(ngModel)]="selectedaccountForMerge"
-                                    [placeholder]="commonLocaleData?.app_select_accounts"
-                                ></sh-select>
-                            </span>
-                            <span class="pull-right">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary merge-btn mr-0"
-                                    (click)="mergeAccounts()"
-                                    aria-label="merge"
-                                >
-                                    {{ localeData?.merge }}
-                                </button>
-                            </span>
+                        <div class="d-flex justify-content-between align-items-center pd-t1" #accountSelect2>
+                            <reactive-dropdown-field
+                                class="width-select"
+                                [label]="commonLocaleData?.app_select_accounts"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="accounts"
+                                (selectedOption)="$event && selectedaccountForMerge = $event.value"
+                                [enableDynamicSearch]="true"
+                                [isPaginationEnabled]="true"
+                                (scrollEnd)="handleScrollEnd()"
+                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                            >
+                            </reactive-dropdown-field>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                type="submit"
+                                (click)="mergeAccounts()"
+                                aria-label="merge"
+                            >
+                                {{ localeData?.merge }}
+                            </button>
                         </div>
                         <small class="clearfix">{{ localeData?.merge_account_note }}</small>
-
                         <ul
                             class="accmerge mr-t1"
                             *ngIf="
@@ -1073,28 +950,24 @@
             <div class="mr-b2 select-box">
                 <div class="form-group">
                     <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
-                    <div class="clearfix">
-                        <span>
-                            <sh-select
-                                class="pull-left calc-width"
-                                [options]="discountList"
-                                [isFilterEnabled]="true"
-                                [forceClearReactive]="forceClearDiscount$ | async"
-                                [(ngModel)]="selectedDiscounts"
-                                (selected)="discountSelected()"
-                                [placeholder]="localeData?.select_discounts"
-                            ></sh-select>
-                        </span>
-                        <span class="pull-right">
-                            <button
-                                class="btn btn-primary merge-btn mr-0"
-                                [disabled]="isDiscountSaveDisable$ | async"
-                                (click)="applyDiscounts()"
-                                aria-label="apply"
-                            >
-                                {{ commonLocaleData?.app_apply }}
-                            </button>
-                        </span>
+                    <div class="d-flex justify-content-between align-items-center pd-t1">
+                        <reactive-dropdown-field
+                            class="adjusted-content-width"
+                            [label]="localeData?.select_discounts"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [options]="discountList"
+                            (selectedOption)="$event && selectedDiscounts = $event.value; discountSelected()"
+                        >
+                        </reactive-dropdown-field>
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            [disabled]="isDiscountSaveDisable$ | async"
+                            (click)="applyDiscounts()"
+                            aria-label="apply"
+                        >
+                            {{ commonLocaleData?.app_apply }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1136,29 +1009,24 @@
                         <div class="tax-label">
                             <label>{{ commonLocaleData?.app_default_taxes }}</label>
                         </div>
-                        <div class="form-group">
-                            <div class="clearfix">
-                                <span class="calc-width pull-left">
-                                    <sh-select
-                                        [options]="companyTaxDropDown$ | async"
-                                        [placeholder]="localeData?.all_applicable_taxes_placeholder"
-                                        (selected)="taxesSelected($event)"
-                                        [multiple]="true"
-                                        formControlName="taxes"
-                                    >
-                                    </sh-select>
-                                </span>
-                                <span class="pull-right">
-                                    <button
-                                        [disabled]="isTaxesSaveDisable$ | async"
-                                        type="submit"
-                                        class="btn btn-success save-btn mr-0"
-                                        aria-label="save"
-                                    >
-                                        {{ commonLocaleData?.app_save }}
-                                    </button>
-                                </span>
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center form-group">
+                            <select-multiple-fields
+                                [label]="localeData?.app_default_taxes"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="companyTaxDropDown$ | async"
+                                (selectedOption)="taxesSelected($event)"
+                                formControlName="taxes"
+                                class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
+                            ></select-multiple-fields>
+                            <button
+                                [disabled]="isTaxesSaveDisable$ | async"
+                                type="submit"
+                                mat-stroked-button
+                                color="primary"
+                                aria-label="save"
+                            >
+                                {{ commonLocaleData?.app_save }}
+                            </button>
                         </div>
                     </form>
 
@@ -1195,43 +1063,26 @@
                 </div>
             </div>
         </ng-container>
-        <div class="row" *ngIf="isOtherSelectedTab">
-            <div class="col-sm-12 mr-t3">
-                <div class="button-group">
-                    <button
-                        type="button"
-                        *ngIf="showDeleteButton"
-                        class="btn btn-danger"
-                        (click)="deleteClicked.emit(true)"
-                        aria-label="delete"
-                    >
-                        {{ commonLocaleData?.app_delete }}
-                    </button>
-                    <button
-                        (click)="submit()"
-                        class="btn btn-primary update-btn-zindex"
-                        [ladda]="updateAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
-                        aria-label="update"
-                    >
-                        {{ commonLocaleData?.app_update }}
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!--deleteMergedAccount account modal  -->
-        <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <confirm-modal
-                        [title]="localeData?.delete_merged_account_title"
-                        [body]="deleteMergedAccountModalBody"
-                        (cancelCallBack)="hideDeleteMergedAccountModal()"
-                        (successCallBack)="deleteMergedAccount()"
-                    >
-                    </confirm-modal>
-                </div>
-            </div>
+        <div class="d-flex column-gap15 pd-t15" *ngIf="isOtherSelectedTab">
+            <button
+                type="button"
+                *ngIf="showDeleteButton"
+                mat-stroked-button
+                color="primary"
+                (click)="deleteClicked.emit(true)"
+                aria-label="delete"
+            >
+                {{ commonLocaleData?.app_delete }}
+            </button>
+            <button
+                (click)="submit()"
+                mat-stroked-button
+                color="primary"
+                [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                aria-label="update"
+            >
+                {{ commonLocaleData?.app_update }}
+            </button>
         </div>
         <!--moveMergedAccount account modal  -->
         <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">

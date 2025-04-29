@@ -946,9 +946,16 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.exportVouchers(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                exportVouchersFile: res.body
-                            });
+                            if (res?.status === "success") {
+                                return this.patchState({
+                                    exportVouchersFile: res.body
+                                });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    exportVouchersFile: null
+                                });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
@@ -1730,7 +1737,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                typeof res.body === 'string' && this.toaster.showSnackBar("error", res.body);
+                                typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);
                                 return this.patchState({
                                     cancelEInvoiceInProgress: false,
                                     cancelEInvoiceIsSuccess: true

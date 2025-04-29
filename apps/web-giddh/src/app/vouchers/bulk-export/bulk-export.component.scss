@@ -1,0 +1,20 @@
+table {
+    &.column-setting {
+        > tr {
+            > td {
+                padding: 15px 20px;
+
+                &:first-child {
+                    border-right: 1px solid var(--color-common-primary-border);
+                }
+                &:last-child {
+                    text-align: right;
+                }
+
+                label {
+                    margin-right: 15px;
+                }
+            }
+        }
+    }
+}

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject } from '@angular/core';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InstitutionsRequest } from '../../../models/api-models/SettingsIntegraion';
 import { SettingIntegrationComponentStore } from '../utility/setting.integration.store';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -34,10 +34,10 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
     /** Holds Store Institutions list provider company API success state as observable*/
     public institutionsListInProgress$: Observable<any> = this.componentStore.select(state => state.institutionsListInProgress);
-    /** Instance for form group*/
-    public searchForm: FormGroup;
     /** Hold filetered item from bank list*/
     public filteredBanks: any[] = [];
+    /** Search field form control */
+    public searchFormControl = new FormControl();
 
     constructor(
         private componentStore: SettingIntegrationComponentStore,
@@ -48,7 +48,6 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public inputData
     ) {
-        this.initializeForm();
     }
 
     /**
@@ -75,21 +74,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
                 this.changeDetection.detectChanges();
             }
         });
-
-        this.searchForm.get('search')?.valueChanges
-            .pipe(debounceTime(300))
-            .subscribe(searchTerm => this.filterInstitutions(searchTerm));
-    }
-
-    /**
-     * This will be use for initialization form
-     *
-     * @memberof InstitutionsListComponent
-     */
-    public initializeForm(): void {
-        this.searchForm = this.formBuilder.group({
-            search: ['']
-        });
+            this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(searchTerm => this.filterInstitutions(searchTerm));
     }
 
     /**

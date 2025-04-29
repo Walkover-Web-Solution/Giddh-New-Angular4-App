@@ -62,6 +62,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/giddh-ledger-paginator.module';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { CarouselComponent } from '../shared/carousel/carousel.component';
+import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 
 @NgModule({
     declarations: [
@@ -140,7 +141,8 @@ import { CarouselComponent } from '../shared/carousel/carousel.component';
         MatIconModule,
         GiddhLedgerPaginatorModule,
         BankIntegrationModule,
-        CarouselComponent
+        CarouselComponent,
+        AsideMenuCreateTaxModule
     ]
 })
 export class LedgerModule {

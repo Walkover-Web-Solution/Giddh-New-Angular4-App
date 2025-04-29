@@ -452,7 +452,7 @@
                                                     class="download-file-text"
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type
+                                                        attachedDocumentType?.type && 
                                                         voucherApiVersion !== 2
                                                     "
                                                     [ngClass]="{
@@ -484,6 +484,7 @@
                                                     ></a>
                                                 </span>
                                             </div>
+                                            <!-- voucherApiVersion !== 2 && selectedItem?.voucherType === 'purchase' ||-->
                                             <div
                                                 class="history-btn"
                                                 *ngIf="

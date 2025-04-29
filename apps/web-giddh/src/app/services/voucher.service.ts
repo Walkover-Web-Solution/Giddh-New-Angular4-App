@@ -479,7 +479,11 @@ export class VoucherService {
      */
     public exportVouchers(model: any): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
+        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV
+        ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        ?.replace(':from', encodeURIComponent(model.from))
+        ?.replace(':to', encodeURIComponent(model.to))
+        ?.replace(':fileType', model?.exportType ?? 'base64');
 
         delete model.dataToSend.from;
         delete model.dataToSend.to;
@@ -781,11 +785,11 @@ export class VoucherService {
                     ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                     ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
                     ?.replace(':fileType', fileType);
-                // if (downloadOption && this.generalService.voucherApiVersion === 1) 
-                // {
-                //     const delimiter = apiUrl.includes('?') ? '&' : '?';
-                //     apiUrl = apiUrl.concat(`${delimiter}downloadOption=${downloadOption}`);
-                // }
+                if (downloadOption && this.generalService.voucherApiVersion === 1) 
+                {
+                    const delimiter = apiUrl.includes('?') ? '&' : '?';
+                    apiUrl = apiUrl.concat(`${delimiter}downloadOption=${downloadOption}`);
+                }
                 apiUrl = this.generalService.addVoucherVersion(apiUrl, this.generalService.voucherApiVersion);
                 delete apiParams.accountUniqueName;
             }

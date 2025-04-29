@@ -1076,6 +1076,9 @@ aside-menu-account .container-fluid {
     padding: 0;
     line-height: 40px;
     overflow: hidden;
+    &.account {
+        line-height: unset;
+    }
 }
 .table-container div.row {
     border-bottom: 1px solid var(--color-dark-fog);

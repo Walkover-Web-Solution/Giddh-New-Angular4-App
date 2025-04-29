@@ -144,5 +144,6 @@
         "submit": "प्रस्तुत करें",
         "cancel": "रद्द करें",
         "razorpay": "RAZORPAY",
-        "paypal": "PAYPAL"
+        "paypal": "PAYPAL",
+        "razorpay_error_message": "रेज़रपे में कोई त्रुटि है। कृपया सहायता से संपर्क करें।"
 	}

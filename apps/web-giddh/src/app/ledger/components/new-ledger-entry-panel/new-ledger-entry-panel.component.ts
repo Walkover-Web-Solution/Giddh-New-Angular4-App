@@ -41,6 +41,9 @@ import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.inter
 import { CommonService } from '../../../services/common.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
+import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
+import { CompanyActions } from '../../../actions/company.actions';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -85,6 +88,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds the index of the current transaction in the blank ledger */
+    @Input() public blankLedgerIndex: number;
     /** Stores true, if the total value is modified by the user */
     @Input() public isTotalChanged: boolean;
     @ViewChild('webFileInput', { static: true }) public webFileInput: ElementRef;
@@ -168,6 +173,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedWarehouse: any;
     /** True, if subvoucher is RCM */
     public isRcmEntry: boolean = false;
+    /** True, if subvoucher is RCM and taxes are not selected */
+    public showRcmEntryError: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: ConfirmationModalConfiguration;
     /** True, if the selected voucher type is 'Receipt' */
@@ -258,6 +265,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private openTooltipMenuStatus: boolean = false;
     /** Holds mouse hovered on tooltip text status */
     public tooltipHoveredStatus: boolean = false;
+    /** Discount dialog ref */
+    public discountDialogRef: MatDialogRef<any>;
+    /** Tax dialog ref */
+    public taxDialogRef: MatDialogRef<any>;
+    /** Delete attached file dialog ref */
+    public deleteAttachedFileDialogRef: MatDialogRef<any>;
+    /** Template Reference for Create Tax aside menu */
+    @ViewChild("createTax") public createTax: TemplateRef<any>;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -271,7 +286,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsDiscountService: SettingsDiscountService,
         private ledgerUtilityService: LedgerUtilityService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private settingsTaxesAction: SettingsTaxesActions,
+        private companyActions: CompanyActions
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -384,13 +401,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[2].label = this.localeData?.others;
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-
-        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
-            }
-        });
-
+        this.getAllDiscounts();
         if (this.voucherApiVersion === 2) {
             this.manualGenerateVoucherChecked = true;
         } else {
@@ -408,6 +419,21 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedStockVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
                 this.cdRef.detectChanges();
                 this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
+            }
+        });
+    }
+
+    /**
+     * Get all discounts API call
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private getAllDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(take(1)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+                this.cdRef.detectChanges();
             }
         });
     }
@@ -665,6 +691,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public amountChanged() {
         this.isInclusiveEntry = false;
         if (this.currentTxn?.selectedAccount) {
+            if ( this.blankLedgerIndex !== undefined) {
+                if (this.currentTxn.type === 'DEBIT') {
+                        this.blankLedger.transactions[this.blankLedgerIndex].debitAmount = this.currentTxn.amount;
+                } else {
+                    this.blankLedger.transactions[this.blankLedgerIndex].creditAmount = this.currentTxn.amount;
+                }
+            }
             if (this.currentTxn.selectedAccount?.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
                     this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
@@ -824,6 +857,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        if ((this.isRcmEntry) && !this.validateTaxes()) {
+            this.showRcmEntryError = true;
+            return;
+        }
         if (this.currentTxn?.isStock && !this.selectedStockVariant.value) {
             return;
         }
@@ -865,7 +902,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public showDeleteAttachedFileModal() {
-        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+        this.deleteAttachedFileDialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '630px',
             data: {
                 title: this.commonLocaleData?.app_delete,
@@ -876,10 +913,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.deleteAttachedFileDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.deleteAttachedFile();
             }
+            this.deleteAttachedFileDialogRef = undefined;
         });
     }
 
@@ -1080,7 +1118,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef) {
             return;
         }
 
@@ -1206,8 +1244,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public closeAsideMenuStateForOtherTax(): void {
-        this.asideMenuStateForOtherTaxesDialogRef.close();
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+        this.closeOtherTaxesDialog();
         if (this.blankLedger.otherTaxesSum > 0) {
             this.blankLedger.isOtherTaxesApplicable = true;
         } else {
@@ -1229,7 +1266,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.otherTaxModal.itemLabel = this.currentTxn?.selectedAccount ? this.currentTxn.selectedAccount?.stock ? `${this.currentTxn?.selectedAccount?.name}(${this.currentTxn?.selectedAccount?.stock?.name})` : this.currentTxn?.selectedAccount?.name : '';
 
         if (this.asideMenuStateForOtherTaxesDialogRef && this.dialog.getDialogById(this.asideMenuStateForOtherTaxesDialogRef.id)) {
-            this.asideMenuStateForOtherTaxesDialogRef.close();
+            this.closeOtherTaxesDialog();
         } else {
             this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
                 position: {
@@ -1238,9 +1275,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 maxWidth: '760px',
                 width: '100%',
                 height: '100vh',
-                maxHeight: '100vh'
+                maxHeight: '100vh',
+                disableClose: true
             });
         }
+    }
+
+    /**
+     * Close other taxes dialog
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private closeOtherTaxesDialog(): void {
+        this.asideMenuStateForOtherTaxesDialogRef.close();
+        setTimeout(() => {
+            this.asideMenuStateForOtherTaxesDialogRef = undefined;
+        }, 800);
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
@@ -2139,5 +2190,53 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getWarehouseLabel(): string {
         return this.warehouses?.find(item => item.value === this.selectedWarehouse)?.label || '';
+    }
+
+    /**
+    * Shows create new discount dialog
+    *
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    public showCreateDiscountDialog(): void {
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+
+        this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.getAllDiscounts();
+            }
+            this.discountDialogRef = undefined;
+        });
+    }
+
+    /**
+     * Shows create new tax dialog
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public showCreateTaxDialog(): void {
+        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
+        this.taxDialogRef = this.dialog.open(this.createTax, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+    /**
+     * Close tax dialog
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeTaxDialog(): void {
+        this.store.dispatch(this.companyActions.getTax());
+        this.taxDialogRef?.close();
+        this.cdRef.detectChanges();
+        this.taxDialogRef = undefined;
     }
 }
