@@ -22,7 +22,7 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div class="header-content-sticky vendor-z-index content-width">
+                    <div class="header-content-sticky vendor-z-index">
                         <div
                             *ngIf="
                                 (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
@@ -34,7 +34,7 @@
                                 [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
                             >
                                 <div class="customer-form-inline">
-                                    <div class="wrap-search-entity d-flex position-sticky left-15">
+                                    <div class="wrap-search-entity d-flex">
                                         <div class="dis mr-r15 pull-left on-desktop-view">
                                             <div class="btn-group pull-right d-flex column-gap15">
                                                 <button
@@ -169,7 +169,7 @@
                                         </button>
                                     </div>
 
-                                    <div class="d-flex justify-content-between position-sticky right-15">
+                                    <div class="d-flex justify-content-between">
                                         <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
                                         <div class="d-flex justify-content-between">
                                             <div
@@ -225,14 +225,14 @@
                         </div>
                         <div class="top-content">
                             <div
-                                class="d-flex w-100"
+                                class="d-flex w-100 justify-content-between overflow-x-auto"
                                 [hidden]="
                                     (activeTab === 'customer' && !sundryDebtorsAccounts?.length) ||
                                     (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
                                 "
                             >
                                 <div
-                                    class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end min-width-230 max-width-230  position-sticky left-15"
+                                    class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230"
                                 >
                                     <h5>
                                         <ng-container *ngIf="!selectedCheckedContacts?.length">{{
@@ -295,7 +295,7 @@
                                         </mat-menu>
                                     </div>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none opening-box min-width-230 max-width-230 position-sticky left-250">
+                                <div class="total-details-box mr-r05 border-none opening-box min-width-230">
                                     <h5>
                                         {{ localeData?.opening }}
                                         <div>
@@ -328,7 +328,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none sales-purchase min-width-230 max-width-230 position-sticky left-485">
+                                <div class="total-details-box mr-r05 border-none sales-purchase min-width-230">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
@@ -345,7 +345,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none payment-receipt min-width-230 max-width-230 position-sticky left-720">
+                                <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{
@@ -364,7 +364,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box border-none closing-box min-width-230 max-width-230 position-sticky left-955">
+                                <div class="total-details-box border-none closing-box min-width-230">
                                     <h5>
                                         {{ localeData?.closing }}
                                         <div>
