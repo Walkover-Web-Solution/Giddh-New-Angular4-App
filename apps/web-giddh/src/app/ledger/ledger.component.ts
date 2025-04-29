@@ -3582,7 +3582,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public getLedgerStatementViewGridColumnsValue() {
+    public getLedgerStatementViewGridColumnsValue(): void {
         if (this.searchText || this.isAdvanceSearchImplemented) {
             this.ledgerStatementViewGridTotalColumns = 9;
             if (this.ledgerStatementViewGridColumnsValue.length > 4) {

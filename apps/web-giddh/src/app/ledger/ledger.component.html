@@ -53,7 +53,7 @@
                 </div>
                 <!-- region ledger table-->
                 <div class="ledg-head transactions-page position-relative">
-                    <span class="w-100 float-left text-center font-16 pb-2 text-saffron" *ngIf="searchText || isAdvanceSearchImplemented">{{localeData?.opening_closing_balance_filter_message}}</span>
+                    <p class="w-100 float-left text-center font-16 pb-2 text-saffron" *ngIf="searchText || isAdvanceSearchImplemented">{{localeData?.opening_closing_balance_filter_message}}</p>
                     <!-- region ledger header -->
                     <div class="clearfix row mr-b15" [ngClass]="{ 'mr-b5': currentCompanyBranches?.length > 2 }">
                         <!-- region currency toggle -->
