@@ -1462,7 +1462,7 @@
                                     ></mat-checkbox>
                                 </mat-grid-tile>
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerGridColumnsValue[1]}}>
-                                    <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented"">{{
+                                    <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">{{
                                         localeData?.to_balance_bf
                                     }}</span>
                                 </mat-grid-tile>
